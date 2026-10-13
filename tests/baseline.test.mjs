@@ -1,0 +1,44 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { mkdtemp, cp, readFile, writeFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { checkKit, ROOT } from "../scripts/check.mjs";
+test("all public exports have valid contracts and previews", async () =>
+  assert.deepEqual((await checkKit()).findings, []));
+test("baseline rejects path escape, missing dependencies, hidden exports and hosted coupling", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "mortar-baseline-"));
+  try {
+    for (const name of [
+      "src",
+      "previews",
+      "manifests",
+      "package.json",
+      "baseline-policy.json",
+    ])
+      await cp(join(ROOT, name), join(dir, name), { recursive: true });
+    const file = join(dir, "manifests/mortar-button.json");
+    const c = JSON.parse(await readFile(file, "utf8"));
+    c.source = "../outside.tsx";
+    c.contract.dependencies = ["missing"];
+    await writeFile(file, JSON.stringify(c));
+    await writeFile(
+      join(dir, "src/index.ts"),
+      "export { Surprise } from './primitives.js';\n",
+      { flag: "a" },
+    );
+    await writeFile(
+      join(dir, "src/forbidden.ts"),
+      "fetch('https://example.invalid'); const classes='bg-indigo-600';\n",
+    );
+    const result = await checkKit(dir);
+    assert.equal(result.passed, false);
+    for (const rule of ["M001", "M002", "M003", "M004", "M005"])
+      assert.ok(
+        result.findings.some((f) => f.rule === rule),
+        rule,
+      );
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});

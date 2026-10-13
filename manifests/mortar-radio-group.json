@@ -1,0 +1,42 @@
+{
+  "id": "mortar-radio-group",
+  "logicalId": "radio-group",
+  "name": "RadioGroup",
+  "description": "Mortar foundation radio group, using central semantic tokens.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "RadioGroup",
+  "source": "src/primitives.tsx",
+  "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference",
+    "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "name": "string",
+      "value": "string",
+      "onChange": "(value: string) => void",
+      "options": "{ value: string; label: string; description?: string }[]"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/RadioGroupPreview.tsx"
+  }
+}

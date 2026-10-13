@@ -1,0 +1,40 @@
+{
+  "id": "mortar-testimonial",
+  "logicalId": "testimonial",
+  "name": "Testimonial",
+  "description": "Mortar marketing testimonial, using central semantic tokens.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Testimonial",
+  "source": "src/marketing.tsx",
+  "capabilities": ["theme", "marketing"],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "provenance": {
+    "kitId": "marketing",
+    "exampleId": "mortar-marketing-reference",
+    "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+  },
+  "contract": {
+    "props": {
+      "quote": "string",
+      "name": "string",
+      "role": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Testimonial } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/TestimonialPreview.tsx"
+  }
+}

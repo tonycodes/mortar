@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "principles": [
+    {
+      "id": "shell-first",
+      "instruction": "Choose the shared purpose shell before composing a page. Use AppShell for application screens and MarketingHeader for public pages. Document deliberate standalone exceptions."
+    },
+    {
+      "id": "page-pattern-reuse",
+      "instruction": "Reuse complete page patterns: navigation, headings, filters, list/detail workspaces, states and action placement. Reusing controls alone is insufficient."
+    },
+    {
+      "id": "project-agnostic-chrome",
+      "instruction": "Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic."
+    },
+    {
+      "id": "central-fixes",
+      "instruction": "Contribute missing patterns centrally. Do not duplicate source, create repeated local wrappers or apply consumer CSS overrides."
+    },
+    {
+      "id": "semantic-themes",
+      "instruction": "Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme."
+    },
+    {
+      "id": "interaction-quality",
+      "instruction": "Verify responsive layout, accessible names, keyboard operation, focus and loading/empty/error states. Automated checks alone cannot prove visual quality."
+    }
+  ]
+}

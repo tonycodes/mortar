@@ -1,0 +1,15 @@
+@import "./src/tokens.css";
+@import "./src/components.css";
+@custom-variant mortar-dark (&:where([data-mortar-appearance='dark'], [data-mortar-appearance='dark'] *));
+@theme inline {
+  --color-paper: var(--m-paper);
+  --color-surface: var(--m-surface);
+  --color-sunken: var(--m-sunken);
+  --color-ink: var(--m-ink);
+  --color-muted: var(--m-muted);
+  --color-line: var(--m-line);
+  --color-primary: var(--m-primary);
+  --color-on-primary: var(--m-on-primary);
+  --color-focus: var(--m-focus);
+  --font-sans: var(--m-font);
+}

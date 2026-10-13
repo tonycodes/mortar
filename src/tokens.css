@@ -1,0 +1,90 @@
+/* Project-agnostic semantic tokens derived from the supplied Mortar v2 designs.
+   Status colours deliberately differ from brand colours. No hosted service dependency. */
+:root {
+  --m-font:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    sans-serif;
+  --m-mono: "SF Mono", ui-monospace, Menlo, monospace;
+  --m-paper: #ffffff;
+  --m-surface: #ffffff;
+  --m-sunken: #f5f5f7;
+  --m-line: #e5e5ea;
+  --m-line-strong: #8e8e93;
+  --m-ink: #000000;
+  --m-secondary: #3a3a3c;
+  --m-muted: #6e6e73;
+  --m-primary: #000000;
+  --m-primary-hover: #29292c;
+  --m-primary-active: #3a3a3c;
+  --m-on-primary: #ffffff;
+  --m-focus: #000000;
+  --m-link: #000000;
+  --m-selected: #f2f2f4;
+  --m-success: #1f7a36;
+  --m-warning: #945700;
+  --m-danger: #c70014;
+  --m-control: 36px;
+  --m-pad: 14px;
+  --m-font-size: 14px;
+  --m-row-pad: 14px;
+  --m-radius-sm: 4px;
+  --m-radius: 8px;
+  --m-radius-lg: 12px;
+  --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
+}
+:root[data-mortar] {
+  color-scheme: light;
+}
+:root[data-mortar-appearance="dark"] {
+  color-scheme: dark;
+  --m-paper: #000000;
+  --m-surface: #0e0e10;
+  --m-sunken: #1c1c1e;
+  --m-line: #29292c;
+  --m-line-strong: #727278;
+  --m-ink: #f5f5f7;
+  --m-secondary: #c7c7cc;
+  --m-muted: #98989d;
+  --m-primary: #ffffff;
+  --m-primary-hover: #e5e5ea;
+  --m-primary-active: #c7c7cc;
+  --m-on-primary: #000000;
+  --m-focus: #ffffff;
+  --m-link: #f5f5f7;
+  --m-selected: #1c1c1e;
+  --m-success: #30d158;
+  --m-warning: #ffd60a;
+  --m-danger: #ff6961;
+  --m-float: none;
+}
+:root[data-mortar-brand="green"] {
+  --m-primary: #047857;
+  --m-primary-hover: #065f46;
+  --m-primary-active: #064e3b;
+  --m-on-primary: #ffffff;
+  --m-focus: #047857;
+  --m-link: #047857;
+  --m-selected: #e6f5ed;
+}
+:root[data-mortar-brand="green"][data-mortar-appearance="dark"] {
+  --m-focus: #6ee7b7;
+  --m-link: #6ee7b7;
+  --m-selected: #062d23;
+}
+:root[data-mortar-density="compact"] {
+  --m-control: 30px;
+  --m-pad: 10px;
+  --m-font-size: 13px;
+  --m-row-pad: 10px;
+}
+:root[data-mortar-density="spacious"] {
+  --m-control: 44px;
+  --m-pad: 18px;
+  --m-font-size: 15px;
+  --m-row-pad: 18px;
+}
+@media (pointer: coarse) {
+  :root[data-mortar] {
+    --m-control: 44px;
+  }
+}

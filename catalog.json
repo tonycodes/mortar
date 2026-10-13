@@ -1,0 +1,1520 @@
+{
+  "schemaVersion": 1,
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "policyVersion": "1.0.0",
+  "components": [
+    {
+      "id": "mortar-action-link",
+      "logicalId": "action-link",
+      "name": "ActionLink",
+      "description": "Mortar foundation action link, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "ActionLink",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation", "action", "keyboard"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "href": "string",
+          "variant": "primary | secondary | ghost | danger"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { ActionLink } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/ActionLinkPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-activity-feed",
+      "logicalId": "activity-feed",
+      "name": "ActivityFeed",
+      "description": "Mortar application activity feed, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "ActivityFeed",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application", "status"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { ActivityFeed } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/ActivityFeedPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-app-shell",
+      "logicalId": "app-shell",
+      "name": "AppShell",
+      "description": "Mortar application app shell, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "AppShell",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "brand": "string",
+          "workspace": "string",
+          "navigation": "NavigationItem[]",
+          "secondaryNavigation": "{ label: string; items: NavigationItem[] }[]",
+          "user": "ReactNode",
+          "header": "ReactNode",
+          "actions": "ReactNode",
+          "children": "ReactNode"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { AppShell } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-button"]
+      },
+      "preview": {
+        "source": "previews/AppShellPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-appearance-control",
+      "logicalId": "appearance-control",
+      "name": "AppearanceControl",
+      "description": "Mortar foundation appearance control, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "AppearanceControl",
+      "source": "src/foundation.tsx",
+      "capabilities": ["theme", "foundation"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {},
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { AppearanceControl } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-theme-provider"]
+      },
+      "preview": {
+        "source": "previews/AppearanceControlPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-badge",
+      "logicalId": "badge",
+      "name": "Badge",
+      "description": "Mortar foundation badge, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Badge",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation", "status"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "children": "ReactNode",
+          "tone": "neutral | success | warning | danger"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Badge } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/BadgePreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-button",
+      "logicalId": "button",
+      "name": "Button",
+      "description": "Mortar foundation button, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Button",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation", "action", "keyboard"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "children": "ReactNode",
+          "variant": "primary | secondary | ghost | danger",
+          "loading": "boolean",
+          "disabled": "boolean",
+          "type": "button | submit | reset",
+          "onClick": "MouseEventHandler<HTMLButtonElement>"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Button } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/ButtonPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-call-to-action",
+      "logicalId": "call-to-action",
+      "name": "CallToAction",
+      "description": "Mortar marketing call to action, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "CallToAction",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "string",
+          "actions": "LinkAction[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-action-link"]
+      },
+      "preview": {
+        "source": "previews/CallToActionPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-checkbox",
+      "logicalId": "checkbox",
+      "name": "Checkbox",
+      "description": "Mortar foundation checkbox, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Checkbox",
+      "source": "src/primitives.tsx",
+      "capabilities": [
+        "theme",
+        "foundation",
+        "input",
+        "validation",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "checked": "boolean",
+          "onChange": "ChangeEventHandler<HTMLInputElement>"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Checkbox } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/CheckboxPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-code-block",
+      "logicalId": "code-block",
+      "name": "CodeBlock",
+      "description": "Mortar application code block, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "CodeBlock",
+      "source": "src/inspection.tsx",
+      "capabilities": ["theme", "application"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "code": "string",
+          "label": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { CodeBlock } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/CodeBlockPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-data-table",
+      "logicalId": "data-table",
+      "name": "DataTable",
+      "description": "Mortar application data table, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "DataTable",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application", "table"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "caption": "string",
+          "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: left | right }[]",
+          "rows": "T[] where T extends { id: string }",
+          "rowLabel": "(row: T) => string",
+          "selectedIds": "string[]",
+          "onSelectionChange": "(ids: string[]) => void",
+          "toolbar": "ReactNode",
+          "bulkActions": "ReactNode",
+          "loading": "boolean",
+          "error": "string",
+          "emptyTitle": "string",
+          "emptyDescription": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { DataTable } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"]
+      },
+      "preview": {
+        "source": "previews/DataTablePreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-dropdown",
+      "logicalId": "dropdown",
+      "name": "Dropdown",
+      "description": "Mortar foundation dropdown, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Dropdown",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation", "action", "keyboard"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "items": "{ label: string; onSelect: () => void; danger?: boolean; disabled?: boolean }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Dropdown } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/DropdownPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-empty-state",
+      "logicalId": "empty-state",
+      "name": "EmptyState",
+      "description": "Mortar foundation empty state, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "EmptyState",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "string",
+          "action": "ReactNode"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { EmptyState } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/EmptyStatePreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-faq",
+      "logicalId": "faq",
+      "name": "FAQ",
+      "description": "Mortar marketing faq, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "FAQ",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "ReactNode",
+          "items": "{ question: string; answer: ReactNode }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { FAQ } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/FAQPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-feature-grid",
+      "logicalId": "feature-grid",
+      "name": "FeatureGrid",
+      "description": "Mortar marketing feature grid, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "FeatureGrid",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "eyebrow": "string",
+          "description": "string",
+          "items": "{ title: string; description: string; icon?: ReactNode }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { FeatureGrid } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/FeatureGridPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-feature-section",
+      "logicalId": "feature-section",
+      "name": "FeatureSection",
+      "description": "Mortar marketing feature section, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "FeatureSection",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "string",
+          "children": "ReactNode",
+          "reverse": "boolean"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { FeatureSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/FeatureSectionPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-footer",
+      "logicalId": "footer",
+      "name": "Footer",
+      "description": "Mortar marketing footer, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Footer",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "brand": "string",
+          "description": "string",
+          "columns": "{ title: string; links: LinkAction[] }[]",
+          "copyright": "string",
+          "legal": "LinkAction[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/FooterPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-hero",
+      "logicalId": "hero",
+      "name": "Hero",
+      "description": "Mortar marketing hero, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Hero",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "eyebrow": "string",
+          "title": "string",
+          "description": "string",
+          "actions": "LinkAction[]",
+          "children": "ReactNode",
+          "align": "center | split",
+          "headingLevel": "1 | 2"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-action-link"]
+      },
+      "preview": {
+        "source": "previews/HeroPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-input",
+      "logicalId": "input",
+      "name": "Input",
+      "description": "Mortar foundation input, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Input",
+      "source": "src/primitives.tsx",
+      "capabilities": [
+        "theme",
+        "foundation",
+        "input",
+        "validation",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "value": "string | number",
+          "onChange": "ChangeEventHandler<HTMLInputElement>",
+          "hint": "string",
+          "error": "string",
+          "prefix": "string",
+          "suffix": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Input } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/InputPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-logo-cloud",
+      "logicalId": "logo-cloud",
+      "name": "LogoCloud",
+      "description": "Mortar marketing logo cloud, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "LogoCloud",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "items": "{ name: string; image?: string }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { LogoCloud } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/LogoCloudPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-marketing-header",
+      "logicalId": "marketing-header",
+      "name": "MarketingHeader",
+      "description": "Mortar marketing marketing header, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "MarketingHeader",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "brand": "string",
+          "homeHref": "string",
+          "links": "LinkAction[]",
+          "action": "LinkAction",
+          "controls": "ReactNode"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-button", "mortar-action-link"]
+      },
+      "preview": {
+        "source": "previews/MarketingHeaderPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-metric-group",
+      "logicalId": "metric-group",
+      "name": "MetricGroup",
+      "description": "Mortar application metric group, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "MetricGroup",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application", "summary"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "items": "{ label: string; value: string; change?: string; tone?: Tone }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { MetricGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/MetricGroupPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-modal",
+      "logicalId": "modal",
+      "name": "Modal",
+      "description": "Mortar foundation modal, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Modal",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "open": "boolean",
+          "onClose": "() => void",
+          "children": "ReactNode",
+          "actions": "ReactNode"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Modal } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-button"]
+      },
+      "preview": {
+        "source": "previews/ModalPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-notice",
+      "logicalId": "notice",
+      "name": "Notice",
+      "description": "Mortar foundation notice, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Notice",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation", "status"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "children": "ReactNode",
+          "tone": "neutral | success | warning | danger",
+          "announce": "boolean"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Notice } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/NoticePreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-page-heading",
+      "logicalId": "page-heading",
+      "name": "PageHeading",
+      "description": "Mortar application page heading, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "PageHeading",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "string",
+          "eyebrow": "string",
+          "actions": "ReactNode",
+          "breadcrumbs": "{ label: string; href?: string }[]",
+          "headingLevel": "1 | 2"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { PageHeading } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/PageHeadingPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-pagination",
+      "logicalId": "pagination",
+      "name": "Pagination",
+      "description": "Mortar application pagination, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Pagination",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "page": "number",
+          "pageCount": "number",
+          "onChange": "(page: number) => void"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Pagination } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-button"]
+      },
+      "preview": {
+        "source": "previews/PaginationPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-preview-frame",
+      "logicalId": "preview-frame",
+      "name": "PreviewFrame",
+      "description": "Mortar application preview frame, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "PreviewFrame",
+      "source": "src/inspection.tsx",
+      "capabilities": ["theme", "application"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "src": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { PreviewFrame } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/PreviewFramePreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-pricing",
+      "logicalId": "pricing",
+      "name": "Pricing",
+      "description": "Mortar marketing pricing, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Pricing",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "string",
+          "plans": "PricingPlan[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": ["mortar-action-link"]
+      },
+      "preview": {
+        "source": "previews/PricingPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-radio-group",
+      "logicalId": "radio-group",
+      "name": "RadioGroup",
+      "description": "Mortar foundation radio group, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "RadioGroup",
+      "source": "src/primitives.tsx",
+      "capabilities": [
+        "theme",
+        "foundation",
+        "input",
+        "validation",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "name": "string",
+          "value": "string",
+          "onChange": "(value: string) => void",
+          "options": "{ value: string; label: string; description?: string }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/RadioGroupPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-segmented-control",
+      "logicalId": "segmented-control",
+      "name": "SegmentedControl",
+      "description": "Mortar foundation segmented control, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "SegmentedControl",
+      "source": "src/inspection.tsx",
+      "capabilities": ["theme", "foundation", "action", "keyboard"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "value": "string",
+          "options": "{ value: string; label: string }[]",
+          "onChange": "(value: string) => void"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { SegmentedControl } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/SegmentedControlPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-select",
+      "logicalId": "select",
+      "name": "Select",
+      "description": "Mortar foundation select, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Select",
+      "source": "src/primitives.tsx",
+      "capabilities": [
+        "theme",
+        "foundation",
+        "input",
+        "validation",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "options": "{ value: string; label: string }[]",
+          "value": "string",
+          "onChange": "ChangeEventHandler<HTMLSelectElement>",
+          "hint": "string",
+          "error": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Select } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/SelectPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-settings-section",
+      "logicalId": "settings-section",
+      "name": "SettingsSection",
+      "description": "Mortar application settings section, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "SettingsSection",
+      "source": "src/application.tsx",
+      "capabilities": ["theme", "application"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference",
+        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+      },
+      "contract": {
+        "props": {
+          "title": "string",
+          "description": "string",
+          "children": "ReactNode"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { SettingsSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/SettingsSectionPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-switch",
+      "logicalId": "switch",
+      "name": "Switch",
+      "description": "Mortar foundation switch, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Switch",
+      "source": "src/primitives.tsx",
+      "capabilities": [
+        "theme",
+        "foundation",
+        "input",
+        "validation",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "checked": "boolean",
+          "onChange": "ChangeEventHandler<HTMLInputElement>"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Switch } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/SwitchPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-tabs",
+      "logicalId": "tabs",
+      "name": "Tabs",
+      "description": "Mortar foundation tabs, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Tabs",
+      "source": "src/primitives.tsx",
+      "capabilities": ["theme", "foundation", "action", "keyboard"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "value": "string",
+          "onChange": "(value: string) => void",
+          "items": "{ id: string; label: string; content: ReactNode }[]"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Tabs } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/TabsPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-testimonial",
+      "logicalId": "testimonial",
+      "name": "Testimonial",
+      "description": "Mortar marketing testimonial, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Testimonial",
+      "source": "src/marketing.tsx",
+      "capabilities": ["theme", "marketing"],
+      "owner": "Mortar maintainers",
+      "kitId": "marketing",
+      "provenance": {
+        "kitId": "marketing",
+        "exampleId": "mortar-marketing-reference",
+        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+      },
+      "contract": {
+        "props": {
+          "quote": "string",
+          "name": "string",
+          "role": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Testimonial } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/TestimonialPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-text-area",
+      "logicalId": "text-area",
+      "name": "TextArea",
+      "description": "Mortar foundation text area, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "TextArea",
+      "source": "src/primitives.tsx",
+      "capabilities": [
+        "theme",
+        "foundation",
+        "input",
+        "validation",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "label": "string",
+          "value": "string",
+          "onChange": "ChangeEventHandler<HTMLTextAreaElement>",
+          "hint": "string",
+          "error": "string"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { TextArea } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/TextAreaPreview.tsx"
+      }
+    },
+    {
+      "id": "mortar-theme-provider",
+      "logicalId": "theme-provider",
+      "name": "ThemeProvider",
+      "description": "Mortar foundation theme provider, using central semantic tokens.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "ThemeProvider",
+      "source": "src/foundation.tsx",
+      "capabilities": ["theme", "foundation"],
+      "owner": "Mortar maintainers",
+      "kitId": "foundation",
+      "provenance": {
+        "kitId": "foundation",
+        "exampleId": "mortar-foundation-reference",
+        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+      },
+      "contract": {
+        "props": {
+          "children": "ReactNode",
+          "initialAppearance": "light | dark | system",
+          "brand": "neutral | green",
+          "density": "compact | comfortable | spacious"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { ThemeProvider } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/ThemeProviderPreview.tsx"
+      }
+    }
+  ]
+}

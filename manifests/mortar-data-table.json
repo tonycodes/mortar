@@ -1,0 +1,49 @@
+{
+  "id": "mortar-data-table",
+  "logicalId": "data-table",
+  "name": "DataTable",
+  "description": "Mortar application data table, using central semantic tokens.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "DataTable",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application", "table"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference",
+    "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+  },
+  "contract": {
+    "props": {
+      "caption": "string",
+      "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: left | right }[]",
+      "rows": "T[] where T extends { id: string }",
+      "rowLabel": "(row: T) => string",
+      "selectedIds": "string[]",
+      "onSelectionChange": "(ids: string[]) => void",
+      "toolbar": "ReactNode",
+      "bulkActions": "ReactNode",
+      "loading": "boolean",
+      "error": "string",
+      "emptyTitle": "string",
+      "emptyDescription": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { DataTable } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"]
+  },
+  "preview": {
+    "source": "previews/DataTablePreview.tsx"
+  }
+}

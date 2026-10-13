@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "rules": {
+    "M001": "Exports require unique manifests and preview fixtures",
+    "M002": "Source and preview paths stay inside the repository",
+    "M003": "Dependencies reference known component IDs",
+    "M004": "Shared components cannot depend on hosted services",
+    "M005": "Component implementations use semantic colour tokens"
+  }
+}
