@@ -35,5 +35,14 @@
   },
   "preview": {
     "source": "previews/MetricGroupPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-metrics",
+    "states": []
+  },
+  "integrity": {
+    "source": "5004e5a15db33c7c7e61fb55b6f7fe389ab010a2f9c6d7a85d59bb31f925f26b",
+    "preview": "f405b845244804d40e33918d7c6b50c9743934b6f70c73bba0448fe28d3ea8c2"
   }
 }

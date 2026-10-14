@@ -37,5 +37,15 @@
   },
   "preview": {
     "source": "previews/SegmentedControlPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-segmented",
+    "states": [],
+    "probe": "segmented"
+  },
+  "integrity": {
+    "source": "3c38afb8d8c612ffa33d7a0b955b1bcacd41f001993cc029dc054908943089ee",
+    "preview": "4000e02f33df071f9d39fe82692b3939e28e9d8e2b350c3a2f1cee97fb78501d"
   }
 }

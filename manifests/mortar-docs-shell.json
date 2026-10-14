@@ -44,5 +44,15 @@
   },
   "preview": {
     "source": "previews/DocsShellPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-docs-shell",
+    "states": [],
+    "probe": "navigation"
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "d1f0d88999a696ec8cb89f40f22a79d9dd5cc8a1cb558f7500a216ab22ff1c7b"
   }
 }

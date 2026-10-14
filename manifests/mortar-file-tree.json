@@ -35,5 +35,14 @@
   },
   "preview": {
     "source": "previews/FileTreePreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-file-tree",
+    "states": []
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "15deff24240f9b3fb00d54387b4fdd174aac93e7bd10995502251cbdd638d6ae"
   }
 }

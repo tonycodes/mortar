@@ -37,5 +37,15 @@
   },
   "preview": {
     "source": "previews/PageFeedbackPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-page-feedback",
+    "states": [],
+    "probe": "feedback"
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "a13b045a046f10251c9eab8f1f66ce84a4678f215583fe8408cbdf4d185195de"
   }
 }

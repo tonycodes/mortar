@@ -37,5 +37,14 @@
   },
   "preview": {
     "source": "previews/PostListPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-post-list",
+    "states": []
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "97627a1ff1b47fd480e894b329c05567b17f88715c36c5ecbaab34fdcee826dd"
   }
 }

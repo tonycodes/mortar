@@ -40,5 +40,15 @@
   },
   "preview": {
     "source": "previews/SaveBarPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-save-bar",
+    "states": [],
+    "probe": "save"
+  },
+  "integrity": {
+    "source": "5cb46a8bf382ebb9e1414064f6e9504317f03f2b9cf72431392cfe0f09973517",
+    "preview": "7a258ae7c0f4df55aac9cac696c006ec4790e952ec8ca2f425529d0aca280fb8"
   }
 }

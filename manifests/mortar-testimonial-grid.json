@@ -35,5 +35,14 @@
   },
   "preview": {
     "source": "previews/TestimonialGridPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-testimonial-grid",
+    "states": []
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "60bfcbb83bd219c30af7150666d0c03707055f8305a014e728a4f628e71452cf"
   }
 }

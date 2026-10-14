@@ -12,14 +12,28 @@ import "./styles.css";
 const fixtures = import.meta.glob("../previews/*Preview.tsx");
 const params = new URLSearchParams(location.search);
 const component = params.get("component") || "Button";
-const loader = fixtures[`../previews/${component}Preview.tsx`];
+const entry = catalog.components.find((c) => c.export === component);
+const loader = entry ? fixtures[`../${entry.preview.source}`] : undefined;
 const Preview = loader
   ? lazy(loader as () => Promise<{ default: ComponentType }>)
   : null;
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider
     brand={params.get("brand") === "green" ? "green" : "neutral"}
-    initialAppearance={params.get("theme") === "dark" ? "dark" : "light"}
+    initialAppearance={
+      params.get("theme") === "system"
+        ? "system"
+        : params.get("theme") === "dark"
+          ? "dark"
+          : "light"
+    }
+    density={
+      params.get("density") === "compact"
+        ? "compact"
+        : params.get("density") === "spacious"
+          ? "spacious"
+          : "comfortable"
+    }
   >
     <main className="m-stack p-6 mx-auto max-w-6xl">
       <PageHeading
@@ -41,9 +55,17 @@ createRoot(document.getElementById("root")!).render(
         />
         <AppearanceControl />
       </div>
-      <Suspense fallback={<p role="status">Loading preview…</p>}>
+      <Suspense
+        fallback={
+          <p role="status" aria-label="Loading preview">
+            Loading preview…
+          </p>
+        }
+      >
         {Preview ? (
-          <Preview />
+          <div data-mortar-preview={component}>
+            <Preview />
+          </div>
         ) : (
           <Notice title="Unknown component" tone="danger">
             Choose a component from the catalogue.

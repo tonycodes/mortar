@@ -36,5 +36,15 @@
   },
   "preview": {
     "source": "previews/PricingPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-pricing",
+    "states": [],
+    "probe": "pricing"
+  },
+  "integrity": {
+    "source": "bf6b274632ab63a5d1a255eb0c8be31ddeef47235382c3b7c6492267ad688c55",
+    "preview": "336a9ac1ba5b993b3fb18325e57df774782807b11f8ab135d0a0a596c123b32f"
   }
 }

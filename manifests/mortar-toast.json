@@ -38,5 +38,15 @@
   },
   "preview": {
     "source": "previews/ToastPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-toast",
+    "states": [],
+    "probe": "toast"
+  },
+  "integrity": {
+    "source": "5cb46a8bf382ebb9e1414064f6e9504317f03f2b9cf72431392cfe0f09973517",
+    "preview": "e83fbdca50778a2ff9df61f3c26c0ea694a78f1d44d34a4491cb06fda72d1f51"
   }
 }

@@ -35,5 +35,15 @@
   },
   "preview": {
     "source": "previews/DropdownPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-button",
+    "states": [],
+    "probe": "menu"
+  },
+  "integrity": {
+    "source": "7eb43de6aac8742606fb2d304c1ed7afd52fca6e100c7635138606fd63160c70",
+    "preview": "03de94929c858df0f2a9a39716af67baa8014258aa807b95f71a8121bb3ade3c"
   }
 }

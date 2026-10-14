@@ -38,5 +38,14 @@
   },
   "preview": {
     "source": "previews/AvatarPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-avatar",
+    "states": []
+  },
+  "integrity": {
+    "source": "3b304860584e7d7e0debd137d4302419d2dcd52a8366b81f7203e0ffd0fa64fb",
+    "preview": "a12e25c3021306185375e603bcb5cc08615f58f1eed5feb9c99071baab29caef"
   }
 }

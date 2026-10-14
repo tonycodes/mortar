@@ -36,5 +36,14 @@
   },
   "preview": {
     "source": "previews/TestimonialPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-testimonial",
+    "states": []
+  },
+  "integrity": {
+    "source": "bf6b274632ab63a5d1a255eb0c8be31ddeef47235382c3b7c6492267ad688c55",
+    "preview": "9d403f2c402726bf40f1aa44dc34456054497966d3a2bf9c5edd7ddecc796e29"
   }
 }

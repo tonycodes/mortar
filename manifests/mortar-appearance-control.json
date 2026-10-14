@@ -32,5 +32,15 @@
   },
   "preview": {
     "source": "previews/AppearanceControlPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-segmented",
+    "states": [],
+    "probe": "appearance"
+  },
+  "integrity": {
+    "source": "5f338a1bec0b5dd7abd0ace93dd93ff4e9935edccc3ccd90b2d717f46aeb8d5f",
+    "preview": "1839a8a19812e7d2b28cebae0bb7c720401df321089cce7ea6a5358f8e3b0828"
   }
 }

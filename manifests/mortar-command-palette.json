@@ -42,5 +42,15 @@
   },
   "preview": {
     "source": "previews/CommandPalettePreview.tsx"
+  },
+  "testing": {
+    "profile": "overlay",
+    "target": ".m-button",
+    "states": [],
+    "probe": "dialog"
+  },
+  "integrity": {
+    "source": "c3df07d0dfeb183e8d6fd4808f2942f4abf2593db4795b08037aee2b7ef3a1ea",
+    "preview": "3b9784e9e146049bf210f43de69ffbf72257e211255d08bbcc4455c3284a942c"
   }
 }

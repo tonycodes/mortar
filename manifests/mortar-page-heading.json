@@ -39,5 +39,14 @@
   },
   "preview": {
     "source": "previews/PageHeadingPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-page-heading",
+    "states": []
+  },
+  "integrity": {
+    "source": "5004e5a15db33c7c7e61fb55b6f7fe389ab010a2f9c6d7a85d59bb31f925f26b",
+    "preview": "16773e46c68712ca36ebb6c02187f839e90534bca7f6a901eeef60db179748ba"
   }
 }

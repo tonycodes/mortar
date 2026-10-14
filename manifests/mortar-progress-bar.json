@@ -38,5 +38,14 @@
   },
   "preview": {
     "source": "previews/ProgressBarPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-progress",
+    "states": []
+  },
+  "integrity": {
+    "source": "3b304860584e7d7e0debd137d4302419d2dcd52a8366b81f7203e0ffd0fa64fb",
+    "preview": "a6d08f8fa4079e31bb7b6cac32d71b392e1454535b220fd0498ab90be82f3858"
   }
 }

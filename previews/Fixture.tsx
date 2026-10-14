@@ -1,3 +1,4 @@
+import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 export function PreviewCase({ name }: { name: string }) {
@@ -12,6 +13,8 @@ export function PreviewCase({ name }: { name: string }) {
       hint="A name for your workspace"
     />
   );
+  const scenario = new URLSearchParams(location.search).get("state");
+  if (scenario) return <StateFixture name={name} state={scenario} />;
   const action = { label: "Explore", href: "#example" };
   const items = [
     {
@@ -38,10 +41,13 @@ export function PreviewCase({ name }: { name: string }) {
     case "Button":
       example = (
         <>
-          <UI.Button>Save changes</UI.Button>
+          <UI.Button onClick={() => setChecked(true)}>Save changes</UI.Button>
           <UI.Button variant="secondary">Cancel</UI.Button>
           <UI.Button variant="danger">Delete</UI.Button>
           <UI.Button loading>Saving</UI.Button>
+          <output aria-label="Action result">
+            {checked ? "saved" : "idle"}
+          </output>
         </>
       );
       break;
@@ -455,22 +461,5 @@ export function PreviewCase({ name }: { name: string }) {
         </UI.Notice>
       );
   }
-  return (
-    <UI.ThemeProvider
-      brand={
-        typeof document !== "undefined" &&
-        document.documentElement.dataset.mortarBrand === "green"
-          ? "green"
-          : "neutral"
-      }
-      initialAppearance={
-        typeof document !== "undefined" &&
-        document.documentElement.dataset.mortarAppearance === "dark"
-          ? "dark"
-          : "light"
-      }
-    >
-      <div className="m-stack">{example}</div>
-    </UI.ThemeProvider>
-  );
+  return <div className="m-stack">{example}</div>;
 }

@@ -37,5 +37,14 @@
   },
   "preview": {
     "source": "previews/NotFoundPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-not-found",
+    "states": []
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "3e4ab61ef24ebd16aab58c8fc15a97d1d842dac91d293c5a68f5ad36b2088766"
   }
 }

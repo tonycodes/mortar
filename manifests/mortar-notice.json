@@ -37,5 +37,14 @@
   },
   "preview": {
     "source": "previews/NoticePreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-notice",
+    "states": []
+  },
+  "integrity": {
+    "source": "7eb43de6aac8742606fb2d304c1ed7afd52fca6e100c7635138606fd63160c70",
+    "preview": "bf1ce3b6d7539a32407a82dc3c8e4914557049599e53a9c2d3777dedecd626ff"
   }
 }
