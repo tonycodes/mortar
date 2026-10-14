@@ -27,3 +27,7 @@ See [TESTING.md](TESTING.md) for profiles, state fixtures, integrity checks, exe
 ## Browsing the playground
 
 Browse the grouped kit navigation or search by component name. On narrow screens, Menu opens the same catalogue. Brand, density, appearance and declared example states are reflected in the URL, so a preview can be shared or revisited. Open “Usage and component contract” for imports and prop metadata. The explorer composes the shared DocsShell with its `wide` layout; shell fixes belong in the kit, not playground CSS.
+
+## Automatic playground deployment
+
+Merges to `main` automatically deploy the playground at https://ui.tony.codes/playground/ after the required checks pass on the merged commit. A separate deployment workflow receives a restricted static-upload credential; PR and build jobs do not. Failed checks leave the current production release unchanged. See [deployment operations](ops/README.md). This does not publish a new npm package version.

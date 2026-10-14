@@ -23,10 +23,25 @@ jobs:
       - name: Check public kit
         id: kit-check
         run: npm run check
+      - name: Test deployment receiver safety
+        run: python3 -m unittest discover -s ops/tests
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - name: Compare curated visual baselines
         run: npm run test:visual
+      - name: Build production playground
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          npm run build:playground -- --base /playground/ --outDir ../playground-production
+          tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -czf release.tar.gz -C playground-production .
+      - name: Upload checked production playground
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortar-playground-production-${{ github.sha }}
+          path: release.tar.gz
+          if-no-files-found: error
+          retention-days: 14
       - name: Upload interactive review playground
         if: always() && steps.kit-check.outcome == 'success'
         uses: actions/upload-artifact@v4
