@@ -188,6 +188,14 @@ export const implementations = {
     await select.click();
     await expect(select).toBeChecked();
     await expect(root.getByText("1 selected")).toBeVisible();
+    const edit = root.getByRole("button", { name: "Edit Acme", exact: true });
+    await edit.click();
+    await expect(root.getByText("Page 2 of 3")).toBeVisible();
+    await expect(page).not.toHaveURL(/#project-acme$/);
+    await root.getByRole("button", { name: "Previous" }).click();
+    await edit.focus();
+    await page.keyboard.press("Enter");
+    await expect(root.getByText("Page 2 of 3")).toBeVisible();
     await root.getByRole("link", { name: "Acme" }).click();
     await expect(page).toHaveURL(/#project-acme$/);
   },

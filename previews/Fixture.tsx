@@ -311,6 +311,15 @@ export function PreviewCase({ name }: { name: string }) {
               render: (row) => row.requests.toLocaleString("en-GB"),
               sortable: true,
             },
+            {
+              key: "actions",
+              label: "Actions",
+              render: (row) => (
+                <UI.Button onClick={() => setPage(2)}>
+                  Edit {row.name}
+                </UI.Button>
+              ),
+            },
           ]}
           rows={[
             {

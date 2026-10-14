@@ -1536,8 +1536,19 @@
     outline: 2px solid var(--m-focus);
     outline-offset: -2px;
   }
-  /* Selection checkboxes stay clickable above the row link overlay. */
-  .m-data-table tr[data-linked] input {
+  /* Cell actions remain independent of the stretched row navigation link. */
+  .m-data-table
+    tr[data-linked]
+    :is(
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      a:not(.m-row-link),
+      [role="button"],
+      [tabindex]
+    ) {
     position: relative;
     z-index: 1;
   }
