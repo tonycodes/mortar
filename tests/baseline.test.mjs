@@ -89,6 +89,12 @@ test("baseline rejects stale source/preview closure, catalogue drift and undocum
         (f) => f.rule === "M007" && f.file.includes("mortar-button"),
       ),
     );
+    c.testing.profile = "control";
+    c.id = "../attempt-" + dir.split("/").pop();
+    await writeFile(file, JSON.stringify(c));
+    const refreshed = await checkKit(dir, { refresh: true });
+    assert.ok(refreshed.findings.some((f) => f.rule === "M001"));
+    await assert.rejects(readFile(join(dir, "manifests", c.id + ".json")));
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

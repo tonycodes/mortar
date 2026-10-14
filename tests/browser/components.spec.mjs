@@ -63,6 +63,12 @@ for (const component of components) {
             ? scope.getByRole("button", { name: "Confirm", exact: true })
             : controls.first();
         await expect(target).toBeDisabled();
+        const bounds = await target.boundingBox();
+        expect(bounds).not.toBeNull();
+        await page.mouse.click(
+          bounds.x + bounds.width / 2,
+          bounds.y + bounds.height / 2,
+        );
         await expect(fixture.getByLabel("Callback count")).toHaveText("0");
       } else if (state === "error") {
         await expect(scope.getByText("Check this value")).toBeVisible();
