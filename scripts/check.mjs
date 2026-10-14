@@ -52,6 +52,23 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
     ts.ScriptTarget.Latest,
     true,
   );
+  for (const node of ast.statements) {
+    if (
+      (ts.isExportDeclaration(node) &&
+        !node.isTypeOnly &&
+        (!node.exportClause || !ts.isNamedExports(node.exportClause))) ||
+      ts.isExportAssignment(node) ||
+      (!ts.isExportDeclaration(node) &&
+        !ts.isInterfaceDeclaration(node) &&
+        !ts.isTypeAliasDeclaration(node) &&
+        ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export)
+    )
+      add(
+        "M001",
+        "src/index.ts",
+        "Public runtime exports must use explicit named export lists so every export receives a manifest and test contract.",
+      );
+  }
   for (const node of ast.statements)
     if (
       ts.isExportDeclaration(node) &&

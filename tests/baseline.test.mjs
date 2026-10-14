@@ -27,7 +27,7 @@ test("baseline rejects path escape, missing dependencies, hidden exports and hos
     await writeFile(file, JSON.stringify(c));
     await writeFile(
       join(dir, "src/index.ts"),
-      "export { Surprise } from './primitives.js';\n",
+      "export { Surprise } from './primitives.js';\nexport function HiddenRuntime() {}\nexport * from './application.js';\n",
       { flag: "a" },
     );
     await writeFile(
@@ -40,6 +40,12 @@ test("baseline rejects path escape, missing dependencies, hidden exports and hos
     );
     const result = await checkKit(dir);
     assert.equal(result.passed, false);
+    assert.ok(
+      result.findings.some(
+        (f) => f.rule === "M001" && f.message.includes("explicit named"),
+      ),
+      "Direct and wildcard exports cannot bypass the contract",
+    );
     for (const rule of ["M001", "M002", "M003", "M004", "M005"])
       assert.ok(
         result.findings.some((f) => f.rule === rule),
