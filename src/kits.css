@@ -1558,6 +1558,14 @@
     background: var(--m-surface);
   }
   :is(.m-marketing-section, .m-feature-section)[data-tone="inverse"] {
+    color-scheme: var(--m-inv-color-scheme);
+    --m-line-strong: var(--m-inv-line-strong);
+    --m-primary-active: var(--m-inv-primary-active);
+    --m-selected: var(--m-inv-selected);
+    --m-success: var(--m-inv-success);
+    --m-warning: var(--m-inv-warning);
+    --m-danger: var(--m-inv-danger);
+    --m-on-feedback: var(--m-inv-on-feedback);
     --m-paper: var(--m-inv-paper);
     --m-surface: var(--m-inv-surface);
     --m-sunken: var(--m-inv-surface);

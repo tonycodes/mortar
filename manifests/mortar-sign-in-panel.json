@@ -44,11 +44,11 @@
   "testing": {
     "profile": "control",
     "target": ".m-sign-in",
-    "states": [],
+    "states": ["loading", "error", "success"],
     "probe": "sign-in"
   },
   "integrity": {
-    "source": "e742a99a8d2615d2c917a5488a95fcfa8f6334fb91f10bdd40df8ad1c8095600",
-    "preview": "94c0af00f6a3d0e1b4205d353808d10171c941ade55672575ef42e633f8b50d8"
+    "source": "7e4b72f8ec3e5715ed4b54d784f532ddc4c96b27493684dfab02583d3b5440b1",
+    "preview": "5ffd440a57aa8f8b3328b15e808d148194327ada273641ca18a0aa964cc0e0af"
   }
 }

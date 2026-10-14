@@ -105,6 +105,7 @@ export function CompositionCase({ name }: { name: string }) {
           >
             <UI.Stack direction="row" justify="center">
               <UI.ActionLink label="Explore" href="#example" />
+              <UI.CheckList items={["Included feature"]} />
             </UI.Stack>
           </UI.Section>
         </>

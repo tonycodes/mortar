@@ -67,7 +67,10 @@ export function contractErrors(component) {
   if (
     !Array.isArray(t.states) ||
     t.states.some(
-      (s) => !["disabled", "loading", "error", "empty", "long"].includes(s),
+      (s) =>
+        !["disabled", "loading", "error", "empty", "long", "success"].includes(
+          s,
+        ),
     ) ||
     new Set(t.states).size !== t.states.length
   )

@@ -37,6 +37,14 @@
   --m-radius-lg: 12px;
   --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
   /* Inverse bands (section tone="inverse") flip appearance locally. */
+  --m-inv-line-strong: #727278;
+  --m-inv-primary-active: #c7c7cc;
+  --m-inv-selected: #1c1c1e;
+  --m-inv-success: #30d158;
+  --m-inv-warning: #ffd60a;
+  --m-inv-danger: #ff6961;
+  --m-inv-on-feedback: #000000;
+  --m-inv-color-scheme: dark;
   --m-inv-paper: #000000;
   --m-inv-surface: #1c1c1e;
   --m-inv-line: #3a3a3c;
@@ -76,6 +84,14 @@
   --m-code-bg: #0e0e10;
   --m-code-line: rgb(255 255 255 / 0.1);
   --m-float: none;
+  --m-inv-line-strong: #8e8e93;
+  --m-inv-primary-active: #3a3a3c;
+  --m-inv-selected: #f2f2f4;
+  --m-inv-success: #1f7a36;
+  --m-inv-warning: #945700;
+  --m-inv-danger: #c70014;
+  --m-inv-on-feedback: #ffffff;
+  --m-inv-color-scheme: light;
   --m-inv-paper: #f5f5f7;
   --m-inv-surface: #ffffff;
   --m-inv-line: #d1d1d6;
@@ -98,6 +114,8 @@
   --m-selected: #e6f5ed;
 }
 :root[data-mortar-brand="green"] {
+  --m-inv-primary-active: #34d399;
+  --m-inv-selected: #062d23;
   --m-inv-primary: #6ee7b7;
   --m-inv-primary-hover: #a7f3d0;
   --m-inv-on-primary: #022c22;
@@ -105,6 +123,8 @@
   --m-inv-link: #6ee7b7;
 }
 :root[data-mortar-brand="green"][data-mortar-appearance="dark"] {
+  --m-inv-primary-active: #064e3b;
+  --m-inv-selected: #e6f5ed;
   --m-inv-primary: #047857;
   --m-inv-primary-hover: #065f46;
   --m-inv-on-primary: #ffffff;

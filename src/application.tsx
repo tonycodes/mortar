@@ -470,7 +470,7 @@ export function SignInPanel({
   const Heading = headingLevel === 1 ? "h1" : "h2";
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    email?.onSubmit(value);
+    if (email?.status !== "submitting") email?.onSubmit(value);
   };
   return (
     <section className="m-sign-in" aria-labelledby={headingId}>
@@ -503,7 +503,7 @@ export function SignInPanel({
         </p>
       )}
       {email && (
-        <form onSubmit={submit} noValidate>
+        <form onSubmit={submit} aria-busy={email.status === "submitting"}>
           <Input
             label={email.label || "Email address"}
             type="email"
@@ -513,8 +513,13 @@ export function SignInPanel({
             value={value}
             onChange={(e) => setValue(e.target.value)}
             error={email.status === "error" ? email.message : undefined}
-            hint={email.status === "success" ? email.message : undefined}
+            disabled={email.status === "submitting"}
           />
+          {email.status === "success" && (
+            <p role="status">
+              {email.message || "Check your inbox for a sign-in link."}
+            </p>
+          )}
           <Button type="submit" loading={email.status === "submitting"}>
             {email.submitLabel || "Email me a sign-in link"}
           </Button>

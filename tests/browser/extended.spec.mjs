@@ -37,7 +37,10 @@ for (const theme of ["light", "dark"]) {
           await expect(confirm).toBeEnabled();
         }
         if (component === "DocsShell" && width === 390) {
-          await page.getByRole("button", { name: "Open navigation" }).click();
+          await page
+            .locator('[data-mortar-preview="DocsShell"]')
+            .getByRole("button", { name: "Open navigation" })
+            .click();
           await expect(page.getByRole("dialog")).toBeVisible();
         }
         await expect(page.locator("[data-mortar-appearance]")).toHaveAttribute(
