@@ -1,6 +1,6 @@
 # Contribute
 
-Clone, run npm ci, npm run catalog, npm run check, npm run dev. Use npm run test:browser for both-theme accessibility/rendering checks. The local playground defaults to port 4340. No service registration or npm token is required.
+Clone https://github.com/tonycodes/mortar, run npm ci, npm run catalog, npm run check, npm run dev. Use npm run test:browser for both-theme accessibility/rendering checks. The local playground defaults to port 4340. No service registration or npm token is required.
 
 Use src for central implementations, previews for fixtures and manifests for contracts. Read DESIGN.md and AGENTS.md. Include a reproducible issue and a regression test for fixes. Open a PR with actual check results and visual evidence. Shared shells are versioned alongside controls; applications supply content through props.
 

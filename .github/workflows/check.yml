@@ -4,10 +4,14 @@ on:
     branches: [main, "codex/**"]
   pull_request:
     branches: [main]
+permissions:
+  contents: read
+
 jobs:
   quality:
     name: Mortar baseline and browser checks
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
