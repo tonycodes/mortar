@@ -55,3 +55,41 @@ export {
 } from "./marketing.js";
 export type { PricingPlan } from "./marketing.js";
 export { SegmentedControl, CodeBlock, PreviewFrame } from "./inspection.js";
+export {
+  Avatar,
+  AvatarGroup,
+  Kbd,
+  ProgressBar,
+  FilterChip,
+} from "./display.js";
+export { Toast, Toaster, ConfirmDialog, SaveBar } from "./feedback.js";
+export type { ToastItem } from "./feedback.js";
+export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
+export type { CommandItem } from "./workspace.js";
+export {
+  BentoGrid,
+  StatGroup,
+  TestimonialGrid,
+  PlanComparison,
+  PostList,
+  TeamGrid,
+  ContactSection,
+  Newsletter,
+  NotFound,
+} from "./marketing-sections.js";
+export {
+  DocsShell,
+  SearchTrigger,
+  SearchDialog,
+  Steps,
+  Callout,
+  FileTree,
+  Prose,
+  CodeTabs,
+  Release,
+  ApiEndpoint,
+  PageFeedback,
+  PagerLinks,
+  LinkCards,
+} from "./docs.js";
+export type { DocsShellProps, FileNode } from "./docs.js";

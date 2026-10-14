@@ -1,5 +1,6 @@
 @import "./src/tokens.css";
 @import "./src/components.css";
+@import "./src/kits.css";
 @custom-variant mortar-dark (&:where([data-mortar-appearance='dark'], [data-mortar-appearance='dark'] *));
 @theme inline {
   --color-paper: var(--m-paper);
@@ -11,5 +12,9 @@
   --color-primary: var(--m-primary);
   --color-on-primary: var(--m-on-primary);
   --color-focus: var(--m-focus);
+  --color-success: var(--m-success);
+  --color-warning: var(--m-warning);
+  --color-danger: var(--m-danger);
   --font-sans: var(--m-font);
+  --font-mono: var(--m-mono);
 }
