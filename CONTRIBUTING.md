@@ -9,3 +9,9 @@ Baseline rules are versioned in baseline-policy.json. CI must use the same rules
 Releases are operator-owned. Verify the final merged commit, run all checks, create an immutable version tag, and prepare the exact package using npm run release:prepare. Upload archives and integrity/provenance records before atomically advancing registry metadata. Never overwrite an existing version. The publisher must verify maintainer approval and successful final-commit CI independently. Publication does not call the paid service; ARC indexes published release manifests afterward.
 
 The cloud service may impose additional organisation adoption policies. Those policies cannot prevent development or installation of the public MIT kit.
+
+## Pull request review
+
+GitHub is the component review authority. Include the evidence in the PR template. CI uploads a runnable `mortar-playground-<commit>` artifact and a browser report with screenshots for both themes. Download and extract the playground, run `python3 -m http.server 4340 --bind 127.0.0.1` in that directory, and open http://127.0.0.1:4340. No package install or cloud identity is needed for this preview. Use an isolated browser profile for untrusted PR code. Never deploy PR artifacts to the production/authentication origin.
+
+Preview artifacts are review evidence, not approved releases. GitHub maintainer review and successful required checks apply to the current PR commit. Source changes invalidate prior approval. A merged change needs a new immutable package version before consumers adopt it. There is no second cloud component approval queue.
