@@ -23,9 +23,22 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
   for (const file of (await readdir(resolve(root, "manifests"))).sort()) {
     if (!file.endsWith(".json")) continue;
     try {
-      manifests.push(
-        JSON.parse(await readFile(resolve(root, "manifests", file), "utf8")),
+      const manifest = JSON.parse(
+        await readFile(resolve(root, "manifests", file), "utf8"),
       );
+      if (!manifest || Array.isArray(manifest) || typeof manifest !== "object")
+        throw Error();
+      if (
+        !/^mortar-[a-z][a-z0-9-]*$/.test(manifest.id || "") ||
+        file !== `${manifest.id}.json`
+      ) {
+        add(
+          "M001",
+          `manifests/${file}`,
+          "Use a safe component ID matching its manifest filename.",
+        );
+      }
+      manifests.push(manifest);
     } catch {
       add("M001", `manifests/${file}`, "Manifest must be valid JSON.");
     }

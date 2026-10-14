@@ -49,7 +49,7 @@ ThemeProvider tests check brand, density, light/dark/system changes centrally. T
 
 Sixteen comparisons cover AppShell, DocsShell, PlanComparison and the open ConfirmDialog at 390/1280px in light/dark. Baselines are platform-specific, with CI pinned to Ubuntu 24.04 and the lockfile's Playwright browser. Screenshots wait for fonts and disable animation. They allow a small pixel tolerance, not arbitrary layout changes.
 
-Missing baselines fail. CI never updates or approves them. To propose new baselines on the matching platform:
+Missing baselines fail. Required CI never updates or approves them. A separate read-only workflow renders Linux candidates into an artifact directory, outside the accepted baseline tree. Its success is not a quality gate or approval. To propose new baselines on the matching platform:
 
 ```sh
 npm run test:visual -- --update-snapshots=all
