@@ -1,0 +1,51 @@
+{
+  "id": "mortar-process-steps",
+  "logicalId": "process-steps",
+  "name": "ProcessSteps",
+  "description": "Mortar connected, numbered how-it-works sequence for marketing pages.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ProcessSteps",
+  "source": "src/marketing.tsx",
+  "capabilities": ["theme", "marketing"],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "provenance": {
+    "kitId": "marketing",
+    "exampleId": "mortar-marketing-reference"
+  },
+  "contract": {
+    "props": {
+      "id": "string",
+      "eyebrow": "string",
+      "title": "string",
+      "description": "string",
+      "items": "{ title: string; description: string }[]",
+      "tone": "\"default\" | \"muted\" | \"inverse\""
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ProcessSteps } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ProcessStepsPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-process-steps",
+    "states": []
+  },
+  "integrity": {
+    "source": "29e5b25160278272a39540e228d82b243136d2fc7f3533598115642d95a1fb24",
+    "preview": "6b6a5b185e8f5152d532af998fcb7a82ad22a5085f5f0a00a87ebf00c551de0b"
+  }
+}

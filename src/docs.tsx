@@ -4,9 +4,12 @@ import { Button, type LinkAction } from "./primitives.js";
 import type { NavigationItem } from "./application.js";
 import { CommandPalette, type CommandItem } from "./workspace.js";
 import { Kbd } from "./display.js";
+import { BrandMark } from "./layout.js";
 
 export interface DocsShellProps {
   brand: string;
+  /** Logo node shown in place of the placeholder brand mark. */
+  logo?: ReactNode;
   /** Use the available content width for explorers and workspaces. */
   layout?: "article" | "wide";
   navigationLabel?: string;
@@ -24,6 +27,7 @@ export interface DocsShellProps {
 
 export function DocsShell({
   brand,
+  logo,
   layout = "article",
   navigationLabel = "Documentation",
   homeHref = "/",
@@ -73,7 +77,7 @@ export function DocsShell({
           Menu
         </Button>
         <a className="m-brand" href={homeHref}>
-          <span className="m-mark" aria-hidden="true" />
+          <BrandMark logo={logo} />
           {brand}
         </a>
         {version && <div className="m-docs-version">{version}</div>}

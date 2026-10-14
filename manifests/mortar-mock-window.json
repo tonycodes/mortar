@@ -1,0 +1,49 @@
+{
+  "id": "mortar-mock-window",
+  "logicalId": "mock-window",
+  "name": "MockWindow",
+  "description": "Mortar framed product mock for hero and feature illustrations.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "MockWindow",
+  "source": "src/showcase.tsx",
+  "capabilities": ["theme", "marketing"],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "provenance": {
+    "kitId": "marketing",
+    "exampleId": "mortar-marketing-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "address": "string",
+      "variant": "\"browser\" | \"app\" | \"plain\"",
+      "children": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/MockWindowPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-mock-window",
+    "states": []
+  },
+  "integrity": {
+    "source": "4454ed291abb473ec77adf4eb5065b6f34fd72bc5bd8603fc275359dabcf434b",
+    "preview": "9025f04f393b18e492f8b62e2388dccf5e12c1a34d244243a819b617e4aae078"
+  }
+}

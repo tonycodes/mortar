@@ -1,0 +1,50 @@
+{
+  "id": "mortar-text",
+  "logicalId": "text",
+  "name": "Text",
+  "description": "Mortar body text with semantic tone, size and weight, replacing text-muted/text-ink utilities.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Text",
+  "source": "src/layout.tsx",
+  "capabilities": ["theme", "foundation"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "as": "ElementType",
+      "tone": "\"default\" | \"secondary\" | \"muted\"",
+      "size": "\"sm\" | \"md\" | \"lg\"",
+      "weight": "\"regular\" | \"medium\" | \"semibold\"",
+      "children": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Text } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/TextPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-text",
+    "states": []
+  },
+  "integrity": {
+    "source": "175d84591dd2a78b008d99423f1ab9ab7d7141697c58377cc65a4bca39d1e43c",
+    "preview": "7467f41da0588e9bfba1765cf21d7a2d6c3708df037069041893f55ac32b60e5"
+  }
+}

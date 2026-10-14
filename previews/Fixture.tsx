@@ -1,6 +1,7 @@
 import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
+import { icons } from "./CompositionFixture.js";
 export function PreviewCase({ name }: { name: string }) {
   const [value, setValue] = useState("first"),
     [checked, setChecked] = useState(false),
@@ -343,13 +344,31 @@ export function PreviewCase({ name }: { name: string }) {
       );
       break;
     case "FeatureGrid":
-      example = <UI.FeatureGrid title="Made to work together" items={items} />;
+      example = (
+        <>
+          <UI.FeatureGrid
+            title="Made to work together"
+            items={items.map((item, i) => ({
+              ...item,
+              icon: [icons.calendar, icons.inbox][i],
+            }))}
+          />
+          <UI.FeatureGrid
+            title="Numbered for sequences"
+            marker="number"
+            tone="muted"
+            items={items}
+          />
+        </>
+      );
       break;
     case "FeatureSection":
       example = (
         <UI.FeatureSection
+          eyebrow="Theming"
           title="Your brand, centrally managed"
           description="Choose a theme in one place."
+          details={<UI.CheckList items={["Light and dark", "Brand colours"]} />}
         >
           {controls}
         </UI.FeatureSection>
