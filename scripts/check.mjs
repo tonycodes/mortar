@@ -205,9 +205,13 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
             path,
             path.replace(/\.js$/, ".tsx"),
             path.replace(/\.js$/, ".ts"),
+            `${path}.tsx`,
+            `${path}.ts`,
+            resolve(path, "index.tsx"),
+            resolve(path, "index.ts"),
           ]) {
             try {
-              await lstat(candidate);
+              if (!(await lstat(candidate)).isFile()) continue;
             } catch {
               continue;
             }

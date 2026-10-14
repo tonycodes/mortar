@@ -861,6 +861,22 @@
     max-width: 760px;
     padding: 40px 56px 48px;
   }
+  .m-docs-shell[data-layout="wide"] > .m-docs-header {
+    position: static;
+  }
+  .m-docs-shell[data-layout="wide"] > .m-docs-body {
+    max-width: none;
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+  .m-docs-shell[data-layout="wide"] > .m-docs-body > main {
+    max-width: none;
+    padding: 24px;
+  }
+  @media (max-width: 900px) {
+    .m-docs-shell[data-layout="wide"] > .m-docs-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
   .m-docs-toc {
     position: sticky;
     top: 56px;
@@ -1349,6 +1365,11 @@
     }
   }
   @media (max-width: 900px) {
+    .m-docs-header {
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-block: 12px;
+    }
     .m-docs-body {
       grid-template-columns: minmax(0, 1fr);
     }
