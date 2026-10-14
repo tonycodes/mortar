@@ -82,6 +82,13 @@ test("baseline rejects stale source/preview closure, catalogue drift and undocum
       "\n// changed shared preview\n",
       { flag: "a" },
     );
+    const previewOnly = await checkKit(dir);
+    assert.ok(
+      previewOnly.findings.some(
+        (f) => f.rule === "M007" && f.file.includes("mortar-button"),
+      ),
+      "An extensionless fixture edit must invalidate Button without a source or CSS edit",
+    );
     await writeFile(
       join(dir, "src/components.css"),
       "\n/* changed central style */\n",
