@@ -162,3 +162,41 @@ export function FilterChip({
     </button>
   );
 }
+
+/** Feature or inclusion list with a check marker; replaces ad-hoc list-disc styling. */
+export function CheckList({
+  items,
+  label,
+  columns = 1,
+  size = "md",
+}: {
+  items: ReactNode[];
+  label?: string;
+  columns?: 1 | 2;
+  size?: "sm" | "md";
+}) {
+  return (
+    <ul
+      className="m-check-list"
+      aria-label={label}
+      data-columns={columns}
+      data-size={size}
+    >
+      {items.map((item, i) => (
+        <li key={i}>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path
+              d="M3.5 8.5 6.5 11.5 12.5 4.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}

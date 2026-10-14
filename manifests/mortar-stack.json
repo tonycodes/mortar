@@ -1,0 +1,52 @@
+{
+  "id": "mortar-stack",
+  "logicalId": "stack",
+  "name": "Stack",
+  "description": "Mortar layout stack for vertical or horizontal rhythm, replacing consumer flex/gap utilities.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Stack",
+  "source": "src/layout.tsx",
+  "capabilities": ["theme", "foundation"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "as": "ElementType",
+      "gap": "\"none\" | \"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+      "direction": "\"column\" | \"row\"",
+      "align": "\"start\" | \"center\" | \"end\" | \"stretch\"",
+      "justify": "\"start\" | \"center\" | \"end\" | \"between\"",
+      "wrap": "boolean",
+      "children": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Stack } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/StackPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-layout-stack",
+    "states": []
+  },
+  "integrity": {
+    "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
+    "preview": "25792030e5c7a8c44cb6e9050bf9f2cd26042f3196e0148dc9a619029ad6fc7b"
+  }
+}

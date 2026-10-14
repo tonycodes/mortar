@@ -21,7 +21,11 @@
       "title": "string",
       "eyebrow": "string",
       "description": "string",
-      "items": "{ title: string; description: string; icon?: ReactNode }[]"
+      "items": "{ title: string; description: string; icon?: ReactNode }[]",
+      "id": "string",
+      "marker": "\"auto\" | \"icon\" | \"number\" | \"none\"",
+      "columns": "2 | 3 | 4",
+      "tone": "\"default\" | \"muted\" | \"inverse\""
     },
     "states": [
       "Light",
@@ -44,7 +48,7 @@
     "states": []
   },
   "integrity": {
-    "source": "c6c3a67da9d9130d2e105302da98f28367d86151c9b10fbffb43520ed21a4c45",
-    "preview": "760a9c4d895a5b2713fdfb3df1d79c1544fad4f3d9b4fcad0adeed5db0ee98f3"
+    "source": "bbda4b9d6935f60671d9166e56bf45c8b49ff11259b6d8d61132c6022f71223c",
+    "preview": "096885cfb2095d80143951a7ca072aadcc5a5db766f69502798943777a3e0f69"
   }
 }

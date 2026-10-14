@@ -12,6 +12,25 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
   const changed = () => setCount((n) => n + 1);
   let content;
   switch (name) {
+    case "SignInPanel":
+      content = (
+        <UI.SignInPanel
+          title="Sign in"
+          headingLevel={2}
+          email={{
+            onSubmit: changed,
+            status:
+              state === "loading"
+                ? "submitting"
+                : state === "error"
+                  ? "error"
+                  : "success",
+            message:
+              state === "error" ? "Check this value" : "Check your inbox",
+          }}
+        />
+      );
+      break;
     case "Button":
       content = (
         <UI.Button

@@ -1,0 +1,52 @@
+{
+  "id": "mortar-chat-preview",
+  "logicalId": "chat-preview",
+  "name": "ChatPreview",
+  "description": "Mortar static chat conversation for marketing conversational products.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ChatPreview",
+  "source": "src/showcase.tsx",
+  "capabilities": ["theme", "marketing"],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "provenance": {
+    "kitId": "marketing",
+    "exampleId": "mortar-marketing-reference"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "status": "string",
+      "messages": "{ from: \"user\" | \"assistant\"; content: ReactNode }[]",
+      "typing": "boolean",
+      "suggestions": "string[]",
+      "placeholder": "string",
+      "assistantName": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ChatPreview } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ChatPreviewPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-chat-preview",
+    "states": []
+  },
+  "integrity": {
+    "source": "2235480f7595d696289d0d34d94520feccf7f23818df2b16b31b499b6b76acf6",
+    "preview": "10fe18bc211992710eda9a20c14e1b496ffdc3261acb319401298d86cb1a3eb6"
+  }
+}

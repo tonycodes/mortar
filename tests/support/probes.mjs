@@ -168,6 +168,25 @@ export const implementations = {
     await root.getByRole("button", { name: "Subscribe" }).click();
     await expect(root.getByLabel("Action result")).toHaveText("completed");
   },
+  async "sign-in"({ page, root }) {
+    const provider = root.getByRole("button", { name: "Continue with GitHub" });
+    await provider.focus();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Action result")).toHaveText("completed");
+    const field = root.getByLabel("Email address");
+    await root.getByRole("button", { name: "Email me a sign-in link" }).click();
+    await expect(root.getByLabel("Submitted email")).toHaveText("none");
+    await field.fill("not-an-email");
+    await field.press("Enter");
+    await expect(root.getByLabel("Submitted email")).toHaveText("none");
+    await expect(field).toBeFocused();
+    await field.fill("person@example.com");
+    await expect(field).toHaveValue("person@example.com");
+    await field.press("Enter");
+    await expect(root.getByLabel("Submitted email")).toHaveText(
+      "person@example.com",
+    );
+  },
   async "table-sort"({ page, root }) {
     const names = root.locator("tbody th[scope=row]");
     const header = root.getByRole("columnheader", { name: "Name" });

@@ -21,7 +21,12 @@
       "title": "string",
       "description": "string",
       "children": "ReactNode",
-      "reverse": "boolean"
+      "reverse": "boolean",
+      "id": "string",
+      "eyebrow": "string",
+      "details": "ReactNode",
+      "tone": "\"default\" | \"muted\" | \"inverse\"",
+      "framed": "boolean"
     },
     "states": [
       "Light",
@@ -44,7 +49,7 @@
     "states": []
   },
   "integrity": {
-    "source": "c6c3a67da9d9130d2e105302da98f28367d86151c9b10fbffb43520ed21a4c45",
-    "preview": "53959d3404996b75ca28a5966a1c3228219d59819404fc62b9fd38cb0b0b1796"
+    "source": "bbda4b9d6935f60671d9166e56bf45c8b49ff11259b6d8d61132c6022f71223c",
+    "preview": "0e10f9bfbde199432ccff96ca9dcaf2a80f9148570a2ed29e962d42f687b7862"
   }
 }

@@ -1,6 +1,14 @@
-import { useId, useRef, useEffect, useState, type ReactNode } from "react";
+import {
+  useId,
+  useRef,
+  useEffect,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { Button, EmptyState, Notice, type Tone } from "./primitives.js";
+import { Button, EmptyState, Input, Notice, type Tone } from "./primitives.js";
+import { BrandMark } from "./layout.js";
 export interface NavigationItem {
   label: string;
   href: string;
@@ -9,6 +17,8 @@ export interface NavigationItem {
 }
 export interface AppShellProps {
   brand: string;
+  /** Logo node shown in place of the placeholder brand mark. */
+  logo?: ReactNode;
   workspace?: string;
   user?: ReactNode;
   navigation: NavigationItem[];
@@ -19,6 +29,7 @@ export interface AppShellProps {
 }
 export function AppShell({
   brand,
+  logo,
   workspace,
   user,
   navigation,
@@ -44,7 +55,7 @@ export function AppShell({
   const content = (
     <>
       <a className="m-workspace" href={navigation[0]?.href || "#"}>
-        <span className="m-mark" aria-hidden="true" />
+        <BrandMark logo={logo} />
         <span>
           <strong>{brand}</strong>
           {workspace && <small>{workspace}</small>}
@@ -636,5 +647,107 @@ export function ActivityFeed({
         </li>
       ))}
     </ol>
+  );
+}
+
+export interface SignInProvider {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  onSelect: () => void;
+}
+/**
+ * Brand-consistent sign-in surface. Mortar renders the form; the consumer's auth
+ * SDK supplies provider redirects and the email-link request through callbacks.
+ */
+export function SignInPanel({
+  title,
+  description,
+  logo,
+  providers = [],
+  email,
+  footer,
+  dividerLabel = "or",
+  headingLevel = 1,
+}: {
+  title: string;
+  /** Use 2 when the panel sits inside a page that already has an h1. */
+  headingLevel?: 1 | 2;
+  description?: string;
+  logo?: ReactNode;
+  providers?: SignInProvider[];
+  email?: {
+    onSubmit: (email: string) => void;
+    label?: string;
+    placeholder?: string;
+    submitLabel?: string;
+    status?: "idle" | "submitting" | "success" | "error";
+    message?: string;
+  };
+  footer?: ReactNode;
+  dividerLabel?: string;
+}) {
+  const [value, setValue] = useState("");
+  const headingId = useId();
+  const Heading = headingLevel === 1 ? "h1" : "h2";
+  const submit = (e: FormEvent) => {
+    e.preventDefault();
+    if (email?.status !== "submitting") email?.onSubmit(value);
+  };
+  return (
+    <section className="m-sign-in" aria-labelledby={headingId}>
+      <header>
+        {logo && <BrandMark logo={logo} />}
+        <Heading id={headingId}>{title}</Heading>
+        {description && <p>{description}</p>}
+      </header>
+      {providers.length > 0 && (
+        <div className="m-sign-in-providers">
+          {providers.map((provider) => (
+            <Button
+              key={provider.id}
+              variant="secondary"
+              onClick={provider.onSelect}
+            >
+              {provider.icon && (
+                <span className="m-sign-in-icon" aria-hidden="true">
+                  {provider.icon}
+                </span>
+              )}
+              {provider.label}
+            </Button>
+          ))}
+        </div>
+      )}
+      {providers.length > 0 && email && (
+        <p className="m-sign-in-divider">
+          <span>{dividerLabel}</span>
+        </p>
+      )}
+      {email && (
+        <form onSubmit={submit} aria-busy={email.status === "submitting"}>
+          <Input
+            label={email.label || "Email address"}
+            type="email"
+            autoComplete="email"
+            placeholder={email.placeholder}
+            required
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            error={email.status === "error" ? email.message : undefined}
+            disabled={email.status === "submitting"}
+          />
+          {email.status === "success" && (
+            <p role="status">
+              {email.message || "Check your inbox for a sign-in link."}
+            </p>
+          )}
+          <Button type="submit" loading={email.status === "submitting"}>
+            {email.submitLabel || "Email me a sign-in link"}
+          </Button>
+        </form>
+      )}
+      {footer && <footer>{footer}</footer>}
+    </section>
   );
 }

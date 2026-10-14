@@ -1,0 +1,52 @@
+{
+  "id": "mortar-section",
+  "logicalId": "section",
+  "name": "Section",
+  "description": "Mortar full-bleed marketing section with default, muted and inverse tones for page rhythm.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Section",
+  "source": "src/layout.tsx",
+  "capabilities": ["theme", "marketing"],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "provenance": {
+    "kitId": "marketing",
+    "exampleId": "mortar-marketing-reference"
+  },
+  "contract": {
+    "props": {
+      "id": "string",
+      "eyebrow": "string",
+      "title": "string",
+      "description": "string",
+      "tone": "\"default\" | \"muted\" | \"inverse\"",
+      "align": "\"start\" | \"center\"",
+      "children": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Section } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/SectionPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-section",
+    "states": []
+  },
+  "integrity": {
+    "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
+    "preview": "6b48006331300d45209da873fd61a579e3bd84b4adc810d2f3c03ba09e090f27"
+  }
+}

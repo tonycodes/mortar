@@ -42,6 +42,7 @@ export const probes = Object.freeze({
   FAQ: "faq",
   Pricing: "pricing",
   Newsletter: "newsletter",
+  SignInPanel: "sign-in",
   AppShell: "navigation",
   DocsShell: "navigation",
   MarketingHeader: "navigation",
@@ -67,7 +68,10 @@ export function contractErrors(component) {
   if (
     !Array.isArray(t.states) ||
     t.states.some(
-      (s) => !["disabled", "loading", "error", "empty", "long"].includes(s),
+      (s) =>
+        !["disabled", "loading", "error", "empty", "long", "success"].includes(
+          s,
+        ),
     ) ||
     new Set(t.states).size !== t.states.length
   )
