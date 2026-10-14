@@ -861,6 +861,9 @@
     max-width: 760px;
     padding: 40px 56px 48px;
   }
+  .m-docs-shell[data-layout="wide"] > .m-docs-header {
+    position: static;
+  }
   .m-docs-shell[data-layout="wide"] > .m-docs-body {
     max-width: none;
     grid-template-columns: 240px minmax(0, 1fr);
