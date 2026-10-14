@@ -54,6 +54,69 @@ test("Mortar table separates loading, error and empty states and keeps row heade
   assert.match(render({ loading: true }), /role="status"/);
   assert.match(render({ error: "Unavailable" }), /role="alert"/);
 });
+test("Mortar table sorts locally, keeps ties stable and puts empty values last", () => {
+  const rows = [
+    { id: "a", name: "item 10", score: 2 },
+    { id: "b", name: "item 2", score: null },
+    { id: "c", name: "Item 1", score: 2 },
+    { id: "d", name: "item 3", score: 1 },
+  ];
+  const columns = [
+    { key: "name", label: "Name", render: (r) => r.name, sortable: true },
+    { key: "score", label: "Score", render: (r) => r.score, sortable: true },
+  ];
+  const order = (sort, extra = {}) =>
+    [
+      ...renderToStaticMarkup(
+        React.createElement(DataTable, {
+          caption: "Records",
+          rowLabel: (r) => r.name,
+          columns,
+          rows,
+          defaultSort: sort,
+          ...extra,
+        }),
+      ).matchAll(/scope="row"[^>]*>([^<]+)</g),
+    ].map((m) => m[1]);
+  assert.deepEqual(order({ key: "name", direction: "ascending" }), [
+    "Item 1",
+    "item 2",
+    "item 3",
+    "item 10",
+  ]);
+  assert.deepEqual(order({ key: "score", direction: "descending" }), [
+    "item 10",
+    "Item 1",
+    "item 3",
+    "item 2",
+  ]);
+  assert.deepEqual(order({ key: "score", direction: "ascending" }), [
+    "item 3",
+    "item 10",
+    "Item 1",
+    "item 2",
+  ]);
+  // Server-side sorting: the consumer orders rows; the table only reflects state.
+  assert.deepEqual(
+    order(undefined, {
+      sort: { key: "name", direction: "descending" },
+      onSortChange: () => {},
+    }),
+    ["item 10", "item 2", "Item 1", "item 3"],
+  );
+  assert.match(
+    renderToStaticMarkup(
+      React.createElement(DataTable, {
+        caption: "Records",
+        rowLabel: (r) => r.name,
+        columns,
+        rows,
+        defaultSort: { key: "name", direction: "ascending" },
+      }),
+    ),
+    /aria-sort="ascending"[\s\S]*aria-sort="none"/,
+  );
+});
 test("Mortar source inspection never executes submitted markup", () => {
   const html = renderToStaticMarkup(
     React.createElement(CodeBlock, { code: "<script>alert(1)</script>" }),

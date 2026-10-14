@@ -180,24 +180,96 @@ export function MetricGroup({
     </dl>
   );
 }
+export type SortDirection = "ascending" | "descending";
+export interface TableSort {
+  key: string;
+  direction: SortDirection;
+}
+export interface DataTableColumn<T> {
+  key: string;
+  label: string;
+  render: (row: T) => ReactNode;
+  align?: "left" | "right";
+  /** Enable header sorting. Supply sortValue unless row[key] is a string, number or Date. */
+  sortable?: boolean;
+  sortValue?: (row: T) => string | number | Date | null | undefined;
+  /** CSS width, e.g. "12rem" or "30%". */
+  width?: string;
+  /** Clip long values to one line with an ellipsis. */
+  truncate?: boolean;
+}
 export interface DataTableProps<T extends { id: string }> {
   caption: string;
-  columns: {
-    key: string;
-    label: string;
-    render: (row: T) => ReactNode;
-    align?: "left" | "right";
-  }[];
+  columns: DataTableColumn<T>[];
   rows: T[];
   selectedIds?: string[];
   onSelectionChange?: (ids: string[]) => void;
   rowLabel: (row: T) => string;
+  /** Link each row's first cell to a detail page; the whole row becomes the click target. */
+  rowHref?: (row: T) => string | undefined;
+  /** Initial sort when the table sorts locally. */
+  defaultSort?: TableSort;
+  /** Controlled sort. With onSortChange the consumer orders rows (e.g. server-side). */
+  sort?: TableSort | null;
+  onSortChange?: (sort: TableSort) => void;
+  /** Scroll height; the header sticks while rows scroll. */
+  maxHeight?: string;
+  density?: "default" | "compact";
+  striped?: boolean;
   toolbar?: ReactNode;
   bulkActions?: ReactNode;
+  /** Rendered under the rows inside the table card, e.g. Pagination. */
+  footer?: ReactNode;
   emptyTitle?: string;
   emptyDescription?: string;
   loading?: boolean;
   error?: string;
+}
+const collator = new Intl.Collator(undefined, {
+  numeric: true,
+  sensitivity: "base",
+});
+function compareValues(a: unknown, b: unknown) {
+  const empty = (v: unknown) => v === null || v === undefined || v === "";
+  if (empty(a) || empty(b))
+    return empty(a) === empty(b) ? 0 : empty(a) ? 1 : -1;
+  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
+  if (typeof a === "number" && typeof b === "number") return a - b;
+  return collator.compare(String(a), String(b));
+}
+/** Stable sort; empty values always sort last regardless of direction. */
+export function sortRows<T>(
+  rows: T[],
+  column: Pick<DataTableColumn<T>, "key" | "sortValue">,
+  direction: SortDirection,
+) {
+  const value =
+    column.sortValue ||
+    ((row: T) => (row as Record<string, unknown>)[column.key] as string);
+  const sign = direction === "ascending" ? 1 : -1;
+  return rows
+    .map((row, index) => ({ row, index, v: value(row) }))
+    .sort((a, b) => {
+      const empty = (v: unknown) => v === null || v === undefined || v === "";
+      if (empty(a.v) || empty(b.v))
+        return compareValues(a.v, b.v) || a.index - b.index;
+      return sign * compareValues(a.v, b.v) || a.index - b.index;
+    })
+    .map((entry) => entry.row);
+}
+function SortIcon({ direction }: { direction?: SortDirection }) {
+  return (
+    <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+      <path
+        d="M3.5 4.5 6 2l2.5 2.5"
+        data-active={direction === "ascending" || undefined}
+      />
+      <path
+        d="M3.5 7.5 6 10l2.5-2.5"
+        data-active={direction === "descending" || undefined}
+      />
+    </svg>
+  );
 }
 function SelectAll({
   checked,
@@ -229,16 +301,49 @@ export function DataTable<T extends { id: string }>({
   selectedIds = [],
   onSelectionChange,
   rowLabel,
+  rowHref,
+  defaultSort,
+  sort: controlledSort,
+  onSortChange,
+  maxHeight,
+  density = "default",
+  striped = false,
   toolbar,
   bulkActions,
+  footer,
   emptyTitle = "No records",
   emptyDescription = "Records will appear here when they are available.",
   loading,
   error,
 }: DataTableProps<T>) {
+  const [localSort, setLocalSort] = useState<TableSort | null>(
+    defaultSort || null,
+  );
+  const sort = controlledSort !== undefined ? controlledSort : localSort;
+  const sortColumn = sort && columns.find((c) => c.key === sort.key);
+  const visibleRows =
+    sort && sortColumn && !onSortChange
+      ? sortRows(rows, sortColumn, sort.direction)
+      : rows;
+  const toggleSort = (key: string) => {
+    const next: TableSort = {
+      key,
+      direction:
+        sort?.key === key && sort.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    };
+    if (controlledSort === undefined) setLocalSort(next);
+    onSortChange?.(next);
+  };
   const selected = rows.filter((row) => selectedIds.includes(row.id));
   return (
-    <section className="m-data-table" aria-label={caption}>
+    <section
+      className="m-data-table"
+      aria-label={caption}
+      data-density={density}
+      data-striped={striped || undefined}
+    >
       {(toolbar || selected.length > 0) && (
         <div className="m-table-toolbar">
           {selected.length > 0 ? (
@@ -272,9 +377,22 @@ export function DataTable<T extends { id: string }>({
           role="region"
           aria-label={`${caption} scroll area`}
           tabIndex={0}
+          style={maxHeight ? { maxHeight } : undefined}
+          data-sticky={maxHeight ? true : undefined}
         >
           <table>
             <caption className="m-sr-only">{caption}</caption>
+            {columns.some((col) => col.width) && (
+              <colgroup>
+                {onSelectionChange && <col className="m-table-select-col" />}
+                {columns.map((col) => (
+                  <col
+                    key={col.key}
+                    style={col.width ? { width: col.width } : undefined}
+                  />
+                ))}
+              </colgroup>
+            )}
             <thead>
               <tr>
                 {onSelectionChange && (
@@ -294,53 +412,157 @@ export function DataTable<T extends { id: string }>({
                     />
                   </th>
                 )}
-                {columns.map((col) => (
-                  <th key={col.key} scope="col" data-align={col.align}>
-                    {col.label}
-                  </th>
-                ))}
+                {columns.map((col) => {
+                  const direction =
+                    sort?.key === col.key ? sort.direction : undefined;
+                  return (
+                    <th
+                      key={col.key}
+                      scope="col"
+                      data-align={col.align}
+                      aria-sort={col.sortable ? direction || "none" : undefined}
+                    >
+                      {col.sortable ? (
+                        <button
+                          type="button"
+                          className="m-sort-button"
+                          onClick={() => toggleSort(col.key)}
+                        >
+                          {col.label}
+                          <SortIcon direction={direction} />
+                        </button>
+                      ) : (
+                        col.label
+                      )}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
-                <tr
-                  key={row.id}
-                  data-selected={selectedIds.includes(row.id) || undefined}
-                >
-                  {onSelectionChange && (
-                    <td>
-                      <input
-                        type="checkbox"
-                        aria-label={`Select ${rowLabel(row)}`}
-                        checked={selectedIds.includes(row.id)}
-                        onChange={() =>
-                          onSelectionChange(
-                            selectedIds.includes(row.id)
-                              ? selectedIds.filter((id) => id !== row.id)
-                              : [...selectedIds, row.id],
-                          )
-                        }
-                      />
-                    </td>
-                  )}
-                  {columns.map((col, index) =>
-                    index === 0 ? (
-                      <th scope="row" key={col.key} data-align={col.align}>
-                        {col.render(row)}
-                      </th>
-                    ) : (
-                      <td key={col.key} data-align={col.align}>
-                        {col.render(row)}
+              {visibleRows.map((row) => {
+                const href = rowHref?.(row);
+                return (
+                  <tr
+                    key={row.id}
+                    data-selected={selectedIds.includes(row.id) || undefined}
+                    data-linked={href ? true : undefined}
+                  >
+                    {onSelectionChange && (
+                      <td>
+                        <input
+                          type="checkbox"
+                          aria-label={`Select ${rowLabel(row)}`}
+                          checked={selectedIds.includes(row.id)}
+                          onChange={() =>
+                            onSelectionChange(
+                              selectedIds.includes(row.id)
+                                ? selectedIds.filter((id) => id !== row.id)
+                                : [...selectedIds, row.id],
+                            )
+                          }
+                        />
                       </td>
-                    ),
-                  )}
-                </tr>
-              ))}
+                    )}
+                    {columns.map((col, index) => {
+                      const content = col.truncate ? (
+                        <span className="m-truncate">{col.render(row)}</span>
+                      ) : (
+                        col.render(row)
+                      );
+                      return index === 0 ? (
+                        <th
+                          scope="row"
+                          key={col.key}
+                          data-align={col.align}
+                          data-truncate={col.truncate || undefined}
+                        >
+                          {href ? (
+                            <a className="m-row-link" href={href}>
+                              {content}
+                            </a>
+                          ) : (
+                            content
+                          )}
+                        </th>
+                      ) : (
+                        <td
+                          key={col.key}
+                          data-align={col.align}
+                          data-truncate={col.truncate || undefined}
+                        >
+                          {content}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       )}
+      {footer && <div className="m-table-footer">{footer}</div>}
     </section>
+  );
+}
+/** Plain semantic table for documents, settings summaries and comparisons without row actions. */
+export function Table({
+  caption,
+  captionVisible = false,
+  columns,
+  rows,
+  rowHeaders = true,
+  striped = false,
+}: {
+  caption: string;
+  captionVisible?: boolean;
+  columns: { key: string; label: string; align?: "left" | "right" }[];
+  rows: Record<string, ReactNode>[];
+  /** Treat the first column as row headers. */
+  rowHeaders?: boolean;
+  striped?: boolean;
+}) {
+  return (
+    <div
+      className="m-table"
+      role="region"
+      aria-label={caption}
+      tabIndex={0}
+      data-striped={striped || undefined}
+    >
+      <table>
+        <caption className={captionVisible ? undefined : "m-sr-only"}>
+          {caption}
+        </caption>
+        <thead>
+          <tr>
+            {columns.map((col) => (
+              <th key={col.key} scope="col" data-align={col.align}>
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i}>
+              {columns.map((col, index) =>
+                index === 0 && rowHeaders ? (
+                  <th key={col.key} scope="row" data-align={col.align}>
+                    {row[col.key]}
+                  </th>
+                ) : (
+                  <td key={col.key} data-align={col.align}>
+                    {row[col.key]}
+                  </td>
+                ),
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 export function Pagination({

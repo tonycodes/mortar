@@ -1,0 +1,51 @@
+{
+  "id": "mortar-table",
+  "logicalId": "table",
+  "name": "Table",
+  "description": "Mortar plain semantic table for documents and summaries without row actions.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Table",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "caption": "string",
+      "captionVisible": "boolean",
+      "columns": "{ key: string; label: string; align?: left | right }[]",
+      "rows": "Record<string, ReactNode>[]",
+      "rowHeaders": "boolean",
+      "striped": "boolean"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Table } from @tony-ui/mortar. Use DataTable instead when rows need selection, sorting, links or loading states.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/TablePreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-table",
+    "states": []
+  },
+  "integrity": {
+    "source": "5affdc825df74d0aa140728433165bd03558e568e1242b42996de017c72226e3",
+    "preview": "98ba95b892be024f516742e0a8f952e2e513b16d75916ffb1805895649c8bda9"
+  }
+}

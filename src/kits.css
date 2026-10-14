@@ -1999,3 +1999,183 @@
     transform: translateY(-3px);
   }
 }
+
+/* DataTable sorting, row links, sticky header, density; plain Table and Prose tables. */
+@layer components {
+  .m-data-table thead th[aria-sort] {
+    padding: 0;
+  }
+  .m-sort-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: var(--m-row-pad);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: pointer;
+  }
+  [data-align="right"] > .m-sort-button {
+    justify-content: flex-end;
+  }
+  .m-sort-button:hover {
+    color: var(--m-ink);
+  }
+  th[aria-sort="ascending"] .m-sort-button,
+  th[aria-sort="descending"] .m-sort-button {
+    color: var(--m-ink);
+  }
+  .m-sort-button svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .m-sort-button svg path {
+    opacity: 0.35;
+  }
+  .m-sort-button svg path[data-active] {
+    opacity: 1;
+  }
+  .m-table-scroll[data-sticky] {
+    overflow: auto;
+  }
+  .m-table-scroll[data-sticky] thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: inset 0 -1px 0 var(--m-line);
+  }
+  .m-data-table colgroup .m-table-select-col {
+    width: 44px;
+  }
+  .m-data-table [data-truncate] {
+    max-width: 0;
+  }
+  @media (max-width: 640px) {
+    /* Narrow screens scroll the table instead of collapsing truncated columns. */
+    .m-data-table [data-truncate] {
+      max-width: none;
+    }
+    .m-truncate {
+      max-width: 14rem;
+    }
+  }
+  .m-truncate {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-data-table tr[data-linked] {
+    position: relative;
+  }
+  .m-data-table tr[data-linked]:hover {
+    background: var(--m-sunken);
+  }
+  .m-row-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .m-row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .m-row-link:hover {
+    text-decoration: underline;
+  }
+  .m-row-link:focus-visible {
+    outline: none;
+  }
+  .m-row-link:focus-visible::after {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  /* Cell actions remain independent of the stretched row navigation link. */
+  .m-data-table
+    tr[data-linked]
+    :is(
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      a:not(.m-row-link),
+      [role="button"],
+      [tabindex]
+    ) {
+    position: relative;
+    z-index: 1;
+  }
+  .m-data-table[data-density="compact"] :is(th, td),
+  .m-data-table[data-density="compact"] .m-sort-button {
+    padding: 6px 10px;
+  }
+  .m-data-table[data-density="compact"] table {
+    font-size: 13px;
+  }
+  :is(.m-data-table, .m-table)[data-striped] tbody tr:nth-child(even) {
+    background: var(--m-sunken);
+  }
+  .m-table-footer {
+    padding: 10px 12px;
+    border-top: 1px solid var(--m-line);
+  }
+
+  .m-table,
+  .m-prose table {
+    min-width: 0;
+    overflow-x: auto;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  .m-prose table {
+    display: block;
+    margin: 20px 0;
+    width: fit-content;
+    max-width: 100%;
+  }
+  .m-table table {
+    width: 100%;
+  }
+  :is(.m-table, .m-prose) table {
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+  }
+  .m-table caption:not(.m-sr-only) {
+    padding: 12px 14px 0;
+    text-align: left;
+    font-weight: 600;
+  }
+  :is(.m-table, .m-prose) :is(th, td) {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--m-line);
+    vertical-align: top;
+  }
+  :is(.m-table, .m-prose) thead th {
+    color: var(--m-muted);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .m-table tbody th {
+    font-weight: 600;
+  }
+  :is(.m-table, .m-prose) tbody tr:last-child :is(th, td) {
+    border-bottom: 0;
+  }
+  .m-table [data-align="right"] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+}

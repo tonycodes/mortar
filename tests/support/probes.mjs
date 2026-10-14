@@ -187,6 +187,37 @@ export const implementations = {
       "person@example.com",
     );
   },
+  async "table-sort"({ page, root }) {
+    const names = root.locator("tbody th[scope=row]");
+    const header = root.getByRole("columnheader", { name: "Name" });
+    await expect(header).toHaveAttribute("aria-sort", "ascending");
+    await expect(names).toHaveText(["Acme", "Northwind", "Zephyr"]);
+    const sortName = root.getByRole("button", { name: "Name", exact: true });
+    await sortName.focus();
+    await page.keyboard.press("Enter");
+    await expect(header).toHaveAttribute("aria-sort", "descending");
+    await expect(names).toHaveText(["Zephyr", "Northwind", "Acme"]);
+    await root.getByRole("button", { name: "Requests", exact: true }).click();
+    await expect(header).toHaveAttribute("aria-sort", "none");
+    await expect(
+      root.getByRole("columnheader", { name: "Requests" }),
+    ).toHaveAttribute("aria-sort", "ascending");
+    await expect(names).toHaveText(["Acme", "Zephyr", "Northwind"]);
+    const select = root.getByRole("checkbox", { name: "Select Zephyr" });
+    await select.click();
+    await expect(select).toBeChecked();
+    await expect(root.getByText("1 selected")).toBeVisible();
+    const edit = root.getByRole("button", { name: "Edit Acme", exact: true });
+    await edit.click();
+    await expect(root.getByText("Page 2 of 3")).toBeVisible();
+    await expect(page).not.toHaveURL(/#project-acme$/);
+    await root.getByRole("button", { name: "Previous" }).click();
+    await edit.focus();
+    await page.keyboard.press("Enter");
+    await expect(root.getByText("Page 2 of 3")).toBeVisible();
+    await root.getByRole("link", { name: "Acme" }).click();
+    await expect(page).toHaveURL(/#project-acme$/);
+  },
   async navigation({ page, root, component }) {
     await page.setViewportSize({ width: 390, height: 900 });
     if (component.export === "MarketingHeader") {
