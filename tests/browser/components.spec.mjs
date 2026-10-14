@@ -55,7 +55,7 @@ for (const component of components) {
       if (
         state === "disabled" ||
         (state === "loading" &&
-          ["Button", "ConfirmDialog"].includes(component.export))
+          ["Button", "ConfirmDialog", "SignInPanel"].includes(component.export))
       ) {
         const controls = scope.locator("button,input,textarea,select");
         const target =
@@ -70,6 +70,19 @@ for (const component of components) {
           bounds.y + bounds.height / 2,
         );
         await expect(fixture.getByLabel("Callback count")).toHaveText("0");
+        if (component.export === "SignInPanel") {
+          await expect(scope.locator("form")).toHaveAttribute(
+            "aria-busy",
+            "true",
+          );
+          await expect(
+            scope.getByRole("button", { name: "Email me a sign-in link" }),
+          ).toBeDisabled();
+        }
+      } else if (state === "success") {
+        await expect(
+          scope.locator(".m-sign-in").getByRole("status"),
+        ).toHaveText("Check your inbox");
       } else if (state === "error") {
         await expect(scope.getByText("Check this value")).toBeVisible();
         if (component.export !== "DataTable")

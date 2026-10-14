@@ -1,0 +1,54 @@
+{
+  "id": "mortar-sign-in-panel",
+  "logicalId": "sign-in-panel",
+  "name": "SignInPanel",
+  "description": "Mortar sign-in surface with provider buttons and email link form; auth SDKs supply callbacks.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "SignInPanel",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application", "action", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "description": "string",
+      "logo": "ReactNode",
+      "providers": "{ id: string; label: string; icon?: ReactNode; onSelect: () => void }[]",
+      "email": "{ onSubmit: (email: string) => void; label?; placeholder?; submitLabel?; status?: \"idle\" | \"submitting\" | \"success\" | \"error\"; message? }",
+      "footer": "ReactNode",
+      "dividerLabel": "string",
+      "headingLevel": "1 | 2"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { SignInPanel } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/SignInPanelPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-sign-in",
+    "states": ["loading", "error", "success"],
+    "probe": "sign-in"
+  },
+  "integrity": {
+    "source": "7e4b72f8ec3e5715ed4b54d784f532ddc4c96b27493684dfab02583d3b5440b1",
+    "preview": "5ffd440a57aa8f8b3328b15e808d148194327ada273641ca18a0aa964cc0e0af"
+  }
+}

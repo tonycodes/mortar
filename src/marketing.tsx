@@ -1,13 +1,16 @@
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
+import { BrandMark, type SectionTone } from "./layout.js";
 export function MarketingHeader({
   brand,
   homeHref = "/",
+  logo,
   links,
   action,
   controls,
 }: {
   brand: string;
+  logo?: ReactNode;
   homeHref?: string;
   links: LinkAction[];
   action?: LinkAction;
@@ -17,7 +20,7 @@ export function MarketingHeader({
   return (
     <header className="m-marketing-header">
       <a className="m-brand" href={homeHref}>
-        <span className="m-mark" aria-hidden="true" />
+        <BrandMark logo={logo} />
         {brand}
       </a>
       <Button
@@ -82,53 +85,143 @@ export function Hero({
   );
 }
 export function FeatureGrid({
+  id,
   eyebrow,
   title,
   description,
   items,
+  marker = "auto",
+  columns,
+  tone = "default",
 }: {
+  id?: string;
   eyebrow?: string;
   title: string;
   description?: string;
   items: { title: string; description: string; icon?: ReactNode }[];
+  /** auto: show icons when supplied, otherwise no marker. number: for sequences. */
+  marker?: "auto" | "icon" | "number" | "none";
+  /** Defaults to a balanced count for the number of items. */
+  columns?: 2 | 3 | 4;
+  tone?: SectionTone;
 }) {
+  const cols =
+    columns ??
+    (items.length === 2 || items.length === 4
+      ? 2
+      : items.length % 3 === 0 || items.length > 4
+        ? 3
+        : Math.min(items.length, 3));
   return (
-    <section className="m-marketing-section">
+    <section id={id} className="m-marketing-section" data-tone={tone}>
       {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
       <h2>{title}</h2>
       {description && <p className="m-section-description">{description}</p>}
-      <div className="m-feature-grid">
-        {items.map((item, i) => (
-          <article key={item.title}>
-            <span className="m-feature-icon" aria-hidden="true">
-              {item.icon || String(i + 1).padStart(2, "0")}
-            </span>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-          </article>
-        ))}
+      <div className="m-feature-grid" data-columns={cols}>
+        {items.map((item, i) => {
+          const content =
+            marker === "number"
+              ? String(i + 1).padStart(2, "0")
+              : marker !== "none"
+                ? item.icon
+                : null;
+          return (
+            <article key={item.title}>
+              {content && (
+                <span
+                  className="m-feature-icon"
+                  data-marker={marker === "number" ? "number" : "icon"}
+                  aria-hidden="true"
+                >
+                  {content}
+                </span>
+              )}
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
 }
 export function FeatureSection({
+  id,
+  eyebrow,
   title,
   description,
+  details,
   children,
   reverse = false,
+  tone = "default",
+  framed = true,
 }: {
+  id?: string;
+  eyebrow?: string;
   title: string;
   description: string;
+  /** Supporting content under the description, such as a CheckList or actions. */
+  details?: ReactNode;
   children: ReactNode;
   reverse?: boolean;
+  tone?: SectionTone;
+  /** Wrap the preview in the sunken frame. Disable when the child brings its own frame. */
+  framed?: boolean;
 }) {
   return (
-    <section className="m-feature-section" data-reverse={reverse}>
+    <section
+      id={id}
+      className="m-feature-section"
+      data-reverse={reverse}
+      data-tone={tone}
+    >
       <div>
+        {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
         <h2>{title}</h2>
         <p>{description}</p>
+        {details && <div className="m-feature-details">{details}</div>}
       </div>
-      <div className="m-feature-preview">{children}</div>
+      <div className="m-feature-preview" data-framed={framed}>
+        {children}
+      </div>
+    </section>
+  );
+}
+/** Numbered, connected sequence for marketing "how it works" sections. */
+export function ProcessSteps({
+  id,
+  eyebrow,
+  title,
+  description,
+  items,
+  tone = "default",
+}: {
+  id?: string;
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  items: { title: string; description: string }[];
+  tone?: SectionTone;
+}) {
+  return (
+    <section id={id} className="m-marketing-section" data-tone={tone}>
+      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
+      <h2>{title}</h2>
+      {description && <p className="m-section-description">{description}</p>}
+      <ol
+        className="m-process-steps"
+        style={{ "--m-steps": items.length } as CSSProperties}
+      >
+        {items.map((item, i) => (
+          <li key={item.title}>
+            <span className="m-process-number" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+          </li>
+        ))}
+      </ol>
     </section>
   );
 }
@@ -298,12 +391,14 @@ export function CallToAction({
 }
 export function Footer({
   brand,
+  logo,
   description,
   columns,
   copyright,
   legal = [],
 }: {
   brand: string;
+  logo?: ReactNode;
   description: string;
   columns: { title: string; links: LinkAction[] }[];
   copyright: string;
@@ -313,7 +408,10 @@ export function Footer({
     <footer className="m-footer">
       <div className="m-footer-grid">
         <div>
-          <strong>{brand}</strong>
+          <strong className="m-brand">
+            <BrandMark logo={logo} />
+            {brand}
+          </strong>
           <p>{description}</p>
         </div>
         {columns.map((column) => (

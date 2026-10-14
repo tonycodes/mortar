@@ -25,7 +25,8 @@
       "user": "ReactNode",
       "header": "ReactNode",
       "actions": "ReactNode",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "logo": "ReactNode"
     },
     "states": [
       "Light",
@@ -49,7 +50,7 @@
     "probe": "navigation"
   },
   "integrity": {
-    "source": "57a180d76754be55d5fbb0c3efb0cc0b3dba540f426b11ddbcf5fb6a6aaba497",
-    "preview": "73763d32360fcbfb22c17911d812129ad4602e75d079bf527573094d0dfb4942"
+    "source": "7e4b72f8ec3e5715ed4b54d784f532ddc4c96b27493684dfab02583d3b5440b1",
+    "preview": "5e8b6eeb39607a7d7aba8ea0f6754296ecfcd64008bb7fbe0b8f5b68376298ed"
   }
 }

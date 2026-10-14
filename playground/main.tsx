@@ -12,6 +12,7 @@ import {
   Badge,
 } from "../src/index.js";
 import catalog from "../catalog.json";
+import { SaasLandingRecipe } from "./recipes.js";
 import "./styles.css";
 const fixtures = import.meta.glob("../previews/*Preview.tsx");
 const params = new URLSearchParams(location.search);
@@ -50,7 +51,17 @@ function Playground() {
           current: c.export === component,
         })),
     }))
-    .filter((group) => group.items.length);
+    .filter((group) => group.items.length)
+    .concat({
+      title: "Page recipes",
+      items: [
+        {
+          label: "SaaS landing",
+          href: "?recipe=saas-landing",
+          current: false,
+        },
+      ],
+    });
   return (
     <DocsShell
       brand="Mortar"
@@ -211,6 +222,10 @@ createRoot(document.getElementById("root")!).render(
           : "comfortable"
     }
   >
-    <Playground />
+    {params.get("recipe") === "saas-landing" ? (
+      <SaasLandingRecipe />
+    ) : (
+      <Playground />
+    )}
   </ThemeProvider>,
 );

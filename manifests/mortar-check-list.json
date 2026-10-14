@@ -1,0 +1,49 @@
+{
+  "id": "mortar-check-list",
+  "logicalId": "check-list",
+  "name": "CheckList",
+  "description": "Mortar check-marked list for features and plan inclusions.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "CheckList",
+  "source": "src/display.tsx",
+  "capabilities": ["theme", "foundation"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "items": "ReactNode[]",
+      "label": "string",
+      "columns": "1 | 2",
+      "size": "\"sm\" | \"md\""
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { CheckList } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/CheckListPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-check-list",
+    "states": []
+  },
+  "integrity": {
+    "source": "3aa6f126547e483ecfce0a312cb920974a67832120d1cab4ee994e9fc84a2e51",
+    "preview": "ca4268e99447412f35079e0361b7598ec3d0ef4f5f5ba3b960f990507e7f5881"
+  }
+}

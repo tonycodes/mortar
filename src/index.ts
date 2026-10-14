@@ -35,17 +35,20 @@ export {
   Pagination,
   SettingsSection,
   ActivityFeed,
+  SignInPanel,
 } from "./application.js";
 export type {
   AppShellProps,
   NavigationItem,
   DataTableProps,
+  SignInProvider,
 } from "./application.js";
 export {
   MarketingHeader,
   Hero,
   FeatureGrid,
   FeatureSection,
+  ProcessSteps,
   Testimonial,
   LogoCloud,
   Pricing,
@@ -61,7 +64,12 @@ export {
   Kbd,
   ProgressBar,
   FilterChip,
+  CheckList,
 } from "./display.js";
+export { Stack, Container, Text, Section } from "./layout.js";
+export type { SectionTone } from "./layout.js";
+export { MockWindow, ChatPreview } from "./showcase.js";
+export type { ChatMessage } from "./showcase.js";
 export { Toast, Toaster, ConfirmDialog, SaveBar } from "./feedback.js";
 export type { ToastItem } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
