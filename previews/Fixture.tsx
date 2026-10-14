@@ -52,7 +52,11 @@ export function PreviewCase({ name }: { name: string }) {
       );
       break;
     case "ActionLink":
-      example = <UI.ActionLink {...action} />;
+      example = (
+        <div className="m-actions">
+          <UI.ActionLink {...action} />
+        </div>
+      );
       break;
     case "Badge":
       example = (

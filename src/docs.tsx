@@ -7,6 +7,9 @@ import { Kbd } from "./display.js";
 
 export interface DocsShellProps {
   brand: string;
+  /** Use the available content width for explorers and workspaces. */
+  layout?: "article" | "wide";
+  navigationLabel?: string;
   homeHref?: string;
   version?: ReactNode;
   sections?: (LinkAction & { current?: boolean })[];
@@ -21,6 +24,8 @@ export interface DocsShellProps {
 
 export function DocsShell({
   brand,
+  layout = "article",
+  navigationLabel = "Documentation",
   homeHref = "/",
   version,
   sections = [],
@@ -33,8 +38,9 @@ export function DocsShell({
   children,
 }: DocsShellProps) {
   const [open, setOpen] = useState(false);
+  const contentId = useId();
   const tree = (
-    <nav aria-label="Documentation">
+    <nav aria-label={navigationLabel}>
       {navigation.map((group) => (
         <section key={group.title}>
           <h2>{group.title}</h2>
@@ -53,8 +59,8 @@ export function DocsShell({
     </nav>
   );
   return (
-    <div className="m-docs-shell">
-      <a className="m-skip" href="#m-docs-content">
+    <div className="m-docs-shell" data-layout={layout}>
+      <a className="m-skip" href={`#${contentId}`}>
         Skip to content
       </a>
       <header className="m-docs-header">
@@ -91,7 +97,7 @@ export function DocsShell({
       </header>
       <div className="m-docs-body">
         <aside className="m-docs-nav">{tree}</aside>
-        <main id="m-docs-content" tabIndex={-1}>
+        <main id={contentId} tabIndex={-1}>
           {children}
         </main>
         {toc.length > 0 && (

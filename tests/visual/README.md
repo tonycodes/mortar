@@ -135,3 +135,7 @@ Linux images were rendered on Ubuntu 24.04 by [candidate run 38596920983](https:
 ### PlanComparison-light-390
 
 ![PlanComparison-light-390](baselines/darwin/PlanComparison-light-390.png)
+
+The component screenshots include the available preview width inside the shared
+playground shell. Explorer layout changes can therefore require reviewed baseline
+updates even when a component's own implementation is unchanged.

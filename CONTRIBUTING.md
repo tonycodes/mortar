@@ -23,3 +23,7 @@ Use a contributor identity or dedicated GitHub App where available. Do not give 
 ## Executable test contract
 
 See [TESTING.md](TESTING.md) for profiles, state fixtures, integrity checks, execution reports and visual baselines. Run both `npm run test:browser` and `npm run test:visual`; catalogue presence or an axe pass on playground chrome is not sufficient. Baseline images and changes to the test policy require maintainer review in the PR.
+
+## Browsing the playground
+
+Browse the grouped kit navigation or search by component name. On narrow screens, Menu opens the same catalogue. Brand, density, appearance and declared example states are reflected in the URL, so a preview can be shared or revisited. Open “Usage and component contract” for imports and prop metadata. The explorer composes the shared DocsShell with its `wide` layout; shell fixes belong in the kit, not playground CSS.
