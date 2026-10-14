@@ -44,6 +44,19 @@ for (const theme of ["light", "dark"]) {
           "data-mortar-appearance",
           theme,
         );
+        if (component === "PlanComparison") {
+          await expect(
+            page.getByRole("heading", { name: "Compare plans" }),
+          ).toBeVisible();
+          expect(
+            await page.evaluate(() => document.documentElement.scrollWidth),
+          ).toBeLessThanOrEqual(width);
+          const table = page.getByRole("region", {
+            name: "Compare plans table",
+          });
+          await table.focus();
+          await expect(table).toBeFocused();
+        }
         const results = await new AxeBuilder({ page })
           .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
           .analyze();

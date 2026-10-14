@@ -2,7 +2,7 @@
 
 Captured by `tests/browser/extended.spec.mjs` in local Chrome. This is review evidence, not component approval.
 
-Known visual follow-up: PlanComparison at 390px produces document-level horizontal overflow. Resolve before release.
+PlanComparison is constrained by the shared marketing-section sizing. At 390px the page fits the viewport and the comparison table scrolls inside its keyboard-focusable region. The browser suite checks document width at mobile and desktop sizes in both appearances.
 
 ## CommandPalette-dark-at-1280px
 
