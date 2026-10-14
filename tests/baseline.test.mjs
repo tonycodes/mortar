@@ -64,6 +64,13 @@ test("baseline rejects stale source/preview closure, catalogue drift and undocum
       "baseline-policy.json",
     ])
       await cp(join(ROOT, name), join(dir, name), { recursive: true });
+    const before = await readFile(join(dir, "catalog.json"), "utf8");
+    assert.equal((await checkKit(dir, { refresh: true })).passed, true);
+    assert.equal(
+      await readFile(join(dir, "catalog.json"), "utf8"),
+      before,
+      "Regeneration must preserve canonical formatting",
+    );
     await writeFile(
       join(dir, "previews/Fixture.tsx"),
       "\n// changed shared preview\n",

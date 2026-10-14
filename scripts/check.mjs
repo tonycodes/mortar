@@ -9,9 +9,11 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import ts from "typescript";
+import { format } from "prettier";
 import { contractErrors } from "./test-contract.mjs";
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export async function checkKit(root = ROOT, { refresh = false } = {}) {
+  root = await realpath(root);
   const findings = [];
   const add = (rule, file, message, line = 1) =>
     findings.push({ rule, file, line, severity: "error", message });
@@ -250,11 +252,11 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
     for (const c of manifests)
       await writeFile(
         resolve(root, `manifests/${c.id}.json`),
-        JSON.stringify(c, null, 2) + "\n",
+        await format(JSON.stringify(c, null, 2), { parser: "json" }),
       );
     await writeFile(
       resolve(root, "catalog.json"),
-      JSON.stringify(catalog, null, 2) + "\n",
+      await format(JSON.stringify(catalog, null, 2), { parser: "json" }),
     );
   } else if (!refresh) {
     try {
@@ -286,11 +288,6 @@ if (
   const report = await checkKit(ROOT, {
     refresh: process.argv.includes("--write-catalog"),
   });
-  if (process.argv.includes("--write-catalog") && report.passed)
-    await writeFile(
-      resolve(ROOT, "catalog.json"),
-      JSON.stringify(report.catalog, null, 2) + "\n",
-    );
   const { catalog, ...result } = report;
   console.log(
     process.argv.includes("--format")
