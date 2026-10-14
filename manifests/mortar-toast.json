@@ -1,0 +1,42 @@
+{
+  "id": "mortar-toast",
+  "logicalId": "toast",
+  "name": "Toast",
+  "description": "Mortar foundation toast, using central semantic tokens.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Toast",
+  "source": "src/feedback.tsx",
+  "capabilities": ["theme", "foundation"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference",
+    "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "description": "string",
+      "tone": "Tone",
+      "action": "{ label: string; onClick: () => void }",
+      "onDismiss": "() => void"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Toast } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": ["mortar-button"]
+  },
+  "preview": {
+    "source": "previews/ToastPreview.tsx"
+  }
+}

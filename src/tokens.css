@@ -23,6 +23,11 @@
   --m-success: #1f7a36;
   --m-warning: #945700;
   --m-danger: #c70014;
+  --m-on-feedback: #ffffff;
+  --m-code-bg: #000000;
+  --m-code-line: rgb(255 255 255 / 0.12);
+  --m-code-ink: #f5f5f7;
+  --m-code-dim: #8e8e93;
   --m-control: 36px;
   --m-pad: 14px;
   --m-font-size: 14px;
@@ -55,6 +60,9 @@
   --m-success: #30d158;
   --m-warning: #ffd60a;
   --m-danger: #ff6961;
+  --m-on-feedback: #000000;
+  --m-code-bg: #0e0e10;
+  --m-code-line: rgb(255 255 255 / 0.1);
   --m-float: none;
 }
 :root[data-mortar-brand="green"] {

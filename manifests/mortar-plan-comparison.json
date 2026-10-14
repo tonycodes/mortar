@@ -1,0 +1,42 @@
+{
+  "id": "mortar-plan-comparison",
+  "logicalId": "plan-comparison",
+  "name": "PlanComparison",
+  "description": "Mortar marketing plan comparison, using central semantic tokens.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "PlanComparison",
+  "source": "src/marketing-sections.tsx",
+  "capabilities": ["theme", "marketing", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "provenance": {
+    "kitId": "marketing",
+    "exampleId": "mortar-marketing-reference",
+    "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "description": "string",
+      "plans": "string[]",
+      "featuredPlan": "string",
+      "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/PlanComparisonPreview.tsx"
+  }
+}
