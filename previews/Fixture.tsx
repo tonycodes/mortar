@@ -41,10 +41,12 @@ export function PreviewCase({ name }: { name: string }) {
     case "Button":
       example = (
         <>
-          <UI.Button onClick={() => setChecked(true)}>Save changes</UI.Button>
-          <UI.Button variant="secondary">Cancel</UI.Button>
-          <UI.Button variant="danger">Delete</UI.Button>
-          <UI.Button loading>Saving</UI.Button>
+          <div className="m-actions">
+            <UI.Button onClick={() => setChecked(true)}>Save changes</UI.Button>
+            <UI.Button variant="secondary">Cancel</UI.Button>
+            <UI.Button variant="danger">Delete</UI.Button>
+            <UI.Button loading>Saving</UI.Button>
+          </div>
           <output aria-label="Action result">
             {checked ? "saved" : "idle"}
           </output>
