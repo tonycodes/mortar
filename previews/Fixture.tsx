@@ -5,7 +5,8 @@ export function PreviewCase({ name }: { name: string }) {
   const [value, setValue] = useState("first"),
     [checked, setChecked] = useState(false),
     [open, setOpen] = useState(false),
-    [page, setPage] = useState(1);
+    [page, setPage] = useState(1),
+    [selectedRows, setSelectedRows] = useState<string[]>([]);
   const controls = (
     <UI.Input
       label="Project name"
@@ -279,15 +280,82 @@ export function PreviewCase({ name }: { name: string }) {
         <UI.DataTable
           caption="Projects"
           rowLabel={(row) => row.name}
+          rowHref={(row) => `#project-${row.id}`}
+          defaultSort={{ key: "name", direction: "ascending" }}
+          selectedIds={selectedRows}
+          onSelectionChange={setSelectedRows}
+          striped
           columns={[
-            { key: "name", label: "Name", render: (row) => row.name },
+            {
+              key: "name",
+              label: "Name",
+              render: (row) => row.name,
+              sortable: true,
+            },
             {
               key: "status",
               label: "Status",
               render: (row) => <UI.Badge>{row.status}</UI.Badge>,
             },
+            {
+              key: "owner",
+              label: "Owner",
+              render: (row) => row.owner,
+              truncate: true,
+              width: "30%",
+            },
+            {
+              key: "requests",
+              label: "Requests",
+              align: "right",
+              render: (row) => row.requests.toLocaleString("en-GB"),
+              sortable: true,
+            },
           ]}
-          rows={[{ id: "example", name: "Northwind", status: "Active" }]}
+          rows={[
+            {
+              id: "northwind",
+              name: "Northwind",
+              status: "Active",
+              owner: "Platform team with a deliberately long owner name",
+              requests: 12840,
+            },
+            {
+              id: "acme",
+              name: "Acme",
+              status: "Paused",
+              owner: "Growth",
+              requests: 920,
+            },
+            {
+              id: "zephyr",
+              name: "Zephyr",
+              status: "Active",
+              owner: "Data",
+              requests: 4310,
+            },
+          ]}
+          footer={
+            <UI.Pagination page={page} pageCount={3} onChange={setPage} />
+          }
+        />
+      );
+      break;
+    case "Table":
+      example = (
+        <UI.Table
+          caption="Plan limits"
+          captionVisible
+          columns={[
+            { key: "plan", label: "Plan" },
+            { key: "conversations", label: "Conversations", align: "right" },
+            { key: "support", label: "Support" },
+          ]}
+          rows={[
+            { plan: "Insider", conversations: "100", support: "Community" },
+            { plan: "Starter", conversations: "500", support: "Email" },
+            { plan: "Pro", conversations: "2,000", support: "Priority" },
+          ]}
         />
       );
       break;

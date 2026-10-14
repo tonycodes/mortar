@@ -32,6 +32,7 @@ export {
   PageHeading,
   MetricGroup,
   DataTable,
+  Table,
   Pagination,
   SettingsSection,
   ActivityFeed,
@@ -40,6 +41,9 @@ export type {
   AppShellProps,
   NavigationItem,
   DataTableProps,
+  DataTableColumn,
+  TableSort,
+  SortDirection,
 } from "./application.js";
 export {
   MarketingHeader,
