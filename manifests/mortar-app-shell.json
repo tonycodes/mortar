@@ -41,5 +41,15 @@
   },
   "preview": {
     "source": "previews/AppShellPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-app-shell",
+    "states": [],
+    "probe": "navigation"
+  },
+  "integrity": {
+    "source": "5004e5a15db33c7c7e61fb55b6f7fe389ab010a2f9c6d7a85d59bb31f925f26b",
+    "preview": "406efd6ec6cacba6186e33506bdeed94542c9f52e7c1a2b0afd8863c71ce5012"
   }
 }

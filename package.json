@@ -32,10 +32,11 @@
     "catalog": "node scripts/check.mjs --write-catalog",
     "check": "npm run format:check && npm run build && node scripts/check.mjs && node --test tests/*.test.mjs && npm run build:playground",
     "check:json": "node scripts/check.mjs --format json",
-    "test:browser": "playwright test",
+    "test:browser": "MORTAR_CONTRACT_FULL=1 playwright test",
     "build:playground": "tsc --noEmit -p tsconfig.playground.json && vite build",
     "format:check": "prettier --check .",
-    "release:prepare": "node scripts/release.mjs"
+    "release:prepare": "node scripts/release.mjs",
+    "test:visual": "playwright test --config playwright.visual.config.mjs"
   },
   "peerDependencies": {
     "react": "^19.0.0",

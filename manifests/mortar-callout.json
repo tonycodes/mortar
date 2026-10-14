@@ -36,5 +36,14 @@
   },
   "preview": {
     "source": "previews/CalloutPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-callout",
+    "states": []
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "307e887651907bf8f4790d722ecf918940b91a9e72dbcf7518e8377b3f86e9f6"
   }
 }

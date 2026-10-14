@@ -36,5 +36,14 @@
   },
   "preview": {
     "source": "previews/TeamGridPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-team-grid",
+    "states": []
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "bcc5319057d044084cfbae39c2806fc38b2e2da018281a5e71799f0a9611a121"
   }
 }

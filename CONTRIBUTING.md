@@ -2,9 +2,9 @@
 
 Clone https://github.com/tonycodes/mortar, run npm ci, npm run catalog, npm run check, npm run dev. Use npm run test:browser for both-theme accessibility/rendering checks. The local playground defaults to port 4340. No service registration or npm token is required.
 
-Use src for central implementations, previews for fixtures and manifests for contracts. Read DESIGN.md and AGENTS.md. Include a reproducible issue and a regression test for fixes. Open a PR with actual check results and visual evidence. Shared shells are versioned alongside controls; applications supply content through props.
+Use src for central implementations, previews for fixtures and manifests for contracts. Read DESIGN.md, AGENTS.md and TESTING.md. Include a reproducible issue and a regression test for fixes. Open a PR with actual check results and visual evidence. Shared shells are versioned alongside controls; applications supply content through props.
 
-Baseline rules are versioned in baseline-policy.json. CI must use the same rules but contributors cannot authorize weakening protected checks; policy, workflow and dependency changes require maintainer review. Branch protection must require successful checks and dismiss approvals when reviewed content changes. Public PR runners must be isolated from release credentials and production networks.
+Baseline rules are versioned in baseline-policy.json. CI must use the same rules but contributors cannot authorize weakening protected checks; policy, workflow and dependency changes require maintainer review. Branch protection requires successful checks. The solo maintainer reviews and authorizes merges; a second GitHub approval is not required. Public PR runners must be isolated from release credentials and production networks.
 
 Releases are operator-owned. Verify the final merged commit, run all checks, create an immutable version tag, and prepare the exact package using npm run release:prepare. Upload archives and integrity/provenance records before atomically advancing registry metadata. Never overwrite an existing version. The publisher must verify maintainer approval and successful final-commit CI independently. Publication does not call the paid service; ARC indexes published release manifests afterward.
 
@@ -18,4 +18,8 @@ Preview artifacts are review evidence, not approved releases. GitHub maintainer 
 
 ## Contributor identity
 
-Coding agents should open PRs through their own contributor identity or a dedicated GitHub App, using a fork when necessary. Do not give contributors package-publishing or repository-administration credentials. If an agent opens a PR with the maintainer's personal token, GitHub treats the maintainer as its author and will not permit that maintainer to approve it. Use a separate authorized maintainer for such a PR; do not bypass the review gate. The initial cloud release verifier expects a current approval from tonycodes on a PR authored by a different identity.
+Use a contributor identity or dedicated GitHub App where available. Do not give contributors package-publishing or repository-administration credentials. For this solo-maintainer repository, passing required CI and the owner's explicit merge authorization are the review gate; no second GitHub reviewer is required. Agents must not self-authorize a merge or release. The hosted service's release-adoption policy is separate and must be verified before publication/adoption.
+
+## Executable test contract
+
+See [TESTING.md](TESTING.md) for profiles, state fixtures, integrity checks, execution reports and visual baselines. Run both `npm run test:browser` and `npm run test:visual`; catalogue presence or an axe pass on playground chrome is not sufficient. Baseline images and changes to the test policy require maintainer review in the PR.

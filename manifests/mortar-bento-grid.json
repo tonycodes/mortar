@@ -37,5 +37,14 @@
   },
   "preview": {
     "source": "previews/BentoGridPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-bento",
+    "states": []
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "83b6ff022ba22ace5609d1ff60e1d55c31a87cd07dfc1d8b7124f7e158656951"
   }
 }

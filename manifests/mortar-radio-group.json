@@ -38,5 +38,15 @@
   },
   "preview": {
     "source": "previews/RadioGroupPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-radio-group",
+    "states": [],
+    "probe": "radio"
+  },
+  "integrity": {
+    "source": "7eb43de6aac8742606fb2d304c1ed7afd52fca6e100c7635138606fd63160c70",
+    "preview": "0536d5ebdae1ff57a9b86b92e746df75d94b058a1afe2a493cbd224f230613b7"
   }
 }

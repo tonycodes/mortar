@@ -36,5 +36,14 @@
   },
   "preview": {
     "source": "previews/SettingsSectionPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-settings-section",
+    "states": []
+  },
+  "integrity": {
+    "source": "5004e5a15db33c7c7e61fb55b6f7fe389ab010a2f9c6d7a85d59bb31f925f26b",
+    "preview": "64ce2d1301085430795f836dcfe13ead9ad6646c8862a97f84dc57d1f83457b4"
   }
 }

@@ -34,5 +34,14 @@
   },
   "preview": {
     "source": "previews/LinkCardsPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-link-cards",
+    "states": []
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "f6c83b6aaecf4fca36a8ff1fd085ffbaf94ab7d0625540794595b2cb48944b83"
   }
 }

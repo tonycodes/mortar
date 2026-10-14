@@ -43,5 +43,15 @@
   },
   "preview": {
     "source": "previews/ConfirmDialogPreview.tsx"
+  },
+  "testing": {
+    "profile": "overlay",
+    "target": ".m-button",
+    "states": ["loading", "long"],
+    "probe": "dialog"
+  },
+  "integrity": {
+    "source": "5cb46a8bf382ebb9e1414064f6e9504317f03f2b9cf72431392cfe0f09973517",
+    "preview": "3dcab0fa0c6513a9813992fc2d0e8408981f9b90b1e9f99d0db8c1c6bd4501e4"
   }
 }

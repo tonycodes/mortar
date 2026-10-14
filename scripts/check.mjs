@@ -9,8 +9,9 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import ts from "typescript";
+import { contractErrors } from "./test-contract.mjs";
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-export async function checkKit(root = ROOT) {
+export async function checkKit(root = ROOT, { refresh = false } = {}) {
   const findings = [];
   const add = (rule, file, message, line = 1) =>
     findings.push({ rule, file, line, severity: "error", message });
@@ -60,6 +61,8 @@ export async function checkKit(root = ROOT) {
         `manifests/${c.id}.json`,
         "Use a unique component ID and an existing named export.",
       );
+    for (const message of contractErrors(c))
+      add("M006", `manifests/${c.id}.json`, message);
     ids.add(c.id);
     names.add(c.export);
     for (const [file, prefix] of [
@@ -124,7 +127,7 @@ export async function checkKit(root = ROOT) {
             i + 1,
           );
         if (
-          /(?:bg|text|border|ring)-(?:indigo|blue|green|red|amber|violet|slate|gray)-\d{2,3}\b/.test(
+          /(?:bg|text|border|ring)-(?:indigo|blue|green|red|amber|violet|slate|gray)-\d{2,3}\b|(?:bg|text|border|ring)-\[#[0-9a-fA-F]+\]|(?:color|backgroundColor|borderColor):\s*["']#[0-9a-fA-F]+/.test(
             lines[i],
           )
         )
@@ -138,6 +141,91 @@ export async function checkKit(root = ROOT) {
     }
   }
   await inspect("src");
+  await inspect("previews");
+  await inspect("playground");
+  // Hash local import closures, not only the tiny preview entry point. Include shared
+  // styles in implementation identity; style changes affect every consumer.
+  async function digest(entry, styles = false) {
+    const files = new Map();
+    async function visit(file) {
+      if (files.has(file)) return;
+      const full = resolve(root, file);
+      if (
+        !(await realpath(full)).startsWith(base + "/") ||
+        !(await lstat(full)).isFile()
+      )
+        throw Error("Unsafe dependency");
+      const text = await readFile(full, "utf8");
+      files.set(file, text);
+      if (/\.tsx?$/.test(file)) {
+        const tree = ts.createSourceFile(
+          file,
+          text,
+          ts.ScriptTarget.Latest,
+          true,
+        );
+        for (const node of tree.statements) {
+          const spec = node.moduleSpecifier;
+          if (!spec || !ts.isStringLiteral(spec) || !spec.text.startsWith("."))
+            continue;
+          const path = resolve(dirname(full), spec.text);
+          for (const candidate of [
+            path,
+            path.replace(/\.js$/, ".tsx"),
+            path.replace(/\.js$/, ".ts"),
+          ]) {
+            try {
+              await lstat(candidate);
+            } catch {
+              continue;
+            }
+            await visit(candidate.slice(base.length + 1));
+            break;
+          }
+        }
+      }
+    }
+    await visit(entry);
+    if (styles)
+      for (const f of [
+        "styles.css",
+        ...(await readdir(resolve(root, "src")))
+          .filter((f) => f.endsWith(".css"))
+          .map((f) => `src/${f}`),
+      ])
+        await visit(f);
+    return createHash("sha256")
+      .update(
+        [...files]
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([p, t]) => `${p}\0${t}`)
+          .join("\0"),
+      )
+      .digest("hex");
+  }
+  if (!findings.some((f) => f.rule === "M002")) {
+    for (const c of manifests) {
+      try {
+        const integrity = {
+          source: await digest(c.source, true),
+          preview: await digest(c.preview.source),
+        };
+        if (refresh) c.integrity = integrity;
+        else if (JSON.stringify(c.integrity) !== JSON.stringify(integrity))
+          add(
+            "M007",
+            `manifests/${c.id}.json`,
+            "Source or preview fingerprint is stale. Run npm run catalog and review the changed content.",
+          );
+      } catch {
+        add(
+          "M007",
+          `manifests/${c.id}.json`,
+          "Unable to fingerprint local source/preview dependencies.",
+        );
+      }
+    }
+  }
   const catalog = {
     schemaVersion: 1,
     package: pkg.name,
@@ -145,6 +233,32 @@ export async function checkKit(root = ROOT) {
     policyVersion: policy.version,
     components: manifests,
   };
+  if (refresh && findings.length === 0) {
+    for (const c of manifests)
+      await writeFile(
+        resolve(root, `manifests/${c.id}.json`),
+        JSON.stringify(c, null, 2) + "\n",
+      );
+    await writeFile(
+      resolve(root, "catalog.json"),
+      JSON.stringify(catalog, null, 2) + "\n",
+    );
+  } else if (!refresh) {
+    try {
+      if (
+        JSON.stringify(
+          JSON.parse(await readFile(resolve(root, "catalog.json"), "utf8")),
+        ) !== JSON.stringify(catalog)
+      )
+        add(
+          "M008",
+          "catalog.json",
+          "Catalogue does not match manifests. Run npm run catalog.",
+        );
+    } catch {
+      add("M008", "catalog.json", "Missing or invalid catalogue.");
+    }
+  }
   return {
     passed: findings.length === 0,
     policyVersion: policy.version,
@@ -156,7 +270,9 @@ if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(resolve(process.argv[1])).href
 ) {
-  const report = await checkKit();
+  const report = await checkKit(ROOT, {
+    refresh: process.argv.includes("--write-catalog"),
+  });
   if (process.argv.includes("--write-catalog") && report.passed)
     await writeFile(
       resolve(ROOT, "catalog.json"),

@@ -39,5 +39,15 @@
   },
   "preview": {
     "source": "previews/NewsletterPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-newsletter",
+    "states": [],
+    "probe": "newsletter"
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "3b2f93145d444e7085ae9a2ae289999a63a012f009ce58a0f6488796e55da105"
   }
 }

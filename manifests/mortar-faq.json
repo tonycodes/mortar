@@ -36,5 +36,15 @@
   },
   "preview": {
     "source": "previews/FAQPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-faq",
+    "states": [],
+    "probe": "faq"
+  },
+  "integrity": {
+    "source": "bf6b274632ab63a5d1a255eb0c8be31ddeef47235382c3b7c6492267ad688c55",
+    "preview": "868ce30def95d42b9ebf1c94cf6c8c9f8b961f45d605adba14d87da98d0a4db6"
   }
 }

@@ -36,5 +36,14 @@
   },
   "preview": {
     "source": "previews/AvatarGroupPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-avatar-group",
+    "states": []
+  },
+  "integrity": {
+    "source": "3b304860584e7d7e0debd137d4302419d2dcd52a8366b81f7203e0ffd0fa64fb",
+    "preview": "f1bf09429167d8186212c0bfa54fea4ab33a4715e7171e6cc84431a8977a6242"
   }
 }

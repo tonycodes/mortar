@@ -38,5 +38,14 @@
   },
   "preview": {
     "source": "previews/PlanComparisonPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-comparison",
+    "states": []
+  },
+  "integrity": {
+    "source": "ce1d8b09a94411cfebf6e59652df6f873581d5b7a9f7afdc77dd92dfd287dd94",
+    "preview": "b2f06731727fa945ac2fef892627b1db52739b5c2b023e10cda39dfbb02fc532"
   }
 }

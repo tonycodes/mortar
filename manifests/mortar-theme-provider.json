@@ -37,5 +37,15 @@
   },
   "preview": {
     "source": "previews/ThemeProviderPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-segmented",
+    "states": [],
+    "probe": "appearance"
+  },
+  "integrity": {
+    "source": "5f338a1bec0b5dd7abd0ace93dd93ff4e9935edccc3ccd90b2d717f46aeb8d5f",
+    "preview": "ad3712dfdb87dcac45ac891f50a0cd3ad1cd039e420146949ec738b5d3c8b03a"
   }
 }

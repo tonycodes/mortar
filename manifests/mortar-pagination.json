@@ -36,5 +36,15 @@
   },
   "preview": {
     "source": "previews/PaginationPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-pagination",
+    "states": [],
+    "probe": "pagination"
+  },
+  "integrity": {
+    "source": "5004e5a15db33c7c7e61fb55b6f7fe389ab010a2f9c6d7a85d59bb31f925f26b",
+    "preview": "430739b185377a1ded778deb5da602028a3db11488c7014c508fc3c87fe5605d"
   }
 }

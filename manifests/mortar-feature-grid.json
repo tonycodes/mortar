@@ -37,5 +37,14 @@
   },
   "preview": {
     "source": "previews/FeatureGridPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-feature-grid",
+    "states": []
+  },
+  "integrity": {
+    "source": "bf6b274632ab63a5d1a255eb0c8be31ddeef47235382c3b7c6492267ad688c55",
+    "preview": "5470fcc803244d18466e2ef348f3e91f28c5f442c3e7e515d325ee58c392270f"
   }
 }

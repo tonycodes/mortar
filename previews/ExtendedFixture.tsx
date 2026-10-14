@@ -1,3 +1,4 @@
+import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 
@@ -16,6 +17,8 @@ export function ExtendedCase({ name }: { name: string }) {
         tone: "success",
       },
     ]);
+  const scenario = new URLSearchParams(location.search).get("state");
+  if (scenario) return <StateFixture name={name} state={scenario} />;
   const action = { label: "Explore", href: "#example" };
   const trigger = (label: string) => (
     <UI.Button onClick={() => setOpen(true)}>{label}</UI.Button>
@@ -99,7 +102,7 @@ export function ExtendedCase({ name }: { name: string }) {
           title="Payment method expired"
           description="Update it to keep builds running."
           tone="danger"
-          action={{ label: "Update", onClick: () => {} }}
+          action={{ label: "Update", onClick: () => setSelected(true) }}
         />
       );
       break;
@@ -336,7 +339,7 @@ export function ExtendedCase({ name }: { name: string }) {
         <UI.Newsletter
           title="Product updates, monthly"
           description="No spam."
-          onSubmit={() => {}}
+          onSubmit={() => setSelected(true)}
         />
       );
       break;
@@ -527,5 +530,12 @@ export function ExtendedCase({ name }: { name: string }) {
         </UI.Notice>
       );
   }
-  return <div className="m-stack">{example}</div>;
+  return (
+    <div className="m-stack">
+      {example}
+      <output aria-label="Action result">
+        {selected ? "completed" : "idle"}
+      </output>
+    </div>
+  );
 }

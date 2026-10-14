@@ -34,5 +34,14 @@
   },
   "preview": {
     "source": "previews/KbdPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-kbd",
+    "states": []
+  },
+  "integrity": {
+    "source": "3b304860584e7d7e0debd137d4302419d2dcd52a8366b81f7203e0ffd0fa64fb",
+    "preview": "40eff32ab5fee88328b9208cf0f28f337d51f09ffa3283ea4f7c37bcaf0e9f14"
   }
 }

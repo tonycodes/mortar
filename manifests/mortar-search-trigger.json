@@ -35,5 +35,15 @@
   },
   "preview": {
     "source": "previews/SearchTriggerPreview.tsx"
+  },
+  "testing": {
+    "profile": "overlay",
+    "target": ".m-search-trigger",
+    "states": [],
+    "probe": "dialog"
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "36fd6cdfd1fd5599b1c6804e1c6bce1a3da5f28642577d7884df93c07edf9e77"
   }
 }

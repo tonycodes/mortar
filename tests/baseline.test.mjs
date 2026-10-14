@@ -12,6 +12,9 @@ test("baseline rejects path escape, missing dependencies, hidden exports and hos
     for (const name of [
       "src",
       "previews",
+      "playground",
+      "styles.css",
+      "catalog.json",
       "manifests",
       "package.json",
       "baseline-policy.json",
@@ -31,6 +34,10 @@ test("baseline rejects path escape, missing dependencies, hidden exports and hos
       join(dir, "src/forbidden.ts"),
       "fetch('https://example.invalid'); const classes='bg-indigo-600';\n",
     );
+    await writeFile(
+      join(dir, "previews/Bad.tsx"),
+      'export const bad = <div className="bg-[#ff0000]" />;',
+    );
     const result = await checkKit(dir);
     assert.equal(result.passed, false);
     for (const rule of ["M001", "M002", "M003", "M004", "M005"])
@@ -38,6 +45,50 @@ test("baseline rejects path escape, missing dependencies, hidden exports and hos
         result.findings.some((f) => f.rule === rule),
         rule,
       );
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test("baseline rejects stale source/preview closure, catalogue drift and undocumented profiles", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "mortar-integrity-"));
+  try {
+    for (const name of [
+      "src",
+      "previews",
+      "playground",
+      "manifests",
+      "styles.css",
+      "catalog.json",
+      "package.json",
+      "baseline-policy.json",
+    ])
+      await cp(join(ROOT, name), join(dir, name), { recursive: true });
+    await writeFile(
+      join(dir, "previews/Fixture.tsx"),
+      "\n// changed shared preview\n",
+      { flag: "a" },
+    );
+    await writeFile(
+      join(dir, "src/components.css"),
+      "\n/* changed central style */\n",
+      { flag: "a" },
+    );
+    const file = join(dir, "manifests/mortar-button.json");
+    const c = JSON.parse(await readFile(file, "utf8"));
+    c.testing.profile = "display";
+    await writeFile(file, JSON.stringify(c));
+    const result = await checkKit(dir);
+    for (const rule of ["M006", "M007", "M008"])
+      assert.ok(
+        result.findings.some((f) => f.rule === rule),
+        rule,
+      );
+    assert.ok(
+      result.findings.some(
+        (f) => f.rule === "M007" && f.file.includes("mortar-button"),
+      ),
+    );
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

@@ -1,11 +1,14 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "rules": {
     "M001": "Exports require unique manifests and preview fixtures",
     "M002": "Source and preview paths stay inside the repository",
     "M003": "Dependencies reference known component IDs",
     "M004": "Shared components cannot depend on hosted services",
-    "M005": "Component implementations use semantic colour tokens"
+    "M005": "Component implementations use semantic colour tokens",
+    "M006": "Every component has an executable test profile and supported probe",
+    "M007": "Source and preview import-closure fingerprints must match",
+    "M008": "Committed catalogue matches the manifests"
   }
 }

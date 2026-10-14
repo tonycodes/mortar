@@ -35,5 +35,14 @@
   },
   "preview": {
     "source": "previews/PagerLinksPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-pager",
+    "states": []
+  },
+  "integrity": {
+    "source": "a16ae5b4ff1f38b61ce4ac79ab769be309411564c0dff83676d904e24dd79e06",
+    "preview": "dcd18b72a7ab1e4d05dbce4bee44153cbcb7016a6cf2684a529b915338fd2bf5"
   }
 }

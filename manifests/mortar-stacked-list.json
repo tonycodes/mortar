@@ -37,5 +37,14 @@
   },
   "preview": {
     "source": "previews/StackedListPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-stacked-list",
+    "states": []
+  },
+  "integrity": {
+    "source": "c3df07d0dfeb183e8d6fd4808f2942f4abf2593db4795b08037aee2b7ef3a1ea",
+    "preview": "596f81e913249b76a34ec96e5adbe7ed32c201f2e9397bf1a0caec832912a12b"
   }
 }
