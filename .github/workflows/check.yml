@@ -20,11 +20,13 @@ jobs:
         with:
           node-version: "22"
       - run: npm ci --ignore-scripts
-      - run: npm run check
+      - name: Check public kit
+        id: kit-check
+        run: npm run check
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - name: Upload interactive review playground
-        if: success()
+        if: always() && steps.kit-check.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: mortar-playground-${{ github.sha }}
