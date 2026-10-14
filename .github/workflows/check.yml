@@ -20,7 +20,32 @@ jobs:
         with:
           node-version: "22"
       - run: npm ci --ignore-scripts
-      - run: npm run check
+      - name: Check public kit
+        id: kit-check
+        run: npm run check
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      - name: Upload interactive review playground
+        if: always() && steps.kit-check.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortar-playground-${{ github.sha }}
+          path: playground-dist/
+          retention-days: 14
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortar-browser-evidence-${{ github.sha }}
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+      - name: Review instructions
+        if: always()
+        run: |
+          echo '## Component review' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Review this exact commit in the pull request. Download the playground artifact, extract it, and serve it locally with `python3 -m http.server 4340 --bind 127.0.0.1`. Open http://127.0.0.1:4340. Inspect the browser-report artifact for both-theme screenshots and accessibility results.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Artifacts contain untrusted contribution code. Use a separate browser profile; do not serve them on the production/authentication origin. No cloud approval is required after GitHub maintainer review.' >> "$GITHUB_STEP_SUMMARY"
+
 # No package-publishing or cloud-governance credentials belong in this workflow.
