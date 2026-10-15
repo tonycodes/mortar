@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, type SectionTone } from "./layout.js";
@@ -19,10 +20,10 @@ export function MarketingHeader({
   const [open, setOpen] = useState(false);
   return (
     <header className="m-marketing-header">
-      <a className="m-brand" href={homeHref}>
+      <KitLink className="m-brand" href={homeHref}>
         <BrandMark logo={logo} />
         {brand}
-      </a>
+      </KitLink>
       <Button
         variant="ghost"
         className="m-menu-trigger"
@@ -34,9 +35,13 @@ export function MarketingHeader({
       </Button>
       <nav id="m-marketing-nav" aria-label="Primary" data-open={open}>
         {links.map((link) => (
-          <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+          <KitLink
+            key={link.href}
+            href={link.href}
+            onClick={() => setOpen(false)}
+          >
             {link.label}
-          </a>
+          </KitLink>
         ))}
       </nav>
       <div className="m-actions">
@@ -418,9 +423,9 @@ export function Footer({
           <nav key={column.title} aria-label={column.title}>
             <h2>{column.title}</h2>
             {column.links.map((link) => (
-              <a href={link.href} key={link.href}>
+              <KitLink href={link.href} key={link.href}>
                 {link.label}
-              </a>
+              </KitLink>
             ))}
           </nav>
         ))}
@@ -429,9 +434,9 @@ export function Footer({
         <span>{copyright}</span>
         <div>
           {legal.map((link) => (
-            <a key={link.href} href={link.href}>
+            <KitLink key={link.href} href={link.href}>
               {link.label}
-            </a>
+            </KitLink>
           ))}
         </div>
       </div>

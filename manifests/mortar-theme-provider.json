@@ -21,7 +21,10 @@
       "children": "ReactNode",
       "initialAppearance": "light | dark | system",
       "brand": "neutral | green",
-      "density": "compact | comfortable | spacious"
+      "density": "compact | comfortable | spacious",
+      "appearance": "Optional controlled light | dark | system",
+      "onAppearanceChange": "(appearance: Appearance) => void",
+      "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation."
     },
     "states": [
       "Light",
@@ -45,7 +48,7 @@
     "probe": "appearance"
   },
   "integrity": {
-    "source": "a7ad6deffa36f9ba37c409d27b118012e28a2cd9afab1ddb3f9ae9dc4893f11a",
-    "preview": "15b7fbc0bca97dafdfb39c54015ffeb6d903ef073193604ba3b16549a91fc8dd"
+    "source": "2efef5ef3e78cdf10164cbba659194a1a62ceedd681b052fd39bfde1fcffa1be",
+    "preview": "8afbea9fd62cf8fac42ac98d62d1ca718042558f9a05d8553ffe8b8751309e2d"
   }
 }

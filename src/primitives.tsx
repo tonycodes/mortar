@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import {
   forwardRef,
   useId,
@@ -58,9 +59,9 @@ export function ActionLink({
   variant = "primary",
 }: LinkAction & { variant?: ButtonProps["variant"] }) {
   return (
-    <a className={`m-button m-button-${variant}`} href={href}>
+    <KitLink className={`m-button m-button-${variant}`} href={href}>
       {label}
-    </a>
+    </KitLink>
   );
 }
 export type Tone = "neutral" | "success" | "warning" | "danger";

@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { ActionLink, Button, Input, type LinkAction } from "./primitives.js";
 import { Avatar } from "./display.js";
@@ -226,7 +227,7 @@ export function PostList({
                 <time dateTime={post.date}>{post.dateLabel}</time>
               </p>
               <h3>
-                <a href={post.href}>{post.title}</a>
+                <KitLink href={post.href}>{post.title}</KitLink>
               </h3>
               <p>{post.excerpt}</p>
             </article>

@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import {
   useId,
   useRef,
@@ -41,7 +42,7 @@ export function AppShell({
   const [open, setOpen] = useState(false);
   const links = (items: NavigationItem[]) =>
     items.map((item) => (
-      <a
+      <KitLink
         key={item.href}
         href={item.href}
         aria-current={item.current ? "page" : undefined}
@@ -50,17 +51,17 @@ export function AppShell({
         <span className="m-nav-marker" aria-hidden="true" />
         {item.label}
         {item.count && <span className="m-nav-count">{item.count}</span>}
-      </a>
+      </KitLink>
     ));
   const content = (
     <>
-      <a className="m-workspace" href={navigation[0]?.href || "#"}>
+      <KitLink className="m-workspace" href={navigation[0]?.href || "#"}>
         <BrandMark logo={logo} />
         <span>
           <strong>{brand}</strong>
           {workspace && <small>{workspace}</small>}
         </span>
-      </a>
+      </KitLink>
       <nav aria-label="Primary">
         {links(navigation)}
         {secondaryNavigation.map((group) => (
@@ -75,9 +76,9 @@ export function AppShell({
   );
   return (
     <div className="m-app-shell">
-      <a className="m-skip" href="#m-content">
+      <KitLink className="m-skip" href="#m-content">
         Skip to content
-      </a>
+      </KitLink>
       <aside className="m-sidebar">{content}</aside>
       <div className="m-app-main">
         <header className="m-app-header">
@@ -135,7 +136,7 @@ export function PageHeading({
             {breadcrumbs.map((b, i) => (
               <li key={i}>
                 {b.href ? (
-                  <a href={b.href}>{b.label}</a>
+                  <KitLink href={b.href}>{b.label}</KitLink>
                 ) : (
                   <span aria-current="page">{b.label}</span>
                 )}
@@ -478,9 +479,9 @@ export function DataTable<T extends { id: string }>({
                           data-truncate={col.truncate || undefined}
                         >
                           {href ? (
-                            <a className="m-row-link" href={href}>
+                            <KitLink className="m-row-link" href={href}>
                               {content}
-                            </a>
+                            </KitLink>
                           ) : (
                             content
                           )}

@@ -1,4 +1,12 @@
-import { Suspense, lazy, useState, type ComponentType } from "react";
+import { KitLink } from "../src/navigation.js";
+import {
+  Suspense,
+  lazy,
+  useState,
+  useEffect,
+  useMemo,
+  type ComponentType,
+} from "react";
 import { createRoot } from "react-dom/client";
 import {
   ThemeProvider,
@@ -15,13 +23,6 @@ import catalog from "../catalog.json";
 import { SaasLandingRecipe } from "./recipes.js";
 import "./styles.css";
 const fixtures = import.meta.glob("../previews/*Preview.tsx");
-const params = new URLSearchParams(location.search);
-const component = params.get("component") || "Button";
-const entry = catalog.components.find((c) => c.export === component);
-const loader = entry ? fixtures[`../${entry.preview.source}`] : undefined;
-const Preview = loader
-  ? lazy(loader as () => Promise<{ default: ComponentType }>)
-  : null;
 const kitNames: Record<string, string> = {
   foundation: "Foundation",
   application: "Application UI",
@@ -32,10 +33,27 @@ function url(key: string, value: string) {
   const next = new URLSearchParams(location.search);
   next.set(key, value);
   if (key === "state" && value === "default") next.delete("state");
-  if (key === "component") next.delete("state");
+  if (key === "component") {
+    next.delete("state");
+    next.delete("recipe");
+  }
   return `?${next}`;
 }
-function Playground() {
+function Playground({
+  params,
+  navigate,
+}: {
+  params: URLSearchParams;
+  navigate: (href: string) => void | false;
+}) {
+  const component = params.get("component") || "Button";
+  const entry = catalog.components.find((c) => c.export === component);
+  const Preview = useMemo(() => {
+    const loader = entry ? fixtures[`../${entry.preview.source}`] : undefined;
+    return loader
+      ? lazy(loader as () => Promise<{ default: ComponentType }>)
+      : null;
+  }, [entry]);
   const [search, setSearch] = useState("");
   const matches = catalog.components.filter((c) =>
     `${c.name} ${c.kitId}`.toLowerCase().includes(search.toLowerCase()),
@@ -57,7 +75,7 @@ function Playground() {
       items: [
         {
           label: "SaaS landing",
-          href: "?recipe=saas-landing",
+          href: url("recipe", "saas-landing"),
           current: false,
         },
       ],
@@ -79,7 +97,7 @@ function Playground() {
             { value: "dark", label: "Dark" },
             { value: "system", label: "System" },
           ]}
-          onChange={(value) => location.assign(url("theme", value))}
+          onChange={(value) => navigate(url("theme", value))}
         />
       }
     >
@@ -108,13 +126,13 @@ function Playground() {
         >
           {search &&
             matches.map((c) => (
-              <a
+              <KitLink
                 className="m-button"
                 href={url("component", c.export)}
                 key={c.id}
               >
                 {c.name}
-              </a>
+              </KitLink>
             ))}
         </div>
         <PageHeading
@@ -133,7 +151,7 @@ function Playground() {
                 { value: "neutral", label: "Neutral" },
                 { value: "green", label: "Green" },
               ]}
-              onChange={(e) => location.assign(url("brand", e.target.value))}
+              onChange={(e) => navigate(url("brand", e.target.value))}
             />
             <Select
               label="Density"
@@ -143,7 +161,7 @@ function Playground() {
                 { value: "comfortable", label: "Comfortable" },
                 { value: "spacious", label: "Spacious" },
               ]}
-              onChange={(e) => location.assign(url("density", e.target.value))}
+              onChange={(e) => navigate(url("density", e.target.value))}
             />
             {entry && (
               <Select
@@ -156,7 +174,7 @@ function Playground() {
                     label: state,
                   })),
                 ]}
-                onChange={(e) => location.assign(url("state", e.target.value))}
+                onChange={(e) => navigate(url("state", e.target.value))}
               />
             )}
           </div>
@@ -174,7 +192,7 @@ function Playground() {
           >
             {Preview ? (
               <div data-mortar-preview={component}>
-                <Preview />
+                <Preview key={params.get("state") || "default"} />
               </div>
             ) : (
               <Notice title="Unknown component" tone="danger">
@@ -204,28 +222,51 @@ function Playground() {
     </DocsShell>
   );
 }
-createRoot(document.getElementById("root")!).render(
-  <ThemeProvider
-    brand={params.get("brand") === "green" ? "green" : "neutral"}
-    initialAppearance={
-      params.get("theme") === "system"
-        ? "system"
-        : params.get("theme") === "dark"
-          ? "dark"
-          : "light"
-    }
-    density={
-      params.get("density") === "compact"
-        ? "compact"
-        : params.get("density") === "spacious"
-          ? "spacious"
-          : "comfortable"
-    }
-  >
-    {params.get("recipe") === "saas-landing" ? (
-      <SaasLandingRecipe />
-    ) : (
-      <Playground />
-    )}
-  </ThemeProvider>,
-);
+function PlaygroundApp() {
+  const [query, setQuery] = useState(location.search);
+  const params = new URLSearchParams(query);
+  useEffect(() => {
+    const sync = () => setQuery(location.search);
+    window.addEventListener("popstate", sync);
+    return () => window.removeEventListener("popstate", sync);
+  }, []);
+  const navigate = (href: string): void | false => {
+    const destination = new URL(href, location.href);
+    if (
+      destination.origin !== location.origin ||
+      destination.pathname !== location.pathname
+    )
+      return false;
+    if (destination.href !== location.href)
+      history.pushState(null, "", destination);
+    setQuery(destination.search);
+  };
+  return (
+    <ThemeProvider
+      brand={params.get("brand") === "green" ? "green" : "neutral"}
+      navigate={navigate}
+      onAppearanceChange={(value) => navigate(url("theme", value))}
+      appearance={
+        params.get("theme") === "system"
+          ? "system"
+          : params.get("theme") === "dark"
+            ? "dark"
+            : "light"
+      }
+      density={
+        params.get("density") === "compact"
+          ? "compact"
+          : params.get("density") === "spacious"
+            ? "spacious"
+            : "comfortable"
+      }
+    >
+      {params.get("recipe") === "saas-landing" ? (
+        <SaasLandingRecipe />
+      ) : (
+        <Playground params={params} navigate={navigate} />
+      )}
+    </ThemeProvider>
+  );
+}
+createRoot(document.getElementById("root")!).render(<PlaygroundApp />);

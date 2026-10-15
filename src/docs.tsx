@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import { useEffect, useId, useState, type ReactNode } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { Button, type LinkAction } from "./primitives.js";
@@ -49,14 +50,14 @@ export function DocsShell({
         <section key={group.title}>
           <h2>{group.title}</h2>
           {group.items.map((item) => (
-            <a
+            <KitLink
               key={item.href}
               href={item.href}
               aria-current={item.current ? "page" : undefined}
               onClick={() => setOpen(false)}
             >
               {item.label}
-            </a>
+            </KitLink>
           ))}
         </section>
       ))}
@@ -64,9 +65,9 @@ export function DocsShell({
   );
   return (
     <div className="m-docs-shell" data-layout={layout}>
-      <a className="m-skip" href={`#${contentId}`}>
+      <KitLink className="m-skip" href={`#${contentId}`}>
         Skip to content
-      </a>
+      </KitLink>
       <header className="m-docs-header">
         <Button
           variant="ghost"
@@ -76,21 +77,21 @@ export function DocsShell({
         >
           Menu
         </Button>
-        <a className="m-brand" href={homeHref}>
+        <KitLink className="m-brand" href={homeHref}>
           <BrandMark logo={logo} />
           {brand}
-        </a>
+        </KitLink>
         {version && <div className="m-docs-version">{version}</div>}
         {sections.length > 0 && (
           <nav aria-label="Sections" className="m-docs-sections">
             {sections.map((s) => (
-              <a
+              <KitLink
                 key={s.href}
                 href={s.href}
                 aria-current={s.current ? "page" : undefined}
               >
                 {s.label}
-              </a>
+              </KitLink>
             ))}
           </nav>
         )}
@@ -109,13 +110,13 @@ export function DocsShell({
             <nav aria-label={tocLabel}>
               <h2>{tocLabel}</h2>
               {toc.map((t) => (
-                <a
+                <KitLink
                   key={t.id}
                   href={`#${t.id}`}
                   aria-current={t.current ? "location" : undefined}
                 >
                   {t.label}
-                </a>
+                </KitLink>
               ))}
             </nav>
             {tocFooter && <div className="m-docs-toc-footer">{tocFooter}</div>}
@@ -546,18 +547,18 @@ export function PagerLinks({
   return (
     <nav className="m-pager" aria-label="Pagination">
       {previous ? (
-        <a href={previous.href} rel="prev">
+        <KitLink href={previous.href} rel="prev">
           <small>Previous</small>
           <span>← {previous.label}</span>
-        </a>
+        </KitLink>
       ) : (
         <span />
       )}
       {next && (
-        <a href={next.href} rel="next" data-next>
+        <KitLink href={next.href} rel="next" data-next>
           <small>Next</small>
           <span>{next.label} →</span>
-        </a>
+        </KitLink>
       )}
     </nav>
   );
@@ -572,10 +573,10 @@ export function LinkCards({
     <ul className="m-link-cards">
       {items.map((item) => (
         <li key={item.href}>
-          <a href={item.href}>
+          <KitLink href={item.href}>
             <strong>{item.title} →</strong>
             {item.description && <span>{item.description}</span>}
-          </a>
+          </KitLink>
         </li>
       ))}
     </ul>
