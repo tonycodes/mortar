@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 5
     environment:
       name: playground-production
-      url: https://ui.tony.codes/playground/
+      url: https://mortar.tony.codes/playground/
     steps:
       # Deliberately no checkout, dependency install or execution of artifact code.
       - name: Download the checked main artifact
@@ -60,4 +60,4 @@ jobs:
           printf '%s\n' "$KNOWN_HOSTS" > "$HOSTS"
           ssh -T -i "$KEY" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$HOSTS" \
             "mortar-playground@$DEPLOY_HOST" "deploy $SHA $RUN_ID $ARTIFACT_ID" < "$RUNNER_TEMP/playground.zip"
-          echo "Deployed [$SHA](https://ui.tony.codes/playground/) after successful main checks." >> "$GITHUB_STEP_SUMMARY"
+          echo "Deployed [$SHA](https://mortar.tony.codes/playground/) after successful main checks." >> "$GITHUB_STEP_SUMMARY"

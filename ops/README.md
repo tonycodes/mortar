@@ -3,7 +3,7 @@
 Merging to `main` starts the required quality workflow. Only after its baseline,
 browser and visual checks pass does it upload a production artifact built with
 `/playground/` as its base path. The separate `Deploy playground` workflow deploys
-that artifact automatically to https://ui.tony.codes/playground/.
+that artifact automatically to https://mortar.tony.codes/playground/.
 
 PR runs never produce deployable artifacts. The deployment job has no checkout,
 dependency installation or artifact code execution. Its SSH credential lives in
