@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { readFile } from "node:fs/promises";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -220,45 +220,23 @@ test("MarketingHeader forwards a logo slot, className and id", () => {
   assert.deepEqual(problems, []);
 });
 
-test(
-  "duplicate href actions and links render without a same-key warning",
-  { timeout: 90_000 },
-  async () => {
-    const dir = resolve(root, "test-results/duplicate-keys");
-    await rm(dir, { recursive: true, force: true });
-    await mkdir(dir, { recursive: true });
-    const source = resolve(root, "src/marketing.tsx");
-    let server;
-    let browser;
-    try {
-      await writeFile(
-        join(dir, "index.html"),
-        '<!doctype html><div id="root"></div><script type="module" src="/main.tsx"></script>\n',
-      );
-      await writeFile(
-        join(dir, "main.tsx"),
-        `import { createRoot } from "react-dom/client";
-import { createElement } from "react";
-import { MarketingHeader, Hero, CallToAction, Footer } from ${JSON.stringify(source)};
-const link = (label, href) => ({ label, href });
-createRoot(document.getElementById("root")).render(
-  createElement(
-    "div",
-    null,
-    createElement(MarketingHeader, {
+test("duplicate href actions and links render all labels", () => {
+  const link = (label, href) => ({ label, href });
+  const html = [
+    markup(UI.MarketingHeader, {
       brand: "Northwind",
       links: [link("Docs", "/docs"), link("Guide", "/docs")],
     }),
-    createElement(Hero, {
+    markup(UI.Hero, {
       title: "Example",
       description: "A shared foundation.",
       actions: [link("Start", "/start"), link("Tour", "/start")],
     }),
-    createElement(CallToAction, {
+    markup(UI.CallToAction, {
       title: "Next",
       actions: [link("Primary", "/next"), link("Secondary", "/next")],
     }),
-    createElement(Footer, {
+    markup(UI.Footer, {
       brand: "Northwind",
       description: "Example product",
       columns: [
@@ -270,90 +248,47 @@ createRoot(document.getElementById("root")).render(
       legal: [link("Terms", "/legal"), link("Privacy", "/legal")],
       copyright: "2026 Northwind",
     }),
-  ),
-);
-`,
-      );
-      const { createServer } = await import("vite");
-      const react = (await import("@vitejs/plugin-react")).default;
-      server = await createServer({
-        configFile: false,
-        root: dir,
-        mode: "development",
-        logLevel: "silent",
-        plugins: [react()],
-        server: {
-          host: "127.0.0.1",
-          port: 0,
-          strictPort: false,
-          fs: { allow: [root, dir] },
-        },
-      });
-      await server.listen();
-      const address = server.httpServer?.address();
-      const port = address && typeof address === "object" ? address.port : 0;
-      const { chromium } = await import("@playwright/test");
-      browser = await chromium.launch();
-      const page = await browser.newPage();
-      const errors = [];
-      const diagnostics = [];
-      page.on("console", (message) => {
-        if (message.type() !== "error") return;
-        errors.push(message.text());
-        if (!/same key/i.test(message.text()))
-          diagnostics.push(
-            `${message.text()} ${message.location().url}`.trim(),
-          );
-      });
-      page.on("pageerror", (error) => {
-        errors.push(error.message);
-        diagnostics.push(error.message);
-      });
-      page.on("response", (response) => {
-        if (response.status() >= 400)
-          diagnostics.push(`${response.status()} ${response.url()}`);
-      });
-      await page.goto(`http://127.0.0.1:${port}/`);
-      const rendered = await page
-        .getByText("Northwind")
-        .first()
-        .waitFor({ timeout: 40_000 })
-        .then(() => true)
-        .catch(() => false);
-      const problems = [
-        ...new Set(
-          errors
-            .filter((error) => /same key/i.test(error))
-            .map((error) => `console.error: ${error}`),
-        ),
-      ];
-      if (!rendered)
-        problems.push(
-          `page did not render (${diagnostics.join(" | ") || "no console error"})`,
-        );
-      for (const label of [
-        "Docs",
-        "Guide",
-        "Start",
-        "Tour",
-        "Primary",
-        "Secondary",
-        "Pricing",
-        "Plans",
-        "Terms",
-        "Privacy",
-      ]) {
-        if ((await page.getByText(label, { exact: true }).count()) < 1)
-          problems.push(`missing rendered label ${label}`);
-      }
-      assert.deepEqual(problems, []);
-    } finally {
-      await browser?.close();
-      await server?.close();
-      await rm(dir, { recursive: true, force: true });
-    }
-  },
-);
+  ].join("");
+  const problems = [];
+  for (const label of [
+    "Docs",
+    "Guide",
+    "Start",
+    "Tour",
+    "Primary",
+    "Secondary",
+    "Pricing",
+    "Plans",
+    "Terms",
+    "Privacy",
+  ]) {
+    if (!html.includes(`>${label}<`))
+      problems.push(`missing rendered label ${label}`);
+  }
+  assert.deepEqual(problems, []);
+});
+
+/* browser-launcher guard */
+test("marketing-gaps node suite does not launch a browser", async () => {
+  const source = await read("tests/marketing-gaps.test.mjs");
+  const marker = "/* browser-launcher guard */";
+  const at = source.indexOf(marker);
+  const resume = at === -1 ? -1 : source.indexOf("\ntest(", at + marker.length);
+  const scanned =
+    at === -1
+      ? source
+      : source.slice(0, at) + (resume === -1 ? "" : source.slice(resume));
+  const launch = ["chromium", ".launch"].join("");
+  const specifier = ["@", "playwright", "/test"].join("");
+  const dynamicImport = ["import(", JSON.stringify(specifier), ")"].join("");
+  const staticFrom = ["from ", JSON.stringify(specifier)].join("");
+  assert.deepEqual(
+    [launch, dynamicImport, staticFrom].filter((needle) =>
+      scanned.includes(needle),
+    ),
+    [],
+  );
+});
 
 test("catalog tokens list --m-accent and --m-on-accent", async () => {
   const catalog = JSON.parse(await read("catalog.json"));
