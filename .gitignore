@@ -9,3 +9,8 @@ playwright-report/
 visual-results/
 visual-report/
 visual-candidates/
+
+# Generated deployment artifacts and Python test caches
+playground-production/
+release.tar.gz
+__pycache__/
