@@ -4,7 +4,7 @@ A shared design foundation and purpose-built Application UI, Marketing UI and Do
 
 The package is `@tony-ui/mortar`, distributed from owner-hosted infrastructure. Releases are immutable and publicly downloadable without a service account. Version 0.1.0 is available. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
-[Explore the live playground](https://ui.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Hosted agent services](#mortar-cloud-and-premium-services)
+[Explore the live playground](https://mortar.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Hosted agent services](#mortar-cloud-and-premium-services)
 
 ## See the kit
 
@@ -15,15 +15,15 @@ that are not yet in the latest npm release.
 
 **Marketing UI — a composed landing page in light mode.**
 
-[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://ui.tony.codes/playground/?recipe=saas-landing&theme=light)
+[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://mortar.tony.codes/playground/?recipe=saas-landing&theme=light)
 
 **Application UI — a semantic table in dark mode, inside the shared explorer.**
 
-[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://ui.tony.codes/playground/?component=Table&theme=dark)
+[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://mortar.tony.codes/playground/?component=Table&theme=dark)
 
 **Docs UI — navigation, search and an article outline using the shared DocsShell.**
 
-[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://ui.tony.codes/playground/?component=DocsShell&theme=light)
+[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://mortar.tony.codes/playground/?component=DocsShell&theme=light)
 
 Open any screenshot to try its live example. Switch appearance, brand, density and
 example states in the playground.
@@ -103,18 +103,18 @@ no published support SLA. The preview onboarding below does not purchase a plan.
 
 ### Connect an agent to the hosted preview
 
-- **Coding agents:** give your agent [the onboarding guide](https://ui.tony.codes/agent.md)
-  and your application brief. It follows the [service skill](https://ui.tony.codes/agent-skill.md)
+- **Coding agents:** give your agent [the onboarding guide](https://mortar.tony.codes/agent.md)
+  and your application brief. It follows the [service skill](https://mortar.tony.codes/agent-skill.md)
   to register its own identity, discover components and run the hosted audit. No team
   invitation or owner token is required. CLI onboarding needs Node 22 or newer.
-- **Remote MCP clients:** add `https://ui.tony.codes/mcp` as the remote connector URL
+- **Remote MCP clients:** add `https://mortar.tony.codes/mcp` as the remote connector URL
   and complete the browser OAuth consent flow. See the
-  [connector guide](https://ui.tony.codes/mcp.md) for supported flows.
+  [connector guide](https://mortar.tony.codes/mcp.md) for supported flows.
 - **Kit bugs and contributions:** use [GitHub issues](https://github.com/tonycodes/mortar/issues)
   and [pull requests](CONTRIBUTING.md). This is community maintenance, not a paid
   support entitlement. Do not put credentials or private project details in issues.
 
-Visit [the agent area](https://ui.tony.codes/#agents) for the hosted entry point.
+Visit [the agent area](https://mortar.tony.codes/#agents) for the hosted entry point.
 The private service and its history are not covered by this repository's MIT licence.
 
 ## Run the playground locally
@@ -131,7 +131,7 @@ It is the local visual development surface for new and updated components.
 No marketing-site process, service account or governance backend is required.
 
 In production it has its own build and deployment at
-[ui.tony.codes/playground/](https://ui.tony.codes/playground/). It shares the domain
+[mortar.tony.codes/playground/](https://mortar.tony.codes/playground/). It shares the domain
 and hosting infrastructure with the marketing/cloud site, but deploys independently.
 Merges to `main` deploy it after checks pass. Marketing-site changes and immutable
 npm releases have separate deployment/publication workflows. See [operations](ops/README.md).

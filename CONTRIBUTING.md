@@ -30,4 +30,4 @@ Browse the grouped kit navigation or search by component name. On narrow screens
 
 ## Automatic playground deployment
 
-Merges to `main` automatically deploy the playground at https://ui.tony.codes/playground/ after the required checks pass on the merged commit. A separate deployment workflow receives a restricted static-upload credential; PR and build jobs do not. Failed checks leave the current production release unchanged. See [deployment operations](ops/README.md). This does not publish a new npm package version.
+Merges to `main` automatically deploy the playground at https://mortar.tony.codes/playground/ after the required checks pass on the merged commit. A separate deployment workflow receives a restricted static-upload credential; PR and build jobs do not. Failed checks leave the current production release unchanged. See [deployment operations](ops/README.md). This does not publish a new npm package version.

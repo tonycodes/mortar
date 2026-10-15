@@ -124,10 +124,10 @@ def activate(base, stage, sha, run_id, artifact_id, bundle_hash):
             pending.replace(destination)
     link_current(base, "releases/" + sha)
     try:
-        with urlopen("https://ui.tony.codes/playground/commit.txt", timeout=30) as response:
+        with urlopen("https://mortar.tony.codes/playground/commit.txt", timeout=30) as response:
             if response.read().decode().strip() != sha:
                 raise ValueError("Live commit verification failed")
-        with urlopen("https://ui.tony.codes/playground/", timeout=30) as response:
+        with urlopen("https://mortar.tony.codes/playground/", timeout=30) as response:
             if response.read() != (stage / "index.html").read_bytes():
                 raise ValueError("Live index verification failed")
     except Exception:
