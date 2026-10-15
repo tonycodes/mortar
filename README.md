@@ -4,6 +4,30 @@ A shared design foundation and purpose-built Application UI, Marketing UI and Do
 
 The package is `@tony-ui/mortar`, distributed from owner-hosted infrastructure. Releases are immutable and publicly downloadable without a service account. Version 0.1.0 is available. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
+[Explore the live playground](https://ui.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Hosted agent services](#mortar-cloud-and-premium-services)
+
+## See the kit
+
+These screenshots show the kit running in the public playground. All product names,
+plans, prices and support labels inside the examples are demonstration content,
+not Mortar offers. The playground follows `main`; screenshots may show components
+that are not yet in the latest npm release.
+
+**Marketing UI — a composed landing page in light mode.**
+
+[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://ui.tony.codes/playground/?recipe=saas-landing&theme=light)
+
+**Application UI — a semantic table in dark mode, inside the shared explorer.**
+
+[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://ui.tony.codes/playground/?component=Table&theme=dark)
+
+**Docs UI — navigation, search and an article outline using the shared DocsShell.**
+
+[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://ui.tony.codes/playground/?component=DocsShell&theme=light)
+
+Open any screenshot to try its live example. Switch appearance, brand, density and
+example states in the playground.
+
 ## Install
 
 ```sh
@@ -54,13 +78,65 @@ The catalogue assigns each export to one purpose. Foundation primitives serve al
 
 Controls use native HTML and Headless UI. Tabs support arrow/Home/End navigation; dialogs and menus use Headless UI focus management. Density has a 44px control floor on coarse pointers. Feedback colours remain separate from the brand.
 
-## Hosted services
+## Mortar Cloud and premium services
 
-Mortar Cloud's registry, agent discovery, approvals, audit and managed release workflow are separate proprietary hosted services. Payment buys service access, not permission to use the MIT components. The kit performs no network requests and contains no licence check or telemetry.
+The MIT kit is free to use, customise and contribute to, including commercial
+projects and agent-assisted development. Mortar Cloud is the separate hosted
+agent and governance service for keeping applications on a centrally controlled UI.
 
-This licence covers this package only. The private governance service and its history are not part of this public repository.
+| Free MIT kit                                          | Hosted cloud capabilities                                                     |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Components, purpose kits, themes and shared shells    | Registry discovery of approved components and dependency relationships        |
+| Local playground and component contracts              | Agent build packets with reusable components and service workflow defaults    |
+| Local baseline, browser and accessibility checks      | Registry-aware application audits against approved implementations            |
+| GitHub issues, contributions and maintainer PR review | OAuth MCP connections, individual agent credentials and stored audit evidence |
 
-### Client-side routing
+The cloud service helps agents discover what to reuse and gives application teams
+consistent adoption rules and audit feedback. Component source review remains on
+GitHub; a cloud subscription is not required to contribute or install the kit.
+The kit contains no licence checks, telemetry or calls to the cloud service.
+
+**Current availability:** hosted onboarding is available as a preview. Paid plans,
+checkout, subscription activation and premium human-support terms are not yet
+launched. There is currently no purchase or premium-support activation step, and
+no published support SLA. The preview onboarding below does not purchase a plan.
+
+### Connect an agent to the hosted preview
+
+- **Coding agents:** give your agent [the onboarding guide](https://ui.tony.codes/agent.md)
+  and your application brief. It follows the [service skill](https://ui.tony.codes/agent-skill.md)
+  to register its own identity, discover components and run the hosted audit. No team
+  invitation or owner token is required. CLI onboarding needs Node 22 or newer.
+- **Remote MCP clients:** add `https://ui.tony.codes/mcp` as the remote connector URL
+  and complete the browser OAuth consent flow. See the
+  [connector guide](https://ui.tony.codes/mcp.md) for supported flows.
+- **Kit bugs and contributions:** use [GitHub issues](https://github.com/tonycodes/mortar/issues)
+  and [pull requests](CONTRIBUTING.md). This is community maintenance, not a paid
+  support entitlement. Do not put credentials or private project details in issues.
+
+Visit [the agent area](https://ui.tony.codes/#agents) for the hosted entry point.
+The private service and its history are not covered by this repository's MIT licence.
+
+## Run the playground locally
+
+```sh
+npm ci
+npm run catalog
+npm run dev
+```
+
+Open `http://127.0.0.1:4340`. The playground is this repository's standalone Vite
+application, built directly from `src`, `previews` and the component catalogue.
+It is the local visual development surface for new and updated components.
+No marketing-site process, service account or governance backend is required.
+
+In production it has its own build and deployment at
+[ui.tony.codes/playground/](https://ui.tony.codes/playground/). It shares the domain
+and hosting infrastructure with the marketing/cloud site, but deploys independently.
+Merges to `main` deploy it after checks pass. Marketing-site changes and immutable
+npm releases have separate deployment/publication workflows. See [operations](ops/README.md).
+
+## Client-side routing
 
 Connect your application's router once at the provider. All kit-owned links
 (including AppShell, DocsShell, MarketingHeader, breadcrumbs, tables and action
