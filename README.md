@@ -59,3 +59,32 @@ Controls use native HTML and Headless UI. Tabs support arrow/Home/End navigation
 Mortar Cloud's registry, agent discovery, approvals, audit and managed release workflow are separate proprietary hosted services. Payment buys service access, not permission to use the MIT components. The kit performs no network requests and contains no licence check or telemetry.
 
 This licence covers this package only. The private governance service and its history are not part of this public repository.
+
+### Client-side routing
+
+Connect your application's router once at the provider. All kit-owned links
+(including AppShell, DocsShell, MarketingHeader, breadcrumbs, tables and action
+links) use this adapter for ordinary same-origin navigation:
+
+```tsx
+<ThemeProvider
+  navigate={(href) => {
+    router.push(href);
+  }}
+>
+  <App />
+</ThemeProvider>
+```
+
+For React Router, pass its `useNavigate()` function through a void-returning
+callback. The router must render the destination and manage route focus/scroll.
+Return `false` for routes your router does not handle. Without an adapter, links
+retain native browser navigation. External links, downloads, same-page fragments,
+modified clicks and new-tab links remain native. Consumer-authored anchors still
+belong to the consumer's router; this does not intercept the whole document.
+
+Theme selection can also be controlled with `appearance` and
+`onAppearanceChange`; `initialAppearance` remains the uncontrolled starting value.
+Brand and density already update through their provider props. None of these
+settings requires reloading the page. Existing apps must install a release
+containing this API, wire their router, and rebuild to adopt it.

@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import { Fragment, type ReactNode } from "react";
 import {
   Combobox,
@@ -219,7 +220,11 @@ export function StackedList({
           );
           return (
             <li key={item.id}>
-              {item.href ? <a href={item.href}>{body}</a> : <div>{body}</div>}
+              {item.href ? (
+                <KitLink href={item.href}>{body}</KitLink>
+              ) : (
+                <div>{body}</div>
+              )}
               {item.trailing && (
                 <div className="m-stacked-trailing">{item.trailing}</div>
               )}

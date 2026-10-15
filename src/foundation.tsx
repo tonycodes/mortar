@@ -1,3 +1,4 @@
+import { NavigationContext, type Navigate } from "./navigation.js";
 import {
   createContext,
   useContext,
@@ -19,6 +20,10 @@ const ThemeContext = createContext<Theme | null>(null);
 export interface ThemeProviderProps {
   children: ReactNode;
   initialAppearance?: Appearance;
+  appearance?: Appearance;
+  onAppearanceChange?: (value: Appearance) => void;
+  /** Connect the application router once for every kit link. */
+  navigate?: Navigate;
   brand?: Brand;
   density?: Density;
 }
@@ -26,10 +31,19 @@ export interface ThemeProviderProps {
 export function ThemeProvider({
   children,
   initialAppearance = "system",
+  appearance: controlledAppearance,
+  onAppearanceChange,
+  navigate,
   brand = "neutral",
   density = "comfortable",
 }: ThemeProviderProps) {
-  const [appearance, setAppearance] = useState<Appearance>(initialAppearance);
+  const [localAppearance, setLocalAppearance] =
+    useState<Appearance>(initialAppearance);
+  const appearance = controlledAppearance ?? localAppearance;
+  const setAppearance = (value: Appearance) => {
+    setLocalAppearance(value);
+    onAppearanceChange?.(value);
+  };
   useEffect(() => {
     const element = document.documentElement;
     const attributes = {
@@ -72,11 +86,13 @@ export function ThemeProvider({
     };
   }, [appearance]);
   return (
-    <ThemeContext.Provider
-      value={{ appearance, setAppearance, brand, density }}
-    >
-      {children}
-    </ThemeContext.Provider>
+    <NavigationContext.Provider value={navigate}>
+      <ThemeContext.Provider
+        value={{ appearance, setAppearance, brand, density }}
+      >
+        {children}
+      </ThemeContext.Provider>
+    </NavigationContext.Provider>
   );
 }
 export function AppearanceControl() {

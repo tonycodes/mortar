@@ -1,3 +1,4 @@
+import { KitLink } from "./navigation.js";
 import { useId } from "react";
 export function SegmentedControl({
   label,
@@ -45,9 +46,9 @@ export function CodeBlock({
 export function PreviewFrame({ title, src }: { title: string; src: string }) {
   return (
     <section className="m-preview-frame" aria-label={title}>
-      <a href={src} target="_blank" rel="noopener noreferrer">
+      <KitLink href={src} target="_blank" rel="noopener noreferrer">
         Open full preview
-      </a>
+      </KitLink>
       <iframe
         title={title}
         src={src}

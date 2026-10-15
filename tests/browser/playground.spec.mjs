@@ -62,6 +62,7 @@ for (const width of [320, 768, 1280]) {
       ).violations,
     ).toEqual([]);
     if (width < 900) {
+      await page.getByLabel("Find a component").fill("");
       await page
         .getByRole("button", { name: "Open navigation", exact: true })
         .click();
@@ -94,4 +95,56 @@ test("shared shell skip links target separate content regions", async ({
   await expect(
     page.locator('.m-docs-shell[data-layout="wide"] > .m-docs-body > main'),
   ).toBeFocused();
+});
+
+test("navigation and preview settings preserve the document and support history", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?component=ActionLink&theme=light");
+  await page.evaluate(() => {
+    window.__navigationMarker = "original";
+  });
+  await page.getByLabel("Find a component").fill("Button");
+  await page
+    .getByRole("group", { name: "Search results" })
+    .getByRole("link", { name: "Button", exact: true })
+    .click();
+  await expect(page.locator('[data-mortar-preview="Button"]')).toBeVisible();
+  await expect(page.getByLabel("Find a component")).toHaveValue("Button");
+  await page.getByRole("button", { name: "Dark", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-mortar-appearance",
+    "dark",
+  );
+  await page.getByLabel("Brand", { exact: true }).selectOption("green");
+  await page.getByLabel("Density", { exact: true }).selectOption("compact");
+  await page.getByLabel("Example state").selectOption("disabled");
+  await expect(
+    page
+      .locator("[data-mortar-preview]")
+      .getByRole("button", { name: "Save", exact: true }),
+  ).toBeDisabled();
+  await page.goBack();
+  await expect(page.getByLabel("Example state")).toHaveValue("default");
+  await page.goBack();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-mortar-density",
+    "comfortable",
+  );
+  await page.goForward();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-mortar-density",
+    "compact",
+  );
+  expect(await page.evaluate(() => window.__navigationMarker)).toBe("original");
+  await page.getByLabel("Find a component").fill("");
+  await page
+    .getByRole("navigation", { name: "Component catalogue" })
+    .getByRole("link", { name: "Input", exact: true })
+    .click();
+  await expect(page.locator('[data-mortar-preview="Input"]')).toBeVisible();
+  expect(await page.evaluate(() => window.__navigationMarker)).toBe("original");
+  await page.goBack();
+  await expect(page.locator('[data-mortar-preview="Button"]')).toBeVisible();
 });
