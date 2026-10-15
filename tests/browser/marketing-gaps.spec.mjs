@@ -87,3 +87,51 @@ for (const brand of ["neutral", "green"]) {
     expect(problems).toEqual([]);
   });
 }
+
+for (const theme of ["light", "dark"])
+  for (const brand of ["neutral", "green"]) {
+    test(`computed --m-accent and --m-on-accent ${theme} ${brand}`, async ({
+      page,
+    }) => {
+      await page.goto(
+        "/?" +
+          new URLSearchParams({
+            component: "CallToAction",
+            theme,
+            brand,
+          }),
+      );
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-mortar-appearance",
+        theme,
+      );
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-mortar-brand",
+        brand,
+      );
+      const problems = await page.locator("html").evaluate((el) => {
+        const colorValue = (value) => {
+          const raw = value.trim();
+          if (
+            !raw ||
+            /^(initial|inherit|unset|revert|revert-layer)$/i.test(raw)
+          )
+            return "";
+          const probe = el.ownerDocument.createElement("span");
+          probe.style.color = raw;
+          return probe.style.color;
+        };
+        const style = getComputedStyle(el);
+        const found = [];
+        for (const name of ["--m-accent", "--m-on-accent"]) {
+          const value = style.getPropertyValue(name);
+          if (!colorValue(value))
+            found.push(
+              `${name} computed ${JSON.stringify(value.trim())} is empty or not a colour`,
+            );
+        }
+        return found;
+      });
+      expect(problems).toEqual([]);
+    });
+  }

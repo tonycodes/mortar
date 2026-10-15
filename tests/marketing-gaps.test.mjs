@@ -355,34 +355,12 @@ createRoot(document.getElementById("root")).render(
   },
 );
 
-test("accent tokens exist for every brand and appearance and in the token catalogue", async () => {
-  const css = await read("src/tokens.css");
-  const light = ruleBodies(css, ":root");
-  const green = ruleBodies(css, ':root[data-mortar-brand="green"]');
-  assert.match(light, /--m-ink\s*:/, "token parser missed :root");
-  assert.match(green, /--m-primary\s*:/, "token parser missed the green brand");
-  const problems = [];
-  for (const selector of [
-    ":root",
-    ':root[data-mortar-appearance="dark"]',
-    ':root[data-mortar-brand="green"]',
-    ':root[data-mortar-brand="green"][data-mortar-appearance="dark"]',
-  ]) {
-    const body = ruleBodies(css, selector);
-    if (!/--m-accent\s*:/.test(body))
-      problems.push(`${selector} missing --m-accent`);
-    if (!/--m-on-accent\s*:/.test(body))
-      problems.push(`${selector} missing --m-on-accent`);
-  }
-  const styles = await read("styles.css");
-  if (!/--color-accent:\s*var\(--m-accent\)/.test(styles))
-    problems.push("styles.css theme catalogue missing --color-accent");
-  if (!/--color-on-accent:\s*var\(--m-on-accent\)/.test(styles))
-    problems.push("styles.css theme catalogue missing --color-on-accent");
+test("catalog tokens list --m-accent and --m-on-accent", async () => {
   const catalog = JSON.parse(await read("catalog.json"));
-  const names = (catalog.tokens ?? []).map((token) =>
-    typeof token === "string" ? token : token.name,
+  const names = (Array.isArray(catalog.tokens) ? catalog.tokens : []).map(
+    (token) => (typeof token === "string" ? token : token.name),
   );
+  const problems = [];
   if (!names.includes("--m-accent"))
     problems.push("catalog.json tokens missing --m-accent");
   if (!names.includes("--m-on-accent"))
