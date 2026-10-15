@@ -891,6 +891,42 @@
     gap: 48px 40px;
     margin-top: 48px;
   }
+  .m-feature-item {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .m-feature-visual {
+    margin-block-end: 24px;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--m-line);
+    border-radius: 12px;
+    background: var(--m-surface);
+  }
+  .m-feature-visual img,
+  .m-feature-visual video {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .m-feature-details {
+    display: grid;
+    gap: 8px;
+    margin-block: 20px 0;
+    padding-inline-start: 20px;
+    list-style: disc;
+    color: var(--m-secondary);
+    font-size: 15px;
+  }
+  .m-feature-details li::marker {
+    color: var(--m-primary);
+  }
+  .m-feature-action {
+    margin-block-start: auto;
+    padding-block-start: 24px;
+  }
   .m-feature-icon {
     display: grid;
     place-items: center;

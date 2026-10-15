@@ -424,6 +424,69 @@ export function PreviewCase({ name }: { name: string }) {
       example = (
         <>
           <UI.FeatureGrid
+            eyebrow="From question to next step"
+            title="Show what your assistant can do"
+            description="Illustrative conversations explain the workflow before a visitor signs up."
+            items={[
+              {
+                title: "Turn availability questions into bookings",
+                description:
+                  "Offer times from your connected calendar while the visitor is still in the conversation.",
+                visual: (
+                  <UI.ChatPreview
+                    title="Booking example"
+                    messages={[
+                      { from: "user", content: "Can we meet on Tuesday?" },
+                      {
+                        from: "assistant",
+                        content:
+                          "There is a 30-minute slot at 10:00. Would that work?",
+                      },
+                    ]}
+                  />
+                ),
+                details: [
+                  "Google and Apple calendar connections",
+                  "Working hours and buffers between appointments",
+                ],
+                action: {
+                  label: "Explore appointment booking",
+                  href: "#booking-details",
+                },
+              },
+              {
+                title: "Answer from your business knowledge",
+                description:
+                  "Give your assistant the documents and pages that explain your services.",
+                visual: (
+                  <UI.ChatPreview
+                    title="Knowledge example"
+                    messages={[
+                      {
+                        from: "user",
+                        content: "What should I bring to my consultation?",
+                      },
+                      {
+                        from: "assistant",
+                        content:
+                          "Your project brief and any reference materials, as outlined in our consultation guide.",
+                      },
+                    ]}
+                  />
+                ),
+                details: [
+                  "Upload documents or add website URLs",
+                  "Update source material as your business changes",
+                ],
+                action: {
+                  label: "Explore knowledge sources",
+                  href: "#knowledge-details",
+                },
+              },
+            ]}
+          />
+          <UI.FeatureGrid
+            id="knowledge-details"
             title="Made to work together"
             items={items.map((item, i) => ({
               ...item,
@@ -431,6 +494,7 @@ export function PreviewCase({ name }: { name: string }) {
             }))}
           />
           <UI.FeatureGrid
+            id="booking-details"
             title="Numbered for sequences"
             marker="number"
             tone="muted"

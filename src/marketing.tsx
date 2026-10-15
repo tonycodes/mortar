@@ -103,7 +103,16 @@ export function FeatureGrid({
   eyebrow?: string;
   title: string;
   description?: string;
-  items: { title: string; description: string; icon?: ReactNode }[];
+  items: {
+    title: string;
+    description: string;
+    icon?: ReactNode;
+    /** Product evidence, such as an accessible screenshot or shared preview. */
+    visual?: ReactNode;
+    /** Specific capabilities or outcomes that support the description. */
+    details?: string[];
+    action?: LinkAction;
+  }[];
   /** auto: show icons when supplied, otherwise no marker. number: for sequences. */
   marker?: "auto" | "icon" | "number" | "none";
   /** Defaults to a balanced count for the number of items. */
@@ -131,7 +140,10 @@ export function FeatureGrid({
                 ? item.icon
                 : null;
           return (
-            <article key={item.title}>
+            <article key={item.title} className="m-feature-item">
+              {item.visual && (
+                <div className="m-feature-visual">{item.visual}</div>
+              )}
               {content && (
                 <span
                   className="m-feature-icon"
@@ -143,6 +155,18 @@ export function FeatureGrid({
               )}
               <h3>{item.title}</h3>
               <p>{item.description}</p>
+              {!!item.details?.length && (
+                <ul className="m-feature-details">
+                  {item.details.map((detail) => (
+                    <li key={detail}>{detail}</li>
+                  ))}
+                </ul>
+              )}
+              {item.action && (
+                <div className="m-feature-action">
+                  <ActionLink {...item.action} variant="secondary" />
+                </div>
+              )}
             </article>
           );
         })}

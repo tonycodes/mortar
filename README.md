@@ -164,3 +164,38 @@ Theme selection can also be controlled with `appearance` and
 Brand and density already update through their provider props. None of these
 settings requires reloading the page. Existing apps must install a release
 containing this API, wire their router, and rebuild to adopt it.
+
+## Features that show the product
+
+Use `FeatureGrid` for capabilities and `ProcessSteps` for a genuine sequence.
+Feature numbers are opt-in; they should communicate order, not decorate unrelated
+benefits. A feature can supply `visual`, `details` and `action` alongside its title
+and description. These additions are optional, so compact grids remain supported.
+
+```tsx
+<FeatureGrid
+  title="From a question to a booking"
+  items={[
+    {
+      title: "Offer a time while the visitor is still here",
+      description: "Answer availability questions using a connected calendar.",
+      visual: (
+        <ChatPreview
+          title="Illustrative booking"
+          messages={[
+            { from: "user", content: "Can we meet on Tuesday?" },
+            { from: "assistant", content: "Would 10:00 work for you?" },
+          ]}
+        />
+      ),
+      details: ["Respect working hours", "Leave a buffer between appointments"],
+      action: { label: "Explore booking", href: "/features/booking" },
+    },
+  ]}
+/>
+```
+
+Keep evidence relevant: use a representative product view or labelled example,
+not decorative numbers or invented performance claims. Give images meaningful
+alt text and link labels a destination-specific name. Product content and URLs
+stay in consumer props; the shared component owns layout, tokens and focus styles.

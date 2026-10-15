@@ -21,7 +21,7 @@
       "title": "string",
       "eyebrow": "string",
       "description": "string",
-      "items": "{ title: string; description: string; icon?: ReactNode }[]",
+      "items": "{ title: string; description: string; icon?: ReactNode; visual?: ReactNode; details?: string[]; action?: LinkAction }[]",
       "id": "string",
       "marker": "\"auto\" | \"icon\" | \"number\" | \"none\"",
       "columns": "2 | 3 | 4",
@@ -34,10 +34,10 @@
       "Green brand",
       "Keyboard and focus"
     ],
-    "usage": "Import { FeatureGrid } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Use unnumbered features for capabilities; reserve numbers for ordered sequences. Add visual evidence, concrete details and descriptive action labels when they help visitors evaluate a feature. Visual slots retain their own accessible labels and must not contain live customer data.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-action-link"]
   },
   "preview": {
     "source": "previews/FeatureGridPreview.tsx"
@@ -48,7 +48,7 @@
     "states": []
   },
   "integrity": {
-    "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-    "preview": "2379fec68fd98bd4b99c395baeda2275f28896f2544099b749017a11d77a4409"
+    "source": "0ad863aa5124db2e231cf828bea3d71048fc508003b1b3e94002fd5be38f3efb",
+    "preview": "fc4f2f4ee86e1ec5fd8e3b95390c7f92d0af702c5b0ebc804f0b1a14c0d9a414"
   }
 }
