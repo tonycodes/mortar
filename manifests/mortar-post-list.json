@@ -5,7 +5,7 @@
   "description": "Mortar marketing post list, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "PostList",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -32,7 +32,7 @@
     ],
     "usage": "Import { PostList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-action-link"]
   },
   "preview": {
@@ -44,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-    "preview": "169cbd3ac80d6fa0e7715c8fc507fe64d84d4e83ef27556d2f77e4a58b215ef0"
+    "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+    "preview": "505f6499bfcfc56c9aa6992f8b4449ca97689944fb3eaedb1899fb75ec43f18e"
   }
 }

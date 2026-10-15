@@ -5,7 +5,7 @@
   "description": "Mortar foundation appearance control, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "AppearanceControl",
   "source": "src/foundation.tsx",
   "capabilities": ["theme", "foundation"],
@@ -17,7 +17,10 @@
     "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
   },
   "contract": {
-    "props": {},
+    "props": {
+      "value": "light | dark | system",
+      "onChange": "(value: Appearance) => void"
+    },
     "states": [
       "Light",
       "Dark",
@@ -36,11 +39,11 @@
   "testing": {
     "profile": "control",
     "target": ".m-segmented",
-    "states": [],
+    "states": ["controlled"],
     "probe": "appearance"
   },
   "integrity": {
-    "source": "2efef5ef3e78cdf10164cbba659194a1a62ceedd681b052fd39bfde1fcffa1be",
-    "preview": "5645d1ddd029148cf72f4992ca1fd397cf1c83e1ef1d484e170ea2e49e55ac41"
+    "source": "f729ac70375b088651388f4831c69d9ef70a6173c90d8209d23d27eddbf0ae54",
+    "preview": "6f73ed224053a3ef1b1d020d7f6233a3a4246a2cab53f663752985217c16888b"
   }
 }

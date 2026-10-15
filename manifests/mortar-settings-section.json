@@ -5,7 +5,7 @@
   "description": "Mortar application settings section, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SettingsSection",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application"],
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-    "preview": "ac918ce9c444ab3031a0382a544dc75864e630c25dc0f644ff07c26ec0ba6214"
+    "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+    "preview": "c8666707df75e720ea00b0e2d3b393dbdc183996008e5200720ce0b4cc786042"
   }
 }

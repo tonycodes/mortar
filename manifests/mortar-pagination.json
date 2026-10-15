@@ -5,7 +5,7 @@
   "description": "Mortar application pagination, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Pagination",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application"],
@@ -44,7 +44,7 @@
     "probe": "pagination"
   },
   "integrity": {
-    "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-    "preview": "f07ac06f3a8fb4bf96f3b8304e3eaedba5c8367c59935be97ac0d90aa2cdbd22"
+    "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+    "preview": "cc04f3d7ac40025e2e70972de1d01f5617aca38c0058d7272ed4f908621c9c16"
   }
 }

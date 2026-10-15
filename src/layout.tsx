@@ -105,6 +105,7 @@ export function Section({
       className="m-marketing-section m-section"
       data-tone={tone}
       data-align={align}
+      data-m-component="Section"
     >
       {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
       {title && <h2>{title}</h2>}

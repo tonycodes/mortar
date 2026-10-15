@@ -5,7 +5,7 @@
   "description": "Mortar application page heading, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "PageHeading",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application"],
@@ -46,7 +46,7 @@
     "states": []
   },
   "integrity": {
-    "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-    "preview": "c5514e7fa27e77e5858973e57805875a211f785970b4da6788a948cb6130411e"
+    "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+    "preview": "9534ef87735716029b1995df79b581def0c5ca158d0cda3fe8da385f1f314206"
   }
 }

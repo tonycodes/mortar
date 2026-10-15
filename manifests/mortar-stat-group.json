@@ -5,7 +5,7 @@
   "description": "Mortar marketing stat group, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "StatGroup",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -30,7 +30,7 @@
     ],
     "usage": "Import { StatGroup } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-    "preview": "46fd8017e1c869b7c4be8b43905aafbc121cf9b6f3f583ad7919f4be60eeed0a"
+    "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+    "preview": "6f3d3cbd12bd7e6f1f66fc4a028ffc25e8981ff63223e30c018bc19e70006a4f"
   }
 }

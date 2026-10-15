@@ -5,7 +5,7 @@
   "description": "Mortar foundation text area, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "TextArea",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
@@ -46,7 +46,7 @@
     "probe": "textarea"
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "3beae88fb5cda7e7deb1f4dbc18dd1d6e7b45f4b5082e97ae9a04ef8b5aafff8"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "f0c19a52ee30467c6f842a8a9ff10393e1f7cc76e6cf8541140ca6d82ad14f70"
   }
 }

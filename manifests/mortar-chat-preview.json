@@ -5,7 +5,7 @@
   "description": "Mortar static chat conversation for marketing conversational products.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "ChatPreview",
   "source": "src/showcase.tsx",
   "capabilities": ["theme", "marketing"],
@@ -34,7 +34,7 @@
     ],
     "usage": "Import { ChatPreview } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -46,7 +46,7 @@
     "states": []
   },
   "integrity": {
-    "source": "2235480f7595d696289d0d34d94520feccf7f23818df2b16b31b499b6b76acf6",
-    "preview": "804d27abb78cc2d1e78123f427c9138cf8ab9972077f4151d369c15d9df6b5b1"
+    "source": "a41d2348086d164f23fe57e561249330ffb9e797544379b15cae4d87908ea547",
+    "preview": "1fff925f8ba2dee2c59edc1e677af1a90de81caf4a040842a78ffd5b99ee8401"
   }
 }

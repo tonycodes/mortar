@@ -1,4 +1,9 @@
 @layer components {
+  /* Document scope paints the page. Container scope paints the wrapper. */
+  [data-mortar]:not(:root) {
+    background: var(--m-paper);
+    color: var(--m-ink);
+  }
   [data-mortar] body {
     margin: 0;
     background: var(--m-paper);
@@ -987,8 +992,12 @@
     flex-direction: column;
   }
   .m-pricing-grid article[data-featured="true"] {
-    background: var(--m-ink);
-    color: var(--m-paper);
+    background: var(--m-surface);
+    color: var(--m-ink);
+  }
+  .m-pricing-grid article[data-featured="true"] .m-button-secondary {
+    background: var(--m-sunken);
+    border-color: var(--m-line);
   }
   .m-pricing-grid h3 {
     font-size: 18px;
@@ -1071,8 +1080,8 @@
   }
   .m-cta {
     text-align: center;
-    background: var(--m-ink);
-    color: var(--m-paper);
+    background: var(--m-surface);
+    color: var(--m-ink);
     padding: 96px 32px;
   }
   .m-cta h2 {
@@ -1085,16 +1094,6 @@
   .m-cta .m-actions {
     justify-content: center;
     margin-top: 32px;
-  }
-  .m-cta .m-button-primary {
-    background: var(--m-paper);
-    color: var(--m-ink) !important;
-    border-color: var(--m-paper);
-  }
-  .m-cta .m-button-secondary {
-    background: transparent;
-    color: var(--m-paper);
-    border-color: var(--m-paper);
   }
   .m-footer {
     max-width: 1280px;
@@ -1112,10 +1111,10 @@
     font-size: 14px;
     max-width: 260px;
   }
-  .m-footer-grid h2 {
+  .m-footer-grid :is(h2, h3, h4) {
     font-size: 13px;
     font-weight: 600;
-    margin-bottom: 12px;
+    margin: 0 0 12px;
   }
   .m-footer-grid nav a {
     display: block;

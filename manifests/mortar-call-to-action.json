@@ -5,7 +5,7 @@
   "description": "Mortar marketing call to action, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "CallToAction",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -20,7 +20,8 @@
     "props": {
       "title": "string",
       "description": "string",
-      "actions": "LinkAction[]"
+      "actions": "LinkAction[]",
+      "tone": "\"surface\" | \"inverse\""
     },
     "states": [
       "Light",
@@ -31,7 +32,7 @@
     ],
     "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-action-link"]
   },
   "preview": {
@@ -40,10 +41,10 @@
   "testing": {
     "profile": "composite",
     "target": ".m-cta",
-    "states": []
+    "states": ["surface", "inverse"]
   },
   "integrity": {
-    "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-    "preview": "43646059f61bf810be893cc98210eb1d32a3cfd2a9737449cce2057e05eb7cd1"
+    "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+    "preview": "62436e6c00973c8e87f56a221329f33435487ca6ff5fc6e146ce5681f62d220a"
   }
 }

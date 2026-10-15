@@ -5,7 +5,7 @@
   "description": "Mortar marketing feature section, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "FeatureSection",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -37,7 +37,7 @@
     ],
     "usage": "Import { FeatureSection } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -49,7 +49,7 @@
     "states": []
   },
   "integrity": {
-    "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-    "preview": "6d3c2136b46a8b9aaf1a4c381bc3944148909609a71489feac926e86ac57cb43"
+    "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+    "preview": "5a77e61076a38929c09d05b8767af127015c88ec48b4eb574bda1147fb0759da"
   }
 }

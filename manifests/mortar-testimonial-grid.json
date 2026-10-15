@@ -5,7 +5,7 @@
   "description": "Mortar marketing testimonial grid, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "TestimonialGrid",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -30,7 +30,7 @@
     ],
     "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-avatar"]
   },
   "preview": {
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-    "preview": "539bbfe848eb5e7d3b029bf79868db7f0527f29fa6da9af9201fe9e0d60a2cfb"
+    "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+    "preview": "8fffd43ec0a83a2718adfa08dc571b46edab1de6d3497837f25a7ac39e39ced9"
   }
 }

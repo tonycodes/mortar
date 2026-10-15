@@ -5,7 +5,7 @@
   "description": "Mortar foundation avatar group, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "AvatarGroup",
   "source": "src/display.tsx",
   "capabilities": ["theme", "foundation"],
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-    "preview": "b842539b5eef1cdd8eb11d4064a27d26b25faabd9731a3cafa56cf45b7385239"
+    "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+    "preview": "68caf2bf09427f841fa6731f828f5dc1a47cd874ee1f4e55c1f182e4726bb7cd"
   }
 }

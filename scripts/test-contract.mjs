@@ -69,9 +69,21 @@ export function contractErrors(component) {
     !Array.isArray(t.states) ||
     t.states.some(
       (s) =>
-        !["disabled", "loading", "error", "empty", "long", "success"].includes(
-          s,
-        ),
+        ![
+          "disabled",
+          "loading",
+          "error",
+          "empty",
+          "long",
+          "success",
+          "surface",
+          "inverse",
+          "coming-soon",
+          "duplicate-links",
+          "heading-3",
+          "scope-container",
+          "controlled",
+        ].includes(s),
     ) ||
     new Set(t.states).size !== t.states.length
   )

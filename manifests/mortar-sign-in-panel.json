@@ -5,7 +5,7 @@
   "description": "Mortar sign-in surface with provider buttons and email link form; auth SDKs supply callbacks.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SignInPanel",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application", "action", "keyboard"],
@@ -48,7 +48,7 @@
     "probe": "sign-in"
   },
   "integrity": {
-    "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-    "preview": "370b7e93dc09fbf262bc69a0a5eb2e46728c91f6ac3aebf2bb76e8b8fd567e1f"
+    "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+    "preview": "a80ae2af8916afd0cc29022df4ab05c188b18de81c2451c84077cd97c8facc88"
   }
 }

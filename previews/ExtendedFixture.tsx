@@ -233,16 +233,25 @@ export function ExtendedCase({ name }: { name: string }) {
     case "BentoGrid":
       example = (
         <UI.BentoGrid
-          title="Built for the parts of shipping nobody demos."
+          title="Layout"
           items={[
             {
-              title: "Preview every branch",
-              description: "A URL per push.",
+              title: "Wide",
+              description: "Spans two columns.",
               span: 2,
+              visual: (
+                <div
+                  style={{
+                    background: "var(--m-line)",
+                    minHeight: 72,
+                    borderRadius: 8,
+                  }}
+                />
+              ),
             },
             {
-              title: "Instant rollback",
-              description: "One click.",
+              title: "Focus",
+              description: "An inverse tile.",
               inverse: true,
             },
           ]}
@@ -396,11 +405,8 @@ export function ExtendedCase({ name }: { name: string }) {
       example = (
         <UI.Steps
           items={[
-            {
-              title: "Install the CLI",
-              description: "Requires Node 20 or later.",
-            },
-            { title: "Push a branch" },
+            { title: "Sign up", description: "Create an account." },
+            { title: "Configure", description: "Choose a theme." },
           ]}
         />
       );

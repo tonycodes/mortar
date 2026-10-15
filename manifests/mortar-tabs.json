@@ -5,7 +5,7 @@
   "description": "Mortar foundation tabs, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Tabs",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -45,7 +45,7 @@
     "probe": "tabs"
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "7dc17cd58f6a652aa854bf024bfa86e560b64c785afd7d80648b5dc4b7311bdf"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "e0e47adc32fe90cc47320601ba161d9144c0340bdddebd7137e9dbb65b13e60d"
   }
 }

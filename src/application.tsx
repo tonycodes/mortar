@@ -41,9 +41,9 @@ export function AppShell({
 }: AppShellProps) {
   const [open, setOpen] = useState(false);
   const links = (items: NavigationItem[]) =>
-    items.map((item) => (
+    items.map((item, index) => (
       <KitLink
-        key={item.href}
+        key={`${item.label}:${item.href}:${index}`}
         href={item.href}
         aria-current={item.current ? "page" : undefined}
         onClick={() => setOpen(false)}

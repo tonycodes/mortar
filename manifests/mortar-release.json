@@ -5,7 +5,7 @@
   "description": "Mortar documentation release, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Release",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -44,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-    "preview": "0ee2ffbbd6e76be182913ea9c84aae665f4fa657c0835711f8bfb9498ca1f54e"
+    "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+    "preview": "0c6414cc24e3476ee393182ad33616e469d684221094c71ba75b756e99e5706a"
   }
 }

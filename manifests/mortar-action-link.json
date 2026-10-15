@@ -5,7 +5,7 @@
   "description": "Mortar foundation action link, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "ActionLink",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -44,7 +44,7 @@
     "probe": "link"
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "2e649b5dee81b1fa12517b7d5f26695f6415a16b44b2cf8149d7c0b369dd6965"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "0ca52c35a50645365a3f339eca98b9b7160f3c842b98b06af07e72bdebe1a652"
   }
 }

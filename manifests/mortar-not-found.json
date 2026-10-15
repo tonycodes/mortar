@@ -5,7 +5,7 @@
   "description": "Mortar marketing not found, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "NotFound",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -32,7 +32,7 @@
     ],
     "usage": "Import { NotFound } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-action-link"]
   },
   "preview": {
@@ -44,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-    "preview": "270b063c33c222c2984f90dcb03b7b2217a89d2ef54712c866baf9085aba9f5a"
+    "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+    "preview": "54b819f8e8b7e228e0ecd90632a2ba417f058a51bc12206cb19ee81addb87660"
   }
 }

@@ -5,7 +5,7 @@
   "description": "Mortar framed product mock for hero and feature illustrations.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "MockWindow",
   "source": "src/showcase.tsx",
   "capabilities": ["theme", "marketing"],
@@ -31,7 +31,7 @@
     ],
     "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "2235480f7595d696289d0d34d94520feccf7f23818df2b16b31b499b6b76acf6",
-    "preview": "91f91f9c85a61c773c4ab5725f1c774a88c16c35fe5866a76db1fb3f6e5bc1d9"
+    "source": "a41d2348086d164f23fe57e561249330ffb9e797544379b15cae4d87908ea547",
+    "preview": "38677cbc8b2f23a9f86a1cc26a0a4eff08bf3a47ab78921a12870801b282dab7"
   }
 }

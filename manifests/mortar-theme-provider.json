@@ -5,7 +5,7 @@
   "description": "Mortar foundation theme provider, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "ThemeProvider",
   "source": "src/foundation.tsx",
   "capabilities": ["theme", "foundation"],
@@ -24,7 +24,8 @@
       "density": "compact | comfortable | spacious",
       "appearance": "Optional controlled light | dark | system",
       "onAppearanceChange": "(appearance: Appearance) => void",
-      "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation."
+      "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation.",
+      "scope": "\"document\" | \"container\""
     },
     "states": [
       "Light",
@@ -44,11 +45,11 @@
   "testing": {
     "profile": "control",
     "target": ".m-segmented",
-    "states": [],
+    "states": ["scope-container"],
     "probe": "appearance"
   },
   "integrity": {
-    "source": "2efef5ef3e78cdf10164cbba659194a1a62ceedd681b052fd39bfde1fcffa1be",
-    "preview": "8afbea9fd62cf8fac42ac98d62d1ca718042558f9a05d8553ffe8b8751309e2d"
+    "source": "f729ac70375b088651388f4831c69d9ef70a6173c90d8209d23d27eddbf0ae54",
+    "preview": "315004d3a719750e276b21a822952f234794dc010051f27afe24f5bb16833097"
   }
 }

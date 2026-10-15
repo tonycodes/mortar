@@ -5,7 +5,7 @@
   "description": "Mortar connected, numbered how-it-works sequence for marketing pages.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "ProcessSteps",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -22,7 +22,8 @@
       "title": "string",
       "description": "string",
       "items": "{ title: string; description: string }[]",
-      "tone": "\"default\" | \"muted\" | \"inverse\""
+      "tone": "\"default\" | \"muted\" | \"inverse\"",
+      "headingLevel": "2 | 3 | 4"
     },
     "states": [
       "Light",
@@ -33,7 +34,7 @@
     ],
     "usage": "Import { ProcessSteps } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -45,7 +46,7 @@
     "states": []
   },
   "integrity": {
-    "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-    "preview": "f995c16839c2e0c8c3b04318976a0e12abdcceb151a7249c33868e9325b2f213"
+    "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+    "preview": "ed2bf94cc0149c462c72a9ae94065be68d7c17b1ad9fc8b86df1d40a117296f9"
   }
 }

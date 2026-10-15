@@ -15,7 +15,12 @@ export function MockWindow({
   children: ReactNode;
 }) {
   return (
-    <figure className="m-mock-window" data-variant={variant} aria-label={label}>
+    <figure
+      className="m-mock-window"
+      data-variant={variant}
+      aria-label={label}
+      data-m-component="MockWindow"
+    >
       {variant !== "plain" && (
         <div className="m-mock-bar" aria-hidden="true">
           <span className="m-mock-dots">
@@ -55,7 +60,11 @@ export function ChatPreview({
   assistantName?: string;
 }) {
   return (
-    <figure className="m-chat-preview" aria-label={`${title} conversation`}>
+    <figure
+      className="m-chat-preview"
+      aria-label={`${title} conversation`}
+      data-m-component="ChatPreview"
+    >
       <header>
         <span className="m-chat-avatar" aria-hidden="true" />
         <span>

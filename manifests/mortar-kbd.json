@@ -5,7 +5,7 @@
   "description": "Mortar foundation kbd, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Kbd",
   "source": "src/display.tsx",
   "capabilities": ["theme", "foundation"],
@@ -41,7 +41,7 @@
     "states": []
   },
   "integrity": {
-    "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-    "preview": "fe15fd71a888826781d58ba82351cb2aaafd3d8d2334ded84e0bb10785b56847"
+    "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+    "preview": "b8f1fa3d71f1672618e6124f446aa5b77dfb121cd00248ded9b6824692b1667d"
   }
 }

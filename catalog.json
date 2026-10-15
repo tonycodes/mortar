@@ -1,8 +1,66 @@
 {
   "schemaVersion": 1,
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
-  "policyVersion": "1.1.0",
+  "version": "0.2.0",
+  "policyVersion": "1.2.0",
+  "tokens": [
+    "--m-accent",
+    "--m-code-bg",
+    "--m-code-dim",
+    "--m-code-ink",
+    "--m-code-line",
+    "--m-control",
+    "--m-danger",
+    "--m-float",
+    "--m-focus",
+    "--m-font",
+    "--m-font-size",
+    "--m-ink",
+    "--m-inv-accent",
+    "--m-inv-color-scheme",
+    "--m-inv-danger",
+    "--m-inv-focus",
+    "--m-inv-ink",
+    "--m-inv-line",
+    "--m-inv-line-strong",
+    "--m-inv-link",
+    "--m-inv-muted",
+    "--m-inv-on-accent",
+    "--m-inv-on-feedback",
+    "--m-inv-on-primary",
+    "--m-inv-paper",
+    "--m-inv-primary",
+    "--m-inv-primary-active",
+    "--m-inv-primary-hover",
+    "--m-inv-secondary",
+    "--m-inv-selected",
+    "--m-inv-success",
+    "--m-inv-surface",
+    "--m-inv-warning",
+    "--m-line",
+    "--m-line-strong",
+    "--m-link",
+    "--m-mono",
+    "--m-muted",
+    "--m-on-accent",
+    "--m-on-feedback",
+    "--m-on-primary",
+    "--m-pad",
+    "--m-paper",
+    "--m-primary",
+    "--m-primary-active",
+    "--m-primary-hover",
+    "--m-radius",
+    "--m-radius-lg",
+    "--m-radius-sm",
+    "--m-row-pad",
+    "--m-secondary",
+    "--m-selected",
+    "--m-success",
+    "--m-sunken",
+    "--m-surface",
+    "--m-warning"
+  ],
   "components": [
     {
       "id": "mortar-action-link",
@@ -11,7 +69,7 @@
       "description": "Mortar foundation action link, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ActionLink",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -50,8 +108,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "2e649b5dee81b1fa12517b7d5f26695f6415a16b44b2cf8149d7c0b369dd6965"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "0ca52c35a50645365a3f339eca98b9b7160f3c842b98b06af07e72bdebe1a652"
       }
     },
     {
@@ -61,7 +119,7 @@
       "description": "Mortar application activity feed, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ActivityFeed",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application", "status"],
@@ -98,8 +156,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "974d6621d05e3d37a53a69545df5017fe8f514449b787adbcdcac2a0a5076b22"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "7efa089b33467a0a2a478cf56eaae9f6bc8d164d60bdeb6458fbd60778e45a4e"
       }
     },
     {
@@ -109,7 +167,7 @@
       "description": "Mortar documentation api endpoint, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ApiEndpoint",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -151,8 +209,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "ba5b232f967cbe9a438888d5b425d79fbb9a24ed1e56df1c830a0897b5a4fec7"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "b98315ded32fc33c9cefbe71eb8f8cfe8f9db2c538e816a529eead43ffc5dc6f"
       }
     },
     {
@@ -162,7 +220,7 @@
       "description": "Mortar application app shell, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "AppShell",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application"],
@@ -207,8 +265,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "8be870d66c7a232da1f979dad3164b75f5c993d32cf6450ebaaabfdd2b356621"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "ce458fa09789293032a2c824c8f4ee68f3b54374e7f30789a6b5380fa8b58c68"
       }
     },
     {
@@ -218,7 +276,7 @@
       "description": "Mortar foundation appearance control, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "AppearanceControl",
       "source": "src/foundation.tsx",
       "capabilities": ["theme", "foundation"],
@@ -230,7 +288,10 @@
         "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
       },
       "contract": {
-        "props": {},
+        "props": {
+          "value": "light | dark | system",
+          "onChange": "(value: Appearance) => void"
+        },
         "states": [
           "Light",
           "Dark",
@@ -249,12 +310,12 @@
       "testing": {
         "profile": "control",
         "target": ".m-segmented",
-        "states": [],
+        "states": ["controlled"],
         "probe": "appearance"
       },
       "integrity": {
-        "source": "2efef5ef3e78cdf10164cbba659194a1a62ceedd681b052fd39bfde1fcffa1be",
-        "preview": "5645d1ddd029148cf72f4992ca1fd397cf1c83e1ef1d484e170ea2e49e55ac41"
+        "source": "f729ac70375b088651388f4831c69d9ef70a6173c90d8209d23d27eddbf0ae54",
+        "preview": "6f73ed224053a3ef1b1d020d7f6233a3a4246a2cab53f663752985217c16888b"
       }
     },
     {
@@ -264,7 +325,7 @@
       "description": "Mortar foundation avatar group, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "AvatarGroup",
       "source": "src/display.tsx",
       "capabilities": ["theme", "foundation"],
@@ -302,8 +363,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-        "preview": "b842539b5eef1cdd8eb11d4064a27d26b25faabd9731a3cafa56cf45b7385239"
+        "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+        "preview": "68caf2bf09427f841fa6731f828f5dc1a47cd874ee1f4e55c1f182e4726bb7cd"
       }
     },
     {
@@ -313,7 +374,7 @@
       "description": "Mortar foundation avatar, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Avatar",
       "source": "src/display.tsx",
       "capabilities": ["theme", "foundation"],
@@ -353,8 +414,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-        "preview": "1a1c6b2d348dc9d7654859b1362add745fd4146306e9eee97d5685eb655205b5"
+        "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+        "preview": "aeda5f7b1fa3306c739d4c97582ff3fdeff19adde4b1bdb240ffe930e4781203"
       }
     },
     {
@@ -364,7 +425,7 @@
       "description": "Mortar foundation badge, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Badge",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation", "status"],
@@ -401,8 +462,8 @@
         "states": []
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "7c6f504b95f0947c79cea66c5f9a3f018076d1180a47d6cc492f82a1fcb0687a"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "c0e13429aadeae77871c940b60f05c3a80604a750cd78cddfd7fa174389b2d1d"
       }
     },
     {
@@ -412,7 +473,7 @@
       "description": "Mortar marketing bento grid, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "BentoGrid",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -428,7 +489,8 @@
           "eyebrow": "string",
           "title": "string",
           "description": "string",
-          "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; inverse?: boolean }[]"
+          "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; inverse?: boolean }[]",
+          "headingLevel": "2 | 3 | 4"
         },
         "states": [
           "Light",
@@ -439,7 +501,7 @@
         ],
         "usage": "Import { BentoGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -451,8 +513,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "850f17d1b1bb6fbd82327f0f99d31dd01f84453a98fac13069d0c4ce87b0cdea"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "53abe26d86558c33268cd6aaf717ca7edddf95dfd8a204a920e2c93327163681"
       }
     },
     {
@@ -462,7 +524,7 @@
       "description": "Mortar foundation button, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Button",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -504,8 +566,8 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "c723c7657115b1809adfb87b21482f727534da697b89a555d8e905551e68b46f"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "690ad947daffe7b6eac966c2f44390d4a5d8d5aa020437241353a014a0496454"
       }
     },
     {
@@ -515,7 +577,7 @@
       "description": "Mortar marketing call to action, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "CallToAction",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -530,7 +592,8 @@
         "props": {
           "title": "string",
           "description": "string",
-          "actions": "LinkAction[]"
+          "actions": "LinkAction[]",
+          "tone": "\"surface\" | \"inverse\""
         },
         "states": [
           "Light",
@@ -541,7 +604,7 @@
         ],
         "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
       },
       "preview": {
@@ -550,11 +613,11 @@
       "testing": {
         "profile": "composite",
         "target": ".m-cta",
-        "states": []
+        "states": ["surface", "inverse"]
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "43646059f61bf810be893cc98210eb1d32a3cfd2a9737449cce2057e05eb7cd1"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "62436e6c00973c8e87f56a221329f33435487ca6ff5fc6e146ce5681f62d220a"
       }
     },
     {
@@ -564,7 +627,7 @@
       "description": "Mortar documentation callout, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Callout",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -602,8 +665,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "e18f0c5f180bdc77f2597d23c02311a339c5cead34fb24c1e1f6197309fcceb4"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "88436307561a810ae3e481e7fa9a6c95c0bbe521a63d2236fb6f78e85f935e07"
       }
     },
     {
@@ -613,7 +676,7 @@
       "description": "Mortar static chat conversation for marketing conversational products.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ChatPreview",
       "source": "src/showcase.tsx",
       "capabilities": ["theme", "marketing"],
@@ -642,7 +705,7 @@
         ],
         "usage": "Import { ChatPreview } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -654,8 +717,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2235480f7595d696289d0d34d94520feccf7f23818df2b16b31b499b6b76acf6",
-        "preview": "804d27abb78cc2d1e78123f427c9138cf8ab9972077f4151d369c15d9df6b5b1"
+        "source": "a41d2348086d164f23fe57e561249330ffb9e797544379b15cae4d87908ea547",
+        "preview": "1fff925f8ba2dee2c59edc1e677af1a90de81caf4a040842a78ffd5b99ee8401"
       }
     },
     {
@@ -665,7 +728,7 @@
       "description": "Mortar check-marked list for features and plan inclusions.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "CheckList",
       "source": "src/display.tsx",
       "capabilities": ["theme", "foundation"],
@@ -703,8 +766,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-        "preview": "13b0bc417f42b55f7c181ff9480b9b6e2ec097d68be659b2d90c13c63df752ea"
+        "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+        "preview": "74daee1fceebef871c2962ebfe66eacc09b0291e705dc4705372c9c983a09934"
       }
     },
     {
@@ -714,7 +777,7 @@
       "description": "Mortar foundation checkbox, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Checkbox",
       "source": "src/primitives.tsx",
       "capabilities": [
@@ -759,8 +822,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "4ce28f772902de0fad039e17060138927d14b56347eef055b5c9d3118bf22b62"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "aa8acb449b15a6bee8ec2b78f9a8232fa3942bf477fb390ba5f05b4ac6b5a134"
       }
     },
     {
@@ -770,7 +833,7 @@
       "description": "Mortar application code block, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "CodeBlock",
       "source": "src/inspection.tsx",
       "capabilities": ["theme", "application"],
@@ -807,8 +870,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d4d6ac20dad749d5a5acb6bf891abae36603abb1d9537ee796c8ae13598002de",
-        "preview": "3f540730eb52bc4dc326fbef98dc558a8f5025694bbeec09f04fd8f95b935cd7"
+        "source": "0118ba9586db04a47d5f4077879f2c026733f4e45a20d1093d34bd9346057529",
+        "preview": "8cd7bfc970a1e0eff1d47a36f9eeeddc1dc309753ad0108d819297ed2eb75b4e"
       }
     },
     {
@@ -818,7 +881,7 @@
       "description": "Mortar documentation code tabs, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "CodeTabs",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs", "keyboard"],
@@ -860,8 +923,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "c27e2cfbd125106daa748bf3d5c0e6ad40dab3276578296bd3b7e42751b0d0cd"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "5bb5598e6d92d549ed336d236d2270120453dbcb2ab1f9d23e0f5ccc11136df4"
       }
     },
     {
@@ -871,7 +934,7 @@
       "description": "Mortar application command palette, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "CommandPalette",
       "source": "src/workspace.tsx",
       "capabilities": ["theme", "application", "keyboard"],
@@ -916,8 +979,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "b4a6a8c186df1a5311907e9d01bdddf572d9b6ab9f3de467aca3c327467442ca",
-        "preview": "b69223e57a44b6b9aa6d921a232c046c0e926a5aa4715093e94bbd8c61bc166e"
+        "source": "cc58badb5209b63b62fed17c2c7fa70747e6c2b75db3feb0f3cf7b31755229ea",
+        "preview": "022ab674a8b29aa5599bb75ed7c63cd893dd530fbbdd96b99eac8ec20eba1567"
       }
     },
     {
@@ -927,7 +990,7 @@
       "description": "Mortar application confirm dialog, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ConfirmDialog",
       "source": "src/feedback.tsx",
       "capabilities": ["theme", "application", "keyboard"],
@@ -973,8 +1036,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "b036aaac973b481aa81693a114e929180660117270029369e6ec908e3b141410",
-        "preview": "96f3accc5180471eb37782ae3596f4099283b55138c0e07ae93f2001771438ef"
+        "source": "60f24937d46be8fb3288faf8361f18b5227d73c74616da839f258acf2866dc1b",
+        "preview": "9af2ea94b6bd40915173182e9ccd211628e076b95cc4e10652f13610f135ed84"
       }
     },
     {
@@ -984,7 +1047,7 @@
       "description": "Mortar marketing contact section, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ContactSection",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1011,7 +1074,7 @@
         ],
         "usage": "Import { ContactSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -1023,8 +1086,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "f4e6853e3cfe82871c63aba0c980f36f074fbec9b3d056f19a9190315237e1e0"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "9ebf1fef3eafe6eb065d398a4171d94941b5de7cace3ec940607d770cb845e3b"
       }
     },
     {
@@ -1034,7 +1097,7 @@
       "description": "Mortar page container with shared widths and gutters, replacing max-w/mx-auto/px utilities.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Container",
       "source": "src/layout.tsx",
       "capabilities": ["theme", "foundation"],
@@ -1072,8 +1135,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
-        "preview": "d7a1dd98cde11da3ae4dca1fae76c4aec46ed5c0a43c9518e45218d9db762c28"
+        "source": "7ccfa49b573d95c731b4f386da0d3b13827e72c2b557e650340cf619a3cd5f2a",
+        "preview": "2857e49d0c0a942c607c626a315cdc895dbec14b246f1931bce8f9e4a07e4252"
       }
     },
     {
@@ -1083,7 +1146,7 @@
       "description": "Mortar application data table, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "DataTable",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application", "table"],
@@ -1139,8 +1202,8 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "69a1987c3bc30f93275234ceb3f07f800884e290025352813bc2085ed868ec70"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "8352d55ab25c39c06c07f3bd1d393adb55b1c306db37c37bbdb0507fc69e6cae"
       }
     },
     {
@@ -1150,7 +1213,7 @@
       "description": "Mortar documentation docs shell, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "DocsShell",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs", "keyboard"],
@@ -1200,8 +1263,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "d16deae4e99a3e0b8b427780c7d81fd510864a4276e72690489c10688390aadf"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "43a5679b35c5d00051c03bc3765ab63895208aa44d9b2b066d054229e3ea06ce"
       }
     },
     {
@@ -1211,7 +1274,7 @@
       "description": "Mortar foundation dropdown, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Dropdown",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -1249,8 +1312,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "0b1be441b397957a58b734434ed0448f2cacf54eeb0b5adfae1294c62b4ed22c"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "0e86e4a7306e25d64da4c9678e060908891be339e8a36c58dee69bd5c6da1453"
       }
     },
     {
@@ -1260,7 +1323,7 @@
       "description": "Mortar foundation empty state, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "EmptyState",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation"],
@@ -1298,8 +1361,8 @@
         "states": []
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "e859f1c1faba9444a0678150a778eeaf47ea8a52edaa1de6bc113e04f623de17"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "3555d2cf0269442465e844069523e50efb38e5189051f955c2d06fa799cd6398"
       }
     },
     {
@@ -1309,7 +1372,7 @@
       "description": "Mortar marketing faq, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "FAQ",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1335,7 +1398,7 @@
         ],
         "usage": "Import { FAQ } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -1348,8 +1411,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "0021b7de3b472b3f4f3d0297002a6e7e4269a3fa3baeedc9ecee856faf381d3e"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "707ca15308616fda322943df6b95c11b42bae53b14e5ef7ff3c58dbe8484da89"
       }
     },
     {
@@ -1359,7 +1422,7 @@
       "description": "Mortar marketing feature grid, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "FeatureGrid",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1390,7 +1453,7 @@
         ],
         "usage": "Import { FeatureGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -1402,8 +1465,8 @@
         "states": []
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "2379fec68fd98bd4b99c395baeda2275f28896f2544099b749017a11d77a4409"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "43ad9298ff8dfc6e52092d8c812142c7915d5f402b5e73957244846791417439"
       }
     },
     {
@@ -1413,7 +1476,7 @@
       "description": "Mortar marketing feature section, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "FeatureSection",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1445,7 +1508,7 @@
         ],
         "usage": "Import { FeatureSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -1457,8 +1520,8 @@
         "states": []
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "6d3c2136b46a8b9aaf1a4c381bc3944148909609a71489feac926e86ac57cb43"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "5a77e61076a38929c09d05b8767af127015c88ec48b4eb574bda1147fb0759da"
       }
     },
     {
@@ -1468,7 +1531,7 @@
       "description": "Mortar documentation file tree, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "FileTree",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -1505,8 +1568,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "94d4cefcb8d4da996506504b9190022db9616fe8c2fa86f59d8a3f58c9025e42"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "3421e05199c50aaf0aa6506ece429823bbc8ec2867231d5ca08b434ee85ee6fc"
       }
     },
     {
@@ -1516,7 +1579,7 @@
       "description": "Mortar foundation filter chip, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "FilterChip",
       "source": "src/display.tsx",
       "capabilities": ["theme", "foundation", "keyboard"],
@@ -1556,8 +1619,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-        "preview": "4bdc054cb66e085b15a2e00b4907713b33b1d8b78fbcf163a3494ecf750c1255"
+        "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+        "preview": "5f22c8b3dd68fe36df6dcbc7459a758ffdc4a99f4a5fa3193440f8b584fb5136"
       }
     },
     {
@@ -1567,7 +1630,7 @@
       "description": "Mortar marketing footer, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Footer",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1585,7 +1648,9 @@
           "columns": "{ title: string; links: LinkAction[] }[]",
           "copyright": "string",
           "legal": "LinkAction[]",
-          "logo": "ReactNode"
+          "logo": "ReactNode",
+          "headingLevel": "2 | 3 | 4",
+          "note": "ReactNode"
         },
         "states": [
           "Light",
@@ -1596,7 +1661,7 @@
         ],
         "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -1605,11 +1670,11 @@
       "testing": {
         "profile": "composite",
         "target": ".m-footer",
-        "states": []
+        "states": ["heading-3"]
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "6b6c135d301c473664ec99469975f32ac252f901efa72664db122bb057959969"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "9cd20ae59a0afb7d36f9ea44c7e71d825213a130d2dad8ce1f806a6fbf9c866b"
       }
     },
     {
@@ -1619,7 +1684,7 @@
       "description": "Mortar marketing hero, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Hero",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1649,7 +1714,7 @@
         ],
         "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
       },
       "preview": {
@@ -1661,8 +1726,8 @@
         "states": []
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "05e6520f5b85b866cf8985bd86657a7da2b144d75f7f722e0fa1d8689e08c5b5"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "a003acf11d8cfadb0fc39802f6e0d0e9ef46490ea5fee031b954b7e2a34f2ab8"
       }
     },
     {
@@ -1672,7 +1737,7 @@
       "description": "Mortar foundation input, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Input",
       "source": "src/primitives.tsx",
       "capabilities": [
@@ -1721,8 +1786,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "7f63abb378e2c9430e41b25f39c235577799dc42a30a131b5774cb17617d04a7"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "690ea1eb575b64140647624fb5806b69dfcf444a9f5d32b6cbc654c6991bf2ac"
       }
     },
     {
@@ -1732,7 +1797,7 @@
       "description": "Mortar foundation kbd, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Kbd",
       "source": "src/display.tsx",
       "capabilities": ["theme", "foundation"],
@@ -1768,8 +1833,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-        "preview": "fe15fd71a888826781d58ba82351cb2aaafd3d8d2334ded84e0bb10785b56847"
+        "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+        "preview": "b8f1fa3d71f1672618e6124f446aa5b77dfb121cd00248ded9b6824692b1667d"
       }
     },
     {
@@ -1779,7 +1844,7 @@
       "description": "Mortar documentation link cards, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "LinkCards",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -1815,8 +1880,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "d53afcbb52a30546501299fe58d834e5f317477c81058bc827173a845723891b"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "f70dcb4012d82f62b88a173820a1a17c9bc43037293cf69949d2c82a11eccae9"
       }
     },
     {
@@ -1826,7 +1891,7 @@
       "description": "Mortar marketing logo cloud, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "LogoCloud",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1851,7 +1916,7 @@
         ],
         "usage": "Import { LogoCloud } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -1863,8 +1928,8 @@
         "states": []
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "63d5d0d69c635e0144c90cf0e165928c9ed87fdb4ef1be841ad19c6ed0df5188"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "f41b59173616af62d9954e456376caa3eebad4b1e1aad469a43fd61c980c24df"
       }
     },
     {
@@ -1874,7 +1939,7 @@
       "description": "Mortar marketing marketing header, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "MarketingHeader",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -1892,7 +1957,9 @@
           "links": "LinkAction[]",
           "action": "LinkAction",
           "controls": "ReactNode",
-          "logo": "ReactNode"
+          "logo": "ReactNode",
+          "className": "string",
+          "id": "string"
         },
         "states": [
           "Light",
@@ -1903,7 +1970,7 @@
         ],
         "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-button", "mortar-action-link"]
       },
       "preview": {
@@ -1912,12 +1979,12 @@
       "testing": {
         "profile": "composite",
         "target": ".m-marketing-header",
-        "states": [],
+        "states": ["duplicate-links"],
         "probe": "navigation"
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "69755528cfe44124db69d28fe98bbbf5d182ee4bb9a5c6c545de298e9fba822e"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "7ee65f12917cbb8139a50992f680d3e7562afff29ee86270b6d9da77897d81cb"
       }
     },
     {
@@ -1927,7 +1994,7 @@
       "description": "Mortar application metric group, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "MetricGroup",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application", "summary"],
@@ -1964,8 +2031,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "759a2d0131fefb9923c54da10ee2f03113c8960cdfb5a15c9347ca2a2904cb28"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "eb991e0174b304cdcbcd481d5e594c82f36284fffdaa376c7fc4a276e4dc9ec7"
       }
     },
     {
@@ -1975,7 +2042,7 @@
       "description": "Mortar framed product mock for hero and feature illustrations.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "MockWindow",
       "source": "src/showcase.tsx",
       "capabilities": ["theme", "marketing"],
@@ -2001,7 +2068,7 @@
         ],
         "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -2013,8 +2080,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2235480f7595d696289d0d34d94520feccf7f23818df2b16b31b499b6b76acf6",
-        "preview": "91f91f9c85a61c773c4ab5725f1c774a88c16c35fe5866a76db1fb3f6e5bc1d9"
+        "source": "a41d2348086d164f23fe57e561249330ffb9e797544379b15cae4d87908ea547",
+        "preview": "38677cbc8b2f23a9f86a1cc26a0a4eff08bf3a47ab78921a12870801b282dab7"
       }
     },
     {
@@ -2024,7 +2091,7 @@
       "description": "Mortar foundation modal, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Modal",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation"],
@@ -2065,8 +2132,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "7b94d7b97c92f04c1f4450261dd42b3feb25c83a909a8a7ce51394e063aad272"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "6ae9ec6aca7d34bb80b56146f780d29ed5b54c24db3d0ea82965963b0643549d"
       }
     },
     {
@@ -2076,7 +2143,7 @@
       "description": "Mortar marketing newsletter, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Newsletter",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -2105,7 +2172,7 @@
         ],
         "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-input", "mortar-button"]
       },
       "preview": {
@@ -2118,8 +2185,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "7c9607c3260b093409da4f04e875485ef48ef67a63bcc623ece924e1c85673a1"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "2eb8ecf9e4b81e1cabc6c9ce00ab7e62778e536fef4995922028e228c1b38d7b"
       }
     },
     {
@@ -2129,7 +2196,7 @@
       "description": "Mortar marketing not found, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "NotFound",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -2156,7 +2223,7 @@
         ],
         "usage": "Import { NotFound } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
       },
       "preview": {
@@ -2168,8 +2235,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "270b063c33c222c2984f90dcb03b7b2217a89d2ef54712c866baf9085aba9f5a"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "54b819f8e8b7e228e0ecd90632a2ba417f058a51bc12206cb19ee81addb87660"
       }
     },
     {
@@ -2179,7 +2246,7 @@
       "description": "Mortar foundation notice, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Notice",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation", "status"],
@@ -2218,8 +2285,8 @@
         "states": []
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "dc22a4bf9919ed3396d3905887179cdf25093c27c8978c2354c40e4520fc9366"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "476ae6ef9c8ebb41e0571b297f3245a220012554680dc77b6ff041193e46a1f0"
       }
     },
     {
@@ -2229,7 +2296,7 @@
       "description": "Mortar documentation page feedback, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "PageFeedback",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs", "keyboard"],
@@ -2269,8 +2336,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "ad870654266de7c2c4dd3207ad1f00feb4690252763e1ab1567b84659bd10d81"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "ec3c29d26cd23c17f9dea3b34e01dd8cee1260ff97553282caf0a51e62fb799c"
       }
     },
     {
@@ -2280,7 +2347,7 @@
       "description": "Mortar application page heading, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "PageHeading",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application"],
@@ -2321,8 +2388,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "c5514e7fa27e77e5858973e57805875a211f785970b4da6788a948cb6130411e"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "9534ef87735716029b1995df79b581def0c5ca158d0cda3fe8da385f1f314206"
       }
     },
     {
@@ -2332,7 +2399,7 @@
       "description": "Mortar documentation pager links, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "PagerLinks",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -2369,8 +2436,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "4514b3ffc212762dc35dec3e967305b54dbe54da0c3dbe8d95610b0c18f80aa9"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "c60e39fd936f0c25742a64c6a6315ddfc05799ce941bbd098e25ca0c0628d700"
       }
     },
     {
@@ -2380,7 +2447,7 @@
       "description": "Mortar application pagination, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Pagination",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application"],
@@ -2419,8 +2486,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "f07ac06f3a8fb4bf96f3b8304e3eaedba5c8367c59935be97ac0d90aa2cdbd22"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "cc04f3d7ac40025e2e70972de1d01f5617aca38c0058d7272ed4f908621c9c16"
       }
     },
     {
@@ -2430,7 +2497,7 @@
       "description": "Mortar marketing plan comparison, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "PlanComparison",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing", "keyboard"],
@@ -2458,7 +2525,7 @@
         ],
         "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -2470,8 +2537,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "15595fbbaa734236d882feea81cebd8674c5d666a4ecc20ad588b38a464175dc"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "11ddcf1c0198c67f9195bbae1da1270bf8b0687e4b1707513b88c1a5f9a63d11"
       }
     },
     {
@@ -2481,7 +2548,7 @@
       "description": "Mortar marketing post list, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "PostList",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -2508,7 +2575,7 @@
         ],
         "usage": "Import { PostList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
       },
       "preview": {
@@ -2520,8 +2587,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "169cbd3ac80d6fa0e7715c8fc507fe64d84d4e83ef27556d2f77e4a58b215ef0"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "505f6499bfcfc56c9aa6992f8b4449ca97689944fb3eaedb1899fb75ec43f18e"
       }
     },
     {
@@ -2531,7 +2598,7 @@
       "description": "Mortar application preview frame, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "PreviewFrame",
       "source": "src/inspection.tsx",
       "capabilities": ["theme", "application"],
@@ -2568,8 +2635,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d4d6ac20dad749d5a5acb6bf891abae36603abb1d9537ee796c8ae13598002de",
-        "preview": "8610f562cb106b2f50f8360699e8bcea3f7963ea32e1b5699be1277eca3bf94d"
+        "source": "0118ba9586db04a47d5f4077879f2c026733f4e45a20d1093d34bd9346057529",
+        "preview": "8444c85e884a9d86e6db17fcb4cf74b53cb91220f984b2afc62ce3da27807471"
       }
     },
     {
@@ -2579,7 +2646,7 @@
       "description": "Mortar marketing pricing, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Pricing",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -2594,7 +2661,9 @@
         "props": {
           "title": "string",
           "description": "string",
-          "plans": "PricingPlan[]"
+          "plans": "{ id: string; name: string; description: string; monthly: string; annual?: string; unit?: string; annualUnit?: string; features: string[]; action: LinkAction; featured?: boolean; availability?: \"available\" | \"coming-soon\" | \"unavailable\"; availabilityLabel?: string }[]",
+          "tone": "\"surface\" | \"inverse\"",
+          "billingToggle": "boolean"
         },
         "states": [
           "Light",
@@ -2605,7 +2674,7 @@
         ],
         "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
       },
       "preview": {
@@ -2614,12 +2683,12 @@
       "testing": {
         "profile": "control",
         "target": ".m-pricing",
-        "states": [],
+        "states": ["surface", "inverse", "coming-soon"],
         "probe": "pricing"
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "13624c05be3e88ac519ee7e9a0af7b30326cf1bc5016cdb3c17cc2038390a8c6"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "aedf7d03bbae087125ac4fc0834b0e935e5674b6fb42ec46cf7e2a36d11d6454"
       }
     },
     {
@@ -2629,7 +2698,7 @@
       "description": "Mortar connected, numbered how-it-works sequence for marketing pages.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ProcessSteps",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -2646,7 +2715,8 @@
           "title": "string",
           "description": "string",
           "items": "{ title: string; description: string }[]",
-          "tone": "\"default\" | \"muted\" | \"inverse\""
+          "tone": "\"default\" | \"muted\" | \"inverse\"",
+          "headingLevel": "2 | 3 | 4"
         },
         "states": [
           "Light",
@@ -2657,7 +2727,7 @@
         ],
         "usage": "Import { ProcessSteps } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -2669,8 +2739,8 @@
         "states": []
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "f995c16839c2e0c8c3b04318976a0e12abdcceb151a7249c33868e9325b2f213"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "ed2bf94cc0149c462c72a9ae94065be68d7c17b1ad9fc8b86df1d40a117296f9"
       }
     },
     {
@@ -2680,7 +2750,7 @@
       "description": "Mortar foundation progress bar, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ProgressBar",
       "source": "src/display.tsx",
       "capabilities": ["theme", "foundation"],
@@ -2720,8 +2790,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-        "preview": "2a047667c77214afd7aa1124aa89c87456a5781b187d9da1d9d455665082d95a"
+        "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+        "preview": "4915d47986a062fd5edd461bc0a7bad625466d2bb39005a5792a0f1f1010b7d0"
       }
     },
     {
@@ -2731,7 +2801,7 @@
       "description": "Mortar documentation prose, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Prose",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -2767,8 +2837,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "94cfcb85e106993d2a6e6c923f9803672398cbaa10e3853d0a68861ab7be5c2a"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "f5f64104399273462499a5cb4c1d8ceb680799beabec300f8a687ea900538d5b"
       }
     },
     {
@@ -2778,7 +2848,7 @@
       "description": "Mortar foundation radio group, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "RadioGroup",
       "source": "src/primitives.tsx",
       "capabilities": [
@@ -2825,8 +2895,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "20aad1d2c28952bac5a49ee1e48f5aed888e440e00ab91aa3da929bf7bf2ec91"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "86c107042adc69fd6c1fb13b07a05adcd01e4df7b0187826bc44325a6203883f"
       }
     },
     {
@@ -2836,7 +2906,7 @@
       "description": "Mortar documentation release, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Release",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -2875,8 +2945,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "0ee2ffbbd6e76be182913ea9c84aae665f4fa657c0835711f8bfb9498ca1f54e"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "0c6414cc24e3476ee393182ad33616e469d684221094c71ba75b756e99e5706a"
       }
     },
     {
@@ -2886,7 +2956,7 @@
       "description": "Mortar application save bar, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SaveBar",
       "source": "src/feedback.tsx",
       "capabilities": ["theme", "application"],
@@ -2929,8 +2999,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "b036aaac973b481aa81693a114e929180660117270029369e6ec908e3b141410",
-        "preview": "c6720d542f0002f71aace052b9a29c47b12c23c4d8fca88912f3b86c1255c334"
+        "source": "60f24937d46be8fb3288faf8361f18b5227d73c74616da839f258acf2866dc1b",
+        "preview": "ecf702a4c2320e857bf78cc1b2b5b4d4f6046f642b055a8e47c16be7f4802bea"
       }
     },
     {
@@ -2940,7 +3010,7 @@
       "description": "Mortar documentation search dialog, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SearchDialog",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs", "keyboard"],
@@ -2982,8 +3052,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "53d30999d3c4db40074e46a9a9fca26afca81a6e06213526a247d09f620f36d0"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "ad2080e89ee6c9790e6e2ea7852e64c8c085865e149752fee1cc7058a55e7437"
       }
     },
     {
@@ -2993,7 +3063,7 @@
       "description": "Mortar documentation search trigger, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SearchTrigger",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs", "keyboard"],
@@ -3031,8 +3101,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "315edd6598d2d3c39a4354ca38f986f0b7c4de7093b1da337fd81de03d7332e7"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "3b8b77b182980bcc8d76750a7b5c1c47f9345beb34476c8eaec00264242550f4"
       }
     },
     {
@@ -3042,7 +3112,7 @@
       "description": "Mortar full-bleed marketing section with default, muted and inverse tones for page rhythm.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Section",
       "source": "src/layout.tsx",
       "capabilities": ["theme", "marketing"],
@@ -3071,7 +3141,7 @@
         ],
         "usage": "Import { Section } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -3083,8 +3153,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
-        "preview": "ec03a3a3c8b1006784b1d83241dfcbef89a777bfbd936018e7491079c4532038"
+        "source": "7ccfa49b573d95c731b4f386da0d3b13827e72c2b557e650340cf619a3cd5f2a",
+        "preview": "86f9f6bca86e30d3daf513bc4bacc2eafff0959e873d65bf55915b0c347baaa8"
       }
     },
     {
@@ -3094,7 +3164,7 @@
       "description": "Mortar foundation segmented control, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SegmentedControl",
       "source": "src/inspection.tsx",
       "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -3134,8 +3204,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "d4d6ac20dad749d5a5acb6bf891abae36603abb1d9537ee796c8ae13598002de",
-        "preview": "bf820b9b0309857300e0086f649d0222db37b68ee031cb307b6c7bf57e78c602"
+        "source": "0118ba9586db04a47d5f4077879f2c026733f4e45a20d1093d34bd9346057529",
+        "preview": "dc41ff8f02a61cf9a445989e3f7bf19a2837d8dd5b3b57cd9e5554d927580649"
       }
     },
     {
@@ -3145,7 +3215,7 @@
       "description": "Mortar foundation select, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Select",
       "source": "src/primitives.tsx",
       "capabilities": [
@@ -3193,8 +3263,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "705234017508b0c6e8ffa6d65659de21252b4f6aca075e2787efe254b0c691c4"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "19eddf94484d7abf3908dd8a744111b167aae56937f0ec244cce4ae6c143c9a2"
       }
     },
     {
@@ -3204,7 +3274,7 @@
       "description": "Mortar application settings section, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SettingsSection",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application"],
@@ -3242,8 +3312,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "ac918ce9c444ab3031a0382a544dc75864e630c25dc0f644ff07c26ec0ba6214"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "c8666707df75e720ea00b0e2d3b393dbdc183996008e5200720ce0b4cc786042"
       }
     },
     {
@@ -3253,7 +3323,7 @@
       "description": "Mortar sign-in surface with provider buttons and email link form; auth SDKs supply callbacks.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SignInPanel",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application", "action", "keyboard"],
@@ -3296,8 +3366,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "370b7e93dc09fbf262bc69a0a5eb2e46728c91f6ac3aebf2bb76e8b8fd567e1f"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "a80ae2af8916afd0cc29022df4ab05c188b18de81c2451c84077cd97c8facc88"
       }
     },
     {
@@ -3307,7 +3377,7 @@
       "description": "Mortar application slide over, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "SlideOver",
       "source": "src/workspace.tsx",
       "capabilities": ["theme", "application", "keyboard"],
@@ -3349,8 +3419,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "b4a6a8c186df1a5311907e9d01bdddf572d9b6ab9f3de467aca3c327467442ca",
-        "preview": "b132c6b549960e6c173c2ecc316ff2ab512a2772c08b683d246ae40f293a36de"
+        "source": "cc58badb5209b63b62fed17c2c7fa70747e6c2b75db3feb0f3cf7b31755229ea",
+        "preview": "b5f8d82e09e0fe55274768f88d5d423cda218759e7cb2910a4b28d774d8fa9a6"
       }
     },
     {
@@ -3360,7 +3430,7 @@
       "description": "Mortar layout stack for vertical or horizontal rhythm, replacing consumer flex/gap utilities.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Stack",
       "source": "src/layout.tsx",
       "capabilities": ["theme", "foundation"],
@@ -3401,8 +3471,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
-        "preview": "accf5fed4845b298a798f7aa18f81b03d6e787868b1a37149229d91f46e6c371"
+        "source": "7ccfa49b573d95c731b4f386da0d3b13827e72c2b557e650340cf619a3cd5f2a",
+        "preview": "c9398a43f84f7af5eed61b93fe0a56551a641fe3e64e12c239eb14707d3280e6"
       }
     },
     {
@@ -3412,7 +3482,7 @@
       "description": "Mortar application stacked list, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "StackedList",
       "source": "src/workspace.tsx",
       "capabilities": ["theme", "application"],
@@ -3451,8 +3521,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b4a6a8c186df1a5311907e9d01bdddf572d9b6ab9f3de467aca3c327467442ca",
-        "preview": "8fc30649919a0fcbb1f493d5ada9c6f4804f573002b0d45e9b2b7061dd33d983"
+        "source": "cc58badb5209b63b62fed17c2c7fa70747e6c2b75db3feb0f3cf7b31755229ea",
+        "preview": "ac527dedb6c31aa037df532eb7751945fbd789e003af9584ad48981dfb034175"
       }
     },
     {
@@ -3462,7 +3532,7 @@
       "description": "Mortar marketing stat group, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "StatGroup",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -3487,7 +3557,7 @@
         ],
         "usage": "Import { StatGroup } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -3499,8 +3569,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "46fd8017e1c869b7c4be8b43905aafbc121cf9b6f3f583ad7919f4be60eeed0a"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "6f3d3cbd12bd7e6f1f66fc4a028ffc25e8981ff63223e30c018bc19e70006a4f"
       }
     },
     {
@@ -3510,7 +3580,7 @@
       "description": "Mortar documentation steps, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Steps",
       "source": "src/docs.tsx",
       "capabilities": ["theme", "docs"],
@@ -3523,7 +3593,8 @@
       },
       "contract": {
         "props": {
-          "items": "{ title; id?; description?; content? }[]"
+          "items": "{ title; id?; description?; content? }[]",
+          "headingLevel": "2 | 3 | 4"
         },
         "states": [
           "Light",
@@ -3546,8 +3617,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7d5dc4a7ecb8d7c6ee442e64e53c84dba70f34fcdf26a7ef1a422779999b3e09",
-        "preview": "44ab6fe0c8bdc34fd33e017e3caf30eb9473830aaa0c6dcaf09eac038bca134a"
+        "source": "69f77a944ed6d9085a96e2696dc4c6ea5008d280891c64020fae71d8768bbaa2",
+        "preview": "2cb1489c42f3d4ceae2bca860592768cf633c71deca04a69f8cdd0cdf7c9791b"
       }
     },
     {
@@ -3557,7 +3628,7 @@
       "description": "Mortar foundation switch, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Switch",
       "source": "src/primitives.tsx",
       "capabilities": [
@@ -3602,8 +3673,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "adf700ad0d8c077979fc7e0f9cc9ca11851fda78b52cdab7276038abb3b6b391"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "0c6494c2d7b48592f65f4728fee4ec5f086c88fa01e5fdcf8c24e25c106f3175"
       }
     },
     {
@@ -3613,7 +3684,7 @@
       "description": "Mortar plain semantic table for documents and summaries without row actions.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Table",
       "source": "src/application.tsx",
       "capabilities": ["theme", "application"],
@@ -3653,8 +3724,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-        "preview": "d49cba6b2e258eb6e7449056b186b760b46786c9a470c908f3ac7233769cb770"
+        "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+        "preview": "240d7696630ea4da1a46c1efd8191633d1767146f33967b6c4466c68d1d40c42"
       }
     },
     {
@@ -3664,7 +3735,7 @@
       "description": "Mortar foundation tabs, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Tabs",
       "source": "src/primitives.tsx",
       "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -3704,8 +3775,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "7dc17cd58f6a652aa854bf024bfa86e560b64c785afd7d80648b5dc4b7311bdf"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "e0e47adc32fe90cc47320601ba161d9144c0340bdddebd7137e9dbb65b13e60d"
       }
     },
     {
@@ -3715,7 +3786,7 @@
       "description": "Mortar marketing team grid, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "TeamGrid",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -3741,7 +3812,7 @@
         ],
         "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-avatar"]
       },
       "preview": {
@@ -3753,8 +3824,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "f7555a8948e2ea9ab2b7950d234693ae2fce807fde05f13f4c30b9263bc5b6f2"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "832e249e73638e4c769863a247a0859dd271e5fbab6fddec60ce82ce13ac8f4f"
       }
     },
     {
@@ -3764,7 +3835,7 @@
       "description": "Mortar marketing testimonial grid, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "TestimonialGrid",
       "source": "src/marketing-sections.tsx",
       "capabilities": ["theme", "marketing"],
@@ -3789,7 +3860,7 @@
         ],
         "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-avatar"]
       },
       "preview": {
@@ -3801,8 +3872,8 @@
         "states": []
       },
       "integrity": {
-        "source": "99cabd05d8c01884aaaf88e4aee9aaa58d9526e06c9914c90058a49ff3d92b77",
-        "preview": "539bbfe848eb5e7d3b029bf79868db7f0527f29fa6da9af9201fe9e0d60a2cfb"
+        "source": "33bc24229e006e53b13ec811998f0819b6b17b3746d4656dd5b216b0ee364fd6",
+        "preview": "8fffd43ec0a83a2718adfa08dc571b46edab1de6d3497837f25a7ac39e39ced9"
       }
     },
     {
@@ -3812,7 +3883,7 @@
       "description": "Mortar marketing testimonial, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Testimonial",
       "source": "src/marketing.tsx",
       "capabilities": ["theme", "marketing"],
@@ -3838,7 +3909,7 @@
         ],
         "usage": "Import { Testimonial } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
       },
       "preview": {
@@ -3850,8 +3921,8 @@
         "states": []
       },
       "integrity": {
-        "source": "848ca7e3937e9b16f9acbdfc9b4c31224ed0ce06a8c2a0736c7c2be02006fa15",
-        "preview": "dba6965508250b9774dd4ad805ddaa83ded127458c69335faf78260aa566e6d0"
+        "source": "fc080e7bde0b943f3bfd9f993dd45b6e0d5afa98f14c355f8017b9044651b16b",
+        "preview": "43f4377269c7a3dc2b4c2b886c005ae688fb00b9f9d69e5caf30a25724e712a9"
       }
     },
     {
@@ -3861,7 +3932,7 @@
       "description": "Mortar foundation text area, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "TextArea",
       "source": "src/primitives.tsx",
       "capabilities": [
@@ -3908,8 +3979,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-        "preview": "3beae88fb5cda7e7deb1f4dbc18dd1d6e7b45f4b5082e97ae9a04ef8b5aafff8"
+        "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+        "preview": "f0c19a52ee30467c6f842a8a9ff10393e1f7cc76e6cf8541140ca6d82ad14f70"
       }
     },
     {
@@ -3919,7 +3990,7 @@
       "description": "Mortar body text with semantic tone, size and weight, replacing text-muted/text-ink utilities.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Text",
       "source": "src/layout.tsx",
       "capabilities": ["theme", "foundation"],
@@ -3958,8 +4029,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
-        "preview": "cf4a0ce8c80a4e807ec6978931e3783dbe3010a3ff293ffdbfa03fe43b6dca18"
+        "source": "7ccfa49b573d95c731b4f386da0d3b13827e72c2b557e650340cf619a3cd5f2a",
+        "preview": "7e750851443e8d1bd4a79053ed43b0d0eceece602fee46a1d70e17f294854176"
       }
     },
     {
@@ -3969,7 +4040,7 @@
       "description": "Mortar foundation theme provider, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "ThemeProvider",
       "source": "src/foundation.tsx",
       "capabilities": ["theme", "foundation"],
@@ -3988,7 +4059,8 @@
           "density": "compact | comfortable | spacious",
           "appearance": "Optional controlled light | dark | system",
           "onAppearanceChange": "(appearance: Appearance) => void",
-          "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation."
+          "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation.",
+          "scope": "\"document\" | \"container\""
         },
         "states": [
           "Light",
@@ -4008,12 +4080,12 @@
       "testing": {
         "profile": "control",
         "target": ".m-segmented",
-        "states": [],
+        "states": ["scope-container"],
         "probe": "appearance"
       },
       "integrity": {
-        "source": "2efef5ef3e78cdf10164cbba659194a1a62ceedd681b052fd39bfde1fcffa1be",
-        "preview": "8afbea9fd62cf8fac42ac98d62d1ca718042558f9a05d8553ffe8b8751309e2d"
+        "source": "f729ac70375b088651388f4831c69d9ef70a6173c90d8209d23d27eddbf0ae54",
+        "preview": "315004d3a719750e276b21a822952f234794dc010051f27afe24f5bb16833097"
       }
     },
     {
@@ -4023,7 +4095,7 @@
       "description": "Mortar foundation toast, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Toast",
       "source": "src/feedback.tsx",
       "capabilities": ["theme", "foundation"],
@@ -4064,8 +4136,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "b036aaac973b481aa81693a114e929180660117270029369e6ec908e3b141410",
-        "preview": "3f6db2f1a4603c51c4a64e96ebccc431197dbc477c42a21a20f19810b753d03c"
+        "source": "60f24937d46be8fb3288faf8361f18b5227d73c74616da839f258acf2866dc1b",
+        "preview": "dadbe309e3e70f11a1b9847c4aa952025824cc4727a093ba0367ae24ec6675c5"
       }
     },
     {
@@ -4075,7 +4147,7 @@
       "description": "Mortar foundation toaster, using central semantic tokens.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "export": "Toaster",
       "source": "src/feedback.tsx",
       "capabilities": ["theme", "foundation"],
@@ -4114,8 +4186,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "b036aaac973b481aa81693a114e929180660117270029369e6ec908e3b141410",
-        "preview": "c5ee3f525b1813e94309c557ace576e68dbb3922f9b6ebdc20fada1986158b22"
+        "source": "60f24937d46be8fb3288faf8361f18b5227d73c74616da839f258acf2866dc1b",
+        "preview": "03a6a687a263677ef46430fb4b4dde50c05955c95de71f8013e8eea116cf5ae6"
       }
     }
   ]

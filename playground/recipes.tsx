@@ -170,30 +170,31 @@ export function SaasLandingRecipe() {
         </UI.FeatureSection>
         <section id="pricing">
           <UI.Pricing
-            title="Free during the open beta"
-            description="Every new account gets the Insider plan at no cost."
+            title="Example plans"
+            description="Illustrative pricing, not a purchase."
             plans={[
               {
-                id: "insider",
-                name: "Insider",
-                description: "Open beta. No card required.",
-                monthly: "Free",
-                features: [
-                  "100 conversations/month",
-                  "Unlimited widgets",
-                  "Calendar booking",
-                ],
-                action: { label: "Start free", href: "#signin" },
-                featured: true,
+                id: "basic",
+                name: "Basic",
+                description: "Personal projects",
+                monthly: "$0",
+                annual: "$0",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["One project"],
+                action: { label: "Start", href: "#signin" },
               },
               {
-                id: "pro",
-                name: "Pro",
-                description: "Coming after the beta.",
-                monthly: "£39",
-                unit: "/mo",
-                features: ["2,000 conversations/month", "Priority support"],
-                action: { label: "Join the waitlist", href: "#signin" },
+                id: "team",
+                name: "Team",
+                description: "Small teams",
+                monthly: "$20",
+                annual: "$16",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["Unlimited projects"],
+                action: { label: "Choose", href: "#signin" },
+                featured: true,
               },
             ]}
           />
@@ -215,14 +216,20 @@ export function SaasLandingRecipe() {
           />
         </UI.Section>
         <UI.CallToAction
-          title="Put an assistant on your site today"
-          description="100 free conversations a month during the beta."
-          actions={[{ label: "Start free", href: "#signin" }]}
+          title="Start your next project"
+          description="Use one shared foundation."
+          actions={[{ label: "Start", href: "#signin" }]}
+        />
+        <UI.CallToAction
+          title="Start your next project"
+          description="Use one shared foundation."
+          actions={[{ label: "Start", href: "#signin" }]}
+          tone="inverse"
         />
       </main>
       <UI.Footer
-        brand="Northwind Chat"
-        description="AI chat and booking for small businesses."
+        brand="Northwind"
+        description="Example product"
         columns={[
           {
             title: "Product",

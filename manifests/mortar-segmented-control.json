@@ -5,7 +5,7 @@
   "description": "Mortar foundation segmented control, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SegmentedControl",
   "source": "src/inspection.tsx",
   "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -45,7 +45,7 @@
     "probe": "segmented"
   },
   "integrity": {
-    "source": "d4d6ac20dad749d5a5acb6bf891abae36603abb1d9537ee796c8ae13598002de",
-    "preview": "bf820b9b0309857300e0086f649d0222db37b68ee031cb307b6c7bf57e78c602"
+    "source": "0118ba9586db04a47d5f4077879f2c026733f4e45a20d1093d34bd9346057529",
+    "preview": "dc41ff8f02a61cf9a445989e3f7bf19a2837d8dd5b3b57cd9e5554d927580649"
   }
 }

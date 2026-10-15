@@ -5,7 +5,7 @@
   "description": "Mortar foundation dropdown, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Dropdown",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -43,7 +43,7 @@
     "probe": "menu"
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "0b1be441b397957a58b734434ed0448f2cacf54eeb0b5adfae1294c62b4ed22c"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "0e86e4a7306e25d64da4c9678e060908891be339e8a36c58dee69bd5c6da1453"
   }
 }

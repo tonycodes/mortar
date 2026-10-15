@@ -5,7 +5,7 @@
   "description": "Mortar foundation toast, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Toast",
   "source": "src/feedback.tsx",
   "capabilities": ["theme", "foundation"],
@@ -46,7 +46,7 @@
     "probe": "toast"
   },
   "integrity": {
-    "source": "b036aaac973b481aa81693a114e929180660117270029369e6ec908e3b141410",
-    "preview": "3f6db2f1a4603c51c4a64e96ebccc431197dbc477c42a21a20f19810b753d03c"
+    "source": "60f24937d46be8fb3288faf8361f18b5227d73c74616da839f258acf2866dc1b",
+    "preview": "dadbe309e3e70f11a1b9847c4aa952025824cc4727a093ba0367ae24ec6675c5"
   }
 }

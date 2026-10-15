@@ -5,7 +5,7 @@
   "description": "Mortar foundation input, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Input",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
@@ -48,7 +48,7 @@
     "probe": "input"
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "7f63abb378e2c9430e41b25f39c235577799dc42a30a131b5774cb17617d04a7"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "690ea1eb575b64140647624fb5806b69dfcf444a9f5d32b6cbc654c6991bf2ac"
   }
 }

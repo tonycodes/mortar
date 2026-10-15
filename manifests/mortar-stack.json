@@ -5,7 +5,7 @@
   "description": "Mortar layout stack for vertical or horizontal rhythm, replacing consumer flex/gap utilities.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Stack",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "foundation"],
@@ -46,7 +46,7 @@
     "states": []
   },
   "integrity": {
-    "source": "ff93259b83238c54a61dad762e6e0ad52cd519b38d14593df3a047d3234d960b",
-    "preview": "accf5fed4845b298a798f7aa18f81b03d6e787868b1a37149229d91f46e6c371"
+    "source": "7ccfa49b573d95c731b4f386da0d3b13827e72c2b557e650340cf619a3cd5f2a",
+    "preview": "c9398a43f84f7af5eed61b93fe0a56551a641fe3e64e12c239eb14707d3280e6"
   }
 }

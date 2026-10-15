@@ -262,11 +262,49 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       }
     }
   }
+  const tokensCss = await readFile(resolve(root, "src/tokens.css"), "utf8");
+  const tokens = [
+    ...new Set(
+      [...tokensCss.matchAll(/(--m-[a-z0-9-]+)\s*:/g)].map((match) => match[1]),
+    ),
+  ].sort();
+  const selectorBody = (selector) => {
+    const bodies = [];
+    for (const match of tokensCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const selectors = match[1]
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .split(",")
+        .map((item) => item.trim());
+      if (selectors.includes(selector)) bodies.push(match[2]);
+    }
+    return bodies.join("\n");
+  };
+  const declares = (body, name) =>
+    new RegExp(`(?:^|[\\s;{])${name}\\s*:`).test(body);
+  for (const selector of [
+    ":root",
+    '[data-mortar-appearance="dark"]',
+    '[data-mortar-brand="green"]',
+    '[data-mortar-brand="green"][data-mortar-appearance="dark"]',
+  ]) {
+    const body = selectorBody(selector);
+    const at = tokensCss.indexOf(selector);
+    const line = at < 0 ? 1 : tokensCss.slice(0, at).split("\n").length;
+    for (const name of ["--m-accent", "--m-on-accent"])
+      if (!declares(body, name))
+        add(
+          "M009",
+          "src/tokens.css",
+          `${selector} must declare ${name}.`,
+          line,
+        );
+  }
   const catalog = {
     schemaVersion: 1,
     package: pkg.name,
     version: pkg.version,
     policyVersion: policy.version,
+    tokens,
     components: manifests,
   };
   if (refresh && findings.length === 0) {

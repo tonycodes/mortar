@@ -5,7 +5,7 @@
   "description": "Mortar plain semantic table for documents and summaries without row actions.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Table",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application"],
@@ -45,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-    "preview": "d49cba6b2e258eb6e7449056b186b760b46786c9a470c908f3ac7233769cb770"
+    "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+    "preview": "240d7696630ea4da1a46c1efd8191633d1767146f33967b6c4466c68d1d40c42"
   }
 }

@@ -5,7 +5,7 @@
   "description": "Mortar application app shell, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "AppShell",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application"],
@@ -50,7 +50,7 @@
     "probe": "navigation"
   },
   "integrity": {
-    "source": "5af9d1b3633e36d7033eb6453eff61e91981b08635b2494d58d306b41cee08ab",
-    "preview": "8be870d66c7a232da1f979dad3164b75f5c993d32cf6450ebaaabfdd2b356621"
+    "source": "bc477d9401655eb986499d03362c2277d9a209660d08848a52fe4e3776a0d75a",
+    "preview": "ce458fa09789293032a2c824c8f4ee68f3b54374e7f30789a6b5380fa8b58c68"
   }
 }

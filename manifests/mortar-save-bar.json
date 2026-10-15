@@ -5,7 +5,7 @@
   "description": "Mortar application save bar, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SaveBar",
   "source": "src/feedback.tsx",
   "capabilities": ["theme", "application"],
@@ -48,7 +48,7 @@
     "probe": "save"
   },
   "integrity": {
-    "source": "b036aaac973b481aa81693a114e929180660117270029369e6ec908e3b141410",
-    "preview": "c6720d542f0002f71aace052b9a29c47b12c23c4d8fca88912f3b86c1255c334"
+    "source": "60f24937d46be8fb3288faf8361f18b5227d73c74616da839f258acf2866dc1b",
+    "preview": "ecf702a4c2320e857bf78cc1b2b5b4d4f6046f642b055a8e47c16be7f4802bea"
   }
 }

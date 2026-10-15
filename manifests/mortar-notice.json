@@ -5,7 +5,7 @@
   "description": "Mortar foundation notice, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Notice",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "status"],
@@ -44,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "dc22a4bf9919ed3396d3905887179cdf25093c27c8978c2354c40e4520fc9366"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "476ae6ef9c8ebb41e0571b297f3245a220012554680dc77b6ff041193e46a1f0"
   }
 }

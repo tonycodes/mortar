@@ -3,6 +3,9 @@ import * as UI from "../src/index.js";
 
 export function StateFixture({ name, state }: { name: string; state: string }) {
   const [count, setCount] = useState(0);
+  const [appearance, setAppearance] = useState<"light" | "dark" | "system">(
+    "light",
+  );
   const disabled = state === "disabled";
   const error = state === "error" ? "Check this value" : undefined;
   const label =
@@ -121,6 +124,101 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
           confirmLabel="Confirm"
           loading={state === "loading"}
         />
+      );
+      break;
+    case "CallToAction":
+      content = (
+        <UI.CallToAction
+          title="Start your next project"
+          description="Use one shared foundation."
+          actions={[{ label: "Start", href: "#start" }]}
+          tone={state === "inverse" ? "inverse" : "surface"}
+        />
+      );
+      break;
+    case "Pricing":
+      content =
+        state === "coming-soon" ? (
+          <UI.Pricing
+            title="Example plans"
+            description="Illustrative pricing, not a purchase."
+            plans={[
+              {
+                id: "basic",
+                name: "Basic",
+                description: "Personal projects",
+                monthly: "$0",
+                features: ["One project"],
+                action: { label: "Choose", href: "#choose" },
+                availability: "coming-soon",
+                availabilityLabel: "Coming soon",
+              },
+            ]}
+          />
+        ) : (
+          <UI.Pricing
+            title="Example plans"
+            description="Illustrative pricing, not a purchase."
+            tone={state === "inverse" ? "inverse" : "surface"}
+            plans={[
+              {
+                id: "team",
+                name: "Team",
+                description: "Small teams",
+                monthly: "$20",
+                annual: "$16",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["Unlimited projects"],
+                action: { label: "Choose", href: "#choose" },
+                featured: true,
+              },
+            ]}
+          />
+        );
+      break;
+    case "MarketingHeader":
+      content = (
+        <UI.MarketingHeader
+          brand="Northwind"
+          links={[
+            { label: "Pricing", href: "#pricing" },
+            { label: "Plans", href: "#pricing" },
+          ]}
+        />
+      );
+      break;
+    case "Footer":
+      content = (
+        <UI.Footer
+          brand="Northwind"
+          description="Example product"
+          headingLevel={3}
+          columns={[
+            {
+              title: "Product",
+              links: [{ label: "Pricing", href: "#pricing" }],
+            },
+          ]}
+          copyright="© Example company"
+        />
+      );
+      break;
+    case "ThemeProvider":
+      content = (
+        <UI.Stack direction="row">
+          <UI.ThemeProvider scope="container" appearance="light">
+            <UI.Text>Light</UI.Text>
+          </UI.ThemeProvider>
+          <UI.ThemeProvider scope="container" appearance="dark">
+            <UI.Text>Dark</UI.Text>
+          </UI.ThemeProvider>
+        </UI.Stack>
+      );
+      break;
+    case "AppearanceControl":
+      content = (
+        <UI.AppearanceControl value={appearance} onChange={setAppearance} />
       );
       break;
     default:

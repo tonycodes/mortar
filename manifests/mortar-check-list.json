@@ -5,7 +5,7 @@
   "description": "Mortar check-marked list for features and plan inclusions.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "CheckList",
   "source": "src/display.tsx",
   "capabilities": ["theme", "foundation"],
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "0f542695943e2c3cd4c803b37cc7c7c4a01835722c7c6fb07d68c57fe7f9c4dd",
-    "preview": "13b0bc417f42b55f7c181ff9480b9b6e2ec097d68be659b2d90c13c63df752ea"
+    "source": "e63a70b36aa48e0394af2dc0ba4a88d8699768c299ff633196a94197d59b708d",
+    "preview": "74daee1fceebef871c2962ebfe66eacc09b0291e705dc4705372c9c983a09934"
   }
 }

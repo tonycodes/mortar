@@ -5,7 +5,7 @@
   "description": "Mortar foundation switch, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Switch",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
@@ -44,7 +44,7 @@
     "probe": "switch"
   },
   "integrity": {
-    "source": "c5d69512b6fd50c3748482c97dbdd116df83851173838a56a8eb021def648ca7",
-    "preview": "adf700ad0d8c077979fc7e0f9cc9ca11851fda78b52cdab7276038abb3b6b391"
+    "source": "185f9ba4acdad8c72ed0ea545414c808994cff79c448e0b0156330ef1a17f400",
+    "preview": "0c6494c2d7b48592f65f4728fee4ec5f086c88fa01e5fdcf8c24e25c106f3175"
   }
 }
