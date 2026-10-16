@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { readFileSync } from "node:fs";
 for (const width of [320, 768, 1280]) {
   test(`playground browsing and settings at ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -149,6 +150,15 @@ test("navigation and preview settings preserve the document and support history"
   await expect(page.locator('[data-mortar-preview="Button"]')).toBeVisible();
 });
 
+const { kits } = JSON.parse(
+  readFileSync(
+    new URL("../../playground/taxonomy.json", import.meta.url),
+    "utf8",
+  ),
+);
+const formControls = kits
+  .find((k) => k.id === "foundation")
+  .categories.find((c) => c.id === "forms").components.length;
 const axe = async (page) =>
   (
     await new AxeBuilder({ page })
@@ -192,7 +202,7 @@ for (const width of [390, 1280])
     await expect(
       page.getByRole("heading", { name: "Form controls", level: 1 }),
     ).toBeVisible();
-    await expect(page.locator(".pg-example")).toHaveCount(10);
+    await expect(page.locator(".pg-example")).toHaveCount(formControls);
     await page
       .getByRole("group", { name: "Combobox view" })
       .getByRole("button", { name: "Code" })
@@ -215,7 +225,7 @@ for (const width of [390, 1280])
       .click();
     await expect(page).toHaveURL(/component=Combobox/);
     await crumbs.getByRole("link", { name: "Form controls" }).click();
-    await expect(page.locator(".pg-example")).toHaveCount(10);
+    await expect(page.locator(".pg-example")).toHaveCount(formControls);
     await crumbs.getByRole("link", { name: "Components" }).click();
     await expect(
       page.getByRole("heading", { name: "Components", level: 1 }),

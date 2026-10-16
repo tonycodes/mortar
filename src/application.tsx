@@ -15,6 +15,8 @@ export interface NavigationItem {
   href: string;
   current?: boolean;
   count?: string;
+  /** Icon shown instead of the default marker. */
+  icon?: ReactNode;
 }
 export interface AppShellProps {
   brand: string;
@@ -28,6 +30,83 @@ export interface AppShellProps {
   actions?: ReactNode;
   children: ReactNode;
 }
+function SidebarContent({
+  brand,
+  logo,
+  workspace,
+  homeHref,
+  navigation,
+  sections = [],
+  footer,
+  label = "Primary",
+  onNavigate,
+}: SidebarProps & { onNavigate?: () => void }) {
+  const links = (items: NavigationItem[]) =>
+    items.map((item) => (
+      <KitLink
+        key={item.href}
+        href={item.href}
+        aria-current={item.current ? "page" : undefined}
+        onClick={onNavigate}
+      >
+        {item.icon ? (
+          <span className="m-nav-icon" aria-hidden="true">
+            {item.icon}
+          </span>
+        ) : (
+          <span className="m-nav-marker" aria-hidden="true" />
+        )}
+        {item.label}
+        {item.count && <span className="m-nav-count">{item.count}</span>}
+      </KitLink>
+    ));
+  return (
+    <>
+      {brand && (
+        <KitLink
+          className="m-workspace"
+          href={homeHref || navigation[0]?.href || "#"}
+        >
+          <BrandMark logo={logo} />
+          <span>
+            <strong>{brand}</strong>
+            {workspace && <small>{workspace}</small>}
+          </span>
+        </KitLink>
+      )}
+      <nav aria-label={label}>
+        {links(navigation)}
+        {sections.map((group) => (
+          <section key={group.label}>
+            <h2>{group.label}</h2>
+            {links(group.items)}
+          </section>
+        ))}
+      </nav>
+      {footer && <div className="m-user">{footer}</div>}
+    </>
+  );
+}
+export interface SidebarProps {
+  brand?: string;
+  logo?: ReactNode;
+  workspace?: string;
+  /** Destination for the brand link; defaults to the first navigation item. */
+  homeHref?: string;
+  navigation: NavigationItem[];
+  sections?: { label: string; items: NavigationItem[] }[];
+  /** Account menu or other content pinned to the bottom. */
+  footer?: ReactNode;
+  label?: string;
+}
+/** Vertical application navigation; AppShell composes the same content. */
+export function Sidebar(props: SidebarProps) {
+  return (
+    <div className="m-sidebar-panel">
+      <SidebarContent {...props} />
+    </div>
+  );
+}
 export function AppShell({
   brand,
   logo,
@@ -40,46 +119,22 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const [open, setOpen] = useState(false);
-  const links = (items: NavigationItem[]) =>
-    items.map((item) => (
-      <KitLink
-        key={item.href}
-        href={item.href}
-        aria-current={item.current ? "page" : undefined}
-        onClick={() => setOpen(false)}
-      >
-        <span className="m-nav-marker" aria-hidden="true" />
-        {item.label}
-        {item.count && <span className="m-nav-count">{item.count}</span>}
-      </KitLink>
-    ));
-  const content = (
-    <>
-      <KitLink className="m-workspace" href={navigation[0]?.href || "#"}>
-        <BrandMark logo={logo} />
-        <span>
-          <strong>{brand}</strong>
-          {workspace && <small>{workspace}</small>}
-        </span>
-      </KitLink>
-      <nav aria-label="Primary">
-        {links(navigation)}
-        {secondaryNavigation.map((group) => (
-          <section key={group.label}>
-            <h2>{group.label}</h2>
-            {links(group.items)}
-          </section>
-        ))}
-      </nav>
-      {user && <div className="m-user">{user}</div>}
-    </>
-  );
+  const sidebar = {
+    brand,
+    logo,
+    workspace,
+    navigation,
+    sections: secondaryNavigation,
+    footer: user,
+  };
   return (
     <div className="m-app-shell">
       <KitLink className="m-skip" href="#m-content">
         Skip to content
       </KitLink>
-      <aside className="m-sidebar">{content}</aside>
+      <aside className="m-sidebar">
+        <SidebarContent {...sidebar} />
+      </aside>
       <div className="m-app-main">
         <header className="m-app-header">
           <Button
@@ -106,10 +161,128 @@ export function AppShell({
               Close navigation
             </Button>
           </div>
-          {content}
+          <SidebarContent {...sidebar} onNavigate={() => setOpen(false)} />
         </DialogPanel>
       </Dialog>
     </div>
+  );
+}
+/** Horizontal application navigation that collapses into a menu on narrow screens. */
+export function Navbar({
+  brand,
+  logo,
+  homeHref = "/",
+  items,
+  actions,
+  label = "Primary",
+}: {
+  brand: string;
+  logo?: ReactNode;
+  homeHref?: string;
+  items: NavigationItem[];
+  actions?: ReactNode;
+  label?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  return (
+    <header className="m-navbar">
+      <KitLink className="m-brand" href={homeHref}>
+        <BrandMark logo={logo} />
+        {brand}
+      </KitLink>
+      <Button
+        variant="ghost"
+        className="m-navbar-toggle"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen(!open)}
+      >
+        Menu
+      </Button>
+      <nav id={id} aria-label={label} data-open={open}>
+        {items.map((item) => (
+          <KitLink
+            key={item.href}
+            href={item.href}
+            aria-current={item.current ? "page" : undefined}
+            onClick={() => setOpen(false)}
+          >
+            {item.icon && (
+              <span className="m-nav-icon" aria-hidden="true">
+                {item.icon}
+              </span>
+            )}
+            {item.label}
+            {item.count && <span className="m-nav-count">{item.count}</span>}
+          </KitLink>
+        ))}
+      </nav>
+      {actions && <div className="m-actions">{actions}</div>}
+    </header>
+  );
+}
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+/** Trail to the current page; the item without an href is the current page. */
+export function Breadcrumbs({
+  items,
+  label = "Breadcrumb",
+  separator = "slash",
+}: {
+  items: BreadcrumbItem[];
+  label?: string;
+  separator?: "slash" | "chevron";
+}) {
+  return (
+    <nav
+      className="m-breadcrumbs"
+      aria-label={label}
+      data-separator={separator}
+    >
+      <ol>
+        {items.map((b, i) => (
+          <li key={i}>
+            {b.href ? (
+              <KitLink href={b.href}>{b.label}</KitLink>
+            ) : (
+              <span aria-current="page">{b.label}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+/** Card with a title, explanation and one decisive action, e.g. deleting an account. */
+export function ActionPanel({
+  title,
+  description,
+  action,
+  children,
+  tone = "default",
+  headingLevel = 2,
+}: {
+  title: string;
+  description?: string;
+  action?: ReactNode;
+  children?: ReactNode;
+  tone?: "default" | "danger";
+  headingLevel?: 2 | 3;
+}) {
+  const id = useId();
+  const Heading = headingLevel === 2 ? "h2" : "h3";
+  return (
+    <section className="m-action-panel" aria-labelledby={id} data-tone={tone}>
+      <div className="m-action-panel-text">
+        <Heading id={id}>{title}</Heading>
+        {description && <p>{description}</p>}
+        {children}
+      </div>
+      {action && <div className="m-action-panel-action">{action}</div>}
+    </section>
   );
 }
 export function PageHeading({
@@ -124,27 +297,13 @@ export function PageHeading({
   description?: string;
   eyebrow?: string;
   actions?: ReactNode;
-  breadcrumbs?: { label: string; href?: string }[];
+  breadcrumbs?: BreadcrumbItem[];
   headingLevel?: 1 | 2;
 }) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <header className="m-page-heading">
-      {breadcrumbs && (
-        <nav aria-label="Breadcrumb">
-          <ol>
-            {breadcrumbs.map((b, i) => (
-              <li key={i}>
-                {b.href ? (
-                  <KitLink href={b.href}>{b.label}</KitLink>
-                ) : (
-                  <span aria-current="page">{b.label}</span>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
-      )}
+      {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
       <div className="m-heading-row">
         <div>
           {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}

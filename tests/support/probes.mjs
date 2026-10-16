@@ -277,6 +277,41 @@ export const implementations = {
     await root.getByRole("link", { name: "Acme" }).click();
     await expect(page).toHaveURL(/#project-acme$/);
   },
+  async navbar({ page, root }) {
+    const nav = root.getByRole("navigation", { name: "Primary" });
+    await expect(nav.getByRole("link", { name: "Dashboard" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await page.setViewportSize({ width: 390, height: 900 });
+    const opener = root.getByRole("button", { name: "Menu", exact: true });
+    await expect(nav).toBeHidden();
+    await opener.focus();
+    await page.keyboard.press("Enter");
+    await expect(opener).toHaveAttribute("aria-expanded", "true");
+    await expect(nav).toBeVisible();
+    await nav.getByRole("link", { name: "Team" }).click();
+    await expect(page).toHaveURL(/#team$/);
+    await expect(opener).toHaveAttribute("aria-expanded", "false");
+    await expect(nav).toBeHidden();
+  },
+  async banner({ page, root }) {
+    const banner = root.getByRole("region", { name: "Announcement" });
+    await expect(
+      banner.getByRole("link", { name: /Read the release notes/ }),
+    ).toHaveAttribute("href", "#release");
+    await expect(
+      root
+        .getByRole("region", { name: "Maintenance notice" })
+        .getByRole("button"),
+    ).toHaveCount(0);
+    await banner.getByRole("button", { name: "Dismiss announcement" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(banner).toHaveCount(0);
+    await expect(root.getByLabel("Banner state")).toHaveText("dismissed");
+    await root.getByRole("button", { name: "Show announcement" }).click();
+    await expect(banner).toBeVisible();
+  },
   async navigation({ page, root, component }) {
     await page.setViewportSize({ width: 390, height: 900 });
     if (component.export === "MarketingHeader") {

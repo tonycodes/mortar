@@ -527,13 +527,13 @@
     border-radius: 5px;
     background: var(--m-primary);
   }
-  :is(.m-sidebar, .m-mobile-sidebar) nav {
+  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel) nav {
     margin-top: 18px;
     display: flex;
     flex-direction: column;
     gap: 2px;
   }
-  :is(.m-sidebar, .m-mobile-sidebar) nav a {
+  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel) nav a {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -545,10 +545,12 @@
     font-weight: 500;
     color: var(--m-secondary);
   }
-  :is(.m-sidebar, .m-mobile-sidebar) nav a:hover {
+  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel) nav a:hover {
     background: var(--m-surface);
   }
-  :is(.m-sidebar, .m-mobile-sidebar) nav a[aria-current="page"] {
+  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel)
+    nav
+    a[aria-current="page"] {
     background: var(--m-surface);
     color: var(--m-link);
     font-weight: 600;
@@ -567,7 +569,7 @@
     font: 11px var(--m-mono);
     color: var(--m-muted);
   }
-  :is(.m-sidebar, .m-mobile-sidebar) nav h2 {
+  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel) nav h2 {
     margin: 24px 10px 6px;
     text-transform: uppercase;
     font-size: 11px;
@@ -630,18 +632,25 @@
     flex-wrap: wrap;
     justify-content: space-between;
   }
-  .m-page-heading nav ol {
+  .m-breadcrumbs ol {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
-    margin: 0 0 12px;
+    margin: 0;
     padding: 0;
     list-style: none;
     font-size: 13px;
     color: var(--m-muted);
   }
-  .m-page-heading nav li:not(:first-child)::before {
+  .m-page-heading .m-breadcrumbs ol {
+    margin-bottom: 12px;
+  }
+  .m-breadcrumbs li:not(:first-child)::before {
     content: "/";
     margin-right: 8px;
+  }
+  .m-breadcrumbs[data-separator="chevron"] li:not(:first-child)::before {
+    content: "›";
   }
   .m-eyebrow {
     font: 12px var(--m-mono);
