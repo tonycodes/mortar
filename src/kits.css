@@ -1541,15 +1541,13 @@
     min-width: 0;
   }
 
-  /* Section tones: full-bleed band without wrapper markup or horizontal overflow. */
+  /* Section tones stay within their layout bounds, including nested previews and shells. */
   :is(.m-marketing-section, .m-feature-section):is(
     [data-tone="muted"],
     [data-tone="inverse"]
   ) {
     border-top-color: transparent;
     background: var(--m-band);
-    box-shadow: 0 0 0 100vmax var(--m-band);
-    clip-path: inset(0 -100vmax);
   }
   :is(.m-marketing-section, .m-feature-section)[data-tone="muted"] {
     --m-band: var(--m-sunken);
