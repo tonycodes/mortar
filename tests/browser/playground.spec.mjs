@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { readFileSync } from "node:fs";
 for (const width of [320, 768, 1280]) {
   test(`playground browsing and settings at ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -147,4 +148,108 @@ test("navigation and preview settings preserve the document and support history"
   expect(await page.evaluate(() => window.__navigationMarker)).toBe("original");
   await page.goBack();
   await expect(page.locator('[data-mortar-preview="Button"]')).toBeVisible();
+});
+
+const { kits } = JSON.parse(
+  readFileSync(
+    new URL("../../playground/taxonomy.json", import.meta.url),
+    "utf8",
+  ),
+);
+const formControls = kits
+  .find((k) => k.id === "foundation")
+  .categories.find((c) => c.id === "forms").components.length;
+const axe = async (page) =>
+  (
+    await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze()
+  ).violations.map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target) }));
+const pageOverflow = (page) =>
+  page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  );
+
+for (const width of [390, 1280])
+  test(`kit overview leads to categories and components at ${width}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/?theme=dark");
+    await expect(
+      page.getByRole("heading", { name: "Components", level: 1 }),
+    ).toBeVisible();
+    for (const kit of [
+      "Foundation",
+      "Application UI",
+      "Marketing UI",
+      "Documentation",
+    ])
+      await expect(page.getByRole("heading", { name: kit })).toBeVisible();
+    // Thumbnails are inert decoration: nothing inside them is focusable or announced.
+    await expect(page.locator(".pg-thumb[inert]").first()).toBeAttached();
+    await expect(page.getByRole("button", { name: "Duplicate" })).toHaveCount(
+      0,
+    );
+    expect(await axe(page)).toEqual([]);
+    expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+
+    await page.getByRole("link", { name: "Form controls" }).click();
+    await expect(page).toHaveURL(/category=foundation%2Fforms/);
+    await expect(page).toHaveURL(/theme=dark/);
+    await expect(
+      page.getByRole("heading", { name: "Form controls", level: 1 }),
+    ).toBeVisible();
+    await expect(page.locator(".pg-example")).toHaveCount(formControls);
+    await page
+      .getByRole("group", { name: "Combobox view" })
+      .getByRole("button", { name: "Code" })
+      .click();
+    await expect(page.getByText("ComboboxExample.tsx")).toBeVisible();
+    expect(await axe(page)).toEqual([]);
+    expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+
+    await page
+      .getByRole("link", { name: "Listbox", exact: true })
+      .last()
+      .click();
+    await expect(page.locator('[data-mortar-preview="Listbox"]')).toBeVisible();
+    const crumbs = page.getByRole("navigation", { name: "Breadcrumb" });
+    await expect(crumbs).toContainText("Foundation");
+    await expect(crumbs).toContainText("Form controls");
+    await page
+      .getByRole("link", { name: /Combobox/, exact: false })
+      .last()
+      .click();
+    await expect(page).toHaveURL(/component=Combobox/);
+    await crumbs.getByRole("link", { name: "Form controls" }).click();
+    await expect(page.locator(".pg-example")).toHaveCount(formControls);
+    await crumbs.getByRole("link", { name: "Components" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Components", level: 1 }),
+    ).toBeVisible();
+  });
+
+test("component code view shows the example source and is shareable", async ({
+  page,
+}) => {
+  await page.goto("/?component=Card");
+  await page
+    .getByRole("group", { name: "Card view" })
+    .getByRole("button", { name: "Code" })
+    .click();
+  await expect(page).toHaveURL(/view=code/);
+  const code = page.locator(".pg-example-code");
+  await expect(code).toContainText(
+    'import { Button, Card, Stack, Text } from "@tony-ui/mortar";',
+  );
+  await expect(code).toContainText('<Card tone="sunken" padding="compact">');
+  await expect(code).not.toContainText("UI.");
+  await page.reload();
+  await expect(code).toContainText("<Card");
+  await page.goBack();
+  await expect(page.locator('[data-mortar-preview="Card"]')).toBeVisible();
+  expect(await axe(page)).toEqual([]);
 });

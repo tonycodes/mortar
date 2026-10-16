@@ -122,6 +122,13 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
       );
       break;
     }
+    case "Fieldset":
+      content = (
+        <UI.Fieldset legend={label} disabled={disabled}>
+          <UI.Input label="Street address" onChange={changed} />
+        </UI.Fieldset>
+      );
+      break;
     case "DescriptionList":
       content = (
         <UI.DescriptionList

@@ -1,0 +1,48 @@
+{
+  "id": "mortar-breadcrumbs",
+  "logicalId": "breadcrumbs",
+  "name": "Breadcrumbs",
+  "description": "Mortar breadcrumbs: a trail to the current page with slash or chevron separators. PageHeading composes the same component.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Breadcrumbs",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application", "navigation"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "items": "{ label: string; href?: string }[]",
+      "label": "string",
+      "separator": "\"slash\" | \"chevron\""
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Breadcrumbs } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/BreadcrumbsPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-breadcrumbs",
+    "states": []
+  },
+  "integrity": {
+    "source": "37e039219c610a30b31b333a06d323ab6ff8081347038a1ef449af3e53bd63b4",
+    "preview": "f5b3b2f0b09fd67f6993325d87e023215dc04d82c0ca8109cb2811fe0e2cbce9"
+  }
+}

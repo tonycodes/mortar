@@ -1,0 +1,58 @@
+{
+  "id": "mortar-navbar",
+  "logicalId": "navbar",
+  "name": "Navbar",
+  "description": "Mortar navbar: horizontal application navigation with brand, current-page indicator and actions, collapsing into a disclosure menu on narrow screens.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Navbar",
+  "source": "src/application.tsx",
+  "capabilities": [
+    "theme",
+    "application",
+    "navigation",
+    "responsive",
+    "keyboard"
+  ],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "brand": "string",
+      "logo": "ReactNode",
+      "homeHref": "string",
+      "items": "NavigationItem[] ({ label: string; href: string; current?: boolean; count?: string; icon?: ReactNode })",
+      "actions": "ReactNode",
+      "label": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Navbar } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/NavbarPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-navbar",
+    "probe": "navbar",
+    "states": []
+  },
+  "integrity": {
+    "source": "37e039219c610a30b31b333a06d323ab6ff8081347038a1ef449af3e53bd63b4",
+    "preview": "879be953138b1eeb8ddb67ffc93b5c365d9d782d331c517a60a06a554decdd52"
+  }
+}

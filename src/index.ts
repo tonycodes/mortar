@@ -13,6 +13,7 @@ export {
   Select,
   TextArea,
   Checkbox,
+  Fieldset,
   RadioGroup,
   Switch,
   Badge,
@@ -39,6 +40,10 @@ export {
   SettingsSection,
   ActivityFeed,
   SignInPanel,
+  Sidebar,
+  Navbar,
+  Breadcrumbs,
+  ActionPanel,
 } from "./application.js";
 export type {
   AppShellProps,
@@ -48,6 +53,8 @@ export type {
   TableSort,
   SortDirection,
   SignInProvider,
+  SidebarProps,
+  BreadcrumbItem,
 } from "./application.js";
 export {
   MarketingHeader,
@@ -77,7 +84,7 @@ export { Stack, Container, Text, Section, Divider, Card } from "./layout.js";
 export type { SectionTone } from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
 export type { ChatMessage } from "./showcase.js";
-export { Toast, Toaster, ConfirmDialog, SaveBar } from "./feedback.js";
+export { Toast, Toaster, ConfirmDialog, SaveBar, Banner } from "./feedback.js";
 export type { ToastItem } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
 export type { CommandItem } from "./workspace.js";

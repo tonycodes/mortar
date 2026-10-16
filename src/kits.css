@@ -1557,7 +1557,11 @@
   .m-feature-section[data-tone="muted"] .m-feature-preview[data-framed="true"] {
     background: var(--m-surface);
   }
-  :is(.m-marketing-section, .m-feature-section)[data-tone="inverse"] {
+  :is(
+    .m-marketing-section,
+    .m-feature-section,
+    .m-banner
+  )[data-tone="inverse"] {
     color-scheme: var(--m-inv-color-scheme);
     --m-line-strong: var(--m-inv-line-strong);
     --m-primary-active: var(--m-inv-primary-active);
@@ -2601,6 +2605,238 @@
     .m-choice-control,
     .m-choice-option {
       min-height: 44px;
+    }
+  }
+}
+
+/* Navigation and form structure: Breadcrumbs, Sidebar, Navbar, Fieldset, ActionPanel and Banner. */
+@layer components {
+  .m-nav-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-nav-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .m-sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+  }
+  .m-sidebar-panel > nav:first-child {
+    margin-top: 0;
+  }
+  .m-navbar {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-height: 60px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-surface);
+  }
+  .m-navbar > .m-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--m-ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .m-navbar > nav {
+    display: flex;
+    align-self: stretch;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+  .m-navbar > nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: inset 0 -2px 0 transparent;
+  }
+  .m-navbar > nav a:hover {
+    color: var(--m-ink);
+    box-shadow: inset 0 -2px 0 var(--m-line-strong);
+  }
+  .m-navbar > nav a[aria-current="page"] {
+    color: var(--m-ink);
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 var(--m-primary);
+  }
+  .m-navbar > .m-actions {
+    margin-left: auto;
+  }
+  .m-navbar-toggle {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .m-navbar {
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 10px 16px;
+    }
+    .m-navbar-toggle {
+      display: inline-flex;
+      margin-left: auto;
+    }
+    /* Like Tailwind's mobile menus, actions move into the open panel below the links. */
+    .m-navbar > .m-actions {
+      display: none;
+      order: 5;
+      flex-basis: 100%;
+      margin-left: 0;
+      padding: 12px 0 6px;
+      border-top: 1px solid var(--m-line);
+    }
+    .m-navbar:has(> nav[data-open="true"]) > .m-actions {
+      display: flex;
+    }
+    .m-navbar > nav {
+      display: none;
+      order: 4;
+      flex-basis: 100%;
+      flex-direction: column;
+      padding-bottom: 6px;
+    }
+    .m-navbar > nav[data-open="true"] {
+      display: flex;
+    }
+    .m-navbar > nav a {
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: var(--m-radius);
+      box-shadow: none;
+    }
+    .m-navbar > nav a:hover {
+      box-shadow: none;
+      background: var(--m-sunken);
+    }
+    .m-navbar > nav a[aria-current="page"] {
+      box-shadow: inset 3px 0 0 var(--m-primary);
+      background: var(--m-sunken);
+    }
+  }
+  .m-fieldset {
+    /* Block layout: a rendered legend is not a flex item, so gap would not apply to it. */
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .m-fieldset > legend {
+    margin-bottom: 16px;
+    padding: 0;
+    color: var(--m-ink);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-fieldset > legend:has(+ p) {
+    margin-bottom: 4px;
+  }
+  .m-fieldset > p {
+    margin: 0 0 16px;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-fieldset-fields {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+  }
+  .m-action-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    padding: 20px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  .m-action-panel[data-tone="danger"] {
+    border-color: var(--m-danger);
+  }
+  .m-action-panel-text {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+  .m-action-panel-text :is(h2, h3) {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-action-panel-text > p {
+    margin: 4px 0 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+  }
+  .m-action-panel-text > :not(:is(h2, h3, p)) {
+    margin-top: 12px;
+  }
+  .m-action-panel-action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 8px 16px;
+    background: var(--m-paper);
+    color: var(--m-ink);
+    border-bottom: 1px solid var(--m-line);
+    font-size: var(--m-font-size);
+  }
+  .m-banner > p {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+  }
+  .m-banner a {
+    color: var(--m-link);
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+  .m-banner > button {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--m-radius-sm);
+    background: transparent;
+    color: var(--m-secondary);
+    cursor: pointer;
+  }
+  .m-banner > button:hover {
+    background: var(--m-sunken);
+  }
+  .m-banner > button svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (pointer: coarse) {
+    .m-banner > button {
+      width: 44px;
+      height: 44px;
     }
   }
 }
