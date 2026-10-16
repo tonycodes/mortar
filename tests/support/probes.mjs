@@ -312,6 +312,39 @@ export const implementations = {
     await root.getByRole("button", { name: "Show announcement" }).click();
     await expect(banner).toBeVisible();
   },
+  async calendar({ page, root }) {
+    const grid = root.getByRole("grid", { name: "January 2026" });
+    const today = grid.getByRole("button", {
+      name: /^Monday, January 12, 2026/,
+    });
+    await expect(today).toHaveAttribute("aria-current", "date");
+    await expect(today).toHaveAttribute("tabindex", "0");
+    await today.focus();
+    await page.keyboard.press("ArrowRight");
+    const next = grid.getByRole("button", {
+      name: /^Tuesday, January 13, 2026/,
+    });
+    await expect(next).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected date")).toHaveText("2026-01-13");
+    await expect(next).toHaveAttribute("tabindex", "0");
+    await expect(grid.getByRole("gridcell", { selected: true })).toHaveCount(1);
+    await grid
+      .getByRole("button", { name: /^Wednesday, January 21, 2026/ })
+      .click();
+    await expect(root.getByLabel("Selected date")).toHaveText("2026-01-21");
+    await expect(root.locator(".m-calendar-events")).toContainText(
+      "Release planning",
+    );
+    const forward = root.getByRole("button", { name: "Next month" });
+    await forward.focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      root.getByRole("grid", { name: "February 2026" }),
+    ).toBeVisible();
+    await root.getByRole("button", { name: "Previous month" }).click();
+    await expect(grid).toBeVisible();
+  },
   async navigation({ page, root, component }) {
     await page.setViewportSize({ width: 390, height: 900 });
     if (component.export === "MarketingHeader") {
