@@ -13,6 +13,7 @@ export const profiles = Object.freeze({
 });
 export const probes = Object.freeze({
   Button: "button",
+  ButtonGroup: "button-group",
   ActionLink: "link",
   Input: "input",
   TextArea: "textarea",

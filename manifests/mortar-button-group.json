@@ -1,0 +1,48 @@
+{
+  "id": "mortar-button-group",
+  "logicalId": "button-group",
+  "name": "ButtonGroup",
+  "description": "Mortar button group: a joined row of related actions, with icon-only and link items. Use SegmentedControl to choose a single value.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ButtonGroup",
+  "source": "src/primitives.tsx",
+  "capabilities": ["theme", "foundation", "action", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "items": "{ label: string; onClick?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ButtonGroup } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ButtonGroupPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-button-group",
+    "probe": "button-group",
+    "states": []
+  },
+  "integrity": {
+    "source": "4f28d2e9f29b99b0099483ce4200792ea47960eedfad193553fc318456af82ff",
+    "preview": "0d3739b25ff6e23901dda4d1bf4fa0900c1f6a4fff0d1c2cdd0f9ea6eb2608b9"
+  }
+}
