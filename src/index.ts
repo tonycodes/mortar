@@ -108,3 +108,5 @@ export {
   LinkCards,
 } from "./docs.js";
 export type { DocsShellProps, FileNode } from "./docs.js";
+export { Listbox, Combobox } from "./choice.js";
+export type { ChoiceOption } from "./choice.js";

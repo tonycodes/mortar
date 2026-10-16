@@ -2424,3 +2424,183 @@
     }
   }
 }
+
+/* Listbox and Combobox: styled single selects built on Headless UI. */
+@layer components {
+  .m-choice-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--m-control);
+    padding: 4px var(--m-pad);
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    text-align: start;
+  }
+  button.m-choice-control {
+    padding-inline-end: calc(var(--m-pad) + 24px);
+    cursor: pointer;
+  }
+  .m-choice-control > svg,
+  .m-combobox-toggle svg {
+    width: 16px;
+    height: 16px;
+    color: var(--m-secondary);
+  }
+  button.m-choice-control > svg {
+    position: absolute;
+    inset-inline-end: var(--m-pad);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .m-choice-control:hover:not(
+      :disabled,
+      [data-disabled],
+      [aria-invalid="true"],
+      [data-invalid]
+    ) {
+    border-color: var(--m-secondary);
+  }
+  .m-choice-control:is([aria-invalid="true"], [data-invalid]) {
+    border-color: var(--m-danger);
+  }
+  .m-choice-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .m-choice-value > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-placeholder {
+    color: var(--m-muted);
+  }
+  .m-combobox {
+    position: relative;
+    min-width: 0;
+  }
+  .m-combobox > input.m-choice-control {
+    padding-inline-end: calc(var(--m-pad) + 28px);
+  }
+  .m-combobox[data-leading] > input.m-choice-control {
+    padding-inline-start: calc(var(--m-pad) + 30px);
+  }
+  .m-combobox > .m-choice-leading {
+    position: absolute;
+    inset-inline-start: var(--m-pad);
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .m-combobox input::placeholder {
+    color: var(--m-muted);
+  }
+  .m-combobox-toggle {
+    position: absolute;
+    inset-inline-end: 4px;
+    top: 50%;
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: var(--m-radius-sm);
+    background: transparent;
+    cursor: pointer;
+  }
+  .m-field[data-disabled] .m-choice-control {
+    color: var(--m-muted);
+    background: var(--m-sunken);
+    cursor: not-allowed;
+  }
+  .m-field[data-disabled] .m-choice-control :is(input, button) {
+    cursor: not-allowed;
+  }
+  .m-choice-leading {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-choice-leading svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-choice-options {
+    z-index: 110;
+    width: var(--button-width);
+    min-width: 200px;
+    max-height: 280px;
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+    list-style: none;
+    --anchor-gap: 6px;
+    outline: none;
+  }
+  .m-choice-options:focus-visible {
+    /* Focus stays visible on the active option via aria-activedescendant. */
+    outline: none;
+  }
+  .m-combobox-options {
+    width: var(--input-width);
+  }
+  .m-choice-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--m-radius-sm);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    cursor: pointer;
+  }
+  .m-choice-option[data-focus] {
+    background: var(--m-selected);
+  }
+  .m-choice-option[data-disabled] {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-choice-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .m-choice-text small {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-choice-check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    visibility: hidden;
+  }
+  .m-choice-option[data-selected] {
+    font-weight: 600;
+  }
+  .m-choice-option[data-selected] .m-choice-check {
+    visibility: visible;
+  }
+  @media (pointer: coarse) {
+    .m-choice-control,
+    .m-choice-option {
+      min-height: 44px;
+    }
+  }
+}

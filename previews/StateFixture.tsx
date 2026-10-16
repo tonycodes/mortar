@@ -104,6 +104,24 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         />
       );
       break;
+    case "Listbox":
+    case "Combobox": {
+      const Control = name === "Listbox" ? UI.Listbox : UI.Combobox;
+      content = (
+        <Control
+          label={label}
+          disabled={disabled}
+          error={error}
+          value={null}
+          onChange={changed}
+          options={[
+            { value: "a", label: "First" },
+            { value: "b", label: "Second" },
+          ]}
+        />
+      );
+      break;
+    }
     case "DescriptionList":
       content = (
         <UI.DescriptionList

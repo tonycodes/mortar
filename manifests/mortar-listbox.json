@@ -1,0 +1,54 @@
+{
+  "id": "mortar-listbox",
+  "logicalId": "listbox",
+  "name": "Listbox",
+  "description": "Mortar listbox: a styled single select for rich options with avatars, descriptions and disabled items. Use Select for plain native choices.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Listbox",
+  "source": "src/choice.tsx",
+  "capabilities": ["theme", "foundation", "form", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "options": "ChoiceOption[] ({ value: string; label: string; description?: string; leading?: ReactNode; disabled?: boolean })",
+      "value": "string | null",
+      "onChange": "(value: string | null) => void",
+      "placeholder": "string",
+      "hint": "string",
+      "error": "string",
+      "disabled": "boolean"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Listbox } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ListboxPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-choice-control",
+    "probe": "listbox",
+    "states": ["disabled", "error", "long"]
+  },
+  "integrity": {
+    "source": "f942c878ed72763080f211d29e128390656368a598317a66f82c71692941bc7a",
+    "preview": "0fad8e7098cca1d7edfbf22e5ccb8f41b2a207e462091053e743cfa38d03e7bd"
+  }
+}
