@@ -2179,3 +2179,248 @@
     font-variant-numeric: tabular-nums;
   }
 }
+
+/* Layout primitives from the Tailwind Plus gap review: divider, card, description list and button group. */
+@layer components {
+  .m-divider {
+    width: 100%;
+    margin: 24px 0;
+    border: 0;
+    border-top: 1px solid var(--m-line-strong);
+  }
+  .m-divider[data-soft] {
+    border-top-color: var(--m-line);
+  }
+  div.m-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  div.m-divider::before,
+  div.m-divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--m-line-strong);
+  }
+  div.m-divider[data-soft]::before,
+  div.m-divider[data-soft]::after {
+    border-top-color: var(--m-line);
+  }
+  .m-divider[data-spacing="none"] {
+    margin: 0;
+  }
+  .m-divider[data-spacing="sm"] {
+    margin: 12px 0;
+  }
+  .m-divider[data-spacing="lg"] {
+    margin: 40px 0;
+  }
+  .m-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    overflow: hidden;
+    --m-card-pad: 20px;
+  }
+  .m-card[data-padding="compact"] {
+    --m-card-pad: 14px;
+  }
+  .m-card[data-padding="none"] {
+    --m-card-pad: 0;
+  }
+  .m-card[data-tone="sunken"] {
+    background: var(--m-sunken);
+  }
+  .m-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-card-header:last-child {
+    border-bottom: 0;
+  }
+  .m-card-heading {
+    min-width: 0;
+  }
+  .m-card-heading :is(h2, h3, h4) {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-card-heading p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m-card-body {
+    flex: 1;
+    min-width: 0;
+    padding: var(--m-card-pad);
+  }
+  .m-card-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 13px;
+  }
+  .m-description-list {
+    container-type: inline-size;
+    min-width: 0;
+  }
+  .m-description-heading {
+    padding-bottom: 14px;
+  }
+  .m-description-heading :is(h2, h3, h4) {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-description-heading p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-description-list dl {
+    margin: 0;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-description-list dl > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px 16px;
+    padding: var(--m-row-pad) 0;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-description-list dl > div[data-action] {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .m-description-list dt {
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+  }
+  .m-description-list dd {
+    margin: 0;
+    min-width: 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    overflow-wrap: anywhere;
+  }
+  .m-description-list dl > div > :is(dt, dd) {
+    grid-column: 1;
+  }
+  .m-description-list dl > div > .m-description-action {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  .m-card-body > .m-description-list dl {
+    border-top: 0;
+  }
+  .m-card-body > .m-description-list dl > div:first-child {
+    padding-top: 0;
+  }
+  .m-card-body > .m-description-list dl > div:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  @container (min-width: 560px) {
+    /* Rows share one set of tracks so details align whether or not a row has an action. */
+    .m-description-list[data-layout="columns"] dl {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+    }
+    .m-description-list[data-layout="columns"] dl > div {
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: baseline;
+    }
+    .m-description-list[data-layout="columns"] dl > div > :is(dt, dd) {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .m-description-list[data-layout="columns"] dl > div > dt {
+      grid-column: 1;
+    }
+    .m-description-list[data-layout="columns"]
+      dl
+      > div
+      > .m-description-action {
+      grid-column: 3;
+      align-self: baseline;
+    }
+  }
+  .m-button-group {
+    display: inline-flex;
+    max-width: 100%;
+    border-radius: var(--m-radius);
+  }
+  .m-button-group > :is(button, a) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: var(--m-control);
+    min-width: var(--m-control);
+    margin-left: -1px;
+    padding: 4px 12px;
+    border: 1px solid var(--m-line-strong);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .m-button-group > :first-child {
+    margin-left: 0;
+    border-start-start-radius: var(--m-radius);
+    border-end-start-radius: var(--m-radius);
+  }
+  .m-button-group > :last-child {
+    border-start-end-radius: var(--m-radius);
+    border-end-end-radius: var(--m-radius);
+  }
+  .m-button-group > :is(button, a):hover:not(:disabled) {
+    background: var(--m-sunken);
+  }
+  .m-button-group > :is(button, a):focus-visible {
+    position: relative;
+    z-index: 1;
+    outline-offset: 2px;
+  }
+  .m-button-group > button:disabled {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-button-group-icon {
+    display: inline-flex;
+  }
+  .m-button-group-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (pointer: coarse) {
+    .m-button-group > :is(button, a) {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}

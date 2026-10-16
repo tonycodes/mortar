@@ -104,6 +104,24 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         />
       );
       break;
+    case "DescriptionList":
+      content = (
+        <UI.DescriptionList
+          title={label}
+          items={[
+            { term: label, details: "x".repeat(120) },
+            {
+              term: "Contact",
+              details:
+                "a-very-long-unbroken-address@an-extremely-long-example-domain.example",
+              action: (
+                <UI.ActionLink label="Update" href="#contact" variant="ghost" />
+              ),
+            },
+          ]}
+        />
+      );
+      break;
     case "ConfirmDialog":
       content = (
         <UI.ConfirmDialog

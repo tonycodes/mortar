@@ -200,3 +200,41 @@ export function CheckList({
     </ul>
   );
 }
+
+/** Label/value pairs for detail screens, stacked on narrow screens and in columns when wide. */
+export function DescriptionList({
+  title,
+  description,
+  headingLevel = 2,
+  items,
+  layout = "columns",
+}: {
+  title?: string;
+  description?: string;
+  headingLevel?: 2 | 3 | 4;
+  items: { term: string; details: ReactNode; action?: ReactNode }[];
+  layout?: "columns" | "stacked";
+}) {
+  const Heading = `h${headingLevel}` as const;
+  return (
+    <div className="m-description-list" data-layout={layout}>
+      {title && (
+        <div className="m-description-heading">
+          <Heading>{title}</Heading>
+          {description && <p>{description}</p>}
+        </div>
+      )}
+      <dl>
+        {items.map((item) => (
+          <div key={item.term} data-action={item.action ? true : undefined}>
+            <dt>{item.term}</dt>
+            <dd>{item.details}</dd>
+            {item.action && (
+              <dd className="m-description-action">{item.action}</dd>
+            )}
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}

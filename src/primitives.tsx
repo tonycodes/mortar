@@ -64,6 +64,56 @@ export function ActionLink({
     </KitLink>
   );
 }
+export interface ButtonGroupItem {
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  icon?: ReactNode;
+  /** Show only the icon; the label remains the accessible name. */
+  iconOnly?: boolean;
+  disabled?: boolean;
+}
+/** Joined row of related secondary actions. Use SegmentedControl to choose one value. */
+export function ButtonGroup({
+  label,
+  items,
+}: {
+  label: string;
+  items: ButtonGroupItem[];
+}) {
+  return (
+    <div className="m-button-group" role="group" aria-label={label}>
+      {items.map((item) => {
+        const content = (
+          <>
+            {item.icon && (
+              <span aria-hidden="true" className="m-button-group-icon">
+                {item.icon}
+              </span>
+            )}
+            {!(item.iconOnly && item.icon) && item.label}
+          </>
+        );
+        const name = item.iconOnly && item.icon ? item.label : undefined;
+        return item.href && !item.disabled ? (
+          <KitLink key={item.label} href={item.href} aria-label={name}>
+            {content}
+          </KitLink>
+        ) : (
+          <button
+            key={item.label}
+            type="button"
+            aria-label={name}
+            disabled={item.disabled}
+            onClick={item.onClick}
+          >
+            {content}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 export type Tone = "neutral" | "success" | "warning" | "danger";
 export function Badge({
   children,

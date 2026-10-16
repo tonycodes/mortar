@@ -7,6 +7,7 @@ export type {
 } from "./foundation.js";
 export {
   Button,
+  ButtonGroup,
   ActionLink,
   Input,
   Select,
@@ -23,6 +24,7 @@ export {
 } from "./primitives.js";
 export type {
   ButtonProps,
+  ButtonGroupItem,
   InputProps,
   LinkAction,
   Tone,
@@ -69,8 +71,9 @@ export {
   ProgressBar,
   FilterChip,
   CheckList,
+  DescriptionList,
 } from "./display.js";
-export { Stack, Container, Text, Section } from "./layout.js";
+export { Stack, Container, Text, Section, Divider, Card } from "./layout.js";
 export type { SectionTone } from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
 export type { ChatMessage } from "./showcase.js";

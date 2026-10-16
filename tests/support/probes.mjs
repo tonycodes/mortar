@@ -8,6 +8,20 @@ export const implementations = {
     await expect(root.getByLabel("Action result")).toHaveText("saved");
     await expect(root.getByRole("button", { name: "Saving" })).toBeDisabled();
   },
+  async "button-group"({ page, root }) {
+    const group = root.getByRole("group", { name: "Record actions" });
+    const duplicate = group.getByRole("button", { name: "Duplicate" });
+    await group.getByRole("button", { name: "Copy" }).focus();
+    await page.keyboard.press("Tab");
+    await expect(duplicate).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Last action")).toHaveText("Duplicate");
+    await expect(group.getByRole("button", { name: "Archive" })).toBeDisabled();
+    await root.getByRole("button", { name: "Next", exact: true }).click();
+    await expect(root.getByLabel("Last action")).toHaveText("Next");
+    await root.getByRole("link", { name: "Docs" }).click();
+    await expect(page).toHaveURL(/#docs$/);
+  },
   async link({ page, root }) {
     const link = root.getByRole("link", { name: "Explore" });
     await link.focus();
