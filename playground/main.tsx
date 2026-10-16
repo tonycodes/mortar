@@ -1,44 +1,33 @@
 import { KitLink } from "../src/navigation.js";
-import {
-  Suspense,
-  lazy,
-  useState,
-  useEffect,
-  useMemo,
-  type ComponentType,
-} from "react";
+import { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ThemeProvider,
   Select,
   SegmentedControl,
   PageHeading,
-  Notice,
   DocsShell,
   Input,
   CodeBlock,
   Badge,
+  PagerLinks,
 } from "../src/index.js";
 import catalog from "../catalog.json";
 import { SaasLandingRecipe } from "./recipes.js";
+import {
+  CategoryPage,
+  ExamplePanel,
+  Overview,
+  PreviewRoot,
+  categoryHref,
+  findCategory,
+  homeHref,
+  kits,
+  locate,
+  ordered,
+  url,
+} from "./explorer.js";
 import "./styles.css";
-const fixtures = import.meta.glob("../previews/*Preview.tsx");
-const kitNames: Record<string, string> = {
-  foundation: "Foundation",
-  application: "Application UI",
-  marketing: "Marketing UI",
-  docs: "Documentation",
-};
-function url(key: string, value: string) {
-  const next = new URLSearchParams(location.search);
-  next.set(key, value);
-  if (key === "state" && value === "default") next.delete("state");
-  if (key === "component") {
-    next.delete("state");
-    next.delete("recipe");
-  }
-  return `?${next}`;
-}
 function Playground({
   params,
   navigate,
@@ -46,29 +35,45 @@ function Playground({
   params: URLSearchParams;
   navigate: (href: string) => void | false;
 }) {
-  const component = params.get("component") || "Button";
-  const entry = catalog.components.find((c) => c.export === component);
-  const Preview = useMemo(() => {
-    const loader = entry ? fixtures[`../${entry.preview.source}`] : undefined;
-    return loader
-      ? lazy(loader as () => Promise<{ default: ComponentType }>)
-      : null;
-  }, [entry]);
+  const component = params.get("component");
+  const category = findCategory(params.get("category"));
+  const kitId = kits.some((k) => k.id === params.get("kit"))
+    ? params.get("kit")
+    : null;
+  const entry = component
+    ? catalog.components.find((c) => c.export === component)
+    : undefined;
   const [search, setSearch] = useState("");
+  const needle = search.toLowerCase();
   const matches = catalog.components.filter((c) =>
-    `${c.name} ${c.kitId}`.toLowerCase().includes(search.toLowerCase()),
+    `${c.name} ${c.kitId} ${locate(c.export)?.category.title ?? ""}`
+      .toLowerCase()
+      .includes(needle),
   );
-  const navigation = Object.entries(kitNames)
-    .map(([id, title]) => ({
-      title,
-      items: matches
-        .filter((c) => c.kitId === id)
-        .map((c) => ({
-          label: c.name,
-          href: url("component", c.export),
-          current: c.export === component,
-        })),
-    }))
+  const navigation = [
+    {
+      title: "Browse",
+      items: [
+        {
+          label: "All components",
+          href: homeHref(),
+          current: !component && !category && !kitId,
+        },
+      ],
+    },
+    ...kits.flatMap((kit) =>
+      kit.categories.map((cat) => ({
+        title: cat.title,
+        items: cat.components
+          .filter((name) => matches.some((c) => c.export === name))
+          .map((name) => ({
+            label: name,
+            href: url("component", name),
+            current: name === component,
+          })),
+      })),
+    ),
+  ]
     .filter((group) => group.items.length)
     .concat({
       title: "Page recipes",
@@ -80,10 +85,121 @@ function Playground({
         },
       ],
     });
+  const place = component ? locate(component) : undefined;
+  const index = place ? ordered.indexOf(place) : -1;
+  const pager = (offset: number) => {
+    const item = index >= 0 ? ordered[index + offset] : undefined;
+    return item
+      ? { label: item.name, href: url("component", item.name) }
+      : undefined;
+  };
+  let content;
+  if (component) {
+    content = (
+      <>
+        <PageHeading
+          title={entry?.name || "Component not found"}
+          description={
+            entry?.description || "Choose a component from the catalogue."
+          }
+          breadcrumbs={
+            place
+              ? [
+                  { label: "Components", href: homeHref() },
+                  { label: place.kit.title, href: url("kit", place.kit.id) },
+                  {
+                    label: place.category.title,
+                    href: categoryHref(place.kit, place.category),
+                  },
+                  { label: place.name },
+                ]
+              : undefined
+          }
+          actions={
+            entry && place ? <Badge>{place.kit.title}</Badge> : undefined
+          }
+        />
+        {entry ? (
+          <ExamplePanel
+            entry={entry}
+            view={params.get("view") === "code" ? "code" : "preview"}
+            onViewChange={(view) => navigate(url("view", view))}
+            toolbar={
+              <section
+                className="pg-example-toolbar"
+                aria-label="Preview settings"
+              >
+                <Select
+                  label="Brand"
+                  value={params.get("brand") || "neutral"}
+                  options={[
+                    { value: "neutral", label: "Neutral" },
+                    { value: "green", label: "Green" },
+                  ]}
+                  onChange={(e) => navigate(url("brand", e.target.value))}
+                />
+                <Select
+                  label="Density"
+                  value={params.get("density") || "comfortable"}
+                  options={[
+                    { value: "compact", label: "Compact" },
+                    { value: "comfortable", label: "Comfortable" },
+                    { value: "spacious", label: "Spacious" },
+                  ]}
+                  onChange={(e) => navigate(url("density", e.target.value))}
+                />
+                <Select
+                  label="Example state"
+                  value={params.get("state") || "default"}
+                  options={[
+                    { value: "default", label: "Default" },
+                    ...entry.testing.states.map((state) => ({
+                      value: state,
+                      label: state,
+                    })),
+                  ]}
+                  onChange={(e) => navigate(url("state", e.target.value))}
+                />
+              </section>
+            }
+          >
+            <PreviewRoot
+              name={entry.export}
+              stateKey={params.get("state") || "default"}
+            />
+          </ExamplePanel>
+        ) : (
+          <PreviewRoot name={component} />
+        )}
+        {entry && (
+          <details>
+            <summary>Usage and component contract</summary>
+            <div className="m-stack pt-4">
+              <CodeBlock
+                label="Import"
+                code={`import { ${entry.export} } from "@tony-ui/mortar";`}
+              />
+              <p>{entry.contract.usage}</p>
+              <CodeBlock
+                label="Props"
+                code={JSON.stringify(entry.contract.props, null, 2)}
+              />
+              <p>{entry.contract.accessibility}</p>
+            </div>
+          </details>
+        )}
+        {place && <PagerLinks previous={pager(-1)} next={pager(1)} />}
+      </>
+    );
+  } else if (category) {
+    content = <CategoryPage kit={category.kit} category={category.category} />;
+  } else {
+    content = <Overview kitId={kitId} />;
+  }
   return (
     <DocsShell
       brand="Mortar"
-      homeHref="?component=Button"
+      homeHref={homeHref()}
       version="Playground"
       layout="wide"
       navigationLabel="Component catalogue"
@@ -101,12 +217,12 @@ function Playground({
         />
       }
     >
-      <div className="m-stack">
+      <div className="m-stack pg-crumbs">
         <div className="max-w-md">
           <Input
             label="Find a component"
             type="search"
-            placeholder="Search components or kits…"
+            placeholder="Search components, kits or categories…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -135,89 +251,7 @@ function Playground({
               </KitLink>
             ))}
         </div>
-        <PageHeading
-          title={entry?.name || "Component not found"}
-          description={
-            entry?.description || "Choose a component from the catalogue."
-          }
-          actions={entry ? <Badge>{kitNames[entry.kitId]}</Badge> : undefined}
-        />
-        <section className="m-stack" aria-label="Preview settings">
-          <div className="flex flex-wrap gap-4 items-end">
-            <Select
-              label="Brand"
-              value={params.get("brand") || "neutral"}
-              options={[
-                { value: "neutral", label: "Neutral" },
-                { value: "green", label: "Green" },
-              ]}
-              onChange={(e) => navigate(url("brand", e.target.value))}
-            />
-            <Select
-              label="Density"
-              value={params.get("density") || "comfortable"}
-              options={[
-                { value: "compact", label: "Compact" },
-                { value: "comfortable", label: "Comfortable" },
-                { value: "spacious", label: "Spacious" },
-              ]}
-              onChange={(e) => navigate(url("density", e.target.value))}
-            />
-            {entry && (
-              <Select
-                label="Example state"
-                value={params.get("state") || "default"}
-                options={[
-                  { value: "default", label: "Default" },
-                  ...entry.testing.states.map((state) => ({
-                    value: state,
-                    label: state,
-                  })),
-                ]}
-                onChange={(e) => navigate(url("state", e.target.value))}
-              />
-            )}
-          </div>
-        </section>
-        <section
-          aria-label="Live preview"
-          className="rounded-lg border border-[var(--m-line)] p-6 min-w-0 min-h-36"
-        >
-          <Suspense
-            fallback={
-              <p role="status" aria-label="Loading preview">
-                Loading preview…
-              </p>
-            }
-          >
-            {Preview ? (
-              <div data-mortar-preview={component}>
-                <Preview key={params.get("state") || "default"} />
-              </div>
-            ) : (
-              <Notice title="Unknown component" tone="danger">
-                Choose a component from the catalogue.
-              </Notice>
-            )}
-          </Suspense>
-        </section>
-        {entry && (
-          <details>
-            <summary>Usage and component contract</summary>
-            <div className="m-stack pt-4">
-              <CodeBlock
-                label="Import"
-                code={`import { ${entry.export} } from "@tony-ui/mortar";`}
-              />
-              <p>{entry.contract.usage}</p>
-              <CodeBlock
-                label="Props"
-                code={JSON.stringify(entry.contract.props, null, 2)}
-              />
-              <p>{entry.contract.accessibility}</p>
-            </div>
-          </details>
-        )}
+        {content}
       </div>
     </DocsShell>
   );

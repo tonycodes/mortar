@@ -26,7 +26,9 @@ See [TESTING.md](TESTING.md) for profiles, state fixtures, integrity checks, exe
 
 ## Browsing the playground
 
-Browse the grouped kit navigation or search by component name. On narrow screens, Menu opens the same catalogue. Brand, density, appearance and declared example states are reflected in the URL, so a preview can be shared or revisited. Open “Usage and component contract” for imports and prop metadata. The explorer composes the shared DocsShell with its `wide` layout; shell fixes belong in the kit, not playground CSS.
+The playground opens on an overview of the four kits. Each kit is split into categories (for example Foundation › Form controls), shown as cards with a live, inert thumbnail and a component count. A category page lists every component in it as a framed example; a component page adds breadcrumbs, preview settings and previous/next links. Every example has a Preview/Code switch, and the Code view shows the JSX the preview renders. Categories live in `playground/taxonomy.json`; `tests/playground.test.mjs` fails if a component is missing from it or listed twice, so add new components there.
+
+Search by component, kit or category name. On narrow screens, Menu opens the same catalogue. Kit, category, component, brand, density, appearance, declared example states and the Code view are reflected in the URL, so a page can be shared or revisited. Open “Usage and component contract” for imports and prop metadata. The explorer composes the shared DocsShell with its `wide` layout; shell fixes belong in the kit, not playground CSS.
 
 ## Automatic playground deployment
 

@@ -1,0 +1,210 @@
+{
+  "kits": [
+    {
+      "id": "foundation",
+      "title": "Foundation",
+      "description": "Controls, elements and layout primitives every Mortar screen is built from.",
+      "categories": [
+        {
+          "id": "actions",
+          "title": "Actions and navigation",
+          "thumbnail": "ButtonGroup",
+          "components": [
+            "Button",
+            "ButtonGroup",
+            "ActionLink",
+            "Dropdown",
+            "Tabs"
+          ]
+        },
+        {
+          "id": "forms",
+          "title": "Form controls",
+          "thumbnail": "Input",
+          "components": [
+            "Input",
+            "TextArea",
+            "Select",
+            "Listbox",
+            "Combobox",
+            "Checkbox",
+            "RadioGroup",
+            "Switch",
+            "SegmentedControl",
+            "FilterChip"
+          ]
+        },
+        {
+          "id": "layout",
+          "title": "Layout",
+          "thumbnail": "Card",
+          "components": ["Card", "Divider", "Stack", "Container", "Text"]
+        },
+        {
+          "id": "elements",
+          "title": "Elements",
+          "thumbnail": "Badge",
+          "components": [
+            "Avatar",
+            "AvatarGroup",
+            "Badge",
+            "Kbd",
+            "ProgressBar",
+            "CheckList"
+          ]
+        },
+        {
+          "id": "feedback",
+          "title": "Feedback and overlays",
+          "thumbnail": "Notice",
+          "components": ["Notice", "EmptyState", "Toast", "Toaster", "Modal"]
+        },
+        {
+          "id": "theming",
+          "title": "Theming",
+          "thumbnail": null,
+          "components": ["ThemeProvider", "AppearanceControl"]
+        }
+      ]
+    },
+    {
+      "id": "application",
+      "title": "Application UI",
+      "description": "Shells, data display, lists and overlays for product screens.",
+      "categories": [
+        {
+          "id": "shells",
+          "title": "Shells and headings",
+          "thumbnail": "PageHeading",
+          "components": ["AppShell", "PageHeading"]
+        },
+        {
+          "id": "lists",
+          "title": "Lists and tables",
+          "thumbnail": "StackedList",
+          "components": [
+            "DataTable",
+            "Table",
+            "StackedList",
+            "ActivityFeed",
+            "Pagination"
+          ]
+        },
+        {
+          "id": "data",
+          "title": "Data display",
+          "thumbnail": "MetricGroup",
+          "components": [
+            "DescriptionList",
+            "MetricGroup",
+            "CodeBlock",
+            "PreviewFrame"
+          ]
+        },
+        {
+          "id": "forms",
+          "title": "Forms and settings",
+          "thumbnail": "SignInPanel",
+          "components": ["SettingsSection", "SaveBar", "SignInPanel"]
+        },
+        {
+          "id": "overlays",
+          "title": "Overlays",
+          "thumbnail": null,
+          "components": ["SlideOver", "ConfirmDialog", "CommandPalette"]
+        }
+      ]
+    },
+    {
+      "id": "marketing",
+      "title": "Marketing UI",
+      "description": "Page sections for landing, pricing and company pages.",
+      "categories": [
+        {
+          "id": "sections",
+          "title": "Page sections",
+          "thumbnail": "Hero",
+          "components": [
+            "Hero",
+            "FeatureGrid",
+            "FeatureSection",
+            "BentoGrid",
+            "ProcessSteps",
+            "CallToAction",
+            "Section"
+          ]
+        },
+        {
+          "id": "social-proof",
+          "title": "Social proof",
+          "thumbnail": "StatGroup",
+          "components": [
+            "Testimonial",
+            "TestimonialGrid",
+            "LogoCloud",
+            "StatGroup",
+            "TeamGrid"
+          ]
+        },
+        {
+          "id": "pricing",
+          "title": "Pricing",
+          "thumbnail": "Pricing",
+          "components": ["Pricing", "PlanComparison", "FAQ"]
+        },
+        {
+          "id": "chrome",
+          "title": "Headers, footers and forms",
+          "thumbnail": "Newsletter",
+          "components": [
+            "MarketingHeader",
+            "Footer",
+            "Newsletter",
+            "ContactSection",
+            "NotFound"
+          ]
+        },
+        {
+          "id": "showcase",
+          "title": "Content and showcase",
+          "thumbnail": "ChatPreview",
+          "components": ["PostList", "MockWindow", "ChatPreview"]
+        }
+      ]
+    },
+    {
+      "id": "docs",
+      "title": "Documentation",
+      "description": "A docs shell with search, navigation and rich content blocks.",
+      "categories": [
+        {
+          "id": "navigation",
+          "title": "Shell and navigation",
+          "thumbnail": "LinkCards",
+          "components": [
+            "DocsShell",
+            "SearchTrigger",
+            "SearchDialog",
+            "PagerLinks",
+            "LinkCards"
+          ]
+        },
+        {
+          "id": "content",
+          "title": "Content",
+          "thumbnail": "Callout",
+          "components": [
+            "Prose",
+            "Callout",
+            "Steps",
+            "CodeTabs",
+            "FileTree",
+            "ApiEndpoint",
+            "Release",
+            "PageFeedback"
+          ]
+        }
+      ]
+    }
+  ]
+}

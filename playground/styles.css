@@ -2,3 +2,179 @@
 @import "../styles.css";
 @source '../src';
 @source '../previews';
+
+/* Explorer chrome modelled on Tailwind Plus: kit overview, category cards and framed examples.
+   Semantic tokens only; the shared shell itself stays in the kit. */
+.pg-overview,
+.pg-category {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+.pg-kit {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 32px;
+  border-top: 1px solid var(--m-line);
+}
+.pg-kit-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 16px;
+  align-items: baseline;
+}
+.pg-kit-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.pg-kit-header h2 a,
+.pg-category-card h3 a,
+.pg-example-title h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+.pg-kit-header h2 a:hover,
+.pg-example-title h2 a:hover {
+  text-decoration: underline;
+}
+.pg-kit-header p {
+  grid-column: 1;
+  margin: 0;
+  color: var(--m-secondary);
+}
+.pg-kit-header span {
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--m-muted);
+  font-size: 13px;
+}
+.pg-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: 32px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.pg-category-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.pg-category-card h3 {
+  margin: 12px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+/* The heading link covers the whole card; the thumbnail is inert decoration. */
+.pg-category-card h3 a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--m-radius-lg);
+}
+.pg-category-card h3 a:focus-visible {
+  outline: none;
+}
+.pg-category-card:has(h3 a:focus-visible) .pg-thumb {
+  outline: 2px solid var(--m-focus);
+  outline-offset: 3px;
+}
+.pg-category-card:hover .pg-thumb {
+  border-color: var(--m-line-strong);
+}
+.pg-category-card p {
+  margin: 0;
+  color: var(--m-muted);
+  font-size: 13px;
+}
+.pg-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border: 1px solid var(--m-line);
+  border-radius: var(--m-radius-lg);
+  background: var(--m-sunken);
+}
+.pg-thumb-scale {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  width: 680px;
+  padding: 24px;
+  border-radius: var(--m-radius);
+  background: var(--m-paper);
+  box-shadow: var(--m-float);
+  /* Scale first, then centre: the translate is measured in unscaled pixels. */
+  transform: scale(0.42) translateX(-50%);
+  transform-origin: top left;
+  pointer-events: none;
+}
+.pg-thumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+}
+.pg-example {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.pg-example-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--m-line);
+  border-bottom: 0;
+  border-radius: var(--m-radius-lg) var(--m-radius-lg) 0 0;
+  background: var(--m-sunken);
+}
+.pg-example-title {
+  min-width: 0;
+}
+.pg-example-title h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+.pg-example-title p {
+  margin: 2px 0 0;
+  color: var(--m-muted);
+  font-size: 13px;
+}
+.pg-example-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--m-line);
+  border-bottom: 0;
+}
+.pg-canvas {
+  background: var(--m-paper);
+}
+.pg-example-code {
+  min-width: 0;
+}
+.pg-example-code .m-code-tabs {
+  margin: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+/* Breadcrumb lines are 19.5px by default; whole-pixel lines keep previews on the
+   sub-pixel offset the visual baselines were captured at. */
+.pg-crumbs nav[aria-label="Breadcrumb"] {
+  line-height: 20px;
+}
