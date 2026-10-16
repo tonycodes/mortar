@@ -225,6 +225,31 @@ export function Select({
     </div>
   );
 }
+/** Groups related fields under a legend; disabled disables every control inside. */
+export function Fieldset({
+  legend,
+  description,
+  disabled,
+  children,
+}: {
+  legend: string;
+  description?: string;
+  disabled?: boolean;
+  children: ReactNode;
+}) {
+  const id = useId();
+  return (
+    <fieldset
+      className="m-fieldset"
+      disabled={disabled}
+      aria-describedby={description ? id : undefined}
+    >
+      <legend>{legend}</legend>
+      {description && <p id={id}>{description}</p>}
+      <div className="m-fieldset-fields">{children}</div>
+    </fieldset>
+  );
+}
 export function TextArea({
   label,
   id,

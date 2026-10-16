@@ -27,6 +27,7 @@
             "Select",
             "Listbox",
             "Combobox",
+            "Fieldset",
             "Checkbox",
             "RadioGroup",
             "Switch",
@@ -79,16 +80,16 @@
           "components": ["AppShell", "PageHeading"]
         },
         {
+          "id": "navigation",
+          "title": "Navigation",
+          "thumbnail": "Navbar",
+          "components": ["Navbar", "Sidebar", "Breadcrumbs", "Pagination"]
+        },
+        {
           "id": "lists",
           "title": "Lists and tables",
           "thumbnail": "StackedList",
-          "components": [
-            "DataTable",
-            "Table",
-            "StackedList",
-            "ActivityFeed",
-            "Pagination"
-          ]
+          "components": ["DataTable", "Table", "StackedList", "ActivityFeed"]
         },
         {
           "id": "data",
@@ -105,7 +106,12 @@
           "id": "forms",
           "title": "Forms and settings",
           "thumbnail": "SignInPanel",
-          "components": ["SettingsSection", "SaveBar", "SignInPanel"]
+          "components": [
+            "SettingsSection",
+            "SaveBar",
+            "SignInPanel",
+            "ActionPanel"
+          ]
         },
         {
           "id": "overlays",
@@ -157,6 +163,7 @@
           "title": "Headers, footers and forms",
           "thumbnail": "Newsletter",
           "components": [
+            "Banner",
             "MarketingHeader",
             "Footer",
             "Newsletter",

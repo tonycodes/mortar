@@ -49,6 +49,8 @@ export const probes = Object.freeze({
   AppShell: "navigation",
   DocsShell: "navigation",
   MarketingHeader: "navigation",
+  Navbar: "navbar",
+  Banner: "banner",
 });
 export function contractErrors(component) {
   const t = component.testing;
