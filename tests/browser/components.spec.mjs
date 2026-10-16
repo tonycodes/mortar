@@ -86,10 +86,9 @@ for (const component of components) {
       } else if (state === "error") {
         await expect(scope.getByText("Check this value")).toBeVisible();
         if (component.export !== "DataTable")
-          await expect(scope.locator("input,textarea,select")).toHaveAttribute(
-            "aria-invalid",
-            "true",
-          );
+          await expect(
+            scope.locator("input,textarea,select,button[aria-invalid]"),
+          ).toHaveAttribute("aria-invalid", "true");
       } else if (state === "empty")
         await expect(scope.getByText("No records")).toBeVisible();
       else if (state === "loading")

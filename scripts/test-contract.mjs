@@ -18,6 +18,8 @@ export const probes = Object.freeze({
   Input: "input",
   TextArea: "textarea",
   Select: "select",
+  Listbox: "listbox",
+  Combobox: "combobox",
   Checkbox: "checkbox",
   Switch: "switch",
   RadioGroup: "radio",

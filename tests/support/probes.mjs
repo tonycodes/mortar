@@ -44,6 +44,51 @@ export const implementations = {
     await expect(select).toHaveValue("second");
     await expect(root.getByLabel("Unavailable environment")).toBeDisabled();
   },
+  async listbox({ page, root }) {
+    const button = root.getByRole("button", { name: /^Assigned to/ });
+    await expect(button).toHaveAccessibleName(/Wade Cooper/);
+    await expect(button).toHaveAccessibleDescription(/Only people/);
+    await button.focus();
+    // Like a native select: Space or ArrowDown opens; Enter submits the form.
+    await page.keyboard.press("Space");
+    const list = page.getByRole("listbox");
+    await expect(list).toBeVisible();
+    await expect(
+      list.getByRole("option", { name: "Devon Webb Support" }),
+    ).toHaveAttribute("aria-disabled", "true");
+    await page.keyboard.press("Escape");
+    await expect(list).toHaveCount(0);
+    await expect(button).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      list.getByRole("option", { name: /Wade Cooper/ }),
+    ).toHaveAttribute("aria-selected", "true");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected value")).toHaveText("arlene");
+    await expect(button).toBeFocused();
+    await button.click();
+    await page.getByRole("option", { name: /Tom Cook/ }).click();
+    await expect(root.getByLabel("Selected value")).toHaveText("tom");
+    await expect(button).toHaveAccessibleName(/Tom Cook/);
+  },
+  async combobox({ page, root }) {
+    const input = root.getByRole("combobox", { name: "Assigned to" });
+    await expect(input).toHaveValue("Wade Cooper");
+    await expect(input).toHaveAccessibleDescription(/Only people/);
+    await input.fill("lind");
+    await expect(page.getByRole("option")).toHaveCount(1);
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected value")).toHaveText("lindsay");
+    await expect(input).toHaveValue("Lindsay Walton");
+    await input.fill("zzz");
+    await expect(page.getByRole("listbox")).toHaveCount(0);
+    await expect(root.getByRole("status").first()).toHaveText("No matches");
+    await page.keyboard.press("Escape");
+    await input.blur();
+    await expect(input).toHaveValue("Lindsay Walton");
+  },
   async checkbox({ page, root }) {
     const input = root.getByRole("checkbox");
     await input.focus();

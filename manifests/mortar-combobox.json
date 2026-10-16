@@ -1,0 +1,55 @@
+{
+  "id": "mortar-combobox",
+  "logicalId": "combobox",
+  "name": "Combobox",
+  "description": "Mortar combobox: a searchable single select that filters options by label and announces when nothing matches.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Combobox",
+  "source": "src/choice.tsx",
+  "capabilities": ["theme", "foundation", "form", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "options": "ChoiceOption[] ({ value: string; label: string; description?: string; leading?: ReactNode; disabled?: boolean })",
+      "value": "string | null",
+      "onChange": "(value: string | null) => void",
+      "placeholder": "string",
+      "hint": "string",
+      "error": "string",
+      "disabled": "boolean",
+      "emptyLabel": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Combobox } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ComboboxPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-choice-control",
+    "probe": "combobox",
+    "states": ["disabled", "error", "long"]
+  },
+  "integrity": {
+    "source": "f942c878ed72763080f211d29e128390656368a598317a66f82c71692941bc7a",
+    "preview": "1aaec012ff4919356e11f3de47fc22d4f21039ab90d18d13d67fd7add67fe88f"
+  }
+}
