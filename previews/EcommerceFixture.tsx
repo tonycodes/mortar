@@ -67,6 +67,14 @@ export const products: UI.ProductCard[] = [
   },
 ];
 
+/** Category per product id, for templates that filter the list. */
+export const productCategory: Record<string, string> = {
+  tote: "bags",
+  "tote-black": "bags",
+  mug: "kitchen",
+  tee: "clothing",
+};
+
 export const toteImages: UI.ProductImage[] = [
   { src: tote("d9c9a8"), alt: "Natural canvas tote bag, front" },
   { src: tote("d9c9a8", "e4e1d8"), alt: "Natural canvas tote bag, in use" },
@@ -96,6 +104,94 @@ export const cartItems: UI.CartItem[] = [
   },
 ];
 
+export const facets: UI.FilterFacet[] = [
+  {
+    id: "colour",
+    label: "Colour",
+    options: [
+      { value: "black", label: "Black", count: 12 },
+      { value: "natural", label: "Natural", count: 9 },
+      { value: "sage", label: "Sage", count: 4 },
+      { value: "charcoal", label: "Charcoal", count: 6 },
+    ],
+  },
+  {
+    id: "category",
+    label: "Category",
+    options: [
+      { value: "bags", label: "Bags", count: 14 },
+      { value: "kitchen", label: "Kitchen", count: 8 },
+      { value: "clothing", label: "Clothing", count: 11 },
+    ],
+  },
+];
+
+export const reviews: UI.Review[] = [
+  {
+    id: "r1",
+    author: "Ana K.",
+    rating: 5,
+    date: "2 September 2026",
+    title: "Holds everything",
+    body: "Laptop, lunch and a jumper, and it still looks smart after a month of commuting.",
+  },
+  {
+    id: "r2",
+    author: "Tom C.",
+    rating: 4,
+    date: "18 August 2026",
+    title: "Great bag, short handles",
+    body: "Lovely canvas. The handles are a little short to wear over a winter coat.",
+  },
+];
+
+export const orders: UI.Order[] = [
+  {
+    id: "o1",
+    number: "WU88191111",
+    date: "6 October 2026",
+    total: "£82.95",
+    status: "Delivered on 9 October 2026",
+    href: "#order-1",
+    items: [
+      {
+        id: "tote",
+        name: "Canvas tote",
+        image: products[0].image,
+        quantity: 1,
+        price: "£32",
+        href: "#tote",
+      },
+      {
+        id: "mug",
+        name: "Stoneware mug",
+        image: products[1].image,
+        quantity: 2,
+        price: "£36",
+        href: "#mug",
+      },
+    ],
+  },
+  {
+    id: "o2",
+    number: "WU88191009",
+    date: "12 September 2026",
+    total: "£28.00",
+    status: "Delivered on 15 September 2026",
+    href: "#order-2",
+    items: [
+      {
+        id: "tee",
+        name: "Organic tee",
+        image: products[2].image,
+        quantity: 1,
+        price: "£28",
+        href: "#tee",
+      },
+    ],
+  },
+];
+
 export function EcommerceCase({ name }: { name: string }) {
   const [selected, setSelected] = useState<Record<string, string>>({
     colour: "natural",
@@ -103,6 +199,10 @@ export function EcommerceCase({ name }: { name: string }) {
   });
   const [added, setAdded] = useState(0);
   const [items, setItems] = useState(cartItems);
+  const [quick, setQuick] = useState(false);
+  const [filters, setFilters] = useState<Record<string, string[]>>({
+    colour: ["black"],
+  });
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
@@ -194,6 +294,79 @@ export function EcommerceCase({ name }: { name: string }) {
           />
         </div>
       );
+      break;
+    case "ProductQuickView":
+      example = (
+        <>
+          <UI.Button variant="secondary" onClick={() => setQuick(true)}>
+            Quick view
+          </UI.Button>
+          <UI.ProductQuickView
+            open={quick}
+            onClose={() => setQuick(false)}
+            href="#tote"
+            name="Canvas tote"
+            price="£32"
+            description="Heavy organic cotton canvas with leather handles."
+            images={toteImages}
+            rating={{ value: 4.5, count: 112 }}
+            options={[
+              {
+                id: "size",
+                label: "Size",
+                values: [
+                  { value: "small", label: "Small" },
+                  { value: "large", label: "Large" },
+                ],
+              },
+            ]}
+            selected={{ size: selected.size }}
+            onSelect={(option, value) =>
+              setSelected((current) => ({ ...current, [option]: value }))
+            }
+            onAdd={() => setQuick(false)}
+          />
+        </>
+      );
+      break;
+    case "ProductFilters":
+      example = (
+        <div className="max-w-xs">
+          <UI.ProductFilters
+            facets={facets}
+            selected={filters}
+            onChange={(facet, values) =>
+              setFilters((current) => ({ ...current, [facet]: values }))
+            }
+          />
+          <output aria-label="Applied filters">
+            {Object.entries(filters)
+              .filter(([, values]) => values.length)
+              .map(([facet, values]) => `${facet}: ${values.join(", ")}`)
+              .join("; ") || "none"}
+          </output>
+        </div>
+      );
+      break;
+    case "ProductReviews":
+      example = (
+        <UI.ProductReviews
+          average={4.4}
+          count={112}
+          distribution={[
+            { stars: 5, count: 70 },
+            { stars: 4, count: 30 },
+            { stars: 3, count: 8 },
+            { stars: 2, count: 3 },
+            { stars: 1, count: 1 },
+          ]}
+          reviews={reviews}
+          action={<UI.Button variant="secondary">Write a review</UI.Button>}
+        />
+      );
+      break;
+    case "OrderHistory":
+      example = <UI.OrderHistory orders={orders} />;
       break;
     default:
       example = (

@@ -359,6 +359,28 @@ export const implementations = {
     await root.getByRole("button", { name: "Add to bag" }).click();
     await expect(bag).toHaveText("1 added · black · small");
   },
+  async filters({ page, root }) {
+    const applied = root.getByLabel("Applied filters");
+    await expect(applied).toHaveText("colour: black");
+    const colour = root.getByRole("group", { name: "Colour" });
+    const sage = colour.getByRole("checkbox", { name: /Sage/ });
+    await sage.focus();
+    await page.keyboard.press("Space");
+    await expect(applied).toHaveText("colour: black, sage");
+    const chips = root.getByRole("group", { name: "Active filters" });
+    await chips.getByRole("button", { name: "Remove Black" }).click();
+    await expect(applied).toHaveText("colour: sage");
+    await expect(
+      colour.getByRole("checkbox", { name: /Black/ }),
+    ).not.toBeChecked();
+    await root.getByRole("checkbox", { name: /Kitchen/ }).check();
+    await root.getByRole("button", { name: "Clear all" }).click();
+    await expect(applied).toHaveText("none");
+    await expect(chips).toHaveCount(0);
+    // Facets are native disclosures.
+    await root.locator("summary", { hasText: "Category" }).click();
+    await expect(root.getByRole("checkbox", { name: /Kitchen/ })).toBeHidden();
+  },
   async cart({ root }) {
     const count = root.getByLabel("Bag count");
     await expect(count).toHaveText("3");

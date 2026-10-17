@@ -1,0 +1,50 @@
+{
+  "id": "mortar-product-filters",
+  "logicalId": "product-filters",
+  "name": "ProductFilters",
+  "description": "Mortar product filters: collapsible checkbox facets with counts and removable chips for active filters, with Clear all.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ProductFilters",
+  "source": "src/ecommerce.tsx",
+  "capabilities": ["theme", "ecommerce", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "ecommerce",
+  "provenance": {
+    "kitId": "ecommerce",
+    "exampleId": "mortar-ecommerce-reference"
+  },
+  "contract": {
+    "props": {
+      "facets": "FilterFacet[] ({ id: string; label: string; options: { value: string; label: string; count?: number }[] })",
+      "selected": "Record<string, string[]>",
+      "onChange": "(facet: string, values: string[]) => void",
+      "label": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ProductFilters } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ProductFiltersPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-filters",
+    "probe": "filters",
+    "states": []
+  },
+  "integrity": {
+    "source": "71ef9050cd6f3f90dde0ecd2549f3179ed550f5e6f1d36951f7629be245ee73e",
+    "preview": "f4654b37d89a64e0b4f0caf2e56532f636839ad933eb582959b0ba7ebbf947c8"
+  }
+}

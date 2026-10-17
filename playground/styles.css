@@ -202,3 +202,20 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* Category template: filters beside the product grid, above it on narrow screens. */
+.pg-shop-layout {
+  display: grid;
+  grid-template-columns: minmax(200px, 240px) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+.pg-checkout-form {
+  display: grid;
+  gap: 32px;
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .pg-shop-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

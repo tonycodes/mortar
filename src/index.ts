@@ -143,10 +143,17 @@ export {
   ProductOverview,
   ShoppingCart,
   OrderSummary,
+  ProductQuickView,
+  ProductFilters,
+  ProductReviews,
+  OrderHistory,
 } from "./ecommerce.js";
 export type {
   ProductImage,
   ProductCard,
   ProductOption,
   CartItem,
+  FilterFacet,
+  Review,
+  Order,
 } from "./ecommerce.js";

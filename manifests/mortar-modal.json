@@ -22,7 +22,8 @@
       "open": "boolean",
       "onClose": "() => void",
       "children": "ReactNode",
-      "actions": "ReactNode"
+      "actions": "ReactNode",
+      "size": "\"md\" | \"lg\""
     },
     "states": [
       "Light",
@@ -46,7 +47,7 @@
     "probe": "dialog"
   },
   "integrity": {
-    "source": "bd168f0687c6972a83fc96ba69fc389778b54396377f06583c8a4902be6fe813",
-    "preview": "fe49ceed570233e89f44010ecc63b0701f311fe96dd26516a641c1959c405b70"
+    "source": "96f4f09faef21f92022354b0dd7fdd367aded8fe53152ea121a2e2bf600f8b3e",
+    "preview": "131eb880fbe4c22e83d48a47e0ec155980a856b51a0d2d93333434107036e3c2"
   }
 }

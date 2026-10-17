@@ -317,7 +317,7 @@ export function TextArea({
 export function Checkbox({
   label,
   ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & { label: string }) {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & { label: ReactNode }) {
   return (
     <label className="m-choice">
       <input {...props} type="checkbox" />
@@ -440,18 +440,21 @@ export function Modal({
   title,
   children,
   actions,
+  size = "md",
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
   actions?: ReactNode;
+  /** "lg" widens the panel for rich content such as a product quick view. */
+  size?: "md" | "lg";
 }) {
   return (
     <HeadlessDialog open={open} onClose={onClose} className="m-dialog">
       <div className="m-backdrop" aria-hidden="true" />
       <div className="m-dialog-position">
-        <DialogPanel className="m-dialog-panel">
+        <DialogPanel className="m-dialog-panel" data-size={size}>
           <div className="m-dialog-heading">
             <DialogTitle>{title}</DialogTitle>
             <Button variant="ghost" onClick={onClose} aria-label="Close dialog">

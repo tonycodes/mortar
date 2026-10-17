@@ -125,6 +125,9 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
       );
       break;
     }
+    case "OrderHistory":
+      content = <UI.OrderHistory orders={[]} emptyTitle="No records" />;
+      break;
     case "ShoppingCart":
       content = (
         <UI.ShoppingCart

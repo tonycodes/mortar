@@ -29,7 +29,8 @@
       "addLabel": "string",
       "adding": "boolean",
       "details": "string[]",
-      "headingLevel": "1 | 2"
+      "headingLevel": "1 | 2",
+      "hideName": "boolean"
     },
     "states": [
       "Light",
@@ -53,7 +54,7 @@
     "states": []
   },
   "integrity": {
-    "source": "f1efed6508241d6a7829d5ac32446e598ea7f4ba620e687ae46a834759fc5ed4",
-    "preview": "1d6cb5f7f70d053f1c98cedc6fcabca576b7acddf62a749883987042bc718fbc"
+    "source": "71ef9050cd6f3f90dde0ecd2549f3179ed550f5e6f1d36951f7629be245ee73e",
+    "preview": "d18c63bfac0bc86eb7e30deba6d8300b30e16cfdc9ebff10751b3db220c1c1b2"
   }
 }

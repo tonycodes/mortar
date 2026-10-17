@@ -4,7 +4,11 @@ import { icons } from "../previews/CompositionFixture.js";
 import { ProjectWorkspaceRecipe, SaasLandingRecipe } from "./recipes.js";
 import {
   cartItems,
+  facets,
+  orders,
+  productCategory,
   products,
+  reviews,
   toteImages,
 } from "../previews/EcommerceFixture.js";
 
@@ -465,6 +469,18 @@ export function ProductPageTemplate() {
             products={products.slice(1)}
             columns={3}
           />
+          <UI.ProductReviews
+            average={4.4}
+            count={112}
+            distribution={[
+              { stars: 5, count: 70 },
+              { stars: 4, count: 30 },
+              { stars: 3, count: 8 },
+              { stars: 2, count: 3 },
+              { stars: 1, count: 1 },
+            ]}
+            reviews={reviews}
+          />
         </UI.Stack>
       </UI.Container>
       <StoreFooter />
@@ -510,6 +526,205 @@ export function CartPageTemplate() {
               action={<UI.Button>Checkout</UI.Button>}
             />
           </div>
+        </UI.Stack>
+      </UI.Container>
+      <StoreFooter />
+    </>
+  );
+}
+
+/** Category page: category previews, filters beside the grid, and incentives. */
+export function CategoryPageTemplate() {
+  const [selected, setSelected] = useState<Record<string, string[]>>({});
+  const colours = selected.colour || [];
+  const categories = selected.category || [];
+  const shown = products.filter(
+    (product) =>
+      (!colours.length ||
+        colours.includes(product.meta?.toLowerCase() ?? "")) &&
+      (!categories.length || categories.includes(productCategory[product.id])),
+  );
+  return (
+    <>
+      <StoreHeader />
+      <UI.Container as="main" size="lg">
+        <UI.Stack gap="xl">
+          <UI.PageHeading
+            title="Shop all"
+            description="Everyday goods in natural materials."
+          />
+          <UI.GridList
+            label="Shop by category"
+            columns={3}
+            items={[
+              {
+                id: "bags",
+                title: "Bags",
+                description: "Totes and travel",
+                href: "#bags",
+                cover: { src: products[0].image.src, alt: "" },
+              },
+              {
+                id: "kitchen",
+                title: "Kitchen",
+                description: "Stoneware and linen",
+                href: "#kitchen",
+                cover: { src: products[1].image.src, alt: "" },
+              },
+              {
+                id: "clothing",
+                title: "Clothing",
+                description: "Organic basics",
+                href: "#clothing",
+                cover: { src: products[2].image.src, alt: "" },
+              },
+            ]}
+          />
+          <div className="pg-shop-layout">
+            <UI.ProductFilters
+              facets={facets}
+              selected={selected}
+              onChange={(facet, values) =>
+                setSelected((current) => ({ ...current, [facet]: values }))
+              }
+            />
+            {shown.length ? (
+              <UI.ProductList label="Products" products={shown} columns={3} />
+            ) : (
+              <UI.EmptyState
+                title="No matching products"
+                description="Try removing a filter."
+              />
+            )}
+          </div>
+        </UI.Stack>
+      </UI.Container>
+      <UI.FeatureGrid
+        title="Why shop with us"
+        columns={3}
+        tone="muted"
+        items={[
+          {
+            title: "Free delivery",
+            description: "On orders over £50 in the UK.",
+            icon: icons.inbox,
+          },
+          {
+            title: "30-day returns",
+            description: "Changed your mind? Send it back free.",
+            icon: icons.calendar,
+          },
+          {
+            title: "Made to last",
+            description: "Repairs are free for the first year.",
+            icon: icons.clock,
+          },
+        ]}
+      />
+      <StoreFooter />
+    </>
+  );
+}
+
+/** Checkout page: contact, shipping, delivery and payment beside the order summary. */
+export function CheckoutPageTemplate() {
+  const [delivery, setDelivery] = useState("standard");
+  return (
+    <>
+      <StoreHeader />
+      <UI.Container as="main" size="lg">
+        <UI.Stack gap="xl">
+          <UI.PageHeading title="Checkout" />
+          <div className="pg-cart-layout">
+            <form
+              className="pg-checkout-form"
+              onSubmit={(event) => event.preventDefault()}
+            >
+              <UI.Fieldset legend="Contact">
+                <UI.Input
+                  label="Email address"
+                  type="email"
+                  autoComplete="email"
+                />
+              </UI.Fieldset>
+              <UI.Fieldset legend="Shipping address">
+                <UI.Input label="Full name" autoComplete="name" />
+                <UI.Input label="Address" autoComplete="street-address" />
+                <UI.Input label="Postcode" autoComplete="postal-code" />
+              </UI.Fieldset>
+              <UI.RadioGroup
+                label="Delivery method"
+                name="delivery"
+                value={delivery}
+                onChange={setDelivery}
+                options={[
+                  {
+                    value: "standard",
+                    label: "Standard — £4.95",
+                    description: "3–5 working days",
+                  },
+                  {
+                    value: "express",
+                    label: "Express — £9.95",
+                    description: "Next working day",
+                  },
+                ]}
+              />
+              <UI.Fieldset
+                legend="Payment"
+                description="Payments are encrypted."
+              >
+                <UI.Input
+                  label="Card number"
+                  autoComplete="cc-number"
+                  inputMode="numeric"
+                />
+                <UI.Input label="Expiry (MM/YY)" autoComplete="cc-exp" />
+              </UI.Fieldset>
+            </form>
+            <UI.OrderSummary
+              lines={[
+                { label: "Subtotal", value: "£68.00" },
+                {
+                  label: "Shipping",
+                  value: delivery === "express" ? "£9.95" : "£4.95",
+                },
+              ]}
+              total={{
+                label: "Order total",
+                value: delivery === "express" ? "£77.95" : "£72.95",
+              }}
+              action={<UI.Button>Pay now</UI.Button>}
+            >
+              <UI.StackedList
+                label="Items"
+                items={cartItems.map((item) => ({
+                  id: item.id,
+                  title: item.name,
+                  description: `${item.meta} · Qty ${item.quantity}`,
+                }))}
+              />
+            </UI.OrderSummary>
+          </div>
+        </UI.Stack>
+      </UI.Container>
+      <StoreFooter />
+    </>
+  );
+}
+
+/** Order history page. */
+export function OrderHistoryPageTemplate() {
+  return (
+    <>
+      <StoreHeader />
+      <UI.Container as="main" size="lg">
+        <UI.Stack gap="xl">
+          <UI.PageHeading
+            title="Order history"
+            description="Check the status of recent orders and buy again."
+          />
+          <UI.OrderHistory orders={orders} />
         </UI.Stack>
       </UI.Container>
       <StoreFooter />
@@ -575,5 +790,26 @@ export const templates: PageTemplate[] = [
     description: "Editable bag lines beside the order summary.",
     kind: "Ecommerce",
     Component: CartPageTemplate,
+  },
+  {
+    id: "category-page",
+    title: "Category page",
+    description: "Category previews, filters, products and incentives.",
+    kind: "Ecommerce",
+    Component: CategoryPageTemplate,
+  },
+  {
+    id: "checkout-page",
+    title: "Checkout",
+    description: "Contact, shipping, delivery and payment with a live total.",
+    kind: "Ecommerce",
+    Component: CheckoutPageTemplate,
+  },
+  {
+    id: "order-history",
+    title: "Order history",
+    description: "Past orders with status and items.",
+    kind: "Ecommerce",
+    Component: OrderHistoryPageTemplate,
   },
 ];

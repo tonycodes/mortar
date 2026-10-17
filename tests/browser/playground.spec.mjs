@@ -322,6 +322,9 @@ const templateIds = [
   "settings",
   "product-page",
   "cart-page",
+  "category-page",
+  "checkout-page",
+  "order-history",
 ];
 for (const id of templateIds)
   for (const width of [390, 1280])
@@ -366,4 +369,16 @@ test("settings template shows and clears unsaved changes", async ({ page }) => {
   await page.getByRole("button", { name: "Discard" }).click();
   await expect(name).toHaveValue("Northwind");
   await expect(bar).toBeHidden();
+});
+
+test("category template filters products", async ({ page }) => {
+  await page.goto("/?recipe=category-page");
+  const list = page.getByRole("list", { name: "Products" });
+  await expect(list.getByRole("listitem")).toHaveCount(4);
+  await page.getByRole("checkbox", { name: /Black/ }).check();
+  await expect(list.getByRole("listitem")).toHaveCount(1);
+  await page.getByRole("checkbox", { name: /Kitchen/ }).check();
+  await expect(page.getByText("No matching products")).toBeVisible();
+  await page.getByRole("button", { name: "Clear all" }).click();
+  await expect(list.getByRole("listitem")).toHaveCount(4);
 });
