@@ -1,0 +1,51 @@
+{
+  "id": "mortar-product-reviews",
+  "logicalId": "product-reviews",
+  "name": "ProductReviews",
+  "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ProductReviews",
+  "source": "src/ecommerce.tsx",
+  "capabilities": ["theme", "ecommerce", "responsive"],
+  "owner": "Mortar maintainers",
+  "kitId": "ecommerce",
+  "provenance": {
+    "kitId": "ecommerce",
+    "exampleId": "mortar-ecommerce-reference"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "average": "number",
+      "count": "number",
+      "distribution": "{ stars: number; count: number }[]",
+      "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode })",
+      "action": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ProductReviewsPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-reviews",
+    "states": []
+  },
+  "integrity": {
+    "source": "71ef9050cd6f3f90dde0ecd2549f3179ed550f5e6f1d36951f7629be245ee73e",
+    "preview": "581c04bd412068bd48ddc1c35777983bef2fc67660ad0e1d6fe370a0f7b997d5"
+  }
+}

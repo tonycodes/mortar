@@ -60,6 +60,7 @@ export const openers = {
   CommandPalette: "Open command menu",
   SearchDialog: "Search docs",
   SearchTrigger: "Search docs",
+  ProductQuickView: "Quick view",
 };
 export async function openOverlay(page, component, root) {
   const opener = root.getByRole("button", {

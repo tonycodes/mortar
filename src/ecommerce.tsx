@@ -1,6 +1,13 @@
 import { useId, useState, type ReactNode } from "react";
 import { KitLink } from "./navigation.js";
-import { Button, EmptyState } from "./primitives.js";
+import {
+  ActionLink,
+  Button,
+  Checkbox,
+  EmptyState,
+  Modal,
+} from "./primitives.js";
+import { FilterChip } from "./display.js";
 
 export interface ProductImage {
   src: string;
@@ -96,6 +103,7 @@ export function ProductOverview({
   adding = false,
   details = [],
   headingLevel = 1,
+  hideName = false,
 }: {
   name: string;
   price: string;
@@ -111,6 +119,8 @@ export function ProductOverview({
   adding?: boolean;
   details?: string[];
   headingLevel?: 1 | 2;
+  /** Omit the name heading when a container (e.g. a dialog title) already shows it. */
+  hideName?: boolean;
 }) {
   const [current, setCurrent] = useState(0);
   const group = useId();
@@ -145,23 +155,14 @@ export function ProductOverview({
         )}
       </div>
       <div className="m-product-details">
-        <Heading>{name}</Heading>
+        {!hideName && <Heading>{name}</Heading>}
         <p className="m-product-price">{price}</p>
         {rating && (
           <div className="m-rating">
-            <div
-              role="img"
-              aria-label={`Rated ${rating.value} out of 5 from ${rating.count} reviews`}
-            >
-              {[1, 2, 3, 4, 5].map((n) => (
-                <span
-                  key={n}
-                  data-filled={rating.value >= n - 0.25 || undefined}
-                >
-                  {star}
-                </span>
-              ))}
-            </div>
+            <Stars
+              value={rating.value}
+              label={`Rated ${rating.value} out of 5 from ${rating.count} reviews`}
+            />
             {rating.href ? (
               <KitLink href={rating.href}>{rating.count} reviews</KitLink>
             ) : (
@@ -381,5 +382,306 @@ export function OrderSummary({
       {children}
       {action && <div className="m-order-action">{action}</div>}
     </section>
+  );
+}
+
+type OverviewProps = Parameters<typeof ProductOverview>[0];
+
+/** Product overview in a dialog, with a link to the full product page. */
+export function ProductQuickView({
+  open,
+  onClose,
+  href,
+  detailsLabel = "View full details",
+  ...product
+}: Omit<OverviewProps, "headingLevel" | "hideName"> & {
+  open: boolean;
+  onClose: () => void;
+  /** Full product page. */
+  href: string;
+  detailsLabel?: string;
+}) {
+  return (
+    <Modal open={open} onClose={onClose} title={product.name} size="lg">
+      <div className="m-quick-view">
+        <ProductOverview {...product} hideName />
+        <ActionLink label={detailsLabel} href={href} variant="ghost" />
+      </div>
+    </Modal>
+  );
+}
+
+export interface FilterFacet {
+  id: string;
+  label: string;
+  options: { value: string; label: string; count?: number }[];
+}
+
+/** Collapsible checkbox facets with counts, plus removable chips for active filters. */
+export function ProductFilters({
+  facets,
+  selected,
+  onChange,
+  label = "Filters",
+}: {
+  facets: FilterFacet[];
+  /** Selected values per facet id. */
+  selected: Record<string, string[]>;
+  onChange: (facet: string, values: string[]) => void;
+  label?: string;
+}) {
+  const active = facets.flatMap((facet) =>
+    (selected[facet.id] || []).map((value) => ({
+      facet,
+      value,
+      label:
+        facet.options.find((option) => option.value === value)?.label ?? value,
+    })),
+  );
+  const toggle = (facet: string, value: string, on: boolean) => {
+    const current = selected[facet] || [];
+    onChange(
+      facet,
+      on ? [...current, value] : current.filter((v) => v !== value),
+    );
+  };
+  return (
+    <section className="m-filters" aria-label={label}>
+      {active.length > 0 && (
+        <div
+          className="m-filter-chips"
+          role="group"
+          aria-label="Active filters"
+        >
+          {active.map((item) => (
+            <FilterChip
+              key={`${item.facet.id}:${item.value}`}
+              label={item.label}
+              onRemove={() => toggle(item.facet.id, item.value, false)}
+            />
+          ))}
+          <button
+            type="button"
+            className="m-filter-clear"
+            onClick={() => facets.forEach((facet) => onChange(facet.id, []))}
+          >
+            Clear all
+          </button>
+        </div>
+      )}
+      {facets.map((facet) => {
+        const count = (selected[facet.id] || []).length;
+        return (
+          <details key={facet.id} open>
+            <summary>
+              {facet.label}
+              {count > 0 && <span className="m-filter-active">{count}</span>}
+            </summary>
+            <fieldset>
+              <legend className="m-sr-only">{facet.label}</legend>
+              {facet.options.map((option) => (
+                <Checkbox
+                  key={option.value}
+                  checked={(selected[facet.id] || []).includes(option.value)}
+                  onChange={(event) =>
+                    toggle(facet.id, option.value, event.target.checked)
+                  }
+                  label={
+                    <>
+                      {option.label}
+                      {option.count !== undefined && (
+                        <span className="m-filter-count">({option.count})</span>
+                      )}
+                    </>
+                  }
+                />
+              ))}
+            </fieldset>
+          </details>
+        );
+      })}
+    </section>
+  );
+}
+
+function Stars({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="m-stars" role="img" aria-label={label}>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span key={n} data-filled={value >= n - 0.25 || undefined}>
+          {star}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+export interface Review {
+  id: string;
+  author: string;
+  rating: number;
+  date: string;
+  title: string;
+  body: ReactNode;
+}
+
+/** Rating summary with a star distribution, followed by individual reviews. */
+export function ProductReviews({
+  title = "Customer reviews",
+  average,
+  count,
+  distribution,
+  reviews,
+  action,
+}: {
+  title?: string;
+  average: number;
+  count: number;
+  distribution: { stars: number; count: number }[];
+  reviews: Review[];
+  /** E.g. a "Write a review" button. */
+  action?: ReactNode;
+}) {
+  const id = useId();
+  return (
+    <section className="m-reviews" aria-labelledby={id}>
+      <div className="m-reviews-summary">
+        <h2 id={id}>{title}</h2>
+        <div className="m-rating">
+          <Stars
+            value={average}
+            label={`Rated ${average} out of 5 from ${count} reviews`}
+          />
+          <span aria-hidden="true">Based on {count} reviews</span>
+        </div>
+        <dl className="m-reviews-distribution">
+          {distribution.map((row) => (
+            <div key={row.stars}>
+              <dt>
+                {row.stars} {row.stars === 1 ? "star" : "stars"}
+              </dt>
+              <dd>
+                <meter
+                  min={0}
+                  max={count}
+                  value={row.count}
+                  aria-label={`${row.stars} ${row.stars === 1 ? "star" : "stars"}: ${row.count} ${row.count === 1 ? "review" : "reviews"}`}
+                />
+                <span>{row.count}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+        {action}
+      </div>
+      <div className="m-review-list">
+        {reviews.map((review) => (
+          <article
+            key={review.id}
+            className="m-review"
+            aria-labelledby={`${id}-${review.id}`}
+          >
+            <header>
+              <Stars
+                value={review.rating}
+                label={`Rated ${review.rating} out of 5`}
+              />
+              <h3 id={`${id}-${review.id}`}>{review.title}</h3>
+              <p className="m-review-meta">
+                {review.author} · {review.date}
+              </p>
+            </header>
+            <div className="m-review-body">{review.body}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export interface Order {
+  id: string;
+  number: string;
+  date: string;
+  total: string;
+  status: string;
+  href: string;
+  items: {
+    id: string;
+    name: string;
+    image: ProductImage;
+    quantity: number;
+    price: string;
+    href?: string;
+  }[];
+}
+
+/** Past orders, each with its summary, status and line items. */
+export function OrderHistory({
+  orders,
+  headingLevel = 2,
+  emptyTitle = "No orders yet",
+  emptyDescription = "Orders you place will appear here.",
+}: {
+  orders: Order[];
+  headingLevel?: 2 | 3;
+  emptyTitle?: string;
+  emptyDescription?: string;
+}) {
+  const base = useId();
+  if (!orders.length)
+    return <EmptyState title={emptyTitle} description={emptyDescription} />;
+  const Heading = headingLevel === 2 ? "h2" : "h3";
+  return (
+    <div className="m-order-history">
+      {orders.map((order) => {
+        const id = `${base}-${order.id}`;
+        return (
+          <section key={order.id} className="m-order" aria-labelledby={id}>
+            <header className="m-order-header">
+              <Heading id={id}>Order {order.number}</Heading>
+              <dl>
+                <div>
+                  <dt>Date placed</dt>
+                  <dd>{order.date}</dd>
+                </div>
+                <div>
+                  <dt>Total</dt>
+                  <dd>{order.total}</dd>
+                </div>
+              </dl>
+              <KitLink href={order.href}>
+                View order<span className="m-sr-only"> {order.number}</span>
+              </KitLink>
+            </header>
+            <p className="m-order-status">{order.status}</p>
+            <ul className="m-order-items">
+              {order.items.map((item) => (
+                <li key={item.id}>
+                  <div className="m-product-image">
+                    <img
+                      src={item.image.src}
+                      alt={item.image.alt}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div>
+                    <p className="m-order-item-name">
+                      {item.href ? (
+                        <KitLink href={item.href}>{item.name}</KitLink>
+                      ) : (
+                        item.name
+                      )}
+                    </p>
+                    <p className="m-product-meta">Qty {item.quantity}</p>
+                  </div>
+                  <p className="m-product-price">{item.price}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
+    </div>
   );
 }
