@@ -23,7 +23,8 @@
       "value": "string",
       "onChange": "ChangeEventHandler<HTMLSelectElement>",
       "hint": "string",
-      "error": "string"
+      "error": "string",
+      "id": "string (defaults to a generated id)"
     },
     "states": [
       "Light",
@@ -47,7 +48,7 @@
     "probe": "select"
   },
   "integrity": {
-    "source": "834b0ab57e5d62c5e14bcb71da0ef7e71de9ef445aec4a3f43db042cf63d6cd8",
-    "preview": "de092c8e16c8fb1be1a2ad1f435a125ffa81cb4116b5e2a52bc47d9acc0439cb"
+    "source": "d6d644f0f0c85faed8b7bcd9ea0380cacb379db0428e59ac84a2fffc80373b96",
+    "preview": "5e480a4a69ea5a1b1cb6530a8b59fdf2afacd8b6cec1316ddb27a29b661655b7"
   }
 }

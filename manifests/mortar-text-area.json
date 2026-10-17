@@ -22,7 +22,8 @@
       "value": "string",
       "onChange": "ChangeEventHandler<HTMLTextAreaElement>",
       "hint": "string",
-      "error": "string"
+      "error": "string",
+      "id": "string (defaults to a generated id)"
     },
     "states": [
       "Light",
@@ -46,7 +47,7 @@
     "probe": "textarea"
   },
   "integrity": {
-    "source": "834b0ab57e5d62c5e14bcb71da0ef7e71de9ef445aec4a3f43db042cf63d6cd8",
-    "preview": "07a271b35fc18a320a5ba8ed9475198dec01636685cbd3e9a9c5f77977cb811c"
+    "source": "d6d644f0f0c85faed8b7bcd9ea0380cacb379db0428e59ac84a2fffc80373b96",
+    "preview": "ca0b67c4f25a894ab6acb087f608516f2dca5bf9c99bd32b31e22a27802f0c0b"
   }
 }

@@ -216,6 +216,10 @@
     background: var(--m-danger);
     color: var(--m-on-feedback);
   }
+  .m-toast[data-tone="info"] .m-toast-icon {
+    background: var(--m-info);
+    color: var(--m-on-feedback);
+  }
   .m-confirm {
     padding: 0;
     max-width: 420px;
@@ -1571,6 +1575,7 @@
     --m-selected: var(--m-inv-selected);
     --m-success: var(--m-inv-success);
     --m-warning: var(--m-inv-warning);
+    --m-info: var(--m-inv-info);
     --m-danger: var(--m-inv-danger);
     --m-on-feedback: var(--m-inv-on-feedback);
     --m-paper: var(--m-inv-paper);

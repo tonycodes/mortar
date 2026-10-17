@@ -225,6 +225,9 @@
   .m-tone-warning {
     color: var(--m-warning);
   }
+  .m-tone-info {
+    color: var(--m-info);
+  }
   .m-choice {
     display: flex;
     align-items: center;

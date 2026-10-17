@@ -20,6 +20,7 @@ export interface ToastItem {
 
 const glyph: Record<Tone, string> = {
   neutral: "i",
+  info: "i",
   success: "✓",
   warning: "!",
   danger: "!",

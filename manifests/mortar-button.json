@@ -27,7 +27,8 @@
       "size": "sm | md | lg",
       "icon": "ReactNode",
       "iconPosition": "start | end",
-      "iconOnly": "boolean"
+      "iconOnly": "boolean",
+      "className": "string"
     },
     "states": [
       "Light",
@@ -51,7 +52,7 @@
     "probe": "button"
   },
   "integrity": {
-    "source": "834b0ab57e5d62c5e14bcb71da0ef7e71de9ef445aec4a3f43db042cf63d6cd8",
-    "preview": "c89809d8d27081e3b487fac7f92d83feaeb2f36204808a290a6c4e45c4ebbb3e"
+    "source": "d6d644f0f0c85faed8b7bcd9ea0380cacb379db0428e59ac84a2fffc80373b96",
+    "preview": "72d442eb4c369b7af61ffee82a75691d4b557f2be4eea9b4fc54ee452153953f"
   }
 }

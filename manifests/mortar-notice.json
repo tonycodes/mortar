@@ -20,7 +20,7 @@
     "props": {
       "title": "string",
       "children": "ReactNode",
-      "tone": "neutral | success | warning | danger",
+      "tone": "neutral | info | success | warning | danger",
       "announce": "boolean",
       "actions": "ReactNode",
       "onDismiss": "() => void",
@@ -48,7 +48,7 @@
     "probe": "notice"
   },
   "integrity": {
-    "source": "834b0ab57e5d62c5e14bcb71da0ef7e71de9ef445aec4a3f43db042cf63d6cd8",
-    "preview": "43b0b12c98128aa1d5633e1104d0ac52ea3df5d12a9bfdc5ae0690fd46999951"
+    "source": "d6d644f0f0c85faed8b7bcd9ea0380cacb379db0428e59ac84a2fffc80373b96",
+    "preview": "995dbf40043bd08392cbd5fe2e6781adf6858cf9d97092f7f8c1e3724576f8ec"
   }
 }
