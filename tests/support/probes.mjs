@@ -304,6 +304,42 @@ export const implementations = {
     await expect(opener).toHaveAttribute("aria-expanded", "false");
     await expect(nav).toBeHidden();
   },
+  async calendar({ page, root }) {
+    const calendar = root.locator(".m-calendar").first();
+    const day = (name) =>
+      calendar.getByRole("button", { name: new RegExp(`^${name}`) });
+    await expect(calendar.locator('[tabindex="0"]')).toHaveCount(1);
+    await expect(
+      calendar.getByRole("gridcell", { selected: true }),
+    ).toHaveCount(1);
+    await day("Tuesday, 20 October 2026").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(day("Wednesday, 21 October 2026")).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(day("Wednesday, 28 October 2026")).toBeFocused();
+    await page.keyboard.press("End");
+    await expect(day("Sunday, 1 November 2026")).toBeFocused();
+    await expect(
+      calendar.getByRole("heading", { name: "November 2026" }),
+    ).toBeVisible();
+    await page.keyboard.press("PageUp");
+    await expect(day("Thursday, 1 October 2026")).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected date")).toHaveText("2026-10-01");
+    await calendar.getByRole("button", { name: "Next month" }).click();
+    await expect(
+      calendar.getByRole("heading", { name: "November 2026" }),
+    ).toBeVisible();
+    await expect(calendar.locator('[tabindex="0"]')).toHaveCount(1);
+    // The full variant names each day's events through aria-describedby.
+    const busy = root
+      .locator(".m-calendar")
+      .nth(1)
+      .getByRole("button", { name: "Tuesday, 20 October 2026, 3 events" });
+    await expect(busy).toHaveAccessibleDescription(
+      /10:00 Customer call.*15:00 Team retro.*\+1 more/,
+    );
+  },
   async banner({ page, root }) {
     const banner = root.getByRole("region", { name: "Announcement" });
     await expect(

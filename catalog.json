@@ -50,8 +50,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "4cb12bc2d2533dcf04cd36560c147e15c4ea00f4001f3e93e96aad16c8d4418e"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "861c4198f34cd9aad25e6e58e2d382c24abae9550bfa55f6cf9ad3abfb7b8262"
       }
     },
     {
@@ -101,8 +101,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "461768d255f1d48d8abc4f274860f68b6d9f5c1cccb0d4b0b0fdd48c19da8189"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "d939e06850a41b90b2af3010eb65e700e7beeb0a9a6f62d8492b2d53389aebce"
       }
     },
     {
@@ -149,8 +149,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "3abebcef511e83e82762535c999ef41cbc09027eaeb4527268e8ea1a6bda0a1f"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "350231164088a709836c014d8ccbc70b71e2cb1947256e13d93749a78ef87879"
       }
     },
     {
@@ -202,15 +202,15 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "95a124380698df5ac9658c50d721b6f78a06340ae685008c8e79eb1340c6be3f"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "0cc41ec56795093dac4e1c407c976e2f37fd5140e335f4a2fe8673a64b18f534"
       }
     },
     {
       "id": "mortar-app-shell",
       "logicalId": "app-shell",
       "name": "AppShell",
-      "description": "Mortar application app shell, using central semantic tokens.",
+      "description": "Mortar application app shell, using central semantic tokens. An optional aside adds a secondary column (multi-column layout).",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.1.0",
@@ -234,7 +234,9 @@
           "header": "ReactNode",
           "actions": "ReactNode",
           "children": "ReactNode",
-          "logo": "ReactNode"
+          "logo": "ReactNode",
+          "aside": "ReactNode",
+          "asideLabel": "string"
         },
         "states": [
           "Light",
@@ -258,8 +260,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "35505dbad7ae50eaacbdbe129b928197550901152d3d4add1286a140a1efac15"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "25674666555cc7077e6a365db8b7e6b8de071054ab6662707aeb004cdaacb8f9"
       }
     },
     {
@@ -304,8 +306,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "830f74724201032e36d4fcfb249d58502f0d35ed094d2eb9d41fb611ba9f61b7",
-        "preview": "f7879e19ff71ec2bc963690586ea15fee6bf6cf67274ee770205c8559bfe0233"
+        "source": "8f0d5660ef334db37403aaf6c8756e663b3c26a8e2f27529df017a0fc012e447",
+        "preview": "3d472233518343187ff24a58332be2a9f804c21cdae434dc175ac1e96ebfe24f"
       }
     },
     {
@@ -353,8 +355,8 @@
         "states": []
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "e9e79211aa44cd58aa3b34a72a5a89d428f18996d5ae10428a3009810f64fa45"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "aa76b90000ab5c43d62ac282003221cad2c4abd3e2952422797f95889dc21e26"
       }
     },
     {
@@ -404,8 +406,8 @@
         "states": []
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "f85df9f9bf6cf8d46e6c54856dc032f36f6712ff6ef686d0725953a73d755d7a"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "1acebef505b02e479e1f1047fdb872a9dd4b5d8841346b4c004d3849200b590e"
       }
     },
     {
@@ -452,8 +454,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "699fbd62dccb9019712dbda7072e0d5730296f320da01b126839fc73274e8d77"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "a465e78ed151a8673e9a5b788810831ea6aad28fcb7513c4216f96470a6638a7"
       }
     },
     {
@@ -504,8 +506,8 @@
         "states": []
       },
       "integrity": {
-        "source": "13b983edfe56b57e5f08ce9dc39547303b2debf94663602bb7a8aecaaa5fdc05",
-        "preview": "b256dbf7ebada1bcad41b3ac312a8f90697c171ddd158c7a6f638150fc84f62b"
+        "source": "fc944869cb0f7205eff1c06bd44aa273a5253e8e8714988f1898309632b90ca1",
+        "preview": "2c9686060ffc035cd442e2b0911881447ff0083ce6acc041c2020500a454b43e"
       }
     },
     {
@@ -554,8 +556,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "1c6ab7228018a63fd624a9120a2aae82e0842cf9e43c069c021d7a0c174a76f4"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "96f341dcc53d5008b033d98a254c45d0ef220a7c8fb7ac611dde420412776bbf"
       }
     },
     {
@@ -602,8 +604,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "a4f7d7eaf5f2306b00a039a301a4536191632c14e9824cee11901179edec1c1d"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "f0ddd15ad9b8545eb124f19d8d44805bc4c2f37fbc70ac0bc7465d8a82c54db0"
       }
     },
     {
@@ -650,8 +652,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "b0155b53e705c281cdbb31f722f465e1dc612f0544cda804ae0f7c57a37c9369"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "100329f7b2ec5236ab35a108d5a47bd74170c5ca8ff3879e09e92ae7bcac5765"
       }
     },
     {
@@ -703,8 +705,64 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "6d72936c24ea4368c5987577584251a9b4bc13c3ce2446493d5c5c3f666d57c8"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "7fc0aeb91774db75843f4c83caa44a51db9c804eeb5b6700b24f7c1677ad9ae0"
+      }
+    },
+    {
+      "id": "mortar-calendar",
+      "logicalId": "calendar",
+      "name": "Calendar",
+      "description": "Mortar calendar: a month grid with keyboard navigation (arrows, Home/End, PageUp/PageDown), today and selection states, and events as dots (compact) or titles (full). Dates are YYYY-MM-DD strings handled in UTC.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "Calendar",
+      "source": "src/calendar.tsx",
+      "capabilities": ["theme", "application", "keyboard", "responsive"],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference"
+      },
+      "contract": {
+        "props": {
+          "month": "string (YYYY-MM)",
+          "onMonthChange": "(month: string) => void",
+          "selected": "string (YYYY-MM-DD)",
+          "onSelect": "(date: string) => void",
+          "events": "CalendarEvent[] ({ id: string; date: string; title: string; time?: string })",
+          "variant": "\"compact\" | \"full\"",
+          "weekStartsOn": "0 | 1",
+          "today": "string (YYYY-MM-DD)",
+          "locale": "string",
+          "maxEvents": "number"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { Calendar } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/CalendarPreview.tsx"
+      },
+      "testing": {
+        "profile": "control",
+        "target": ".m-calendar",
+        "probe": "calendar",
+        "states": []
+      },
+      "integrity": {
+        "source": "f0b2da858c870d3f74043f8492ab050bf98060bbadb41ea59383c413c27a23c7",
+        "preview": "d427e70ae127d76745e14594027fb00b8d122f1e2501a5b46412daa10e874d22"
       }
     },
     {
@@ -752,8 +810,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "5f642e7d532190a0d2250a81d835e0c70358e308561dd6aa17cadc576e557171"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "02c424d4f4b94b5814c5db174254ca907cda99848eb60b201c36ae6cc2877ef9"
       }
     },
     {
@@ -801,8 +859,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "ff1dfcff036370a7dc0761704ab3d289141c5e449d71d09257d1d0bf44aa893a"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "35f7ab38e7398d5c108004a9df69e99a0b529f5f1de452fc3125b8f3763f1ca9"
       }
     },
     {
@@ -855,8 +913,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "5ed0fe6b79834e24cbd6983cf6f2ae3096852387dd77668bf1769169964e38ae"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "0d1d3b6b4d5362b4bb578348e4f1de415f5369e49f2e9985eed37b534588bb16"
       }
     },
     {
@@ -907,8 +965,8 @@
         "states": []
       },
       "integrity": {
-        "source": "830136c03e456a039f3ed8c9312221abd16adf4cb7cfa4104088ea305795084e",
-        "preview": "a59e61b8163614d09ac995799b2d85dee48e83acbc00c14de99b7004f307ed3b"
+        "source": "663e19a188c347801e1f194d73b0bfefd5c39b9cb40929f815ecc546c421fe84",
+        "preview": "7a0c867b3a607e3cb96f4b8bf3cee45133048174789128de6e7d6e4b9f5870d5"
       }
     },
     {
@@ -956,8 +1014,8 @@
         "states": []
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "4b6c43c5ed662924a3ed8dd0664a12fc67c431025d8813f6a6aed31060bcb13b"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "b71e93c29f9369416614d9582bd287047fbf8e08c5fd3a3a08ae127bbf02fff3"
       }
     },
     {
@@ -1012,8 +1070,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "6cf643e0e0f0358ff53206edfbcfe6c62fcec20358ba3db39610290ceecddd12"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "e87b54d7e95e01ad8299f6908fb25409b060ec4fbf7b6d62ebf362e47e0c4fd8"
       }
     },
     {
@@ -1060,8 +1118,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b06e1c1b729a2b2eab2e26794b6d4cb9aa828d2a586c78e5bdd3c8b3ccc625e1",
-        "preview": "98f4d8b71c21ef830ba803b8430693b9ae2af736640f4dfb74e0824eda54fbde"
+        "source": "1ae723d03eba29c60343db1dcf31b2f9b3429223b52600840718e758cedfc401",
+        "preview": "6d039b917ce90689bf9851fc76f3f365a29ea30ec40bb725d3831b394bad8401"
       }
     },
     {
@@ -1113,8 +1171,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "b8a503bba6326b6d9439fe64cba4069498b47f3a2150d55a54ddf1a0ae86c4e3"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "effbc95c9063bc0b95d2698b7ef5c451728258e3715a8c1433f533a18b48ddbe"
       }
     },
     {
@@ -1168,8 +1226,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "b8176d8901785af12d70d385bd407fa1c37f055e1f3fefa31e5e0d5dc13ffce0",
-        "preview": "b37537f3df72481582a6d92f5b0780ca5118613d5590966e760f7740c749f659"
+        "source": "81183f54ff2a00a35777604464f26ebeef9d4697186dad4bce53654d8786e78a",
+        "preview": "8d5d87f462897d065341e87542c38b4709dfb1e9c27953e2425962f638287bef"
       }
     },
     {
@@ -1224,8 +1282,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "ff0cba42a8ff4d98586d964cf014e58d080211eeaf867a78203554ca9761c459",
-        "preview": "3689933fb45e2c297a20bbfd6fb193d81a736732f4a4979eb80719e27799ec05"
+        "source": "d40252aaf1d0b18502d40641a5e72b1e39d336060326156bb67fcc67044f70ec",
+        "preview": "6a5ea2b7fc235cbef81084a1c80b6fa902ef9c70e94160abb13502a24020ddb1"
       }
     },
     {
@@ -1281,8 +1339,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "13b983edfe56b57e5f08ce9dc39547303b2debf94663602bb7a8aecaaa5fdc05",
-        "preview": "202549623040d88fcee5c06b8fbce28d5fbef1335a2e6b84eb4fd2b8aef8c7cb"
+        "source": "fc944869cb0f7205eff1c06bd44aa273a5253e8e8714988f1898309632b90ca1",
+        "preview": "9bf238a471c237f66f783ae76040a10c71ced4084e331b78163e3abc57cf0a51"
       }
     },
     {
@@ -1331,8 +1389,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "9a0df875dc59987dec752db71d12597dbea0fbea2c4faf14202068487d8fcc52"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "37f6c8377de4789d5f61347d10fd0a5ea1c573c8fc4f9ce3028ce73b7921bfd8"
       }
     },
     {
@@ -1380,8 +1438,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "9b4f4f9bbf287a3f7132b38243aa97a562c7d2a3194d781f5b1ebf447f87f398"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "011ba0c49e601a5aa9e0238350e1b4478968b7419129fa47af79d36015cd6ccd"
       }
     },
     {
@@ -1447,8 +1505,8 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "b9bcbdc0b60d13747fa7a38703b52220ac4a1f8d07291682435863475c71670f"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "02ba802b9a5cd0684f97fd126a868d894df7a21891167aa71413a40ec0bddf67"
       }
     },
     {
@@ -1497,8 +1555,8 @@
         "states": ["long"]
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "64771d938dd7bd125507a243e3f1d6eaed9e932d68dd69e488663ed3c9c81f73"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "9c1823427cb1c47230903e82edcd94743c0d25d3b7d88147499fd76b88536eab"
       }
     },
     {
@@ -1545,8 +1603,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "d7265da796456298db6cba8097e0b78f1cddb7d91522e9b66cc148e731af6591"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "004570d64f3bb55aa2ad155c1dbb66cb41d85bfe47e82502d2645fe51af82812"
       }
     },
     {
@@ -1606,8 +1664,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "81daf8edd3b230ac20ba92b5d08af4dc612584e72e435972f17e9a7f8fccca1e"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "cda570f078df2d428c2228a7bce4e51ff7232011d41e94dafda307cdfdc710bc"
       }
     },
     {
@@ -1655,8 +1713,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "2bcffb3126988b8a6d925f68aa3ee8bf829d4a04d7109d96db01d06bace03e9b"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "b16f9963e94abebdd59dec0f186b5b04f9e40529bb89236dd248f6db17ca713e"
       }
     },
     {
@@ -1704,8 +1762,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "78e1a969fb14e332ecf889f03ca1edbc2bb5f13df7ab52378388e97ba9578939"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "b7be3dd147054ca1d46dc5008f5494bd92b0b7671b152c6119abcf9d9afaf311"
       }
     },
     {
@@ -1754,8 +1812,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "791cd6e1c4d86c8775d924dc94fc79daf49e63a5fe3e270cfd816ffbc4ff854c"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "36563dd71cdcdb4441b57ea5c036cd5e4deab6e794781aa2baad23d47ead8984"
       }
     },
     {
@@ -1808,8 +1866,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "a89de5e9752ccdd5125b8b2607b7d088a8da0632c453376399deff4f43063f05"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "1cc1700d90408c766e4c65802bf9ee8a99e4e8f322f7d745a9ab0c3855ccbf3a"
       }
     },
     {
@@ -1863,8 +1921,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "945194ced2fd1f4cf729a619e3c89196eae6b1ba9087ad7712a20ac15322a91b"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "cd024ecec5d97e5fc83e690997f0555b2be217b6053fa0055f196fb015e127c6"
       }
     },
     {
@@ -1912,8 +1970,8 @@
         "states": ["disabled"]
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "91df31dcb85bfe39bb8b25ef84e35e5692703b3bdc59af4b1e11ae44fbf02458"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "e22367b3c4d5370075a586db9d2e7fd6316a1e5d70f501ce08377e7018fd26c6"
       }
     },
     {
@@ -1960,8 +2018,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "94542fa1f9f757398c5bf2f1be4e40ebc8359fd609544b5070768b5593a5c3db"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "d8547da2268260561b6813cf2e6aa65f0b72ea27ffa052e68343e84b39c203ab"
       }
     },
     {
@@ -2011,8 +2069,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "815d793f3db1232f36e99d0b08de537a8c65ef162225550bd1bdfcff8f9eb589"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "c5f7aadd516c8146b626e7aa2e00356276782c80533468e9407c3cb98077ab14"
       }
     },
     {
@@ -2063,8 +2121,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "36fa2fd531783fd8fddf7e171d5060927afef345a3c659b339916a7df5b35493"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "b5e2614f5e1bb85f5fc274dcf5d82d080de90c34e51383cf02eee8f4fdd93cf1"
       }
     },
     {
@@ -2112,8 +2170,8 @@
         "states": []
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "d49ac850ea9db71f2de1ab147b66e1f26a176003d97002a9594dd5201a46ef28"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "aee7ef97e75188287b67ce7aa98688dc6647895093f153cf37c8dc8ead539f98"
       }
     },
     {
@@ -2165,8 +2223,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "ed4e87e9b946175e6c01c8b97ef97de2fb695576517c5b443abe56c1838e24d7"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "757f88698f0e338073e22c24a0306cc5756c0d26c0f46a9ed6f5ab8bbcf1a76d"
       }
     },
     {
@@ -2228,8 +2286,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "fc24b331c70ee9db6c3097c54d82be94b38953896bbc6673c2bc10b68d008cc7"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "691299a300475c8285feb2b82e02934cb50f2ac690a55abb84f72fe20dd98b01"
       }
     },
     {
@@ -2275,8 +2333,8 @@
         "states": []
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "afb0c1e5e28baa7b7b06c794af20b42acfe8e218b2fd6366672ebe87932ab3da"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "59e156defc12a04ec584cbad37cb6fa82f8e368427e13c05a6c38aee219d8bed"
       }
     },
     {
@@ -2322,8 +2380,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "26d75840a3c469b97214c243ac2a0fbb5f6c32f9e484486861db10135808863e"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "fc124f9d1ecb00b46367dc2d2c2224a3fb31200f40bb1a3e637d31c1160be7e9"
       }
     },
     {
@@ -2376,8 +2434,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "b8176d8901785af12d70d385bd407fa1c37f055e1f3fefa31e5e0d5dc13ffce0",
-        "preview": "47c2a852a252cd7e7ea05a4e04b7638b872401455b1e48002808bd4e598ecdae"
+        "source": "81183f54ff2a00a35777604464f26ebeef9d4697186dad4bce53654d8786e78a",
+        "preview": "37c257b06e3ef0e06e8f00631d07b6d7eda54a73a6b1e0c9bf605c5db3a0f615"
       }
     },
     {
@@ -2424,8 +2482,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "b3076fd9c50c1d0a65cf314ee058487db87023dc2e9f2b20aa02aa8456b1a88c"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "7bfc30ad91bceb5acd0e6140b0144ac58d50d08105c88e9305c6a2901ace7efc"
       }
     },
     {
@@ -2477,8 +2535,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "5144b10131072e5698702b48132c15bd2ebc7ca2c365b0f168cc4b50c2c28a65"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "5b5986a73db1b2bfe3b75f8e51ea93736f5aa9e82f05bb5c7fdca1ba56061069"
       }
     },
     {
@@ -2527,8 +2585,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "c383321c8c3e887129c02ca81496ea125929eecff32660ab01a9d8d983ac05a3"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "4ca7ba0a45e47f76b187a7b84e182186655a041360f81338795cdf82e770cc9d"
       }
     },
     {
@@ -2575,8 +2633,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "11c5c81303919b3ff60b9b378a611688985aa49b4d89f6e7dcf0c47840b1279b"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "217623d65e8a6bf6e8e2a3ff295c1552d405a9e3bdac98428f014a4dac40d0cd"
       }
     },
     {
@@ -2624,8 +2682,8 @@
         "states": []
       },
       "integrity": {
-        "source": "830136c03e456a039f3ed8c9312221abd16adf4cb7cfa4104088ea305795084e",
-        "preview": "4553a8d5a362b24ba04de0cd50550069631227ebdd96493f027cf2ae19cb5d4a"
+        "source": "663e19a188c347801e1f194d73b0bfefd5c39b9cb40929f815ecc546c421fe84",
+        "preview": "a7d5816ef1de5cb1e12bb47b67ee440a0df945f695e3f5adf88993183626781a"
       }
     },
     {
@@ -2676,8 +2734,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "03a256a71d9c0b4c556de4e949f6693303614ad23019a52bda116dae39c56ef8"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "13643b5b58eb9d98a35783c295652aa0f56b6bcc8265902437530abb1a40a422"
       }
     },
     {
@@ -2734,8 +2792,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "2bd95e71ab7213147764dcce08187dae6cfeb73f20d82d5d9ab1de8e0dd9c739"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "80122bb87b11078aa7def3e9aaf154153d3f5a0c3db5d081b9043135daffa1f0"
       }
     },
     {
@@ -2787,8 +2845,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "e9deccd19acf32402a1afae20932ec477cad6e5678fe08ab3fa93d4ffe7e43a1"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "957e5d971b66a83422be1c175f5cc55ec7ff355f4438f67191c70811221e8392"
       }
     },
     {
@@ -2837,8 +2895,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "0339ce0c463a10e3b5f50d325a979546f29dae1cda711469222070a744bde747"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "f9764aeab11309c641fe42cab332f846b1b75df8f105a7fccb0cde485d841069"
       }
     },
     {
@@ -2887,8 +2945,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "5f23580b39f3574d478b1b50a59be2089a044dadf698d3d97d04b43ad238f88d"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "e770b1da3ed48eb20f0cecd914f2b1768598afb6e86c95e1c14f2d1d2f51b4ba"
       }
     },
     {
@@ -2938,8 +2996,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "6999e8db37cab335e22d3d278806096aa1733b9654d343909ea1ca08b2b63b8f"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "94ec0b6c53202b30607912b0958c6b01f626a6f04fcc89a24b0b09ff2b89379d"
       }
     },
     {
@@ -2990,8 +3048,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "14161947075f5355392ecae78c9983b211d7bbd73ed23906950c8d5af9d4f3ff"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "fdaee10f2cb22beb05ce7759192e7b52b1669d921e14dc5aa78e402c54a89ec2"
       }
     },
     {
@@ -3038,8 +3096,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "43285daecd63b5800acfcc34e0d7e57e734dd86a42fefc6f2435afb9be8cb981"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "2d3f6e23c403a84ee895d8922fc910bf9cd47b71b86a9e2dff295bb256c2f596"
       }
     },
     {
@@ -3088,8 +3146,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "2299865e7df62cdb265b2ae289b3941b469a096d5bed17661bd8b9f0d1c8c4d3"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "ef808d1c670958b1ce94796f366ea27701e904b8895c60357f5a4990153ba2d8"
       }
     },
     {
@@ -3139,8 +3197,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "3c70996a889b068642d43e1e3695993943c55c50fcdfcdf49d4fbbab76dd2dc5"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "874b382782a80069048b6db94d3ac3d1430816b3d01b382aa2b2d781e8db7ca7"
       }
     },
     {
@@ -3189,8 +3247,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "a7f973e59624c55764b8efd311f264e7c81310b1d48c739d762b16cab99e5dc8"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "fbe630da24cce147004b8c9dcbdff76d38e24d6ccbab721ed866b375166a77d9"
       }
     },
     {
@@ -3237,8 +3295,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b06e1c1b729a2b2eab2e26794b6d4cb9aa828d2a586c78e5bdd3c8b3ccc625e1",
-        "preview": "e0e54890c16ed9a05dc34c2b5a66ff7cc1e08d7ed1ee8557df8dbe742b0cdd58"
+        "source": "1ae723d03eba29c60343db1dcf31b2f9b3429223b52600840718e758cedfc401",
+        "preview": "3c390a47df350d786b89a1fab62367943c7d8967566176d125cd8fb5bf56a265"
       }
     },
     {
@@ -3287,8 +3345,8 @@
         "probe": "pricing"
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "a2ef0bb4cfd2fcfe7c77679ef310a4acec314fd5d8f9fb54a80bd9cda8f52491"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "c99ac78fd1d884075951182f2629f883ce7117bad1759d47199d5751b56e3d6c"
       }
     },
     {
@@ -3338,8 +3396,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "1f13107dbd2b11e000c5684f39f07568c78560e742dc67b95cf9d4466a8134f5"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "d49a924632d7dd60b869e3953f3f51995b601ccfc4252b5354ab745bb9e8fd38"
       }
     },
     {
@@ -3389,8 +3447,8 @@
         "states": []
       },
       "integrity": {
-        "source": "51570dbd6e9725a0845c34e08ba890046fe40f00267f09f51a1ff01aecc3b570",
-        "preview": "d3f2bcfe5eeddf1135eb4a9d783e6a96dde8e686965b3f5dd35ae5b4390ee3ae"
+        "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
+        "preview": "76de8ab32cf96d7c9a3aa73fd812f2052a36df7c2505cd4f4d9009b81e3e233c"
       }
     },
     {
@@ -3436,8 +3494,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "cd301eef6e461c34d496468b4ebd19812b78c86decb7ffcf117027bc2ea53604"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "2d3621f5c6c8e318d836030c9bb2be0ef47362244bd6a3f15c4bbc6295f59d87"
       }
     },
     {
@@ -3494,8 +3552,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "7886428239894d86bdb2070d3a29f7855f0df7e5511857ea3adc43c577de9869"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "e30448095eb54a3fad03288b6638fc41533edcb62eef6ff59c0632be4300d1db"
       }
     },
     {
@@ -3544,8 +3602,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "8ef021e417c02a6785f3ef93009109ea95d27579e770f98dfb3ef4cc458601b8"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "b01dfaf4777528cdedd0f5e7159d36d7543143388962d874bd08621e026043ba"
       }
     },
     {
@@ -3598,8 +3656,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "13b983edfe56b57e5f08ce9dc39547303b2debf94663602bb7a8aecaaa5fdc05",
-        "preview": "40a381c0c3d1fbe68f18aa10f09af906b2a344502107293b96b8b45c77997f33"
+        "source": "fc944869cb0f7205eff1c06bd44aa273a5253e8e8714988f1898309632b90ca1",
+        "preview": "d9ffd5673bc5cd3cf367dfe2c3ff15f1c7eb05fe3da4a846c238e3c1b33db441"
       }
     },
     {
@@ -3651,8 +3709,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "aaf5de63a40ad51bb164edf0a80ae3a29e5d24f8b50c3b4f5a946929baf2f915"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "0f981e2a91d7439e2671adff37c5994f4a3548458b67f3cee5614d3cfa243de0"
       }
     },
     {
@@ -3700,8 +3758,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "2ea660082328ee773379b1bb24e446b46eb4c7451882a699c7c552fdd8a0a20a"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "4533a5e7dca2b730af9c34b89ea73e9d2b2d056db6f79ecd33a67bcf1078bbe7"
       }
     },
     {
@@ -3750,8 +3808,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "f53d1da4f89c5728416f6f4887dd99bddbbf8cb0257f43bf150dfef64a4139ae"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "5e4312d63333c1aaf3f27f11525dafa426c8f5df41360798e3d902bc83ec1807"
       }
     },
     {
@@ -3802,8 +3860,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "93bbd9b6fa7fa199267b1b8d9787e911efeaf86fb9bc8ccff3354f5d8d8fa702"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "0f6bad3272908731cf6449acdf33b8d1013c91dd70e96fff12ff155fa3576659"
       }
     },
     {
@@ -3853,8 +3911,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "b06e1c1b729a2b2eab2e26794b6d4cb9aa828d2a586c78e5bdd3c8b3ccc625e1",
-        "preview": "ab005f9ea5d677be4231b3738379a9a7a22876dd98454a434d6888d7d29ec58a"
+        "source": "1ae723d03eba29c60343db1dcf31b2f9b3429223b52600840718e758cedfc401",
+        "preview": "7b36b538bb80000d05a4bafc48d3ac1018990a136b6fa7ea63a73e1648c8cbdd"
       }
     },
     {
@@ -3912,8 +3970,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "8a1def623b370aa4408f8f2ec1f35136d30abbfb79004a772923a1f86e94dbfd"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "ce4c33a576b3b9efc10c7e3008888f78f18407f235743c3fe3698aac1d61c2b3"
       }
     },
     {
@@ -3961,8 +4019,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "679999a01a9d06cebfd9c3a20b59122bb26ff7e6b5f7a3834812de4747842d48"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "7b966ed2be0d2f7258856843a9c5d657c91ee800abff95bdd846421358459c24"
       }
     },
     {
@@ -4014,8 +4072,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "1a84631cbf30489a7baa3520692d41d5d512538c0711023aad576104ce4bd137"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "d3639e085ee4c10631c15ca89a105072735764cb92e6e88f3090f29d81c0350f"
       }
     },
     {
@@ -4068,8 +4126,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "13b88be5dba616e7fc5008dd453ea1149afea6bdeec776a0dfa6cb86d4b59727"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "cb2c937b8b43e12c63a8f9090f3fa17fd477efb9e2f545147ee9ead492eb2333"
       }
     },
     {
@@ -4121,8 +4179,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "ff0cba42a8ff4d98586d964cf014e58d080211eeaf867a78203554ca9761c459",
-        "preview": "c9d9585fa119a907bcc9901c924b99674c2d40ef7478dd3067c5278040b02973"
+        "source": "d40252aaf1d0b18502d40641a5e72b1e39d336060326156bb67fcc67044f70ec",
+        "preview": "e568c3c62894f96578fade84e08ac422f5d06614afa6ce320384e09bd87e0863"
       }
     },
     {
@@ -4173,8 +4231,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "6971b6a24f6c5038a71f2ea982411e1c53c9fc58697fcdbb1ece6486f29f7722"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "f3b049b2e564c0593e02034fc876acbf51cae8f644ebcd51eaba66f1ac72cf6f"
       }
     },
     {
@@ -4223,8 +4281,68 @@
         "states": []
       },
       "integrity": {
-        "source": "ff0cba42a8ff4d98586d964cf014e58d080211eeaf867a78203554ca9761c459",
-        "preview": "68e7a2446e357fbf94f6ce27de34f2c2b1909fcdb339ac5239da8e9de75d576a"
+        "source": "d40252aaf1d0b18502d40641a5e72b1e39d336060326156bb67fcc67044f70ec",
+        "preview": "8cd069ed489f6623794f1d579666582f0e104d5f0245f9579c9f1b10df9f892f"
+      }
+    },
+    {
+      "id": "mortar-stacked-shell",
+      "logicalId": "stacked-shell",
+      "name": "StackedShell",
+      "description": "Mortar stacked shell: top Navbar with a centred page column and optional page header, Tailwind's stacked application layout.",
+      "stack": "react-tailwind",
+      "package": "@tony-ui/mortar",
+      "version": "0.1.0",
+      "export": "StackedShell",
+      "source": "src/application.tsx",
+      "capabilities": [
+        "theme",
+        "application",
+        "navigation",
+        "responsive",
+        "keyboard"
+      ],
+      "owner": "Mortar maintainers",
+      "kitId": "application",
+      "provenance": {
+        "kitId": "application",
+        "exampleId": "mortar-application-reference"
+      },
+      "contract": {
+        "props": {
+          "brand": "string",
+          "logo": "ReactNode",
+          "homeHref": "string",
+          "navigation": "NavigationItem[]",
+          "actions": "ReactNode",
+          "header": "ReactNode",
+          "width": "\"md\" | \"lg\" | \"xl\" | \"full\"",
+          "children": "ReactNode"
+        },
+        "states": [
+          "Light",
+          "Dark",
+          "Neutral brand",
+          "Green brand",
+          "Keyboard and focus"
+        ],
+        "usage": "Import { StackedShell } from @tony-ui/mortar. Compose with the public typed props.",
+        "avoid": "Do not copy implementations, override central colours or grant component approval.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "dependencies": []
+      },
+      "preview": {
+        "source": "previews/StackedShellPreview.tsx"
+      },
+      "testing": {
+        "profile": "composite",
+        "target": ".m-stacked-shell",
+        "probe": "navbar",
+        "states": []
+      },
+      "integrity": {
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "8a89ff4bb9f8a25fe931561bfc1d20c1b59f68fd56bdb158fadc464b077870fd"
       }
     },
     {
@@ -4271,8 +4389,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "a832f71dca072d0fe18a4e21e9193895cd3b23c1f7b0b8fa219d144add6d25b4"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "fe3a2532a8f50eff6c76909074ccc4e6eca5de5aea9433d197262342be66ee1b"
       }
     },
     {
@@ -4318,8 +4436,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f20d79e49c386ba415114f5bc0f0a83a5a16a0088c7e918b037853fe51b6823d",
-        "preview": "a36aa1ff3b36a4626ffdec0cdc7e5ee6aa83ce4fc918df4ca0f7fcc62e589bf9"
+        "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
+        "preview": "a595b5f6b926d399d461f699dc6a844ec9706dc6740d0d93851cac006d639756"
       }
     },
     {
@@ -4374,8 +4492,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "332fc95dccecb45eaabe2f89462dcac1cb8fe82462abb929ea673d5f142645de"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "c8577ded4c5d977a055e63ca0da482a0f4862539d040a26ec46685f66023cc39"
       }
     },
     {
@@ -4425,8 +4543,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a56a5e02861e073df98a35a2761f23023eb4bdff999ee539ba771b8588975934",
-        "preview": "86c9d82e7a94111fda824eb678050f234c7692fb75c5e322f10d16ab1e59e6fa"
+        "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
+        "preview": "ff7169137f69ab594408fc6fdf6e72601fd2e40454cba493c3346b9d97527f90"
       }
     },
     {
@@ -4476,8 +4594,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "2eee663de71c6f0decedd5b32fadfaf52cc42f7d80c385f1639ce0dc360ad92d"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "4138cd37c7898056b6963cde5ae2eee93ea81c46b85febba1a5674776ef398bd"
       }
     },
     {
@@ -4525,8 +4643,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "e048a062970ec19d99686eeb550d08a2782b1aef02f3e034b440cd83e8b8c85f"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "cedb137c32e865f195e1a3c797f3c0bdf65e5ac6234346e2e7f44e6000e4d2dd"
       }
     },
     {
@@ -4573,8 +4691,8 @@
         "states": []
       },
       "integrity": {
-        "source": "305075671390ca9ae1d85eaefefeb6aba820b6763d212b50c683b48a3b668d36",
-        "preview": "a7b63aa7d3356aa03688c65dbe7b8a85f21f87162772ec74c44b5779ae4e9bfd"
+        "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
+        "preview": "566ea87aab3a1ee17cc6ffee680c7a42606db7914caa0b95f0737bc696ecd131"
       }
     },
     {
@@ -4622,8 +4740,8 @@
         "states": []
       },
       "integrity": {
-        "source": "86dc6636b03cfd24f24db0a96fe8ebe8af29013f8516a6976015fde1479623fd",
-        "preview": "c42bebe8895e02dd6e16136ce4f90f1cd687d7c3c0ce3426db18356c7d48ef89"
+        "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
+        "preview": "f6d09c80125b2061d1163937415d1ce9852e51fa2b26cc5a89175355a69ad124"
       }
     },
     {
@@ -4680,8 +4798,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "9c23d36d9652ec1d7146b20111b6699696fa6e497df5e3f223f43b2ce3cc4c22",
-        "preview": "1e3b68b87428f279c8deadc017799c6bd9f751dd5a2bcb42b04c3b8a1817230d"
+        "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
+        "preview": "776f2af79e3bc0246d6b6aaece49a3b722d7cb1dceae4313c22e5d962fb9c4ad"
       }
     },
     {
@@ -4730,8 +4848,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4cfb52cce925c3799464ebefa6dc58243396c9e989964861402160ebb8308b0a",
-        "preview": "78b181c2e828c374ada96e1a5c1f7724270967c1b712c78b5d0984ca007db629"
+        "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
+        "preview": "736425ad63e44fd70cb74e8faf97a3f0e837c311b8d2f54ce2471da9a72f6fa9"
       }
     },
     {
@@ -4784,8 +4902,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "830f74724201032e36d4fcfb249d58502f0d35ed094d2eb9d41fb611ba9f61b7",
-        "preview": "0605be4c22945550b9b0a3ffb96f1433f521b2a4f891fd583d92f0335ba6c055"
+        "source": "8f0d5660ef334db37403aaf6c8756e663b3c26a8e2f27529df017a0fc012e447",
+        "preview": "ba213878a87d8b47d1d48a0de77ca4b9bfbd67ae98590f39652413c8d6512830"
       }
     },
     {
@@ -4836,8 +4954,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "13b983edfe56b57e5f08ce9dc39547303b2debf94663602bb7a8aecaaa5fdc05",
-        "preview": "b25166c438622e0adf977d4689c07b78f8b6d5eb33324b5109e06c9e9cf5b487"
+        "source": "fc944869cb0f7205eff1c06bd44aa273a5253e8e8714988f1898309632b90ca1",
+        "preview": "6ece0552c982ecd39e087dd695fbd9956da23949e0e612e7808f0aa31af443ce"
       }
     },
     {
@@ -4886,8 +5004,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "13b983edfe56b57e5f08ce9dc39547303b2debf94663602bb7a8aecaaa5fdc05",
-        "preview": "abd7dea47781bdb657d1a91dfdae176fdeedee0b963487a03561269e4581bc26"
+        "source": "fc944869cb0f7205eff1c06bd44aa273a5253e8e8714988f1898309632b90ca1",
+        "preview": "39e6f67ad206181e18543238fd0e01a66b6f543e82b3f3e7d08edf6f0e550548"
       }
     }
   ]

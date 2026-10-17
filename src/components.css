@@ -600,7 +600,8 @@
     color: var(--m-muted);
     font-size: 13px;
   }
-  .m-app-main > main {
+  .m-app-main > main,
+  .m-app-columns > main {
     padding: 28px;
   }
   .m-menu-trigger {
@@ -1162,7 +1163,8 @@
       flex-wrap: wrap;
       padding: 12px 20px;
     }
-    .m-app-main > main {
+    .m-app-main > main,
+    .m-app-columns > main {
       padding: 24px 20px;
     }
     .m-marketing-header {

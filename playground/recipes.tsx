@@ -244,3 +244,102 @@ export function SaasLandingRecipe() {
     </>
   );
 }
+
+/** Multi-column application page: sidebar, main column and a secondary column. */
+export function ProjectWorkspaceRecipe() {
+  return (
+    <UI.AppShell
+      brand="Northwind"
+      workspace="Billing redesign"
+      navigation={[
+        { label: "Overview", href: "#overview", current: true },
+        { label: "Tasks", href: "#tasks", count: "12" },
+        { label: "Files", href: "#files" },
+      ]}
+      asideLabel="Schedule and activity"
+      aside={
+        <UI.Stack gap="xl">
+          <UI.Calendar
+            today="2026-10-17"
+            selected="2026-10-20"
+            events={[
+              {
+                id: "1",
+                date: "2026-10-20",
+                title: "Customer call",
+                time: "10:00",
+              },
+              {
+                id: "2",
+                date: "2026-10-29",
+                title: "Board update",
+                time: "11:00",
+              },
+            ]}
+          />
+          <UI.ActivityFeed
+            label="Recent activity"
+            items={[
+              {
+                id: "1",
+                title: "Ana approved the copy",
+                description: "Confirmation step, version 3.",
+                time: "2 hours ago",
+                tone: "success",
+              },
+              {
+                id: "2",
+                title: "Tom uploaded designs",
+                description: "Checkout flow, mobile.",
+                time: "Yesterday",
+              },
+            ]}
+          />
+        </UI.Stack>
+      }
+    >
+      <UI.Stack gap="xl">
+        <UI.PageHeading
+          title="Billing redesign"
+          description="Due 30 October · 12 open tasks"
+          actions={<UI.Button>New task</UI.Button>}
+        />
+        <UI.SectionHeading title="Team" headingLevel={2} />
+        <UI.GridList
+          label="Project team"
+          items={[
+            {
+              id: "ana",
+              title: "Ana Kovač",
+              description: "Engineering",
+              media: <UI.Avatar name="Ana Kovač" />,
+            },
+            {
+              id: "tom",
+              title: "Tom Cook",
+              description: "Design",
+              media: <UI.Avatar name="Tom Cook" />,
+            },
+            {
+              id: "lw",
+              title: "Lindsay Walton",
+              description: "Support",
+              media: <UI.Avatar name="Lindsay Walton" />,
+            },
+          ]}
+        />
+        <UI.DescriptionList
+          title="Details"
+          items={[
+            { term: "Owner", details: "Ana Kovač" },
+            {
+              term: "Status",
+              details: <UI.Badge tone="warning">At risk</UI.Badge>,
+            },
+            { term: "Budget", details: "£18,000" },
+          ]}
+        />
+      </UI.Stack>
+    </UI.AppShell>
+  );
+}

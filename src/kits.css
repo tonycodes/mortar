@@ -3046,3 +3046,213 @@
     font-size: var(--m-font-size);
   }
 }
+
+/* Calendar, StackedShell and the AppShell secondary column. */
+@layer components {
+  .m-calendar {
+    container-type: inline-size;
+    min-width: 0;
+  }
+  .m-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .m-calendar-header h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-calendar-nav {
+    display: flex;
+    gap: 4px;
+  }
+  .m-calendar-nav button {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--m-radius);
+    background: transparent;
+    color: var(--m-secondary);
+    cursor: pointer;
+  }
+  .m-calendar-nav button:hover {
+    background: var(--m-sunken);
+  }
+  .m-calendar-nav svg {
+    width: 18px;
+    height: 18px;
+  }
+  .m-calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .m-calendar th {
+    padding: 4px 0 8px;
+    color: var(--m-muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .m-calendar td {
+    padding: 2px 0;
+    text-align: center;
+  }
+  .m-calendar td > button {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .m-calendar td > button:hover {
+    background: var(--m-sunken);
+  }
+  .m-calendar td[data-outside] > button {
+    color: var(--m-muted);
+  }
+  .m-calendar td > button[aria-current="date"] {
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px var(--m-line-strong);
+  }
+  .m-calendar td[aria-selected="true"] > button {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+    font-weight: 600;
+  }
+  .m-calendar-dot {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    transform: translateX(-50%);
+  }
+  .m-calendar[data-variant="full"] table {
+    border: 1px solid var(--m-line);
+  }
+  .m-calendar[data-variant="full"] th {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-sunken);
+  }
+  .m-calendar[data-variant="full"] td {
+    height: 104px;
+    padding: 6px;
+    border: 1px solid var(--m-line);
+    text-align: start;
+    vertical-align: top;
+  }
+  .m-calendar[data-variant="full"] td[data-outside] {
+    background: var(--m-sunken);
+  }
+  .m-calendar[data-variant="full"] td > button {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  .m-calendar[data-variant="full"] .m-calendar-dot {
+    display: none;
+  }
+  .m-calendar-events {
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .m-calendar-events li {
+    overflow: hidden;
+    color: var(--m-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-calendar-events time {
+    color: var(--m-muted);
+  }
+  .m-calendar-more {
+    color: var(--m-muted) !important;
+  }
+  /* Narrow full calendars fall back to dots; titles stay available via aria-describedby. */
+  @container (max-width: 560px) {
+    .m-calendar[data-variant="full"] td {
+      height: 56px;
+      padding: 4px 2px;
+      text-align: center;
+    }
+    .m-calendar[data-variant="full"] .m-calendar-events {
+      display: none;
+    }
+    .m-calendar[data-variant="full"] .m-calendar-dot {
+      display: block;
+    }
+  }
+  @media (pointer: coarse) {
+    .m-calendar td > button,
+    .m-calendar-nav button {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+  .m-stacked-shell {
+    min-height: 100%;
+    background: var(--m-paper);
+  }
+  .m-stacked-shell > main {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 32px 24px 48px;
+  }
+  .m-stacked-shell > main[data-width="md"] {
+    max-width: 768px;
+  }
+  .m-stacked-shell > main[data-width="xl"] {
+    max-width: 1440px;
+  }
+  .m-stacked-shell > main[data-width="full"] {
+    max-width: none;
+  }
+  .m-stacked-shell > main:focus {
+    outline: none;
+  }
+  .m-stacked-header {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-app-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    min-width: 0;
+  }
+  .m-app-aside {
+    min-width: 0;
+    padding: 28px 24px;
+    border-left: 1px solid var(--m-line);
+    background: var(--m-surface);
+  }
+  @media (max-width: 1200px) {
+    .m-app-columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-app-aside {
+      border-left: 0;
+      border-top: 1px solid var(--m-line);
+    }
+  }
+}

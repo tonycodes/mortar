@@ -18,8 +18,18 @@ const icons = {
   calendar: icon("M7 3v3M17 3v3M4 9h16M5 5h14v15H5z"),
 };
 
+const meetings: UI.CalendarEvent[] = [
+  { id: "1", date: "2026-10-05", title: "Sprint planning", time: "09:30" },
+  { id: "2", date: "2026-10-14", title: "Design review", time: "14:00" },
+  { id: "3", date: "2026-10-20", title: "Customer call", time: "10:00" },
+  { id: "4", date: "2026-10-20", title: "Team retro", time: "15:00" },
+  { id: "5", date: "2026-10-20", title: "Release notes" },
+  { id: "6", date: "2026-10-29", title: "Board update", time: "11:00" },
+];
+
 export function StructureCase({ name }: { name: string }) {
   const [dismissed, setDismissed] = useState(false);
+  const [day, setDay] = useState("2026-10-20");
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
@@ -162,6 +172,56 @@ export function StructureCase({ name }: { name: string }) {
             {dismissed ? "dismissed" : "shown"}
           </output>
         </UI.Stack>
+      );
+      break;
+    case "Calendar":
+      example = (
+        <UI.Stack gap="xl">
+          <div className="max-w-sm">
+            <UI.Calendar
+              today="2026-10-17"
+              selected={day}
+              onSelect={setDay}
+              events={meetings}
+            />
+            <output aria-label="Selected date">{day}</output>
+          </div>
+          <UI.Calendar
+            today="2026-10-17"
+            variant="full"
+            month="2026-10"
+            events={meetings}
+          />
+        </UI.Stack>
+      );
+      break;
+    case "StackedShell":
+      example = (
+        <UI.StackedShell
+          brand="Northwind"
+          homeHref="#home"
+          navigation={[
+            { label: "Dashboard", href: "#dashboard", current: true },
+            { label: "Team", href: "#team" },
+            { label: "Projects", href: "#projects" },
+            { label: "Calendar", href: "#calendar" },
+          ]}
+          actions={<UI.Avatar name="Ana Kovač" size="sm" />}
+          header={
+            <UI.PageHeading
+              title="Dashboard"
+              description="What changed across your projects this week."
+            />
+          }
+        >
+          <UI.MetricGroup
+            label="This week"
+            items={[
+              { label: "Deploys", value: "48", change: "+6", tone: "success" },
+              { label: "Incidents", value: "1", change: "−2", tone: "success" },
+            ]}
+          />
+        </UI.StackedShell>
       );
       break;
     default:

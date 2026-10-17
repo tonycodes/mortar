@@ -256,3 +256,23 @@ test("component code view shows the example source and is shareable", async ({
   await expect(page.locator('[data-mortar-preview="Card"]')).toBeVisible();
   expect(await axe(page)).toEqual([]);
 });
+
+for (const width of [390, 1280])
+  test(`multi-column workspace recipe at ${width}`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/?recipe=project-workspace&theme=dark");
+    const aside = page.getByRole("complementary", {
+      name: "Schedule and activity",
+    });
+    await expect(aside).toBeVisible();
+    await expect(
+      aside.getByRole("grid", { name: "October 2026" }),
+    ).toBeVisible();
+    const main = await page.locator("#m-content").boundingBox();
+    const side = await aside.boundingBox();
+    // Side by side on wide screens, stacked below the main column on narrow ones.
+    if (width >= 1280) expect(side.x).toBeGreaterThan(main.x + main.width - 1);
+    else expect(side.y).toBeGreaterThan(main.y + main.height - 1);
+    expect(await axe(page)).toEqual([]);
+    expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+  });
