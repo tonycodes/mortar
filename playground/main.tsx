@@ -13,7 +13,7 @@ import {
   PagerLinks,
 } from "../src/index.js";
 import catalog from "../catalog.json";
-import { SaasLandingRecipe, ProjectWorkspaceRecipe } from "./recipes.js";
+import { templates } from "./templates.js";
 import {
   CategoryPage,
   ExamplePanel,
@@ -76,19 +76,12 @@ function Playground({
   ]
     .filter((group) => group.items.length)
     .concat({
-      title: "Page recipes",
-      items: [
-        {
-          label: "SaaS landing",
-          href: url("recipe", "saas-landing"),
-          current: false,
-        },
-        {
-          label: "Project workspace",
-          href: url("recipe", "project-workspace"),
-          current: false,
-        },
-      ],
+      title: "Page templates",
+      items: templates.map((template) => ({
+        label: template.title,
+        href: url("recipe", template.id),
+        current: false,
+      })),
     });
   const place = component ? locate(component) : undefined;
   const index = place ? ordered.indexOf(place) : -1;
@@ -264,6 +257,9 @@ function Playground({
 function PlaygroundApp() {
   const [query, setQuery] = useState(location.search);
   const params = new URLSearchParams(query);
+  const Template = templates.find(
+    (template) => template.id === params.get("recipe"),
+  )?.Component;
   useEffect(() => {
     const sync = () => setQuery(location.search);
     window.addEventListener("popstate", sync);
@@ -300,10 +296,8 @@ function PlaygroundApp() {
             : "comfortable"
       }
     >
-      {params.get("recipe") === "saas-landing" ? (
-        <SaasLandingRecipe />
-      ) : params.get("recipe") === "project-workspace" ? (
-        <ProjectWorkspaceRecipe />
+      {Template ? (
+        <Template />
       ) : (
         <Playground params={params} navigate={navigate} />
       )}

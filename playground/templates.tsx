@@ -1,0 +1,412 @@
+import { useState, type ComponentType } from "react";
+import * as UI from "../src/index.js";
+import { icons } from "../previews/CompositionFixture.js";
+import { ProjectWorkspaceRecipe, SaasLandingRecipe } from "./recipes.js";
+
+/** Shared marketing chrome so every marketing template reads as one site. */
+function SiteHeader() {
+  return (
+    <UI.MarketingHeader
+      brand="Northwind"
+      homeHref="?recipe=saas-landing"
+      links={[
+        {
+          label: "Product",
+          items: [
+            {
+              label: "Assistant",
+              href: "#assistant",
+              description: "Answer questions on your site, day and night.",
+              icon: icons.inbox,
+            },
+            {
+              label: "Booking",
+              href: "#booking",
+              description: "Let visitors book time without the back-and-forth.",
+              icon: icons.calendar,
+            },
+          ],
+          footer: [{ label: "Watch demo", href: "#demo" }],
+        },
+        { label: "Pricing", href: "?recipe=pricing" },
+        { label: "About", href: "?recipe=about" },
+      ]}
+      action={{ label: "Start free", href: "#start" }}
+      controls={<UI.AppearanceControl />}
+    />
+  );
+}
+
+function SiteFooter() {
+  return (
+    <UI.Footer
+      brand="Northwind"
+      description="Chat and booking for small businesses."
+      columns={[
+        {
+          title: "Product",
+          links: [
+            { label: "Pricing", href: "?recipe=pricing" },
+            { label: "Changelog", href: "#changelog" },
+          ],
+        },
+        {
+          title: "Company",
+          links: [
+            { label: "About", href: "?recipe=about" },
+            { label: "Careers", href: "#careers" },
+          ],
+        },
+      ]}
+      copyright="© Northwind"
+      legal={[
+        { label: "Terms", href: "#terms" },
+        { label: "Privacy", href: "#privacy" },
+      ]}
+    />
+  );
+}
+
+/** Pricing page: intro, plans, a comparison table, questions and a closing call to action. */
+export function PricingPageTemplate() {
+  const start = { label: "Start free", href: "#start" };
+  return (
+    <>
+      <SiteHeader />
+      <main>
+        <UI.HeaderSection
+          eyebrow="Pricing"
+          title="Pricing that grows with you"
+          description="Start free, upgrade when your inbox gets busy. Every plan includes the assistant and booking."
+          align="center"
+        />
+        <UI.Pricing
+          title="Choose a plan"
+          description="Prices exclude VAT. Cancel any time."
+          billingToggle
+          plans={[
+            {
+              id: "starter",
+              name: "Starter",
+              description: "For a single location.",
+              monthly: "£0",
+              features: ["100 conversations a month", "Booking page"],
+              action: start,
+            },
+            {
+              id: "team",
+              name: "Team",
+              description: "For growing businesses.",
+              monthly: "£29",
+              annual: "£290",
+              features: ["Unlimited conversations", "Calendar sync", "3 seats"],
+              action: start,
+              featured: true,
+            },
+            {
+              id: "business",
+              name: "Business",
+              description: "For several locations.",
+              monthly: "£99",
+              annual: "£990",
+              features: ["Everything in Team", "SSO", "Priority support"],
+              action: { label: "Talk to sales", href: "#sales" },
+              availability: "coming-soon",
+            },
+          ]}
+        />
+        <UI.PlanComparison
+          title="Compare plans"
+          plans={["Starter", "Team", "Business"]}
+          featuredPlan="Team"
+          groups={[
+            {
+              label: "Assistant",
+              rows: [
+                {
+                  feature: "Conversations",
+                  values: ["100/mo", "Unlimited", "Unlimited"],
+                },
+                { feature: "Custom answers", values: [true, true, true] },
+              ],
+            },
+            {
+              label: "Booking",
+              rows: [
+                { feature: "Calendar sync", values: [false, true, true] },
+                { feature: "Reminders by SMS", values: [false, false, true] },
+              ],
+            },
+          ]}
+        />
+        <UI.FAQ
+          title="Questions"
+          items={[
+            {
+              question: "Is there a contract?",
+              answer:
+                "No. Plans are monthly or yearly and you can cancel any time.",
+            },
+            {
+              question: "What counts as a conversation?",
+              answer:
+                "One visitor's chat in a 24-hour window, however many messages it has.",
+            },
+          ]}
+        />
+        <UI.CallToAction
+          title="Try it on your site today"
+          description="Set up takes about ten minutes."
+          actions={[start, { label: "Book a demo", href: "#demo" }]}
+          tone="inverse"
+        />
+      </main>
+      <SiteFooter />
+    </>
+  );
+}
+
+/** About page: who we are, the story, the team and the customers. */
+export function AboutPageTemplate() {
+  return (
+    <>
+      <SiteHeader />
+      <main>
+        <UI.HeaderSection
+          eyebrow="About us"
+          title="Small team, busy inboxes"
+          description="We build tools that let small businesses answer every customer without hiring a call centre."
+          links={[
+            { label: "Open roles", href: "#careers" },
+            { label: "Press kit", href: "#press" },
+          ]}
+          stats={[
+            { label: "Businesses", value: "2,400" },
+            { label: "Conversations a month", value: "1.2M" },
+            { label: "Countries", value: "18" },
+          ]}
+        />
+        <UI.ContentSection
+          eyebrow="Our story"
+          title="Started behind a counter"
+          description="Northwind began in a bike shop that kept missing calls while fixing bikes."
+          tone="muted"
+          media={
+            <UI.MockWindow label="Northwind assistant">
+              <UI.StatGroup
+                label="This week"
+                items={[
+                  { value: "312", label: "Questions answered" },
+                  { value: "41", label: "Bookings made" },
+                ]}
+              />
+            </UI.MockWindow>
+          }
+        >
+          <p>
+            The owner wrote a few answers into a chat box on the shop's site.
+            Within a month, most questions never reached the phone.
+          </p>
+          <p>
+            Northwind turns that idea into a product any business can set up in
+            an afternoon.
+          </p>
+        </UI.ContentSection>
+        <UI.TeamGrid
+          title="The team"
+          description="Nine people across three time zones."
+          members={[
+            { name: "Ana Kovač", role: "Co-founder, engineering" },
+            { name: "Tom Cook", role: "Co-founder, design" },
+            { name: "Lindsay Walton", role: "Customer success" },
+          ]}
+        />
+        <UI.LogoCloud
+          label="Trusted by"
+          items={[
+            { name: "Wheelhouse" },
+            { name: "Fern & Co" },
+            { name: "Harbour Dental" },
+          ]}
+        />
+        <UI.CallToAction
+          title="Work with us"
+          description="We're hiring engineers and support specialists."
+          actions={[{ label: "See open roles", href: "#careers" }]}
+        />
+      </main>
+      <SiteFooter />
+    </>
+  );
+}
+
+/** Settings screen: tabs, grouped fields, a destructive action and an unsaved-changes bar. */
+export function SettingsScreenTemplate() {
+  const [tab, setTab] = useState("general");
+  const [name, setName] = useState("Northwind");
+  const [zone, setZone] = useState<string | null>("europe-london");
+  const [digest, setDigest] = useState(true);
+  const dirty = name !== "Northwind" || zone !== "europe-london" || !digest;
+  const reset = () => {
+    setName("Northwind");
+    setZone("europe-london");
+    setDigest(true);
+  };
+  return (
+    <UI.AppShell
+      brand="Northwind"
+      workspace="Acme workspace"
+      navigation={[
+        { label: "Inbox", href: "#inbox", count: "8" },
+        { label: "Bookings", href: "#bookings" },
+        { label: "Settings", href: "?recipe=settings", current: true },
+      ]}
+    >
+      <UI.Stack gap="xl">
+        <UI.PageHeading
+          title="Settings"
+          description="Manage your workspace, notifications and billing."
+          breadcrumbs={[
+            { label: "Workspace", href: "#workspace" },
+            { label: "Settings" },
+          ]}
+        />
+        <UI.Tabs
+          label="Settings sections"
+          value={tab}
+          onChange={setTab}
+          items={[
+            {
+              id: "general",
+              label: "General",
+              content: (
+                <UI.Stack gap="xl">
+                  <UI.SettingsSection
+                    title="Workspace"
+                    description="Shown to customers in chat and booking emails."
+                  >
+                    <UI.Fieldset legend="Details">
+                      <UI.Input
+                        label="Workspace name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                      <UI.Combobox
+                        label="Time zone"
+                        value={zone}
+                        onChange={setZone}
+                        options={[
+                          { value: "europe-london", label: "Europe/London" },
+                          { value: "europe-dublin", label: "Europe/Dublin" },
+                          {
+                            value: "america-new-york",
+                            label: "America/New_York",
+                          },
+                        ]}
+                      />
+                    </UI.Fieldset>
+                  </UI.SettingsSection>
+                  <UI.SettingsSection
+                    title="Notifications"
+                    description="Choose what reaches your inbox."
+                  >
+                    <UI.Switch
+                      label="Daily digest email"
+                      checked={digest}
+                      onChange={(e) => setDigest(e.target.checked)}
+                    />
+                  </UI.SettingsSection>
+                  <UI.ActionPanel
+                    title="Delete workspace"
+                    description="Removes all conversations and bookings. This cannot be undone."
+                    tone="danger"
+                    action={
+                      <UI.Button variant="danger">Delete workspace</UI.Button>
+                    }
+                  />
+                </UI.Stack>
+              ),
+            },
+            {
+              id: "billing",
+              label: "Billing",
+              content: (
+                <UI.DescriptionList
+                  title="Current plan"
+                  items={[
+                    { term: "Plan", details: "Team, billed yearly" },
+                    { term: "Renews", details: "1 March 2027" },
+                    {
+                      term: "Payment method",
+                      details: "Visa ending 4242",
+                      action: (
+                        <UI.ActionLink
+                          label="Update"
+                          href="#card"
+                          variant="ghost"
+                        />
+                      ),
+                    },
+                  ]}
+                />
+              ),
+            },
+          ]}
+        />
+      </UI.Stack>
+      <UI.SaveBar
+        open={dirty}
+        message="You have unsaved changes"
+        onSave={reset}
+        onDiscard={reset}
+      />
+    </UI.AppShell>
+  );
+}
+
+export interface PageTemplate {
+  id: string;
+  title: string;
+  description: string;
+  kind: "Marketing" | "Application";
+  Component: ComponentType;
+}
+
+/** Whole-page templates shown on the overview and in the sidebar. */
+export const templates: PageTemplate[] = [
+  {
+    id: "saas-landing",
+    title: "Landing page",
+    description: "Hero, features, pricing and sign-up for a SaaS product.",
+    kind: "Marketing",
+    Component: SaasLandingRecipe,
+  },
+  {
+    id: "pricing",
+    title: "Pricing page",
+    description: "Plans, comparison table, questions and a call to action.",
+    kind: "Marketing",
+    Component: PricingPageTemplate,
+  },
+  {
+    id: "about",
+    title: "About page",
+    description: "Story, team, stats and customers.",
+    kind: "Marketing",
+    Component: AboutPageTemplate,
+  },
+  {
+    id: "project-workspace",
+    title: "Project workspace",
+    description: "Multi-column app screen with a schedule and activity.",
+    kind: "Application",
+    Component: ProjectWorkspaceRecipe,
+  },
+  {
+    id: "settings",
+    title: "Settings screen",
+    description: "Tabs, grouped fields, a danger zone and unsaved changes.",
+    kind: "Application",
+    Component: SettingsScreenTemplate,
+  },
+];

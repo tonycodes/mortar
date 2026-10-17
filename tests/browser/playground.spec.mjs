@@ -312,3 +312,55 @@ test("full-bleed section bands stay inside the preview frame", async ({
   for (let i = 0; i < 3; i++)
     expect(Math.abs(sample[i] - paper[i])).toBeLessThanOrEqual(2);
 });
+
+const templateIds = [
+  "saas-landing",
+  "pricing",
+  "about",
+  "project-workspace",
+  "settings",
+];
+for (const id of templateIds)
+  for (const width of [390, 1280])
+    test(`page template ${id} at ${width}`, async ({ page }) => {
+      const errors = [];
+      page.on("pageerror", (error) => errors.push(error.message));
+      page.on("console", (message) => {
+        if (message.type() === "error") errors.push(message.text());
+      });
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`/?recipe=${id}&theme=${width < 900 ? "dark" : "light"}`);
+      await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+      await expect(page.getByRole("main")).toHaveCount(1);
+      expect(await axe(page)).toEqual([]);
+      expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+      expect(errors).toEqual([]);
+    });
+
+test("overview links every page template", async ({ page }) => {
+  await page.goto("/");
+  const section = page.getByRole("region", { name: "Page templates" });
+  // Role queries skip the aria-hidden thumbnails, whose pages link to each other.
+  const links = section.getByRole("link");
+  await expect(links).toHaveCount(templateIds.length);
+  for (const [index, id] of templateIds.entries())
+    await expect(links.nth(index)).toHaveAttribute(
+      "href",
+      new RegExp(`recipe=${id}`),
+    );
+  await section.getByRole("link", { name: "Pricing page" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Pricing that grows with you" }),
+  ).toBeVisible();
+});
+
+test("settings template shows and clears unsaved changes", async ({ page }) => {
+  await page.goto("/?recipe=settings");
+  const name = page.getByLabel("Workspace name");
+  await name.fill("Northwind Labs");
+  const bar = page.getByText("You have unsaved changes");
+  await expect(bar).toBeVisible();
+  await page.getByRole("button", { name: "Discard" }).click();
+  await expect(name).toHaveValue("Northwind");
+  await expect(bar).toBeHidden();
+});

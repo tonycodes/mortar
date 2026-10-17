@@ -490,7 +490,12 @@ export function Pricing({
                 ))}
               </ul>
               {blocked ? (
-                <p role="status">{plan.availabilityLabel}</p>
+                <p role="status">
+                  {plan.availabilityLabel ??
+                    (availability === "coming-soon"
+                      ? "Coming soon"
+                      : "Unavailable")}
+                </p>
               ) : (
                 <ActionLink {...plan.action} variant="secondary" />
               )}
