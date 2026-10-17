@@ -5,7 +5,7 @@
   "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "export": "ProductList",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce", "responsive"],

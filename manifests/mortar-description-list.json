@@ -5,7 +5,7 @@
   "description": "Mortar description list: label/value pairs for detail screens, in columns when wide and stacked when narrow, with optional row actions.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "export": "DescriptionList",
   "source": "src/display.tsx",
   "capabilities": ["theme", "application", "responsive"],

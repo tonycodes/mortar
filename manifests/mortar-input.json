@@ -5,7 +5,7 @@
   "description": "Mortar foundation input, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "export": "Input",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
