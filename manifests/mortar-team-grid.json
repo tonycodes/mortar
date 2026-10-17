@@ -20,7 +20,7 @@
     "props": {
       "title": "string",
       "description": "string",
-      "members": "{ name; role; image?: ReactNode }[]"
+      "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]"
     },
     "states": [
       "Light",
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "bc2c8dd9c1d94f049341189c9f0e78a8c5e54e65c9fa3ecba6853c336e984c5b",
-    "preview": "de431ba5f7c9f37ca24e35712bacba1f95ce10fb32854e101cd80f983ed00922"
+    "source": "fe0141a2d4930b60391d4a9015e1fde4bbccbe8a5174c716e0bfc5c5ba520c0d",
+    "preview": "23b5413bd5e093ef8b78c8bf851a7e386adb5e3dff1d0291cb7be168f28bee58"
   }
 }

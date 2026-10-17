@@ -20,7 +20,9 @@
     "props": {
       "quote": "string",
       "name": "string",
-      "role": "string"
+      "role": "string",
+      "logo": "ReactNode",
+      "avatar": "ReactNode"
     },
     "states": [
       "Light",
@@ -43,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "cc20ee1130146834b47dce4e948dce67fb9620e99a92a0956a66ed47b259dd78",
-    "preview": "b347133eaa7893160a49347764eb0e23901b3118a83f64f4ffd689c16a53518f"
+    "source": "32843d84d9e408f95a9b1f04f1453f825c21b1d4ef6154af1e566af6682f90e5",
+    "preview": "654d20f4e1e9dbfb7f0261746735cf3f444b55e86b3713638f25bc4f51099ed6"
   }
 }
