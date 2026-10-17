@@ -24,7 +24,8 @@
       "email": "{ onSubmit: (email: string) => void; label?; placeholder?; submitLabel?; status?: \"idle\" | \"submitting\" | \"success\" | \"error\"; message? }",
       "footer": "ReactNode",
       "dividerLabel": "string",
-      "headingLevel": "1 | 2"
+      "headingLevel": "1 | 2",
+      "aside": "ReactNode"
     },
     "states": [
       "Light",
@@ -48,7 +49,7 @@
     "probe": "sign-in"
   },
   "integrity": {
-    "source": "155d48c675cfbb636763a2ea209e52eee8154ce1e08a7248d7e41624f8174217",
-    "preview": "8fb8dbbe12d4f4fcd8da83b07e7dc6a25def6c2aa8e761dfd02c1cf875148157"
+    "source": "bbc158abc432e1edca13a642b15099dccecf863bccd2d6cef2f7562744ad0d23",
+    "preview": "b94177e9b0dda0306aeca24669132cc5b6d1bf691e83103bf2d5703560240499"
   }
 }

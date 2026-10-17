@@ -113,6 +113,7 @@ export function ExtendedCase({ name }: { name: string }) {
             description="“Looks good — ship it on Friday.”"
             leading={<UI.Avatar name="Ana Kovač" size="sm" />}
             action={{ label: "Reply", onClick: () => {} }}
+            secondaryAction={{ label: "Mark as read", onClick: () => {} }}
           />
         </UI.Stack>
       );
@@ -543,6 +544,18 @@ export function ExtendedCase({ name }: { name: string }) {
           title="This page isn't deployed."
           description="Check the URL or head back home."
           actions={[{ label: "Go home", href: "/" }, action]}
+          illustration={
+            <svg
+              viewBox="0 0 120 80"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+            >
+              <path d="M20 60h80M30 60V30l30-18 30 18v30M50 60V42h20v18" />
+              <path d="M88 14l14 14M102 14L88 28" />
+            </svg>
+          }
         />
       );
       break;

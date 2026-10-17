@@ -389,14 +389,22 @@ export function NotFound({
   title,
   description,
   actions,
+  illustration,
 }: {
   code?: string;
   title: string;
   description: string;
   actions: LinkAction[];
+  /** Decorative artwork above the code. */
+  illustration?: ReactNode;
 }) {
   return (
     <section className="m-not-found" data-m-component="NotFound">
+      {illustration && (
+        <div className="m-not-found-art" aria-hidden="true">
+          {illustration}
+        </div>
+      )}
       <p className="m-eyebrow">{code}</p>
       <h1>{title}</h1>
       <p>{description}</p>

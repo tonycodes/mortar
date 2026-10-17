@@ -19,7 +19,7 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ label: string; value: string; change?: string; tone?: Tone }[]"
+      "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode }[]"
     },
     "states": [
       "Light",
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "155d48c675cfbb636763a2ea209e52eee8154ce1e08a7248d7e41624f8174217",
-    "preview": "22cac6a76ae069e489c3f3c0e9fb28e95a18d69d0dc9a14748a2bbdb736e6092"
+    "source": "bbc158abc432e1edca13a642b15099dccecf863bccd2d6cef2f7562744ad0d23",
+    "preview": "75fdf4168247bec5c20f280dfece139971a131ed8d9069b8180345aded3d06dd"
   }
 }

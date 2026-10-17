@@ -561,14 +561,17 @@ export function CallToAction({
   description,
   actions,
   tone,
+  media,
 }: {
   title: string;
   description?: string;
   actions: LinkAction[];
   tone?: MarketingTone;
+  /** Image or screenshot beside the copy (promo layout). */
+  media?: ReactNode;
 }) {
-  return (
-    <section className="m-cta" data-m-component="CallToAction" data-tone={tone}>
+  const copy = (
+    <>
       <h2>{title}</h2>
       {description && <p>{description}</p>}
       <div className="m-actions">
@@ -580,6 +583,23 @@ export function CallToAction({
           />
         ))}
       </div>
+    </>
+  );
+  return (
+    <section
+      className="m-cta"
+      data-m-component="CallToAction"
+      data-tone={tone}
+      data-layout={media ? "split" : undefined}
+    >
+      {media ? (
+        <>
+          <div className="m-cta-copy">{copy}</div>
+          <div className="m-cta-media">{media}</div>
+        </>
+      ) : (
+        copy
+      )}
     </section>
   );
 }

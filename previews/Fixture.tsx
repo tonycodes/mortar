@@ -398,6 +398,7 @@ export function PreviewCase({ name }: { name: string }) {
               value: "1.42M",
               change: "+12.4%",
               tone: "success",
+              icon: icons.inbox,
             },
             {
               label: "Latency",
@@ -724,11 +725,29 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "CallToAction":
       example = (
-        <UI.CallToAction
-          title="Start your next project"
-          description="Use one shared foundation."
-          actions={[action]}
-        />
+        <>
+          <UI.CallToAction
+            title="Start your next project"
+            description="Use one shared foundation."
+            actions={[action]}
+          />
+          <UI.CallToAction
+            title="See every conversation in one place"
+            description="The inbox groups chats, bookings and follow-ups by customer."
+            actions={[action, { label: "Book a demo", href: "#demo" }]}
+            media={
+              <UI.MockWindow label="Northwind inbox">
+                <UI.MetricGroup
+                  label="Today"
+                  items={[
+                    { label: "Open chats", value: "12", icon: icons.inbox },
+                    { label: "Bookings", value: "5", icon: icons.calendar },
+                  ]}
+                />
+              </UI.MockWindow>
+            }
+          />
+        </>
       );
       break;
     case "Footer":

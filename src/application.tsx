@@ -396,13 +396,27 @@ export function MetricGroup({
   items,
 }: {
   label: string;
-  items: { label: string; value: string; change?: string; tone?: Tone }[];
+  items: {
+    label: string;
+    value: string;
+    change?: string;
+    tone?: Tone;
+    /** Decorative icon before the label. */
+    icon?: ReactNode;
+  }[];
 }) {
   return (
     <dl className="m-metrics" aria-label={label}>
       {items.map((item) => (
         <div key={item.label}>
-          <dt>{item.label}</dt>
+          <dt>
+            {item.icon && (
+              <span className="m-metric-icon" aria-hidden="true">
+                {item.icon}
+              </span>
+            )}
+            {item.label}
+          </dt>
           <dd>
             <strong>{item.value}</strong>
             {item.change && (
@@ -972,10 +986,13 @@ export function SignInPanel({
   footer,
   dividerLabel = "or",
   headingLevel = 1,
+  aside,
 }: {
   title: string;
   /** Use 2 when the panel sits inside a page that already has an h1. */
   headingLevel?: 1 | 2;
+  /** Image or quote beside the form on wide screens (split-screen layout). */
+  aside?: ReactNode;
   description?: string;
   logo?: ReactNode;
   providers?: SignInProvider[];
@@ -997,7 +1014,7 @@ export function SignInPanel({
     e.preventDefault();
     if (email?.status !== "submitting") email?.onSubmit(value);
   };
-  return (
+  const panel = (
     <section className="m-sign-in" aria-labelledby={headingId}>
       <header>
         {logo && <BrandMark logo={logo} />}
@@ -1052,5 +1069,13 @@ export function SignInPanel({
       )}
       {footer && <footer>{footer}</footer>}
     </section>
+  );
+  return aside ? (
+    <div className="m-sign-in-split">
+      {panel}
+      <div className="m-sign-in-aside">{aside}</div>
+    </div>
+  ) : (
+    panel
   );
 }
