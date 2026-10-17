@@ -10,6 +10,10 @@ const icon = (path: string) => (
   </svg>
 );
 const icons = {
+  attach: icon("M8 12l6-6a3 3 0 0 1 4 4l-8 8a5 5 0 0 1-7-7l7-7"),
+  smile: icon(
+    "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01",
+  ),
   home: icon("M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"),
   team: icon("M16 19v-1a4 4 0 0 0-8 0v1M12 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"),
   folder: icon(
@@ -86,6 +90,7 @@ export function StructureCase({ name }: { name: string }) {
   const [day, setDay] = useState("2026-10-20");
   const [view, setView] = useState<UI.CalendarView>("week");
   const [opened, setOpened] = useState("none");
+  const [comments, setComments] = useState<string[]>([]);
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
@@ -263,6 +268,48 @@ export function StructureCase({ name }: { name: string }) {
             />
             <output aria-label="Opened event">{opened}</output>
           </div>
+        </UI.Stack>
+      );
+      break;
+    case "CommentComposer":
+      example = (
+        <UI.Stack gap="lg">
+          <UI.CommentComposer
+            avatar={<UI.Avatar name="Ana Kovač" size="sm" />}
+            maxLength={280}
+            hint="Markdown is not supported yet."
+            preview={(text) =>
+              text
+                .split(/\n{2,}/)
+                .map((paragraph, i) => <p key={i}>{paragraph}</p>)
+            }
+            actions={
+              <>
+                <UI.Button
+                  variant="ghost"
+                  size="sm"
+                  icon={icons.attach}
+                  iconOnly
+                >
+                  Attach a file
+                </UI.Button>
+                <UI.Button
+                  variant="ghost"
+                  size="sm"
+                  icon={icons.smile}
+                  iconOnly
+                >
+                  Add an emoji
+                </UI.Button>
+              </>
+            }
+            onSubmit={(text) => setComments((current) => [...current, text])}
+          />
+          <ul aria-label="Posted comments">
+            {comments.map((comment, i) => (
+              <li key={i}>{comment}</li>
+            ))}
+          </ul>
         </UI.Stack>
       );
       break;

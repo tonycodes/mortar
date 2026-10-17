@@ -1,0 +1,61 @@
+{
+  "id": "mortar-comment-composer",
+  "logicalId": "comment-composer",
+  "name": "CommentComposer",
+  "description": "Mortar comment composer: a labelled textarea in a box with an optional avatar, toolbar, Write/Preview tabs and character count; Ctrl/⌘+Enter submits and empty comments cannot be sent.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "CommentComposer",
+  "source": "src/composer.tsx",
+  "capabilities": ["theme", "application", "form", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "onSubmit": "(value: string) => void",
+      "value": "string",
+      "onValueChange": "(value: string) => void",
+      "label": "string",
+      "labelVisible": "boolean",
+      "placeholder": "string",
+      "submitLabel": "string",
+      "submitting": "boolean",
+      "avatar": "ReactNode",
+      "actions": "ReactNode",
+      "preview": "(value: string) => ReactNode",
+      "maxLength": "number",
+      "hint": "string",
+      "error": "string",
+      "rows": "number"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { CommentComposer } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/CommentComposerPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-composer",
+    "probe": "composer",
+    "states": ["error"]
+  },
+  "integrity": {
+    "source": "f5f41537449ace4924a0d76bef055c573f7d00397bcaf01d5b3a061e967f8a38",
+    "preview": "66f50cbb8468e9123a09e6fb2943bf9f60756c7ea20c53768e9ab28734d6cd3d"
+  }
+}

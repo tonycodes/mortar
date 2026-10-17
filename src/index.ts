@@ -158,3 +158,4 @@ export type {
   Review,
   Order,
 } from "./ecommerce.js";
+export { CommentComposer } from "./composer.js";
