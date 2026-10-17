@@ -27,7 +27,8 @@
       "size": "sm | md | lg",
       "icon": "ReactNode",
       "iconPosition": "start | end",
-      "iconOnly": "boolean"
+      "iconOnly": "boolean",
+      "className": "string"
     },
     "states": [
       "Light",

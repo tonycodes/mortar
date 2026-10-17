@@ -20,7 +20,9 @@
     "props": {
       "quote": "string",
       "name": "string",
-      "role": "string"
+      "role": "string",
+      "logo": "ReactNode",
+      "avatar": "ReactNode"
     },
     "states": [
       "Light",

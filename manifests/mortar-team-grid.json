@@ -20,7 +20,7 @@
     "props": {
       "title": "string",
       "description": "string",
-      "members": "{ name; role; image?: ReactNode }[]"
+      "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]"
     },
     "states": [
       "Light",

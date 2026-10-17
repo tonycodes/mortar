@@ -25,7 +25,8 @@
       "legal": "LinkAction[]",
       "logo": "ReactNode",
       "headingLevel": "2 | 3 | 4",
-      "note": "ReactNode"
+      "note": "ReactNode",
+      "social": "{ label: string; href: string; icon?: ReactNode }[]"
     },
     "states": [
       "Light",

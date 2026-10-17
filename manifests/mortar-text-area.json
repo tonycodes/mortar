@@ -22,7 +22,8 @@
       "value": "string",
       "onChange": "ChangeEventHandler<HTMLTextAreaElement>",
       "hint": "string",
-      "error": "string"
+      "error": "string",
+      "id": "string (defaults to a generated id)"
     },
     "states": [
       "Light",

@@ -270,7 +270,7 @@
       "id": "mortar-app-shell",
       "logicalId": "app-shell",
       "name": "AppShell",
-      "description": "Mortar application app shell, using central semantic tokens.",
+      "description": "Mortar application app shell, using central semantic tokens. An optional aside adds a secondary column (multi-column layout).",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.3.0",
@@ -294,7 +294,9 @@
           "header": "ReactNode",
           "actions": "ReactNode",
           "children": "ReactNode",
-          "logo": "ReactNode"
+          "logo": "ReactNode",
+          "aside": "ReactNode",
+          "asideLabel": "string"
         },
         "states": [
           "Light",
@@ -747,7 +749,8 @@
           "size": "sm | md | lg",
           "icon": "ReactNode",
           "iconPosition": "start | end",
-          "iconOnly": "boolean"
+          "iconOnly": "boolean",
+          "className": "string"
         },
         "states": [
           "Light",
@@ -2294,7 +2297,8 @@
           "legal": "LinkAction[]",
           "logo": "ReactNode",
           "headingLevel": "2 | 3 | 4",
-          "note": "ReactNode"
+          "note": "ReactNode",
+          "social": "{ label: string; href: string; icon?: ReactNode }[]"
         },
         "states": [
           "Light",
@@ -2481,7 +2485,7 @@
       "id": "mortar-input",
       "logicalId": "input",
       "name": "Input",
-      "description": "Mortar foundation input, using central semantic tokens.",
+      "description": "Mortar foundation input, using central semantic tokens. Supports text prefix/suffix add-ons, decorative leading/trailing icons and an attached action button.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.3.0",
@@ -2509,7 +2513,12 @@
           "hint": "string",
           "error": "string",
           "prefix": "string",
-          "suffix": "string"
+          "suffix": "string",
+          "leadingIcon": "ReactNode",
+          "trailingIcon": "ReactNode",
+          "action": "ReactNode",
+          "id": "string (defaults to a generated id)",
+          "className": "string (applied to the input)"
         },
         "states": [
           "Light",
@@ -4568,7 +4577,8 @@
           "value": "string",
           "onChange": "ChangeEventHandler<HTMLSelectElement>",
           "hint": "string",
-          "error": "string"
+          "error": "string",
+          "id": "string (defaults to a generated id)"
         },
         "states": [
           "Light",
@@ -5301,7 +5311,7 @@
         "props": {
           "title": "string",
           "description": "string",
-          "members": "{ name; role; image?: ReactNode }[]"
+          "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]"
         },
         "states": [
           "Light",
@@ -5398,7 +5408,9 @@
         "props": {
           "quote": "string",
           "name": "string",
-          "role": "string"
+          "role": "string",
+          "logo": "ReactNode",
+          "avatar": "ReactNode"
         },
         "states": [
           "Light",
@@ -5455,7 +5467,8 @@
           "value": "string",
           "onChange": "ChangeEventHandler<HTMLTextAreaElement>",
           "hint": "string",
-          "error": "string"
+          "error": "string",
+          "id": "string (defaults to a generated id)"
         },
         "states": [
           "Light",

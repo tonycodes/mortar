@@ -2,7 +2,7 @@
   "id": "mortar-input",
   "logicalId": "input",
   "name": "Input",
-  "description": "Mortar foundation input, using central semantic tokens.",
+  "description": "Mortar foundation input, using central semantic tokens. Supports text prefix/suffix add-ons, decorative leading/trailing icons and an attached action button.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.3.0",
@@ -24,7 +24,12 @@
       "hint": "string",
       "error": "string",
       "prefix": "string",
-      "suffix": "string"
+      "suffix": "string",
+      "leadingIcon": "ReactNode",
+      "trailingIcon": "ReactNode",
+      "action": "ReactNode",
+      "id": "string (defaults to a generated id)",
+      "className": "string (applied to the input)"
     },
     "states": [
       "Light",
