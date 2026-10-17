@@ -360,6 +360,21 @@ export const implementations = {
   async navigation({ page, root, component }) {
     await page.setViewportSize({ width: 390, height: 900 });
     if (component.export === "MarketingHeader") {
+      // Flyout groups are disclosures: keyboard opens, Escape closes and returns focus.
+      await page.setViewportSize({ width: 1280, height: 900 });
+      const product = root.getByRole("button", { name: "Product" });
+      await product.focus();
+      await page.keyboard.press("Enter");
+      await expect(product).toHaveAttribute("aria-expanded", "true");
+      await expect(page.getByRole("link", { name: /Analytics/ })).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(product).toHaveAttribute("aria-expanded", "false");
+      await expect(product).toBeFocused();
+      await product.click();
+      await page.getByRole("link", { name: /Inbox/ }).click();
+      await expect(page).toHaveURL(/#inbox$/);
+      await expect(product).toHaveAttribute("aria-expanded", "false");
+      await page.setViewportSize({ width: 390, height: 900 });
       const opener = root.getByRole("button", { name: "Menu", exact: true });
       await opener.focus();
       await page.keyboard.press("Enter");

@@ -151,6 +151,7 @@
           "thumbnail": "Hero",
           "components": [
             "Hero",
+            "HeaderSection",
             "FeatureGrid",
             "FeatureSection",
             "BentoGrid",
@@ -194,7 +195,12 @@
           "id": "showcase",
           "title": "Content and showcase",
           "thumbnail": "ChatPreview",
-          "components": ["PostList", "MockWindow", "ChatPreview"]
+          "components": [
+            "ContentSection",
+            "PostList",
+            "MockWindow",
+            "ChatPreview"
+          ]
         }
       ]
     },
