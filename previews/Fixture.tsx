@@ -426,6 +426,33 @@ export function PreviewCase({ name }: { name: string }) {
             />
           }
           links={[
+            {
+              label: "Product",
+              items: [
+                {
+                  label: "Analytics",
+                  href: "#analytics",
+                  description: "See where your visitors come from.",
+                  icon: icons.clock,
+                },
+                {
+                  label: "Inbox",
+                  href: "#inbox",
+                  description: "Every conversation in one place.",
+                  icon: icons.inbox,
+                },
+                {
+                  label: "Scheduling",
+                  href: "#scheduling",
+                  description: "Let customers book time with you.",
+                  icon: icons.calendar,
+                },
+              ],
+              footer: [
+                { label: "Watch demo", href: "#demo" },
+                { label: "Contact sales", href: "#sales" },
+              ],
+            },
             { label: "Features", href: "#features" },
             { label: "Pricing", href: "#pricing" },
           ]}

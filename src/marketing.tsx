@@ -1,7 +1,14 @@
 import { KitLink } from "./navigation.js";
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useId, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  CloseButton,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+} from "@headlessui/react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, type SectionTone } from "./layout.js";
+import { Prose } from "./docs.js";
 
 export type MarketingTone = "surface" | "inverse";
 type HeadingLevel = 2 | 3 | 4;
@@ -13,6 +20,83 @@ function childHeading(level: HeadingLevel) {
   return headingTag(level === 2 ? 3 : 4);
 }
 
+export interface FlyoutItem {
+  label: string;
+  href: string;
+  description?: string;
+  icon?: ReactNode;
+}
+/** A header link, or a labelled group that opens a flyout panel. */
+export type HeaderLink =
+  LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[] };
+
+function Flyout({
+  label,
+  items,
+  footer = [],
+  onNavigate,
+}: {
+  label: string;
+  items: FlyoutItem[];
+  footer?: LinkAction[];
+  onNavigate: () => void;
+}) {
+  return (
+    <Popover className="m-flyout">
+      <PopoverButton className="m-flyout-trigger">
+        {label}
+        <svg
+          viewBox="0 0 20 20"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="m6 8 4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </PopoverButton>
+      {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off. */}
+      <PopoverPanel anchor="bottom" className="m-flyout-panel">
+        <ul>
+          {items.map((item, index) => (
+            <li key={`${item.label}:${item.href}:${index}`}>
+              <CloseButton as={KitLink} href={item.href} onClick={onNavigate}>
+                {item.icon && (
+                  <span className="m-flyout-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                )}
+                <span className="m-flyout-text">
+                  <strong>{item.label}</strong>
+                  {item.description && <span>{item.description}</span>}
+                </span>
+              </CloseButton>
+            </li>
+          ))}
+        </ul>
+        {footer.length > 0 && (
+          <div className="m-flyout-footer">
+            {footer.map((link, index) => (
+              <CloseButton
+                as={KitLink}
+                key={`${link.label}:${link.href}:${index}`}
+                href={link.href}
+                onClick={onNavigate}
+              >
+                {link.label}
+              </CloseButton>
+            ))}
+          </div>
+        )}
+      </PopoverPanel>
+    </Popover>
+  );
+}
 export function MarketingHeader({
   brand,
   homeHref = "/",
@@ -26,7 +110,8 @@ export function MarketingHeader({
   brand: string;
   logo?: ReactNode;
   homeHref?: string;
-  links: LinkAction[];
+  /** Links, or groups of items that open a flyout panel. */
+  links: HeaderLink[];
   action?: LinkAction;
   controls?: ReactNode;
   className?: string;
@@ -55,15 +140,25 @@ export function MarketingHeader({
         Menu
       </Button>
       <nav id="m-marketing-nav" aria-label="Primary" data-open={open}>
-        {links.map((link, index) => (
-          <KitLink
-            key={`${link.label}:${link.href}:${index}`}
-            href={link.href}
-            onClick={() => setOpen(false)}
-          >
-            {link.label}
-          </KitLink>
-        ))}
+        {links.map((link, index) =>
+          "items" in link ? (
+            <Flyout
+              key={`${link.label}:flyout:${index}`}
+              label={link.label}
+              items={link.items}
+              footer={link.footer}
+              onNavigate={() => setOpen(false)}
+            />
+          ) : (
+            <KitLink
+              key={`${link.label}:${link.href}:${index}`}
+              href={link.href}
+              onClick={() => setOpen(false)}
+            >
+              {link.label}
+            </KitLink>
+          ),
+        )}
       </nav>
       <div className="m-actions">
         {controls}
@@ -521,5 +616,104 @@ export function Footer({
         </div>
       </div>
     </footer>
+  );
+}
+
+/** Intro band for inner pages (about, pricing, careers), with optional links and stats. */
+export function HeaderSection({
+  eyebrow,
+  title,
+  description,
+  links = [],
+  stats = [],
+  tone = "default",
+  align = "start",
+  headingLevel = 1,
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  links?: LinkAction[];
+  stats?: { label: string; value: string }[];
+  tone?: SectionTone;
+  align?: "start" | "center";
+  headingLevel?: 1 | 2;
+}) {
+  const id = useId();
+  const Heading = headingLevel === 1 ? "h1" : "h2";
+  return (
+    <section
+      className="m-marketing-section m-header-section"
+      data-tone={tone}
+      data-align={align}
+      aria-labelledby={id}
+      data-m-component="HeaderSection"
+    >
+      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
+      <Heading id={id}>{title}</Heading>
+      {description && <p className="m-section-description">{description}</p>}
+      {links.length > 0 && (
+        <div className="m-header-links">
+          {links.map((link, index) => (
+            <KitLink
+              key={`${link.label}:${link.href}:${index}`}
+              href={link.href}
+            >
+              {link.label}
+              <span aria-hidden="true"> →</span>
+            </KitLink>
+          ))}
+        </div>
+      )}
+      {stats.length > 0 && (
+        <dl className="m-header-stats">
+          {stats.map((stat) => (
+            <div key={stat.label}>
+              <dt>{stat.label}</dt>
+              <dd>{stat.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </section>
+  );
+}
+
+/** Long-form copy with optional media beside it, e.g. an about-page story. */
+export function ContentSection({
+  eyebrow,
+  title,
+  description,
+  media,
+  mediaPosition = "end",
+  tone = "default",
+  children,
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  /** Image, figure or illustration shown beside the copy. */
+  media?: ReactNode;
+  mediaPosition?: "start" | "end";
+  tone?: SectionTone;
+  children?: ReactNode;
+}) {
+  const id = useId();
+  return (
+    <section
+      className="m-marketing-section m-content-section"
+      data-tone={tone}
+      data-media={media ? mediaPosition : undefined}
+      aria-labelledby={id}
+      data-m-component="ContentSection"
+    >
+      <div className="m-content-copy">
+        {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
+        <h2 id={id}>{title}</h2>
+        {description && <p className="m-section-description">{description}</p>}
+        {children && <Prose>{children}</Prose>}
+      </div>
+      {media && <figure className="m-content-media">{media}</figure>}
+    </section>
   );
 }

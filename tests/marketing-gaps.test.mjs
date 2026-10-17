@@ -345,6 +345,8 @@ test("marketing component roots expose data-m-component", async () => {
   const action = { label: "Explore", href: "/explore" };
   const factories = {
     Banner: () => markup(UI.Banner, { children: "Announcement" }),
+    HeaderSection: () => markup(UI.HeaderSection, { title: "About" }),
+    ContentSection: () => markup(UI.ContentSection, { title: "Story" }),
     MarketingHeader: () =>
       markup(UI.MarketingHeader, { brand: "Northwind", links: [action] }),
     Hero: () =>

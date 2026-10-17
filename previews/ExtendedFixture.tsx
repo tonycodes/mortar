@@ -270,6 +270,64 @@ export function ExtendedCase({ name }: { name: string }) {
         </UI.Stack>
       );
       break;
+    case "HeaderSection":
+      example = (
+        <>
+          <UI.HeaderSection
+            eyebrow="About us"
+            title="We build the foundations other teams ship on"
+            description="Mortar started as one team's design system. Now it powers product, marketing and documentation sites."
+            links={[
+              { label: "Open roles", href: "#roles" },
+              { label: "Our values", href: "#values" },
+            ]}
+            stats={[
+              { label: "Components", value: "100" },
+              { label: "Teams using Mortar", value: "40+" },
+              { label: "Accessibility checks per release", value: "300" },
+            ]}
+          />
+          <UI.HeaderSection
+            title="Simple, transparent pricing"
+            description="One plan per team size. No per-seat surprises."
+            tone="inverse"
+            align="center"
+            headingLevel={2}
+          />
+        </>
+      );
+      break;
+    case "ContentSection":
+      example = (
+        <UI.ContentSection
+          eyebrow="Our story"
+          title="Why Mortar exists"
+          description="Every product we worked on rebuilt the same buttons, forms and page shells."
+          media={
+            <UI.MockWindow label="Northwind dashboard">
+              <UI.MetricGroup
+                label="This week"
+                items={[
+                  { label: "Deploys", value: "48" },
+                  { label: "Incidents", value: "1" },
+                ]}
+              />
+            </UI.MockWindow>
+          }
+        >
+          <p>
+            Each rebuild drifted: different focus rings, different dark modes,
+            different accessibility bugs. Fixing one product never fixed the
+            others.
+          </p>
+          <p>
+            Mortar puts those decisions in one place. Components ship with typed
+            contracts, both themes and executable accessibility checks, so a fix
+            lands everywhere at once.
+          </p>
+        </UI.ContentSection>
+      );
+      break;
     case "StackedList":
       example = (
         <UI.StackedList
