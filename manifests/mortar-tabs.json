@@ -21,7 +21,7 @@
       "label": "string",
       "value": "string",
       "onChange": "(value: string) => void",
-      "items": "{ id: string; label: string; content: ReactNode }[]"
+      "items": "{ id: string; label: string; content: ReactNode; count?: number | string; icon?: ReactNode }[]"
     },
     "states": [
       "Light",
@@ -45,7 +45,7 @@
     "probe": "tabs"
   },
   "integrity": {
-    "source": "96f4f09faef21f92022354b0dd7fdd367aded8fe53152ea121a2e2bf600f8b3e",
-    "preview": "4b9607ea8cdedfeeddb5e0346c7b2a1b67147252f2fae27ad0550adceee938dc"
+    "source": "3882806a8f2547e0a402975b14c0d6210753982f542deb4c7ff919623403af9f",
+    "preview": "a712e098db697dd76ed6b4e22305c67d596af858f1e4b1fcfc13828e71afdd3d"
   }
 }

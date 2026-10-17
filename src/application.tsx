@@ -783,20 +783,51 @@ export function Table({
     </div>
   );
 }
+/** Page numbers to show: first, last and the current page's neighbours, with gaps. */
+function pageWindow(page: number, count: number) {
+  const pages = new Set([1, count, page - 1, page, page + 1]);
+  const shown = [...pages]
+    .filter((n) => n >= 1 && n <= count)
+    .sort((a, b) => a - b);
+  const out: (number | "gap")[] = [];
+  shown.forEach((n, i) => {
+    if (i && n - shown[i - 1] > 1) out.push("gap");
+    out.push(n);
+  });
+  return out;
+}
 export function Pagination({
   page,
   pageCount,
   onChange,
+  numbered = false,
+  summary,
+  label = "Pagination",
 }: {
   page: number;
   pageCount: number;
   onChange: (page: number) => void;
+  /** Show individual page buttons between Previous and Next. */
+  numbered?: boolean;
+  /** "Showing 51 to 60 of 114 results". */
+  summary?: { from: number; to: number; total: number; noun?: string };
+  /** Accessible name; give each pagination on a page a distinct one. */
+  label?: string;
 }) {
+  const count = Math.max(1, pageCount);
   return (
-    <nav className="m-pagination" aria-label="Pagination">
-      <span aria-live="polite">
-        Page {page} of {Math.max(1, pageCount)}
-      </span>
+    <nav className="m-pagination" aria-label={label}>
+      {summary ? (
+        <p aria-live="polite">
+          Showing <strong>{summary.from}</strong> to{" "}
+          <strong>{summary.to}</strong> of <strong>{summary.total}</strong>{" "}
+          {summary.noun ?? "results"}
+        </p>
+      ) : (
+        <span aria-live="polite">
+          Page {page} of {count}
+        </span>
+      )}
       <div className="m-actions">
         <Button
           variant="secondary"
@@ -805,6 +836,31 @@ export function Pagination({
         >
           Previous
         </Button>
+        {numbered && (
+          <div className="m-pagination-pages">
+            {pageWindow(page, count).map((n, i) =>
+              n === "gap" ? (
+                <span
+                  key={`gap-${i}`}
+                  className="m-pagination-gap"
+                  aria-hidden="true"
+                >
+                  …
+                </span>
+              ) : (
+                <button
+                  key={n}
+                  type="button"
+                  aria-current={n === page ? "page" : undefined}
+                  aria-label={`Page ${n}`}
+                  onClick={() => onChange(n)}
+                >
+                  {n}
+                </button>
+              ),
+            )}
+          </div>
+        )}
         <Button
           variant="secondary"
           disabled={page >= pageCount}

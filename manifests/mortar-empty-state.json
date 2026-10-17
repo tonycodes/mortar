@@ -20,7 +20,8 @@
     "props": {
       "title": "string",
       "description": "string",
-      "action": "ReactNode"
+      "action": "ReactNode",
+      "icon": "ReactNode"
     },
     "states": [
       "Light",
@@ -43,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "96f4f09faef21f92022354b0dd7fdd367aded8fe53152ea121a2e2bf600f8b3e",
-    "preview": "3a7bf14feaf477bd56651d4f17f1fc4fe457b7e8eeea1696e215046e4c84ce80"
+    "source": "3882806a8f2547e0a402975b14c0d6210753982f542deb4c7ff919623403af9f",
+    "preview": "bc931302229600d8c51e1857668a1892206f479cb2e6cad09265813b99fd6d7d"
   }
 }

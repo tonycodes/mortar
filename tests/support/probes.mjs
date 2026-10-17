@@ -1,6 +1,20 @@
 import { expect } from "@playwright/test";
 import { openOverlay } from "./preview.mjs";
 export const implementations = {
+  async notice({ page, root }) {
+    const notice = root.getByText("Payment failed");
+    await expect(
+      root.getByRole("link", { name: "Update billing" }),
+    ).toBeVisible();
+    const dismiss = root.getByRole("button", {
+      name: "Dismiss Payment failed",
+    });
+    await dismiss.focus();
+    await page.keyboard.press("Enter");
+    await expect(notice).toHaveCount(0);
+    await root.getByRole("button", { name: "Show payment notice" }).click();
+    await expect(notice).toBeVisible();
+  },
   async button({ page, root }) {
     const button = root.getByRole("button", { name: "Save changes" });
     await button.focus();
@@ -123,6 +137,7 @@ export const implementations = {
     await expect(radios.first()).toBeChecked();
   },
   async tabs({ page, root }) {
+    await expect(root.getByRole("tab", { name: "Activity 12" })).toBeVisible();
     const tabs = root.getByRole("tab");
     await tabs.first().focus();
     await page.keyboard.press("ArrowRight");
@@ -162,6 +177,18 @@ export const implementations = {
     await page.keyboard.press("Escape");
     await expect(page.getByRole("menu")).toHaveCount(0);
     await expect(opener).toBeFocused();
+    // Icon-only trigger keeps its label as the accessible name; sections are labelled groups.
+    const more = root.getByRole("button", { name: "More options" });
+    await more.click();
+    const menu = page.getByRole("menu");
+    await expect(menu.getByRole("group", { name: "Project" })).toBeVisible();
+    await expect(menu.getByRole("separator")).toHaveCount(1);
+    await menu.getByRole("menuitem", { name: /Edit/ }).click();
+    await expect(root.getByLabel("Menu choice")).toHaveText("edit");
+    await expect(menu).toHaveCount(0);
+    await more.click();
+    await menu.getByRole("menuitem", { name: "Documentation" }).click();
+    await expect(page).toHaveURL(/#docs$/);
   },
   async dialog({ page, component, root }) {
     await openOverlay(page, component, root);
@@ -209,13 +236,23 @@ export const implementations = {
     }
   },
   async pagination({ page, root }) {
-    await expect(root.getByRole("button", { name: "Previous" })).toBeDisabled();
-    const next = root.getByRole("button", { name: "Next" });
+    const simple = root.getByRole("navigation", { name: "Pagination" });
+    await expect(
+      simple.getByRole("button", { name: "Previous" }),
+    ).toBeDisabled();
+    const next = simple.getByRole("button", { name: "Next" });
     await next.focus();
     await page.keyboard.press("Enter");
-    await expect(root).toContainText("Page 2 of 5");
-    await root.getByRole("button", { name: "Previous" }).click();
-    await expect(root).toContainText("Page 1 of 5");
+    await expect(simple).toContainText("Page 2 of 5");
+    await simple.getByRole("button", { name: "Previous" }).click();
+    await expect(simple).toContainText("Page 1 of 5");
+    const results = root.getByRole("navigation", { name: "Results pages" });
+    await expect(
+      results.getByRole("button", { name: "Page 6" }),
+    ).toHaveAttribute("aria-current", "page");
+    await results.getByRole("button", { name: "Page 12" }).click();
+    await expect(results).toContainText("Showing 111 to 114 of 114 results");
+    await expect(results.getByRole("button", { name: "Next" })).toBeDisabled();
   },
   async faq({ page, root }) {
     const summary = root.locator("summary");

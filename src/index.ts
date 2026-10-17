@@ -26,6 +26,7 @@ export {
 export type {
   ButtonProps,
   ButtonGroupItem,
+  DropdownItem,
   InputProps,
   LinkAction,
   Tone,

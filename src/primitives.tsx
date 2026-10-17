@@ -1,5 +1,6 @@
 import { KitLink } from "./navigation.js";
 import {
+  Fragment,
   forwardRef,
   useId,
   type ButtonHTMLAttributes,
@@ -16,10 +17,19 @@ import {
   MenuButton,
   MenuItems,
   MenuItem,
+  MenuSection,
+  MenuHeading,
+  MenuSeparator,
 } from "@headlessui/react";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "danger";
   loading?: boolean;
+  size?: "sm" | "md" | "lg";
+  /** Decorative icon; the text remains the accessible name. */
+  icon?: ReactNode;
+  iconPosition?: "start" | "end";
+  /** Show only the icon; the children become screen-reader-only text. */
+  iconOnly?: boolean;
 }
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
@@ -30,10 +40,19 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       className = "",
       type = "button",
+      size = "md",
+      icon,
+      iconPosition = "start",
+      iconOnly = false,
       ...props
     },
     ref,
   ) {
+    const glyph = icon && (
+      <span className="m-button-icon" aria-hidden="true">
+        {icon}
+      </span>
+    );
     return (
       <button
         {...props}
@@ -42,9 +61,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         aria-busy={loading || undefined}
         className={`m-button m-button-${variant} ${className}`}
+        data-size={size === "md" ? undefined : size}
+        data-icon-only={iconOnly && icon ? true : undefined}
       >
         {loading && <span className="m-spinner" aria-hidden="true" />}
-        {children}
+        {iconPosition === "start" && glyph}
+        {iconOnly && icon ? (
+          <span className="m-sr-only">{children}</span>
+        ) : (
+          children
+        )}
+        {iconPosition === "end" && glyph}
       </button>
     );
   },
@@ -381,7 +408,14 @@ export function Tabs({
   label: string;
   value: string;
   onChange: (value: string) => void;
-  items: { id: string; label: string; content: ReactNode }[];
+  items: {
+    id: string;
+    label: string;
+    content: ReactNode;
+    /** Shown after the label, e.g. a number of items. */
+    count?: number | string;
+    icon?: ReactNode;
+  }[];
 }) {
   const base = useId();
   return (
@@ -415,7 +449,15 @@ export function Tabs({
             tabIndex={item.id === value ? 0 : -1}
             onClick={() => onChange(item.id)}
           >
+            {item.icon && (
+              <span className="m-tab-icon" aria-hidden="true">
+                {item.icon}
+              </span>
+            )}
             {item.label}
+            {item.count !== undefined && (
+              <span className="m-tab-count">{item.count}</span>
+            )}
           </button>
         ))}
       </div>
@@ -468,36 +510,115 @@ export function Modal({
     </HeadlessDialog>
   );
 }
+export interface DropdownItem {
+  label: string;
+  /** Run an action. Use href instead for navigation. */
+  onSelect?: () => void;
+  href?: string;
+  icon?: ReactNode;
+  description?: string;
+  /** Items sharing a section are grouped under that heading, separated by a divider. */
+  section?: string;
+  danger?: boolean;
+  disabled?: boolean;
+}
 export function Dropdown({
   label,
   items,
+  icon,
+  iconOnly = false,
+  variant = "secondary",
+  align = "end",
+  header,
 }: {
+  /** Trigger text, and its accessible name when iconOnly. */
   label: string;
-  items: {
-    label: string;
-    onSelect: () => void;
-    danger?: boolean;
-    disabled?: boolean;
-  }[];
+  items: DropdownItem[];
+  /** Trigger icon, e.g. a "more" ellipsis or an avatar. */
+  icon?: ReactNode;
+  iconOnly?: boolean;
+  variant?: "secondary" | "ghost";
+  align?: "start" | "end";
+  /** Content above the items, e.g. "Signed in as …". */
+  header?: ReactNode;
 }) {
+  const groups: { section?: string; items: DropdownItem[] }[] = [];
+  for (const item of items) {
+    const last = groups[groups.length - 1];
+    if (last && last.section === item.section) last.items.push(item);
+    else groups.push({ section: item.section, items: [item] });
+  }
+  const entry = (item: DropdownItem) => {
+    const content = (
+      <>
+        {item.icon && (
+          <span className="m-menu-icon" aria-hidden="true">
+            {item.icon}
+          </span>
+        )}
+        {item.description ? (
+          <span className="m-menu-text">
+            <span>{item.label}</span>
+            <small>{item.description}</small>
+          </span>
+        ) : (
+          item.label
+        )}
+      </>
+    );
+    return (
+      <MenuItem key={item.label} disabled={item.disabled}>
+        {item.href ? (
+          <KitLink href={item.href} className={item.danger ? "m-error" : ""}>
+            {content}
+          </KitLink>
+        ) : (
+          <button
+            type="button"
+            className={item.danger ? "m-error" : ""}
+            onClick={item.onSelect}
+          >
+            {content}
+          </button>
+        )}
+      </MenuItem>
+    );
+  };
   return (
     <Menu>
-      <MenuButton className="m-button m-button-secondary">
-        {label}
-        <span aria-hidden="true">⌄</span>
+      <MenuButton
+        className={`m-button m-button-${variant}`}
+        aria-label={iconOnly && icon ? label : undefined}
+        data-icon-only={iconOnly && icon ? true : undefined}
+      >
+        {icon && (
+          <span className="m-button-icon" aria-hidden="true">
+            {icon}
+          </span>
+        )}
+        {!(iconOnly && icon) && label}
+        {!(iconOnly && icon) && <span aria-hidden="true">⌄</span>}
       </MenuButton>
-      <MenuItems anchor="bottom end" className="m-menu">
-        {items.map((item) => (
-          <MenuItem key={item.label} disabled={item.disabled}>
-            <button
-              type="button"
-              className={item.danger ? "m-error" : ""}
-              onClick={item.onSelect}
-            >
-              {item.label}
-            </button>
-          </MenuItem>
-        ))}
+      <MenuItems anchor={`bottom ${align}`} className="m-menu">
+        {header && <div className="m-menu-header">{header}</div>}
+        {groups.map((group, index) =>
+          group.section ? (
+            <Fragment key={`${group.section}:${index}`}>
+              {index > 0 && <MenuSeparator className="m-menu-separator" />}
+              <MenuSection>
+                <MenuHeading className="m-menu-heading">
+                  {group.section}
+                </MenuHeading>
+                {group.items.map(entry)}
+              </MenuSection>
+            </Fragment>
+          ) : (
+            <Fragment key={`items:${index}`}>
+              {index > 0 && <MenuSeparator className="m-menu-separator" />}
+              {group.items.map(entry)}
+            </Fragment>
+          ),
+        )}
       </MenuItems>
     </Menu>
   );
@@ -507,19 +628,51 @@ export function Notice({
   children,
   tone = "neutral",
   announce = false,
+  actions,
+  onDismiss,
+  dismissLabel,
 }: {
   title: string;
   children?: ReactNode;
   tone?: Tone;
   announce?: boolean;
+  /** Links or buttons such as "View details". */
+  actions?: ReactNode;
+  onDismiss?: () => void;
+  /** Accessible name for the dismiss button; defaults to "Dismiss {title}". */
+  dismissLabel?: string;
 }) {
   return (
     <div
       className={`m-notice m-tone-${tone}`}
       role={announce ? (tone === "danger" ? "alert" : "status") : undefined}
+      data-dismissible={onDismiss ? true : undefined}
     >
       <strong>{title}</strong>
       {children && <div>{children}</div>}
+      {actions && <div className="m-notice-actions">{actions}</div>}
+      {onDismiss && (
+        <button
+          type="button"
+          className="m-notice-dismiss"
+          aria-label={dismissLabel ?? `Dismiss ${title}`}
+          onClick={onDismiss}
+        >
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="m5 5 10 10M15 5 5 15"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
@@ -527,13 +680,21 @@ export function EmptyState({
   title,
   description,
   action,
+  icon,
 }: {
   title: string;
   description: string;
   action?: ReactNode;
+  /** Decorative illustration or icon above the title. */
+  icon?: ReactNode;
 }) {
   return (
     <div className="m-empty">
+      {icon && (
+        <span className="m-empty-icon" aria-hidden="true">
+          {icon}
+        </span>
+      )}
       <h3>{title}</h3>
       <p>{description}</p>
       {action}

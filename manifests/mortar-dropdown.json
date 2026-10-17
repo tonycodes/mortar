@@ -19,7 +19,12 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ label: string; onSelect: () => void; danger?: boolean; disabled?: boolean }[]"
+      "items": "DropdownItem[] ({ label; onSelect?; href?; icon?; description?; section?; danger?; disabled? })",
+      "icon": "ReactNode",
+      "iconOnly": "boolean",
+      "variant": "secondary | ghost",
+      "align": "start | end",
+      "header": "ReactNode"
     },
     "states": [
       "Light",
@@ -43,7 +48,7 @@
     "probe": "menu"
   },
   "integrity": {
-    "source": "96f4f09faef21f92022354b0dd7fdd367aded8fe53152ea121a2e2bf600f8b3e",
-    "preview": "f2d9f93d18df01ea0f7768f98d11f34656df3375363fa4d38f87b96f20cad089"
+    "source": "3882806a8f2547e0a402975b14c0d6210753982f542deb4c7ff919623403af9f",
+    "preview": "dba185725085fccff3306cfe17cb3e7a6b6b479b3c0bf030ef62635dd8821458"
   }
 }

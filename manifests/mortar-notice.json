@@ -21,7 +21,10 @@
       "title": "string",
       "children": "ReactNode",
       "tone": "neutral | success | warning | danger",
-      "announce": "boolean"
+      "announce": "boolean",
+      "actions": "ReactNode",
+      "onDismiss": "() => void",
+      "dismissLabel": "string"
     },
     "states": [
       "Light",
@@ -39,12 +42,13 @@
     "source": "previews/NoticePreview.tsx"
   },
   "testing": {
-    "profile": "display",
+    "profile": "control",
     "target": ".m-notice",
-    "states": []
+    "states": [],
+    "probe": "notice"
   },
   "integrity": {
-    "source": "96f4f09faef21f92022354b0dd7fdd367aded8fe53152ea121a2e2bf600f8b3e",
-    "preview": "3e1947947f84196a34535a97f63b0046ea7549aa41555551a29143f450279404"
+    "source": "3882806a8f2547e0a402975b14c0d6210753982f542deb4c7ff919623403af9f",
+    "preview": "1190c006496c385588e46507b4fe5be66bf8c82e0fcc030ed471abc1081c1d6f"
   }
 }
