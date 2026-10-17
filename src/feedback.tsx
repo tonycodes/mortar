@@ -14,6 +14,8 @@ export interface ToastItem {
   description?: string;
   tone?: Tone;
   action?: { label: string; onClick: () => void };
+  /** A second action shown after the first, e.g. Decline next to Accept. */
+  secondaryAction?: { label: string; onClick: () => void };
   /** Avatar or icon shown instead of the tone icon, e.g. who replied. */
   leading?: ReactNode;
 }
@@ -33,6 +35,7 @@ export function Toast({
   action,
   onDismiss,
   leading,
+  secondaryAction,
 }: Omit<ToastItem, "id"> & { onDismiss?: () => void }) {
   return (
     <div className="m-toast" data-tone={tone}>
@@ -51,6 +54,11 @@ export function Toast({
         {action && (
           <Button variant="ghost" onClick={action.onClick}>
             {action.label}
+          </Button>
+        )}
+        {secondaryAction && (
+          <Button variant="ghost" onClick={secondaryAction.onClick}>
+            {secondaryAction.label}
           </Button>
         )}
         {onDismiss && (

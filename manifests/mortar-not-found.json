@@ -21,7 +21,8 @@
       "code": "string",
       "title": "string",
       "description": "string",
-      "actions": "LinkAction[]"
+      "actions": "LinkAction[]",
+      "illustration": "ReactNode"
     },
     "states": [
       "Light",
@@ -44,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "cd5f79015a47883f442fd4b1f0890dd7560603202e371cc4435926fdaca84c11",
-    "preview": "e6d5d56cd46818a6ebab1902bec33211a59b71b02e6a11f11201d69b123f5e1e"
+    "source": "f5ac97d9fc42eed1d45e70d4b3f271c87847aee1e6e9b5c7c554b01e2001694f",
+    "preview": "558e4236113423cd8e2ecaeb5c1c6c16d08522d1ef8cacade0683501c230b6cf"
   }
 }

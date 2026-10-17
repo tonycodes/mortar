@@ -64,7 +64,11 @@ for (const brand of ["neutral", "green"]) {
     problems.push(
       ...surfaceProblems(
         "CallToAction",
-        await paint(page, '[data-mortar-preview="CallToAction"] .m-cta'),
+        // The default (non-split) CTA; the preview also shows a split promo variant.
+        await paint(
+          page,
+          '[data-mortar-preview="CallToAction"] .m-cta:not([data-layout])',
+        ),
       ),
     );
     await page.goto(

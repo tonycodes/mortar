@@ -175,6 +175,16 @@ export function CompositionCase({ name }: { name: string }) {
           ]}
           email={{ onSubmit: setSubmitted }}
           footer="By continuing you agree to the terms of service."
+          aside={
+            <UI.Stack gap="md">
+              <UI.Text size="lg" weight="medium">
+                “We answered twice as many customers in the first month.”
+              </UI.Text>
+              <UI.Text tone="muted" size="sm">
+                Lindsay Walton, Wheelhouse Bikes
+              </UI.Text>
+            </UI.Stack>
+          }
         />
       );
       break;

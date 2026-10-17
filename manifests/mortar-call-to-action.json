@@ -21,7 +21,8 @@
       "title": "string",
       "description": "string",
       "actions": "LinkAction[]",
-      "tone": "\"surface\" | \"inverse\""
+      "tone": "\"surface\" | \"inverse\"",
+      "media": "ReactNode"
     },
     "states": [
       "Light",
@@ -44,7 +45,7 @@
     "states": ["surface", "inverse"]
   },
   "integrity": {
-    "source": "77a2b1bd9c80c4766a0ba66a83737673dc0caea0568b7bab48626b631cfc5dba",
-    "preview": "b98a877826cd240e5907963c771f574bc5ea7fcf96999fb95bf2f24d40b32cd6"
+    "source": "87f143f352a7664c3cf5c563889e832c58c2959c85cb4b761bb8e36674f57077",
+    "preview": "6691c694b26b0dd35e05655c38b7976c31ce92e9360ccc1a409d17b46c08a02b"
   }
 }

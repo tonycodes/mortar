@@ -4969,3 +4969,102 @@
     }
   }
 }
+
+/* Imagery variants: promo CTA, illustrated 404, split-screen sign-in and metric icons. */
+@layer components {
+  .m-cta[data-layout="split"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 40px 64px;
+    align-items: center;
+    max-width: 1280px;
+    margin-inline: auto;
+    text-align: start;
+  }
+  .m-cta[data-layout="split"] :is(h2, p) {
+    margin-inline: 0;
+  }
+  .m-cta[data-layout="split"] .m-actions {
+    justify-content: flex-start;
+  }
+  .m-cta-media {
+    min-width: 0;
+  }
+  .m-cta-media :is(img, video) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--m-radius-lg);
+  }
+  @media (max-width: 900px) {
+    .m-cta[data-layout="split"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .m-not-found-art {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+    color: var(--m-muted);
+  }
+  .m-not-found-art :is(img, svg) {
+    width: min(240px, 60%);
+    height: auto;
+  }
+  .m-sign-in-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: center;
+    min-height: 100%;
+  }
+  .m-sign-in-aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    align-self: stretch;
+    padding: 40px;
+    overflow: hidden;
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+  }
+  /* Media fills the panel edge to edge; text gets breathing room. */
+  .m-sign-in-aside:has(> :is(img, video):only-child) {
+    padding: 0;
+  }
+  .m-sign-in-aside :is(img, video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 900px) {
+    .m-sign-in-split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    /* The form comes first; the artwork is decorative on small screens. */
+    .m-sign-in-aside {
+      display: none;
+    }
+  }
+  .m-metrics dt:has(.m-metric-icon) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .m-metric-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--m-radius);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+  }
+  .m-metric-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+}
