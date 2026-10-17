@@ -84,7 +84,12 @@
           "id": "shells",
           "title": "Shells and headings",
           "thumbnail": "PageHeading",
-          "components": ["AppShell", "PageHeading", "SectionHeading"]
+          "components": [
+            "AppShell",
+            "StackedShell",
+            "PageHeading",
+            "SectionHeading"
+          ]
         },
         {
           "id": "navigation",
@@ -110,6 +115,7 @@
           "thumbnail": "MetricGroup",
           "components": [
             "DescriptionList",
+            "Calendar",
             "MetricGroup",
             "CodeBlock",
             "PreviewFrame"

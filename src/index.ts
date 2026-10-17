@@ -42,6 +42,7 @@ export {
   SignInPanel,
   Sidebar,
   Navbar,
+  StackedShell,
   Breadcrumbs,
   ActionPanel,
 } from "./application.js";
@@ -128,3 +129,5 @@ export {
 export type { DocsShellProps, FileNode } from "./docs.js";
 export { Listbox, Combobox } from "./choice.js";
 export type { ChoiceOption } from "./choice.js";
+export { Calendar } from "./calendar.js";
+export type { CalendarEvent } from "./calendar.js";

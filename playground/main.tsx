@@ -13,7 +13,7 @@ import {
   PagerLinks,
 } from "../src/index.js";
 import catalog from "../catalog.json";
-import { SaasLandingRecipe } from "./recipes.js";
+import { SaasLandingRecipe, ProjectWorkspaceRecipe } from "./recipes.js";
 import {
   CategoryPage,
   ExamplePanel,
@@ -81,6 +81,11 @@ function Playground({
         {
           label: "SaaS landing",
           href: url("recipe", "saas-landing"),
+          current: false,
+        },
+        {
+          label: "Project workspace",
+          href: url("recipe", "project-workspace"),
           current: false,
         },
       ],
@@ -297,6 +302,8 @@ function PlaygroundApp() {
     >
       {params.get("recipe") === "saas-landing" ? (
         <SaasLandingRecipe />
+      ) : params.get("recipe") === "project-workspace" ? (
+        <ProjectWorkspaceRecipe />
       ) : (
         <Playground params={params} navigate={navigate} />
       )}

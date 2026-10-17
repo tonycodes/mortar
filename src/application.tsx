@@ -28,6 +28,10 @@ export interface AppShellProps {
   secondaryNavigation?: { label: string; items: NavigationItem[] }[];
   header?: ReactNode;
   actions?: ReactNode;
+  /** Secondary column beside the main content (multi-column layout). */
+  aside?: ReactNode;
+  /** Accessible name for the secondary column. */
+  asideLabel?: string;
   children: ReactNode;
 }
 function SidebarContent({
@@ -116,6 +120,8 @@ export function AppShell({
   secondaryNavigation = [],
   header,
   actions,
+  aside,
+  asideLabel = "Details",
   children,
 }: AppShellProps) {
   const [open, setOpen] = useState(false);
@@ -148,9 +154,20 @@ export function AppShell({
           <div className="m-header-context">{header || workspace || brand}</div>
           <div className="m-actions">{actions}</div>
         </header>
-        <main id="m-content" tabIndex={-1}>
-          {children}
-        </main>
+        {aside ? (
+          <div className="m-app-columns">
+            <main id="m-content" tabIndex={-1}>
+              {children}
+            </main>
+            <aside className="m-app-aside" aria-label={asideLabel}>
+              {aside}
+            </aside>
+          </div>
+        ) : (
+          <main id="m-content" tabIndex={-1}>
+            {children}
+          </main>
+        )}
       </div>
       <Dialog open={open} onClose={() => setOpen(false)} className="m-dialog">
         <div className="m-backdrop" aria-hidden="true" />
@@ -164,6 +181,47 @@ export function AppShell({
           <SidebarContent {...sidebar} onNavigate={() => setOpen(false)} />
         </DialogPanel>
       </Dialog>
+    </div>
+  );
+}
+/** Top navigation with a centred page column: Tailwind's stacked application layout. */
+export function StackedShell({
+  brand,
+  logo,
+  homeHref,
+  navigation,
+  actions,
+  header,
+  width = "lg",
+  children,
+}: {
+  brand: string;
+  logo?: ReactNode;
+  homeHref?: string;
+  navigation: NavigationItem[];
+  actions?: ReactNode;
+  /** Page heading shown above the content, e.g. a PageHeading. */
+  header?: ReactNode;
+  width?: "md" | "lg" | "xl" | "full";
+  children: ReactNode;
+}) {
+  const contentId = "m-stacked-" + useId().replace(/[^a-zA-Z0-9-]/g, "");
+  return (
+    <div className="m-stacked-shell">
+      <KitLink className="m-skip" href={`#${contentId}`}>
+        Skip to content
+      </KitLink>
+      <Navbar
+        brand={brand}
+        logo={logo}
+        homeHref={homeHref}
+        items={navigation}
+        actions={actions}
+      />
+      <main id={contentId} tabIndex={-1} data-width={width}>
+        {header && <div className="m-stacked-header">{header}</div>}
+        {children}
+      </main>
     </div>
   );
 }
