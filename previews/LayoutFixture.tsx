@@ -2,7 +2,7 @@ import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 
-/** Fixtures for Divider, Card, DescriptionList and ButtonGroup. Kept apart to keep the diff reviewable. */
+/** Fixtures for Divider, Card, DescriptionList, ButtonGroup and Calendar. Kept apart to keep the diff reviewable. */
 
 const icon = (path: string) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -12,6 +12,7 @@ const icon = (path: string) => (
 
 export function LayoutCase({ name }: { name: string }) {
   const [last, setLast] = useState("none");
+  const [date, setDate] = useState<string | null>("2026-01-12");
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
@@ -129,6 +130,39 @@ export function LayoutCase({ name }: { name: string }) {
             ]}
           />
           <output aria-label="Last action">{last}</output>
+        </UI.Stack>
+      );
+      break;
+    case "Calendar":
+      example = (
+        <UI.Stack gap="lg">
+          <UI.Calendar
+            label="Choose a date"
+            locale="en-US"
+            weekStartsOn={1}
+            today="2026-01-12"
+            value={date}
+            onChange={setDate}
+            min="2025-12-01"
+            max="2026-03-31"
+            disabledDates={["2026-01-15"]}
+            events={[
+              {
+                id: "review",
+                date: "2026-01-12",
+                title: "Design review",
+                time: "10:00",
+              },
+              {
+                id: "sync",
+                date: "2026-01-12",
+                title: "Team sync",
+                time: "14:00",
+              },
+              { id: "release", date: "2026-01-21", title: "Release planning" },
+            ]}
+          />
+          <output aria-label="Selected date">{date ?? "none"}</output>
         </UI.Stack>
       );
       break;

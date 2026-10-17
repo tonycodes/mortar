@@ -1,0 +1,64 @@
+{
+  "id": "mortar-calendar",
+  "logicalId": "calendar",
+  "name": "Calendar",
+  "description": "Mortar calendar: a month-grid date picker with keyboard navigation, min/max and unavailable dates, and an optional event list for the selected day. Dates are ISO strings, so no time zone shifts a day.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Calendar",
+  "source": "src/display.tsx",
+  "capabilities": ["theme", "application", "keyboard", "responsive"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "value": "string | null (YYYY-MM-DD)",
+      "onChange": "(value: string) => void",
+      "month": "string (YYYY-MM, controlled visible month)",
+      "onMonthChange": "(month: string) => void",
+      "min": "string (YYYY-MM-DD)",
+      "max": "string (YYYY-MM-DD)",
+      "disabledDates": "string[]",
+      "isDateDisabled": "(date: string) => boolean",
+      "locale": "string (labels only)",
+      "weekStartsOn": "0 | 1 | 2 | 3 | 4 | 5 | 6 (default 0, Sunday)",
+      "today": "string (YYYY-MM-DD, required; the calendar never reads the clock)",
+      "disabled": "boolean",
+      "events": "CalendarEvent[] ({ id: string; date: string; title: string; time?: string; href?: string })",
+      "previousLabel": "string",
+      "nextLabel": "string",
+      "emptyEventsLabel": "string",
+      "eventCountLabel": "(count: number) => string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Calendar } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": ["mortar-button"]
+  },
+  "preview": {
+    "source": "previews/CalendarPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-calendar",
+    "probe": "calendar",
+    "states": ["disabled", "empty", "long"]
+  },
+  "integrity": {
+    "source": "ea44cd3cc02686a230fb4cc105902cc4450258deae72db91fab6b1a9a6da53eb",
+    "preview": "f4ede05149c507066ed4f550a7d1607fa0c380924bd3387a041b1313f0585df6"
+  }
+}

@@ -41,6 +41,7 @@ export const probes = Object.freeze({
   Toast: "toast",
   Toaster: "toast",
   Pagination: "pagination",
+  Calendar: "calendar",
   DataTable: "table-sort",
   FAQ: "faq",
   Pricing: "pricing",

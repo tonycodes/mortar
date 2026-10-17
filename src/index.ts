@@ -79,7 +79,9 @@ export {
   FilterChip,
   CheckList,
   DescriptionList,
+  Calendar,
 } from "./display.js";
+export type { CalendarEvent, CalendarProps } from "./display.js";
 export { Stack, Container, Text, Section, Divider, Card } from "./layout.js";
 export type { SectionTone } from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
