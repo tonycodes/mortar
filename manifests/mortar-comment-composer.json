@@ -5,7 +5,7 @@
   "description": "Mortar comment composer: a labelled textarea in a box with an optional avatar, toolbar, Write/Preview tabs and character count; Ctrl/⌘+Enter submits and empty comments cannot be sent.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "export": "CommentComposer",
   "source": "src/composer.tsx",
   "capabilities": ["theme", "application", "form", "keyboard"],

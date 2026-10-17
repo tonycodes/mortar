@@ -5,7 +5,7 @@
   "description": "Mortar stacked shell: top Navbar with a centred page column and optional page header, Tailwind's stacked application layout.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "export": "StackedShell",
   "source": "src/application.tsx",
   "capabilities": [

@@ -5,7 +5,7 @@
   "description": "Mortar card: a bordered surface with optional heading, header actions, footer, compact padding and sunken tone.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "export": "Card",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "foundation"],
