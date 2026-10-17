@@ -115,6 +115,15 @@
   transform-origin: top left;
   pointer-events: none;
 }
+/* Whole pages: render at desktop width and shrink further, cropped from the top. */
+.pg-thumb-page {
+  top: 0;
+  width: 1280px;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  transform: scale(0.25) translateX(-50%);
+}
 .pg-thumb-list {
   display: flex;
   flex-wrap: wrap;

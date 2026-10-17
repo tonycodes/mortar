@@ -95,3 +95,23 @@ test("ContentSection pairs prose with optional media", () => {
     /m-content-media|data-media/,
   );
 });
+
+test("Pricing names unavailable plans even without a custom label", async () => {
+  const { Pricing } = await import("../dist/index.js");
+  const plan = (id, availability) => ({
+    id,
+    name: id,
+    description: "Plan",
+    monthly: "£1",
+    features: ["One"],
+    action: { label: "Buy", href: "#buy" },
+    availability,
+  });
+  const markup = html(Pricing, {
+    title: "Plans",
+    plans: [plan("soon", "coming-soon"), plan("gone", "unavailable")],
+  });
+  assert.match(markup, /<p role="status">Coming soon<\/p>/);
+  assert.match(markup, /<p role="status">Unavailable<\/p>/);
+  assert.doesNotMatch(markup, /<p role="status"><\/p>/);
+});

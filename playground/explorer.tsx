@@ -18,6 +18,7 @@ import {
 } from "../src/index.js";
 import catalog from "../catalog.json";
 import taxonomy from "./taxonomy.json";
+import { templates } from "./templates.js";
 
 export type Entry = (typeof catalog.components)[number];
 export type Kit = (typeof taxonomy.kits)[number];
@@ -36,7 +37,7 @@ export function url(key: string, value: string) {
   next.set(key, value);
   if (key === "state" && value === "default") next.delete("state");
   if (key === "view" && value === "preview") next.delete("view");
-  if (["component", "category", "kit"].includes(key)) {
+  if (["component", "category", "kit", "recipe"].includes(key)) {
     for (const k of ["component", "category", "kit", "state", "recipe", "view"])
       if (k !== key) next.delete(k);
   }
@@ -316,6 +317,32 @@ export function Overview({ kitId }: { kitId: string | null }) {
           </section>
         );
       })}
+      {!only && (
+        <section className="pg-kit" aria-labelledby="kit-templates">
+          <header className="pg-kit-header">
+            <h2 id="kit-templates">Page templates</h2>
+            <p>Whole pages composed only from Mortar components.</p>
+            <span>{templates.length} templates</span>
+          </header>
+          <ul className="pg-category-grid">
+            {templates.map(({ id, title, description, kind, Component }) => (
+              <li key={id} className="pg-category-card">
+                <div className="pg-thumb" inert aria-hidden="true">
+                  <div className="pg-thumb-scale pg-thumb-page">
+                    <Component />
+                  </div>
+                </div>
+                <h3>
+                  <KitLink href={url("recipe", id)}>{title}</KitLink>
+                </h3>
+                <p>
+                  {kind} · {description}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }
