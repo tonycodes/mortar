@@ -1,11 +1,14 @@
 import {
+  type CSSProperties,
   useEffect,
   useId,
   useMemo,
   useRef,
   useState,
   type KeyboardEvent,
+  type ReactNode,
 } from "react";
+import { SegmentedControl } from "./inspection.js";
 
 export interface CalendarEvent {
   id: string;
@@ -14,7 +17,12 @@ export interface CalendarEvent {
   title: string;
   /** Display time, e.g. "10:00". */
   time?: string;
+  /** Start as HH:MM; positions the event in week and day views. Omit for all-day. */
+  start?: string;
+  /** End as HH:MM; defaults to an hour after start. */
+  end?: string;
 }
+export type CalendarView = "month" | "week" | "day";
 
 // Dates are YYYY-MM-DD strings handled in UTC, so no local time zone can shift a day.
 const DAY = 86_400_000;
@@ -36,6 +44,46 @@ function addMonths(date: string, months: number) {
   );
 }
 const monthOf = (date: string) => date.slice(0, 7);
+const toMinutes = (time: string) => {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + (m || 0);
+};
+
+/** Assign overlapping timed events to side-by-side lanes. */
+function layout(events: CalendarEvent[]) {
+  const timed = events
+    .filter((e) => e.start)
+    .map((e) => {
+      const start = toMinutes(e.start!);
+      return { event: e, start, end: e.end ? toMinutes(e.end) : start + 60 };
+    })
+    .sort((a, b) => a.start - b.start || a.end - b.end);
+  type Placed = (typeof timed)[number] & { lane: number; lanes: number };
+  const out: Placed[] = [];
+  let cluster: Placed[] = [];
+  let laneEnds: number[] = [];
+  let clusterEnd = -1;
+  const flush = () => {
+    const lanes = Math.max(1, ...cluster.map((c) => c.lane + 1));
+    cluster.forEach((c) => (c.lanes = lanes));
+    out.push(...cluster);
+    cluster = [];
+    laneEnds = [];
+    clusterEnd = -1;
+  };
+  for (const item of timed) {
+    if (cluster.length && item.start >= clusterEnd) flush();
+    let lane = laneEnds.findIndex((end) => end <= item.start);
+    if (lane < 0) {
+      lane = laneEnds.length;
+      laneEnds.push(item.end);
+    } else laneEnds[lane] = item.end;
+    cluster.push({ ...item, lane, lanes: 1 });
+    clusterEnd = Math.max(clusterEnd, item.end);
+  }
+  if (cluster.length) flush();
+  return out;
+}
 function localToday() {
   const now = new Date();
   return toDate(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
@@ -53,6 +101,12 @@ export function Calendar({
   today: todayProp,
   locale = "en-GB",
   maxEvents = 2,
+  view = "month",
+  onViewChange,
+  onEventSelect,
+  onDateChange,
+  dayStartHour = 8,
+  dayEndHour = 19,
 }: {
   /** Displayed month as YYYY-MM. Omit to let the calendar manage it. */
   month?: string;
@@ -68,6 +122,17 @@ export function Calendar({
   locale?: string;
   /** Events listed per day in the full variant before "+N more". */
   maxEvents?: number;
+  /** Month grid, or a time grid for one week or one day. */
+  view?: CalendarView;
+  /** Shows a Month/Week/Day switcher when provided. */
+  onViewChange?: (view: CalendarView) => void;
+  /** Makes events in week and day views buttons. */
+  onEventSelect?: (id: string) => void;
+  /** Week and day views: called with the new anchor date after Previous/Next. */
+  onDateChange?: (date: string) => void;
+  /** First and last hour shown in week and day views. */
+  dayStartHour?: number;
+  dayEndHour?: number;
 }) {
   const today = todayProp || localToday();
   const [ownMonth, setOwnMonth] = useState(
@@ -79,6 +144,7 @@ export function Calendar({
   const moved = useRef(false);
   const grid = useRef<HTMLTableElement>(null);
   const headingId = useId();
+  const [anchor, setAnchor] = useState(selected || today);
 
   const formats = useMemo(
     () => ({
@@ -157,12 +223,48 @@ export function Calendar({
     setFocused(monthOf(focused) === monthOf(next) ? focused : next);
   };
 
+  const switcher = onViewChange && (
+    <SegmentedControl
+      label="Calendar view"
+      value={view}
+      options={[
+        { value: "month", label: "Month" },
+        { value: "week", label: "Week" },
+        { value: "day", label: "Day" },
+      ]}
+      onChange={(next) => onViewChange(next as CalendarView)}
+    />
+  );
+  if (view !== "month")
+    return (
+      <TimeGrid
+        view={view}
+        anchor={anchor}
+        onAnchorChange={(date) => {
+          setAnchor(date);
+          onDateChange?.(date);
+        }}
+        events={byDay}
+        today={today}
+        selected={selected}
+        weekStartsOn={weekStartsOn}
+        locale={locale}
+        formats={formats}
+        headingId={headingId}
+        switcher={switcher}
+        onEventSelect={onEventSelect}
+        dayStartHour={dayStartHour}
+        dayEndHour={dayEndHour}
+      />
+    );
+
   return (
     <div className="m-calendar" data-variant={variant}>
       <div className="m-calendar-header">
         <h2 id={headingId} aria-live="polite">
           {formats.title.format(new Date(toTime(first)))}
         </h2>
+        {switcher}
         <div className="m-calendar-nav">
           <button
             type="button"
@@ -282,6 +384,219 @@ export function Calendar({
           ))}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+function NavButton({
+  label,
+  direction,
+  onClick,
+}: {
+  label: string;
+  direction: "back" | "forward";
+  onClick: () => void;
+}) {
+  return (
+    <button type="button" aria-label={label} onClick={onClick}>
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+        <path
+          d={direction === "back" ? "m12 5-5 5 5 5" : "m8 5 5 5-5 5"}
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </button>
+  );
+}
+
+/** Week and day views: labelled day sections whose events are positioned on an hour grid. */
+function TimeGrid({
+  view,
+  anchor,
+  onAnchorChange,
+  events,
+  today,
+  selected,
+  weekStartsOn,
+  locale,
+  formats,
+  headingId,
+  switcher,
+  onEventSelect,
+  dayStartHour,
+  dayEndHour,
+}: {
+  view: "week" | "day";
+  anchor: string;
+  onAnchorChange: (date: string) => void;
+  events: Map<string, CalendarEvent[]>;
+  today: string;
+  selected?: string;
+  weekStartsOn: 0 | 1;
+  locale: string;
+  formats: { day: Intl.DateTimeFormat; short: Intl.DateTimeFormat };
+  headingId: string;
+  switcher: ReactNode;
+  onEventSelect?: (id: string) => void;
+  dayStartHour: number;
+  dayEndHour: number;
+}) {
+  const offset = (new Date(toTime(anchor)).getUTCDay() - weekStartsOn + 7) % 7;
+  const days =
+    view === "week"
+      ? Array.from({ length: 7 }, (_, i) => addDays(anchor, i - offset))
+      : [anchor];
+  const step = view === "week" ? 7 : 1;
+  const unit = view === "week" ? "week" : "day";
+  const range = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+  const title =
+    view === "week"
+      ? range.formatRange(
+          new Date(toTime(days[0])),
+          new Date(toTime(days[days.length - 1])),
+        )
+      : formats.day.format(new Date(toTime(anchor)));
+  const first = dayStartHour * 60;
+  const span = Math.max(60, (dayEndHour - dayStartHour) * 60);
+  const pct = (n: number) =>
+    `${(Math.min(Math.max(n, 0), 1) * 100).toFixed(4)}%`;
+  const hours = Array.from(
+    { length: dayEndHour - dayStartHour },
+    (_, i) => dayStartHour + i,
+  );
+  const times = (event: CalendarEvent) => (
+    <span className="m-calendar-event-time">
+      <time>{event.start}</time>
+      {event.end && (
+        <>
+          –<time>{event.end}</time>
+        </>
+      )}
+    </span>
+  );
+  const item = (event: CalendarEvent, timed: boolean) => {
+    const inner = (
+      <>
+        {event.title}
+        {timed && times(event)}
+      </>
+    );
+    return onEventSelect ? (
+      <button
+        type="button"
+        className="m-calendar-event"
+        onClick={() => onEventSelect(event.id)}
+      >
+        {inner}
+      </button>
+    ) : timed ? (
+      <div className="m-calendar-event">{inner}</div>
+    ) : (
+      inner
+    );
+  };
+  return (
+    <div className="m-calendar" data-view={view}>
+      <div className="m-calendar-header">
+        <h2 id={headingId} aria-live="polite">
+          {title}
+        </h2>
+        {switcher}
+        <div className="m-calendar-nav">
+          <NavButton
+            label={`Previous ${unit}`}
+            direction="back"
+            onClick={() => onAnchorChange(addDays(anchor, -step))}
+          />
+          <NavButton
+            label={`Next ${unit}`}
+            direction="forward"
+            onClick={() => onAnchorChange(addDays(anchor, step))}
+          />
+        </div>
+      </div>
+      <div
+        className="m-calendar-timegrid"
+        style={
+          {
+            "--m-hours": hours.length,
+            "--m-days": days.length,
+          } as CSSProperties
+        }
+      >
+        <div className="m-calendar-hours" aria-hidden="true">
+          {hours.map((h) => (
+            <span key={h}>{`${String(h).padStart(2, "0")}:00`}</span>
+          ))}
+        </div>
+        <div className="m-calendar-columns" data-count={days.length}>
+          {days.map((date) => {
+            const dayEvents = events.get(date) || [];
+            const allDay = dayEvents.filter((e) => !e.start);
+            const timed = layout(dayEvents);
+            const d = new Date(toTime(date));
+            const labelId = `${headingId}-${date}`;
+            return (
+              <section
+                key={date}
+                className="m-calendar-column"
+                aria-labelledby={labelId}
+                data-selected={date === selected || undefined}
+              >
+                <h3
+                  id={labelId}
+                  aria-current={date === today ? "date" : undefined}
+                >
+                  <span className="m-calendar-column-label" aria-hidden="true">
+                    <span>{formats.short.format(d)}</span>
+                    <strong>{Number(date.slice(8))}</strong>
+                  </span>
+                  <span className="m-sr-only">{formats.day.format(d)}</span>
+                </h3>
+                {allDay.length > 0 && (
+                  <ul className="m-calendar-allday" aria-label="All day">
+                    {allDay.map((event) => (
+                      <li key={event.id}>{item(event, false)}</li>
+                    ))}
+                  </ul>
+                )}
+                {timed.length > 0 ? (
+                  <ol className="m-calendar-slots">
+                    {timed.map((t) => (
+                      <li
+                        key={t.event.id}
+                        style={
+                          {
+                            "--m-top": pct((t.start - first) / span),
+                            "--m-height": pct((t.end - t.start) / span),
+                            "--m-lane": t.lane,
+                            "--m-lanes": t.lanes,
+                          } as CSSProperties
+                        }
+                      >
+                        {item(t.event, true)}
+                      </li>
+                    ))}
+                  </ol>
+                ) : allDay.length ? (
+                  // Keeps the hour lines in columns that only have all-day events.
+                  <div className="m-calendar-slots" aria-hidden="true" />
+                ) : (
+                  <p className="m-calendar-none">No events</p>
+                )}
+              </section>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

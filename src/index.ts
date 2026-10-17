@@ -138,7 +138,7 @@ export type { DocsShellProps, FileNode } from "./docs.js";
 export { Listbox, Combobox } from "./choice.js";
 export type { ChoiceOption } from "./choice.js";
 export { Calendar } from "./calendar.js";
-export type { CalendarEvent } from "./calendar.js";
+export type { CalendarEvent, CalendarView } from "./calendar.js";
 export {
   ProductList,
   ProductOverview,
