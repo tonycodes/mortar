@@ -186,6 +186,7 @@ for (const width of [390, 1280])
       "Application UI",
       "Marketing UI",
       "Documentation",
+      "Ecommerce",
     ])
       await expect(page.getByRole("heading", { name: kit })).toBeVisible();
     // Thumbnails are inert decoration: nothing inside them is focusable or announced.
@@ -319,6 +320,8 @@ const templateIds = [
   "about",
   "project-workspace",
   "settings",
+  "product-page",
+  "cart-page",
 ];
 for (const id of templateIds)
   for (const width of [390, 1280])
