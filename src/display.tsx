@@ -300,3 +300,55 @@ export function GridList({
     </ul>
   );
 }
+
+export interface Attachment {
+  id: string;
+  name: string;
+  href: string;
+  /** Preformatted size, e.g. "2.4 MB". */
+  size?: string;
+  /** Link text; the file name is appended for screen readers. Defaults to "Download". */
+  actionLabel?: string;
+  icon?: ReactNode;
+}
+const paperclip = (
+  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+    <path
+      d="M7 10.5l5-5a2.5 2.5 0 0 1 3.5 3.5l-6.5 6.5a4 4 0 0 1-5.7-5.7l6.2-6.2"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+/** Files attached to a record, each with a size and a named download link. */
+export function AttachmentList({
+  files,
+  label = "Attachments",
+}: {
+  files: Attachment[];
+  label?: string;
+}) {
+  return (
+    <ul className="m-attachments" aria-label={label}>
+      {files.map((file) => (
+        <li key={file.id}>
+          <span className="m-attachment-icon" aria-hidden="true">
+            {file.icon ?? paperclip}
+          </span>
+          <span className="m-attachment-text">
+            <span className="m-attachment-name">{file.name}</span>
+            {file.size && (
+              <span className="m-attachment-size">{file.size}</span>
+            )}
+          </span>
+          <KitLink href={file.href}>
+            {file.actionLabel ?? "Download"}
+            <span className="m-sr-only"> {file.name}</span>
+          </KitLink>
+        </li>
+      ))}
+    </ul>
+  );
+}

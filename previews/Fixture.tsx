@@ -381,11 +381,29 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "PageHeading":
       example = (
-        <UI.PageHeading
-          title="Projects"
-          description="Your team’s active projects."
-          actions={<UI.Button>New project</UI.Button>}
-        />
+        <UI.Stack gap="xl">
+          <UI.PageHeading
+            title="Projects"
+            description="Your team’s active projects."
+            actions={<UI.Button>New project</UI.Button>}
+          />
+          <UI.PageHeading
+            title="Back End Developer"
+            headingLevel={2}
+            avatar={<UI.Avatar name="Northwind" size="lg" shape="square" />}
+            meta={[
+              { label: "Full-time", icon: icons.clock },
+              { label: "Remote", icon: icons.inbox },
+              { label: "Closes 9 January 2027", icon: icons.calendar },
+            ]}
+            actions={
+              <>
+                <UI.Button variant="secondary">Edit</UI.Button>
+                <UI.Button>Publish</UI.Button>
+              </>
+            }
+          />
+        </UI.Stack>
       );
       break;
     case "MetricGroup":

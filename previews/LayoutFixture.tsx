@@ -10,6 +10,21 @@ const icon = (path: string) => (
   </svg>
 );
 
+const attachments: UI.Attachment[] = [
+  {
+    id: "cv",
+    name: "resume_back_end_developer.pdf",
+    size: "2.4 MB",
+    href: "#resume",
+  },
+  {
+    id: "cover",
+    name: "coverletter_back_end_developer.pdf",
+    size: "4.5 MB",
+    href: "#cover",
+  },
+];
+
 export function LayoutCase({ name }: { name: string }) {
   const [last, setLast] = useState("none");
   const scenario = new URLSearchParams(location.search).get("state");
@@ -54,6 +69,13 @@ export function LayoutCase({ name }: { name: string }) {
         </UI.Stack>
       );
       break;
+    case "AttachmentList":
+      example = (
+        <div className="max-w-xl">
+          <UI.AttachmentList files={attachments} />
+        </div>
+      );
+      break;
     case "DescriptionList":
       example = (
         <UI.Stack gap="xl">
@@ -62,6 +84,10 @@ export function LayoutCase({ name }: { name: string }) {
             description="Personal details and application."
             items={[
               { term: "Full name", details: "Margot Foster" },
+              {
+                term: "Attachments",
+                details: <UI.AttachmentList files={attachments} />,
+              },
               {
                 term: "Application for",
                 details: "Backend developer",

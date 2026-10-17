@@ -22,7 +22,7 @@
       "onClose": "() => void",
       "query": "string",
       "onQueryChange": "(value: string) => void",
-      "groups": "{ label: string; items: CommandItem[] }[]",
+      "groups": "{ label: string; items: CommandItem[] }[] (CommandItem: { id; label; description?; meta?; shortcut?; match?; icon?; onSelect })",
       "label": "string",
       "placeholder": "string",
       "emptyMessage": "string",
@@ -50,7 +50,7 @@
     "probe": "dialog"
   },
   "integrity": {
-    "source": "99ee8de8aa3a984d133a00862dbf19be8c11e2e9c6d5a783521a279fe7ac7dcb",
-    "preview": "5e39083ab1da5ec07a8a0597ad7a8d9d37de48ee2351575f200106972f12e353"
+    "source": "860d7aa7613287d84b47e69d2e98930d6483469aa954bc63b25425dd9c3c76e4",
+    "preview": "b9bc4c344b230977f44591e67e4024836c02359e29b61e453f6e6cdf90cc6808"
   }
 }

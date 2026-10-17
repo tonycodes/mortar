@@ -115,6 +115,7 @@
           "thumbnail": "MetricGroup",
           "components": [
             "DescriptionList",
+            "AttachmentList",
             "Calendar",
             "MetricGroup",
             "CodeBlock",

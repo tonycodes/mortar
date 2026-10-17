@@ -209,12 +209,14 @@ export function ExtendedCase({ name }: { name: string }) {
                   {
                     id: "new",
                     label: "New deployment",
+                    icon: icons.download,
                     shortcut: ["↵"],
                     onSelect: () => {},
                   },
                   {
                     id: "re",
                     label: "Redeploy latest",
+                    icon: icons.clock,
                     shortcut: ["⌘", "R"],
                     onSelect: () => {},
                   },

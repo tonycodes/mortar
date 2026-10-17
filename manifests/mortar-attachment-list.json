@@ -1,0 +1,47 @@
+{
+  "id": "mortar-attachment-list",
+  "logicalId": "attachment-list",
+  "name": "AttachmentList",
+  "description": "Mortar attachment list: files attached to a record, each with an icon, name, size and a download link named after the file.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.4.0",
+  "export": "AttachmentList",
+  "source": "src/display.tsx",
+  "capabilities": ["theme", "application"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "files": "Attachment[] ({ id: string; name: string; href: string; size?: string; actionLabel?: string; icon?: ReactNode })",
+      "label": "string"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { AttachmentList } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/AttachmentListPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-attachments",
+    "states": []
+  },
+  "integrity": {
+    "source": "f6d95c998c0514fcbec085af4d85e61848a71d12056707b93ce45f16950a6317",
+    "preview": "e05585e2344f7ded52073c4ea8c266c0f41617ced6c7a410d6b70853959253c4"
+  }
+}
