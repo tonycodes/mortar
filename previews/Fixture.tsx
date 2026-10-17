@@ -80,6 +80,21 @@ export function PreviewCase({ name }: { name: string }) {
         <>
           {controls}
           <UI.Input label="Email" error="Enter a valid email address" />
+          <UI.Input
+            label="Search candidates"
+            type="search"
+            leadingIcon={icons.search}
+            action={
+              <UI.Button
+                variant="secondary"
+                onClick={() => setChecked(!checked)}
+                aria-pressed={checked}
+              >
+                Sort
+              </UI.Button>
+            }
+          />
+          <UI.Input label="Website" prefix="https://" suffix=".com" />
         </>
       );
       break;

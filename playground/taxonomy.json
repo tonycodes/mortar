@@ -39,7 +39,14 @@
           "id": "layout",
           "title": "Layout",
           "thumbnail": "Card",
-          "components": ["Card", "Divider", "Stack", "Container", "Text"]
+          "components": [
+            "Card",
+            "Divider",
+            "MediaObject",
+            "Stack",
+            "Container",
+            "Text"
+          ]
         },
         {
           "id": "elements",
@@ -77,7 +84,7 @@
           "id": "shells",
           "title": "Shells and headings",
           "thumbnail": "PageHeading",
-          "components": ["AppShell", "PageHeading"]
+          "components": ["AppShell", "PageHeading", "SectionHeading"]
         },
         {
           "id": "navigation",
@@ -89,7 +96,13 @@
           "id": "lists",
           "title": "Lists and tables",
           "thumbnail": "StackedList",
-          "components": ["DataTable", "Table", "StackedList", "ActivityFeed"]
+          "components": [
+            "DataTable",
+            "Table",
+            "GridList",
+            "StackedList",
+            "ActivityFeed"
+          ]
         },
         {
           "id": "data",

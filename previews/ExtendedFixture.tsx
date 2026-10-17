@@ -212,6 +212,64 @@ export function ExtendedCase({ name }: { name: string }) {
         </>
       );
       break;
+    case "GridList":
+      example = (
+        <UI.Stack gap="xl">
+          <UI.GridList
+            label="Team members"
+            items={[
+              {
+                id: "ana",
+                title: "Ana Kovač",
+                description: "Engineering lead",
+                href: "#ana",
+                media: <UI.Avatar name="Ana Kovač" />,
+                meta: <UI.Badge tone="success">Admin</UI.Badge>,
+                actions: (
+                  <UI.ActionLink
+                    label="Email Ana"
+                    href="#email-ana"
+                    variant="secondary"
+                  />
+                ),
+              },
+              {
+                id: "tom",
+                title: "Tom Cook",
+                description: "Product designer",
+                href: "#tom",
+                media: <UI.Avatar name="Tom Cook" />,
+              },
+              {
+                id: "lindsay",
+                title: "Lindsay Walton",
+                description: "Support",
+                href: "#lindsay",
+                media: <UI.Avatar name="Lindsay Walton" />,
+              },
+            ]}
+          />
+          <UI.GridList
+            label="Projects"
+            columns={2}
+            items={[
+              {
+                id: "billing",
+                title: "Billing redesign",
+                description: "12 open tasks · due 30 October",
+                meta: <UI.Badge tone="warning">At risk</UI.Badge>,
+              },
+              {
+                id: "search",
+                title: "Search relevance",
+                description: "4 open tasks · due 14 November",
+                meta: <UI.Badge>On track</UI.Badge>,
+              },
+            ]}
+          />
+        </UI.Stack>
+      );
+      break;
     case "StackedList":
       example = (
         <UI.StackedList

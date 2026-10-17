@@ -201,3 +201,58 @@ export function Card({
     </Tag>
   );
 }
+
+/** Image, avatar or icon beside text, e.g. comments and list rows. */
+export function MediaObject({
+  media,
+  title,
+  align = "start",
+  reverse = false,
+  children,
+}: {
+  media: ReactNode;
+  title?: string;
+  align?: "start" | "center";
+  reverse?: boolean;
+  children?: ReactNode;
+}) {
+  return (
+    <div
+      className="m-media-object"
+      data-align={align}
+      data-reverse={reverse || undefined}
+    >
+      <div className="m-media-object-media">{media}</div>
+      <div className="m-media-object-body">
+        {title && <p className="m-media-object-title">{title}</p>}
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/** Heading for a section within a page, with optional description and actions. */
+export function SectionHeading({
+  title,
+  description,
+  actions,
+  headingLevel = 2,
+  divider = true,
+}: {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+  headingLevel?: 2 | 3 | 4;
+  divider?: boolean;
+}) {
+  const Heading = `h${headingLevel}` as const;
+  return (
+    <div className="m-section-heading" data-divider={divider}>
+      <div className="m-section-heading-text">
+        <Heading>{title}</Heading>
+        {description && <p>{description}</p>}
+      </div>
+      {actions && <div className="m-actions">{actions}</div>}
+    </div>
+  );
+}
