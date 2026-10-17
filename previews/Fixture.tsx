@@ -83,7 +83,7 @@ export function PreviewCase({ name }: { name: string }) {
     case "Badge":
       example = (
         <>
-          {(["neutral", "success", "warning", "danger"] as const).map(
+          {(["neutral", "info", "success", "warning", "danger"] as const).map(
             (tone) => (
               <UI.Badge key={tone} tone={tone}>
                 {tone}
@@ -332,7 +332,7 @@ export function PreviewCase({ name }: { name: string }) {
     case "Notice":
       example = (
         <UI.Stack gap="md">
-          <UI.Notice title="Update available">
+          <UI.Notice title="Update available" tone="info">
             Your project can use the latest release.
           </UI.Notice>
           {noticeShown ? (

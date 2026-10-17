@@ -25,6 +25,7 @@
   --m-success: #1f7a36;
   --m-warning: #945700;
   --m-danger: #c70014;
+  --m-info: #0060c7;
   --m-on-feedback: #ffffff;
   --m-code-bg: #000000;
   --m-code-line: rgb(255 255 255 / 0.12);
@@ -45,6 +46,7 @@
   --m-inv-success: #30d158;
   --m-inv-warning: #ffd60a;
   --m-inv-danger: #ff6961;
+  --m-inv-info: #5aa9ff;
   --m-inv-on-feedback: #000000;
   --m-inv-color-scheme: dark;
   --m-inv-paper: #000000;
@@ -86,6 +88,7 @@
   --m-success: #30d158;
   --m-warning: #ffd60a;
   --m-danger: #ff6961;
+  --m-info: #5aa9ff;
   --m-on-feedback: #000000;
   --m-code-bg: #0e0e10;
   --m-code-line: rgb(255 255 255 / 0.1);
@@ -96,6 +99,7 @@
   --m-inv-success: #1f7a36;
   --m-inv-warning: #945700;
   --m-inv-danger: #c70014;
+  --m-inv-info: #0060c7;
   --m-inv-on-feedback: #ffffff;
   --m-inv-color-scheme: light;
   --m-inv-paper: #f5f5f7;

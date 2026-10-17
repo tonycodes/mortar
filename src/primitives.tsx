@@ -141,7 +141,7 @@ export function ButtonGroup({
     </div>
   );
 }
-export type Tone = "neutral" | "success" | "warning" | "danger";
+export type Tone = "neutral" | "info" | "success" | "warning" | "danger";
 export function Badge({
   children,
   tone = "neutral",

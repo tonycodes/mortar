@@ -19,7 +19,7 @@
   "contract": {
     "props": {
       "children": "ReactNode",
-      "tone": "neutral | success | warning | danger"
+      "tone": "neutral | info | success | warning | danger"
     },
     "states": [
       "Light",
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "99eb2945bd2777ba36ad0a34c0edd014e7b3ec315896086f00d6b4fd7b2c74d9",
-    "preview": "8415355c15c8accb4a26086b91bac048fbab800591f6bc2d62d30dc2c0681fe0"
+    "source": "0a3d891cecb2d28f440720e5b92487371b11983822f1182659cee869d6b8835f",
+    "preview": "1f0d043d7f5ea5e67d98c7e8455cd9fec1c5d3d34c18874e68bf58fea10dbb4f"
   }
 }
