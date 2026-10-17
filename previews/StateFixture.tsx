@@ -125,6 +125,16 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
       );
       break;
     }
+    case "ShoppingCart":
+      content = (
+        <UI.ShoppingCart
+          items={[]}
+          emptyTitle="No records"
+          onQuantityChange={changed}
+          onRemove={changed}
+        />
+      );
+      break;
     case "Fieldset":
       content = (
         <UI.Fieldset legend={label} disabled={disabled}>

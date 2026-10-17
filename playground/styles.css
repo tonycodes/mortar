@@ -190,3 +190,15 @@
 .pg-crumbs nav[aria-label="Breadcrumb"] {
   line-height: 20px;
 }
+/* Cart template layout only: bag lines beside a summary that stacks below on narrow screens. */
+.pg-cart-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .pg-cart-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

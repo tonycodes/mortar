@@ -1,6 +1,6 @@
 # Mortar
 
-A shared design foundation and purpose-built Application UI, Marketing UI and Docs UI kits for React 19 and Tailwind CSS 4. MIT licensed. No account, token, registry connection or subscription is required to use the kit, including use by coding agents.
+A shared design foundation and purpose-built Application UI, Marketing UI, Docs UI and Ecommerce kits for React 19 and Tailwind CSS 4. MIT licensed. No account, token, registry connection or subscription is required to use the kit, including use by coding agents.
 
 The package is `@tony-ui/mortar`, distributed from owner-hosted infrastructure. Releases are immutable and publicly downloadable without a service account. Version 0.2.0 is available. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
@@ -74,7 +74,7 @@ import { ThemeProvider, AppShell, Button } from "@tony-ui/mortar";
 
 ## Purpose kits
 
-The catalogue assigns each export to one purpose. Foundation primitives serve all purpose kits. Application UI provides shells, page headings, metrics, selectable tables, settings and activity. Marketing UI provides headers, heroes, features, social proof, pricing, FAQs, calls to action and footers. Docs UI provides a shared documentation shell, search, code examples, API references and article navigation. Product content and callbacks remain in the consumer. Sample names and prices belong only in the catalogue demonstrations.
+The catalogue assigns each export to one purpose. Foundation primitives serve all purpose kits. Application UI provides shells, page headings, metrics, selectable tables, settings and activity. Marketing UI provides headers, heroes, features, social proof, pricing, FAQs, calls to action and footers. Docs UI provides a shared documentation shell, search, code examples, API references and article navigation. Ecommerce provides product lists, product overviews with option pickers, shopping carts and order summaries; prices arrive preformatted so currency and locale stay with the consumer. Product content and callbacks remain in the consumer. Sample names and prices belong only in the catalogue demonstrations.
 
 Controls use native HTML and Headless UI. Tabs support arrow/Home/End navigation; dialogs and menus use Headless UI focus management. Density has a 44px control floor on coarse pointers. Feedback colours remain separate from the brand.
 

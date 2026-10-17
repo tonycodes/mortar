@@ -1,0 +1,54 @@
+{
+  "id": "mortar-shopping-cart",
+  "logicalId": "shopping-cart",
+  "name": "ShoppingCart",
+  "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; shows an empty state when there are no items.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ShoppingCart",
+  "source": "src/ecommerce.tsx",
+  "capabilities": ["theme", "ecommerce", "keyboard"],
+  "owner": "Mortar maintainers",
+  "kitId": "ecommerce",
+  "provenance": {
+    "kitId": "ecommerce",
+    "exampleId": "mortar-ecommerce-reference"
+  },
+  "contract": {
+    "props": {
+      "items": "CartItem[] ({ id: string; name: string; href: string; price: string; quantity: number; image: { src: string; alt: string }; meta?: string; stock?: string })",
+      "onQuantityChange": "(id: string, quantity: number) => void",
+      "onRemove": "(id: string) => void",
+      "label": "string",
+      "maxQuantity": "number",
+      "emptyTitle": "string",
+      "emptyDescription": "string",
+      "emptyAction": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ShoppingCart } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ShoppingCartPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-cart",
+    "probe": "cart",
+    "states": ["empty"]
+  },
+  "integrity": {
+    "source": "f1efed6508241d6a7829d5ac32446e598ea7f4ba620e687ae46a834759fc5ed4",
+    "preview": "c3eac49f6dbb7b46677a7d186b8f3b26e12fc9535341235b9341a3f8ec7fe493"
+  }
+}

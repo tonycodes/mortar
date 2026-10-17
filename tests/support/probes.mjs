@@ -340,6 +340,41 @@ export const implementations = {
       /10:00 Customer call.*15:00 Team retro.*\+1 more/,
     );
   },
+  async product({ page, root }) {
+    const bag = root.getByLabel("Bag", { exact: true });
+    const thumbs = root.getByRole("group", { name: "Product images" });
+    const second = thumbs.getByRole("button", { name: /Show image 2 of 3/ });
+    await second.click();
+    await expect(second).toHaveAttribute("aria-pressed", "true");
+    await expect(
+      root.locator(".m-product-gallery > .m-product-image img"),
+    ).toHaveAttribute("alt", "Natural canvas tote bag, in use");
+    // Options are native radio groups: arrow keys move the choice.
+    const sizes = root.getByRole("group", { name: "Size" });
+    await sizes.getByRole("radio", { name: "Large" }).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(sizes.getByRole("radio", { name: "Small" })).toBeChecked();
+    await expect(sizes.getByRole("radio", { name: "Travel" })).toBeDisabled();
+    await root.getByRole("radio", { name: "Black" }).check();
+    await root.getByRole("button", { name: "Add to bag" }).click();
+    await expect(bag).toHaveText("1 added · black · small");
+  },
+  async cart({ root }) {
+    const count = root.getByLabel("Bag count");
+    await expect(count).toHaveText("3");
+    await root.getByLabel("Quantity, Stoneware mug").selectOption("4");
+    await expect(count).toHaveText("5");
+    await root.getByRole("button", { name: "Remove Canvas tote" }).click();
+    await expect(root.getByRole("link", { name: "Canvas tote" })).toHaveCount(
+      0,
+    );
+    await expect(count).toHaveText("4");
+    await root.getByRole("button", { name: "Remove Stoneware mug" }).click();
+    await expect(root.getByText("Your bag is empty")).toBeVisible();
+    await expect(
+      root.getByRole("link", { name: "Continue shopping" }),
+    ).toBeVisible();
+  },
   async banner({ page, root }) {
     const banner = root.getByRole("region", { name: "Announcement" });
     await expect(

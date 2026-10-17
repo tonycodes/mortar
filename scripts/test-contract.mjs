@@ -52,6 +52,8 @@ export const probes = Object.freeze({
   Navbar: "navbar",
   StackedShell: "navbar",
   Calendar: "calendar",
+  ProductOverview: "product",
+  ShoppingCart: "cart",
   Banner: "banner",
 });
 export function contractErrors(component) {

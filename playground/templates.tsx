@@ -2,6 +2,11 @@ import { useState, type ComponentType } from "react";
 import * as UI from "../src/index.js";
 import { icons } from "../previews/CompositionFixture.js";
 import { ProjectWorkspaceRecipe, SaasLandingRecipe } from "./recipes.js";
+import {
+  cartItems,
+  products,
+  toteImages,
+} from "../previews/EcommerceFixture.js";
 
 /** Shared marketing chrome so every marketing template reads as one site. */
 function SiteHeader() {
@@ -364,11 +369,159 @@ export function SettingsScreenTemplate() {
   );
 }
 
+function StoreHeader() {
+  return (
+    <UI.MarketingHeader
+      brand="Northwind Goods"
+      homeHref="?recipe=product-page"
+      links={[
+        { label: "Bags", href: "?recipe=product-page" },
+        { label: "Kitchen", href: "#kitchen" },
+        { label: "Clothing", href: "#clothing" },
+      ]}
+      action={{ label: "Bag (3)", href: "?recipe=cart-page" }}
+    />
+  );
+}
+
+function StoreFooter() {
+  return (
+    <UI.Footer
+      brand="Northwind Goods"
+      description="Everyday goods, made to last."
+      columns={[
+        {
+          title: "Shop",
+          links: [
+            { label: "Bags", href: "?recipe=product-page" },
+            { label: "Kitchen", href: "#kitchen" },
+          ],
+        },
+        {
+          title: "Help",
+          links: [
+            { label: "Delivery", href: "#delivery" },
+            { label: "Returns", href: "#returns" },
+          ],
+        },
+      ]}
+      copyright="© Northwind Goods"
+    />
+  );
+}
+
+/** Product page: breadcrumbs, gallery and options, then related products. */
+export function ProductPageTemplate() {
+  const [selected, setSelected] = useState<Record<string, string>>({
+    colour: "natural",
+    size: "large",
+  });
+  return (
+    <>
+      <StoreHeader />
+      <UI.Container as="main" size="lg">
+        <UI.Stack gap="xl">
+          <UI.Breadcrumbs
+            separator="chevron"
+            items={[
+              { label: "Home", href: "#home" },
+              { label: "Bags", href: "#bags" },
+              { label: "Canvas tote" },
+            ]}
+          />
+          <UI.ProductOverview
+            name="Canvas tote"
+            price="£32"
+            description="Heavy organic cotton canvas with vegetable-tanned leather handles and an inside pocket."
+            images={toteImages}
+            rating={{ value: 4.5, count: 112, href: "#reviews" }}
+            options={[
+              {
+                id: "colour",
+                label: "Colour",
+                values: [
+                  { value: "natural", label: "Natural", swatch: "#d9c9a8" },
+                  { value: "black", label: "Black", swatch: "#26262a" },
+                ],
+              },
+              {
+                id: "size",
+                label: "Size",
+                values: [
+                  { value: "small", label: "Small" },
+                  { value: "large", label: "Large" },
+                ],
+              },
+            ]}
+            selected={selected}
+            onSelect={(option, value) =>
+              setSelected((current) => ({ ...current, [option]: value }))
+            }
+            details={["Holds a 16-inch laptop", "Machine washable"]}
+          />
+          <UI.SectionHeading title="You may also like" divider={false} />
+          <UI.ProductList
+            label="Related products"
+            products={products.slice(1)}
+            columns={3}
+          />
+        </UI.Stack>
+      </UI.Container>
+      <StoreFooter />
+    </>
+  );
+}
+
+/** Shopping bag page: editable lines beside the order summary. */
+export function CartPageTemplate() {
+  const [items, setItems] = useState(cartItems);
+  return (
+    <>
+      <StoreHeader />
+      <UI.Container as="main" size="lg">
+        <UI.Stack gap="xl">
+          <UI.PageHeading title="Shopping bag" />
+          <div className="pg-cart-layout">
+            <UI.ShoppingCart
+              items={items}
+              onQuantityChange={(id, quantity) =>
+                setItems((current) =>
+                  current.map((item) =>
+                    item.id === id ? { ...item, quantity } : item,
+                  ),
+                )
+              }
+              onRemove={(id) =>
+                setItems((current) => current.filter((item) => item.id !== id))
+              }
+              emptyAction={
+                <UI.ActionLink
+                  label="Continue shopping"
+                  href="?recipe=product-page"
+                />
+              }
+            />
+            <UI.OrderSummary
+              lines={[
+                { label: "Subtotal", value: "£68.00" },
+                { label: "Shipping", value: "£4.95" },
+              ]}
+              total={{ label: "Order total", value: "£72.95" }}
+              action={<UI.Button>Checkout</UI.Button>}
+            />
+          </div>
+        </UI.Stack>
+      </UI.Container>
+      <StoreFooter />
+    </>
+  );
+}
+
 export interface PageTemplate {
   id: string;
   title: string;
   description: string;
-  kind: "Marketing" | "Application";
+  kind: "Marketing" | "Application" | "Ecommerce";
   Component: ComponentType;
 }
 
@@ -408,5 +561,19 @@ export const templates: PageTemplate[] = [
     description: "Tabs, grouped fields, a danger zone and unsaved changes.",
     kind: "Application",
     Component: SettingsScreenTemplate,
+  },
+  {
+    id: "product-page",
+    title: "Product page",
+    description: "Gallery, options, add to bag and related products.",
+    kind: "Ecommerce",
+    Component: ProductPageTemplate,
+  },
+  {
+    id: "cart-page",
+    title: "Shopping bag",
+    description: "Editable bag lines beside the order summary.",
+    kind: "Ecommerce",
+    Component: CartPageTemplate,
   },
 ];

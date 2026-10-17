@@ -1,0 +1,49 @@
+{
+  "id": "mortar-product-list",
+  "logicalId": "product-list",
+  "name": "ProductList",
+  "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ProductList",
+  "source": "src/ecommerce.tsx",
+  "capabilities": ["theme", "ecommerce", "responsive"],
+  "owner": "Mortar maintainers",
+  "kitId": "ecommerce",
+  "provenance": {
+    "kitId": "ecommerce",
+    "exampleId": "mortar-ecommerce-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string }; meta?: string; badge?: string })",
+      "columns": "2 | 3 | 4",
+      "headingLevel": "2 | 3 | 4"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ProductList } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ProductListPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-product-list",
+    "states": []
+  },
+  "integrity": {
+    "source": "f1efed6508241d6a7829d5ac32446e598ea7f4ba620e687ae46a834759fc5ed4",
+    "preview": "de8b1da2da9495635bcb17f71386c35d219cafe8a1c5475bb4e0a88bd12ef884"
+  }
+}

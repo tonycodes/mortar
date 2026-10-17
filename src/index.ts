@@ -138,3 +138,15 @@ export { Listbox, Combobox } from "./choice.js";
 export type { ChoiceOption } from "./choice.js";
 export { Calendar } from "./calendar.js";
 export type { CalendarEvent } from "./calendar.js";
+export {
+  ProductList,
+  ProductOverview,
+  ShoppingCart,
+  OrderSummary,
+} from "./ecommerce.js";
+export type {
+  ProductImage,
+  ProductCard,
+  ProductOption,
+  CartItem,
+} from "./ecommerce.js";

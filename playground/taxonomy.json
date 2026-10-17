@@ -237,6 +237,25 @@
           ]
         }
       ]
+    },
+    {
+      "id": "ecommerce",
+      "title": "Ecommerce",
+      "description": "Product lists, product pages, carts and order summaries for storefronts.",
+      "categories": [
+        {
+          "id": "products",
+          "title": "Products",
+          "thumbnail": "ProductList",
+          "components": ["ProductList", "ProductOverview"]
+        },
+        {
+          "id": "checkout",
+          "title": "Cart and checkout",
+          "thumbnail": "OrderSummary",
+          "components": ["ShoppingCart", "OrderSummary"]
+        }
+      ]
     }
   ]
 }
