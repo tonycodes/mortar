@@ -164,6 +164,9 @@
 }
 .pg-canvas {
   background: var(--m-paper);
+  /* Marketing bands paint across the viewport by design; the preview frame contains them.
+     clip, not hidden: no scroll container, and portalled menus render outside anyway. */
+  overflow: clip;
 }
 .pg-example-code {
   min-width: 0;

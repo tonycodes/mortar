@@ -276,3 +276,39 @@ for (const width of [390, 1280])
     expect(await axe(page)).toEqual([]);
     expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
   });
+
+test("full-bleed section bands stay inside the preview frame", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?component=FeatureGrid");
+  const band = page.locator(
+    '[data-mortar-preview] .m-marketing-section[data-tone="muted"]',
+  );
+  await band.scrollIntoViewIfNeeded();
+  const canvas = await page.locator(".pg-canvas").boundingBox();
+  const box = await band.boundingBox();
+  // A pixel just left of the frame, level with the band, must show the page, not the band.
+  const point = { x: canvas.x - 6, y: box.y + box.height / 2 };
+  const shot = await page.screenshot({
+    clip: { x: point.x, y: point.y, width: 1, height: 1 },
+  });
+  const sample = await page.evaluate(async (data) => {
+    const image = new Image();
+    image.src = `data:image/png;base64,${data}`;
+    await image.decode();
+    const context = new OffscreenCanvas(1, 1).getContext("2d");
+    context.drawImage(image, 0, 0);
+    return [...context.getImageData(0, 0, 1, 1).data.slice(0, 3)];
+  }, shot.toString("base64"));
+  const paper = await page.evaluate(() => {
+    const probe = document.createElement("div");
+    probe.style.color = "var(--m-paper)";
+    document.body.append(probe);
+    const value = getComputedStyle(probe).color.match(/\d+/g).slice(0, 3);
+    probe.remove();
+    return value.map(Number);
+  });
+  for (let i = 0; i < 3; i++)
+    expect(Math.abs(sample[i] - paper[i])).toBeLessThanOrEqual(2);
+});
