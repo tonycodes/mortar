@@ -1,6 +1,34 @@
 import { expect } from "@playwright/test";
 import { openOverlay } from "./preview.mjs";
 export const implementations = {
+  async composer({ page, root }) {
+    const field = root.getByLabel("Add your comment", { exact: true });
+    const send = root.getByRole("button", { name: "Comment", exact: true });
+    const posted = root.getByRole("list", { name: "Posted comments" });
+    await expect(send).toBeDisabled();
+    await expect(
+      root.getByRole("button", { name: "Attach a file" }),
+    ).toBeVisible();
+    await field.fill("   ");
+    await expect(send).toBeDisabled();
+    await field.fill("Looks good");
+    await expect(root.getByText("10 / 280")).toBeVisible();
+    await expect(send).toBeEnabled();
+    // Ctrl+Enter submits and clears the uncontrolled composer.
+    await field.press("Control+Enter");
+    await expect(posted.getByRole("listitem")).toHaveText(["Looks good"]);
+    await expect(field).toHaveValue("");
+    await field.fill("Ship it");
+    await root.getByRole("tab", { name: "Preview" }).click();
+    await expect(root.getByRole("tabpanel")).toHaveText("Ship it");
+    await root.getByRole("tab", { name: "Write" }).click();
+    await expect(field).toHaveValue("Ship it");
+    await send.click();
+    await expect(posted.getByRole("listitem")).toHaveText([
+      "Looks good",
+      "Ship it",
+    ]);
+  },
   async notice({ page, root }) {
     const notice = root.getByText("Payment failed");
     await expect(
