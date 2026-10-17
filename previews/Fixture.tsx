@@ -7,6 +7,9 @@ export function PreviewCase({ name }: { name: string }) {
     [checked, setChecked] = useState(false),
     [open, setOpen] = useState(false),
     [page, setPage] = useState(1),
+    [resultsPage, setResultsPage] = useState(6),
+    [noticeShown, setNoticeShown] = useState(true),
+    [menuChoice, setMenuChoice] = useState("none"),
     [selectedRows, setSelectedRows] = useState<string[]>([]);
   const controls = (
     <UI.Input
@@ -48,6 +51,18 @@ export function PreviewCase({ name }: { name: string }) {
             <UI.Button variant="secondary">Cancel</UI.Button>
             <UI.Button variant="danger">Delete</UI.Button>
             <UI.Button loading>Saving</UI.Button>
+          </div>
+          <div className="m-actions">
+            <UI.Button size="sm" variant="secondary">
+              Small
+            </UI.Button>
+            <UI.Button size="lg">Large</UI.Button>
+            <UI.Button variant="secondary" icon={icons.download}>
+              Export CSV
+            </UI.Button>
+            <UI.Button variant="ghost" icon={icons.edit} iconOnly>
+              Edit project
+            </UI.Button>
           </div>
           <output aria-label="Action result">
             {checked ? "saved" : "idle"}
@@ -192,6 +207,8 @@ export function PreviewCase({ name }: { name: string }) {
             {
               id: "second",
               label: "Activity",
+              count: 12,
+              icon: icons.clock,
               content: <p>Activity content</p>,
             },
           ]}
@@ -215,24 +232,70 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Dropdown":
       example = (
-        <UI.Dropdown
-          label="Actions"
-          items={[
-            { label: "Duplicate", onSelect: () => setChecked(true) },
-            {
-              label: "Delete",
-              danger: true,
-              onSelect: () => setChecked(false),
-            },
-          ]}
-        />
+        <div className="m-actions">
+          <UI.Dropdown
+            label="Actions"
+            items={[
+              { label: "Duplicate", onSelect: () => setChecked(true) },
+              {
+                label: "Delete",
+                danger: true,
+                onSelect: () => setChecked(false),
+              },
+            ]}
+          />
+          <UI.Dropdown
+            label="More options"
+            icon={icons.more}
+            iconOnly
+            variant="ghost"
+            header="Signed in as ana@example.com"
+            items={[
+              {
+                section: "Project",
+                label: "Edit",
+                icon: icons.edit,
+                description: "Rename or change details",
+                onSelect: () => setMenuChoice("edit"),
+              },
+              {
+                section: "Project",
+                label: "Export",
+                icon: icons.download,
+                onSelect: () => setMenuChoice("export"),
+              },
+              {
+                section: "Help",
+                label: "Documentation",
+                href: "#docs",
+              },
+            ]}
+          />
+          <output aria-label="Menu choice">{menuChoice}</output>
+        </div>
       );
       break;
     case "Notice":
       example = (
-        <UI.Notice title="Update available">
-          Your project can use the latest release.
-        </UI.Notice>
+        <UI.Stack gap="md">
+          <UI.Notice title="Update available">
+            Your project can use the latest release.
+          </UI.Notice>
+          {noticeShown ? (
+            <UI.Notice
+              title="Payment failed"
+              tone="danger"
+              actions={<a href="#billing">Update billing</a>}
+              onDismiss={() => setNoticeShown(false)}
+            >
+              We couldn't charge your card ending 4242.
+            </UI.Notice>
+          ) : (
+            <UI.Button variant="secondary" onClick={() => setNoticeShown(true)}>
+              Show payment notice
+            </UI.Button>
+          )}
+        </UI.Stack>
       );
       break;
     case "EmptyState":
@@ -240,6 +303,7 @@ export function PreviewCase({ name }: { name: string }) {
         <UI.EmptyState
           title="No projects yet"
           description="Create your first project to get started."
+          icon={icons.inbox}
           action={<UI.Button>Create project</UI.Button>}
         />
       );
@@ -385,7 +449,23 @@ export function PreviewCase({ name }: { name: string }) {
       );
       break;
     case "Pagination":
-      example = <UI.Pagination page={page} pageCount={5} onChange={setPage} />;
+      example = (
+        <UI.Stack gap="xl">
+          <UI.Pagination page={page} pageCount={5} onChange={setPage} />
+          <UI.Pagination
+            label="Results pages"
+            numbered
+            page={resultsPage}
+            pageCount={12}
+            onChange={setResultsPage}
+            summary={{
+              from: (resultsPage - 1) * 10 + 1,
+              to: Math.min(resultsPage * 10, 114),
+              total: 114,
+            }}
+          />
+        </UI.Stack>
+      );
       break;
     case "SettingsSection":
       example = (

@@ -4134,3 +4134,222 @@
     }
   }
 }
+
+/* Component variants: button sizes and icons, rich dropdowns, notice actions,
+   empty-state icons, tab counts and numbered pagination. */
+@layer components {
+  .m-button[data-size="sm"] {
+    min-height: 30px;
+    padding: 2px 10px;
+    font-size: 13px;
+  }
+  .m-button[data-size="lg"] {
+    min-height: 44px;
+    padding: 6px 20px;
+    font-size: 15px;
+  }
+  .m-button-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-button-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-button[data-icon-only] {
+    min-width: var(--m-control);
+    padding-inline: 0;
+  }
+  .m-button[data-icon-only][data-size="sm"] {
+    min-width: 30px;
+  }
+  .m-button[data-icon-only][data-size="lg"] {
+    min-width: 44px;
+  }
+  .m-menu :is(button, a) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--m-ink);
+    font-size: 14px;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .m-menu:focus-visible {
+    /* The active item shows focus; the panel itself needs no ring. */
+    outline: none;
+  }
+  .m-menu a[data-focus] {
+    background: var(--m-selected);
+  }
+  .m-menu a[data-disabled] {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-menu .m-error {
+    color: var(--m-danger);
+  }
+  .m-menu-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--m-muted);
+  }
+  .m-menu-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-menu-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .m-menu-text small {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-menu-heading {
+    padding: 8px 10px 4px;
+    color: var(--m-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .m-menu-separator {
+    height: 1px;
+    margin: 6px -6px;
+    background: var(--m-line);
+  }
+  .m-menu-header {
+    margin: -6px -6px 6px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--m-line);
+    color: var(--m-secondary);
+    font-size: 13px;
+  }
+  .m-notice[data-dismissible] {
+    position: relative;
+    padding-inline-end: 48px;
+  }
+  .m-notice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    font-weight: 600;
+  }
+  .m-notice-actions a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .m-notice-dismiss {
+    position: absolute;
+    top: 10px;
+    inset-inline-end: 10px;
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: var(--m-radius-sm);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .m-notice-dismiss:hover {
+    background: var(--m-sunken);
+  }
+  .m-notice-dismiss svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-empty-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+  }
+  .m-empty-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .m-tabs [role="tab"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .m-tab-icon {
+    display: inline-flex;
+  }
+  .m-tab-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-tab-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-tabs [aria-selected="true"] .m-tab-count {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+  }
+  .m-pagination > p {
+    margin: 0;
+  }
+  .m-pagination strong {
+    color: var(--m-ink);
+    font-weight: 600;
+  }
+  .m-pagination-pages {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .m-pagination-pages button {
+    min-width: var(--m-control);
+    min-height: var(--m-control);
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--m-radius);
+    background: transparent;
+    color: var(--m-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .m-pagination-pages button:hover {
+    background: var(--m-sunken);
+  }
+  .m-pagination-pages [aria-current="page"] {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+  }
+  .m-pagination-gap {
+    padding: 0 4px;
+    color: var(--m-muted);
+  }
+  @media (max-width: 560px) {
+    .m-pagination-pages {
+      display: none;
+    }
+  }
+}

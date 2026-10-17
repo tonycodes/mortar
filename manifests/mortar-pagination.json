@@ -20,7 +20,10 @@
     "props": {
       "page": "number",
       "pageCount": "number",
-      "onChange": "(page: number) => void"
+      "onChange": "(page: number) => void",
+      "numbered": "boolean",
+      "summary": "{ from: number; to: number; total: number; noun?: string }",
+      "label": "string"
     },
     "states": [
       "Light",
@@ -44,7 +47,7 @@
     "probe": "pagination"
   },
   "integrity": {
-    "source": "ed6507747c0ff5099d8b0ccf8b4c8976a9135acb4694da98d00dbe21696d90d0",
-    "preview": "dfb92a3d75364647bc5de2fdfb86dc6257a34294c957b9d1ec3e4800f2f059f9"
+    "source": "0de7dcf07e82a2237b0529a0a3813a1f2c27cf5f483d0d7842b8880e65d87dd9",
+    "preview": "af23dd658a2f7657dc574f3b4156e3b9dfad1f39e7d5dbbb8bad120418afac64"
   }
 }
