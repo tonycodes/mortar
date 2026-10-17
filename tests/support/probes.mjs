@@ -376,6 +376,53 @@ export const implementations = {
     await expect(busy).toHaveAccessibleDescription(
       /10:00 Customer call.*15:00 Team retro.*\+1 more/,
     );
+    // Week view: labelled day sections, selectable events, paging and the view switcher.
+    const week = root.locator(".m-calendar").nth(2);
+    // The header (title, switcher, arrows) must stay within the calendar on phones.
+    await page.setViewportSize({ width: 390, height: 900 });
+    const next = week.getByRole("button", { name: "Next week" });
+    const [box, nextBox] = await Promise.all([
+      week.boundingBox(),
+      next.boundingBox(),
+    ]);
+    expect(nextBox.x + nextBox.width).toBeLessThanOrEqual(
+      box.x + box.width + 1,
+    );
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      /19\s.\s25 October 2026/,
+    );
+    const tuesday = week.getByRole("region", {
+      name: "Tuesday, 20 October 2026",
+    });
+    await expect(tuesday.getByRole("listitem")).toHaveCount(3);
+    await tuesday.getByRole("button", { name: /Design review/ }).click();
+    await expect(root.getByLabel("Opened event")).toHaveText("Design review");
+    await expect(
+      week.getByRole("heading", { name: "Wednesday, 21 October 2026" }),
+    ).toHaveAttribute("aria-current", "date");
+    await week.getByRole("button", { name: "Next week" }).click();
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      /26 October\s.\s1 November 2026/,
+    );
+    await expect(
+      week.getByRole("button", { name: /Board prep/ }),
+    ).toBeVisible();
+    await week.getByRole("button", { name: "Previous week" }).click();
+    await week
+      .getByRole("group", { name: "Calendar view" })
+      .getByRole("button", { name: "Day" })
+      .click();
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      "Tuesday, 20 October 2026",
+    );
+    await week.getByRole("button", { name: "Next day" }).click();
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      "Wednesday, 21 October 2026",
+    );
+    await expect(
+      week.getByRole("list", { name: "All day" }).getByText("Offsite"),
+    ).toBeVisible();
   },
   async product({ page, root }) {
     const bag = root.getByLabel("Bag", { exact: true });

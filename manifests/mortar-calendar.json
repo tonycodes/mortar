@@ -2,7 +2,7 @@
   "id": "mortar-calendar",
   "logicalId": "calendar",
   "name": "Calendar",
-  "description": "Mortar calendar: a month grid with keyboard navigation (arrows, Home/End, PageUp/PageDown), today and selection states, and events as dots (compact) or titles (full). Dates are YYYY-MM-DD strings handled in UTC.",
+  "description": "Mortar calendar: a month grid with keyboard navigation, plus week and day time grids where timed events sit on an hour scale (overlaps side by side) and collapse to an agenda when narrow. Dates are YYYY-MM-DD strings handled in UTC.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.1.0",
@@ -21,12 +21,18 @@
       "onMonthChange": "(month: string) => void",
       "selected": "string (YYYY-MM-DD)",
       "onSelect": "(date: string) => void",
-      "events": "CalendarEvent[] ({ id: string; date: string; title: string; time?: string })",
+      "events": "CalendarEvent[] ({ id: string; date: string; title: string; time?: string; start?: string; end?: string })",
       "variant": "\"compact\" | \"full\"",
       "weekStartsOn": "0 | 1",
       "today": "string (YYYY-MM-DD)",
       "locale": "string",
-      "maxEvents": "number"
+      "maxEvents": "number",
+      "view": "\"month\" | \"week\" | \"day\"",
+      "onViewChange": "(view: CalendarView) => void",
+      "onEventSelect": "(id: string) => void",
+      "onDateChange": "(date: string) => void",
+      "dayStartHour": "number",
+      "dayEndHour": "number"
     },
     "states": [
       "Light",
@@ -50,7 +56,7 @@
     "states": []
   },
   "integrity": {
-    "source": "58360f0006fd10c2e31a59dd71396b76343268992a47e29f8bd2b73877cbaa4a",
-    "preview": "0c4fb7af949f6828c8258de3bd9eabf9304e9fb9703ccfced8512d6dedd75a2f"
+    "source": "410d053900f5a5d4b120e82f779039ca6abf223241ac37379e93af456b44b9b0",
+    "preview": "ad5111288b0cb15b53d272b719837234806d51c800e8565a9af1e207b771bc5f"
   }
 }

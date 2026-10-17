@@ -27,9 +27,65 @@ const meetings: UI.CalendarEvent[] = [
   { id: "6", date: "2026-10-29", title: "Board update", time: "11:00" },
 ];
 
+/** Timed events for the week and day views (the week of 19 October 2026). */
+const schedule: UI.CalendarEvent[] = [
+  {
+    id: "w1",
+    date: "2026-10-19",
+    title: "Sprint planning",
+    start: "09:30",
+    end: "11:00",
+  },
+  {
+    id: "w2",
+    date: "2026-10-20",
+    title: "Customer call",
+    start: "10:00",
+    end: "11:00",
+  },
+  {
+    id: "w3",
+    date: "2026-10-20",
+    title: "Design review",
+    start: "10:30",
+    end: "12:00",
+  },
+  {
+    id: "w4",
+    date: "2026-10-20",
+    title: "Team retro",
+    start: "15:00",
+    end: "16:00",
+  },
+  { id: "w5", date: "2026-10-21", title: "Offsite" },
+  {
+    id: "w6",
+    date: "2026-10-22",
+    title: "Lunch with Ana",
+    start: "12:30",
+    end: "13:30",
+  },
+  {
+    id: "w7",
+    date: "2026-10-23",
+    title: "Release",
+    start: "16:00",
+    end: "17:30",
+  },
+  {
+    id: "w8",
+    date: "2026-10-27",
+    title: "Board prep",
+    start: "09:00",
+    end: "10:00",
+  },
+];
+
 export function StructureCase({ name }: { name: string }) {
   const [dismissed, setDismissed] = useState(false);
   const [day, setDay] = useState("2026-10-20");
+  const [view, setView] = useState<UI.CalendarView>("week");
+  const [opened, setOpened] = useState("none");
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
@@ -192,6 +248,21 @@ export function StructureCase({ name }: { name: string }) {
             month="2026-10"
             events={meetings}
           />
+          <div>
+            <UI.Calendar
+              today="2026-10-21"
+              selected="2026-10-20"
+              view={view}
+              onViewChange={setView}
+              events={schedule}
+              onEventSelect={(id) =>
+                setOpened(
+                  schedule.find((event) => event.id === id)?.title ?? id,
+                )
+              }
+            />
+            <output aria-label="Opened event">{opened}</output>
+          </div>
         </UI.Stack>
       );
       break;
