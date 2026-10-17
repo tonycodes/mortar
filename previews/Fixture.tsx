@@ -544,6 +544,13 @@ export function PreviewCase({ name }: { name: string }) {
               time: "2 minutes ago",
               tone: "success",
             },
+            {
+              id: "2",
+              title: "Ana Kovač commented",
+              time: "1 hour ago",
+              actor: <UI.Avatar name="Ana Kovač" size="sm" />,
+              body: "Can we move the release to Thursday? Support is short-staffed on Friday.",
+            },
           ]}
         />
       );

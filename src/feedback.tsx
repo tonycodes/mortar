@@ -14,6 +14,8 @@ export interface ToastItem {
   description?: string;
   tone?: Tone;
   action?: { label: string; onClick: () => void };
+  /** Avatar or icon shown instead of the tone icon, e.g. who replied. */
+  leading?: ReactNode;
 }
 
 const glyph: Record<Tone, string> = {
@@ -29,12 +31,17 @@ export function Toast({
   tone = "neutral",
   action,
   onDismiss,
+  leading,
 }: Omit<ToastItem, "id"> & { onDismiss?: () => void }) {
   return (
     <div className="m-toast" data-tone={tone}>
-      <span className="m-toast-icon" aria-hidden="true">
-        {glyph[tone]}
-      </span>
+      {leading ? (
+        <span className="m-toast-leading">{leading}</span>
+      ) : (
+        <span className="m-toast-icon" aria-hidden="true">
+          {glyph[tone]}
+        </span>
+      )}
       <div>
         <strong>{title}</strong>
         {description && <p>{description}</p>}

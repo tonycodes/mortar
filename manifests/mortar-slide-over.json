@@ -23,7 +23,8 @@
       "title": "string",
       "description": "string",
       "children": "ReactNode",
-      "actions": "ReactNode"
+      "actions": "ReactNode",
+      "size": "md | lg | xl"
     },
     "states": [
       "Light",
@@ -47,7 +48,7 @@
     "probe": "dialog"
   },
   "integrity": {
-    "source": "8367189f3174038ffc762d43a939c594b40d4d47d471f6434f6e9b31991ae78d",
-    "preview": "3309b7b635cb0d8d59aed97998e7beba22e9ba2823073f8d42fabc1b1ae727bb"
+    "source": "741a01e36fef8ce3f86487c4828dfc8f8495554496bab4b43fc02b431471dc08",
+    "preview": "4843268cd57e002144df637dcebd0b6dbd4d0b00ba3b283b51f80fed519bd27e"
   }
 }
