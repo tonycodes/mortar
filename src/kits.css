@@ -4803,3 +4803,43 @@
     margin-inline-start: 0;
   }
 }
+
+/* Calendar year view: twelve compact months with one roving tab stop. */
+@layer components {
+  .m-calendar-year {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 28px 24px;
+  }
+  .m-calendar-month {
+    min-width: 0;
+  }
+  .m-calendar-month h3 {
+    margin: 0 0 8px;
+    color: var(--m-ink);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .m-calendar[data-view="year"] th {
+    padding: 0 0 4px;
+    font-size: 11px;
+  }
+  .m-calendar[data-view="year"] td {
+    padding: 1px 0;
+  }
+  .m-calendar[data-view="year"] td > button {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  .m-calendar[data-view="year"] td > button[aria-pressed="true"] {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+    font-weight: 600;
+  }
+  .m-calendar[data-view="year"] .m-calendar-dot {
+    bottom: 3px;
+    width: 3px;
+    height: 3px;
+  }
+}

@@ -2,7 +2,7 @@
   "id": "mortar-calendar",
   "logicalId": "calendar",
   "name": "Calendar",
-  "description": "Mortar calendar: a month grid with keyboard navigation, plus week and day time grids where timed events sit on an hour scale (overlaps side by side) and collapse to an agenda when narrow. Dates are YYYY-MM-DD strings handled in UTC.",
+  "description": "Mortar calendar: a month grid with keyboard navigation, a twelve-month year view with one roving tab stop, and week and day time grids where timed events sit on an hour scale and collapse to an agenda when narrow. Dates are YYYY-MM-DD strings handled in UTC.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.1.0",
@@ -27,7 +27,7 @@
       "today": "string (YYYY-MM-DD)",
       "locale": "string",
       "maxEvents": "number",
-      "view": "\"month\" | \"week\" | \"day\"",
+      "view": "\"year\" | \"month\" | \"week\" | \"day\"",
       "onViewChange": "(view: CalendarView) => void",
       "onEventSelect": "(id: string) => void",
       "onDateChange": "(date: string) => void",
@@ -56,7 +56,7 @@
     "states": []
   },
   "integrity": {
-    "source": "acc32a207548b41e62a741a205b3bf064ae0ae81f092228ab0fa7a677ed16712",
-    "preview": "5612e67966fd72d36032001e3d1fabea8e465994ec1e595bf0219cf5bff37f59"
+    "source": "467dab63d2d02bd1ef1e6d0a1c13a9d82f8fb725db111150e89b5c0df4affa4f",
+    "preview": "69a8a8ca51e61fa5369301f434c5b64e759a2b0e24545b6f5680af62306f83b7"
   }
 }

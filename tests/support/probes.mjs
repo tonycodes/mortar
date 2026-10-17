@@ -469,6 +469,28 @@ export const implementations = {
     await expect(
       week.getByRole("list", { name: "All day" }).getByText("Offsite"),
     ).toBeVisible();
+    // Year view: twelve months, one tab stop, arrows cross month boundaries.
+    await week
+      .getByRole("group", { name: "Calendar view" })
+      .getByRole("button", { name: "Year" })
+      .click();
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText("2026");
+    await expect(week.getByRole("heading", { level: 3 })).toHaveCount(12);
+    await expect(week.locator('[tabindex="0"]')).toHaveCount(1);
+    const yearDay = (name) =>
+      week.getByRole("button", { name: new RegExp(`^${name}`) });
+    await expect(yearDay("Tuesday, 20 October 2026")).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    await yearDay("Saturday, 31 October 2026").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(yearDay("Sunday, 1 November 2026")).toBeFocused();
+    await page.keyboard.press("PageDown");
+    await expect(yearDay("Tuesday, 1 December 2026")).toBeFocused();
+    await week.getByRole("button", { name: "Next year" }).click();
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText("2027");
+    await expect(week.locator('[tabindex="0"]')).toHaveCount(1);
   },
   async product({ page, root }) {
     const bag = root.getByLabel("Bag", { exact: true });
