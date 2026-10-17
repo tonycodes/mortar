@@ -1,3 +1,4 @@
+import type React from "react";
 import {
   type CSSProperties,
   useEffect,
@@ -22,7 +23,7 @@ export interface CalendarEvent {
   /** End as HH:MM; defaults to an hour after start. */
   end?: string;
 }
-export type CalendarView = "month" | "week" | "day";
+export type CalendarView = "year" | "month" | "week" | "day";
 
 // Dates are YYYY-MM-DD strings handled in UTC, so no local time zone can shift a day.
 const DAY = 86_400_000;
@@ -122,7 +123,7 @@ export function Calendar({
   locale?: string;
   /** Events listed per day in the full variant before "+N more". */
   maxEvents?: number;
-  /** Month grid, or a time grid for one week or one day. */
+  /** Twelve months, one month grid, or a time grid for one week or one day. */
   view?: CalendarView;
   /** Shows a Month/Week/Day switcher when provided. */
   onViewChange?: (view: CalendarView) => void;
@@ -142,7 +143,7 @@ export function Calendar({
   const [focused, setFocused] = useState(selected || today);
   const focusDate = monthOf(focused) === month ? focused : `${month}-01`;
   const moved = useRef(false);
-  const grid = useRef<HTMLTableElement>(null);
+  const grid = useRef<HTMLElement>(null);
   const headingId = useId();
   const [anchor, setAnchor] = useState(selected || today);
 
@@ -168,6 +169,14 @@ export function Calendar({
         weekday: "long",
         timeZone: "UTC",
       }),
+      narrow: new Intl.DateTimeFormat(locale, {
+        weekday: "narrow",
+        timeZone: "UTC",
+      }),
+      monthName: new Intl.DateTimeFormat(locale, {
+        month: "long",
+        timeZone: "UTC",
+      }),
     }),
     [locale],
   );
@@ -189,16 +198,25 @@ export function Calendar({
     if (!controlledMonth) setOwnMonth(next);
     onMonthChange?.(next);
   }
+  const year = anchor.slice(0, 4);
+  const yearFocus = focused.slice(0, 4) === year ? focused : `${year}-01-01`;
+  const showAnchor = (date: string) => {
+    setAnchor(date);
+    onDateChange?.(date);
+  };
   function move(date: string) {
     moved.current = true;
     setFocused(date);
-    if (monthOf(date) !== month) showMonth(monthOf(date));
+    if (view === "year") {
+      if (date.slice(0, 4) !== year) showAnchor(date);
+    } else if (monthOf(date) !== month) showMonth(monthOf(date));
   }
   useEffect(() => {
     if (!moved.current) return;
     moved.current = false;
+    const target = view === "year" ? yearFocus : focusDate;
     grid.current
-      ?.querySelector<HTMLButtonElement>(`[data-date="${focusDate}"]`)
+      ?.querySelector<HTMLButtonElement>(`[data-date="${target}"]`)
       ?.focus();
   });
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>, date: string) {
@@ -228,6 +246,7 @@ export function Calendar({
       label="Calendar view"
       value={view}
       options={[
+        { value: "year", label: "Year" },
         { value: "month", label: "Month" },
         { value: "week", label: "Week" },
         { value: "day", label: "Day" },
@@ -235,6 +254,124 @@ export function Calendar({
       onChange={(next) => onViewChange(next as CalendarView)}
     />
   );
+  if (view === "year") {
+    const shiftYear = (by: number) => {
+      showAnchor(addMonths(anchor, 12 * by));
+      setFocused(addMonths(yearFocus, 12 * by));
+    };
+    const label = (date: string) => {
+      const count = byDay.get(date)?.length ?? 0;
+      const name = formats.day.format(new Date(toTime(date)));
+      return count
+        ? `${name}, ${count} ${count === 1 ? "event" : "events"}`
+        : name;
+    };
+    return (
+      <div className="m-calendar" data-view="year">
+        <div className="m-calendar-header">
+          <h2 id={headingId} aria-live="polite">
+            {year}
+          </h2>
+          {switcher}
+          <div className="m-calendar-nav">
+            <NavButton
+              label="Previous year"
+              direction="back"
+              onClick={() => shiftYear(-1)}
+            />
+            <NavButton
+              label="Next year"
+              direction="forward"
+              onClick={() => shiftYear(1)}
+            />
+          </div>
+        </div>
+        <div
+          className="m-calendar-year"
+          ref={grid as React.RefObject<HTMLDivElement>}
+        >
+          {Array.from({ length: 12 }, (_, i) => {
+            const mm = String(i + 1).padStart(2, "0");
+            const firstDay = `${year}-${mm}-01`;
+            const lead =
+              (new Date(toTime(firstDay)).getUTCDay() - weekStartsOn + 7) % 7;
+            const cells = Array.from({ length: 42 }, (_, n) =>
+              addDays(firstDay, n - lead),
+            );
+            const titleId = `${headingId}-m${mm}`;
+            return (
+              <section
+                key={mm}
+                className="m-calendar-month"
+                aria-labelledby={titleId}
+              >
+                <h3 id={titleId}>
+                  {formats.monthName.format(new Date(toTime(firstDay)))}
+                </h3>
+                <table>
+                  <thead>
+                    <tr>
+                      {cells.slice(0, 7).map((date) => {
+                        const d = new Date(toTime(date));
+                        return (
+                          <th
+                            key={date}
+                            scope="col"
+                            abbr={formats.long.format(d)}
+                          >
+                            {formats.narrow.format(d)}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array.from({ length: 6 }, (_, w) => (
+                      <tr key={w}>
+                        {cells.slice(w * 7, w * 7 + 7).map((date) =>
+                          monthOf(date) === `${year}-${mm}` ? (
+                            <td key={date}>
+                              <button
+                                type="button"
+                                data-date={date}
+                                tabIndex={date === yearFocus ? 0 : -1}
+                                aria-current={
+                                  date === today ? "date" : undefined
+                                }
+                                aria-pressed={date === selected}
+                                aria-label={label(date)}
+                                onClick={() => {
+                                  setFocused(date);
+                                  onSelect?.(date);
+                                }}
+                                onKeyDown={(event) => onKeyDown(event, date)}
+                              >
+                                <span className="m-calendar-day">
+                                  {Number(date.slice(8))}
+                                </span>
+                                {byDay.has(date) && (
+                                  <span
+                                    className="m-calendar-dot"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                              </button>
+                            </td>
+                          ) : (
+                            <td key={date} />
+                          ),
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </section>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
   if (view !== "month")
     return (
       <TimeGrid
@@ -304,7 +441,11 @@ export function Calendar({
           </button>
         </div>
       </div>
-      <table role="grid" aria-labelledby={headingId} ref={grid}>
+      <table
+        role="grid"
+        aria-labelledby={headingId}
+        ref={grid as React.RefObject<HTMLTableElement>}
+      >
         <thead>
           <tr>
             {weeks[0].map((date) => {
