@@ -5,7 +5,7 @@
   "description": "Mortar grid list: a responsive grid of cards for people, projects or files, with avatar or cover media, metadata and actions; a linked title makes the whole card clickable.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "export": "GridList",
   "source": "src/display.tsx",
   "capabilities": ["theme", "application", "responsive"],

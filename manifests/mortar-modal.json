@@ -5,7 +5,7 @@
   "description": "Mortar foundation modal, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "export": "Modal",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation"],
