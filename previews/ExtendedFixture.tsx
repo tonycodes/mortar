@@ -1,6 +1,7 @@
 import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
+import { icons } from "./CompositionFixture.js";
 
 /** Fixtures for components added in the v2 kits PR. Kept apart from Fixture.tsx to keep the diff reviewable. */
 export function ExtendedCase({ name }: { name: string }) {
@@ -492,7 +493,23 @@ export function ExtendedCase({ name }: { name: string }) {
         <UI.TeamGrid
           title="The people behind the product"
           members={[
-            { name: "Ana Kovač", role: "Founder" },
+            {
+              name: "Ana Kovač",
+              role: "Founder",
+              bio: "Ran support for a bike shop before building Northwind.",
+              links: [
+                {
+                  label: "Ana Kovač's website",
+                  href: "#ana-web",
+                  icon: icons.globe,
+                },
+                {
+                  label: "Ana Kovač on GitHub",
+                  href: "#ana-gh",
+                  icon: icons.code,
+                },
+              ],
+            },
             { name: "Ben Lee", role: "Engineering" },
           ]}
         />

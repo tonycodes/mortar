@@ -25,7 +25,8 @@
       "legal": "LinkAction[]",
       "logo": "ReactNode",
       "headingLevel": "2 | 3 | 4",
-      "note": "ReactNode"
+      "note": "ReactNode",
+      "social": "{ label: string; href: string; icon?: ReactNode }[]"
     },
     "states": [
       "Light",
@@ -48,7 +49,7 @@
     "states": ["heading-3"]
   },
   "integrity": {
-    "source": "cc20ee1130146834b47dce4e948dce67fb9620e99a92a0956a66ed47b259dd78",
-    "preview": "84c56a5a414059f29cff2483ec9e5d4d5a1ffa88af25a1bed084e088a0dcef6c"
+    "source": "32843d84d9e408f95a9b1f04f1453f825c21b1d4ef6154af1e566af6682f90e5",
+    "preview": "03d3d00a55fed67d242fb0a7922372b0127d25505509b47e5b4726a04f77479d"
   }
 }

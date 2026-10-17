@@ -1,4 +1,4 @@
-import { KitLink } from "./navigation.js";
+import { IconLinks, KitLink, type IconLink } from "./navigation.js";
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import {
   CloseButton,
@@ -365,17 +365,38 @@ export function Testimonial({
   quote,
   name,
   role,
+  logo,
+  avatar,
 }: {
   quote: string;
   name: string;
   role?: string;
+  /** Company logo above the quote; give the image its company name as alt text. */
+  logo?: ReactNode;
+  /** Photo or avatar beside the name (decorative). */
+  avatar?: ReactNode;
 }) {
+  const person = (
+    <>
+      <strong>{name}</strong>
+      {role && <span>{role}</span>}
+    </>
+  );
   return (
     <figure className="m-testimonial" data-m-component="Testimonial">
+      {logo && <div className="m-testimonial-logo">{logo}</div>}
       <blockquote>{quote}</blockquote>
       <figcaption>
-        <strong>{name}</strong>
-        {role && <span>{role}</span>}
+        {avatar ? (
+          <>
+            <span className="m-testimonial-avatar" aria-hidden="true">
+              {avatar}
+            </span>
+            <span className="m-testimonial-person">{person}</span>
+          </>
+        ) : (
+          person
+        )}
       </figcaption>
     </figure>
   );
@@ -571,6 +592,7 @@ export function Footer({
   copyright,
   legal = [],
   headingLevel = 2,
+  social = [],
 }: {
   brand: string;
   logo?: ReactNode;
@@ -580,6 +602,8 @@ export function Footer({
   copyright: string;
   legal?: LinkAction[];
   headingLevel?: HeadingLevel;
+  /** Social profiles, usually icon-only; each label names its link. */
+  social?: IconLink[];
 }) {
   const Heading = headingTag(headingLevel);
   return (
@@ -592,6 +616,9 @@ export function Footer({
           </strong>
           <p>{description}</p>
           {note && <p>{note}</p>}
+          {social.length > 0 && (
+            <IconLinks label="Social media" links={social} />
+          )}
         </div>
         {columns.map((column) => (
           <nav key={column.title} aria-label={column.title}>

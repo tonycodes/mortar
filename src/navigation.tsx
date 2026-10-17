@@ -1,4 +1,5 @@
 import {
+  type ReactNode,
   createContext,
   useContext,
   type AnchorHTMLAttributes,
@@ -63,5 +64,36 @@ export function KitLink({
         followLink(event, navigate);
       }}
     />
+  );
+}
+
+export interface IconLink {
+  /** Accessible name; also the visible text when there is no icon. */
+  label: string;
+  href: string;
+  icon?: ReactNode;
+}
+/** Labelled list of profile or social links; icon links are named by their label. */
+export function IconLinks({
+  label,
+  links,
+}: {
+  label: string;
+  links: IconLink[];
+}) {
+  return (
+    <ul className="m-icon-links" aria-label={label}>
+      {links.map((link, index) => (
+        <li key={`${link.label}:${link.href}:${index}`}>
+          {link.icon ? (
+            <KitLink href={link.href} aria-label={link.label}>
+              <span aria-hidden="true">{link.icon}</span>
+            </KitLink>
+          ) : (
+            <KitLink href={link.href}>{link.label}</KitLink>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 }

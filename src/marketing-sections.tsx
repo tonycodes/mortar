@@ -1,4 +1,4 @@
-import { KitLink } from "./navigation.js";
+import { IconLinks, KitLink, type IconLink } from "./navigation.js";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { ActionLink, Button, Input, type LinkAction } from "./primitives.js";
 import { Avatar } from "./display.js";
@@ -274,7 +274,14 @@ export function TeamGrid({
 }: {
   title: string;
   description?: string;
-  members: { name: string; role: string; image?: ReactNode }[];
+  members: {
+    name: string;
+    role: string;
+    image?: ReactNode;
+    bio?: string;
+    /** Profile links, e.g. icon-only social links named "Ana on LinkedIn". */
+    links?: IconLink[];
+  }[];
 }) {
   return (
     <section className="m-marketing-section" data-m-component="TeamGrid">
@@ -289,6 +296,10 @@ export function TeamGrid({
             </div>
             <strong>{member.name}</strong>
             <span>{member.role}</span>
+            {member.bio && <p className="m-team-bio">{member.bio}</p>}
+            {member.links?.length ? (
+              <IconLinks label={`${member.name} links`} links={member.links} />
+            ) : null}
           </li>
         ))}
       </ul>
