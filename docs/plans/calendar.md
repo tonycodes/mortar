@@ -17,7 +17,7 @@ added in the green phase.
 | -------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 | Implementation | `src/display.tsx`, `export function Calendar`                                               | `DescriptionList`, `FilterChip` in `src/display.tsx`                    |
 | Public export  | `src/index.ts` display block; `export type { CalendarEvent, CalendarProps }`                | `Listbox` / `ChoiceOption` in `src/index.ts`                            |
-| Styles         | `.m-calendar*` rules in `src/components.css` (`@layer components`)                          | `.m-segmented`, `.m-tabs`, `.m-pagination` in `src/components.css`      |
+| Styles         | `.m-calendar*` rules in a new `@layer components` block appended to `src/kits.css`          | `138e023` / `adb7a52`: new application components in `src/kits.css`     |
 | Manifest       | `manifests/mortar-calendar.json`, `kitId: "application"`                                    | `manifests/mortar-description-list.json`, `mortar-pagination.json`      |
 | Catalogue      | `npm run catalog` (catalog.json entry + source/preview integrity hashes)                    | every manifest                                                          |
 | Preview        | `previews/CalendarPreview.tsx` → shared fixture case; states in `previews/StateFixture.tsx` | `previews/ListboxPreview.tsx` → `ChoiceFixture.tsx`, `StateFixture.tsx` |
@@ -56,7 +56,7 @@ interface CalendarProps {
   isDateDisabled?: (date: string) => boolean;
   locale?: string; // Intl locale; month/weekday names and day labels
   weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6; // default 0 (Sunday)
-  today?: string; // defaults to the current local date
+  today: string; // YYYY-MM-DD, supplied by the caller; no clock-derived default
   disabled?: boolean;
   events?: CalendarEvent[]; // omit to hide the event list
   previousLabel?: string; // default "Previous month"
@@ -68,12 +68,21 @@ interface CalendarProps {
 
 - Visible month: `month` if given, else the month of `value`, else `today`.
   Uncontrolled navigation keeps its own month state; `onMonthChange` fires
-  either way.
+  either way. With controlled `month`, navigation only requests a month;
+  the heading and grid remain unchanged until the parent updates the prop.
+  A pending keyboard target receives focus when that update arrives.
+- `today` is required: this is simpler than an implicit local clock and lets
+  the host supply the same date for SSR and hydration, even across time zones.
+  Calendar does not read the clock. `locale` controls labels only, never the
+  week start: omitted `weekStartsOn` always means Sunday (`0`).
 - `min`/`max`, `disabledDates` and `isDateDisabled` mark days unavailable.
   Previous/next buttons are disabled when the adjacent month lies wholly
   outside `min`/`max`.
 - Leading/trailing days of adjacent months fill complete weeks
-  (`data-outside`), muted, and remain selectable when in range.
+  (`data-outside` on the day button), muted, and remain selectable when in
+  range. Selecting one calls `onChange` and navigates to its month (requests
+  it via `onMonthChange` when controlled). Render the minimum complete weeks:
+  January 2026 Monday-start has five; March/August 2026 Monday-start have six.
 
 ## Markup and accessibility
 
@@ -87,7 +96,7 @@ interface CalendarProps {
 - Each gridcell has `aria-selected` (`"true"` only for `value`) and contains a
   day `<button type="button">` with:
   - `aria-label` = full localized date, plus `", N events"` when it has events;
-  - `<time dateTime="YYYY-MM-DD">` showing the day number;
+  - class `m-calendar-day`, `<time dateTime="YYYY-MM-DD">` showing the day number;
   - `aria-current="date"` for `today`;
   - `aria-disabled="true"` for unavailable days (still focusable, Enter ignored);
   - roving `tabindex`: exactly one day is `0` (selected → today → first
@@ -95,11 +104,18 @@ interface CalendarProps {
 - Keyboard (focus inside the grid): ←/→ ±1 day, ↑/↓ ±1 week, Home/End start/end
   of week (respecting `weekStartsOn`), PageUp/PageDown previous/next month,
   Enter/Space select. Crossing a month boundary moves the visible month and
-  keeps focus on the new day.
+  keeps focus on the new day, even when it was already visible as an outside
+  day. PageUp/PageDown clamp to the last day of the target month (Jan 31 →
+  Feb 28, or Feb 29 in a leap year; Mar 31 → the same February endpoint).
+  All keyboard date targets clamp to `min`/`max`; moving beyond either bound
+  focuses that boundary date and never opens an out-of-range month. Disabled
+  dates within those bounds remain focusable. Navigation never selects a day.
+  Button navigation retains focus on that button while it remains enabled.
 - Event list (only with `events`): `<section class="m-calendar-events"
 aria-labelledby>` headed by the selected full date, `<ol>` of the day's events
   (time + title, `<a>` when `href`). With no events it shows `emptyEventsLabel`.
-- `disabled` disables navigation and all day buttons.
+- `disabled` disables navigation and all day buttons; pointer, synthetic click
+  and keyboard activation must never call `onChange`.
 
 ## States
 
@@ -117,6 +133,26 @@ Default fixture (used by the probe and browser spec):
 `max="2026-03-31"`, `disabledDates={["2026-01-15"]}`, events “Design review”
 (10:00) and “Team sync” (14:00) on 2026-01-12, “Release planning” on
 2026-01-21, plus `<output aria-label="Selected date">` echoing the value.
+
+Additional browser scenarios, implemented in the green phase through the
+existing `state` query/fixture mechanism (not new manifest state vocabulary):
+
+- `unbounded`: value `2026-01-31`, today `2026-01-12`, locale `en-US`, explicit
+  `weekStartsOn={0}`, no min/max. Owns selection, leaves `month` uncontrolled.
+- `controlled`: value/today `2026-01-12`, locale `en-US`, Monday start, initial
+  `month="2026-01"`. `onMonthChange` records the request in an output labelled
+  `Requested month` and increments `Month request count`; only the existing
+  Button labelled `Show requested month` applies it to `month`. Selection is
+  echoed in `Selected date`. This makes Next and PageDown requests observable
+  separately before the parent accepts February.
+- `disabled`: uses the default January props, with `disabled`; every
+  `onChange` increments the existing `Callback count` output.
+
+The node matrix renders identical props under Los Angeles, Kiritimati and
+UTC, and checks consecutive complete weeks in March/October/November under
+New York and London. Browser contexts cover LA keyboard dates and both zones'
+spring/autumn DST weeks. Date arithmetic must operate on calendar dates,
+without local parsing shifts, duplicated days or gaps.
 
 ## Dark and light
 
@@ -143,9 +179,17 @@ Both appearances come from tokens only; no appearance-specific selectors.
 - `Intl.DateTimeFormat` (platform) for names; no date library, no new
   dependency.
 
-Calendar CSS contains no raw colours (hex/rgb/hsl/named) and no px literals
-other than `1px` hairlines (no hairline token exists); sizes use tokens, `em`,
-`%` or grid units. `tests/calendar.test.mjs` enforces this.
+Calendar CSS contains no raw colours (hex/rgb/hsl/named), appearance-specific
+selectors (`[data-theme…]`, `.dark`, or `prefers-color-scheme`) or new `--m-*`
+definitions. Every Calendar-specific rule, including `[data-outside]` and
+grid internals, must be scoped to `.m-calendar` (or its `m-calendar-*` classes)
+in the new final components layer in `kits.css`. Radius values use
+`var(--m-radius*)` or `50%`; day height and minimum sizes use `var(--m-control)`
+or a calc containing it. Other px values are allowed: there is no house
+spacing scale. Reuse existing primitives/tokens only; a real primitive gap
+requires its own PR first. No gap is currently identified: raw day buttons
+follow the existing SegmentedControl/choice internals. The node token tests
+enforce these requirements. The interactive `control` profile is retained.
 
 ## Reflow
 
