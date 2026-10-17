@@ -1,0 +1,66 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { CommentComposer } from "../dist/index.js";
+const h = React.createElement;
+const html = (props) => renderToStaticMarkup(h(CommentComposer, props));
+
+test("CommentComposer labels its textarea and disables submit while empty", () => {
+  const markup = html({ onSubmit() {} });
+  assert.match(markup, /^<form class="m-composer"/);
+  const id = markup.match(
+    /<label class="m-sr-only" for="([^"]+)">Add your comment<\/label>/,
+  )?.[1];
+  assert.ok(id, markup);
+  assert.match(markup, new RegExp(`<textarea[^>]*id="${id}"`));
+  assert.match(markup, /aria-keyshortcuts="Control\+Enter Meta\+Enter"/);
+  assert.match(
+    markup,
+    /<button type="submit"[^>]*disabled=""[^>]*>Comment<\/button>/,
+  );
+});
+
+test("CommentComposer shows an avatar, toolbar, counter, hint and error", () => {
+  const markup = html({
+    onSubmit() {},
+    value: "Looks good",
+    onValueChange() {},
+    avatar: h("span", { "data-avatar": "" }),
+    actions: h("button", { type: "button" }, "Attach"),
+    maxLength: 280,
+    error: "Too spicy",
+  });
+  assert.match(
+    markup,
+    /<span class="m-composer-avatar" aria-hidden="true"><span data-avatar=""><\/span><\/span>/,
+  );
+  assert.match(
+    markup,
+    /<div class="m-composer-actions"><button type="button">Attach<\/button><\/div>/,
+  );
+  assert.match(markup, /maxLength="280"/i);
+  assert.match(
+    markup,
+    /<span class="m-composer-count" aria-live="polite">10 \/ 280<\/span>/,
+  );
+  assert.match(markup, /aria-invalid="true"/);
+  const describedBy = markup.match(/aria-describedby="([^"]+)"/)?.[1];
+  assert.ok(
+    markup.includes(`<p id="${describedBy}" class="m-error">Too spicy</p>`),
+  );
+  assert.match(
+    markup,
+    /<button type="submit"(?![^>]*disabled)[^>]*>Comment<\/button>/,
+  );
+});
+
+test("CommentComposer adds Write and Preview tabs when it can preview", () => {
+  const markup = html({ onSubmit() {}, preview: (v) => v.toUpperCase() });
+  assert.match(markup, /role="tablist" aria-label="Comment mode"/);
+  assert.match(
+    markup,
+    /role="tab"[^>]*aria-selected="true"[^>]*>Write<\/button>/,
+  );
+  assert.match(markup, /role="tab"[^>]*>Preview<\/button>/);
+});

@@ -125,6 +125,11 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
       );
       break;
     }
+    case "CommentComposer":
+      content = (
+        <UI.CommentComposer label={label} error={error} onSubmit={changed} />
+      );
+      break;
     case "OrderHistory":
       content = <UI.OrderHistory orders={[]} emptyTitle="No records" />;
       break;

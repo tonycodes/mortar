@@ -4701,3 +4701,105 @@
     font-size: 24px;
   }
 }
+
+/* CommentComposer: textarea in a box with a toolbar, optional tabs, avatar and count. */
+@layer components {
+  .m-composer {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+  .m-composer-avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-composer-main {
+    display: grid;
+    flex: 1;
+    gap: 6px;
+    min-width: 0;
+  }
+  .m-composer-label {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .m-composer-main > p {
+    margin: 0;
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-composer-box {
+    overflow: hidden;
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+  }
+  .m-composer-box:focus-within {
+    outline: 2px solid var(--m-focus);
+    outline-offset: 2px;
+  }
+  .m-composer-box[data-invalid] {
+    border-color: var(--m-danger);
+  }
+  .m-composer-box textarea {
+    display: block;
+    width: 100%;
+    min-height: 88px;
+    padding: 12px;
+    border: 0;
+    background: transparent;
+    color: var(--m-ink);
+    font: inherit;
+    font-size: var(--m-font-size);
+    resize: vertical;
+  }
+  .m-composer-box textarea:focus-visible {
+    outline: none;
+  }
+  .m-composer-box textarea::placeholder {
+    color: var(--m-muted);
+  }
+  .m-composer-box .m-tabs {
+    gap: 16px;
+    padding: 0 12px;
+  }
+  .m-composer-preview {
+    min-height: 88px;
+    padding: 12px;
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    overflow-wrap: anywhere;
+  }
+  .m-composer-empty {
+    margin: 0;
+    color: var(--m-muted);
+  }
+  .m-composer-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 8px 8px 12px;
+  }
+  .m-composer-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-inline-end: auto;
+  }
+  .m-composer-count {
+    margin-inline-start: auto;
+    color: var(--m-muted);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-composer-actions + .m-composer-count {
+    margin-inline-start: 0;
+  }
+  .m-composer-bar > .m-button {
+    margin-inline-start: auto;
+  }
+  .m-composer-count + .m-button {
+    margin-inline-start: 0;
+  }
+}

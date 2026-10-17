@@ -14,6 +14,7 @@ export const profiles = Object.freeze({
 export const probes = Object.freeze({
   Button: "button",
   Notice: "notice",
+  CommentComposer: "composer",
   ButtonGroup: "button-group",
   ActionLink: "link",
   Input: "input",
