@@ -5,7 +5,7 @@
   "description": "Mortar combobox: a searchable single select that filters options by label and announces when nothing matches.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "export": "Combobox",
   "source": "src/choice.tsx",
   "capabilities": ["theme", "foundation", "form", "keyboard"],
