@@ -341,10 +341,49 @@ export function TextArea({
     </div>
   );
 }
+/** Label beside a control with a description line linked by aria-describedby. */
+function DescribedChoice({
+  input,
+  id,
+  label,
+  description,
+}: {
+  input: (attrs: { id: string; "aria-describedby": string }) => ReactNode;
+  id?: string;
+  label: ReactNode;
+  description: ReactNode;
+}) {
+  const generated = useId();
+  const fieldId = id || generated;
+  const descriptionId = `${fieldId}-description`;
+  return (
+    <div className="m-choice m-choice-described">
+      {input({ id: fieldId, "aria-describedby": descriptionId })}
+      <div className="m-choice-text">
+        <label htmlFor={fieldId}>{label}</label>
+        <p id={descriptionId}>{description}</p>
+      </div>
+    </div>
+  );
+}
 export function Checkbox({
   label,
+  description,
   ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & { label: ReactNode }) {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
+  label: ReactNode;
+  /** Secondary line under the label, announced as the description. */
+  description?: ReactNode;
+}) {
+  if (description)
+    return (
+      <DescribedChoice
+        id={props.id}
+        label={label}
+        description={description}
+        input={(attrs) => <input {...props} {...attrs} type="checkbox" />}
+      />
+    );
   return (
     <label className="m-choice">
       <input {...props} type="checkbox" />
@@ -354,10 +393,30 @@ export function Checkbox({
 }
 export function Switch({
   label,
+  description,
   ...props
 }: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "role"> & {
   label: string;
+  /** Secondary line under the label, announced as the description. */
+  description?: ReactNode;
 }) {
+  if (description)
+    return (
+      <DescribedChoice
+        id={props.id}
+        label={label}
+        description={description}
+        input={(attrs) => (
+          <input
+            {...props}
+            {...attrs}
+            type="checkbox"
+            role="switch"
+            className="m-switch"
+          />
+        )}
+      />
+    );
   return (
     <label className="m-choice">
       <input {...props} type="checkbox" role="switch" className="m-switch" />
@@ -371,15 +430,28 @@ export function RadioGroup({
   value,
   onChange,
   options,
+  layout = "list",
 }: {
   label: string;
   name: string;
   value: string;
   onChange: (value: string) => void;
-  options: { value: string; label: string; description?: string }[];
+  options: {
+    value: string;
+    label: string;
+    description?: string;
+    /** CSS colour for the swatches layout; the label stays the accessible name. */
+    swatch?: string;
+    disabled?: boolean;
+  }[];
+  /** Stacked cards, a card grid, or colour swatches. */
+  layout?: "list" | "grid" | "swatches";
 }) {
   return (
-    <fieldset className="m-radio-group">
+    <fieldset
+      className="m-radio-group"
+      data-layout={layout === "list" ? undefined : layout}
+    >
       <legend>{label}</legend>
       {options.map((o) => (
         <label className="m-radio-card" key={o.value}>
@@ -388,12 +460,24 @@ export function RadioGroup({
             name={name}
             value={o.value}
             checked={value === o.value}
+            disabled={o.disabled}
             onChange={() => onChange(o.value)}
           />
-          <span>
-            <strong>{o.label}</strong>
-            {o.description && <span>{o.description}</span>}
-          </span>
+          {layout === "swatches" ? (
+            <>
+              <span
+                className="m-swatch"
+                aria-hidden="true"
+                style={{ background: o.swatch }}
+              />
+              <span className="m-sr-only">{o.label}</span>
+            </>
+          ) : (
+            <span>
+              <strong>{o.label}</strong>
+              {o.description && <span>{o.description}</span>}
+            </span>
+          )}
         </label>
       ))}
     </fieldset>

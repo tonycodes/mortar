@@ -21,7 +21,7 @@
       "logo": "ReactNode",
       "workspace": "string",
       "homeHref": "string",
-      "navigation": "NavigationItem[] ({ label: string; href: string; current?: boolean; count?: string; icon?: ReactNode })",
+      "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] })",
       "sections": "{ label: string; items: NavigationItem[] }[]",
       "footer": "ReactNode",
       "label": "string"
@@ -42,12 +42,13 @@
     "source": "previews/SidebarPreview.tsx"
   },
   "testing": {
-    "profile": "display",
+    "profile": "control",
     "target": ".m-sidebar-panel",
+    "probe": "sidebar",
     "states": []
   },
   "integrity": {
-    "source": "7fbababe4bb13271f2a0986272613b3fb627a8aa876782226668e91ada5fbfc0",
-    "preview": "e8481527414c0041852a908b8f0351c36d3fdfa5d66b9c1b9fa3208aee5a05dc"
+    "source": "6bc501e99c6c9a306a8c425bcea40474831d7c8763b05633a461e50871ea4d89",
+    "preview": "3e8ace58c11e8de2b18d0b3444a41fd4489be2698a1efaaedb478b9f7dd542b3"
   }
 }

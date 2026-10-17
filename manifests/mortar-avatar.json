@@ -20,7 +20,7 @@
     "props": {
       "name": "string",
       "src": "string",
-      "size": "sm | md | lg",
+      "size": "xs | sm | md | lg | xl",
       "shape": "circle | square",
       "status": "online | offline"
     },
@@ -45,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "739a829ec174139054543d83982d6ad5e67a3a8b58c8558d9dad3020467c962e",
-    "preview": "abe12f5e06cd53f4f9d9c98c9317f463b5db566734f1d0efa89a516c1162f476"
+    "source": "d65e97df26447d8afd0b5c06afd765573687eb14ae1215df01319b309b1eaa1d",
+    "preview": "a9d43332b123c8db55f3b1c91d043b6399d3f0feb643dbd746e4640e979d5f0d"
   }
 }

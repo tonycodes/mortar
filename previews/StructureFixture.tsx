@@ -153,6 +153,15 @@ export function StructureCase({ name }: { name: string }) {
               },
               { label: "Team", href: "#team", icon: icons.team },
               {
+                label: "Reports",
+                href: "#reports",
+                icon: icons.calendar,
+                children: [
+                  { label: "Revenue", href: "#revenue" },
+                  { label: "Retention", href: "#retention" },
+                ],
+              },
+              {
                 label: "Projects",
                 href: "#projects",
                 count: "12",

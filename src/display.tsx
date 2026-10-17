@@ -19,7 +19,7 @@ export function Avatar({
 }: {
   name: string;
   src?: string;
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   shape?: "circle" | "square";
   status?: "online" | "offline";
 }) {

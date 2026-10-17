@@ -52,6 +52,7 @@ export const probes = Object.freeze({
   DocsShell: "navigation",
   MarketingHeader: "navigation",
   Navbar: "navbar",
+  Sidebar: "sidebar",
   StackedShell: "navbar",
   Calendar: "calendar",
   ProductOverview: "product",

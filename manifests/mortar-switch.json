@@ -20,7 +20,8 @@
     "props": {
       "label": "string",
       "checked": "boolean",
-      "onChange": "ChangeEventHandler<HTMLInputElement>"
+      "onChange": "ChangeEventHandler<HTMLInputElement>",
+      "description": "ReactNode"
     },
     "states": [
       "Light",
@@ -44,7 +45,7 @@
     "probe": "switch"
   },
   "integrity": {
-    "source": "00294f6fef7e71f9884f73bffe6ebf221fb97638aeb61a6b4fc6f1b211046fb7",
-    "preview": "9630ad07201470617704b1fc391d1840fae5115198e7de8849014aaf0ffb50b4"
+    "source": "0ec3c4e4b04e8a856b8c0f474cacda54ab0ecf76b79820056b056bcc1d24c8ac",
+    "preview": "3cab6236bb83283a24c97b92d3b096b1f29f065e8e5cf6ca28d3be51ca060069"
   }
 }

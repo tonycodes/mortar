@@ -141,7 +141,12 @@ export const implementations = {
     await expect(input).toHaveValue("Lindsay Walton");
   },
   async checkbox({ page, root }) {
-    const input = root.getByRole("checkbox");
+    await expect(
+      root.getByRole("checkbox", { name: "Comments" }),
+    ).toHaveAccessibleDescription(
+      "Get notified when someone comments on your post.",
+    );
+    const input = root.getByRole("checkbox", { name: "Email notifications" });
     await input.focus();
     await page.keyboard.press("Space");
     await expect(input).toBeChecked();
@@ -149,7 +154,10 @@ export const implementations = {
     await expect(input).not.toBeChecked();
   },
   async switch({ page, root }) {
-    const input = root.getByRole("switch");
+    await expect(
+      root.getByRole("switch", { name: "Annual billing" }),
+    ).toHaveAccessibleDescription("Save 10% when you pay for a year up front.");
+    const input = root.getByRole("switch", { name: "Automatic updates" });
     await input.focus();
     await page.keyboard.press("Space");
     await expect(input).toBeChecked();
@@ -157,7 +165,17 @@ export const implementations = {
     await expect(input).not.toBeChecked();
   },
   async radio({ page, root }) {
-    const radios = root.getByRole("radio");
+    const chosen = root.getByLabel("Chosen options");
+    const memory = root.getByRole("group", { name: "Memory" });
+    await expect(memory.getByRole("radio", { name: /64 GB/ })).toBeDisabled();
+    await memory.getByRole("radio", { name: /32 GB/ }).check();
+    await expect(chosen).toHaveText("32 · slate");
+    const colour = root.getByRole("group", { name: "Colour" });
+    await colour.getByRole("radio", { name: "Slate" }).focus();
+    await page.keyboard.press("ArrowLeft");
+    await expect(colour.getByRole("radio", { name: "Sky" })).toBeChecked();
+    await expect(chosen).toHaveText("32 · sky");
+    const radios = root.getByRole("group", { name: "Plan" }).getByRole("radio");
     await radios.first().focus();
     await page.keyboard.press("ArrowDown");
     await expect(radios.nth(1)).toBeChecked();
@@ -508,6 +526,18 @@ export const implementations = {
     await expect(
       root.getByRole("link", { name: "Continue shopping" }),
     ).toBeVisible();
+  },
+  async sidebar({ page, root }) {
+    const reports = root.locator("summary", { hasText: "Reports" });
+    const revenue = root.getByRole("link", { name: "Revenue" });
+    await expect(revenue).toBeHidden();
+    await reports.focus();
+    await page.keyboard.press("Enter");
+    await expect(revenue).toBeVisible();
+    await revenue.click();
+    await expect(page).toHaveURL(/#revenue$/);
+    await reports.click();
+    await expect(revenue).toBeHidden();
   },
   async banner({ page, root }) {
     const banner = root.getByRole("region", { name: "Announcement" });

@@ -49,8 +49,10 @@ export function ExtendedCase({ name }: { name: string }) {
     case "Avatar":
       example = (
         <div className="m-actions">
+          <UI.Avatar name="Ana Kovač" size="xs" />
           <UI.Avatar name="Ana Kovač" status="online" />
           <UI.Avatar name="Example Person" size="lg" shape="square" />
+          <UI.Avatar name="Tom Cook" size="xl" />
         </div>
       );
       break;
