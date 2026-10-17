@@ -100,12 +100,20 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "Toast":
       example = (
-        <UI.Toast
-          title="Payment method expired"
-          description="Update it to keep builds running."
-          tone="danger"
-          action={{ label: "Update", onClick: () => setSelected(true) }}
-        />
+        <UI.Stack gap="md">
+          <UI.Toast
+            title="Payment method expired"
+            description="Update it to keep builds running."
+            tone="danger"
+            action={{ label: "Update", onClick: () => setSelected(true) }}
+          />
+          <UI.Toast
+            title="Ana Kovač replied"
+            description="“Looks good — ship it on Friday.”"
+            leading={<UI.Avatar name="Ana Kovač" size="sm" />}
+            action={{ label: "Reply", onClick: () => {} }}
+          />
+        </UI.Stack>
       );
       break;
     case "Toaster":
@@ -166,6 +174,7 @@ export function ExtendedCase({ name }: { name: string }) {
             onClose={() => setOpen(false)}
             title="Add environment variable"
             description="Applies to the next deployment."
+            size="lg"
             actions={
               <>
                 <UI.Button variant="secondary" onClick={() => setOpen(false)}>
@@ -332,20 +341,61 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "StackedList":
       example = (
-        <UI.StackedList
-          label="Members"
-          heading="Members"
-          action={<a href="#manage">Manage</a>}
-          items={[
-            {
-              id: "1",
-              title: "Ana Kovač",
-              description: "ana@example.com",
-              leading: <UI.Avatar name="Ana Kovač" />,
-              trailing: <UI.Badge>Owner</UI.Badge>,
-            },
-          ]}
-        />
+        <UI.Stack gap="xl">
+          <UI.StackedList
+            label="Members"
+            heading="Members"
+            action={<a href="#manage">Manage</a>}
+            items={[
+              {
+                id: "1",
+                title: "Ana Kovač",
+                description: "ana@example.com",
+                leading: <UI.Avatar name="Ana Kovač" />,
+                trailing: <UI.Badge>Owner</UI.Badge>,
+              },
+            ]}
+          />
+          <UI.StackedList
+            label="Directory"
+            groups={[
+              {
+                label: "A",
+                items: [
+                  {
+                    id: "ana",
+                    title: "Ana Kovač",
+                    description: "Engineering",
+                    leading: <UI.Avatar name="Ana Kovač" size="sm" />,
+                  },
+                  {
+                    id: "arlene",
+                    title: "Arlene Mccoy",
+                    description: "Design",
+                    leading: <UI.Avatar name="Arlene Mccoy" size="sm" />,
+                  },
+                ],
+              },
+              {
+                label: "T",
+                items: [
+                  {
+                    id: "tom",
+                    title: "Tom Cook",
+                    description: "Design",
+                    leading: <UI.Avatar name="Tom Cook" size="sm" />,
+                  },
+                  {
+                    id: "tanya",
+                    title: "Tanya Fox",
+                    description: "Marketing",
+                    leading: <UI.Avatar name="Tanya Fox" size="sm" />,
+                  },
+                ],
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "BentoGrid":

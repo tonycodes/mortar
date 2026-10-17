@@ -4843,3 +4843,51 @@
     height: 3px;
   }
 }
+
+/* App feedback variants: toast avatars, activity actors and comments,
+   grouped stacked lists with sticky headings, and wider slide-overs. */
+@layer components {
+  .m-toast-leading {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-activity-actor {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-activity-body {
+    margin: 8px 0 0;
+    padding: 10px 12px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 13px;
+  }
+  /* clip, not hidden: hidden makes the list a scroll container and stops headings sticking. */
+  .m-stacked-list:has(> .m-stacked-group) {
+    overflow: clip;
+  }
+  .m-stacked-group-heading {
+    position: sticky;
+    /* Set --m-sticky-top to the height of a fixed app header so headings stop below it. */
+    top: var(--m-sticky-top, 0px);
+    z-index: 1;
+    margin: 0;
+    padding: 6px 18px;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .m-stacked-list > .m-stacked-group:not(:last-child) li:last-child {
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-slide-over[data-size="lg"] {
+    width: min(640px, 96vw);
+  }
+  .m-slide-over[data-size="xl"] {
+    width: min(880px, 100vw);
+  }
+}

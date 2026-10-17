@@ -921,19 +921,30 @@ export function ActivityFeed({
     description?: string;
     time: string;
     tone?: Tone;
+    /** Avatar of who acted; replaces the tone dot. */
+    actor?: ReactNode;
+    /** Comment text, shown as a quote under the title. */
+    body?: ReactNode;
   }[];
 }) {
   return (
     <ol className="m-activity" aria-label={label}>
       {items.map((item) => (
         <li key={item.id}>
-          <span
-            aria-hidden="true"
-            className={`m-activity-dot m-tone-${item.tone || "neutral"}`}
-          />
+          {item.actor ? (
+            <span className="m-activity-actor">{item.actor}</span>
+          ) : (
+            <span
+              aria-hidden="true"
+              className={`m-activity-dot m-tone-${item.tone || "neutral"}`}
+            />
+          )}
           <div>
             <strong>{item.title}</strong>
             {item.description && <p>{item.description}</p>}
+            {item.body && (
+              <blockquote className="m-activity-body">{item.body}</blockquote>
+            )}
           </div>
           <span>{item.time}</span>
         </li>

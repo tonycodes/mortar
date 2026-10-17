@@ -22,7 +22,8 @@
       "description": "string",
       "tone": "Tone",
       "action": "{ label: string; onClick: () => void }",
-      "onDismiss": "() => void"
+      "onDismiss": "() => void",
+      "leading": "ReactNode"
     },
     "states": [
       "Light",
@@ -46,7 +47,7 @@
     "probe": "toast"
   },
   "integrity": {
-    "source": "d787c30db1544763a52785f9f99e83079e649a092176f5276f9972860c000cc9",
-    "preview": "5488c3d1759f21c4d21f81a2f4f1e37350f833a72d035bc37feab9fb92a83d56"
+    "source": "9f4e7eb703a42fe8b424b0fc7c009ea0d910483671deea8e5f127730f4472f1d",
+    "preview": "a58a52274163be2be22fe6bd4a3158a0e3638d959a7abb3b95da22d8ef9d6f9c"
   }
 }

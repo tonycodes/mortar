@@ -1,5 +1,5 @@
 import { KitLink } from "./navigation.js";
-import { Fragment, type ReactNode } from "react";
+import { Fragment, useId, type ReactNode } from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -20,6 +20,7 @@ export function SlideOver({
   description,
   children,
   actions,
+  size = "md",
 }: {
   open: boolean;
   onClose: () => void;
@@ -27,11 +28,16 @@ export function SlideOver({
   description?: string;
   children: ReactNode;
   actions?: ReactNode;
+  /** Panel width: md (default), lg or xl. */
+  size?: "md" | "lg" | "xl";
 }) {
   return (
     <Dialog open={open} onClose={onClose} className="m-dialog">
       <div className="m-backdrop" aria-hidden="true" />
-      <DialogPanel className="m-slide-over">
+      <DialogPanel
+        className="m-slide-over"
+        data-size={size === "md" ? undefined : size}
+      >
         <header>
           <div>
             <DialogTitle>{title}</DialogTitle>
@@ -181,24 +187,52 @@ export function CommandPalette({
   );
 }
 
+export interface StackedListItem {
+  id: string;
+  title: ReactNode;
+  description?: ReactNode;
+  leading?: ReactNode;
+  trailing?: ReactNode;
+  href?: string;
+}
 export function StackedList({
   label,
   heading,
   action,
-  items,
+  items = [],
+  groups,
 }: {
   label: string;
   heading?: ReactNode;
   action?: ReactNode;
-  items: {
-    id: string;
-    title: ReactNode;
-    description?: ReactNode;
-    leading?: ReactNode;
-    trailing?: ReactNode;
-    href?: string;
-  }[];
+  items?: StackedListItem[];
+  /** Sections with sticky headings, e.g. a directory grouped by letter. */
+  groups?: { label: string; items: StackedListItem[] }[];
 }) {
+  const base = useId();
+  const row = (item: StackedListItem) => {
+    const body = (
+      <>
+        {item.leading}
+        <span className="m-stacked-text">
+          <strong>{item.title}</strong>
+          {item.description && <span>{item.description}</span>}
+        </span>
+      </>
+    );
+    return (
+      <li key={item.id}>
+        {item.href ? (
+          <KitLink href={item.href}>{body}</KitLink>
+        ) : (
+          <div>{body}</div>
+        )}
+        {item.trailing && (
+          <div className="m-stacked-trailing">{item.trailing}</div>
+        )}
+      </li>
+    );
+  };
   return (
     <section className="m-stacked-list" aria-label={label}>
       {(heading || action) && (
@@ -207,31 +241,18 @@ export function StackedList({
           {action}
         </header>
       )}
-      <ul>
-        {items.map((item) => {
-          const body = (
-            <>
-              {item.leading}
-              <span className="m-stacked-text">
-                <strong>{item.title}</strong>
-                {item.description && <span>{item.description}</span>}
-              </span>
-            </>
-          );
-          return (
-            <li key={item.id}>
-              {item.href ? (
-                <KitLink href={item.href}>{body}</KitLink>
-              ) : (
-                <div>{body}</div>
-              )}
-              {item.trailing && (
-                <div className="m-stacked-trailing">{item.trailing}</div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+      {groups ? (
+        groups.map((group, index) => (
+          <div key={group.label} className="m-stacked-group">
+            <h3 id={`${base}-${index}`} className="m-stacked-group-heading">
+              {group.label}
+            </h3>
+            <ul aria-labelledby={`${base}-${index}`}>{group.items.map(row)}</ul>
+          </div>
+        ))
+      ) : (
+        <ul>{items.map(row)}</ul>
+      )}
     </section>
   );
 }

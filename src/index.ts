@@ -107,7 +107,7 @@ export type { ChatMessage } from "./showcase.js";
 export { Toast, Toaster, ConfirmDialog, SaveBar, Banner } from "./feedback.js";
 export type { ToastItem } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
-export type { CommandItem } from "./workspace.js";
+export type { CommandItem, StackedListItem } from "./workspace.js";
 export {
   BentoGrid,
   StatGroup,
