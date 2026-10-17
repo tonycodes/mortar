@@ -1,0 +1,54 @@
+{
+  "id": "mortar-card",
+  "logicalId": "card",
+  "name": "Card",
+  "description": "Mortar card: a bordered surface with optional heading, header actions, footer, compact padding and sunken tone.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Card",
+  "source": "src/layout.tsx",
+  "capabilities": ["theme", "foundation"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "as": "\"div\" | \"section\" | \"article\"",
+      "title": "string",
+      "description": "string",
+      "headingLevel": "2 | 3 | 4",
+      "actions": "ReactNode",
+      "footer": "ReactNode",
+      "padding": "\"default\" | \"compact\" | \"none\"",
+      "tone": "\"default\" | \"sunken\"",
+      "children": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Card } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/CardPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-card",
+    "states": []
+  },
+  "integrity": {
+    "source": "0c62f1f8f729c8d2d7c9b1dfd58d6cfa3255aa404e90dfbc05685c8ea79f8092",
+    "preview": "18654d1e797e1810204b69d1232201c8e85109a8d690a419c5aa6e63c4177c54"
+  }
+}

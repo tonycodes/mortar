@@ -96,7 +96,9 @@ test.beforeAll(async () => {
     };
     const onData = (chunk) => {
       output += chunk.toString();
-      const match = output.match(/Local:\s+http:\/\/127\.0\.0\.1:(\d+)/);
+      // Playwright workers set FORCE_COLOR, so Vite wraps "Local:" in ANSI codes.
+      const plain = output.replace(/\x1b\[[0-9;]*m/g, "");
+      const match = plain.match(/Local:\s+http:\/\/127\.0\.0\.1:(\d+)/);
       if (match) finish(null, `http://127.0.0.1:${match[1]}`);
     };
     child.stdout.on("data", onData);

@@ -1,0 +1,51 @@
+{
+  "id": "mortar-action-panel",
+  "logicalId": "action-panel",
+  "name": "ActionPanel",
+  "description": "Mortar action panel: a titled card with an explanation and one decisive action, with a danger tone for destructive settings.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "ActionPanel",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application", "action"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "description": "string",
+      "action": "ReactNode",
+      "children": "ReactNode",
+      "tone": "\"default\" | \"danger\"",
+      "headingLevel": "2 | 3"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ActionPanel } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ActionPanelPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-action-panel",
+    "states": []
+  },
+  "integrity": {
+    "source": "3436ccfc433222bb9beccc115bc00c9dc99f8ef628807d773b8b8395d5aff7c9",
+    "preview": "b7602d8364f16ee9954a82488c889c3a5d0fa68dd83ebbed2cf1b2c68b10d680"
+  }
+}

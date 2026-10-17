@@ -1,4 +1,4 @@
-import type { ElementType, ReactNode } from "react";
+import { useId, type ElementType, type ReactNode } from "react";
 
 type Space = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -123,5 +123,137 @@ export function BrandMark({ logo }: { logo?: ReactNode }) {
     </span>
   ) : (
     <span className="m-mark" aria-hidden="true" />
+  );
+}
+
+/** Horizontal rule between groups; a label names the break for assistive technology. */
+export function Divider({
+  label,
+  soft = false,
+  spacing = "md",
+}: {
+  label?: string;
+  soft?: boolean;
+  spacing?: "none" | "sm" | "md" | "lg";
+}) {
+  return label ? (
+    <div
+      className="m-divider"
+      role="separator"
+      aria-label={label}
+      data-soft={soft || undefined}
+      data-spacing={spacing}
+    >
+      <span aria-hidden="true">{label}</span>
+    </div>
+  ) : (
+    <hr
+      className="m-divider"
+      data-soft={soft || undefined}
+      data-spacing={spacing}
+    />
+  );
+}
+
+/** Bordered surface with optional heading, header actions and footer. */
+export function Card({
+  as: Tag = "div",
+  title,
+  description,
+  headingLevel = 2,
+  actions,
+  footer,
+  padding = "default",
+  tone = "default",
+  children,
+}: {
+  as?: "div" | "section" | "article";
+  title?: string;
+  description?: string;
+  headingLevel?: 2 | 3 | 4;
+  actions?: ReactNode;
+  footer?: ReactNode;
+  padding?: "default" | "compact" | "none";
+  tone?: "default" | "sunken";
+  children?: ReactNode;
+}) {
+  const id = useId();
+  const Heading = `h${headingLevel}` as const;
+  return (
+    <Tag
+      className="m-card"
+      data-padding={padding}
+      data-tone={tone}
+      aria-labelledby={title && Tag !== "div" ? id : undefined}
+    >
+      {(title || actions) && (
+        <header className="m-card-header">
+          {title && (
+            <div className="m-card-heading">
+              <Heading id={id}>{title}</Heading>
+              {description && <p>{description}</p>}
+            </div>
+          )}
+          {actions && <div className="m-card-actions">{actions}</div>}
+        </header>
+      )}
+      {children && <div className="m-card-body">{children}</div>}
+      {footer && <footer className="m-card-footer">{footer}</footer>}
+    </Tag>
+  );
+}
+
+/** Image, avatar or icon beside text, e.g. comments and list rows. */
+export function MediaObject({
+  media,
+  title,
+  align = "start",
+  reverse = false,
+  children,
+}: {
+  media: ReactNode;
+  title?: string;
+  align?: "start" | "center";
+  reverse?: boolean;
+  children?: ReactNode;
+}) {
+  return (
+    <div
+      className="m-media-object"
+      data-align={align}
+      data-reverse={reverse || undefined}
+    >
+      <div className="m-media-object-media">{media}</div>
+      <div className="m-media-object-body">
+        {title && <p className="m-media-object-title">{title}</p>}
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/** Heading for a section within a page, with optional description and actions. */
+export function SectionHeading({
+  title,
+  description,
+  actions,
+  headingLevel = 2,
+  divider = true,
+}: {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+  headingLevel?: 2 | 3 | 4;
+  divider?: boolean;
+}) {
+  const Heading = `h${headingLevel}` as const;
+  return (
+    <div className="m-section-heading" data-divider={divider}>
+      <div className="m-section-heading-text">
+        <Heading>{title}</Heading>
+        {description && <p>{description}</p>}
+      </div>
+      {actions && <div className="m-actions">{actions}</div>}
+    </div>
   );
 }

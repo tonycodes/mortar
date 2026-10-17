@@ -64,6 +64,56 @@ export function ActionLink({
     </KitLink>
   );
 }
+export interface ButtonGroupItem {
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  icon?: ReactNode;
+  /** Show only the icon; the label remains the accessible name. */
+  iconOnly?: boolean;
+  disabled?: boolean;
+}
+/** Joined row of related secondary actions. Use SegmentedControl to choose one value. */
+export function ButtonGroup({
+  label,
+  items,
+}: {
+  label: string;
+  items: ButtonGroupItem[];
+}) {
+  return (
+    <div className="m-button-group" role="group" aria-label={label}>
+      {items.map((item) => {
+        const content = (
+          <>
+            {item.icon && (
+              <span aria-hidden="true" className="m-button-group-icon">
+                {item.icon}
+              </span>
+            )}
+            {!(item.iconOnly && item.icon) && item.label}
+          </>
+        );
+        const name = item.iconOnly && item.icon ? item.label : undefined;
+        return item.href && !item.disabled ? (
+          <KitLink key={item.label} href={item.href} aria-label={name}>
+            {content}
+          </KitLink>
+        ) : (
+          <button
+            key={item.label}
+            type="button"
+            aria-label={name}
+            disabled={item.disabled}
+            onClick={item.onClick}
+          >
+            {content}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 export type Tone = "neutral" | "success" | "warning" | "danger";
 export function Badge({
   children,
@@ -83,9 +133,27 @@ export interface InputProps
   extends InputHTMLAttributes<HTMLInputElement>, FieldDescription {
   prefix?: string;
   suffix?: string;
+  /** Decorative icon inside the field, before the text. */
+  leadingIcon?: ReactNode;
+  /** Decorative icon inside the field, after the text. */
+  trailingIcon?: ReactNode;
+  /** Button or menu attached to the end of the field, e.g. "Sort" or "Copy". */
+  action?: ReactNode;
 }
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, hint, error, id, prefix, suffix, className = "", ...props },
+  {
+    label,
+    hint,
+    error,
+    id,
+    prefix,
+    suffix,
+    leadingIcon,
+    trailingIcon,
+    action,
+    className = "",
+    ...props
+  },
   ref,
 ) {
   const generated = useId(),
@@ -94,8 +162,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <div className="m-field">
       <label htmlFor={fieldId}>{label}</label>
-      <div className="m-input-group" data-invalid={!!error || undefined}>
+      <div
+        className="m-input-group"
+        data-invalid={!!error || undefined}
+        data-leading={leadingIcon ? true : undefined}
+        data-trailing={trailingIcon ? true : undefined}
+      >
         {prefix && <span>{prefix}</span>}
+        {leadingIcon && (
+          <span className="m-input-icon" aria-hidden="true">
+            {leadingIcon}
+          </span>
+        )}
         <input
           {...props}
           ref={ref}
@@ -108,7 +186,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               .join(" ") || undefined
           }
         />
+        {trailingIcon && (
+          <span className="m-input-icon" aria-hidden="true">
+            {trailingIcon}
+          </span>
+        )}
         {suffix && <span>{suffix}</span>}
+        {action && <div className="m-input-action">{action}</div>}
       </div>
       {(error || hint) && (
         <p id={messageId} className={error ? "m-error" : ""}>
@@ -173,6 +257,31 @@ export function Select({
         </p>
       )}
     </div>
+  );
+}
+/** Groups related fields under a legend; disabled disables every control inside. */
+export function Fieldset({
+  legend,
+  description,
+  disabled,
+  children,
+}: {
+  legend: string;
+  description?: string;
+  disabled?: boolean;
+  children: ReactNode;
+}) {
+  const id = useId();
+  return (
+    <fieldset
+      className="m-fieldset"
+      disabled={disabled}
+      aria-describedby={description ? id : undefined}
+    >
+      <legend>{legend}</legend>
+      {description && <p id={id}>{description}</p>}
+      <div className="m-fieldset-fields">{children}</div>
+    </fieldset>
   );
 }
 export function TextArea({

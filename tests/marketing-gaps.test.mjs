@@ -344,6 +344,7 @@ test("Footer note renders plain text that is not a link", () => {
 test("marketing component roots expose data-m-component", async () => {
   const action = { label: "Explore", href: "/explore" };
   const factories = {
+    Banner: () => markup(UI.Banner, { children: "Announcement" }),
     MarketingHeader: () =>
       markup(UI.MarketingHeader, { brand: "Northwind", links: [action] }),
     Hero: () =>

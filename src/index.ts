@@ -7,11 +7,13 @@ export type {
 } from "./foundation.js";
 export {
   Button,
+  ButtonGroup,
   ActionLink,
   Input,
   Select,
   TextArea,
   Checkbox,
+  Fieldset,
   RadioGroup,
   Switch,
   Badge,
@@ -23,6 +25,7 @@ export {
 } from "./primitives.js";
 export type {
   ButtonProps,
+  ButtonGroupItem,
   InputProps,
   LinkAction,
   Tone,
@@ -37,6 +40,11 @@ export {
   SettingsSection,
   ActivityFeed,
   SignInPanel,
+  Sidebar,
+  Navbar,
+  StackedShell,
+  Breadcrumbs,
+  ActionPanel,
 } from "./application.js";
 export type {
   AppShellProps,
@@ -46,6 +54,8 @@ export type {
   TableSort,
   SortDirection,
   SignInProvider,
+  SidebarProps,
+  BreadcrumbItem,
 } from "./application.js";
 export {
   MarketingHeader,
@@ -69,12 +79,24 @@ export {
   ProgressBar,
   FilterChip,
   CheckList,
+  DescriptionList,
+  GridList,
 } from "./display.js";
-export { Stack, Container, Text, Section } from "./layout.js";
+export type { GridListItem } from "./display.js";
+export {
+  Stack,
+  Container,
+  Text,
+  Section,
+  Divider,
+  Card,
+  MediaObject,
+  SectionHeading,
+} from "./layout.js";
 export type { SectionTone } from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
 export type { ChatMessage } from "./showcase.js";
-export { Toast, Toaster, ConfirmDialog, SaveBar } from "./feedback.js";
+export { Toast, Toaster, ConfirmDialog, SaveBar, Banner } from "./feedback.js";
 export type { ToastItem } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
 export type { CommandItem } from "./workspace.js";
@@ -105,3 +127,7 @@ export {
   LinkCards,
 } from "./docs.js";
 export type { DocsShellProps, FileNode } from "./docs.js";
+export { Listbox, Combobox } from "./choice.js";
+export type { ChoiceOption } from "./choice.js";
+export { Calendar } from "./calendar.js";
+export type { CalendarEvent } from "./calendar.js";

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { KitLink } from "./navigation.js";
 
 function initials(name: string) {
   return name
@@ -195,6 +196,105 @@ export function CheckList({
             />
           </svg>
           <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Label/value pairs for detail screens, stacked on narrow screens and in columns when wide. */
+export function DescriptionList({
+  title,
+  description,
+  headingLevel = 2,
+  items,
+  layout = "columns",
+}: {
+  title?: string;
+  description?: string;
+  headingLevel?: 2 | 3 | 4;
+  items: { term: string; details: ReactNode; action?: ReactNode }[];
+  layout?: "columns" | "stacked";
+}) {
+  const Heading = `h${headingLevel}` as const;
+  return (
+    <div className="m-description-list" data-layout={layout}>
+      {title && (
+        <div className="m-description-heading">
+          <Heading>{title}</Heading>
+          {description && <p>{description}</p>}
+        </div>
+      )}
+      <dl>
+        {items.map((item) => (
+          <div key={item.term} data-action={item.action ? true : undefined}>
+            <dt>{item.term}</dt>
+            <dd>{item.details}</dd>
+            {item.action && (
+              <dd className="m-description-action">{item.action}</dd>
+            )}
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
+export interface GridListItem {
+  id: string;
+  title: string;
+  description?: string;
+  /** Destination for the card; its title link covers the whole card. */
+  href?: string;
+  /** Avatar or icon shown beside the title. */
+  media?: ReactNode;
+  /** Image across the top of the card. Use alt="" when the title already describes it. */
+  cover?: { src: string; alt: string };
+  /** Badges, dates or counts under the description. */
+  meta?: ReactNode;
+  actions?: ReactNode;
+}
+/** Responsive grid of cards for people, projects or files. */
+export function GridList({
+  label,
+  items,
+  columns = 3,
+  headingLevel = 3,
+}: {
+  label: string;
+  items: GridListItem[];
+  columns?: 2 | 3 | 4;
+  headingLevel?: 2 | 3 | 4;
+}) {
+  const Heading = `h${headingLevel}` as const;
+  return (
+    <ul className="m-grid-list" aria-label={label} data-columns={columns}>
+      {items.map((item) => (
+        <li key={item.id}>
+          {item.cover && (
+            <div className="m-grid-list-cover">
+              <img src={item.cover.src} alt={item.cover.alt} loading="lazy" />
+            </div>
+          )}
+          <div className="m-grid-list-body">
+            {item.media && (
+              <span className="m-grid-list-media">{item.media}</span>
+            )}
+            <div className="m-grid-list-text">
+              <Heading>
+                {item.href ? (
+                  <KitLink href={item.href}>{item.title}</KitLink>
+                ) : (
+                  item.title
+                )}
+              </Heading>
+              {item.description && <p>{item.description}</p>}
+              {item.meta && <div className="m-grid-list-meta">{item.meta}</div>}
+            </div>
+          </div>
+          {item.actions && (
+            <div className="m-grid-list-actions">{item.actions}</div>
+          )}
         </li>
       ))}
     </ul>

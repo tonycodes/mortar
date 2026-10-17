@@ -5,7 +5,8 @@ import {
   DialogTitle,
   Description,
 } from "@headlessui/react";
-import { Button, Input, type Tone } from "./primitives.js";
+import { Button, Input, type LinkAction, type Tone } from "./primitives.js";
+import { KitLink } from "./navigation.js";
 
 export interface ToastItem {
   id: string;
@@ -188,5 +189,61 @@ export function SaveBar({
         </Button>
       </div>
     </div>
+  );
+}
+
+/** Site-wide announcement bar with an optional link and dismiss button. */
+export function Banner({
+  children,
+  action,
+  onDismiss,
+  label = "Announcement",
+  dismissLabel = "Dismiss announcement",
+  tone = "inverse",
+}: {
+  children: ReactNode;
+  action?: LinkAction;
+  onDismiss?: () => void;
+  label?: string;
+  dismissLabel?: string;
+  tone?: "inverse" | "neutral";
+}) {
+  return (
+    <section
+      className="m-banner"
+      aria-label={label}
+      data-tone={tone}
+      data-m-component="Banner"
+    >
+      <p>
+        {children}
+        {action && (
+          <>
+            {" "}
+            <KitLink href={action.href}>
+              {action.label}
+              <span aria-hidden="true"> →</span>
+            </KitLink>
+          </>
+        )}
+      </p>
+      {onDismiss && (
+        <button type="button" aria-label={dismissLabel} onClick={onDismiss}>
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="m5 5 10 10M15 5 5 15"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+            />
+          </svg>
+        </button>
+      )}
+    </section>
   );
 }

@@ -1,0 +1,49 @@
+{
+  "id": "mortar-fieldset",
+  "logicalId": "fieldset",
+  "name": "Fieldset",
+  "description": "Mortar fieldset: groups related fields under a legend and description; disabled disables every control inside.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "Fieldset",
+  "source": "src/primitives.tsx",
+  "capabilities": ["theme", "foundation", "form"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "provenance": {
+    "kitId": "foundation",
+    "exampleId": "mortar-foundation-reference"
+  },
+  "contract": {
+    "props": {
+      "legend": "string",
+      "description": "string",
+      "disabled": "boolean",
+      "children": "ReactNode"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { Fieldset } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/FieldsetPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-fieldset",
+    "states": ["disabled"]
+  },
+  "integrity": {
+    "source": "6d07745d325476227af7c8a3b9aa70c919e21bd363779743713278931eaf2fb5",
+    "preview": "696b43ee9785c5178b234e9d9799422534cc0abb273a6682ccbdc35de7808fdf"
+  }
+}

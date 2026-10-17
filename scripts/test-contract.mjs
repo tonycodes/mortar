@@ -13,10 +13,13 @@ export const profiles = Object.freeze({
 });
 export const probes = Object.freeze({
   Button: "button",
+  ButtonGroup: "button-group",
   ActionLink: "link",
   Input: "input",
   TextArea: "textarea",
   Select: "select",
+  Listbox: "listbox",
+  Combobox: "combobox",
   Checkbox: "checkbox",
   Switch: "switch",
   RadioGroup: "radio",
@@ -46,6 +49,10 @@ export const probes = Object.freeze({
   AppShell: "navigation",
   DocsShell: "navigation",
   MarketingHeader: "navigation",
+  Navbar: "navbar",
+  StackedShell: "navbar",
+  Calendar: "calendar",
+  Banner: "banner",
 });
 export function contractErrors(component) {
   const t = component.testing;

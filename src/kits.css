@@ -1557,7 +1557,12 @@
   .m-feature-section[data-tone="muted"] .m-feature-preview[data-framed="true"] {
     background: var(--m-surface);
   }
-  :is(.m-marketing-section, .m-feature-section, .m-cta)[data-tone="inverse"],
+  :is(
+    .m-marketing-section,
+    .m-feature-section,
+    .m-cta,
+    .m-banner
+  )[data-tone="inverse"],
   .m-pricing-grid article[data-featured="true"][data-tone="inverse"],
   .m-bento article:is([data-inverse], [data-tone="inverse"]) {
     color-scheme: var(--m-inv-color-scheme);
@@ -2182,5 +2187,1078 @@
   .m-table [data-align="right"] {
     text-align: right;
     font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Layout primitives from the Tailwind Plus gap review: divider, card, description list and button group. */
+@layer components {
+  .m-divider {
+    width: 100%;
+    margin: 24px 0;
+    border: 0;
+    border-top: 1px solid var(--m-line-strong);
+  }
+  .m-divider[data-soft] {
+    border-top-color: var(--m-line);
+  }
+  div.m-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  div.m-divider::before,
+  div.m-divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--m-line-strong);
+  }
+  div.m-divider[data-soft]::before,
+  div.m-divider[data-soft]::after {
+    border-top-color: var(--m-line);
+  }
+  .m-divider[data-spacing="none"] {
+    margin: 0;
+  }
+  .m-divider[data-spacing="sm"] {
+    margin: 12px 0;
+  }
+  .m-divider[data-spacing="lg"] {
+    margin: 40px 0;
+  }
+  .m-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    overflow: hidden;
+    --m-card-pad: 20px;
+  }
+  .m-card[data-padding="compact"] {
+    --m-card-pad: 14px;
+  }
+  .m-card[data-padding="none"] {
+    --m-card-pad: 0;
+  }
+  .m-card[data-tone="sunken"] {
+    background: var(--m-sunken);
+  }
+  .m-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-card-header:last-child {
+    border-bottom: 0;
+  }
+  .m-card-heading {
+    min-width: 0;
+  }
+  .m-card-heading :is(h2, h3, h4) {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-card-heading p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m-card-body {
+    flex: 1;
+    min-width: 0;
+    padding: var(--m-card-pad);
+  }
+  .m-card-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 13px;
+  }
+  .m-description-list {
+    container-type: inline-size;
+    min-width: 0;
+  }
+  .m-description-heading {
+    padding-bottom: 14px;
+  }
+  .m-description-heading :is(h2, h3, h4) {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-description-heading p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-description-list dl {
+    margin: 0;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-description-list dl > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px 16px;
+    padding: var(--m-row-pad) 0;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-description-list dl > div[data-action] {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .m-description-list dt {
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+  }
+  .m-description-list dd {
+    margin: 0;
+    min-width: 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    overflow-wrap: anywhere;
+  }
+  .m-description-list dl > div > :is(dt, dd) {
+    grid-column: 1;
+  }
+  .m-description-list dl > div > .m-description-action {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  .m-card-body > .m-description-list dl {
+    border-top: 0;
+  }
+  .m-card-body > .m-description-list dl > div:first-child {
+    padding-top: 0;
+  }
+  .m-card-body > .m-description-list dl > div:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  @container (min-width: 560px) {
+    /* Rows share one set of tracks so details align whether or not a row has an action. */
+    .m-description-list[data-layout="columns"] dl {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+    }
+    .m-description-list[data-layout="columns"] dl > div {
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: baseline;
+    }
+    .m-description-list[data-layout="columns"] dl > div > :is(dt, dd) {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .m-description-list[data-layout="columns"] dl > div > dt {
+      grid-column: 1;
+    }
+    .m-description-list[data-layout="columns"]
+      dl
+      > div
+      > .m-description-action {
+      grid-column: 3;
+      align-self: baseline;
+    }
+  }
+  .m-button-group {
+    display: inline-flex;
+    max-width: 100%;
+    border-radius: var(--m-radius);
+  }
+  .m-button-group > :is(button, a) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: var(--m-control);
+    min-width: var(--m-control);
+    margin-left: -1px;
+    padding: 4px 12px;
+    border: 1px solid var(--m-line-strong);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .m-button-group > :first-child {
+    margin-left: 0;
+    border-start-start-radius: var(--m-radius);
+    border-end-start-radius: var(--m-radius);
+  }
+  .m-button-group > :last-child {
+    border-start-end-radius: var(--m-radius);
+    border-end-end-radius: var(--m-radius);
+  }
+  .m-button-group > :is(button, a):hover:not(:disabled) {
+    background: var(--m-sunken);
+  }
+  .m-button-group > :is(button, a):focus-visible {
+    position: relative;
+    z-index: 1;
+    outline-offset: 2px;
+  }
+  .m-button-group > button:disabled {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-button-group-icon {
+    display: inline-flex;
+  }
+  .m-button-group-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (pointer: coarse) {
+    .m-button-group > :is(button, a) {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+}
+
+/* Listbox and Combobox: styled single selects built on Headless UI. */
+@layer components {
+  .m-choice-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--m-control);
+    padding: 4px var(--m-pad);
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    text-align: start;
+  }
+  button.m-choice-control {
+    padding-inline-end: calc(var(--m-pad) + 24px);
+    cursor: pointer;
+  }
+  .m-choice-control > svg,
+  .m-combobox-toggle svg {
+    width: 16px;
+    height: 16px;
+    color: var(--m-secondary);
+  }
+  button.m-choice-control > svg {
+    position: absolute;
+    inset-inline-end: var(--m-pad);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .m-choice-control:hover:not(
+      :disabled,
+      [data-disabled],
+      [aria-invalid="true"],
+      [data-invalid]
+    ) {
+    border-color: var(--m-secondary);
+  }
+  .m-choice-control:is([aria-invalid="true"], [data-invalid]) {
+    border-color: var(--m-danger);
+  }
+  .m-choice-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .m-choice-value > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-placeholder {
+    color: var(--m-muted);
+  }
+  .m-combobox {
+    position: relative;
+    min-width: 0;
+  }
+  .m-combobox > input.m-choice-control {
+    padding-inline-end: calc(var(--m-pad) + 28px);
+  }
+  .m-combobox[data-leading] > input.m-choice-control {
+    padding-inline-start: calc(var(--m-pad) + 30px);
+  }
+  .m-combobox > .m-choice-leading {
+    position: absolute;
+    inset-inline-start: var(--m-pad);
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .m-combobox input::placeholder {
+    color: var(--m-muted);
+  }
+  .m-combobox-toggle {
+    position: absolute;
+    inset-inline-end: 4px;
+    top: 50%;
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    transform: translateY(-50%);
+    border: 0;
+    border-radius: var(--m-radius-sm);
+    background: transparent;
+    cursor: pointer;
+  }
+  .m-field[data-disabled] .m-choice-control {
+    color: var(--m-muted);
+    background: var(--m-sunken);
+    cursor: not-allowed;
+  }
+  .m-field[data-disabled] .m-choice-control :is(input, button) {
+    cursor: not-allowed;
+  }
+  .m-choice-leading {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-choice-leading svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-choice-options {
+    z-index: 110;
+    width: var(--button-width);
+    min-width: 200px;
+    max-height: 280px;
+    margin: 0;
+    padding: 6px;
+    overflow-y: auto;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+    list-style: none;
+    --anchor-gap: 6px;
+    outline: none;
+  }
+  .m-choice-options:focus-visible {
+    /* Focus stays visible on the active option via aria-activedescendant. */
+    outline: none;
+  }
+  .m-combobox-options {
+    width: var(--input-width);
+  }
+  .m-choice-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--m-radius-sm);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    cursor: pointer;
+  }
+  .m-choice-option[data-focus] {
+    background: var(--m-selected);
+  }
+  .m-choice-option[data-disabled] {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-choice-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .m-choice-text small {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-choice-check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    visibility: hidden;
+  }
+  .m-choice-option[data-selected] {
+    font-weight: 600;
+  }
+  .m-choice-option[data-selected] .m-choice-check {
+    visibility: visible;
+  }
+  @media (pointer: coarse) {
+    .m-choice-control,
+    .m-choice-option {
+      min-height: 44px;
+    }
+  }
+}
+
+/* Navigation and form structure: Breadcrumbs, Sidebar, Navbar, Fieldset, ActionPanel and Banner. */
+@layer components {
+  .m-nav-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-nav-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .m-sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+  }
+  .m-sidebar-panel > nav:first-child {
+    margin-top: 0;
+  }
+  .m-navbar {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-height: 60px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-surface);
+  }
+  .m-navbar > .m-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--m-ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .m-navbar > nav {
+    display: flex;
+    align-self: stretch;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+  .m-navbar > nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: inset 0 -2px 0 transparent;
+  }
+  .m-navbar > nav a:hover {
+    color: var(--m-ink);
+    box-shadow: inset 0 -2px 0 var(--m-line-strong);
+  }
+  .m-navbar > nav a[aria-current="page"] {
+    color: var(--m-ink);
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 var(--m-primary);
+  }
+  .m-navbar > .m-actions {
+    margin-left: auto;
+  }
+  .m-navbar-toggle {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .m-navbar {
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 10px 16px;
+    }
+    .m-navbar-toggle {
+      display: inline-flex;
+      margin-left: auto;
+    }
+    /* Like Tailwind's mobile menus, actions move into the open panel below the links. */
+    .m-navbar > .m-actions {
+      display: none;
+      order: 5;
+      flex-basis: 100%;
+      margin-left: 0;
+      padding: 12px 0 6px;
+      border-top: 1px solid var(--m-line);
+    }
+    .m-navbar:has(> nav[data-open="true"]) > .m-actions {
+      display: flex;
+    }
+    .m-navbar > nav {
+      display: none;
+      order: 4;
+      flex-basis: 100%;
+      flex-direction: column;
+      padding-bottom: 6px;
+    }
+    .m-navbar > nav[data-open="true"] {
+      display: flex;
+    }
+    .m-navbar > nav a {
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: var(--m-radius);
+      box-shadow: none;
+    }
+    .m-navbar > nav a:hover {
+      box-shadow: none;
+      background: var(--m-sunken);
+    }
+    .m-navbar > nav a[aria-current="page"] {
+      box-shadow: inset 3px 0 0 var(--m-primary);
+      background: var(--m-sunken);
+    }
+  }
+  .m-fieldset {
+    /* Block layout: a rendered legend is not a flex item, so gap would not apply to it. */
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .m-fieldset > legend {
+    margin-bottom: 16px;
+    padding: 0;
+    color: var(--m-ink);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-fieldset > legend:has(+ p) {
+    margin-bottom: 4px;
+  }
+  .m-fieldset > p {
+    margin: 0 0 16px;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-fieldset-fields {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+  }
+  .m-action-panel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    padding: 20px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  .m-action-panel[data-tone="danger"] {
+    border-color: var(--m-danger);
+  }
+  .m-action-panel-text {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+  .m-action-panel-text :is(h2, h3) {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-action-panel-text > p {
+    margin: 4px 0 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+  }
+  .m-action-panel-text > :not(:is(h2, h3, p)) {
+    margin-top: 12px;
+  }
+  .m-action-panel-action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    padding: 8px 16px;
+    background: var(--m-paper);
+    color: var(--m-ink);
+    border-bottom: 1px solid var(--m-line);
+    font-size: var(--m-font-size);
+  }
+  .m-banner > p {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+    text-align: center;
+  }
+  .m-banner a {
+    color: var(--m-link);
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+  .m-banner > button {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--m-radius-sm);
+    background: transparent;
+    color: var(--m-secondary);
+    cursor: pointer;
+  }
+  .m-banner > button:hover {
+    background: var(--m-sunken);
+  }
+  .m-banner > button svg {
+    width: 16px;
+    height: 16px;
+  }
+  @media (pointer: coarse) {
+    .m-banner > button {
+      width: 44px;
+      height: 44px;
+    }
+  }
+}
+
+/* Lists and input groups: GridList, MediaObject, SectionHeading and Input icons/actions. */
+@layer components {
+  .m-input-group > .m-input-icon {
+    padding: 0;
+    background: transparent;
+    color: var(--m-muted);
+    font: inherit;
+  }
+  .m-input-group > .m-input-icon:first-child {
+    padding-inline-start: var(--m-pad);
+  }
+  .m-input-group > .m-input-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-input-group[data-leading] > .m-input-icon + input {
+    padding-inline-start: 8px;
+  }
+  .m-input-group[data-trailing] > input:has(+ .m-input-icon) {
+    padding-inline-end: 8px;
+  }
+  .m-input-group > input + .m-input-icon {
+    padding-inline-end: var(--m-pad);
+  }
+  .m-input-action {
+    display: flex;
+    flex-shrink: 0;
+    border-inline-start: 1px solid var(--m-line-strong);
+  }
+  .m-input-action > :is(button, a, .m-button) {
+    min-height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .m-input-action > :is(button, a, .m-button):focus-visible {
+    outline-offset: -2px;
+  }
+  .m-grid-list {
+    display: grid;
+    grid-template-columns: repeat(var(--m-grid-columns, 3), minmax(0, 1fr));
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .m-grid-list[data-columns="2"] {
+    --m-grid-columns: 2;
+  }
+  .m-grid-list[data-columns="4"] {
+    --m-grid-columns: 4;
+  }
+  .m-grid-list > li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  .m-grid-list > li:has(.m-grid-list-text a:focus-visible) {
+    outline: 2px solid var(--m-focus);
+    outline-offset: 3px;
+  }
+  .m-grid-list-text a:focus-visible {
+    outline: none;
+  }
+  .m-grid-list > li:has(a:hover) {
+    border-color: var(--m-line-strong);
+  }
+  .m-grid-list-cover {
+    aspect-ratio: 16 / 9;
+    background: var(--m-sunken);
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-grid-list-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .m-grid-list-body {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+    padding: 16px;
+  }
+  .m-grid-list-media {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-grid-list-text {
+    min-width: 0;
+  }
+  .m-grid-list-text :is(h2, h3, h4) {
+    margin: 0;
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .m-grid-list-text :is(h2, h3, h4) a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* The title link covers the card; actions sit above it so they stay clickable. */
+  .m-grid-list-text :is(h2, h3, h4) a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .m-grid-list-text p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-grid-list-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .m-grid-list-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--m-line);
+  }
+  @media (max-width: 900px) {
+    .m-grid-list[data-columns] {
+      --m-grid-columns: 2;
+    }
+  }
+  @media (max-width: 560px) {
+    .m-grid-list[data-columns] {
+      --m-grid-columns: 1;
+    }
+  }
+  .m-media-object {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+  }
+  .m-media-object[data-align="center"] {
+    align-items: center;
+  }
+  .m-media-object[data-reverse] {
+    flex-direction: row-reverse;
+  }
+  .m-media-object[data-reverse] > .m-media-object-body {
+    text-align: end;
+  }
+  .m-media-object-media {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-media-object-media img {
+    display: block;
+    max-width: 96px;
+    height: auto;
+    border-radius: var(--m-radius);
+  }
+  .m-media-object-body {
+    flex: 1;
+    min-width: 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+  }
+  .m-media-object-title {
+    margin: 0 0 2px;
+    color: var(--m-ink);
+    font-weight: 600;
+  }
+  .m-section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 20px;
+    min-width: 0;
+  }
+  .m-section-heading[data-divider="true"] {
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-section-heading-text {
+    min-width: 0;
+  }
+  .m-section-heading-text :is(h2, h3, h4) {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .m-section-heading-text p {
+    margin: 4px 0 0;
+    color: var(--m-muted);
+    font-size: var(--m-font-size);
+  }
+}
+
+/* Calendar, StackedShell and the AppShell secondary column. */
+@layer components {
+  .m-calendar {
+    container-type: inline-size;
+    min-width: 0;
+  }
+  .m-calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .m-calendar-header h2 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-calendar-nav {
+    display: flex;
+    gap: 4px;
+  }
+  .m-calendar-nav button {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: var(--m-radius);
+    background: transparent;
+    color: var(--m-secondary);
+    cursor: pointer;
+  }
+  .m-calendar-nav button:hover {
+    background: var(--m-sunken);
+  }
+  .m-calendar-nav svg {
+    width: 18px;
+    height: 18px;
+  }
+  .m-calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .m-calendar th {
+    padding: 4px 0 8px;
+    color: var(--m-muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .m-calendar td {
+    padding: 2px 0;
+    text-align: center;
+  }
+  .m-calendar td > button {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+  }
+  .m-calendar td > button:hover {
+    background: var(--m-sunken);
+  }
+  .m-calendar td[data-outside] > button {
+    color: var(--m-muted);
+  }
+  .m-calendar td > button[aria-current="date"] {
+    font-weight: 700;
+    box-shadow: inset 0 0 0 1px var(--m-line-strong);
+  }
+  .m-calendar td[aria-selected="true"] > button {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+    font-weight: 600;
+  }
+  .m-calendar-dot {
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    transform: translateX(-50%);
+  }
+  .m-calendar[data-variant="full"] table {
+    border: 1px solid var(--m-line);
+  }
+  .m-calendar[data-variant="full"] th {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-sunken);
+  }
+  .m-calendar[data-variant="full"] td {
+    height: 104px;
+    padding: 6px;
+    border: 1px solid var(--m-line);
+    text-align: start;
+    vertical-align: top;
+  }
+  .m-calendar[data-variant="full"] td[data-outside] {
+    background: var(--m-sunken);
+  }
+  .m-calendar[data-variant="full"] td > button {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  .m-calendar[data-variant="full"] .m-calendar-dot {
+    display: none;
+  }
+  .m-calendar-events {
+    margin: 4px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+  .m-calendar-events li {
+    overflow: hidden;
+    color: var(--m-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-calendar-events time {
+    color: var(--m-muted);
+  }
+  .m-calendar-more {
+    color: var(--m-muted) !important;
+  }
+  /* Narrow full calendars fall back to dots; titles stay available via aria-describedby. */
+  @container (max-width: 560px) {
+    .m-calendar[data-variant="full"] td {
+      height: 56px;
+      padding: 4px 2px;
+      text-align: center;
+    }
+    .m-calendar[data-variant="full"] .m-calendar-events {
+      display: none;
+    }
+    .m-calendar[data-variant="full"] .m-calendar-dot {
+      display: block;
+    }
+  }
+  @media (pointer: coarse) {
+    .m-calendar td > button,
+    .m-calendar-nav button {
+      min-width: 44px;
+      min-height: 44px;
+    }
+  }
+  .m-stacked-shell {
+    min-height: 100%;
+    background: var(--m-paper);
+  }
+  .m-stacked-shell > main {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 32px 24px 48px;
+  }
+  .m-stacked-shell > main[data-width="md"] {
+    max-width: 768px;
+  }
+  .m-stacked-shell > main[data-width="xl"] {
+    max-width: 1440px;
+  }
+  .m-stacked-shell > main[data-width="full"] {
+    max-width: none;
+  }
+  .m-stacked-shell > main:focus {
+    outline: none;
+  }
+  .m-stacked-header {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-app-columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    min-width: 0;
+  }
+  .m-app-aside {
+    min-width: 0;
+    padding: 28px 24px;
+    border-left: 1px solid var(--m-line);
+    background: var(--m-surface);
+  }
+  @media (max-width: 1200px) {
+    .m-app-columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-app-aside {
+      border-left: 0;
+      border-top: 1px solid var(--m-line);
+    }
   }
 }

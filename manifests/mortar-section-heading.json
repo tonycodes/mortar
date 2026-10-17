@@ -1,0 +1,50 @@
+{
+  "id": "mortar-section-heading",
+  "logicalId": "section-heading",
+  "name": "SectionHeading",
+  "description": "Mortar section heading: a heading for a section within a page, with description, actions and an optional divider.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "SectionHeading",
+  "source": "src/layout.tsx",
+  "capabilities": ["theme", "application"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "title": "string",
+      "description": "string",
+      "actions": "ReactNode",
+      "headingLevel": "2 | 3 | 4",
+      "divider": "boolean"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { SectionHeading } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/SectionHeadingPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-section-heading",
+    "states": []
+  },
+  "integrity": {
+    "source": "0c62f1f8f729c8d2d7c9b1dfd58d6cfa3255aa404e90dfbc05685c8ea79f8092",
+    "preview": "2ad365cc417b5354d393811e5a071a71e6f56f7ce431c37e3fda9b853ba64c1e"
+  }
+}

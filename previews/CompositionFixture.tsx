@@ -13,6 +13,7 @@ export const icons = {
   calendar: icon("M7 3v3M17 3v3M4 9h16M5 5h14v15H5z"),
   inbox: icon("M4 13h4l2 3h4l2-3h4M5 5h14l1 8v6H4v-6z"),
   clock: icon("M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"),
+  search: icon("M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4"),
 };
 
 export function CompositionCase({ name }: { name: string }) {

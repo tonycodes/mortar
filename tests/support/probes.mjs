@@ -8,16 +8,39 @@ export const implementations = {
     await expect(root.getByLabel("Action result")).toHaveText("saved");
     await expect(root.getByRole("button", { name: "Saving" })).toBeDisabled();
   },
+  async "button-group"({ page, root }) {
+    const group = root.getByRole("group", { name: "Record actions" });
+    const duplicate = group.getByRole("button", { name: "Duplicate" });
+    await group.getByRole("button", { name: "Copy" }).focus();
+    await page.keyboard.press("Tab");
+    await expect(duplicate).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Last action")).toHaveText("Duplicate");
+    await expect(group.getByRole("button", { name: "Archive" })).toBeDisabled();
+    await root.getByRole("button", { name: "Next", exact: true }).click();
+    await expect(root.getByLabel("Last action")).toHaveText("Next");
+    await root.getByRole("link", { name: "Docs" }).click();
+    await expect(page).toHaveURL(/#docs$/);
+  },
   async link({ page, root }) {
     const link = root.getByRole("link", { name: "Explore" });
     await link.focus();
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#example$/);
   },
-  async input({ root }) {
+  async input({ page, root }) {
     const field = root.getByLabel("Project name");
     await field.fill("Changed");
     await expect(field).toHaveValue("Changed");
+    // Input groups: icons are decorative, the attached action is its own control.
+    const search = root.getByRole("searchbox", { name: "Search candidates" });
+    await search.fill("ana");
+    await expect(search).toHaveValue("ana");
+    const sort = root.getByRole("button", { name: "Sort" });
+    await page.keyboard.press("Tab");
+    await expect(sort).toBeFocused();
+    await page.keyboard.press("Space");
+    await expect(sort).toHaveAttribute("aria-pressed", "true");
   },
   async textarea({ root }) {
     const field = root.getByLabel("Description");
@@ -29,6 +52,51 @@ export const implementations = {
     await select.selectOption("second");
     await expect(select).toHaveValue("second");
     await expect(root.getByLabel("Unavailable environment")).toBeDisabled();
+  },
+  async listbox({ page, root }) {
+    const button = root.getByRole("button", { name: /^Assigned to/ });
+    await expect(button).toHaveAccessibleName(/Wade Cooper/);
+    await expect(button).toHaveAccessibleDescription(/Only people/);
+    await button.focus();
+    // Like a native select: Space or ArrowDown opens; Enter submits the form.
+    await page.keyboard.press("Space");
+    const list = page.getByRole("listbox");
+    await expect(list).toBeVisible();
+    await expect(
+      list.getByRole("option", { name: "Devon Webb Support" }),
+    ).toHaveAttribute("aria-disabled", "true");
+    await page.keyboard.press("Escape");
+    await expect(list).toHaveCount(0);
+    await expect(button).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(
+      list.getByRole("option", { name: /Wade Cooper/ }),
+    ).toHaveAttribute("aria-selected", "true");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected value")).toHaveText("arlene");
+    await expect(button).toBeFocused();
+    await button.click();
+    await page.getByRole("option", { name: /Tom Cook/ }).click();
+    await expect(root.getByLabel("Selected value")).toHaveText("tom");
+    await expect(button).toHaveAccessibleName(/Tom Cook/);
+  },
+  async combobox({ page, root }) {
+    const input = root.getByRole("combobox", { name: "Assigned to" });
+    await expect(input).toHaveValue("Wade Cooper");
+    await expect(input).toHaveAccessibleDescription(/Only people/);
+    await input.fill("lind");
+    await expect(page.getByRole("option")).toHaveCount(1);
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected value")).toHaveText("lindsay");
+    await expect(input).toHaveValue("Lindsay Walton");
+    await input.fill("zzz");
+    await expect(page.getByRole("listbox")).toHaveCount(0);
+    await expect(root.getByRole("status").first()).toHaveText("No matches");
+    await page.keyboard.press("Escape");
+    await input.blur();
+    await expect(input).toHaveValue("Lindsay Walton");
   },
   async checkbox({ page, root }) {
     const input = root.getByRole("checkbox");
@@ -217,6 +285,77 @@ export const implementations = {
     await expect(root.getByText("Page 2 of 3")).toBeVisible();
     await root.getByRole("link", { name: "Acme" }).click();
     await expect(page).toHaveURL(/#project-acme$/);
+  },
+  async navbar({ page, root }) {
+    const nav = root.getByRole("navigation", { name: "Primary" });
+    await expect(nav.getByRole("link", { name: "Dashboard" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await page.setViewportSize({ width: 390, height: 900 });
+    const opener = root.getByRole("button", { name: "Menu", exact: true });
+    await expect(nav).toBeHidden();
+    await opener.focus();
+    await page.keyboard.press("Enter");
+    await expect(opener).toHaveAttribute("aria-expanded", "true");
+    await expect(nav).toBeVisible();
+    await nav.getByRole("link", { name: "Team" }).click();
+    await expect(page).toHaveURL(/#team$/);
+    await expect(opener).toHaveAttribute("aria-expanded", "false");
+    await expect(nav).toBeHidden();
+  },
+  async calendar({ page, root }) {
+    const calendar = root.locator(".m-calendar").first();
+    const day = (name) =>
+      calendar.getByRole("button", { name: new RegExp(`^${name}`) });
+    await expect(calendar.locator('[tabindex="0"]')).toHaveCount(1);
+    await expect(
+      calendar.getByRole("gridcell", { selected: true }),
+    ).toHaveCount(1);
+    await day("Tuesday, 20 October 2026").focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(day("Wednesday, 21 October 2026")).toBeFocused();
+    await page.keyboard.press("ArrowDown");
+    await expect(day("Wednesday, 28 October 2026")).toBeFocused();
+    await page.keyboard.press("End");
+    await expect(day("Sunday, 1 November 2026")).toBeFocused();
+    await expect(
+      calendar.getByRole("heading", { name: "November 2026" }),
+    ).toBeVisible();
+    await page.keyboard.press("PageUp");
+    await expect(day("Thursday, 1 October 2026")).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Selected date")).toHaveText("2026-10-01");
+    await calendar.getByRole("button", { name: "Next month" }).click();
+    await expect(
+      calendar.getByRole("heading", { name: "November 2026" }),
+    ).toBeVisible();
+    await expect(calendar.locator('[tabindex="0"]')).toHaveCount(1);
+    // The full variant names each day's events through aria-describedby.
+    const busy = root
+      .locator(".m-calendar")
+      .nth(1)
+      .getByRole("button", { name: "Tuesday, 20 October 2026, 3 events" });
+    await expect(busy).toHaveAccessibleDescription(
+      /10:00 Customer call.*15:00 Team retro.*\+1 more/,
+    );
+  },
+  async banner({ page, root }) {
+    const banner = root.getByRole("region", { name: "Announcement" });
+    await expect(
+      banner.getByRole("link", { name: /Read the release notes/ }),
+    ).toHaveAttribute("href", "#release");
+    await expect(
+      root
+        .getByRole("region", { name: "Maintenance notice" })
+        .getByRole("button"),
+    ).toHaveCount(0);
+    await banner.getByRole("button", { name: "Dismiss announcement" }).focus();
+    await page.keyboard.press("Enter");
+    await expect(banner).toHaveCount(0);
+    await expect(root.getByLabel("Banner state")).toHaveText("dismissed");
+    await root.getByRole("button", { name: "Show announcement" }).click();
+    await expect(banner).toBeVisible();
   },
   async navigation({ page, root, component }) {
     await page.setViewportSize({ width: 390, height: 900 });

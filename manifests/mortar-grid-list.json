@@ -1,0 +1,49 @@
+{
+  "id": "mortar-grid-list",
+  "logicalId": "grid-list",
+  "name": "GridList",
+  "description": "Mortar grid list: a responsive grid of cards for people, projects or files, with avatar or cover media, metadata and actions; a linked title makes the whole card clickable.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.1.0",
+  "export": "GridList",
+  "source": "src/display.tsx",
+  "capabilities": ["theme", "application", "responsive"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "items": "GridListItem[] ({ id: string; title: string; description?: string; href?: string; media?: ReactNode; cover?: { src: string; alt: string }; meta?: ReactNode; actions?: ReactNode })",
+      "columns": "2 | 3 | 4",
+      "headingLevel": "2 | 3 | 4"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { GridList } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/GridListPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-grid-list",
+    "states": []
+  },
+  "integrity": {
+    "source": "04ecae0fc894d13e500a5aaf7a2e488e0d202e78754c57da80bb58cb6153ee02",
+    "preview": "4003b5005bab3c070640c931442d47addd304a0577b3c1769c4202562bf8ebd0"
+  }
+}
