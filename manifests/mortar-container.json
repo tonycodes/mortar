@@ -5,7 +5,7 @@
   "description": "Mortar page container with shared widths and gutters, replacing max-w/mx-auto/px utilities.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Container",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "foundation"],
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
-    "preview": "011ba0c49e601a5aa9e0238350e1b4478968b7419129fa47af79d36015cd6ccd"
+    "source": "0c62f1f8f729c8d2d7c9b1dfd58d6cfa3255aa404e90dfbc05685c8ea79f8092",
+    "preview": "bdf4e67a1a231ecd31b0ac4029a3e333f6997e7d70d96e899016d85f159ec02a"
   }
 }

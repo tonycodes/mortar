@@ -5,7 +5,7 @@
   "description": "Mortar marketing plan comparison, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "PlanComparison",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing", "keyboard"],
@@ -33,7 +33,7 @@
     ],
     "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -45,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
-    "preview": "874b382782a80069048b6db94d3ac3d1430816b3d01b382aa2b2d781e8db7ca7"
+    "source": "b43271957156072f5ae4438f6274bb198b2d7aefb5c09f7fe7d21f038a41ab68",
+    "preview": "ed1efb24d40b52d61d23f00aad83b251a5073354d7e76073592e0c7caf8b531b"
   }
 }

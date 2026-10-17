@@ -3,21 +3,30 @@ import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { ActionLink, Button, Input, type LinkAction } from "./primitives.js";
 import { Avatar } from "./display.js";
 
+type HeadingLevel = 2 | 3 | 4;
+
+function headingTag(level: HeadingLevel) {
+  return `h${level}` as "h2" | "h3" | "h4";
+}
+
 function SectionIntro({
   eyebrow,
   title,
   description,
   id,
+  headingLevel = 2,
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   id?: string;
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
   return (
     <>
       {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <h2 id={id}>{title}</h2>
+      <Heading id={id}>{title}</Heading>
       {description && <p className="m-section-description">{description}</p>}
     </>
   );
@@ -28,6 +37,7 @@ export function BentoGrid({
   title,
   description,
   items,
+  headingLevel = 2,
 }: {
   eyebrow?: string;
   title: string;
@@ -39,23 +49,33 @@ export function BentoGrid({
     span?: 1 | 2;
     inverse?: boolean;
   }[];
+  headingLevel?: HeadingLevel;
 }) {
+  const ItemHeading = headingTag(headingLevel === 2 ? 3 : 4);
   return (
-    <section className="m-marketing-section">
-      <SectionIntro eyebrow={eyebrow} title={title} description={description} />
-      <div className="m-bento">
-        {items.map((item) => (
-          <article
-            key={item.title}
-            data-span={item.span || 1}
-            data-inverse={item.inverse || undefined}
-          >
-            {item.visual && <div className="m-bento-visual">{item.visual}</div>}
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-          </article>
+    <section className="m-marketing-section" data-m-component="BentoGrid">
+      <SectionIntro
+        eyebrow={eyebrow}
+        title={title}
+        description={description}
+        headingLevel={headingLevel}
+      />
+      <ul className="m-bento">
+        {items.map((item, index) => (
+          <li key={`${item.title}:${index}`} data-span={item.span || 1}>
+            <article
+              data-inverse={item.inverse || undefined}
+              data-tone={item.inverse ? "inverse" : undefined}
+            >
+              {item.visual && (
+                <div className="m-bento-visual">{item.visual}</div>
+              )}
+              <ItemHeading>{item.title}</ItemHeading>
+              <p>{item.description}</p>
+            </article>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }
@@ -68,7 +88,11 @@ export function StatGroup({
   items: { value: string; label: string }[];
 }) {
   return (
-    <dl className="m-stat-group" aria-label={label}>
+    <dl
+      className="m-stat-group"
+      aria-label={label}
+      data-m-component="StatGroup"
+    >
       {items.map((item) => (
         <div key={item.label}>
           <dt>{item.label}</dt>
@@ -90,6 +114,7 @@ export function TestimonialGrid({
     <section
       className="m-marketing-section"
       aria-label={title ? undefined : "Testimonials"}
+      data-m-component="TestimonialGrid"
     >
       {title && <h2>{title}</h2>}
       <div className="m-testimonial-grid">
@@ -128,7 +153,11 @@ export function PlanComparison({
 }) {
   const id = useId();
   return (
-    <section className="m-marketing-section" aria-labelledby={id}>
+    <section
+      className="m-marketing-section"
+      aria-labelledby={id}
+      data-m-component="PlanComparison"
+    >
       <SectionIntro id={id} title={title} description={description} />
       <div
         className="m-table-scroll m-comparison"
@@ -210,7 +239,7 @@ export function PostList({
   action?: LinkAction;
 }) {
   return (
-    <section className="m-marketing-section">
+    <section className="m-marketing-section" data-m-component="PostList">
       <div className="m-section-heading-row">
         <div>
           <SectionIntro title={title} description={description} />
@@ -218,8 +247,8 @@ export function PostList({
         {action && <ActionLink {...action} variant="secondary" />}
       </div>
       <ul className="m-post-list">
-        {posts.map((post) => (
-          <li key={post.href}>
+        {posts.map((post, index) => (
+          <li key={`${post.title}:${post.href}:${index}`}>
             <article>
               {post.image && <div className="m-post-image">{post.image}</div>}
               <p className="m-post-meta">
@@ -248,7 +277,7 @@ export function TeamGrid({
   members: { name: string; role: string; image?: ReactNode }[];
 }) {
   return (
-    <section className="m-marketing-section">
+    <section className="m-marketing-section" data-m-component="TeamGrid">
       <SectionIntro title={title} description={description} />
       <ul className="m-team-grid">
         {members.map((member) => (
@@ -280,7 +309,7 @@ export function ContactSection({
   children: ReactNode;
 }) {
   return (
-    <section className="m-contact">
+    <section className="m-contact" data-m-component="ContactSection">
       <div>
         <SectionIntro title={title} description={description} />
         {details.length > 0 && (
@@ -320,7 +349,7 @@ export function Newsletter({
     onSubmit(email);
   };
   return (
-    <section className="m-newsletter">
+    <section className="m-newsletter" data-m-component="Newsletter">
       <div>
         <h2>{title}</h2>
         {description && <p>{description}</p>}
@@ -356,14 +385,14 @@ export function NotFound({
   actions: LinkAction[];
 }) {
   return (
-    <section className="m-not-found">
+    <section className="m-not-found" data-m-component="NotFound">
       <p className="m-eyebrow">{code}</p>
       <h1>{title}</h1>
       <p>{description}</p>
       <div className="m-actions">
         {actions.map((action, i) => (
           <ActionLink
-            key={action.href}
+            key={`${action.label}:${action.href}:${i}`}
             {...action}
             variant={i === 0 ? "primary" : "secondary"}
           />

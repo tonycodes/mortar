@@ -5,7 +5,7 @@
   "description": "Mortar foundation progress bar, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "ProgressBar",
   "source": "src/display.tsx",
   "capabilities": ["theme", "foundation"],
@@ -45,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
-    "preview": "76de8ab32cf96d7c9a3aa73fd812f2052a36df7c2505cd4f4d9009b81e3e233c"
+    "source": "04ecae0fc894d13e500a5aaf7a2e488e0d202e78754c57da80bb58cb6153ee02",
+    "preview": "3219acc8759dbe7103c0e996c3c16232df40251f18fa11a109ad73249b79ade9"
   }
 }

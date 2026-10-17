@@ -5,7 +5,7 @@
   "description": "Mortar marketing testimonial, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Testimonial",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -31,7 +31,7 @@
     ],
     "usage": "Import { Testimonial } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
-    "preview": "f6d09c80125b2061d1163937415d1ce9852e51fa2b26cc5a89175355a69ad124"
+    "source": "0350acad54fdc890134ab3929f0149b7682b0c12b69d12561a06cf48d36a6c67",
+    "preview": "7a0e3b7fcac9639fae7c24f065bb9e72760015490db6791ea7b7d0fca278028d"
   }
 }

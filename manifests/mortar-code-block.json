@@ -5,7 +5,7 @@
   "description": "Mortar application code block, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "CodeBlock",
   "source": "src/inspection.tsx",
   "capabilities": ["theme", "application"],
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "1ae723d03eba29c60343db1dcf31b2f9b3429223b52600840718e758cedfc401",
-    "preview": "6d039b917ce90689bf9851fc76f3f365a29ea30ec40bb725d3831b394bad8401"
+    "source": "09e1e4ee70bc1c219fafc672ecfd633a65ef6c6648e46ed15921eb0339d8c5bd",
+    "preview": "7b1e0b75caf85428db1dc2d93b0342b8a4b8e08cca32964e2a51b3e7df76cda7"
   }
 }

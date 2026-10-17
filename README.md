@@ -2,7 +2,7 @@
 
 A shared design foundation and purpose-built Application UI, Marketing UI and Docs UI kits for React 19 and Tailwind CSS 4. MIT licensed. No account, token, registry connection or subscription is required to use the kit, including use by coding agents.
 
-The package is `@tony-ui/mortar`, distributed from owner-hosted infrastructure. Releases are immutable and publicly downloadable without a service account. Version 0.1.0 is available. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
+The package is `@tony-ui/mortar`, distributed from owner-hosted infrastructure. Releases are immutable and publicly downloadable without a service account. Version 0.2.0 is available. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
 [Explore the live playground](https://mortar.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Hosted agent services](#mortar-cloud-and-premium-services)
 
@@ -46,7 +46,7 @@ npm run build
 npm pack
 ```
 
-Install the resulting `tony-ui-mortar-0.1.0.tgz` in the consuming app, with React 19, React DOM 19 and Tailwind 4. Public releases use https://git.tony.codes/api/packages/tony/npm/.
+Install the resulting `tony-ui-mortar-0.2.0.tgz` in the consuming app, with React 19, React DOM 19 and Tailwind 4. Public releases use https://git.tony.codes/api/packages/tony/npm/.
 
 In the app's Tailwind CSS entry:
 

@@ -5,7 +5,7 @@
   "description": "Mortar application metric group, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "MetricGroup",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application", "summary"],
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
-    "preview": "217623d65e8a6bf6e8e2a3ff295c1552d405a9e3bdac98428f014a4dac40d0cd"
+    "source": "3436ccfc433222bb9beccc115bc00c9dc99f8ef628807d773b8b8395d5aff7c9",
+    "preview": "ff85120d8e1f25192db3155041907bfe2edef45cc469fe5da24d5aa815e7b0e1"
   }
 }

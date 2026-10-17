@@ -26,6 +26,8 @@ export interface ThemeProviderProps {
   navigate?: Navigate;
   brand?: Brand;
   density?: Density;
+  /** document writes the root element. container paints a wrapper and leaves the document unchanged. */
+  scope?: "document" | "container";
 }
 /** One provider per application. Selection never requires a hosted account. */
 export function ThemeProvider({
@@ -36,6 +38,7 @@ export function ThemeProvider({
   navigate,
   brand = "neutral",
   density = "comfortable",
+  scope = "document",
 }: ThemeProviderProps) {
   const [localAppearance, setLocalAppearance] =
     useState<Appearance>(initialAppearance);
@@ -44,7 +47,23 @@ export function ThemeProvider({
     setLocalAppearance(value);
     onAppearanceChange?.(value);
   };
+  const [systemDark, setSystemDark] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
   useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const update = () => setSystemDark(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+  const resolvedAppearance = (
+    appearance === "system" ? (systemDark ? "dark" : "light") : appearance
+  ) as "light" | "dark";
+  useEffect(() => {
+    if (scope !== "document") return;
     const element = document.documentElement;
     const attributes = {
       "data-mortar": "",
@@ -62,8 +81,9 @@ export function ThemeProvider({
           ? element.removeAttribute(key)
           : element.setAttribute(key, value);
     };
-  }, [brand, density]);
+  }, [brand, density, scope]);
   useEffect(() => {
+    if (scope !== "document") return;
     const element = document.documentElement;
     const previous = element.getAttribute("data-mortar-appearance");
     const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -84,8 +104,8 @@ export function ThemeProvider({
         ? element.removeAttribute("data-mortar-appearance")
         : element.setAttribute("data-mortar-appearance", previous);
     };
-  }, [appearance]);
-  return (
+  }, [appearance, scope]);
+  const theme = (
     <NavigationContext.Provider value={navigate}>
       <ThemeContext.Provider
         value={{ appearance, setAppearance, brand, density }}
@@ -94,20 +114,49 @@ export function ThemeProvider({
       </ThemeContext.Provider>
     </NavigationContext.Provider>
   );
+  if (scope === "container")
+    return (
+      <div
+        data-mortar=""
+        data-mortar-brand={brand}
+        data-mortar-density={density}
+        data-mortar-appearance={resolvedAppearance}
+      >
+        {theme}
+      </div>
+    );
+  return theme;
 }
-export function AppearanceControl() {
+export function AppearanceControl({
+  value,
+  onChange,
+}: {
+  value?: Appearance;
+  onChange?: (value: Appearance) => void;
+} = {}) {
+  const controlled = value !== undefined || onChange !== undefined;
+  if ((value === undefined) !== (onChange === undefined))
+    throw new Error(
+      "AppearanceControl requires both value and onChange, or neither.",
+    );
   const context = useContext(ThemeContext);
-  if (!context) throw new Error("AppearanceControl requires ThemeProvider");
+  if (!controlled && !context)
+    throw new Error("AppearanceControl requires ThemeProvider");
+  const appearance = controlled ? value : context!.appearance;
+  const select = (next: Appearance) => {
+    if (controlled) onChange?.(next);
+    else context!.setAppearance(next);
+  };
   return (
     <div className="m-segmented" role="group" aria-label="Appearance">
-      {(["light", "dark", "system"] as const).map((value) => (
+      {(["light", "dark", "system"] as const).map((option) => (
         <button
-          key={value}
+          key={option}
           type="button"
-          aria-pressed={context.appearance === value}
-          onClick={() => context.setAppearance(value)}
+          aria-pressed={appearance === option}
+          onClick={() => select(option)}
         >
-          {value[0].toUpperCase() + value.slice(1)}
+          {option[0].toUpperCase() + option.slice(1)}
         </button>
       ))}
     </div>

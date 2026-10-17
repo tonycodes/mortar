@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "rules": {
     "M001": "Exports require unique manifests and preview fixtures",
     "M002": "Source and preview paths stay inside the repository",
@@ -9,6 +9,7 @@
     "M005": "Component implementations use semantic colour tokens",
     "M006": "Every component has an executable test profile and supported probe",
     "M007": "Source and preview import-closure fingerprints must match",
-    "M008": "Committed catalogue matches the manifests"
+    "M008": "Committed catalogue matches the manifests",
+    "M009": "Accent tokens are declared for every brand and appearance"
   }
 }

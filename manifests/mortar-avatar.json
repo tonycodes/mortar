@@ -5,7 +5,7 @@
   "description": "Mortar foundation avatar, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Avatar",
   "source": "src/display.tsx",
   "capabilities": ["theme", "foundation"],
@@ -45,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
-    "preview": "1acebef505b02e479e1f1047fdb872a9dd4b5d8841346b4c004d3849200b590e"
+    "source": "04ecae0fc894d13e500a5aaf7a2e488e0d202e78754c57da80bb58cb6153ee02",
+    "preview": "9304ddf9edd45ac7c58399bbaba19d415ce6d21c4184db7f6529e5b8f32523c5"
   }
 }

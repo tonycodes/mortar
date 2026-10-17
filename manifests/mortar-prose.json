@@ -5,7 +5,7 @@
   "description": "Mortar documentation prose, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Prose",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -41,7 +41,7 @@
     "states": []
   },
   "integrity": {
-    "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
-    "preview": "2d3621f5c6c8e318d836030c9bb2be0ef47362244bd6a3f15c4bbc6295f59d87"
+    "source": "729b97fecd0466a887c4fe9200da1662fed911ef96934948b3e6bd1f122b922d",
+    "preview": "8b705a90e0bc0dd3d920de9119fdad2545e4f6dd4ba05b526306beecf173cd07"
   }
 }

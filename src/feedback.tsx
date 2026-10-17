@@ -209,7 +209,12 @@ export function Banner({
   tone?: "inverse" | "neutral";
 }) {
   return (
-    <section className="m-banner" aria-label={label} data-tone={tone}>
+    <section
+      className="m-banner"
+      aria-label={label}
+      data-tone={tone}
+      data-m-component="Banner"
+    >
       <p>
         {children}
         {action && (

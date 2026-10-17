@@ -5,7 +5,7 @@
   "description": "Mortar marketing logo cloud, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "LogoCloud",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -30,7 +30,7 @@
     ],
     "usage": "Import { LogoCloud } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "cf6f081d1e2f0877b4b0dfc95f8bfeaf0885d026104a1d82590f8b90b951cd8b",
-    "preview": "7bfc30ad91bceb5acd0e6140b0144ac58d50d08105c88e9305c6a2901ace7efc"
+    "source": "0350acad54fdc890134ab3929f0149b7682b0c12b69d12561a06cf48d36a6c67",
+    "preview": "2e519ff4b3ae16e23bc230cc16fec142d7f02dbf2792fa76426231e7ea9da8fc"
   }
 }

@@ -5,7 +5,7 @@
   "description": "Mortar documentation search trigger, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SearchTrigger",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs", "keyboard"],
@@ -43,7 +43,7 @@
     "probe": "dialog"
   },
   "integrity": {
-    "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
-    "preview": "4533a5e7dca2b730af9c34b89ea73e9d2b2d056db6f79ecd33a67bcf1078bbe7"
+    "source": "729b97fecd0466a887c4fe9200da1662fed911ef96934948b3e6bd1f122b922d",
+    "preview": "33cdda8902b3593807418327b209c2e2633dba3678d92b2fc50bc7fa224e7347"
   }
 }

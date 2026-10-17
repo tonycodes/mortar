@@ -418,6 +418,13 @@ export function PreviewCase({ name }: { name: string }) {
       example = (
         <UI.MarketingHeader
           brand="Northwind"
+          id="site-header"
+          logo={
+            <img
+              alt=""
+              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='currentColor'/%3E%3C/svg%3E"
+            />
+          }
           links={[
             { label: "Features", href: "#features" },
             { label: "Pricing", href: "#pricing" },
@@ -498,6 +505,9 @@ export function PreviewCase({ name }: { name: string }) {
               name: "Basic",
               description: "Personal projects",
               monthly: "$0",
+              annual: "$0",
+              unit: "/month",
+              annualUnit: "/year",
               features: ["One project"],
               action,
             },
@@ -507,6 +517,8 @@ export function PreviewCase({ name }: { name: string }) {
               description: "Small teams",
               monthly: "$20",
               annual: "$16",
+              unit: "/month",
+              annualUnit: "/year",
               features: ["Unlimited projects"],
               action,
               featured: true,
@@ -542,6 +554,7 @@ export function PreviewCase({ name }: { name: string }) {
         <UI.Footer
           brand="Northwind"
           description="Example product"
+          note="Weekdays 9 to 5"
           columns={[{ title: "Product", links: [action] }]}
           copyright="© Example company"
         />

@@ -5,7 +5,7 @@
   "description": "Mortar documentation pager links, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "PagerLinks",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
-    "preview": "2d3f6e23c403a84ee895d8922fc910bf9cd47b71b86a9e2dff295bb256c2f596"
+    "source": "729b97fecd0466a887c4fe9200da1662fed911ef96934948b3e6bd1f122b922d",
+    "preview": "21cb73dd0a2809cf08cb7ffd7ed0a908d3ad6473b2df6f9d7bd307fa80ebf634"
   }
 }

@@ -70,7 +70,7 @@ export {
   CallToAction,
   Footer,
 } from "./marketing.js";
-export type { PricingPlan } from "./marketing.js";
+export type { PricingPlan, MarketingTone } from "./marketing.js";
 export { SegmentedControl, CodeBlock, PreviewFrame } from "./inspection.js";
 export {
   Avatar,

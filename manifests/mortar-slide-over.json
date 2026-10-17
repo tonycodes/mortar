@@ -5,7 +5,7 @@
   "description": "Mortar application slide over, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SlideOver",
   "source": "src/workspace.tsx",
   "capabilities": ["theme", "application", "keyboard"],
@@ -47,7 +47,7 @@
     "probe": "dialog"
   },
   "integrity": {
-    "source": "d40252aaf1d0b18502d40641a5e72b1e39d336060326156bb67fcc67044f70ec",
-    "preview": "e568c3c62894f96578fade84e08ac422f5d06614afa6ce320384e09bd87e0863"
+    "source": "7769e85136d2051bf6a4047afa733ef89c5d00f855b6b68efc89dd19f9733548",
+    "preview": "0d73c6440a839244f4fb5cc5089f5f4240c35ab45c4d0930c3efa4def63648d3"
   }
 }

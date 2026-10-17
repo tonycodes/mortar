@@ -2,10 +2,10 @@
   "id": "mortar-app-shell",
   "logicalId": "app-shell",
   "name": "AppShell",
-  "description": "Mortar application app shell, using central semantic tokens. An optional aside adds a secondary column (multi-column layout).",
+  "description": "Mortar application app shell, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "AppShell",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application"],
@@ -26,9 +26,7 @@
       "header": "ReactNode",
       "actions": "ReactNode",
       "children": "ReactNode",
-      "logo": "ReactNode",
-      "aside": "ReactNode",
-      "asideLabel": "string"
+      "logo": "ReactNode"
     },
     "states": [
       "Light",
@@ -52,7 +50,7 @@
     "probe": "navigation"
   },
   "integrity": {
-    "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
-    "preview": "25674666555cc7077e6a365db8b7e6b8de071054ab6662707aeb004cdaacb8f9"
+    "source": "3436ccfc433222bb9beccc115bc00c9dc99f8ef628807d773b8b8395d5aff7c9",
+    "preview": "67cb3b309fa98a25dc117e1b0e6d36eb058b4bb412babcc9d035942cf7cb8356"
   }
 }

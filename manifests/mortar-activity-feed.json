@@ -5,7 +5,7 @@
   "description": "Mortar application activity feed, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "ActivityFeed",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application", "status"],
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "4aa715325f1495929a1e83e79b50657a0b7ba1e5a335e96702c116347b599a89",
-    "preview": "350231164088a709836c014d8ccbc70b71e2cb1947256e13d93749a78ef87879"
+    "source": "3436ccfc433222bb9beccc115bc00c9dc99f8ef628807d773b8b8395d5aff7c9",
+    "preview": "cd709ecf045857ede7bddfeb6c55025cda92b0191a9c0e40f43ef3d6ee1e17ac"
   }
 }

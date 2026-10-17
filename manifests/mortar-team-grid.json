@@ -5,7 +5,7 @@
   "description": "Mortar marketing team grid, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "TeamGrid",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -31,7 +31,7 @@
     ],
     "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-avatar"]
   },
   "preview": {
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "a35e20f503117590e35e2751b09f6343f51e0a444ac1966ca00e179a3beee226",
-    "preview": "cedb137c32e865f195e1a3c797f3c0bdf65e5ac6234346e2e7f44e6000e4d2dd"
+    "source": "b43271957156072f5ae4438f6274bb198b2d7aefb5c09f7fe7d21f038a41ab68",
+    "preview": "03b5f5b32e37000ad02a6aa5b6459e689bdf17ee7138dbf51c725fb6087e931d"
   }
 }

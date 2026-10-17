@@ -2,6 +2,17 @@ import { KitLink } from "./navigation.js";
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, type SectionTone } from "./layout.js";
+
+export type MarketingTone = "surface" | "inverse";
+type HeadingLevel = 2 | 3 | 4;
+
+function headingTag(level: HeadingLevel) {
+  return `h${level}` as "h2" | "h3" | "h4";
+}
+function childHeading(level: HeadingLevel) {
+  return headingTag(level === 2 ? 3 : 4);
+}
+
 export function MarketingHeader({
   brand,
   homeHref = "/",
@@ -9,6 +20,8 @@ export function MarketingHeader({
   links,
   action,
   controls,
+  className,
+  id,
 }: {
   brand: string;
   logo?: ReactNode;
@@ -16,10 +29,18 @@ export function MarketingHeader({
   links: LinkAction[];
   action?: LinkAction;
   controls?: ReactNode;
+  className?: string;
+  id?: string;
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <header className="m-marketing-header">
+    <header
+      id={id}
+      className={
+        className ? `m-marketing-header ${className}` : "m-marketing-header"
+      }
+      data-m-component="MarketingHeader"
+    >
       <KitLink className="m-brand" href={homeHref}>
         <BrandMark logo={logo} />
         {brand}
@@ -34,9 +55,9 @@ export function MarketingHeader({
         Menu
       </Button>
       <nav id="m-marketing-nav" aria-label="Primary" data-open={open}>
-        {links.map((link) => (
+        {links.map((link, index) => (
           <KitLink
-            key={link.href}
+            key={`${link.label}:${link.href}:${index}`}
             href={link.href}
             onClick={() => setOpen(false)}
           >
@@ -70,7 +91,7 @@ export function Hero({
 }) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
-    <section className={`m-hero m-hero-${align}`}>
+    <section className={`m-hero m-hero-${align}`} data-m-component="Hero">
       <div>
         {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
         <Heading>{title}</Heading>
@@ -78,7 +99,7 @@ export function Hero({
         <div className="m-actions">
           {actions.map((action, i) => (
             <ActionLink
-              key={action.href}
+              key={`${action.label}:${action.href}:${i}`}
               {...action}
               variant={i === 0 ? "primary" : "secondary"}
             />
@@ -118,7 +139,12 @@ export function FeatureGrid({
         ? 3
         : Math.min(items.length, 3));
   return (
-    <section id={id} className="m-marketing-section" data-tone={tone}>
+    <section
+      id={id}
+      className="m-marketing-section"
+      data-tone={tone}
+      data-m-component="FeatureGrid"
+    >
       {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
       <h2>{title}</h2>
       {description && <p className="m-section-description">{description}</p>}
@@ -179,6 +205,7 @@ export function FeatureSection({
       className="m-feature-section"
       data-reverse={reverse}
       data-tone={tone}
+      data-m-component="FeatureSection"
     >
       <div>
         {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
@@ -200,6 +227,7 @@ export function ProcessSteps({
   description,
   items,
   tone = "default",
+  headingLevel = 2,
 }: {
   id?: string;
   eyebrow?: string;
@@ -207,22 +235,30 @@ export function ProcessSteps({
   description?: string;
   items: { title: string; description: string }[];
   tone?: SectionTone;
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
+  const ItemHeading = childHeading(headingLevel);
   return (
-    <section id={id} className="m-marketing-section" data-tone={tone}>
+    <section
+      id={id}
+      className="m-marketing-section"
+      data-tone={tone}
+      data-m-component="ProcessSteps"
+    >
       {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <h2>{title}</h2>
+      <Heading>{title}</Heading>
       {description && <p className="m-section-description">{description}</p>}
       <ol
         className="m-process-steps"
         style={{ "--m-steps": items.length } as CSSProperties}
       >
         {items.map((item, i) => (
-          <li key={item.title}>
+          <li key={`${item.title}:${i}`}>
             <span className="m-process-number" aria-hidden="true">
               {i + 1}
             </span>
-            <h3>{item.title}</h3>
+            <ItemHeading>{item.title}</ItemHeading>
             <p>{item.description}</p>
           </li>
         ))}
@@ -240,7 +276,7 @@ export function Testimonial({
   role?: string;
 }) {
   return (
-    <figure className="m-testimonial">
+    <figure className="m-testimonial" data-m-component="Testimonial">
       <blockquote>{quote}</blockquote>
       <figcaption>
         <strong>{name}</strong>
@@ -257,7 +293,11 @@ export function LogoCloud({
   items: { name: string; image?: string }[];
 }) {
   return (
-    <section className="m-logo-cloud" aria-label={label}>
+    <section
+      className="m-logo-cloud"
+      aria-label={label}
+      data-m-component="LogoCloud"
+    >
       <p>{label}</p>
       <ul>
         {items.map((item) => (
@@ -280,26 +320,39 @@ export interface PricingPlan {
   monthly: string;
   annual?: string;
   unit?: string;
+  annualUnit?: string;
   features: string[];
   action: LinkAction;
   featured?: boolean;
+  availability?: "available" | "coming-soon" | "unavailable";
+  availabilityLabel?: string;
 }
 export function Pricing({
   title,
   description,
   plans,
+  tone,
+  billingToggle,
 }: {
   title: string;
   description?: string;
   plans: PricingPlan[];
+  /** Applied only to featured cards. Omitted plans keep the page surface. */
+  tone?: MarketingTone;
+  billingToggle?: boolean;
 }) {
-  const [annual, setAnnual] = useState(true),
-    toggle = plans.some((p) => p.annual);
+  const [annual, setAnnual] = useState(true);
+  const showToggle =
+    billingToggle ??
+    (plans.length > 0 && plans.every((plan) => Boolean(plan.annual)));
   return (
-    <section className="m-marketing-section m-pricing">
+    <section
+      className="m-marketing-section m-pricing"
+      data-m-component="Pricing"
+    >
       <h2>{title}</h2>
       {description && <p className="m-section-description">{description}</p>}
-      {toggle && (
+      {showToggle && (
         <div className="m-segmented" role="group" aria-label="Billing interval">
           <button
             type="button"
@@ -318,24 +371,37 @@ export function Pricing({
         </div>
       )}
       <div className="m-pricing-grid">
-        {plans.map((plan) => (
-          <article key={plan.id} data-featured={plan.featured}>
-            <h3>{plan.name}</h3>
-            <p>{plan.description}</p>
-            <div className="m-price">
-              <strong>
-                {annual && plan.annual ? plan.annual : plan.monthly}
-              </strong>
-              {plan.unit && <span>{plan.unit}</span>}
-            </div>
-            <ul>
-              {plan.features.map((feature) => (
-                <li key={feature}>{feature}</li>
-              ))}
-            </ul>
-            <ActionLink {...plan.action} variant="secondary" />
-          </article>
-        ))}
+        {plans.map((plan) => {
+          const availability = plan.availability ?? "available";
+          const blocked = availability !== "available";
+          const showAnnual = annual && Boolean(plan.annual);
+          const suffix = showAnnual ? plan.annualUnit : plan.unit;
+          return (
+            <article
+              key={plan.id}
+              data-featured={plan.featured || undefined}
+              data-tone={plan.featured && tone ? tone : undefined}
+              data-availability={blocked ? availability : undefined}
+            >
+              <h3>{plan.name}</h3>
+              <p>{plan.description}</p>
+              <div className="m-price">
+                <strong>{showAnnual ? plan.annual : plan.monthly}</strong>
+                {suffix && <span>{suffix}</span>}
+              </div>
+              <ul>
+                {plan.features.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+              {blocked ? (
+                <p role="status">{plan.availabilityLabel}</p>
+              ) : (
+                <ActionLink {...plan.action} variant="secondary" />
+              )}
+            </article>
+          );
+        })}
       </div>
     </section>
   );
@@ -350,7 +416,7 @@ export function FAQ({
   items: { question: string; answer: ReactNode }[];
 }) {
   return (
-    <section className="m-faq">
+    <section className="m-faq" data-m-component="FAQ">
       <div>
         <h2>{title}</h2>
         {description && <div>{description}</div>}
@@ -373,19 +439,21 @@ export function CallToAction({
   title,
   description,
   actions,
+  tone,
 }: {
   title: string;
   description?: string;
   actions: LinkAction[];
+  tone?: MarketingTone;
 }) {
   return (
-    <section className="m-cta">
+    <section className="m-cta" data-m-component="CallToAction" data-tone={tone}>
       <h2>{title}</h2>
       {description && <p>{description}</p>}
       <div className="m-actions">
         {actions.map((action, i) => (
           <ActionLink
-            key={action.href}
+            key={`${action.label}:${action.href}:${i}`}
             {...action}
             variant={i === 0 ? "primary" : "secondary"}
           />
@@ -398,19 +466,24 @@ export function Footer({
   brand,
   logo,
   description,
+  note,
   columns,
   copyright,
   legal = [],
+  headingLevel = 2,
 }: {
   brand: string;
   logo?: ReactNode;
   description: string;
+  note?: ReactNode;
   columns: { title: string; links: LinkAction[] }[];
   copyright: string;
   legal?: LinkAction[];
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
   return (
-    <footer className="m-footer">
+    <footer className="m-footer" data-m-component="Footer">
       <div className="m-footer-grid">
         <div>
           <strong className="m-brand">
@@ -418,12 +491,16 @@ export function Footer({
             {brand}
           </strong>
           <p>{description}</p>
+          {note && <p>{note}</p>}
         </div>
         {columns.map((column) => (
           <nav key={column.title} aria-label={column.title}>
-            <h2>{column.title}</h2>
-            {column.links.map((link) => (
-              <KitLink href={link.href} key={link.href}>
+            <Heading>{column.title}</Heading>
+            {column.links.map((link, index) => (
+              <KitLink
+                href={link.href}
+                key={`${link.label}:${link.href}:${index}`}
+              >
                 {link.label}
               </KitLink>
             ))}
@@ -433,8 +510,11 @@ export function Footer({
       <div className="m-footer-bottom">
         <span>{copyright}</span>
         <div>
-          {legal.map((link) => (
-            <KitLink key={link.href} href={link.href}>
+          {legal.map((link, index) => (
+            <KitLink
+              key={`${link.label}:${link.href}:${index}`}
+              href={link.href}
+            >
               {link.label}
             </KitLink>
           ))}

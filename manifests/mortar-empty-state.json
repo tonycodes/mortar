@@ -5,7 +5,7 @@
   "description": "Mortar foundation empty state, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "EmptyState",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation"],
@@ -43,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "a5e540aa871932830afa87fe5beee6372f47b3b69e7fbce15361585297c53507",
-    "preview": "b7be3dd147054ca1d46dc5008f5494bd92b0b7671b152c6119abcf9d9afaf311"
+    "source": "6d07745d325476227af7c8a3b9aa70c919e21bd363779743713278931eaf2fb5",
+    "preview": "9e57ad59b35516a83be07dee379c18effeab220b2ce0282bc0b68f19167cf4aa"
   }
 }

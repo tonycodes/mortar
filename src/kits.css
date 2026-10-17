@@ -476,9 +476,19 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     margin-top: 48px;
+    list-style: none;
+    padding: 0;
+  }
+  .m-bento > li {
+    display: flex;
+    min-width: 0;
+  }
+  .m-bento > li[data-span="2"] {
+    grid-column: span 2;
   }
   .m-bento article {
     display: flex;
+    flex: 1;
     flex-direction: column;
     gap: 8px;
     padding: 28px;
@@ -487,23 +497,12 @@
     background: var(--m-sunken);
     min-width: 0;
   }
-  .m-bento article[data-span="2"] {
-    grid-column: span 2;
-  }
-  .m-bento article[data-inverse] {
-    background: var(--m-ink);
-    color: var(--m-paper);
-    border-color: var(--m-ink);
-  }
-  .m-bento article[data-inverse] p {
-    color: inherit;
-    opacity: 0.8;
-  }
   .m-bento-visual {
     margin-bottom: 16px;
     min-height: 120px;
   }
-  .m-bento h3 {
+  .m-bento :is(h3, h4) {
+    margin: 0;
     font-size: 17px;
     font-weight: 600;
   }
@@ -952,7 +951,8 @@
     border-color: var(--m-primary);
     color: var(--m-on-primary);
   }
-  .m-steps h3 {
+  .m-steps :is(h2, h3, h4) {
+    margin: 0;
     padding-top: 2px;
     font-size: 17px;
     font-weight: 600;
@@ -1396,7 +1396,7 @@
     .m-bento {
       grid-template-columns: minmax(0, 1fr);
     }
-    .m-bento article[data-span="2"] {
+    .m-bento > li[data-span="2"] {
       grid-column: auto;
     }
     .m-contact,
@@ -1560,8 +1560,11 @@
   :is(
     .m-marketing-section,
     .m-feature-section,
+    .m-cta,
     .m-banner
-  )[data-tone="inverse"] {
+  )[data-tone="inverse"],
+  .m-pricing-grid article[data-featured="true"][data-tone="inverse"],
+  .m-bento article:is([data-inverse], [data-tone="inverse"]) {
     color-scheme: var(--m-inv-color-scheme);
     --m-line-strong: var(--m-inv-line-strong);
     --m-primary-active: var(--m-inv-primary-active);
@@ -1580,6 +1583,8 @@
     --m-primary: var(--m-inv-primary);
     --m-primary-hover: var(--m-inv-primary-hover);
     --m-on-primary: var(--m-inv-on-primary);
+    --m-accent: var(--m-inv-accent);
+    --m-on-accent: var(--m-inv-on-accent);
     --m-focus: var(--m-inv-focus);
     --m-link: var(--m-inv-link);
     --m-band: var(--m-inv-paper);
@@ -1651,7 +1656,8 @@
     border-color: var(--m-primary);
     color: var(--m-on-primary);
   }
-  .m-process-steps h3 {
+  .m-process-steps :is(h3, h4) {
+    margin: 0;
     font-size: 16px;
     font-weight: 600;
   }

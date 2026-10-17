@@ -46,9 +46,9 @@ function SidebarContent({
   onNavigate,
 }: SidebarProps & { onNavigate?: () => void }) {
   const links = (items: NavigationItem[]) =>
-    items.map((item) => (
+    items.map((item, index) => (
       <KitLink
-        key={item.href}
+        key={`${item.label}:${item.href}:${index}`}
         href={item.href}
         aria-current={item.current ? "page" : undefined}
         onClick={onNavigate}
@@ -259,9 +259,9 @@ export function Navbar({
         Menu
       </Button>
       <nav id={id} aria-label={label} data-open={open}>
-        {items.map((item) => (
+        {items.map((item, index) => (
           <KitLink
-            key={item.href}
+            key={`${item.label}:${item.href}:${index}`}
             href={item.href}
             aria-current={item.current ? "page" : undefined}
             onClick={() => setOpen(false)}

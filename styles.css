@@ -11,6 +11,8 @@
   --color-line: var(--m-line);
   --color-primary: var(--m-primary);
   --color-on-primary: var(--m-on-primary);
+  --color-accent: var(--m-accent);
+  --color-on-accent: var(--m-on-accent);
   --color-focus: var(--m-focus);
   --color-success: var(--m-success);
   --color-warning: var(--m-warning);

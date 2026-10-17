@@ -49,9 +49,9 @@ export function DocsShell({
       {navigation.map((group) => (
         <section key={group.title}>
           <h2>{group.title}</h2>
-          {group.items.map((item) => (
+          {group.items.map((item, index) => (
             <KitLink
-              key={item.href}
+              key={`${item.label}:${item.href}:${index}`}
               href={item.href}
               aria-current={item.current ? "page" : undefined}
               onClick={() => setOpen(false)}
@@ -84,9 +84,9 @@ export function DocsShell({
         {version && <div className="m-docs-version">{version}</div>}
         {sections.length > 0 && (
           <nav aria-label="Sections" className="m-docs-sections">
-            {sections.map((s) => (
+            {sections.map((s, index) => (
               <KitLink
-                key={s.href}
+                key={`${s.label}:${s.href}:${index}`}
                 href={s.href}
                 aria-current={s.current ? "page" : undefined}
               >
@@ -201,6 +201,7 @@ export function SearchDialog(props: {
 
 export function Steps({
   items,
+  headingLevel = 3,
 }: {
   items: {
     title: string;
@@ -208,16 +209,18 @@ export function Steps({
     description?: ReactNode;
     content?: ReactNode;
   }[];
+  headingLevel?: 2 | 3 | 4;
 }) {
+  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
   return (
     <ol className="m-steps">
       {items.map((item, i) => (
-        <li key={item.title}>
+        <li key={`${item.title}:${i}`}>
           <span className="m-step-number" aria-hidden="true">
             {i + 1}
           </span>
           <div>
-            <h3 id={item.id}>{item.title}</h3>
+            <Heading id={item.id}>{item.title}</Heading>
             {item.description && (
               <div className="m-step-description">{item.description}</div>
             )}
@@ -571,8 +574,8 @@ export function LinkCards({
 }) {
   return (
     <ul className="m-link-cards">
-      {items.map((item) => (
-        <li key={item.href}>
+      {items.map((item, index) => (
+        <li key={`${item.title}:${item.href}:${index}`}>
           <KitLink href={item.href}>
             <strong>{item.title} →</strong>
             {item.description && <span>{item.description}</span>}

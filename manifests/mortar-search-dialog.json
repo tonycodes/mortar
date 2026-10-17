@@ -5,7 +5,7 @@
   "description": "Mortar documentation search dialog, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "SearchDialog",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs", "keyboard"],
@@ -47,7 +47,7 @@
     "probe": "dialog"
   },
   "integrity": {
-    "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
-    "preview": "0f981e2a91d7439e2671adff37c5994f4a3548458b67f3cee5614d3cfa243de0"
+    "source": "729b97fecd0466a887c4fe9200da1662fed911ef96934948b3e6bd1f122b922d",
+    "preview": "e19d9518e2c8df84131f28d9fda05024d4e0aed43ec637a01bb22631c7701925"
   }
 }

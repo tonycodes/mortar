@@ -12,7 +12,7 @@
     },
     {
       "id": "project-agnostic-chrome",
-      "instruction": "Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic."
+      "instruction": "Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic. The marketing header logo is a slot. Marketing roots expose data-m-component for tests and consumers. It is not a styling hook."
     },
     {
       "id": "central-fixes",
@@ -20,11 +20,11 @@
     },
     {
       "id": "semantic-themes",
-      "instruction": "Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme."
+      "instruction": "Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme. Accent is a brand token, separate from ink, surface, and the feedback colours. Every brand and appearance declares --m-accent and --m-on-accent. CallToAction and a featured Pricing card use the page surface unless tone=\"inverse\" opts into the inverse token remap. ThemeProvider scope=\"container\" paints those tokens on a wrapper and leaves the document unchanged. The default scope is document."
     },
     {
       "id": "interaction-quality",
-      "instruction": "Verify responsive layout, accessible names, keyboard operation, focus and loading/empty/error states. Automated checks alone cannot prove visual quality."
+      "instruction": "Verify responsive layout, accessible names, keyboard operation, focus and loading/empty/error states. Automated checks alone cannot prove visual quality. A plan that is not available exposes a status and does not offer a purchase link. Column titles accept an explicit heading level so a page can keep a single h1."
     }
   ]
 }

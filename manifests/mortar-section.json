@@ -5,7 +5,7 @@
   "description": "Mortar full-bleed marketing section with default, muted and inverse tones for page rhythm.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Section",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "marketing"],
@@ -34,7 +34,7 @@
     ],
     "usage": "Import { Section } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {
@@ -46,7 +46,7 @@
     "states": []
   },
   "integrity": {
-    "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
-    "preview": "0f6bad3272908731cf6449acdf33b8d1013c91dd70e96fff12ff155fa3576659"
+    "source": "0c62f1f8f729c8d2d7c9b1dfd58d6cfa3255aa404e90dfbc05685c8ea79f8092",
+    "preview": "113878952bfa706b250c5fad500ba3c6c5bacaf7656a16b8dc3764d6f88b152f"
   }
 }

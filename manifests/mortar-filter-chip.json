@@ -5,7 +5,7 @@
   "description": "Mortar foundation filter chip, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "FilterChip",
   "source": "src/display.tsx",
   "capabilities": ["theme", "foundation", "keyboard"],
@@ -45,7 +45,7 @@
     "probe": "chip"
   },
   "integrity": {
-    "source": "68ae96e8b623fda481beca97d2884ba50cf7a590ee13535829330c604bb294f8",
-    "preview": "c5f7aadd516c8146b626e7aa2e00356276782c80533468e9407c3cb98077ab14"
+    "source": "04ecae0fc894d13e500a5aaf7a2e488e0d202e78754c57da80bb58cb6153ee02",
+    "preview": "9cc5f2e3c3da9249957342c5e36b718675c77680b8230f0cefa10418efa3b75a"
   }
 }

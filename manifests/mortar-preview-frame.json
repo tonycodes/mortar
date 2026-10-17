@@ -5,7 +5,7 @@
   "description": "Mortar application preview frame, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "PreviewFrame",
   "source": "src/inspection.tsx",
   "capabilities": ["theme", "application"],
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "1ae723d03eba29c60343db1dcf31b2f9b3429223b52600840718e758cedfc401",
-    "preview": "3c390a47df350d786b89a1fab62367943c7d8967566176d125cd8fb5bf56a265"
+    "source": "09e1e4ee70bc1c219fafc672ecfd633a65ef6c6648e46ed15921eb0339d8c5bd",
+    "preview": "8a48de313216c5d7d56602fcab07988e1f854ac2e1227e44f57ea71fc1e2efd2"
   }
 }

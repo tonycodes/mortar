@@ -5,7 +5,7 @@
   "description": "Mortar body text with semantic tone, size and weight, replacing text-muted/text-ink utilities.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "Text",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "foundation"],
@@ -44,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "80bdc4953e1fce819a6e36d044ec0d866944aa3aa4ba343bbfae5e567d33c0ca",
-    "preview": "736425ad63e44fd70cb74e8faf97a3f0e837c311b8d2f54ce2471da9a72f6fa9"
+    "source": "0c62f1f8f729c8d2d7c9b1dfd58d6cfa3255aa404e90dfbc05685c8ea79f8092",
+    "preview": "7e7fc128423cc35ee36bb3cabb26fb8a40b646045e68864e2cb6cb104fa36930"
   }
 }

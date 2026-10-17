@@ -5,7 +5,7 @@
   "description": "Mortar documentation page feedback, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "export": "PageFeedback",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs", "keyboard"],
@@ -45,7 +45,7 @@
     "probe": "feedback"
   },
   "integrity": {
-    "source": "81d01f92f278c693a789d5c9983744e86d16a57c6d1694df4931ad126c3bf1a2",
-    "preview": "94ec0b6c53202b30607912b0958c6b01f626a6f04fcc89a24b0b09ff2b89379d"
+    "source": "729b97fecd0466a887c4fe9200da1662fed911ef96934948b3e6bd1f122b922d",
+    "preview": "00dc9960ce29a635e98e497b1ce3952147f6358aed399568f1802a9cb654fdb8"
   }
 }
