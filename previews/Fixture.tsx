@@ -643,11 +643,25 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Testimonial":
       example = (
-        <UI.Testimonial
-          quote="The example shows how a testimonial appears."
-          name="Example customer"
-          role="Illustrative content"
-        />
+        <>
+          <UI.Testimonial
+            quote="The example shows how a testimonial appears."
+            name="Example customer"
+            role="Illustrative content"
+          />
+          <UI.Testimonial
+            quote="We answered twice as many customers in the first month."
+            name="Lindsay Walton"
+            role="Owner, Wheelhouse Bikes"
+            logo={
+              <img
+                alt="Wheelhouse Bikes"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 28'%3E%3Ccircle cx='14' cy='14' r='11' fill='none' stroke='%238e8e93' stroke-width='3'/%3E%3Crect x='32' y='10' width='80' height='8' rx='4' fill='%238e8e93'/%3E%3C/svg%3E"
+              />
+            }
+            avatar={<UI.Avatar name="Lindsay Walton" />}
+          />
+        </>
       );
       break;
     case "LogoCloud":
@@ -725,6 +739,11 @@ export function PreviewCase({ name }: { name: string }) {
           note="Weekdays 9 to 5"
           columns={[{ title: "Product", links: [action] }]}
           copyright="© Example company"
+          social={[
+            { label: "Northwind website", href: "#website", icon: icons.globe },
+            { label: "Northwind on GitHub", href: "#github", icon: icons.code },
+            { label: "Email Northwind", href: "#email", icon: icons.mail },
+          ]}
         />
       );
       break;

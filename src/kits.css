@@ -3199,8 +3199,8 @@
   .m-calendar-events time {
     color: var(--m-muted);
   }
-  .m-calendar-more {
-    color: var(--m-muted) !important;
+  .m-calendar-events .m-calendar-more {
+    color: var(--m-muted);
   }
   /* Narrow full calendars fall back to dots; titles stay available via aria-describedby. */
   @container (max-width: 560px) {
@@ -4894,5 +4894,78 @@
   }
   .m-slide-over[data-size="xl"] {
     width: min(880px, 100vw);
+  }
+}
+
+/* Marketing people variants: testimonial logos and avatars, team bios and
+   profile links, and footer social links. */
+@layer components {
+  .m-testimonial-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .m-testimonial-logo :is(img, svg) {
+    display: block;
+    height: 28px;
+    width: auto;
+  }
+  .m-testimonial figcaption:has(.m-testimonial-avatar) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    text-align: start;
+  }
+  /* The shared caption rule mutes every span; keep the name at full contrast. */
+  .m-testimonial figcaption .m-testimonial-person {
+    color: var(--m-ink);
+  }
+  .m-testimonial figcaption .m-testimonial-person > span {
+    color: var(--m-muted);
+  }
+  .m-testimonial-avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-testimonial-person {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .m-team-bio {
+    margin: 8px 0 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+  }
+  .m-icon-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .m-icon-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-icon-links a:hover {
+    color: var(--m-ink);
+  }
+  .m-icon-links svg {
+    width: 20px;
+    height: 20px;
+  }
+  @media (pointer: coarse) {
+    .m-icon-links a {
+      min-width: 44px;
+      min-height: 44px;
+      justify-content: center;
+    }
   }
 }

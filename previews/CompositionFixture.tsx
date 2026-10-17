@@ -17,6 +17,11 @@ export const icons = {
   more: icon("M5 12h.01M12 12h.01M19 12h.01"),
   edit: icon("M4 20h4L19 9l-4-4L4 16zM14 6l4 4"),
   download: icon("M12 4v11M7 10l5 5 5-5M5 20h14"),
+  globe: icon(
+    "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18",
+  ),
+  code: icon("M8 8l-4 4 4 4M16 8l4 4-4 4"),
+  mail: icon("M4 6h16v12H4zM4 7l8 6 8-6"),
 };
 
 export function CompositionCase({ name }: { name: string }) {
