@@ -5,7 +5,7 @@
   "description": "Mortar button group: a joined row of related actions, with icon-only and link items. Use SegmentedControl to choose a single value.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "export": "ButtonGroup",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "action", "keyboard"],

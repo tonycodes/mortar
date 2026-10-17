@@ -5,7 +5,7 @@
   "description": "Mortar foundation toaster, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "export": "Toaster",
   "source": "src/feedback.tsx",
   "capabilities": ["theme", "foundation"],

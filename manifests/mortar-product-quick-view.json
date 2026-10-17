@@ -5,7 +5,7 @@
   "description": "Mortar product quick view: a ProductOverview in a wide Modal with a link to the full product page.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "export": "ProductQuickView",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce", "keyboard"],

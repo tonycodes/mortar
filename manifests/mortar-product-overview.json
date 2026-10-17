@@ -5,7 +5,7 @@
   "description": "Mortar product overview: gallery with selectable thumbnails, price, rating, option pickers (native radios, with colour swatches), add to bag and highlights.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "export": "ProductOverview",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce", "keyboard", "responsive"],

@@ -5,7 +5,7 @@
   "description": "Mortar section heading: a heading for a section within a page, with description, actions and an optional divider.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "export": "SectionHeading",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "application"],
