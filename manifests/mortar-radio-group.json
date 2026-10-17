@@ -22,7 +22,8 @@
       "name": "string",
       "value": "string",
       "onChange": "(value: string) => void",
-      "options": "{ value: string; label: string; description?: string }[]"
+      "options": "{ value: string; label: string; description?: string; swatch?: string; disabled?: boolean }[]",
+      "layout": "\"list\" | \"grid\" | \"swatches\""
     },
     "states": [
       "Light",
@@ -46,7 +47,7 @@
     "probe": "radio"
   },
   "integrity": {
-    "source": "f5ce1593228511cbbecadc9e829d24e5c2dcb640efe953dc0214eecb352822cc",
-    "preview": "af5d1501e24c495177754510476c4ea673f961f35dbcce4bc24c826560088d04"
+    "source": "c720a9d74e5380f19dae8bf71462bb82aa519e06ce95ba56759581d10e0d34bd",
+    "preview": "d7e3d98bd823a737cb169efb17e339d127630d5d4815562da42b3a9ef6d8a5ab"
   }
 }

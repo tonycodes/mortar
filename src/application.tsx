@@ -17,6 +17,8 @@ export interface NavigationItem {
   count?: string;
   /** Icon shown instead of the default marker. */
   icon?: ReactNode;
+  /** Sub-pages; the item becomes a disclosure, open when a child is current. */
+  children?: NavigationItem[];
 }
 export interface AppShellProps {
   brand: string;
@@ -45,25 +47,41 @@ function SidebarContent({
   label = "Primary",
   onNavigate,
 }: SidebarProps & { onNavigate?: () => void }) {
-  const links = (items: NavigationItem[]) =>
-    items.map((item, index) => (
-      <KitLink
-        key={`${item.label}:${item.href}:${index}`}
-        href={item.href}
-        aria-current={item.current ? "page" : undefined}
-        onClick={onNavigate}
-      >
-        {item.icon ? (
-          <span className="m-nav-icon" aria-hidden="true">
-            {item.icon}
-          </span>
-        ) : (
-          <span className="m-nav-marker" aria-hidden="true" />
-        )}
-        {item.label}
-        {item.count && <span className="m-nav-count">{item.count}</span>}
-      </KitLink>
-    ));
+  const lead = (item: NavigationItem) =>
+    item.icon ? (
+      <span className="m-nav-icon" aria-hidden="true">
+        {item.icon}
+      </span>
+    ) : (
+      <span className="m-nav-marker" aria-hidden="true" />
+    );
+  const links = (items: NavigationItem[]): ReactNode[] =>
+    items.map((item, index) =>
+      item.children?.length ? (
+        <details
+          key={`${item.label}:${item.href}:${index}`}
+          className="m-nav-group"
+          open={item.children.some((child) => child.current) || undefined}
+        >
+          <summary>
+            {lead(item)}
+            {item.label}
+          </summary>
+          <div className="m-nav-children">{links(item.children)}</div>
+        </details>
+      ) : (
+        <KitLink
+          key={`${item.label}:${item.href}:${index}`}
+          href={item.href}
+          aria-current={item.current ? "page" : undefined}
+          onClick={onNavigate}
+        >
+          {lead(item)}
+          {item.label}
+          {item.count && <span className="m-nav-count">{item.count}</span>}
+        </KitLink>
+      ),
+    );
   return (
     <>
       {brand && (

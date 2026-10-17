@@ -10,6 +10,9 @@ export function PreviewCase({ name }: { name: string }) {
     [resultsPage, setResultsPage] = useState(6),
     [noticeShown, setNoticeShown] = useState(true),
     [menuChoice, setMenuChoice] = useState("none"),
+    [extra, setExtra] = useState(false),
+    [memory, setMemory] = useState("16"),
+    [colour, setColour] = useState("slate"),
     [selectedRows, setSelectedRows] = useState<string[]>([]);
   const controls = (
     <UI.Input
@@ -154,42 +157,93 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Checkbox":
       example = (
-        <UI.Checkbox
-          label="Email notifications"
-          checked={checked}
-          onChange={(e) => setChecked(e.target.checked)}
-        />
+        <UI.Stack gap="sm">
+          <UI.Checkbox
+            label="Email notifications"
+            checked={checked}
+            onChange={(e) => setChecked(e.target.checked)}
+          />
+          <UI.Checkbox
+            label="Comments"
+            description="Get notified when someone comments on your post."
+            checked={extra}
+            onChange={(e) => setExtra(e.target.checked)}
+          />
+        </UI.Stack>
       );
       break;
     case "Switch":
       example = (
-        <UI.Switch
-          label="Automatic updates"
-          checked={checked}
-          onChange={(e) => setChecked(e.target.checked)}
-        />
+        <UI.Stack gap="sm">
+          <UI.Switch
+            label="Automatic updates"
+            checked={checked}
+            onChange={(e) => setChecked(e.target.checked)}
+          />
+          <UI.Switch
+            label="Annual billing"
+            description="Save 10% when you pay for a year up front."
+            checked={extra}
+            onChange={(e) => setExtra(e.target.checked)}
+          />
+        </UI.Stack>
       );
       break;
     case "RadioGroup":
       example = (
-        <UI.RadioGroup
-          label="Plan"
-          name="plan"
-          value={value}
-          onChange={setValue}
-          options={[
-            {
-              value: "first",
-              label: "Standard",
-              description: "For small teams",
-            },
-            {
-              value: "second",
-              label: "Advanced",
-              description: "For growing teams",
-            },
-          ]}
-        />
+        <UI.Stack gap="xl">
+          <UI.RadioGroup
+            label="Plan"
+            name="plan"
+            value={value}
+            onChange={setValue}
+            options={[
+              {
+                value: "first",
+                label: "Standard",
+                description: "For small teams",
+              },
+              {
+                value: "second",
+                label: "Advanced",
+                description: "For growing teams",
+              },
+            ]}
+          />
+          <UI.RadioGroup
+            label="Memory"
+            name="memory"
+            layout="grid"
+            value={memory}
+            onChange={setMemory}
+            options={[
+              { value: "8", label: "8 GB", description: "£0" },
+              { value: "16", label: "16 GB", description: "+ £200" },
+              { value: "32", label: "32 GB", description: "+ £400" },
+              {
+                value: "64",
+                label: "64 GB",
+                description: "Out of stock",
+                disabled: true,
+              },
+            ]}
+          />
+          <UI.RadioGroup
+            label="Colour"
+            name="colour"
+            layout="swatches"
+            value={colour}
+            onChange={setColour}
+            options={[
+              { value: "rose", label: "Rose", swatch: "#e8a3b4" },
+              { value: "sky", label: "Sky", swatch: "#8bbcdc" },
+              { value: "slate", label: "Slate", swatch: "#475569" },
+            ]}
+          />
+          <output aria-label="Chosen options">
+            {memory} · {colour}
+          </output>
+        </UI.Stack>
       );
       break;
     case "Tabs":
