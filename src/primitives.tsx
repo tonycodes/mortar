@@ -133,9 +133,27 @@ export interface InputProps
   extends InputHTMLAttributes<HTMLInputElement>, FieldDescription {
   prefix?: string;
   suffix?: string;
+  /** Decorative icon inside the field, before the text. */
+  leadingIcon?: ReactNode;
+  /** Decorative icon inside the field, after the text. */
+  trailingIcon?: ReactNode;
+  /** Button or menu attached to the end of the field, e.g. "Sort" or "Copy". */
+  action?: ReactNode;
 }
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { label, hint, error, id, prefix, suffix, className = "", ...props },
+  {
+    label,
+    hint,
+    error,
+    id,
+    prefix,
+    suffix,
+    leadingIcon,
+    trailingIcon,
+    action,
+    className = "",
+    ...props
+  },
   ref,
 ) {
   const generated = useId(),
@@ -144,8 +162,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   return (
     <div className="m-field">
       <label htmlFor={fieldId}>{label}</label>
-      <div className="m-input-group" data-invalid={!!error || undefined}>
+      <div
+        className="m-input-group"
+        data-invalid={!!error || undefined}
+        data-leading={leadingIcon ? true : undefined}
+        data-trailing={trailingIcon ? true : undefined}
+      >
         {prefix && <span>{prefix}</span>}
+        {leadingIcon && (
+          <span className="m-input-icon" aria-hidden="true">
+            {leadingIcon}
+          </span>
+        )}
         <input
           {...props}
           ref={ref}
@@ -158,7 +186,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
               .join(" ") || undefined
           }
         />
+        {trailingIcon && (
+          <span className="m-input-icon" aria-hidden="true">
+            {trailingIcon}
+          </span>
+        )}
         {suffix && <span>{suffix}</span>}
+        {action && <div className="m-input-action">{action}</div>}
       </div>
       {(error || hint) && (
         <p id={messageId} className={error ? "m-error" : ""}>

@@ -28,10 +28,19 @@ export const implementations = {
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#example$/);
   },
-  async input({ root }) {
+  async input({ page, root }) {
     const field = root.getByLabel("Project name");
     await field.fill("Changed");
     await expect(field).toHaveValue("Changed");
+    // Input groups: icons are decorative, the attached action is its own control.
+    const search = root.getByRole("searchbox", { name: "Search candidates" });
+    await search.fill("ana");
+    await expect(search).toHaveValue("ana");
+    const sort = root.getByRole("button", { name: "Sort" });
+    await page.keyboard.press("Tab");
+    await expect(sort).toBeFocused();
+    await page.keyboard.press("Space");
+    await expect(sort).toHaveAttribute("aria-pressed", "true");
   },
   async textarea({ root }) {
     const field = root.getByLabel("Description");

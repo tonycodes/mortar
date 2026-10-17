@@ -132,6 +132,48 @@ export function LayoutCase({ name }: { name: string }) {
         </UI.Stack>
       );
       break;
+    case "MediaObject":
+      example = (
+        <UI.Stack gap="lg">
+          <UI.MediaObject
+            media={<UI.Avatar name="Ana Kovač" />}
+            title="Ana Kovač"
+          >
+            Shipped the new billing flow. Can someone review the copy on the
+            confirmation step before Friday?
+          </UI.MediaObject>
+          <UI.MediaObject
+            media={<UI.Avatar name="Lindsay Walton" shape="square" />}
+            title="Lindsay Walton"
+            align="center"
+            reverse
+          >
+            Reversed and centred for replies on the right.
+          </UI.MediaObject>
+        </UI.Stack>
+      );
+      break;
+    case "SectionHeading":
+      example = (
+        <UI.Stack gap="xl">
+          <UI.SectionHeading
+            title="Job postings"
+            description="Open roles across your teams."
+            actions={
+              <>
+                <UI.Button variant="secondary">Share</UI.Button>
+                <UI.Button>Create posting</UI.Button>
+              </>
+            }
+          />
+          <UI.SectionHeading
+            title="Recent activity"
+            headingLevel={3}
+            divider={false}
+          />
+        </UI.Stack>
+      );
+      break;
     default:
       example = (
         <UI.Notice title="Unknown fixture">

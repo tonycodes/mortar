@@ -239,7 +239,8 @@ function Thumbnail({ category }: { category: Category }) {
       </div>
     );
   return (
-    <div className="pg-thumb" inert>
+    // inert removes focus; aria-hidden also hides the copy from tools that ignore inert.
+    <div className="pg-thumb" inert aria-hidden="true">
       <div className="pg-thumb-scale">
         <PreviewRoot name={category.thumbnail} marked={false} />
       </div>

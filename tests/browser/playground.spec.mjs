@@ -189,10 +189,13 @@ for (const width of [390, 1280])
     ])
       await expect(page.getByRole("heading", { name: kit })).toBeVisible();
     // Thumbnails are inert decoration: nothing inside them is focusable or announced.
-    await expect(page.locator(".pg-thumb[inert]").first()).toBeAttached();
+    // Wait for the lazily loaded thumbnail to render, or a count of 0 passes vacuously.
+    const thumb = page.locator(".pg-thumb[inert]").first();
+    await expect(thumb.locator(".m-button-group").first()).toBeAttached();
     await expect(page.getByRole("button", { name: "Duplicate" })).toHaveCount(
       0,
     );
+    await expect(thumb.locator("button").first()).not.toBeFocused();
     expect(await axe(page)).toEqual([]);
     expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
 
