@@ -5,7 +5,7 @@
   "description": "Mortar full-bleed marketing section with default, muted and inverse tones for page rhythm.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "Section",
   "source": "src/layout.tsx",
   "capabilities": ["theme", "marketing"],

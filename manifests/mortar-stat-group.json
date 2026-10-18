@@ -5,7 +5,7 @@
   "description": "Mortar marketing stat group, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "StatGroup",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
