@@ -5,7 +5,7 @@
   "description": "Mortar framed product mock for hero and feature illustrations.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "MockWindow",
   "source": "src/showcase.tsx",
   "capabilities": ["theme", "marketing"],

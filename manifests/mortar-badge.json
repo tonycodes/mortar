@@ -5,7 +5,7 @@
   "description": "Mortar foundation badge, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "Badge",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "status"],

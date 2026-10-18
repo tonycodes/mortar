@@ -5,7 +5,7 @@
   "description": "Mortar sidebar: vertical application navigation with brand, icons, counts, grouped sections and a footer slot. AppShell composes the same content.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "Sidebar",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application", "navigation"],

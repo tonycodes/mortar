@@ -5,7 +5,7 @@
   "description": "Mortar order summary: cost lines, a distinguished total and a checkout action.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "OrderSummary",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce"],

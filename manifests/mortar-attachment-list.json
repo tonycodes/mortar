@@ -5,7 +5,7 @@
   "description": "Mortar attachment list: files attached to a record, each with an icon, name, size and a download link named after the file.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "export": "AttachmentList",
   "source": "src/display.tsx",
   "capabilities": ["theme", "application"],
