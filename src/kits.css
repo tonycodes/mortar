@@ -2137,7 +2137,9 @@
   .m-data-table[data-density="compact"] table {
     font-size: 13px;
   }
-  :is(.m-data-table, .m-table)[data-striped] tbody tr:nth-child(even) {
+  :is(.m-data-table, .m-table)[data-striped]
+    tbody
+    tr:nth-child(even of :not(.m-table-group)) {
     background: var(--m-sunken);
   }
   .m-table-footer {
@@ -5488,5 +5490,26 @@
   .m-avatar-status[data-position="top"] {
     top: -1px;
     bottom: auto;
+  }
+}
+
+/* Grouped table rows: a sunken, full-width header row opens each tbody group. */
+@layer components {
+  :is(.m-data-table, .m-table) .m-table-group th {
+    padding-block: 6px;
+    border-top: 1px solid var(--m-line);
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-ink);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+  }
+  /* The column header row already draws the line above the first group. */
+  :is(.m-data-table, .m-table) thead + tbody > .m-table-group th {
+    border-top: 0;
+  }
+  .m-data-table[data-density="compact"] .m-table-group th {
+    padding-block: 4px;
   }
 }

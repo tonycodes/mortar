@@ -34,6 +34,7 @@
       "defaultSort": "{ key: string; direction: ascending | descending }",
       "sort": "{ key: string; direction: ascending | descending } | null",
       "onSortChange": "(sort: TableSort) => void",
+      "groupBy": "(row: T) => string",
       "maxHeight": "string",
       "density": "default | compact",
       "striped": "boolean",
@@ -46,7 +47,7 @@
       "Green brand",
       "Keyboard and focus"
     ],
-    "usage": "Import { DataTable } from @tony-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. Put Pagination in footer.",
+    "usage": "Import { DataTable } from @tony-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"]

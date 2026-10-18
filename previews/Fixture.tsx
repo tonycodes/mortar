@@ -15,7 +15,8 @@ export function PreviewCase({ name }: { name: string }) {
     [colour, setColour] = useState("slate"),
     [section, setSection] = useState("profile"),
     [period, setPeriod] = useState("monthly"),
-    [selectedRows, setSelectedRows] = useState<string[]>([]);
+    [selectedRows, setSelectedRows] = useState<string[]>([]),
+    [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const controls = (
     <UI.Input
       label="Project name"
@@ -543,95 +544,196 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "DataTable":
       example = (
-        <UI.DataTable
-          caption="Projects"
-          rowLabel={(row) => row.name}
-          rowHref={(row) => `#project-${row.id}`}
-          defaultSort={{ key: "name", direction: "ascending" }}
-          selectedIds={selectedRows}
-          onSelectionChange={setSelectedRows}
-          striped
-          columns={[
-            {
-              key: "name",
-              label: "Name",
-              render: (row) => row.name,
-              sortable: true,
-            },
-            {
-              key: "status",
-              label: "Status",
-              render: (row) => <UI.Badge>{row.status}</UI.Badge>,
-            },
-            {
-              key: "owner",
-              label: "Owner",
-              render: (row) => row.owner,
-              truncate: true,
-              width: "30%",
-            },
-            {
-              key: "requests",
-              label: "Requests",
-              align: "right",
-              render: (row) => row.requests.toLocaleString("en-GB"),
-              sortable: true,
-            },
-            {
-              key: "actions",
-              label: "Actions",
-              render: (row) => (
-                <UI.Button onClick={() => setPage(2)}>
-                  Edit {row.name}
-                </UI.Button>
-              ),
-            },
-          ]}
-          rows={[
-            {
-              id: "northwind",
-              name: "Northwind",
-              status: "Active",
-              owner: "Platform team with a deliberately long owner name",
-              requests: 12840,
-            },
-            {
-              id: "acme",
-              name: "Acme",
-              status: "Paused",
-              owner: "Growth",
-              requests: 920,
-            },
-            {
-              id: "zephyr",
-              name: "Zephyr",
-              status: "Active",
-              owner: "Data",
-              requests: 4310,
-            },
-          ]}
-          footer={
-            <UI.Pagination page={page} pageCount={3} onChange={setPage} />
-          }
-        />
+        <UI.Stack gap="xl">
+          <UI.DataTable
+            caption="Projects"
+            rowLabel={(row) => row.name}
+            rowHref={(row) => `#project-${row.id}`}
+            defaultSort={{ key: "name", direction: "ascending" }}
+            selectedIds={selectedRows}
+            onSelectionChange={setSelectedRows}
+            striped
+            columns={[
+              {
+                key: "name",
+                label: "Name",
+                render: (row) => row.name,
+                sortable: true,
+              },
+              {
+                key: "status",
+                label: "Status",
+                render: (row) => <UI.Badge>{row.status}</UI.Badge>,
+              },
+              {
+                key: "owner",
+                label: "Owner",
+                render: (row) => row.owner,
+                truncate: true,
+                width: "30%",
+              },
+              {
+                key: "requests",
+                label: "Requests",
+                align: "right",
+                render: (row) => row.requests.toLocaleString("en-GB"),
+                sortable: true,
+              },
+              {
+                key: "actions",
+                label: "Actions",
+                render: (row) => (
+                  <UI.Button onClick={() => setPage(2)}>
+                    Edit {row.name}
+                  </UI.Button>
+                ),
+              },
+            ]}
+            rows={[
+              {
+                id: "northwind",
+                name: "Northwind",
+                status: "Active",
+                owner: "Platform team with a deliberately long owner name",
+                requests: 12840,
+              },
+              {
+                id: "acme",
+                name: "Acme",
+                status: "Paused",
+                owner: "Growth",
+                requests: 920,
+              },
+              {
+                id: "zephyr",
+                name: "Zephyr",
+                status: "Active",
+                owner: "Data",
+                requests: 4310,
+              },
+            ]}
+            footer={
+              <UI.Pagination page={page} pageCount={3} onChange={setPage} />
+            }
+          />
+          <UI.DataTable
+            caption="People by office"
+            rowLabel={(row) => row.name}
+            groupBy={(row) => row.office}
+            defaultSort={{ key: "name", direction: "ascending" }}
+            selectedIds={selectedPeople}
+            onSelectionChange={setSelectedPeople}
+            columns={[
+              {
+                key: "name",
+                label: "Name",
+                render: (row) => row.name,
+                sortable: true,
+              },
+              { key: "title", label: "Title", render: (row) => row.title },
+              { key: "email", label: "Email", render: (row) => row.email },
+              { key: "role", label: "Role", render: (row) => row.role },
+            ]}
+            rows={[
+              {
+                id: "lindsay",
+                name: "Lindsay Walton",
+                title: "Front-end developer",
+                email: "lindsay@example.com",
+                role: "Member",
+                office: "Edinburgh",
+              },
+              {
+                id: "tom",
+                name: "Tom Cook",
+                title: "Director of product",
+                email: "tom@example.com",
+                role: "Admin",
+                office: "London",
+              },
+              {
+                id: "courtney",
+                name: "Courtney Henry",
+                title: "Designer",
+                email: "courtney@example.com",
+                role: "Admin",
+                office: "Edinburgh",
+              },
+              {
+                id: "whitney",
+                name: "Whitney Francis",
+                title: "Copywriter",
+                email: "whitney@example.com",
+                role: "Member",
+                office: "London",
+              },
+              {
+                id: "leonard",
+                name: "Leonard Krasner",
+                title: "Senior designer",
+                email: "leonard@example.com",
+                role: "Owner",
+                office: "London",
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "Table":
       example = (
-        <UI.Table
-          caption="Plan limits"
-          captionVisible
-          columns={[
-            { key: "plan", label: "Plan" },
-            { key: "conversations", label: "Conversations", align: "right" },
-            { key: "support", label: "Support" },
-          ]}
-          rows={[
-            { plan: "Insider", conversations: "100", support: "Community" },
-            { plan: "Starter", conversations: "500", support: "Email" },
-            { plan: "Pro", conversations: "2,000", support: "Priority" },
-          ]}
-        />
+        <UI.Stack gap="xl">
+          <UI.Table
+            caption="Plan limits"
+            captionVisible
+            columns={[
+              { key: "plan", label: "Plan" },
+              { key: "conversations", label: "Conversations", align: "right" },
+              { key: "support", label: "Support" },
+            ]}
+            rows={[
+              { plan: "Insider", conversations: "100", support: "Community" },
+              { plan: "Starter", conversations: "500", support: "Email" },
+              { plan: "Pro", conversations: "2,000", support: "Priority" },
+            ]}
+          />
+          <UI.Table
+            caption="People by office"
+            columns={[
+              { key: "name", label: "Name" },
+              { key: "title", label: "Title" },
+              { key: "role", label: "Role" },
+            ]}
+            groups={[
+              {
+                label: "Edinburgh",
+                rows: [
+                  {
+                    name: "Lindsay Walton",
+                    title: "Front-end developer",
+                    role: "Member",
+                  },
+                  { name: "Courtney Henry", title: "Designer", role: "Admin" },
+                ],
+              },
+              {
+                label: "London",
+                rows: [
+                  {
+                    name: "Tom Cook",
+                    title: "Director of product",
+                    role: "Admin",
+                  },
+                  {
+                    name: "Whitney Francis",
+                    title: "Copywriter",
+                    role: "Member",
+                  },
+                ],
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "Pagination":
