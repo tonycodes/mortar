@@ -21,7 +21,9 @@
       "label": "string",
       "value": "string",
       "onChange": "(value: string) => void",
-      "items": "{ id: string; label: string; content: ReactNode; count?: number | string; icon?: ReactNode }[]"
+      "items": "{ id: string; label: string; content: ReactNode; count?: number | string; icon?: ReactNode }[]",
+      "variant": "\"underline\" | \"pills\"",
+      "fullWidth": "boolean"
     },
     "states": [
       "Light",
@@ -45,7 +47,7 @@
     "probe": "tabs"
   },
   "integrity": {
-    "source": "948e30e6be39642c5ba23ea86679a3edb6a6626114c8dcce997539d5535e6283",
-    "preview": "f7f747ff5f9cec45d59371987f795423a45c53bbc2d7599887299c2af51bbc12"
+    "source": "5bcf70867f2603db60184fd8d185cdcc7d3652a011eb6fc2e6ea8a088f45ae7a",
+    "preview": "608ff53d999c5d04d43a84a1fb270e8dbde8d990f77c272199a7add27ee3fb94"
   }
 }

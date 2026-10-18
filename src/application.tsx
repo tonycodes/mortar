@@ -332,6 +332,93 @@ export function Breadcrumbs({
     </nav>
   );
 }
+export interface ProgressStep {
+  id: string;
+  name: string;
+  description?: string;
+  /** Lets people revisit the step, e.g. a completed form page. */
+  href?: string;
+  status: "complete" | "current" | "upcoming";
+}
+const stepCheck = (
+  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5">
+    <path
+      d="M5 10.5l3.5 3.5L15 7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+/** Where someone is in a multi-step flow. The current step is marked aria-current="step". */
+export function ProgressSteps({
+  steps,
+  label = "Progress",
+  variant = "simple",
+}: {
+  steps: ProgressStep[];
+  label?: string;
+  /** simple: bars with step numbers; circles: vertical with descriptions; bullets: "Step 2 of 4" with dots. */
+  variant?: "simple" | "circles" | "bullets";
+}) {
+  const current = steps.findIndex((step) => step.status === "current");
+  return (
+    <nav className="m-progress-steps" aria-label={label} data-variant={variant}>
+      {variant === "bullets" && current >= 0 && (
+        <p>
+          Step {current + 1} of {steps.length}
+        </p>
+      )}
+      <ol>
+        {steps.map((step, index) => {
+          const body = (
+            <>
+              {variant !== "simple" && (
+                <span className="m-progress-step-marker" aria-hidden="true">
+                  {variant === "circles" &&
+                    step.status === "complete" &&
+                    stepCheck}
+                </span>
+              )}
+              <span
+                className={
+                  variant === "bullets" ? "m-sr-only" : "m-progress-step-text"
+                }
+              >
+                {variant === "simple" && (
+                  <span className="m-progress-step-number">
+                    Step {index + 1}
+                  </span>
+                )}
+                <span className="m-progress-step-name">{step.name}</span>
+                {step.description && variant === "circles" && (
+                  <span className="m-progress-step-description">
+                    {step.description}
+                  </span>
+                )}
+                {step.status === "complete" && (
+                  <span className="m-sr-only"> (completed)</span>
+                )}
+              </span>
+            </>
+          );
+          const ariaCurrent =
+            step.status === "current" ? ("step" as const) : undefined;
+          return (
+            <li key={step.id} data-status={step.status}>
+              {step.href ? (
+                <KitLink href={step.href} aria-current={ariaCurrent}>
+                  {body}
+                </KitLink>
+              ) : (
+                <span aria-current={ariaCurrent}>{body}</span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+}
 /** Card with a title, explanation and one decisive action, e.g. deleting an account. */
 export function ActionPanel({
   title,

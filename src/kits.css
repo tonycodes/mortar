@@ -5168,3 +5168,193 @@
     font-weight: 600;
   }
 }
+@layer components {
+  .m-tabs[data-variant="pills"] {
+    gap: 4px;
+    border-bottom: 0;
+  }
+  .m-tabs[data-variant="pills"] [role="tab"] {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: var(--m-radius);
+  }
+  .m-tabs[data-variant="pills"] [aria-selected="true"] {
+    background: var(--m-selected);
+    color: var(--m-link);
+  }
+  .m-tabs[data-full-width]:not([data-variant]) {
+    gap: 0;
+  }
+  .m-tabs[data-full-width] [role="tab"] {
+    flex: 1;
+    justify-content: center;
+  }
+  .m-progress-steps ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .m-progress-steps li > * {
+    color: inherit;
+    text-decoration: none;
+  }
+  .m-progress-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .m-progress-step-name {
+    color: var(--m-ink);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .m-progress-step-number {
+    color: var(--m-muted);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .m-progress-step-description {
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-progress-steps [data-status="complete"] .m-progress-step-number,
+  .m-progress-steps [data-status="current"] .m-progress-step-number {
+    color: var(--m-link);
+  }
+  .m-progress-steps[data-variant="simple"] {
+    container-type: inline-size;
+  }
+  .m-progress-steps[data-variant="simple"] ol {
+    display: grid;
+    gap: 16px;
+  }
+  .m-progress-steps[data-variant="simple"] li > * {
+    display: block;
+    padding-left: 16px;
+    border-left: 4px solid var(--m-line);
+  }
+  .m-progress-steps[data-variant="simple"] [data-status="complete"] > *,
+  .m-progress-steps[data-variant="simple"] [data-status="current"] > * {
+    border-color: var(--m-primary);
+  }
+  @container (min-width: 560px) {
+    .m-progress-steps[data-variant="simple"] ol {
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+      gap: 32px;
+    }
+    .m-progress-steps[data-variant="simple"] li > * {
+      padding: 16px 0 0;
+      border-top: 4px solid var(--m-line);
+      border-left: 0;
+    }
+  }
+  .m-progress-steps[data-variant="circles"] li {
+    position: relative;
+    padding-bottom: 32px;
+  }
+  .m-progress-steps[data-variant="circles"] li:last-child {
+    padding-bottom: 0;
+  }
+  .m-progress-steps[data-variant="circles"] li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 32px;
+    bottom: 0;
+    left: 15px;
+    width: 2px;
+    background: var(--m-line);
+  }
+  .m-progress-steps[data-variant="circles"]
+    li[data-status="complete"]:not(:last-child)::before {
+    background: var(--m-primary);
+  }
+  .m-progress-steps[data-variant="circles"] li > * {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .m-progress-steps[data-variant="circles"] .m-progress-step-text {
+    padding-top: 6px;
+  }
+  .m-progress-steps[data-variant="circles"] .m-progress-step-marker {
+    display: grid;
+    position: relative;
+    flex-shrink: 0;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--m-line-strong);
+    border-radius: 50%;
+    background: var(--m-surface);
+  }
+  .m-progress-steps[data-variant="circles"]
+    [data-status="complete"]
+    .m-progress-step-marker {
+    border-color: var(--m-primary);
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+  }
+  .m-progress-steps[data-variant="circles"] .m-progress-step-marker svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-progress-steps[data-variant="circles"]
+    [data-status="current"]
+    .m-progress-step-marker {
+    border-color: var(--m-primary);
+  }
+  .m-progress-steps[data-variant="circles"]
+    [data-status="current"]
+    .m-progress-step-marker::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--m-primary);
+  }
+  .m-progress-steps[data-variant="circles"]
+    [data-status="upcoming"]
+    .m-progress-step-name {
+    color: var(--m-muted);
+  }
+  .m-progress-steps[data-variant="bullets"] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+  }
+  .m-progress-steps[data-variant="bullets"] p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .m-progress-steps[data-variant="bullets"] ol {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .m-progress-steps[data-variant="bullets"] li > * {
+    display: block;
+    padding: 7px;
+    border-radius: 50%;
+  }
+  .m-progress-steps[data-variant="bullets"] .m-progress-step-marker {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--m-line-strong);
+  }
+  .m-progress-steps[data-variant="bullets"]
+    :is([data-status="complete"], [data-status="current"])
+    .m-progress-step-marker {
+    background: var(--m-primary);
+  }
+  .m-progress-steps[data-variant="bullets"]
+    [data-status="current"]
+    .m-progress-step-marker {
+    box-shadow: 0 0 0 4px var(--m-selected);
+  }
+}

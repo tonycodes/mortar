@@ -13,6 +13,8 @@ export function PreviewCase({ name }: { name: string }) {
     [extra, setExtra] = useState(false),
     [memory, setMemory] = useState("16"),
     [colour, setColour] = useState("slate"),
+    [section, setSection] = useState("profile"),
+    [period, setPeriod] = useState("monthly"),
     [selectedRows, setSelectedRows] = useState<string[]>([]);
   const controls = (
     <UI.Input
@@ -248,25 +250,52 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Tabs":
       example = (
-        <UI.Tabs
-          label="Example tabs"
-          value={value}
-          onChange={setValue}
-          items={[
-            {
-              id: "first",
-              label: "Overview",
-              content: <p>Overview content</p>,
-            },
-            {
-              id: "second",
-              label: "Activity",
-              count: 12,
-              icon: icons.clock,
-              content: <p>Activity content</p>,
-            },
-          ]}
-        />
+        <UI.Stack gap="xl">
+          <UI.Tabs
+            label="Example tabs"
+            value={value}
+            onChange={setValue}
+            items={[
+              {
+                id: "first",
+                label: "Overview",
+                content: <p>Overview content</p>,
+              },
+              {
+                id: "second",
+                label: "Activity",
+                count: 12,
+                icon: icons.clock,
+                content: <p>Activity content</p>,
+              },
+            ]}
+          />
+          <UI.Tabs
+            label="Account sections"
+            variant="pills"
+            value={section}
+            onChange={setSection}
+            items={[
+              { id: "profile", label: "Profile", content: <p>Profile form</p> },
+              { id: "billing", label: "Billing", content: <p>Invoices</p> },
+              { id: "team", label: "Team", content: <p>Team members</p> },
+            ]}
+          />
+          <UI.Tabs
+            label="Billing period"
+            fullWidth
+            value={period}
+            onChange={setPeriod}
+            items={[
+              {
+                id: "monthly",
+                label: "Monthly",
+                content: <p>Billed monthly</p>,
+              },
+              { id: "yearly", label: "Yearly", content: <p>Billed yearly</p> },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "Modal":

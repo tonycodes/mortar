@@ -95,7 +95,13 @@
           "id": "navigation",
           "title": "Navigation",
           "thumbnail": "Navbar",
-          "components": ["Navbar", "Sidebar", "Breadcrumbs", "Pagination"]
+          "components": [
+            "Navbar",
+            "Sidebar",
+            "Breadcrumbs",
+            "ProgressSteps",
+            "Pagination"
+          ]
         },
         {
           "id": "lists",
