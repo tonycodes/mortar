@@ -200,7 +200,12 @@ test("LogoCloud default markup is unchanged; grid and split layouts", () => {
 
 test("variant styles use semantic tokens and the hero joins the inverse remap", async () => {
   const css = await read("src/kits.css");
-  const block = css.slice(css.lastIndexOf("@layer components {"));
+  const start = css.lastIndexOf(
+    "@layer components {",
+    css.indexOf(".m-hero[data-background]"),
+  );
+  const end = css.indexOf("@layer components {", start + 1);
+  const block = css.slice(start, end === -1 ? undefined : end);
   for (const selector of [
     ".m-hero-background::after",
     ".m-faq-grid",
