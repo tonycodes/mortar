@@ -577,6 +577,8 @@ export interface DataTableProps<T extends { id: string }> {
   /** Controlled sort. With onSortChange the consumer orders rows (e.g. server-side). */
   sort?: TableSort | null;
   onSortChange?: (sort: TableSort) => void;
+  /** Group rows under full-width header rows. Groups keep the order in which they first appear in rows; sorting applies within each group. */
+  groupBy?: (row: T) => string;
   /** Scroll height; the header sticks while rows scroll. */
   maxHeight?: string;
   density?: "default" | "compact";
@@ -659,6 +661,22 @@ function SelectAll({
     />
   );
 }
+/** Buckets ordered rows by group; groups keep their first-appearance order in the unsorted rows. */
+function groupRows<T>(rows: T[], ordered: T[], groupBy: (row: T) => string) {
+  const groups = new Map<string, T[]>(rows.map((row) => [groupBy(row), []]));
+  ordered.forEach((row) => groups.get(groupBy(row))!.push(row));
+  return [...groups];
+}
+/** Full-width header row that labels the rows of its tbody. */
+function TableGroupRow({ label, span }: { label: string; span: number }) {
+  return (
+    <tr className="m-table-group">
+      <th colSpan={span} scope="rowgroup">
+        {label}
+      </th>
+    </tr>
+  );
+}
 export function DataTable<T extends { id: string }>({
   caption,
   columns,
@@ -670,6 +688,7 @@ export function DataTable<T extends { id: string }>({
   defaultSort,
   sort: controlledSort,
   onSortChange,
+  groupBy,
   maxHeight,
   density = "default",
   striped = false,
@@ -702,6 +721,65 @@ export function DataTable<T extends { id: string }>({
     onSortChange?.(next);
   };
   const selected = rows.filter((row) => selectedIds.includes(row.id));
+  const span = columns.length + (onSelectionChange ? 1 : 0);
+  const renderRow = (row: T) => {
+    const href = rowHref?.(row);
+    return (
+      <tr
+        key={row.id}
+        data-selected={selectedIds.includes(row.id) || undefined}
+        data-linked={href ? true : undefined}
+      >
+        {onSelectionChange && (
+          <td>
+            <input
+              type="checkbox"
+              aria-label={`Select ${rowLabel(row)}`}
+              checked={selectedIds.includes(row.id)}
+              onChange={() =>
+                onSelectionChange(
+                  selectedIds.includes(row.id)
+                    ? selectedIds.filter((id) => id !== row.id)
+                    : [...selectedIds, row.id],
+                )
+              }
+            />
+          </td>
+        )}
+        {columns.map((col, index) => {
+          const content = col.truncate ? (
+            <span className="m-truncate">{col.render(row)}</span>
+          ) : (
+            col.render(row)
+          );
+          return index === 0 ? (
+            <th
+              scope="row"
+              key={col.key}
+              data-align={col.align}
+              data-truncate={col.truncate || undefined}
+            >
+              {href ? (
+                <KitLink className="m-row-link" href={href}>
+                  {content}
+                </KitLink>
+              ) : (
+                content
+              )}
+            </th>
+          ) : (
+            <td
+              key={col.key}
+              data-align={col.align}
+              data-truncate={col.truncate || undefined}
+            >
+              {content}
+            </td>
+          );
+        })}
+      </tr>
+    );
+  };
   return (
     <section
       className="m-data-table"
@@ -804,66 +882,16 @@ export function DataTable<T extends { id: string }>({
                 })}
               </tr>
             </thead>
-            <tbody>
-              {visibleRows.map((row) => {
-                const href = rowHref?.(row);
-                return (
-                  <tr
-                    key={row.id}
-                    data-selected={selectedIds.includes(row.id) || undefined}
-                    data-linked={href ? true : undefined}
-                  >
-                    {onSelectionChange && (
-                      <td>
-                        <input
-                          type="checkbox"
-                          aria-label={`Select ${rowLabel(row)}`}
-                          checked={selectedIds.includes(row.id)}
-                          onChange={() =>
-                            onSelectionChange(
-                              selectedIds.includes(row.id)
-                                ? selectedIds.filter((id) => id !== row.id)
-                                : [...selectedIds, row.id],
-                            )
-                          }
-                        />
-                      </td>
-                    )}
-                    {columns.map((col, index) => {
-                      const content = col.truncate ? (
-                        <span className="m-truncate">{col.render(row)}</span>
-                      ) : (
-                        col.render(row)
-                      );
-                      return index === 0 ? (
-                        <th
-                          scope="row"
-                          key={col.key}
-                          data-align={col.align}
-                          data-truncate={col.truncate || undefined}
-                        >
-                          {href ? (
-                            <KitLink className="m-row-link" href={href}>
-                              {content}
-                            </KitLink>
-                          ) : (
-                            content
-                          )}
-                        </th>
-                      ) : (
-                        <td
-                          key={col.key}
-                          data-align={col.align}
-                          data-truncate={col.truncate || undefined}
-                        >
-                          {content}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-            </tbody>
+            {groupBy ? (
+              groupRows(rows, visibleRows, groupBy).map(([label, group]) => (
+                <tbody key={label}>
+                  <TableGroupRow label={label} span={span} />
+                  {group.map(renderRow)}
+                </tbody>
+              ))
+            ) : (
+              <tbody>{visibleRows.map(renderRow)}</tbody>
+            )}
           </table>
         </div>
       )}
@@ -876,18 +904,36 @@ export function Table({
   caption,
   captionVisible = false,
   columns,
-  rows,
+  rows = [],
+  groups,
   rowHeaders = true,
   striped = false,
 }: {
   caption: string;
   captionVisible?: boolean;
   columns: { key: string; label: string; align?: "left" | "right" }[];
-  rows: Record<string, ReactNode>[];
+  rows?: Record<string, ReactNode>[];
+  /** Labelled row groups, each its own tbody under a full-width header row. Ungrouped rows render first. */
+  groups?: { label: string; rows: Record<string, ReactNode>[] }[];
   /** Treat the first column as row headers. */
   rowHeaders?: boolean;
   striped?: boolean;
 }) {
+  const renderRow = (row: Record<string, ReactNode>, i: number) => (
+    <tr key={i}>
+      {columns.map((col, index) =>
+        index === 0 && rowHeaders ? (
+          <th key={col.key} scope="row" data-align={col.align}>
+            {row[col.key]}
+          </th>
+        ) : (
+          <td key={col.key} data-align={col.align}>
+            {row[col.key]}
+          </td>
+        ),
+      )}
+    </tr>
+  );
   return (
     <div
       className="m-table"
@@ -909,23 +955,13 @@ export function Table({
             ))}
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr key={i}>
-              {columns.map((col, index) =>
-                index === 0 && rowHeaders ? (
-                  <th key={col.key} scope="row" data-align={col.align}>
-                    {row[col.key]}
-                  </th>
-                ) : (
-                  <td key={col.key} data-align={col.align}>
-                    {row[col.key]}
-                  </td>
-                ),
-              )}
-            </tr>
-          ))}
-        </tbody>
+        {(!groups || rows.length > 0) && <tbody>{rows.map(renderRow)}</tbody>}
+        {groups?.map((group, g) => (
+          <tbody key={g}>
+            <TableGroupRow label={group.label} span={columns.length} />
+            {group.rows.map(renderRow)}
+          </tbody>
+        ))}
       </table>
     </div>
   );
