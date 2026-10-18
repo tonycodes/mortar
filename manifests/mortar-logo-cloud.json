@@ -19,7 +19,11 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ name: string; image?: string }[]"
+      "items": "{ name: string; image?: string }[]",
+      "layout": "\"inline\" | \"grid\" | \"split\"",
+      "title": "string",
+      "description": "string",
+      "actions": "LinkAction[]"
     },
     "states": [
       "Light",
@@ -31,7 +35,7 @@
     "usage": "Import { LogoCloud } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
-    "dependencies": []
+    "dependencies": ["mortar-action-link"]
   },
   "preview": {
     "source": "previews/LogoCloudPreview.tsx"

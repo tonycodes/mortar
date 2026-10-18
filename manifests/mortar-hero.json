@@ -24,7 +24,8 @@
       "actions": "LinkAction[]",
       "children": "ReactNode",
       "align": "center | split",
-      "headingLevel": "1 | 2"
+      "headingLevel": "1 | 2",
+      "background": "ReactNode"
     },
     "states": [
       "Light",

@@ -19,7 +19,7 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ value: string; label: string }[]"
+      "items": "{ value: string; label: string; description?: string }[]"
     },
     "states": [
       "Light",

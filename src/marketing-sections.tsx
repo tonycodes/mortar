@@ -85,7 +85,8 @@ export function StatGroup({
   items,
 }: {
   label: string;
-  items: { value: string; label: string }[];
+  /** description: optional supporting sentence under the value. */
+  items: { value: string; label: string; description?: string }[];
 }) {
   return (
     <dl
@@ -97,6 +98,9 @@ export function StatGroup({
         <div key={item.label}>
           <dt>{item.label}</dt>
           <dd>{item.value}</dd>
+          {item.description && (
+            <dd className="m-stat-description">{item.description}</dd>
+          )}
         </div>
       ))}
     </dl>

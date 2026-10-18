@@ -20,7 +20,8 @@
     "props": {
       "title": "string",
       "description": "ReactNode",
-      "items": "{ question: string; answer: ReactNode }[]"
+      "items": "{ question: string; answer: ReactNode }[]",
+      "layout": "\"split\" | \"centered\" | \"grid\""
     },
     "states": [
       "Light",

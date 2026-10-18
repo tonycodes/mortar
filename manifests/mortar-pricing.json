@@ -22,7 +22,9 @@
       "description": "string",
       "plans": "{ id: string; name: string; description: string; monthly: string; annual?: string; unit?: string; annualUnit?: string; features: string[]; action: LinkAction; featured?: boolean; availability?: \"available\" | \"coming-soon\" | \"unavailable\"; availabilityLabel?: string }[]",
       "tone": "\"surface\" | \"inverse\"",
-      "billingToggle": "boolean"
+      "billingToggle": "boolean",
+      "layout": "\"cards\" | \"detailed\"",
+      "featuresLabel": "string"
     },
     "states": [
       "Light",
