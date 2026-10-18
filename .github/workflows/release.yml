@@ -1,0 +1,183 @@
+name: Release package
+on:
+  workflow_run:
+    workflows: [Mortar contribution checks]
+    branches: [main]
+    types: [completed]
+permissions:
+  contents: read
+concurrency:
+  group: npm-release
+  cancel-in-progress: false
+env:
+  REGISTRY: https://git.tony.codes/api/packages/tony/npm/
+jobs:
+  prepare:
+    # Builds the exact checked main commit without any release credential.
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+      publish: ${{ steps.plan.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Decide whether this commit carries an unpublished version
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          [[ "$SHA" =~ ^[0-9a-f]{40}$ ]]
+          VERSION=$(node -p 'require("./package.json").version')
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          MAIN_SHA=$(gh api "repos/$REPO/git/ref/heads/main" --jq .object.sha)
+          if [ "$MAIN_SHA" != "$SHA" ]; then
+            echo "Superseded run; the latest main commit releases $VERSION if needed." >> "$GITHUB_STEP_SUMMARY"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" > "$RUNNER_TEMP/view.txt" 2> "$RUNNER_TEMP/view.err"; then
+            if [ -s "$RUNNER_TEMP/view.txt" ]; then
+              echo "$VERSION is already published; nothing to release." >> "$GITHUB_STEP_SUMMARY"
+              echo "publish=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          elif ! grep -q E404 "$RUNNER_TEMP/view.err"; then
+            cat "$RUNNER_TEMP/view.err"
+            exit 1
+          fi
+          echo "publish=true" >> "$GITHUB_OUTPUT"
+      - if: steps.plan.outputs.publish == 'true'
+        run: npm ci --ignore-scripts
+      - name: Build and prepare the release archive
+        if: steps.plan.outputs.publish == 'true'
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          VERSION: ${{ steps.plan.outputs.version }}
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          npm run build
+          npm run release:prepare
+          DIR="release/$VERSION"
+          node -e '
+            const [dir, sha, version] = process.argv.slice(1);
+            const { readFileSync } = require("node:fs");
+            const { createHash } = require("node:crypto");
+            const p = JSON.parse(readFileSync(dir + "/provenance.json", "utf8"));
+            const hash = "sha512-" + createHash("sha512").update(readFileSync(dir + "/" + p.filename)).digest("base64");
+            if (p.commit !== sha || p.version !== version || p.integrity !== hash) throw Error("Provenance does not match the archive");
+          ' "$DIR" "$SHA" "$VERSION"
+      - if: steps.plan.outputs.publish == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortar-release-${{ steps.plan.outputs.version }}
+          path: release/${{ steps.plan.outputs.version }}/
+          if-no-files-found: error
+          retention-days: 30
+
+  publish:
+    # Receives the registry token; never checks out or runs repository code.
+    needs: prepare
+    if: needs.prepare.outputs.publish == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment:
+      name: npm-release
+      url: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.prepare.outputs.version }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: mortar-release-${{ needs.prepare.outputs.version }}
+          path: ${{ runner.temp }}/release
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: ${{ env.REGISTRY }}
+          scope: "@tony-ui"
+      - name: Verify the archive against its provenance
+        working-directory: ${{ runner.temp }}/release
+        env:
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          TGZ="tony-ui-mortar-$VERSION.tgz"
+          [ "$(jq -r .commit provenance.json)" = "$SHA" ]
+          [ "$(jq -r .version provenance.json)" = "$VERSION" ]
+          [ "$(jq -r .filename provenance.json)" = "$TGZ" ]
+          [ "$(jq -r .integrity provenance.json)" = "sha512-$(openssl dgst -sha512 -binary "$TGZ" | base64 -w0)" ]
+      - name: Create the immutable tag and GitHub release
+        working-directory: ${{ runner.temp }}/release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          TAG="v$VERSION"
+          TGZ="tony-ui-mortar-$VERSION.tgz"
+          if TAGGED=$(gh api "repos/$REPO/commits/$TAG" --jq .sha 2>/dev/null); then
+            [ "$TAGGED" = "$SHA" ] || { echo "::error::$TAG already points at $TAGGED"; exit 1; }
+          else
+            OBJECT=$(gh api "repos/$REPO/git/tags" -f tag="$TAG" -f message="Mortar $VERSION" -f object="$SHA" -f type=commit --jq .sha)
+            gh api "repos/$REPO/git/refs" -f ref="refs/tags/$TAG" -f sha="$OBJECT" > /dev/null
+          fi
+          if gh release view "$TAG" --repo "$REPO" > /dev/null 2>&1; then
+            # A rerun publishes the archive already attached to the release, never a rebuilt one.
+            mkdir existing
+            gh release download "$TAG" --repo "$REPO" -p "$TGZ" -p provenance.json -D existing
+            cmp existing/provenance.json provenance.json || {
+              cp existing/provenance.json existing/"$TGZ" .
+              [ "$(jq -r .commit provenance.json)" = "$SHA" ]
+              [ "$(jq -r .integrity provenance.json)" = "sha512-$(openssl dgst -sha512 -binary "$TGZ" | base64 -w0)" ]
+            }
+          else
+            PRERELEASE=()
+            [[ "$VERSION" == *-* ]] && PRERELEASE=(--prerelease)
+            gh release create "$TAG" --repo "$REPO" --verify-tag --title "$TAG" --generate-notes "${PRERELEASE[@]}" "$TGZ" provenance.json
+          fi
+      - name: Publish the exact archive
+        working-directory: ${{ runner.temp }}/release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.MORTAR_REGISTRY_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          set -euo pipefail
+          [ -n "$NODE_AUTH_TOKEN" ] || { echo "::error::MORTAR_REGISTRY_TOKEN is not set on the npm-release environment"; exit 1; }
+          DIST_TAG=latest
+          [[ "$VERSION" == *-* ]] && DIST_TAG=next
+          if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" 2>/dev/null | grep -q .; then
+            echo "$VERSION was published by an earlier attempt; verifying it."
+          else
+            npm publish "tony-ui-mortar-$VERSION.tgz" --registry "$REGISTRY" --tag "$DIST_TAG"
+          fi
+      - name: Verify the registry serves the released archive
+        working-directory: ${{ runner.temp }}/release
+        env:
+          # setup-node otherwise sends a placeholder token, which the registry rejects.
+          NODE_AUTH_TOKEN: ${{ secrets.MORTAR_REGISTRY_TOKEN }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          INTEGRITY=$(npm view "@tony-ui/mortar@$VERSION" dist.integrity --registry "$REGISTRY")
+          [ "$INTEGRITY" = "$(jq -r .integrity provenance.json)" ] || { echo "::error::Registry integrity $INTEGRITY differs from provenance"; exit 1; }
+          echo "Published [@tony-ui/mortar@$VERSION](https://github.com/$REPO/releases/tag/v$VERSION) from the checked main commit." >> "$GITHUB_STEP_SUMMARY"
