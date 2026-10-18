@@ -528,7 +528,9 @@ export const implementations = {
     await second.click();
     await expect(second).toHaveAttribute("aria-pressed", "true");
     await expect(
-      root.locator(".m-product-gallery > .m-product-image img"),
+      root.locator(
+        ".m-product-gallery:not([data-gallery]) > .m-product-image img",
+      ),
     ).toHaveAttribute("alt", "Natural canvas tote bag, in use");
     // Options are native radio groups: arrow keys move the choice.
     const sizes = root.getByRole("group", { name: "Size" });

@@ -268,6 +268,8 @@ export interface GridListItem {
   cover?: { src: string; alt: string };
   /** Badges, dates or counts under the description. */
   meta?: ReactNode;
+  /** Term/value pairs under the body, e.g. a client card's last invoice and amount. */
+  details?: { term: string; details: ReactNode }[];
   actions?: ReactNode;
 }
 /** Responsive grid of cards for people, projects or files. */
@@ -276,15 +278,23 @@ export function GridList({
   items,
   columns = 3,
   headingLevel = 3,
+  actionsLayout = "inline",
 }: {
   label: string;
   items: GridListItem[];
   columns?: 2 | 3 | 4;
   headingLevel?: 2 | 3 | 4;
+  /** `split` gives each action an equal cell divided by shared borders, e.g. Email | Call. */
+  actionsLayout?: "inline" | "split";
 }) {
   const Heading = `h${headingLevel}` as const;
   return (
-    <ul className="m-grid-list" aria-label={label} data-columns={columns}>
+    <ul
+      className="m-grid-list"
+      aria-label={label}
+      data-columns={columns}
+      data-actions={actionsLayout === "split" ? "split" : undefined}
+    >
       {items.map((item) => (
         <li key={item.id}>
           {item.cover && (
@@ -308,6 +318,16 @@ export function GridList({
               {item.meta && <div className="m-grid-list-meta">{item.meta}</div>}
             </div>
           </div>
+          {item.details && item.details.length > 0 && (
+            <dl className="m-grid-list-details">
+              {item.details.map((detail) => (
+                <div key={detail.term}>
+                  <dt>{detail.term}</dt>
+                  <dd>{detail.details}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
           {item.actions && (
             <div className="m-grid-list-actions">{item.actions}</div>
           )}

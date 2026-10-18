@@ -208,7 +208,62 @@ export function EcommerceCase({ name }: { name: string }) {
   let example: ReactNode;
   switch (name) {
     case "ProductList":
-      example = <UI.ProductList label="New arrivals" products={products} />;
+      example = (
+        <UI.Stack gap="xl">
+          <UI.ProductList label="New arrivals" products={products} />
+          <UI.ProductList
+            label="Bags and kitchen"
+            variant="card"
+            columns={3}
+            products={[
+              {
+                ...products[0],
+                id: "tote-card",
+                meta: undefined,
+                badge: undefined,
+                description:
+                  "Heavy organic canvas with an inside pocket and leather handles.",
+                swatches: [
+                  { label: "Natural", swatch: "#d9c9a8" },
+                  { label: "Black", swatch: "#26262a" },
+                ],
+                action: (
+                  <UI.Button variant="secondary">
+                    Add to bag<span className="m-sr-only"> Canvas tote</span>
+                  </UI.Button>
+                ),
+              },
+              {
+                ...products[1],
+                id: "mug-card",
+                meta: undefined,
+                description: "Hand-glazed stoneware that keeps coffee warm.",
+                swatches: [
+                  { label: "Sage", swatch: "#9fb5a0" },
+                  { label: "Chalk", swatch: "#f1efe9" },
+                ],
+                action: (
+                  <UI.Button variant="secondary">
+                    Add to bag<span className="m-sr-only"> Stoneware mug</span>
+                  </UI.Button>
+                ),
+              },
+              {
+                ...products[2],
+                id: "tee-card",
+                meta: undefined,
+                description: "Midweight organic cotton with a relaxed fit.",
+                swatches: [{ label: "Charcoal", swatch: "#3d3f45" }],
+                action: (
+                  <UI.Button variant="secondary">
+                    Add to bag<span className="m-sr-only"> Organic tee</span>
+                  </UI.Button>
+                ),
+              },
+            ]}
+          />
+        </UI.Stack>
+      );
       break;
     case "ProductOverview":
       example = (
@@ -252,6 +307,21 @@ export function EcommerceCase({ name }: { name: string }) {
           <output aria-label="Bag">
             {added} added · {selected.colour} · {selected.size}
           </output>
+          <UI.Divider />
+          <UI.ProductOverview
+            name="Stoneware mug"
+            headingLevel={2}
+            price="£18"
+            gallery="grid"
+            description="Hand-glazed stoneware, shown from every side at once."
+            images={[
+              { src: mug("9fb5a0"), alt: "Sage stoneware mug, front" },
+              { src: mug("b8c7b0"), alt: "Sage stoneware mug, in daylight" },
+              { src: mug("7e9480"), alt: "Sage stoneware mug, in shade" },
+            ]}
+            addLabel="Add mug"
+            onAdd={() => setAdded((n) => n + 1)}
+          />
         </>
       );
       break;
@@ -366,7 +436,44 @@ export function EcommerceCase({ name }: { name: string }) {
       );
       break;
     case "OrderHistory":
-      example = <UI.OrderHistory orders={orders} />;
+      example = (
+        <UI.Stack gap="xl">
+          <UI.OrderHistory orders={orders} />
+          <UI.OrderHistory
+            headingLevel={3}
+            orders={[
+              {
+                ...orders[0],
+                id: "o3",
+                number: "WU88191207",
+                href: "#order-3",
+                actions: (
+                  <UI.ActionLink
+                    label="View invoice"
+                    href="#invoice-3"
+                    variant="secondary"
+                  />
+                ),
+                items: orders[0].items.map((item) => ({
+                  ...item,
+                  actions: (
+                    <>
+                      <UI.Button variant="secondary">
+                        Buy again<span className="m-sr-only"> {item.name}</span>
+                      </UI.Button>
+                      <UI.ActionLink
+                        label={`View ${item.name.toLowerCase()}`}
+                        href={item.href ?? "#product"}
+                        variant="ghost"
+                      />
+                    </>
+                  ),
+                })),
+              },
+            ]}
+          />
+        </UI.Stack>
+      );
       break;
     default:
       example = (

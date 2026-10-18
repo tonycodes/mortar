@@ -559,9 +559,14 @@ export function PageHeading({
     </header>
   );
 }
+const trendArrow = {
+  up: "M10 15V5m0 0-4 4m4-4 4 4",
+  down: "M10 5v10m0 0-4-4m4 4 4-4",
+};
 export function MetricGroup({
   label,
   items,
+  variant = "shared",
 }: {
   label: string;
   items: {
@@ -571,10 +576,20 @@ export function MetricGroup({
     tone?: Tone;
     /** Decorative icon before the label. */
     icon?: ReactNode;
+    /** Direction of the change: adds an arrow and announces "Increased by" or "Decreased by". */
+    trend?: "up" | "down";
+    /** Prior value for comparison, shown as "from …" after the value. */
+    previous?: string;
   }[];
+  /** `shared` joins metrics with shared borders; `cards` separates them into individual cards. */
+  variant?: "shared" | "cards";
 }) {
   return (
-    <dl className="m-metrics" aria-label={label}>
+    <dl
+      className="m-metrics"
+      aria-label={label}
+      data-variant={variant === "cards" ? "cards" : undefined}
+    >
       {items.map((item) => (
         <div key={item.label}>
           <dt>
@@ -587,8 +602,35 @@ export function MetricGroup({
           </dt>
           <dd>
             <strong>{item.value}</strong>
+            {item.previous && (
+              <span className="m-metric-previous">from {item.previous}</span>
+            )}
             {item.change && (
-              <span className={`m-tone-${item.tone || "neutral"}`}>
+              <span
+                className={`m-tone-${item.tone || "neutral"}`}
+                data-trend={item.trend}
+              >
+                {item.trend && (
+                  <>
+                    <svg
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path
+                        d={trendArrow[item.trend]}
+                        stroke="currentColor"
+                        strokeWidth="1.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span className="m-sr-only">
+                      {item.trend === "up" ? "Increased by " : "Decreased by "}
+                    </span>
+                  </>
+                )}
                 {item.change}
               </span>
             )}

@@ -2,7 +2,7 @@
   "id": "mortar-order-history",
   "logicalId": "order-history",
   "name": "OrderHistory",
-  "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link; empty state when there are none.",
+  "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions; empty state when there are none.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
@@ -17,7 +17,7 @@
   },
   "contract": {
     "props": {
-      "orders": "Order[] ({ id; number; date; total; status; href; items: { id; name; image; quantity; price; href? }[] })",
+      "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
       "headingLevel": "2 | 3",
       "emptyTitle": "string",
       "emptyDescription": "string"

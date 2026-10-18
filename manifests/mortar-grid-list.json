@@ -2,7 +2,7 @@
   "id": "mortar-grid-list",
   "logicalId": "grid-list",
   "name": "GridList",
-  "description": "Mortar grid list: a responsive grid of cards for people, projects or files, with avatar or cover media, metadata and actions; a linked title makes the whole card clickable.",
+  "description": "Mortar grid list: a responsive grid of cards for people, projects, clients or files, with avatar or cover media, metadata, term/value details and actions (inline or split into equal cells with shared borders); a linked title makes the whole card clickable.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
@@ -18,9 +18,10 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "GridListItem[] ({ id: string; title: string; description?: string; href?: string; media?: ReactNode; cover?: { src: string; alt: string }; meta?: ReactNode; actions?: ReactNode })",
+      "items": "GridListItem[] ({ id: string; title: string; description?: string; href?: string; media?: ReactNode; cover?: { src: string; alt: string }; meta?: ReactNode; details?: { term: string; details: ReactNode }[]; actions?: ReactNode })",
       "columns": "2 | 3 | 4",
-      "headingLevel": "2 | 3 | 4"
+      "headingLevel": "2 | 3 | 4",
+      "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)"
     },
     "states": [
       "Light",

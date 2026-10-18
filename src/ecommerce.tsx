@@ -25,6 +25,12 @@ export interface ProductCard {
   /** Colour, variant or category shown under the name. */
   meta?: string;
   badge?: string;
+  /** Supporting text under the name, e.g. in the card variant. */
+  description?: string;
+  /** Available colours as data: `swatch` is any CSS colour the consumer supplies; the label is announced. */
+  swatches?: { label: string; swatch: string }[];
+  /** Control under the card, e.g. an "Add to bag" button; it sits above the card link. */
+  action?: ReactNode;
 }
 
 /** Grid of product cards; each card's name link covers the card. */
@@ -33,15 +39,23 @@ export function ProductList({
   products,
   columns = 4,
   headingLevel = 3,
+  variant = "plain",
 }: {
   label: string;
   products: ProductCard[];
   columns?: 2 | 3 | 4;
   headingLevel?: 2 | 3 | 4;
+  /** `card` frames each product with a border, for listings with full details. */
+  variant?: "plain" | "card";
 }) {
   const Heading = `h${headingLevel}` as const;
   return (
-    <ul className="m-product-list" aria-label={label} data-columns={columns}>
+    <ul
+      className="m-product-list"
+      aria-label={label}
+      data-columns={columns}
+      data-variant={variant === "card" ? "card" : undefined}
+    >
       {products.map((product) => (
         <li key={product.id}>
           <div className="m-product-image">
@@ -59,8 +73,31 @@ export function ProductList({
               <KitLink href={product.href}>{product.name}</KitLink>
             </Heading>
             {product.meta && <p className="m-product-meta">{product.meta}</p>}
+            {product.description && (
+              <p className="m-product-summary">{product.description}</p>
+            )}
           </div>
           <p className="m-product-price">{product.price}</p>
+          {product.swatches && product.swatches.length > 0 && (
+            <ul
+              className="m-product-swatches"
+              aria-label={`${product.name} colours`}
+            >
+              {product.swatches.map((colour) => (
+                <li key={colour.label}>
+                  <span
+                    className="m-swatch"
+                    aria-hidden="true"
+                    style={{ background: colour.swatch }}
+                  />
+                  <span className="m-sr-only">{colour.label}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {product.action && (
+            <div className="m-product-card-action">{product.action}</div>
+          )}
         </li>
       ))}
     </ul>
@@ -104,6 +141,7 @@ export function ProductOverview({
   details = [],
   headingLevel = 1,
   hideName = false,
+  gallery = "thumbnails",
 }: {
   name: string;
   price: string;
@@ -121,6 +159,8 @@ export function ProductOverview({
   headingLevel?: 1 | 2;
   /** Omit the name heading when a container (e.g. a dialog title) already shows it. */
   hideName?: boolean;
+  /** `grid` shows every image at once: the first large, the rest tiered beneath it. */
+  gallery?: "thumbnails" | "grid";
 }) {
   const [current, setCurrent] = useState(0);
   const group = useId();
@@ -128,32 +168,42 @@ export function ProductOverview({
   const shown = images[current] ?? images[0];
   return (
     <div className="m-product-overview">
-      <div className="m-product-gallery">
-        {shown && (
-          <div className="m-product-image">
-            <img src={shown.src} alt={shown.alt} />
-          </div>
-        )}
-        {images.length > 1 && (
-          <div
-            className="m-product-thumbs"
-            role="group"
-            aria-label="Product images"
-          >
-            {images.map((image, index) => (
-              <button
-                key={image.src}
-                type="button"
-                aria-pressed={index === current}
-                aria-label={`Show image ${index + 1} of ${images.length}: ${image.alt}`}
-                onClick={() => setCurrent(index)}
-              >
-                <img src={image.src} alt="" />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      {gallery === "grid" ? (
+        <div className="m-product-gallery" data-gallery="grid">
+          {images.map((image) => (
+            <div key={image.src} className="m-product-image">
+              <img src={image.src} alt={image.alt} />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="m-product-gallery">
+          {shown && (
+            <div className="m-product-image">
+              <img src={shown.src} alt={shown.alt} />
+            </div>
+          )}
+          {images.length > 1 && (
+            <div
+              className="m-product-thumbs"
+              role="group"
+              aria-label="Product images"
+            >
+              {images.map((image, index) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  aria-pressed={index === current}
+                  aria-label={`Show image ${index + 1} of ${images.length}: ${image.alt}`}
+                  onClick={() => setCurrent(index)}
+                >
+                  <img src={image.src} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       <div className="m-product-details">
         {!hideName && <Heading>{name}</Heading>}
         <p className="m-product-price">{price}</p>
@@ -606,6 +656,8 @@ export interface Order {
   total: string;
   status: string;
   href: string;
+  /** Order-level controls in the header, e.g. "View invoice" or an actions menu. */
+  actions?: ReactNode;
   items: {
     id: string;
     name: string;
@@ -613,6 +665,8 @@ export interface Order {
     quantity: number;
     price: string;
     href?: string;
+    /** Per-item controls, e.g. "Buy again" and "View product". */
+    actions?: ReactNode;
   }[];
 }
 
@@ -653,6 +707,9 @@ export function OrderHistory({
               <KitLink href={order.href}>
                 View order<span className="m-sr-only"> {order.number}</span>
               </KitLink>
+              {order.actions && (
+                <div className="m-order-actions">{order.actions}</div>
+              )}
             </header>
             <p className="m-order-status">{order.status}</p>
             <ul className="m-order-items">
@@ -676,6 +733,9 @@ export function OrderHistory({
                     <p className="m-product-meta">Qty {item.quantity}</p>
                   </div>
                   <p className="m-product-price">{item.price}</p>
+                  {item.actions && (
+                    <div className="m-order-item-actions">{item.actions}</div>
+                  )}
                 </li>
               ))}
             </ul>

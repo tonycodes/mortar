@@ -5711,3 +5711,185 @@
     }
   }
 }
+
+/* Data and ecommerce variants: product swatches and cards, image-grid gallery,
+   order quick actions, grid-list details and split actions, metric trends. */
+@layer components {
+  .m-product-summary {
+    margin: 6px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-product-list > li > :is(.m-product-swatches, .m-product-card-action) {
+    grid-column: 1 / -1;
+  }
+  .m-product-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .m-product-swatches .m-swatch {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--m-line-strong);
+  }
+  .m-product-card-action {
+    position: relative;
+    z-index: 1;
+    margin-top: 8px;
+  }
+  .m-product-card-action > :is(.m-button, button, a) {
+    width: 100%;
+  }
+  .m-product-list[data-variant="card"] > li > .m-product-swatches {
+    grid-row: 3;
+  }
+  .m-product-list[data-variant="card"] > li > .m-product-card-action {
+    grid-row: 5;
+  }
+  @media (max-width: 560px) {
+    .m-product-list[data-variant="card"][data-columns] {
+      --m-product-columns: 1;
+    }
+  }
+  /* Fixed rows keep each card's action on its bottom edge across a row of cards. */
+  .m-product-list[data-variant="card"] > li {
+    grid-template-rows: auto auto auto 1fr auto;
+    padding-bottom: 16px;
+    overflow: hidden;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  .m-product-list[data-variant="card"] > li:has(a:hover) {
+    border-color: var(--m-line-strong);
+  }
+  .m-product-list[data-variant="card"] .m-product-image {
+    border-radius: 0;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-product-list[data-variant="card"] > li > :not(.m-product-image) {
+    margin-inline: 16px;
+  }
+  .m-product-list[data-variant="card"] > li > .m-product-info {
+    margin-right: 0;
+  }
+  .m-product-gallery[data-gallery="grid"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .m-product-gallery[data-gallery="grid"] > .m-product-image:first-child {
+    grid-column: 1 / -1;
+  }
+  .m-product-gallery[data-gallery="grid"]
+    > .m-product-image:last-child:nth-child(even) {
+    grid-column: 1 / -1;
+    aspect-ratio: 2;
+  }
+  .m-order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m-order-item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    grid-column: 2 / -1;
+  }
+  .m-grid-list-details {
+    margin: 0;
+    padding: 0 16px 8px;
+    font-size: 13px;
+  }
+  .m-grid-list-details > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-grid-list-details dt {
+    color: var(--m-muted);
+  }
+  .m-grid-list-details dd {
+    margin: 0;
+    color: var(--m-ink);
+    font-weight: 500;
+    text-align: right;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > * {
+    display: inline-flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--m-ink);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > * + * {
+    border-left: 1px solid var(--m-line);
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > :hover {
+    background: var(--m-sunken);
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > :focus-visible {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--m-muted);
+  }
+  .m-metrics .m-metric-previous {
+    color: var(--m-muted);
+    font: 13px var(--m-font);
+    letter-spacing: 0;
+  }
+  .m-metrics span[data-trend] {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .m-metrics span[data-trend] svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .m-metrics[data-variant="cards"] {
+    gap: 16px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+  }
+  .m-metrics[data-variant="cards"] > div,
+  .m-metrics[data-variant="cards"] > div:last-child {
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+}

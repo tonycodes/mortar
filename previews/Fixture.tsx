@@ -541,6 +541,41 @@ export function PreviewCase({ name }: { name: string }) {
           ]}
         />
       );
+      example = (
+        <UI.Stack gap="xl">
+          {example}
+          <UI.MetricGroup
+            label="Last 30 days"
+            variant="cards"
+            items={[
+              {
+                label: "Total subscribers",
+                value: "71,897",
+                previous: "70,946",
+                change: "12%",
+                trend: "up",
+                tone: "success",
+              },
+              {
+                label: "Avg. open rate",
+                value: "58.16%",
+                previous: "56.14%",
+                change: "2.02%",
+                trend: "up",
+                tone: "success",
+              },
+              {
+                label: "Avg. click rate",
+                value: "24.57%",
+                previous: "28.62%",
+                change: "4.05%",
+                trend: "down",
+                tone: "danger",
+              },
+            ]}
+          />
+        </UI.Stack>
+      );
       break;
     case "DataTable":
       example = (
