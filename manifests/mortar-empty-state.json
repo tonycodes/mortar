@@ -21,7 +21,11 @@
       "title": "string",
       "description": "string",
       "action": "ReactNode",
-      "icon": "ReactNode"
+      "icon": "ReactNode",
+      "dashed": "boolean",
+      "align": "center | start",
+      "headingLevel": "2 | 3 | 4",
+      "children": "ReactNode"
     },
     "states": [
       "Light",

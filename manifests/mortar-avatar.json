@@ -22,7 +22,9 @@
       "src": "string",
       "size": "xs | sm | md | lg | xl",
       "shape": "circle | square",
-      "status": "online | offline"
+      "status": "online | offline",
+      "statusPosition": "bottom | top",
+      "placeholder": "initials | icon"
     },
     "states": [
       "Light",

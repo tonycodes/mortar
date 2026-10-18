@@ -383,12 +383,96 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "EmptyState":
       example = (
-        <UI.EmptyState
-          title="No projects yet"
-          description="Create your first project to get started."
-          icon={icons.inbox}
-          action={<UI.Button>Create project</UI.Button>}
-        />
+        <UI.Stack gap="xl">
+          <UI.EmptyState
+            title="No projects yet"
+            description="Create your first project to get started."
+            icon={icons.inbox}
+            action={<UI.Button>Create project</UI.Button>}
+          />
+          <UI.EmptyState
+            dashed
+            title="No databases"
+            description="Connect a database to start syncing records."
+            icon={icons.download}
+            action={<UI.Button variant="secondary">Add database</UI.Button>}
+          />
+          <UI.EmptyState
+            align="start"
+            title="Projects"
+            description="You haven’t created a project yet. Get started by selecting a template or start from an empty project."
+          >
+            <UI.Stack gap="md" align="start">
+              <UI.StackedList
+                label="Project templates"
+                items={[
+                  {
+                    id: "list",
+                    title: "Create a list",
+                    description:
+                      "Another to-do system you’ll try but eventually give up on.",
+                    href: "#example",
+                    leading: (
+                      <span className="m-empty-icon" aria-hidden="true">
+                        {icons.edit}
+                      </span>
+                    ),
+                  },
+                  {
+                    id: "calendar",
+                    title: "Create a calendar",
+                    description: "Stay on top of your deadlines, or don’t.",
+                    href: "#example",
+                    leading: (
+                      <span className="m-empty-icon" aria-hidden="true">
+                        {icons.calendar}
+                      </span>
+                    ),
+                  },
+                  {
+                    id: "timeline",
+                    title: "Create a timeline",
+                    description:
+                      "Get a birds-eye view of your procrastination.",
+                    href: "#example",
+                    leading: (
+                      <span className="m-empty-icon" aria-hidden="true">
+                        {icons.clock}
+                      </span>
+                    ),
+                  },
+                ]}
+              />
+              <a href="#example">Or start from an empty project →</a>
+            </UI.Stack>
+          </UI.EmptyState>
+          <UI.EmptyState
+            title="Add team members"
+            description="You haven’t added any team members to your project yet."
+            icon={icons.mail}
+          >
+            <UI.StackedList
+              label="Team members previously added to projects"
+              items={["Lindsay Walton", "Courtney Henry", "Tom Cook"].map(
+                (person) => ({
+                  id: person,
+                  title: person,
+                  description: "Designer",
+                  leading: <UI.Avatar name={person} size="sm" />,
+                  trailing: (
+                    <UI.Button
+                      variant="secondary"
+                      size="sm"
+                      aria-label={`Invite ${person}`}
+                    >
+                      Invite
+                    </UI.Button>
+                  ),
+                }),
+              )}
+            />
+          </UI.EmptyState>
+        </UI.Stack>
       );
       break;
     case "AppShell":
