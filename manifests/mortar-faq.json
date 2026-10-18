@@ -20,7 +20,8 @@
     "props": {
       "title": "string",
       "description": "ReactNode",
-      "items": "{ question: string; answer: ReactNode }[]"
+      "items": "{ question: string; answer: ReactNode }[]",
+      "layout": "\"split\" | \"centered\" | \"grid\""
     },
     "states": [
       "Light",
@@ -44,7 +45,7 @@
     "probe": "faq"
   },
   "integrity": {
-    "source": "1a7500865945ee08d4ceb52d1954d7bfe2caf2b0abcbfeb2de944fa6ca19294e",
-    "preview": "4fca62886592e3afc25041be1ebc967a1340ded827aaeb7fd9d62f2bad8fc27c"
+    "source": "e391ff7f06551a72be0716a82cfcda09d83b40752e03b0eb31cc80f5b2813796",
+    "preview": "730041084e525742a7077615205f7e868cf0b7b9c6a5967a4693757bca8fabd6"
   }
 }

@@ -651,11 +651,26 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Hero":
       example = (
-        <UI.Hero
-          title="Build with confidence."
-          description="One shared foundation for your next product."
-          actions={[action]}
-        />
+        <>
+          <UI.Hero
+            title="Build with confidence."
+            description="One shared foundation for your next product."
+            actions={[action]}
+          />
+          <UI.Hero
+            headingLevel={2}
+            eyebrow="New in spring"
+            title="Plan trips the whole team can see."
+            description="Itineraries, bookings and budgets stay in one shared place."
+            actions={[action, { label: "Take the tour", href: "#tour" }]}
+            background={
+              <img
+                alt=""
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f6d365'/%3E%3Cstop offset='1' stop-color='%23fda085'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='600' fill='url(%23s)'/%3E%3Ccircle cx='880' cy='190' r='90' fill='%23fff3c4'/%3E%3Cpath d='M0 420 L220 250 L420 400 L640 220 L900 430 L1200 280 L1200 600 L0 600Z' fill='%234b6cb7'/%3E%3Cpath d='M0 500 L300 380 L560 500 L820 360 L1200 520 L1200 600 L0 600Z' fill='%23243b55'/%3E%3C/svg%3E"
+              />
+            }
+          />
+        </>
       );
       break;
     case "FeatureGrid":
@@ -714,60 +729,129 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "LogoCloud":
       example = (
-        <UI.LogoCloud
-          label="Example companies"
-          items={[
-            { name: "Northwind" },
-            { name: "Contoso" },
-            { name: "Fabrikam" },
-          ]}
-        />
+        <>
+          <UI.LogoCloud
+            label="Example companies"
+            items={[
+              { name: "Northwind" },
+              { name: "Contoso" },
+              { name: "Fabrikam" },
+            ]}
+          />
+          <UI.LogoCloud
+            label="Teams on the grid"
+            layout="grid"
+            items={[
+              { name: "Tailspin" },
+              { name: "Litware" },
+              { name: "Proseware" },
+              { name: "Adatum" },
+            ]}
+          />
+          <UI.LogoCloud
+            label="Customer logos"
+            layout="split"
+            title="Trusted by teams that ship every day"
+            description="From two-person studios to global support desks."
+            actions={[{ label: "Read case studies", href: "#cases" }]}
+            items={[
+              { name: "Woodgrove" },
+              { name: "Wingtip" },
+              { name: "Relecloud" },
+              { name: "Lucerne" },
+            ]}
+          />
+        </>
       );
       break;
     case "Pricing":
       example = (
-        <UI.Pricing
-          title="Example plans"
-          description="Illustrative pricing, not a purchase."
-          plans={[
-            {
-              id: "basic",
-              name: "Basic",
-              description: "Personal projects",
-              monthly: "$0",
-              annual: "$0",
-              unit: "/month",
-              annualUnit: "/year",
-              features: ["One project"],
-              action,
-            },
-            {
-              id: "team",
-              name: "Team",
-              description: "Small teams",
-              monthly: "$20",
-              annual: "$16",
-              unit: "/month",
-              annualUnit: "/year",
-              features: ["Unlimited projects"],
-              action,
-              featured: true,
-            },
-          ]}
-        />
+        <>
+          <UI.Pricing
+            title="Example plans"
+            description="Illustrative pricing, not a purchase."
+            plans={[
+              {
+                id: "basic",
+                name: "Basic",
+                description: "Personal projects",
+                monthly: "$0",
+                annual: "$0",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["One project"],
+                action,
+              },
+              {
+                id: "team",
+                name: "Team",
+                description: "Small teams",
+                monthly: "$20",
+                annual: "$16",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["Unlimited projects"],
+                action,
+                featured: true,
+              },
+            ]}
+          />
+          <UI.Pricing
+            title="One price, everything included"
+            description="A single plan with no tiers to compare."
+            layout="detailed"
+            plans={[
+              {
+                id: "lifetime",
+                name: "Lifetime membership",
+                description: "Pay once and keep every update.",
+                monthly: "$349",
+                unit: "One-time payment, USD",
+                features: [
+                  "Private forum access",
+                  "Member resources",
+                  "Entry to annual conference",
+                  "Official member t-shirt",
+                ],
+                action: { label: "Get access", href: "#access" },
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "FAQ":
       example = (
-        <UI.FAQ
-          title="Questions"
-          items={[
-            {
-              question: "Is the kit open source?",
-              answer: "Yes. Mortar is MIT licensed.",
-            },
-          ]}
-        />
+        <>
+          <UI.FAQ
+            title="Questions"
+            items={[
+              {
+                question: "Is the kit open source?",
+                answer: "Yes. Mortar is MIT licensed.",
+              },
+            ]}
+          />
+          <UI.FAQ
+            title="Everything else"
+            description="Answers stay visible so they can be scanned."
+            layout="grid"
+            items={[
+              {
+                question: "Does it support dark mode?",
+                answer: "Yes. Every component reads the semantic tokens.",
+              },
+              {
+                question: "Can I change the brand colour?",
+                answer: "Set the accent token once in your theme.",
+              },
+              {
+                question: "Which frameworks are supported?",
+                answer: "React 19 with Tailwind CSS 4.",
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "CallToAction":

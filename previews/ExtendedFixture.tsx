@@ -432,13 +432,35 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "StatGroup":
       example = (
-        <UI.StatGroup
-          label="Platform numbers"
-          items={[
-            { value: "99.99%", label: "Uptime" },
-            { value: "41s", label: "Median build" },
-          ]}
-        />
+        <>
+          <UI.StatGroup
+            label="Platform numbers"
+            items={[
+              { value: "99.99%", label: "Uptime" },
+              { value: "41s", label: "Median build" },
+            ]}
+          />
+          <UI.StatGroup
+            label="Support numbers"
+            items={[
+              {
+                value: "4 min",
+                label: "First response",
+                description: "Median across every channel last quarter.",
+              },
+              {
+                value: "92%",
+                label: "Solved on first reply",
+                description: "Customers rarely need to ask twice.",
+              },
+              {
+                value: "24/7",
+                label: "Coverage",
+                description: "Follow-the-sun teams in three time zones.",
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "TestimonialGrid":

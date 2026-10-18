@@ -19,7 +19,7 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ value: string; label: string }[]"
+      "items": "{ value: string; label: string; description?: string }[]"
     },
     "states": [
       "Light",
@@ -42,7 +42,7 @@
     "states": []
   },
   "integrity": {
-    "source": "5e679b8cf070492c85ee08102419189374ba8aa00493bf56a00f6b8ee0557e2d",
-    "preview": "7e41b13114ab77ee375fd929ab25c4d6a494ccddab38ed99bda07e5f9b9cff40"
+    "source": "099e6545c157d829bd1470288754f990352de69ea9cdb1a4e716ec211072a74e",
+    "preview": "7962f9c4053aa05f48b26f667df0ef68040c41c2d2f6cc1ed094af7e43116bb8"
   }
 }
