@@ -23,7 +23,9 @@
       "eyebrow": "string",
       "actions": "ReactNode",
       "breadcrumbs": "{ label: string; href?: string }[]",
-      "headingLevel": "1 | 2"
+      "headingLevel": "1 | 2",
+      "meta": "{ label: string; icon?: ReactNode }[]",
+      "avatar": "ReactNode"
     },
     "states": [
       "Light",
@@ -46,7 +48,7 @@
     "states": []
   },
   "integrity": {
-    "source": "bbc158abc432e1edca13a642b15099dccecf863bccd2d6cef2f7562744ad0d23",
-    "preview": "5a98f06c177b1d20c0aa5313c3f8a8214e58ad62a1dfc3f2f5f49045a2f8610d"
+    "source": "0f39d74e5dfc803359718239ee2952f2a36b735bba0bbc57bc15acfc43e0572f",
+    "preview": "ebae95ddc3138540eb715c3b319f3b924edae4939fb731373c558321c2a39034"
   }
 }

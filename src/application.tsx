@@ -368,6 +368,8 @@ export function PageHeading({
   actions,
   breadcrumbs,
   headingLevel = 1,
+  meta = [],
+  avatar,
 }: {
   title: string;
   description?: string;
@@ -375,17 +377,43 @@ export function PageHeading({
   actions?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   headingLevel?: 1 | 2;
+  /** Facts under the title, e.g. "Full-time", "Remote", "Closes 9 January". */
+  meta?: { label: string; icon?: ReactNode }[];
+  /** Avatar or logo beside the title (decorative). */
+  avatar?: ReactNode;
 }) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
+  const text = (
+    <div>
+      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
+      <Heading>{title}</Heading>
+      {description && <p>{description}</p>}
+      {meta.length > 0 && (
+        <ul className="m-heading-meta">
+          {meta.map((item, index) => (
+            <li key={`${item.label}:${index}`}>
+              {item.icon && <span aria-hidden="true">{item.icon}</span>}
+              {item.label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
   return (
     <header className="m-page-heading">
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
       <div className="m-heading-row">
-        <div>
-          {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-          <Heading>{title}</Heading>
-          {description && <p>{description}</p>}
-        </div>
+        {avatar ? (
+          <div className="m-heading-main">
+            <span className="m-heading-avatar" aria-hidden="true">
+              {avatar}
+            </span>
+            {text}
+          </div>
+        ) : (
+          text
+        )}
         {actions && <div className="m-actions">{actions}</div>}
       </div>
     </header>

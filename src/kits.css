@@ -5068,3 +5068,103 @@
     height: 16px;
   }
 }
+
+/* Detail screens: heading meta and avatars, palette icons and attachment lists. */
+@layer components {
+  .m-heading-main {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+  }
+  .m-heading-avatar {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-heading-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-heading-meta li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .m-heading-meta svg {
+    width: 16px;
+    height: 16px;
+  }
+  .m-palette-icon {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--m-radius);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+  }
+  .m-palette-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  /* With an icon, the label takes the space so it stays beside the icon. */
+  .m-palette-icon + span {
+    flex: 1;
+    min-width: 0;
+  }
+  .m-attachments {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+  }
+  .m-attachments li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--m-line);
+    font-size: var(--m-font-size);
+  }
+  .m-attachments li:last-child {
+    border-bottom: 0;
+  }
+  .m-attachment-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--m-muted);
+  }
+  .m-attachment-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .m-attachment-text {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+    min-width: 0;
+  }
+  .m-attachment-name {
+    overflow: hidden;
+    color: var(--m-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-attachment-size {
+    color: var(--m-muted);
+  }
+  .m-attachments a {
+    flex-shrink: 0;
+    color: var(--m-link);
+    font-weight: 600;
+  }
+}

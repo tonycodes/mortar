@@ -89,8 +89,9 @@ export {
   CheckList,
   DescriptionList,
   GridList,
+  AttachmentList,
 } from "./display.js";
-export type { GridListItem } from "./display.js";
+export type { GridListItem, Attachment } from "./display.js";
 export {
   Stack,
   Container,

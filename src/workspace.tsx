@@ -60,6 +60,8 @@ export interface CommandItem {
   description?: string;
   meta?: string;
   shortcut?: string[];
+  /** Icon or avatar before the label. */
+  icon?: ReactNode;
   /** [start, end) character range of label to emphasise as the query match. */
   match?: [number, number];
   onSelect: () => void;
@@ -148,6 +150,11 @@ export function CommandPalette({
                     {group.items.map((item) => (
                       <ComboboxOption key={item.id} value={item} as={Fragment}>
                         <div className="m-palette-item">
+                          {item.icon && (
+                            <span className="m-palette-icon" aria-hidden="true">
+                              {item.icon}
+                            </span>
+                          )}
                           <span>
                             <span className="m-palette-label">
                               <Highlight
