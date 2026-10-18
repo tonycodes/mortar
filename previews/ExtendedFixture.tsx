@@ -54,6 +54,14 @@ export function ExtendedCase({ name }: { name: string }) {
           <UI.Avatar name="Ana Kovač" status="online" />
           <UI.Avatar name="Example Person" size="lg" shape="square" />
           <UI.Avatar name="Tom Cook" size="xl" />
+          <UI.Avatar name="Unknown member" placeholder="icon" />
+          <UI.Avatar
+            name="Lindsay Walton"
+            placeholder="icon"
+            shape="square"
+            size="lg"
+          />
+          <UI.Avatar name="Tom Cook" status="online" statusPosition="top" />
         </div>
       );
       break;

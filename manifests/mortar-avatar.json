@@ -22,7 +22,9 @@
       "src": "string",
       "size": "xs | sm | md | lg | xl",
       "shape": "circle | square",
-      "status": "online | offline"
+      "status": "online | offline",
+      "statusPosition": "bottom | top",
+      "placeholder": "initials | icon"
     },
     "states": [
       "Light",
@@ -45,7 +47,7 @@
     "states": []
   },
   "integrity": {
-    "source": "8291782728696970369b33cb3ecf47babd806f31e9987b65dca6daac90115254",
-    "preview": "fd443f9c2084462eab0a67e84d30123db69f97278c2c805020af816a1cc1a203"
+    "source": "5040860edca13d4c602e92e11486256b7d94922a6dc6a8fa48205629f1aba2b1",
+    "preview": "309cebbbb222527b5f1074276e800c802600f33a964ea0bc60f54cbf145f0e77"
   }
 }

@@ -773,23 +773,41 @@ export function EmptyState({
   description,
   action,
   icon,
+  dashed,
+  align = "center",
+  headingLevel = 3,
+  children,
 }: {
   title: string;
   description: string;
   action?: ReactNode;
   /** Decorative illustration or icon above the title. */
   icon?: ReactNode;
+  /** Draws a dashed-border box, e.g. a "create your first" tile. */
+  dashed?: boolean;
+  /** `start` left-aligns the content for starting-point and template layouts. */
+  align?: "center" | "start";
+  /** Heading level for the title so the page keeps a correct outline. */
+  headingLevel?: 2 | 3 | 4;
+  /** Extra content after the action, e.g. starting points or recommendations. */
+  children?: ReactNode;
 }) {
+  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
   return (
-    <div className="m-empty">
+    <div
+      className="m-empty"
+      data-dashed={dashed || undefined}
+      data-align={align === "start" ? "start" : undefined}
+    >
       {icon && (
         <span className="m-empty-icon" aria-hidden="true">
           {icon}
         </span>
       )}
-      <h3>{title}</h3>
+      <Heading>{title}</Heading>
       <p>{description}</p>
       {action}
+      {children && <div className="m-empty-extra">{children}</div>}
     </div>
   );
 }

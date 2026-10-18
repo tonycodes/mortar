@@ -16,12 +16,18 @@ export function Avatar({
   size = "md",
   shape = "circle",
   status,
+  statusPosition = "bottom",
+  placeholder = "initials",
 }: {
   name: string;
   src?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   shape?: "circle" | "square";
   status?: "online" | "offline";
+  /** Corner of the status dot; `top` suits notification indicators. */
+  statusPosition?: "bottom" | "top";
+  /** Shown when there is no `src`: the name's initials or a generic person icon. */
+  placeholder?: "initials" | "icon";
 }) {
   return (
     <span
@@ -32,6 +38,15 @@ export function Avatar({
     >
       {src ? (
         <img src={src} alt="" />
+      ) : placeholder === "icon" ? (
+        <svg
+          className="m-avatar-placeholder"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0 1 12.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
+        </svg>
       ) : (
         <span aria-hidden="true">{initials(name)}</span>
       )}
@@ -39,6 +54,7 @@ export function Avatar({
         <span
           className="m-avatar-status"
           data-status={status}
+          data-position={statusPosition === "top" ? "top" : undefined}
           aria-hidden="true"
         />
       )}
