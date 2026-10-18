@@ -2,7 +2,7 @@
   "id": "mortar-section-heading",
   "logicalId": "section-heading",
   "name": "SectionHeading",
-  "description": "Mortar section heading: a heading for a section within a page, with description, actions and an optional divider.",
+  "description": "Mortar section heading: a heading for a section within a page, with description, actions, an optional divider and optional page tabs below that replace the divider.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
@@ -21,7 +21,8 @@
       "description": "string",
       "actions": "ReactNode",
       "headingLevel": "2 | 3 | 4",
-      "divider": "boolean"
+      "divider": "boolean",
+      "tabs": "ReactNode"
     },
     "states": [
       "Light",
@@ -44,7 +45,7 @@
     "states": []
   },
   "integrity": {
-    "source": "6258c81b7f231e2083fce971f12c5ec2abd693adcb2554880311c55fbb6438c7",
-    "preview": "35c8bf46cf7d314e1115a27ac9643f27e6dc4b9d2037c391d363c28ac3bb519e"
+    "source": "eb437447946e345c539027bef179a26adb9c591c6187776de118383a90223a9a",
+    "preview": "1931f755fcf4548162286810b0ab5fa85f567feda791c065c7bbfb57ace776c8"
   }
 }

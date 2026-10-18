@@ -20,6 +20,9 @@ const icons = {
     "M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",
   ),
   calendar: icon("M7 3v3M17 3v3M4 9h16M5 5h14v15H5z"),
+  card: icon(
+    "M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 10h18",
+  ),
 };
 
 const meetings: UI.CalendarEvent[] = [
@@ -95,6 +98,51 @@ export function StructureCase({ name }: { name: string }) {
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
   switch (name) {
+    case "TabNav":
+      example = (
+        <UI.Stack gap="xl">
+          <UI.TabNav
+            label="Settings"
+            items={[
+              { label: "General", href: "#general", icon: icons.home },
+              { label: "Billing", href: "#billing", icon: icons.card },
+              {
+                label: "Team",
+                href: "#team",
+                icon: icons.team,
+                current: true,
+                count: 4,
+              },
+              { label: "Projects", href: "#projects", icon: icons.folder },
+            ]}
+          />
+          <UI.TabNav
+            label="Candidates"
+            variant="pills"
+            items={[
+              { label: "Applied", href: "#applied", count: 52 },
+              {
+                label: "Phone screening",
+                href: "#screening",
+                count: 6,
+                current: true,
+              },
+              { label: "Interview", href: "#interview", count: 4 },
+              { label: "Offer", href: "#offer" },
+            ]}
+          />
+          <UI.TabNav
+            label="Account"
+            fullWidth
+            items={[
+              { label: "My account", href: "#account", current: true },
+              { label: "Company", href: "#company" },
+              { label: "Team members", href: "#members" },
+            ]}
+          />
+        </UI.Stack>
+      );
+      break;
     case "ProgressSteps":
       example = (
         <UI.Stack gap="xl">

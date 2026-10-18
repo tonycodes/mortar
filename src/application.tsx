@@ -332,6 +332,59 @@ export function Breadcrumbs({
     </nav>
   );
 }
+export interface TabNavItem {
+  label: string;
+  href: string;
+  /** The page being shown; marked aria-current="page". */
+  current?: boolean;
+  /** Shown after the label, e.g. a number of items. */
+  count?: number | string;
+  icon?: ReactNode;
+}
+/** Tabs that link between pages, e.g. settings sections. Uses links, not ARIA tabs. */
+export function TabNav({
+  label,
+  items,
+  variant = "underline",
+  fullWidth = false,
+}: {
+  label: string;
+  items: TabNavItem[];
+  /** Underlined tabs (default) or filled pills. */
+  variant?: "underline" | "pills";
+  /** Stretch the tabs to share the full width. */
+  fullWidth?: boolean;
+}) {
+  return (
+    <nav
+      className="m-tab-nav"
+      aria-label={label}
+      data-variant={variant === "underline" ? undefined : variant}
+      data-full-width={fullWidth || undefined}
+    >
+      <ul>
+        {items.map((item) => (
+          <li key={item.href}>
+            <KitLink
+              href={item.href}
+              aria-current={item.current ? "page" : undefined}
+            >
+              {item.icon && (
+                <span className="m-tab-icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+              )}
+              {item.label}
+              {item.count !== undefined && (
+                <span className="m-tab-count">{item.count}</span>
+              )}
+            </KitLink>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
 export interface ProgressStep {
   id: string;
   name: string;
