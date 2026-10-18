@@ -2,7 +2,7 @@
   "id": "mortar-metric-group",
   "logicalId": "metric-group",
   "name": "MetricGroup",
-  "description": "Mortar application metric group, using central semantic tokens.",
+  "description": "Mortar application metric group with optional icons, previous values and trend arrows; shared borders by default or separate cards, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
@@ -19,7 +19,8 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode }[]"
+      "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\")",
+      "variant": "\"shared\" | \"cards\" (default \"shared\")"
     },
     "states": [
       "Light",
@@ -42,7 +43,7 @@
     "states": []
   },
   "integrity": {
-    "source": "beed1129b464620bb940412e3d6b51a56e72f308ddb59395c4f44626aba79917",
-    "preview": "0fac3c6a40ff5776571ec78e24e7270a4e9262b1734c9cb1601954ddc705978b"
+    "source": "4c5a06653b2ee97da995a6ff71be8523b879c9d77b2f38c4c0fca5ad6fbbe782",
+    "preview": "52b7996a506e15b13e25fe6b219965a8a0458abb93697f8e00b385f878460792"
   }
 }

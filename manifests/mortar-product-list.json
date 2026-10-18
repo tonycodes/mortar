@@ -2,7 +2,7 @@
   "id": "mortar-product-list",
   "logicalId": "product-list",
   "name": "ProductList",
-  "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card.",
+  "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card. Opt-in card variant with supporting text, colour swatches (consumer-supplied colours, announced by label) and a per-card action.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
@@ -18,9 +18,10 @@
   "contract": {
     "props": {
       "label": "string",
-      "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string }; meta?: string; badge?: string })",
+      "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string }; meta?: string; badge?: string; description?: string; swatches?: { label: string; swatch: string }[]; action?: ReactNode })",
       "columns": "2 | 3 | 4",
-      "headingLevel": "2 | 3 | 4"
+      "headingLevel": "2 | 3 | 4",
+      "variant": "\"plain\" | \"card\" (default \"plain\"; card frames each product for full-detail listings)"
     },
     "states": [
       "Light",
@@ -43,7 +44,7 @@
     "states": []
   },
   "integrity": {
-    "source": "d33d447777a9431f2e16aaee367a0484f3814775d424bee73ae3d6f2b179a92d",
-    "preview": "972670f19e0c55663fe04b9e1b58d7be4beb99cff6116f355f8af8f33534686d"
+    "source": "e62eef77792639f535c828afa53fb72baa0ee5e157cc3bfdb3511d166abcf192",
+    "preview": "34a4b0b7272254b2f821ed56e7ed514e9fa3a2c844bf9872a7a131e6b4403b73"
   }
 }
