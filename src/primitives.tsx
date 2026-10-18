@@ -488,10 +488,16 @@ export function Tabs({
   value,
   onChange,
   items,
+  variant = "underline",
+  fullWidth = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  /** Underlined tabs (default) or filled pills. */
+  variant?: "underline" | "pills";
+  /** Stretch the tabs to share the full width. */
+  fullWidth?: boolean;
   items: {
     id: string;
     label: string;
@@ -508,6 +514,8 @@ export function Tabs({
         className="m-tabs"
         role="tablist"
         aria-label={label}
+        data-variant={variant === "underline" ? undefined : variant}
+        data-full-width={fullWidth || undefined}
         onKeyDown={(e) => {
           const i = items.findIndex((item) => item.id === value);
           let next = i;

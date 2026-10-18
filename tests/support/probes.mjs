@@ -189,9 +189,12 @@ export const implementations = {
     await page.keyboard.press("ArrowRight");
     await expect(tabs.nth(1)).toBeFocused();
     await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
-    await expect(root.getByRole("tabpanel")).toContainText("Activity");
+    await expect(root.getByRole("tabpanel").first()).toContainText("Activity");
     await tabs.first().click();
-    await expect(root.getByRole("tabpanel")).toContainText("Overview");
+    await expect(root.getByRole("tabpanel").first()).toContainText("Overview");
+    const pills = root.getByRole("tablist", { name: "Account sections" });
+    await pills.getByRole("tab", { name: "Billing" }).click();
+    await expect(root.getByRole("tabpanel", { name: "Billing" })).toBeVisible();
   },
   async segmented({ page, root }) {
     const button = root.getByRole("button", { name: "Activity" });

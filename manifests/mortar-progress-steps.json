@@ -1,0 +1,48 @@
+{
+  "id": "mortar-progress-steps",
+  "logicalId": "progress-steps",
+  "name": "ProgressSteps",
+  "description": "Mortar progress steps: where someone is in a multi-step flow, as numbered bars, circles with descriptions or compact bullets, with the current step marked for assistive technology.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.5.0",
+  "export": "ProgressSteps",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application", "navigation"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "steps": "ProgressStep[] ({ id: string; name: string; description?: string; href?: string; status: \"complete\" | \"current\" | \"upcoming\" })",
+      "label": "string",
+      "variant": "\"simple\" | \"circles\" | \"bullets\""
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { ProgressSteps } from @tony-ui/mortar. Compose with the public typed props.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ProgressStepsPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-progress-steps",
+    "states": []
+  },
+  "integrity": {
+    "source": "beed1129b464620bb940412e3d6b51a56e72f308ddb59395c4f44626aba79917",
+    "preview": "1c2a60d3d2671e357df7fa82dbd202bdd107df0879a6d0e44aa56a257c92b31a"
+  }
+}

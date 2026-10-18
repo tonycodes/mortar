@@ -45,6 +45,7 @@ export {
   Navbar,
   StackedShell,
   Breadcrumbs,
+  ProgressSteps,
   ActionPanel,
 } from "./application.js";
 export type {
@@ -57,6 +58,7 @@ export type {
   SignInProvider,
   SidebarProps,
   BreadcrumbItem,
+  ProgressStep,
 } from "./application.js";
 export {
   MarketingHeader,

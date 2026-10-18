@@ -95,6 +95,67 @@ export function StructureCase({ name }: { name: string }) {
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
   switch (name) {
+    case "ProgressSteps":
+      example = (
+        <UI.Stack gap="xl">
+          <UI.ProgressSteps
+            label="Job application"
+            steps={[
+              {
+                id: "details",
+                name: "Job details",
+                href: "#details",
+                status: "complete",
+              },
+              { id: "form", name: "Application form", status: "current" },
+              { id: "preview", name: "Preview", status: "upcoming" },
+            ]}
+          />
+          <div className="max-w-md">
+            <UI.ProgressSteps
+              label="Account setup"
+              variant="circles"
+              steps={[
+                {
+                  id: "account",
+                  name: "Create account",
+                  description: "Vitae sed mi luctus laoreet.",
+                  href: "#account",
+                  status: "complete",
+                },
+                {
+                  id: "profile",
+                  name: "Profile information",
+                  description: "Cursus semper viverra facilisis et et.",
+                  status: "current",
+                },
+                {
+                  id: "business",
+                  name: "Business information",
+                  description: "Penatibus eu quis ante.",
+                  status: "upcoming",
+                },
+              ]}
+            />
+          </div>
+          <UI.ProgressSteps
+            label="Checkout"
+            variant="bullets"
+            steps={[
+              {
+                id: "cart",
+                name: "Cart",
+                href: "#cart",
+                status: "complete",
+              },
+              { id: "shipping", name: "Shipping", status: "current" },
+              { id: "payment", name: "Payment", status: "upcoming" },
+              { id: "review", name: "Review", status: "upcoming" },
+            ]}
+          />
+        </UI.Stack>
+      );
+      break;
     case "Breadcrumbs":
       example = (
         <UI.Stack gap="lg">
