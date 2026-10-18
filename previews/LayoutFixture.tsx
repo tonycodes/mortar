@@ -197,6 +197,26 @@ export function LayoutCase({ name }: { name: string }) {
             headingLevel={3}
             divider={false}
           />
+          <UI.SectionHeading
+            title="Candidates"
+            actions={<UI.Button>Add candidate</UI.Button>}
+            tabs={
+              <UI.TabNav
+                label="Candidate stages"
+                items={[
+                  { label: "Applied", href: "#applied" },
+                  {
+                    label: "Phone screening",
+                    href: "#screening",
+                    current: true,
+                  },
+                  { label: "Interview", href: "#interview" },
+                  { label: "Offer", href: "#offer" },
+                  { label: "Hired", href: "#hired" },
+                ]}
+              />
+            }
+          />
         </UI.Stack>
       );
       break;

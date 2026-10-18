@@ -175,6 +175,7 @@ export function Hero({
   children,
   align = "center",
   headingLevel = 1,
+  background,
 }: {
   eyebrow?: string;
   title: string;
@@ -183,10 +184,22 @@ export function Hero({
   children?: ReactNode;
   align?: "center" | "split";
   headingLevel?: 1 | 2;
+  /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
+  background?: ReactNode;
 }) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
-    <section className={`m-hero m-hero-${align}`} data-m-component="Hero">
+    <section
+      className={`m-hero m-hero-${align}`}
+      data-m-component="Hero"
+      data-background={background ? true : undefined}
+      data-tone={background ? "inverse" : undefined}
+    >
+      {background && (
+        <div className="m-hero-background" aria-hidden="true">
+          {background}
+        </div>
+      )}
       <div>
         {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
         <Heading>{title}</Heading>
@@ -404,15 +417,70 @@ export function Testimonial({
 export function LogoCloud({
   label,
   items,
+  layout = "inline",
+  title,
+  description,
+  actions = [],
 }: {
   label: string;
   items: { name: string; image?: string }[];
+  /** inline: a centred row. grid: logos in bordered tiles. split: copy beside a logo grid. */
+  layout?: "inline" | "grid" | "split";
+  /** Split layout heading; the label still names the section. */
+  title?: string;
+  /** Split layout supporting copy. */
+  description?: string;
+  /** Split layout links, e.g. a case-studies link. */
+  actions?: LinkAction[];
 }) {
+  const list = (
+    <ul>
+      {items.map((item) => (
+        <li key={item.name}>
+          {item.image ? (
+            <img src={item.image} alt={item.name} />
+          ) : (
+            <span>{item.name}</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+  if (layout === "split") {
+    return (
+      <section
+        className="m-logo-cloud"
+        aria-label={label}
+        data-m-component="LogoCloud"
+        data-layout="split"
+      >
+        <div className="m-logo-cloud-copy">
+          {title ? <h2>{title}</h2> : <p>{label}</p>}
+          {description && (
+            <p className="m-section-description">{description}</p>
+          )}
+          {actions.length > 0 && (
+            <div className="m-actions">
+              {actions.map((action, i) => (
+                <ActionLink
+                  key={`${action.label}:${action.href}:${i}`}
+                  {...action}
+                  variant={i === 0 ? "primary" : "secondary"}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        {list}
+      </section>
+    );
+  }
   return (
     <section
       className="m-logo-cloud"
       aria-label={label}
       data-m-component="LogoCloud"
+      data-layout={layout === "grid" ? "grid" : undefined}
     >
       <p>{label}</p>
       <ul>
@@ -449,6 +517,8 @@ export function Pricing({
   plans,
   tone,
   billingToggle,
+  layout = "cards",
+  featuresLabel = "What’s included",
 }: {
   title: string;
   description?: string;
@@ -456,6 +526,10 @@ export function Pricing({
   /** Applied only to featured cards. Omitted plans keep the page surface. */
   tone?: MarketingTone;
   billingToggle?: boolean;
+  /** cards: side-by-side tiers. detailed: one full-width row per plan, features beside a price panel (single-price pages). */
+  layout?: "cards" | "detailed";
+  /** Heading above the feature list in the detailed layout. */
+  featuresLabel?: string;
 }) {
   const [annual, setAnnual] = useState(true);
   const showToggle =
@@ -486,12 +560,41 @@ export function Pricing({
           </button>
         </div>
       )}
-      <div className="m-pricing-grid">
+      <div
+        className="m-pricing-grid"
+        data-layout={layout === "detailed" ? "detailed" : undefined}
+      >
         {plans.map((plan) => {
           const availability = plan.availability ?? "available";
           const blocked = availability !== "available";
           const showAnnual = annual && Boolean(plan.annual);
           const suffix = showAnnual ? plan.annualUnit : plan.unit;
+          const price = (
+            <div className="m-price">
+              <strong>{showAnnual ? plan.annual : plan.monthly}</strong>
+              {suffix && <span>{suffix}</span>}
+            </div>
+          );
+          const features = (
+            <ul>
+              {plan.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+          );
+          const purchase = blocked ? (
+            <p role="status">
+              {plan.availabilityLabel ??
+                (availability === "coming-soon"
+                  ? "Coming soon"
+                  : "Unavailable")}
+            </p>
+          ) : (
+            <ActionLink
+              {...plan.action}
+              variant={layout === "detailed" ? "primary" : "secondary"}
+            />
+          );
           return (
             <article
               key={plan.id}
@@ -499,26 +602,27 @@ export function Pricing({
               data-tone={plan.featured && tone ? tone : undefined}
               data-availability={blocked ? availability : undefined}
             >
-              <h3>{plan.name}</h3>
-              <p>{plan.description}</p>
-              <div className="m-price">
-                <strong>{showAnnual ? plan.annual : plan.monthly}</strong>
-                {suffix && <span>{suffix}</span>}
-              </div>
-              <ul>
-                {plan.features.map((feature) => (
-                  <li key={feature}>{feature}</li>
-                ))}
-              </ul>
-              {blocked ? (
-                <p role="status">
-                  {plan.availabilityLabel ??
-                    (availability === "coming-soon"
-                      ? "Coming soon"
-                      : "Unavailable")}
-                </p>
+              {layout === "detailed" ? (
+                <>
+                  <div className="m-pricing-detail">
+                    <h3>{plan.name}</h3>
+                    <p>{plan.description}</p>
+                    <p className="m-pricing-features-label">{featuresLabel}</p>
+                    {features}
+                  </div>
+                  <div className="m-pricing-offer">
+                    {price}
+                    {purchase}
+                  </div>
+                </>
               ) : (
-                <ActionLink {...plan.action} variant="secondary" />
+                <>
+                  <h3>{plan.name}</h3>
+                  <p>{plan.description}</p>
+                  {price}
+                  {features}
+                  {purchase}
+                </>
               )}
             </article>
           );
@@ -531,17 +635,42 @@ export function FAQ({
   title,
   description,
   items,
+  layout = "split",
 }: {
   title: string;
   description?: ReactNode;
   items: { question: string; answer: ReactNode }[];
+  /** split: heading beside an accordion. centered: heading above a narrow accordion. grid: every answer visible in columns. */
+  layout?: "split" | "centered" | "grid";
 }) {
+  const head = (
+    <div>
+      <h2>{title}</h2>
+      {description && <div>{description}</div>}
+    </div>
+  );
+  if (layout === "grid") {
+    return (
+      <section className="m-faq" data-m-component="FAQ" data-layout="grid">
+        {head}
+        <dl className="m-faq-grid">
+          {items.map((item) => (
+            <div key={item.question}>
+              <dt>{item.question}</dt>
+              <dd>{item.answer}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    );
+  }
   return (
-    <section className="m-faq" data-m-component="FAQ">
-      <div>
-        <h2>{title}</h2>
-        {description && <div>{description}</div>}
-      </div>
+    <section
+      className="m-faq"
+      data-m-component="FAQ"
+      data-layout={layout === "centered" ? "centered" : undefined}
+    >
+      {head}
       <div>
         {items.map((item) => (
           <details key={item.question}>

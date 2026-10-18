@@ -21,7 +21,11 @@
       "title": "string",
       "description": "string",
       "action": "ReactNode",
-      "icon": "ReactNode"
+      "icon": "ReactNode",
+      "dashed": "boolean",
+      "align": "center | start",
+      "headingLevel": "2 | 3 | 4",
+      "children": "ReactNode"
     },
     "states": [
       "Light",
@@ -44,7 +48,7 @@
     "states": []
   },
   "integrity": {
-    "source": "5bcf70867f2603db60184fd8d185cdcc7d3652a011eb6fc2e6ea8a088f45ae7a",
-    "preview": "7892386a7723b99a9818ed288636ef9d84f3ba6dbcca4d2729bb427432071cb1"
+    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
+    "preview": "5e84a94544f128b254acbcca339e51cfdd8bcead99c68df82dd5699d382be3e9"
   }
 }

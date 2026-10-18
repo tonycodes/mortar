@@ -239,12 +239,15 @@ export function SectionHeading({
   actions,
   headingLevel = 2,
   divider = true,
+  tabs,
 }: {
   title: string;
   description?: string;
   actions?: ReactNode;
   headingLevel?: 2 | 3 | 4;
   divider?: boolean;
+  /** Page tabs (e.g. TabNav) below the title row; their underline replaces the divider. */
+  tabs?: ReactNode;
 }) {
   const Heading = `h${headingLevel}` as const;
   return (
@@ -254,6 +257,7 @@ export function SectionHeading({
         {description && <p>{description}</p>}
       </div>
       {actions && <div className="m-actions">{actions}</div>}
+      {tabs && <div className="m-section-heading-tabs">{tabs}</div>}
     </div>
   );
 }

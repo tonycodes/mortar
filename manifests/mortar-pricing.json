@@ -22,7 +22,9 @@
       "description": "string",
       "plans": "{ id: string; name: string; description: string; monthly: string; annual?: string; unit?: string; annualUnit?: string; features: string[]; action: LinkAction; featured?: boolean; availability?: \"available\" | \"coming-soon\" | \"unavailable\"; availabilityLabel?: string }[]",
       "tone": "\"surface\" | \"inverse\"",
-      "billingToggle": "boolean"
+      "billingToggle": "boolean",
+      "layout": "\"cards\" | \"detailed\"",
+      "featuresLabel": "string"
     },
     "states": [
       "Light",
@@ -46,7 +48,7 @@
     "probe": "pricing"
   },
   "integrity": {
-    "source": "1a7500865945ee08d4ceb52d1954d7bfe2caf2b0abcbfeb2de944fa6ca19294e",
-    "preview": "9f64541a2cde621ca2d58786a19515a9c0e512b759f58f11de9cc3ecec53a4fe"
+    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
+    "preview": "1bdc4e014a21feff99a9aa22e071316698992a6f1c3f488c6632c210059d39bb"
   }
 }

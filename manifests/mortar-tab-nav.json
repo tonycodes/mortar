@@ -1,0 +1,49 @@
+{
+  "id": "mortar-tab-nav",
+  "logicalId": "tab-nav",
+  "name": "TabNav",
+  "description": "Mortar tab navigation: tabs that link between pages, such as settings sections, as underlined tabs or pills with optional icons and counts; the current page is marked aria-current=\"page\".",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "version": "0.5.0",
+  "export": "TabNav",
+  "source": "src/application.tsx",
+  "capabilities": ["theme", "application", "navigation"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "provenance": {
+    "kitId": "application",
+    "exampleId": "mortar-application-reference"
+  },
+  "contract": {
+    "props": {
+      "label": "string",
+      "items": "TabNavItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode })",
+      "variant": "\"underline\" | \"pills\"",
+      "fullWidth": "boolean"
+    },
+    "states": [
+      "Light",
+      "Dark",
+      "Neutral brand",
+      "Green brand",
+      "Keyboard and focus"
+    ],
+    "usage": "Import { TabNav } from @tony-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/TabNavPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-tab-nav",
+    "states": []
+  },
+  "integrity": {
+    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
+    "preview": "ec613223857168e66169f1b0bc7a53e5a7a3712d9dbfdbc4c4506cac7f59b8e0"
+  }
+}

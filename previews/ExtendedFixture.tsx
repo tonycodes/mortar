@@ -54,6 +54,14 @@ export function ExtendedCase({ name }: { name: string }) {
           <UI.Avatar name="Ana Kovač" status="online" />
           <UI.Avatar name="Example Person" size="lg" shape="square" />
           <UI.Avatar name="Tom Cook" size="xl" />
+          <UI.Avatar name="Unknown member" placeholder="icon" />
+          <UI.Avatar
+            name="Lindsay Walton"
+            placeholder="icon"
+            shape="square"
+            size="lg"
+          />
+          <UI.Avatar name="Tom Cook" status="online" statusPosition="top" />
         </div>
       );
       break;
@@ -282,6 +290,72 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
+          <UI.GridList
+            label="Contacts"
+            actionsLayout="split"
+            items={[
+              { id: "jane", name: "Jane Cooper", role: "Regional paradigm" },
+              { id: "cody", name: "Cody Fisher", role: "Product directives" },
+              { id: "esther", name: "Esther Howard", role: "Forward response" },
+            ].map((person) => ({
+              id: person.id,
+              title: person.name,
+              description: person.role,
+              media: <UI.Avatar name={person.name} />,
+              actions: (
+                <>
+                  <a href={`#email-${person.id}`}>
+                    {icons.mail}Email
+                    <span className="m-sr-only"> {person.name}</span>
+                  </a>
+                  <a href={`#meet-${person.id}`}>
+                    {icons.calendar}Schedule
+                    <span className="m-sr-only"> with {person.name}</span>
+                  </a>
+                </>
+              ),
+            }))}
+          />
+          <UI.GridList
+            label="Clients"
+            columns={2}
+            items={[
+              {
+                id: "tuple",
+                title: "Tuple",
+                href: "#client-tuple",
+                media: <UI.Avatar name="Tuple" shape="square" />,
+                details: [
+                  { term: "Last invoice", details: "14 October 2026" },
+                  {
+                    term: "Amount",
+                    details: (
+                      <>
+                        £2,000.00 <UI.Badge tone="danger">Overdue</UI.Badge>
+                      </>
+                    ),
+                  },
+                ],
+              },
+              {
+                id: "savvycal",
+                title: "SavvyCal",
+                href: "#client-savvycal",
+                media: <UI.Avatar name="SavvyCal" shape="square" />,
+                details: [
+                  { term: "Last invoice", details: "2 October 2026" },
+                  {
+                    term: "Amount",
+                    details: (
+                      <>
+                        £14,000.00 <UI.Badge tone="success">Paid</UI.Badge>
+                      </>
+                    ),
+                  },
+                ],
+              },
+            ]}
+          />
         </UI.Stack>
       );
       break;
@@ -432,13 +506,35 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "StatGroup":
       example = (
-        <UI.StatGroup
-          label="Platform numbers"
-          items={[
-            { value: "99.99%", label: "Uptime" },
-            { value: "41s", label: "Median build" },
-          ]}
-        />
+        <>
+          <UI.StatGroup
+            label="Platform numbers"
+            items={[
+              { value: "99.99%", label: "Uptime" },
+              { value: "41s", label: "Median build" },
+            ]}
+          />
+          <UI.StatGroup
+            label="Support numbers"
+            items={[
+              {
+                value: "4 min",
+                label: "First response",
+                description: "Median across every channel last quarter.",
+              },
+              {
+                value: "92%",
+                label: "Solved on first reply",
+                description: "Customers rarely need to ask twice.",
+              },
+              {
+                value: "24/7",
+                label: "Coverage",
+                description: "Follow-the-sun teams in three time zones.",
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "TestimonialGrid":

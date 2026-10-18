@@ -46,6 +46,7 @@ export {
   StackedShell,
   Breadcrumbs,
   ProgressSteps,
+  TabNav,
   ActionPanel,
 } from "./application.js";
 export type {
@@ -59,6 +60,7 @@ export type {
   SidebarProps,
   BreadcrumbItem,
   ProgressStep,
+  TabNavItem,
 } from "./application.js";
 export {
   MarketingHeader,

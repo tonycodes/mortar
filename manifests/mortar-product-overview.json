@@ -2,7 +2,7 @@
   "id": "mortar-product-overview",
   "logicalId": "product-overview",
   "name": "ProductOverview",
-  "description": "Mortar product overview: gallery with selectable thumbnails, price, rating, option pickers (native radios, with colour swatches), add to bag and highlights.",
+  "description": "Mortar product overview: gallery with selectable thumbnails (or an opt-in image grid showing every image), price, rating, option pickers (native radios, with colour swatches), add to bag and highlights.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
@@ -30,7 +30,8 @@
       "adding": "boolean",
       "details": "string[]",
       "headingLevel": "1 | 2",
-      "hideName": "boolean"
+      "hideName": "boolean",
+      "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)"
     },
     "states": [
       "Light",
@@ -54,7 +55,7 @@
     "states": []
   },
   "integrity": {
-    "source": "d33d447777a9431f2e16aaee367a0484f3814775d424bee73ae3d6f2b179a92d",
-    "preview": "30d7ab3fc72dccbfd45be5b45fdce8d33b203e6b0e2c6e8099953d7d92f5214a"
+    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
+    "preview": "5b3f1cea012b9ffd8df26fc622aeeb8c71c480b60f404a17fc0ed6ac01665d66"
   }
 }

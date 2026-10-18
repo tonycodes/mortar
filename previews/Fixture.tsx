@@ -15,7 +15,8 @@ export function PreviewCase({ name }: { name: string }) {
     [colour, setColour] = useState("slate"),
     [section, setSection] = useState("profile"),
     [period, setPeriod] = useState("monthly"),
-    [selectedRows, setSelectedRows] = useState<string[]>([]);
+    [selectedRows, setSelectedRows] = useState<string[]>([]),
+    [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const controls = (
     <UI.Input
       label="Project name"
@@ -383,12 +384,96 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "EmptyState":
       example = (
-        <UI.EmptyState
-          title="No projects yet"
-          description="Create your first project to get started."
-          icon={icons.inbox}
-          action={<UI.Button>Create project</UI.Button>}
-        />
+        <UI.Stack gap="xl">
+          <UI.EmptyState
+            title="No projects yet"
+            description="Create your first project to get started."
+            icon={icons.inbox}
+            action={<UI.Button>Create project</UI.Button>}
+          />
+          <UI.EmptyState
+            dashed
+            title="No databases"
+            description="Connect a database to start syncing records."
+            icon={icons.download}
+            action={<UI.Button variant="secondary">Add database</UI.Button>}
+          />
+          <UI.EmptyState
+            align="start"
+            title="Projects"
+            description="You haven’t created a project yet. Get started by selecting a template or start from an empty project."
+          >
+            <UI.Stack gap="md" align="start">
+              <UI.StackedList
+                label="Project templates"
+                items={[
+                  {
+                    id: "list",
+                    title: "Create a list",
+                    description:
+                      "Another to-do system you’ll try but eventually give up on.",
+                    href: "#example",
+                    leading: (
+                      <span className="m-empty-icon" aria-hidden="true">
+                        {icons.edit}
+                      </span>
+                    ),
+                  },
+                  {
+                    id: "calendar",
+                    title: "Create a calendar",
+                    description: "Stay on top of your deadlines, or don’t.",
+                    href: "#example",
+                    leading: (
+                      <span className="m-empty-icon" aria-hidden="true">
+                        {icons.calendar}
+                      </span>
+                    ),
+                  },
+                  {
+                    id: "timeline",
+                    title: "Create a timeline",
+                    description:
+                      "Get a birds-eye view of your procrastination.",
+                    href: "#example",
+                    leading: (
+                      <span className="m-empty-icon" aria-hidden="true">
+                        {icons.clock}
+                      </span>
+                    ),
+                  },
+                ]}
+              />
+              <a href="#example">Or start from an empty project →</a>
+            </UI.Stack>
+          </UI.EmptyState>
+          <UI.EmptyState
+            title="Add team members"
+            description="You haven’t added any team members to your project yet."
+            icon={icons.mail}
+          >
+            <UI.StackedList
+              label="Team members previously added to projects"
+              items={["Lindsay Walton", "Courtney Henry", "Tom Cook"].map(
+                (person) => ({
+                  id: person,
+                  title: person,
+                  description: "Designer",
+                  leading: <UI.Avatar name={person} size="sm" />,
+                  trailing: (
+                    <UI.Button
+                      variant="secondary"
+                      size="sm"
+                      aria-label={`Invite ${person}`}
+                    >
+                      Invite
+                    </UI.Button>
+                  ),
+                }),
+              )}
+            />
+          </UI.EmptyState>
+        </UI.Stack>
       );
       break;
     case "AppShell":
@@ -456,98 +541,234 @@ export function PreviewCase({ name }: { name: string }) {
           ]}
         />
       );
+      example = (
+        <UI.Stack gap="xl">
+          {example}
+          <UI.MetricGroup
+            label="Last 30 days"
+            variant="cards"
+            items={[
+              {
+                label: "Total subscribers",
+                value: "71,897",
+                previous: "70,946",
+                change: "12%",
+                trend: "up",
+                tone: "success",
+              },
+              {
+                label: "Avg. open rate",
+                value: "58.16%",
+                previous: "56.14%",
+                change: "2.02%",
+                trend: "up",
+                tone: "success",
+              },
+              {
+                label: "Avg. click rate",
+                value: "24.57%",
+                previous: "28.62%",
+                change: "4.05%",
+                trend: "down",
+                tone: "danger",
+              },
+            ]}
+          />
+        </UI.Stack>
+      );
       break;
     case "DataTable":
       example = (
-        <UI.DataTable
-          caption="Projects"
-          rowLabel={(row) => row.name}
-          rowHref={(row) => `#project-${row.id}`}
-          defaultSort={{ key: "name", direction: "ascending" }}
-          selectedIds={selectedRows}
-          onSelectionChange={setSelectedRows}
-          striped
-          columns={[
-            {
-              key: "name",
-              label: "Name",
-              render: (row) => row.name,
-              sortable: true,
-            },
-            {
-              key: "status",
-              label: "Status",
-              render: (row) => <UI.Badge>{row.status}</UI.Badge>,
-            },
-            {
-              key: "owner",
-              label: "Owner",
-              render: (row) => row.owner,
-              truncate: true,
-              width: "30%",
-            },
-            {
-              key: "requests",
-              label: "Requests",
-              align: "right",
-              render: (row) => row.requests.toLocaleString("en-GB"),
-              sortable: true,
-            },
-            {
-              key: "actions",
-              label: "Actions",
-              render: (row) => (
-                <UI.Button onClick={() => setPage(2)}>
-                  Edit {row.name}
-                </UI.Button>
-              ),
-            },
-          ]}
-          rows={[
-            {
-              id: "northwind",
-              name: "Northwind",
-              status: "Active",
-              owner: "Platform team with a deliberately long owner name",
-              requests: 12840,
-            },
-            {
-              id: "acme",
-              name: "Acme",
-              status: "Paused",
-              owner: "Growth",
-              requests: 920,
-            },
-            {
-              id: "zephyr",
-              name: "Zephyr",
-              status: "Active",
-              owner: "Data",
-              requests: 4310,
-            },
-          ]}
-          footer={
-            <UI.Pagination page={page} pageCount={3} onChange={setPage} />
-          }
-        />
+        <UI.Stack gap="xl">
+          <UI.DataTable
+            caption="Projects"
+            rowLabel={(row) => row.name}
+            rowHref={(row) => `#project-${row.id}`}
+            defaultSort={{ key: "name", direction: "ascending" }}
+            selectedIds={selectedRows}
+            onSelectionChange={setSelectedRows}
+            striped
+            columns={[
+              {
+                key: "name",
+                label: "Name",
+                render: (row) => row.name,
+                sortable: true,
+              },
+              {
+                key: "status",
+                label: "Status",
+                render: (row) => <UI.Badge>{row.status}</UI.Badge>,
+              },
+              {
+                key: "owner",
+                label: "Owner",
+                render: (row) => row.owner,
+                truncate: true,
+                width: "30%",
+              },
+              {
+                key: "requests",
+                label: "Requests",
+                align: "right",
+                render: (row) => row.requests.toLocaleString("en-GB"),
+                sortable: true,
+              },
+              {
+                key: "actions",
+                label: "Actions",
+                render: (row) => (
+                  <UI.Button onClick={() => setPage(2)}>
+                    Edit {row.name}
+                  </UI.Button>
+                ),
+              },
+            ]}
+            rows={[
+              {
+                id: "northwind",
+                name: "Northwind",
+                status: "Active",
+                owner: "Platform team with a deliberately long owner name",
+                requests: 12840,
+              },
+              {
+                id: "acme",
+                name: "Acme",
+                status: "Paused",
+                owner: "Growth",
+                requests: 920,
+              },
+              {
+                id: "zephyr",
+                name: "Zephyr",
+                status: "Active",
+                owner: "Data",
+                requests: 4310,
+              },
+            ]}
+            footer={
+              <UI.Pagination page={page} pageCount={3} onChange={setPage} />
+            }
+          />
+          <UI.DataTable
+            caption="People by office"
+            rowLabel={(row) => row.name}
+            groupBy={(row) => row.office}
+            defaultSort={{ key: "name", direction: "ascending" }}
+            selectedIds={selectedPeople}
+            onSelectionChange={setSelectedPeople}
+            columns={[
+              {
+                key: "name",
+                label: "Name",
+                render: (row) => row.name,
+                sortable: true,
+              },
+              { key: "title", label: "Title", render: (row) => row.title },
+              { key: "email", label: "Email", render: (row) => row.email },
+              { key: "role", label: "Role", render: (row) => row.role },
+            ]}
+            rows={[
+              {
+                id: "lindsay",
+                name: "Lindsay Walton",
+                title: "Front-end developer",
+                email: "lindsay@example.com",
+                role: "Member",
+                office: "Edinburgh",
+              },
+              {
+                id: "tom",
+                name: "Tom Cook",
+                title: "Director of product",
+                email: "tom@example.com",
+                role: "Admin",
+                office: "London",
+              },
+              {
+                id: "courtney",
+                name: "Courtney Henry",
+                title: "Designer",
+                email: "courtney@example.com",
+                role: "Admin",
+                office: "Edinburgh",
+              },
+              {
+                id: "whitney",
+                name: "Whitney Francis",
+                title: "Copywriter",
+                email: "whitney@example.com",
+                role: "Member",
+                office: "London",
+              },
+              {
+                id: "leonard",
+                name: "Leonard Krasner",
+                title: "Senior designer",
+                email: "leonard@example.com",
+                role: "Owner",
+                office: "London",
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "Table":
       example = (
-        <UI.Table
-          caption="Plan limits"
-          captionVisible
-          columns={[
-            { key: "plan", label: "Plan" },
-            { key: "conversations", label: "Conversations", align: "right" },
-            { key: "support", label: "Support" },
-          ]}
-          rows={[
-            { plan: "Insider", conversations: "100", support: "Community" },
-            { plan: "Starter", conversations: "500", support: "Email" },
-            { plan: "Pro", conversations: "2,000", support: "Priority" },
-          ]}
-        />
+        <UI.Stack gap="xl">
+          <UI.Table
+            caption="Plan limits"
+            captionVisible
+            columns={[
+              { key: "plan", label: "Plan" },
+              { key: "conversations", label: "Conversations", align: "right" },
+              { key: "support", label: "Support" },
+            ]}
+            rows={[
+              { plan: "Insider", conversations: "100", support: "Community" },
+              { plan: "Starter", conversations: "500", support: "Email" },
+              { plan: "Pro", conversations: "2,000", support: "Priority" },
+            ]}
+          />
+          <UI.Table
+            caption="People by office"
+            columns={[
+              { key: "name", label: "Name" },
+              { key: "title", label: "Title" },
+              { key: "role", label: "Role" },
+            ]}
+            groups={[
+              {
+                label: "Edinburgh",
+                rows: [
+                  {
+                    name: "Lindsay Walton",
+                    title: "Front-end developer",
+                    role: "Member",
+                  },
+                  { name: "Courtney Henry", title: "Designer", role: "Admin" },
+                ],
+              },
+              {
+                label: "London",
+                rows: [
+                  {
+                    name: "Tom Cook",
+                    title: "Director of product",
+                    role: "Admin",
+                  },
+                  {
+                    name: "Whitney Francis",
+                    title: "Copywriter",
+                    role: "Member",
+                  },
+                ],
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "Pagination":
@@ -651,11 +872,26 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Hero":
       example = (
-        <UI.Hero
-          title="Build with confidence."
-          description="One shared foundation for your next product."
-          actions={[action]}
-        />
+        <>
+          <UI.Hero
+            title="Build with confidence."
+            description="One shared foundation for your next product."
+            actions={[action]}
+          />
+          <UI.Hero
+            headingLevel={2}
+            eyebrow="New in spring"
+            title="Plan trips the whole team can see."
+            description="Itineraries, bookings and budgets stay in one shared place."
+            actions={[action, { label: "Take the tour", href: "#tour" }]}
+            background={
+              <img
+                alt=""
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 600' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23f6d365'/%3E%3Cstop offset='1' stop-color='%23fda085'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='600' fill='url(%23s)'/%3E%3Ccircle cx='880' cy='190' r='90' fill='%23fff3c4'/%3E%3Cpath d='M0 420 L220 250 L420 400 L640 220 L900 430 L1200 280 L1200 600 L0 600Z' fill='%234b6cb7'/%3E%3Cpath d='M0 500 L300 380 L560 500 L820 360 L1200 520 L1200 600 L0 600Z' fill='%23243b55'/%3E%3C/svg%3E"
+              />
+            }
+          />
+        </>
       );
       break;
     case "FeatureGrid":
@@ -714,60 +950,129 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "LogoCloud":
       example = (
-        <UI.LogoCloud
-          label="Example companies"
-          items={[
-            { name: "Northwind" },
-            { name: "Contoso" },
-            { name: "Fabrikam" },
-          ]}
-        />
+        <>
+          <UI.LogoCloud
+            label="Example companies"
+            items={[
+              { name: "Northwind" },
+              { name: "Contoso" },
+              { name: "Fabrikam" },
+            ]}
+          />
+          <UI.LogoCloud
+            label="Teams on the grid"
+            layout="grid"
+            items={[
+              { name: "Tailspin" },
+              { name: "Litware" },
+              { name: "Proseware" },
+              { name: "Adatum" },
+            ]}
+          />
+          <UI.LogoCloud
+            label="Customer logos"
+            layout="split"
+            title="Trusted by teams that ship every day"
+            description="From two-person studios to global support desks."
+            actions={[{ label: "Read case studies", href: "#cases" }]}
+            items={[
+              { name: "Woodgrove" },
+              { name: "Wingtip" },
+              { name: "Relecloud" },
+              { name: "Lucerne" },
+            ]}
+          />
+        </>
       );
       break;
     case "Pricing":
       example = (
-        <UI.Pricing
-          title="Example plans"
-          description="Illustrative pricing, not a purchase."
-          plans={[
-            {
-              id: "basic",
-              name: "Basic",
-              description: "Personal projects",
-              monthly: "$0",
-              annual: "$0",
-              unit: "/month",
-              annualUnit: "/year",
-              features: ["One project"],
-              action,
-            },
-            {
-              id: "team",
-              name: "Team",
-              description: "Small teams",
-              monthly: "$20",
-              annual: "$16",
-              unit: "/month",
-              annualUnit: "/year",
-              features: ["Unlimited projects"],
-              action,
-              featured: true,
-            },
-          ]}
-        />
+        <>
+          <UI.Pricing
+            title="Example plans"
+            description="Illustrative pricing, not a purchase."
+            plans={[
+              {
+                id: "basic",
+                name: "Basic",
+                description: "Personal projects",
+                monthly: "$0",
+                annual: "$0",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["One project"],
+                action,
+              },
+              {
+                id: "team",
+                name: "Team",
+                description: "Small teams",
+                monthly: "$20",
+                annual: "$16",
+                unit: "/month",
+                annualUnit: "/year",
+                features: ["Unlimited projects"],
+                action,
+                featured: true,
+              },
+            ]}
+          />
+          <UI.Pricing
+            title="One price, everything included"
+            description="A single plan with no tiers to compare."
+            layout="detailed"
+            plans={[
+              {
+                id: "lifetime",
+                name: "Lifetime membership",
+                description: "Pay once and keep every update.",
+                monthly: "$349",
+                unit: "One-time payment, USD",
+                features: [
+                  "Private forum access",
+                  "Member resources",
+                  "Entry to annual conference",
+                  "Official member t-shirt",
+                ],
+                action: { label: "Get access", href: "#access" },
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "FAQ":
       example = (
-        <UI.FAQ
-          title="Questions"
-          items={[
-            {
-              question: "Is the kit open source?",
-              answer: "Yes. Mortar is MIT licensed.",
-            },
-          ]}
-        />
+        <>
+          <UI.FAQ
+            title="Questions"
+            items={[
+              {
+                question: "Is the kit open source?",
+                answer: "Yes. Mortar is MIT licensed.",
+              },
+            ]}
+          />
+          <UI.FAQ
+            title="Everything else"
+            description="Answers stay visible so they can be scanned."
+            layout="grid"
+            items={[
+              {
+                question: "Does it support dark mode?",
+                answer: "Yes. Every component reads the semantic tokens.",
+              },
+              {
+                question: "Can I change the brand colour?",
+                answer: "Set the accent token once in your theme.",
+              },
+              {
+                question: "Which frameworks are supported?",
+                answer: "React 19 with Tailwind CSS 4.",
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "CallToAction":

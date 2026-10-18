@@ -341,7 +341,9 @@ export const implementations = {
       "person@example.com",
     );
   },
-  async "table-sort"({ page, root }) {
+  async "table-sort"({ page, root: preview }) {
+    // The preview also shows a grouped table; exercise the first (paginated) one.
+    const root = preview.locator(".m-data-table").first();
     const names = root.locator("tbody th[scope=row]");
     const header = root.getByRole("columnheader", { name: "Name" });
     await expect(header).toHaveAttribute("aria-sort", "ascending");
@@ -371,6 +373,30 @@ export const implementations = {
     await expect(root.getByText("Page 2 of 3")).toBeVisible();
     await root.getByRole("link", { name: "Acme" }).click();
     await expect(page).toHaveURL(/#project-acme$/);
+    // Grouped rows: groups keep first-appearance order and sort within themselves.
+    const grouped = preview.locator(".m-data-table").nth(1);
+    const people = grouped.locator("tbody th[scope=row]");
+    await expect(grouped.locator(".m-table-group th")).toHaveText([
+      "Edinburgh",
+      "London",
+    ]);
+    await expect(people).toHaveText([
+      "Courtney Henry",
+      "Lindsay Walton",
+      "Leonard Krasner",
+      "Tom Cook",
+      "Whitney Francis",
+    ]);
+    await grouped.getByRole("button", { name: "Name", exact: true }).click();
+    await expect(people).toHaveText([
+      "Lindsay Walton",
+      "Courtney Henry",
+      "Whitney Francis",
+      "Tom Cook",
+      "Leonard Krasner",
+    ]);
+    await grouped.getByRole("checkbox", { name: "Select all rows" }).click();
+    await expect(grouped.getByText("5 selected")).toBeVisible();
   },
   async navbar({ page, root }) {
     const nav = root.getByRole("navigation", { name: "Primary" });
@@ -502,7 +528,9 @@ export const implementations = {
     await second.click();
     await expect(second).toHaveAttribute("aria-pressed", "true");
     await expect(
-      root.locator(".m-product-gallery > .m-product-image img"),
+      root.locator(
+        ".m-product-gallery:not([data-gallery]) > .m-product-image img",
+      ),
     ).toHaveAttribute("alt", "Natural canvas tote bag, in use");
     // Options are native radio groups: arrow keys move the choice.
     const sizes = root.getByRole("group", { name: "Size" });
