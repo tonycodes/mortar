@@ -1,41 +1,45 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { AppShell, Input, DataTable, CodeBlock } from "../dist/index.js";
+import {
+  h,
+  html,
+  Fragment,
+  AppShell,
+  Input,
+  DataTable,
+  CodeBlock,
+} from "./support/render.mjs";
 test("Mortar shell supplies page landmarks and labelled navigation", () => {
-  const html = renderToStaticMarkup(
-    React.createElement(
-      AppShell,
-      {
-        brand: "Example",
-        navigation: [{ label: "Overview", href: "#overview", current: true }],
-      },
-      "Content",
-    ),
+  const markup = html(
+    AppShell,
+    {
+      brand: "Example",
+      navigation: [{ label: "Overview", href: "#overview", current: true }],
+    },
+    "Content",
   );
-  assert.match(html, /aria-current="page"/);
-  assert.match(html, /<main id="m-content"/);
-  assert.match(html, /Skip to content/);
+  assert.match(markup, /aria-current="page"/);
+  assert.match(markup, /<main id="m-content"/);
+  assert.match(markup, /Skip to content/);
 });
 test("Mortar fields keep unique labels and external error descriptions", () => {
-  const html = renderToStaticMarkup(
-    React.createElement(
-      React.Fragment,
-      {},
-      React.createElement(Input, {
-        label: "Email",
-        error: "Invalid email",
-        "aria-describedby": "external",
-      }),
-      React.createElement(Input, { label: "Name" }),
-    ),
+  const markup = html(
+    Fragment,
+    {},
+    h(Input, {
+      label: "Email",
+      error: "Invalid email",
+      "aria-describedby": "external",
+    }),
+    h(Input, { label: "Name" }),
   );
-  const ids = [...html.matchAll(/<input[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
+  const ids = [...markup.matchAll(/<input[^>]*\sid="([^"]+)"/g)].map(
+    (m) => m[1],
+  );
   assert.equal(ids.length, 2);
   assert.notEqual(ids[0], ids[1]);
-  assert.ok(html.includes("external " + ids[0] + "-message"));
-  assert.ok(html.includes('for="' + ids[1] + '"'));
+  assert.ok(markup.includes("external " + ids[0] + "-message"));
+  assert.ok(markup.includes('for="' + ids[1] + '"'));
 });
 test("Mortar table separates loading, error and empty states and keeps row headers", () => {
   const props = {
@@ -44,10 +48,7 @@ test("Mortar table separates loading, error and empty states and keeps row heade
     rowLabel: (row) => row.name,
     rows: [{ id: "1", name: "Example" }],
   };
-  const render = (extra) =>
-    renderToStaticMarkup(
-      React.createElement(DataTable, { ...props, ...extra }),
-    );
+  const render = (extra) => html(DataTable, { ...props, ...extra });
   assert.match(render({}), /scope="row"/);
   assert.match(render({}), /tabindex="0"/);
   assert.match(render({ rows: [] }), /No records/);
@@ -67,16 +68,14 @@ test("Mortar table sorts locally, keeps ties stable and puts empty values last",
   ];
   const order = (sort, extra = {}) =>
     [
-      ...renderToStaticMarkup(
-        React.createElement(DataTable, {
-          caption: "Records",
-          rowLabel: (r) => r.name,
-          columns,
-          rows,
-          defaultSort: sort,
-          ...extra,
-        }),
-      ).matchAll(/scope="row"[^>]*>([^<]+)</g),
+      ...html(DataTable, {
+        caption: "Records",
+        rowLabel: (r) => r.name,
+        columns,
+        rows,
+        defaultSort: sort,
+        ...extra,
+      }).matchAll(/scope="row"[^>]*>([^<]+)</g),
     ].map((m) => m[1]);
   assert.deepEqual(order({ key: "name", direction: "ascending" }), [
     "Item 1",
@@ -105,22 +104,18 @@ test("Mortar table sorts locally, keeps ties stable and puts empty values last",
     ["item 10", "item 2", "Item 1", "item 3"],
   );
   assert.match(
-    renderToStaticMarkup(
-      React.createElement(DataTable, {
-        caption: "Records",
-        rowLabel: (r) => r.name,
-        columns,
-        rows,
-        defaultSort: { key: "name", direction: "ascending" },
-      }),
-    ),
+    html(DataTable, {
+      caption: "Records",
+      rowLabel: (r) => r.name,
+      columns,
+      rows,
+      defaultSort: { key: "name", direction: "ascending" },
+    }),
     /aria-sort="ascending"[\s\S]*aria-sort="none"/,
   );
 });
 test("Mortar source inspection never executes submitted markup", () => {
-  const html = renderToStaticMarkup(
-    React.createElement(CodeBlock, { code: "<script>alert(1)</script>" }),
-  );
-  assert.ok(!html.includes("<script>"));
-  assert.match(html, /&lt;script&gt;/);
+  const markup = html(CodeBlock, { code: "<script>alert(1)</script>" });
+  assert.ok(!markup.includes("<script>"));
+  assert.match(markup, /&lt;script&gt;/);
 });

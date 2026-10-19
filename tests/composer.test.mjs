@@ -1,13 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { CommentComposer } from "../dist/index.js";
-const h = React.createElement;
-const html = (props) => renderToStaticMarkup(h(CommentComposer, props));
+import { h, html, CommentComposer } from "./support/render.mjs";
 
 test("CommentComposer labels its textarea and disables submit while empty", () => {
-  const markup = html({ onSubmit() {} });
+  const markup = html(CommentComposer, { onSubmit() {} });
   assert.match(markup, /^<form class="m-composer"/);
   const id = markup.match(
     /<label class="m-sr-only" for="([^"]+)">Add your comment<\/label>/,
@@ -22,7 +18,7 @@ test("CommentComposer labels its textarea and disables submit while empty", () =
 });
 
 test("CommentComposer shows an avatar, toolbar, counter, hint and error", () => {
-  const markup = html({
+  const markup = html(CommentComposer, {
     onSubmit() {},
     value: "Looks good",
     onValueChange() {},
@@ -56,7 +52,10 @@ test("CommentComposer shows an avatar, toolbar, counter, hint and error", () => 
 });
 
 test("CommentComposer adds Write and Preview tabs when it can preview", () => {
-  const markup = html({ onSubmit() {}, preview: (v) => v.toUpperCase() });
+  const markup = html(CommentComposer, {
+    onSubmit() {},
+    preview: (v) => v.toUpperCase(),
+  });
   assert.match(markup, /role="tablist" aria-label="Comment mode"/);
   assert.match(
     markup,

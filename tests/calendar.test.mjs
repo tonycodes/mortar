@@ -1,11 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Calendar, StackedShell, AppShell } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props, ...children) =>
-  renderToStaticMarkup(h(type, props, ...children));
+import {
+  h,
+  html,
+  Calendar,
+  StackedShell,
+  AppShell,
+} from "./support/render.mjs";
 const days = (markup) =>
   [...markup.matchAll(/data-date="(\d{4}-\d{2}-\d{2})"/g)].map((m) => m[1]);
 

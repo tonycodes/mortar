@@ -1,10 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Calendar } from "../dist/index.js";
-const h = React.createElement;
-const html = (props) => renderToStaticMarkup(h(Calendar, props));
+import { html, Calendar } from "./support/render.mjs";
 const events = [
   {
     id: "a",
@@ -37,7 +33,7 @@ const base = {
 };
 
 test("week view shows the selected week as labelled day sections", () => {
-  const markup = html({ ...base, view: "week" });
+  const markup = html(Calendar, { ...base, view: "week" });
   assert.match(markup, /data-view="week"/);
   assert.match(
     markup,
@@ -65,7 +61,7 @@ test("week view shows the selected week as labelled day sections", () => {
 });
 
 test("timed events are listed in order with times; untimed ones are all-day", () => {
-  const markup = html({ ...base, view: "week" });
+  const markup = html(Calendar, { ...base, view: "week" });
   const tuesday = markup.slice(
     markup.indexOf("Tuesday, 20 October 2026"),
     markup.indexOf("Wednesday, 21 October 2026"),
@@ -88,7 +84,7 @@ test("timed events are listed in order with times; untimed ones are all-day", ()
 });
 
 test("day view shows one day and steps by day", () => {
-  const markup = html({ ...base, view: "day" });
+  const markup = html(Calendar, { ...base, view: "day" });
   assert.equal(
     [...markup.matchAll(/<section class="m-calendar-column"/g)].length,
     1,
@@ -102,7 +98,7 @@ test("day view shows one day and steps by day", () => {
 });
 
 test("events become buttons when selectable, and a view switcher appears on request", () => {
-  const markup = html({
+  const markup = html(Calendar, {
     ...base,
     view: "week",
     onEventSelect() {},
@@ -117,7 +113,7 @@ test("events become buttons when selectable, and a view switcher appears on requ
 });
 
 test("month view is unchanged by default", () => {
-  const markup = html(base);
+  const markup = html(Calendar, base);
   assert.match(markup, /<table role="grid"/);
   assert.doesNotMatch(markup, /m-calendar-column"|Calendar view/);
 });

@@ -1,10 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { PageHeading, AttachmentList } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props) => renderToStaticMarkup(h(type, props));
+import { h, html, PageHeading, AttachmentList } from "./support/render.mjs";
 const icon = h("svg", { viewBox: "0 0 20 20" });
 
 test("PageHeading keeps its markup and adds meta and an avatar", () => {
