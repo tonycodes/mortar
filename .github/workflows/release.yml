@@ -82,6 +82,7 @@ jobs:
             const hash = "sha512-" + createHash("sha512").update(readFileSync(dir + "/" + p.filename)).digest("base64");
             if (p.commit !== sha || p.version !== version || p.integrity !== hash) throw Error("Provenance does not match the archive");
           ' "$DIR" "$SHA" "$VERSION"
+          node scripts/release-notes.mjs "$VERSION" > "$DIR/notes.md"
       - if: steps.plan.outputs.publish == 'true'
         uses: actions/upload-artifact@v4
         with:
@@ -152,7 +153,8 @@ jobs:
           else
             PRERELEASE=()
             [[ "$VERSION" == *-* ]] && PRERELEASE=(--prerelease)
-            gh release create "$TAG" --repo "$REPO" --verify-tag --title "$TAG" --generate-notes "${PRERELEASE[@]}" "$TGZ" provenance.json
+            # The version's CHANGELOG.md section, extracted at the checked commit.
+            gh release create "$TAG" --repo "$REPO" --verify-tag --title "$TAG" --notes-file notes.md "${PRERELEASE[@]}" "$TGZ" provenance.json
           fi
       - name: Publish the exact archive
         working-directory: ${{ runner.temp }}/release
