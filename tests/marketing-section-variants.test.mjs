@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { h, html as markup, UI } from "./support/render.mjs";
-import { readSource } from "./support/css.mjs";
+import { readSource, layerBlockWith } from "./support/css.mjs";
 
 const go = { label: "Go", href: "/go" };
 const img = (src) => h("img", { alt: "", src });
@@ -238,11 +238,9 @@ test("NotFound background is decorative and switches to the inverse tone", () =>
   );
 });
 
-test("variant styles sit in one block at the end of kits.css with semantic tokens", async () => {
+test("variant styles sit in one block of kits.css with semantic tokens", async () => {
   const css = await readSource("src/kits.css");
-  const start = css.lastIndexOf("@layer components {");
-  const block = css.slice(start);
-  assert.ok(start > css.indexOf(".m-hero[data-background]"));
+  const block = layerBlockWith(css, ".m-hero-tiles");
   for (const selector of [
     ".m-hero-tiles",
     ".m-hero-angled .m-hero-preview",

@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { layerBlockWith } from "./support/css.mjs";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -198,12 +199,7 @@ test("LogoCloud default markup is unchanged; grid and split layouts", () => {
 
 test("variant styles use semantic tokens and the hero joins the inverse remap", async () => {
   const css = await read("src/kits.css");
-  const start = css.lastIndexOf(
-    "@layer components {",
-    css.indexOf(".m-hero[data-background]"),
-  );
-  const end = css.indexOf("@layer components {", start + 1);
-  const block = css.slice(start, end === -1 ? undefined : end);
+  const block = layerBlockWith(css, ".m-hero[data-background]");
   for (const selector of [
     ".m-hero-background::after",
     ".m-faq-grid",

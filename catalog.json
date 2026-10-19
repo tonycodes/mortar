@@ -135,8 +135,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "4d506eded72f95c61f3bd8dbac9587e9593c3d52891b2b2d9ee88a5b02faf26b"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "14be7f5671406c3177fd0ec7a6d8246f56afcb7bbdce05205889ebe821f5b420"
       }
     },
     {
@@ -217,8 +217,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "927fa5cdf3892688f40d64709b7409c2181f3d4102f60c50dab519fa7eb582e5"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "8a2ddca2b9d21001b35a350e76f7e0cea4de3e0aa9e475c8e8c7b25378403165"
       }
     },
     {
@@ -272,8 +272,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "c4ca0fcf9b80749f590215198b6c31b6d8fb58f9d86c91d4c7e86b2e411caf29"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "e551082f8fa0b1ef0e551f1dbd16ffe7b1a39fc9791aa857445bdd493946715e"
       }
     },
     {
@@ -364,8 +364,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "a8eea05e4a8b66e6cb23e174243c945e172ea5e4cb905de7d227a74b1940df1d"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "d0426eaaba20cba8903803f97e287c34f5cde0542075b2d5b974d6ab2d5d9436"
       }
     },
     {
@@ -472,8 +472,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "4ce51c84105be03a16c92c74a7b364e5958ce36898fc6ba7682642d55450fc4e"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "1bf9f397e3cce5086cc5185703c40a5e8f214b18bbcdea04c6a9cade6d51f074"
       }
     },
     {
@@ -528,8 +528,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "375de977286f580ef14b25a754f794fa7a6dc8ef6f137b3272c93c798f43284f",
-        "preview": "201c431e5d1432703f7b19a50be5da2b4cb9fe36f2a3c97c4f402818ed42e527"
+        "source": "d2430a4c88e089bab3cc20c04235b7940eb02553adc9650d21c35bc79391a5ee",
+        "preview": "679c64c812fe0c31fb04e1fd0dd61c68057537d1324b65c78ee2400e642a686f"
       }
     },
     {
@@ -584,8 +584,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "6d1d62c48e741557e8a643aa152d449184844764e70ca3678861c44c60afd100"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "089a6f02ef047b4a0753c783ff697d0b464aeda8f59ac9a375f9010d59e1928f"
       }
     },
     {
@@ -645,8 +645,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "20ecdbbd73dcc3882898f3e5b6ce3ec5cf17a7e274592c745a87bc13d02d1902"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "438268ac08c5c31758f7b9a5f1622de2a7acd363964d949edc51f864a93e3a3f"
       }
     },
     {
@@ -735,8 +735,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "ab860bcbdff08dc4dcadb8ccd48de752d0539cef057c34f42d2919a6f970d5d2"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "fcc9cf42b7ba1ce50f41eb871b2950522f58dba024f179fe01178b05bca7e441"
       }
     },
     {
@@ -791,8 +791,8 @@
         "states": []
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "a30eadc8e6a86e4371c9123391ba5750fba8adbfd131fa696154e4c1216fa444"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "9cc756ec65be30f657e255de16c804cf4445b7b1f4a15b2e34205be9fa506ea3"
       }
     },
     {
@@ -875,8 +875,8 @@
         "states": []
       },
       "integrity": {
-        "source": "3be0fbefa9ac7cf7d502cac3d3b8c394e8b05b15e673011f59d76a8c7ba55491",
-        "preview": "5946da11d4abf6be32574aa968268f473559ac3c5c8a5c07ff78ebb0bd7c6f12"
+        "source": "6d9d29f45176ef9cdc4af526b14a0216b1a8a174f3d07c76be1bc3842b60e6d5",
+        "preview": "e3e929d6911d5da6828f63b793ed315b8cb18760cc3ca69ffa091bd4c6cd11f0"
       }
     },
     {
@@ -957,8 +957,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "312f821df55bac90ccaefb8b9387d96f227a13a03a7834ca7444714d0dae0aa0"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "6e8443a337dab566d41162dda0fde15154ec5fb7a80509da6b9517b5e36c40c5"
       }
     },
     {
@@ -1019,8 +1019,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "4fc93fa63b078798a814c77231d15ce0e0afa038149802e7917d8fed67fd441c"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "e468dad8e990a3e9d4f9508b77386da02fdea533eb7b686216c710e075bc95ef"
       }
     },
     {
@@ -1075,8 +1075,8 @@
         "states": []
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "d0e7796fb5eb056fa651f8869cf272dbcffab235abc427828ca3a94f74a4fec5"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "f401fd5bc6c474aef474788eede1afd08f34b778cbfca3cbdb0fc20e07b1ce72"
       }
     },
     {
@@ -1156,15 +1156,15 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "957302cc97ce3deed93c43b63c4d2a2387eadb62676bfe431e56f75be86cfc1e"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "dfcd18b7b1def4515dc4aca3509099a5db5081bf3dc85dc4bcda57f31f49640a"
       }
     },
     {
       "id": "mortar-calendar",
       "logicalId": "calendar",
       "name": "Calendar",
-      "description": "Mortar calendar: one current date shared by a month grid with keyboard navigation, a twelve-month year view with one roving tab stop, and week and day time grids where timed events sit on an hour scale and collapse to an agenda when narrow. Dates are YYYY-MM-DD strings handled in UTC.",
+      "description": "Mortar calendar: one current date shared by a month grid with keyboard navigation, a twelve-month year view with one roving tab stop, and week and day time grids where timed events sit on an hour scale and collapse to an agenda when narrow. An opt-in month agenda lists the selected day's meetings beside the month (below it when narrow). Dates are YYYY-MM-DD strings handled in UTC.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -1185,7 +1185,7 @@
           "onDateChange": "(date: string) => void (after navigation in any view)",
           "selected": "string (YYYY-MM-DD)",
           "onSelect": "(date: string) => void",
-          "events": "CalendarEvent[] ({ id: string; date: string; title: string; time?: string; start?: string; end?: string })",
+          "events": "CalendarEvent[] ({ id: string; date: string; title: string; time?: string; start?: string; end?: string; media?: ReactNode (avatar or icon in the agenda) })",
           "variant": "\"compact\" | \"full\" (month view only)",
           "weekStartsOn": "0 | 1",
           "today": "string (YYYY-MM-DD)",
@@ -1193,7 +1193,8 @@
           "maxEvents": "number (month view with variant=\"full\" only)",
           "view": "\"year\" | \"month\" | \"week\" | \"day\"",
           "onViewChange": "(view: CalendarView) => void",
-          "onEventSelect": "(id: string) => void",
+          "onEventSelect": "(id: string) => void (makes events in week and day views, and in the agenda, buttons)",
+          "agenda": "boolean (month view only; lists the selected day's events, or the current date's, beside the month under a \"Schedule for\" heading one level below the title; below the month when narrow)",
           "dayStartHour": "number (events outside the hours are drawn at the edge and marked as cut off)",
           "dayEndHour": "number",
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; month and day headings are one level below)",
@@ -1201,6 +1202,11 @@
           "className": "string"
         },
         "propTypes": {
+          "agenda": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
           "className": {
             "type": "string",
             "required": false
@@ -1306,8 +1312,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e8540f55ab0ed4fe4b06cc2bbd9a3e54a1dc933cf7af98778f51eadb4b7e0959",
-        "preview": "c329b6fdd96401b256a8e4e32f570cf587a6bb5be6396746001c01c12d7f3e1d"
+        "source": "f523d664a52b79f82dd614d644361886b6deeffbf2aaa048462e71ef72cab9ad",
+        "preview": "01336aa10ce484a10f0e11926d98a3c4c88fc3d51470e3426b6532b793b5e0bd"
       }
     },
     {
@@ -1388,8 +1394,8 @@
         "states": ["surface", "inverse"]
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "add1034fc57df575d55b71171b0b21941e9af9a3576118eb110a9b183d95acde"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "547a3a2f6939f029830862993b985a88b8a23d4a6bb0adcea2a2b0ce30bd2675"
       }
     },
     {
@@ -1454,8 +1460,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "8c03a77abbb5de157ba30554c7f9265e7547a535be149e2d7811f6e36afc44b1"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "a374b4b4f282ac38ff4b904d933bd29686b05b7a04039d3fb0cf24940d3bc86d"
       }
     },
     {
@@ -1553,8 +1559,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "e811b263b61196f430591015fd124696612346c1ac611459a7c5f2fc2543148e"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "9aa043692c1f016d0216e56cd7778dcdc553eda7a5a4f83d194c613ae5720f87"
       }
     },
     {
@@ -1642,8 +1648,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b4024c727c162d6ba0692ae2fd98aa7d484c4da8e25355f500f826d4c2e5606e",
-        "preview": "d26640c3114aae691b99f60f5575f1bc78e826c6724d9a26e7a446d808f3cebd"
+        "source": "e0f5f3070218d306534d63fe7b6132743fc8bd32c1efed7adabe501ee02f3f9e",
+        "preview": "7947d6a687934f2ac410a66dc22ea1b89ca6826a6b8e0b64e6270026d4da74d6"
       }
     },
     {
@@ -1709,8 +1715,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "d00f92fc36be048efa45019b3dc5fade95cfe532bb773929e0937eb931a8793e"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "61f13c76dcc8cb5506a950d35716f08ad88e478a07238c175bba3789d8d1a7b1"
       }
     },
     {
@@ -1769,8 +1775,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "8b4bedab414a33d848be875697d564dd3e04490b81c69f1485a71fcc776bef91"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "0732eab1ce5b0a5bccd2c360311d410fe55007df70edbc1cf575aeb8416fdbf9"
       }
     },
     {
@@ -1825,8 +1831,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b82242794ef64f2c61aea2f20c40863c413201353088913cb5f4522f3c487c6",
-        "preview": "850e416cda302ce9eb832972524e7afd1955c56cb625b17580eca192e6b84025"
+        "source": "4488684b172d2a3795e0f7715b3e12994445d425f49a543b1ed3d7759ff5f46e",
+        "preview": "7c408ea498ba3852961ba62bd2a596302c89438065ea0548a1e744776c891ad6"
       }
     },
     {
@@ -1908,8 +1914,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "5ca9af537150ee9cb5d7198dc4c4d0457366a2613a6480031d21f59d91baa3dd"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "60ab8b64d1319a48e6de74820868de0528e81b7d2dfa9f61cee3778a20238075"
       }
     },
     {
@@ -2006,8 +2012,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "5d4c772b6113a85165fa20edac29b4053d3d48359b3409620784df4498c67b0b",
-        "preview": "4de5057abcb19162ee764d6e7871ed4fd4c0bc46fd96562416220283b16cbf62"
+        "source": "e4a6de64d2c0dc910f99902b58840ae3e46d195f924982427f65f8f568e4ea95",
+        "preview": "836072ab253fb7c83e107da099940c87ac76770ba7fdc736262a23cd200c0547"
       }
     },
     {
@@ -2099,8 +2105,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "d846299c3af6517530fa8d69c7c337178b4a0caa8518810e397bdc8a366a73bc",
-        "preview": "5e480c2139ae34652410bb53f205dbcc0f49e7f7bb944a32af18517dbe68c5f7"
+        "source": "9831a659995d94149a0f65fcaa77f485898aec15dad642342a172e0889f3e543",
+        "preview": "64db7a7de408020be977bdcb36a2d5d8f08bf428a456b26436e9df65da4c0101"
       }
     },
     {
@@ -2226,8 +2232,8 @@
         "states": ["error"]
       },
       "integrity": {
-        "source": "c61dc0f8818ca48747026d405779beac35c25553d6e722d85a7498c97d1028d4",
-        "preview": "96e7be67d22bb9e30e8117993c56d47880f7bcacd812ea020774ee5e3c199904"
+        "source": "60c7249a8df900072e30c6976c1ea574829d471a92b1e5edf91820bbba976c35",
+        "preview": "92cbca84b544e98e822ad13cb634f7d9d40d9f2a02ce7fed82fd9d4499ce029e"
       }
     },
     {
@@ -2325,8 +2331,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "3be0fbefa9ac7cf7d502cac3d3b8c394e8b05b15e673011f59d76a8c7ba55491",
-        "preview": "6a36000ad6db2ee912f3c17dae986b3841bb4cdbae8841b0899096d8d62f09f3"
+        "source": "6d9d29f45176ef9cdc4af526b14a0216b1a8a174f3d07c76be1bc3842b60e6d5",
+        "preview": "3fd8d50115fa7c85277125fa559945fa916793b70edd8aea557d9305d7b0468b"
       }
     },
     {
@@ -2402,8 +2408,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "e872d7d69743cc4d191658cf86760612391d20c0568739a8864ccb9e9b4e4780"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "d6b1e95d9c5bb0f235f360304d4278523b334423dbdf2a3f86e4239c9199fd5d"
       }
     },
     {
@@ -2470,8 +2476,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "9ba9336cc051f53bad9ca404afc00463d168f57a16cd9d41ab46b5246dc4ff34"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "162c5e66f538186b63fcd064135a90d6d602fb07c5de054444f2e3bc9e28954a"
       }
     },
     {
@@ -2578,8 +2584,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "51c55aace940bface7cb4240fe030d0a1ef7c8568661a538604c28330e9da346"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "2a16a60430da6538cf1ddf602cb7772a4760f554d8204a1bddf1f5a2144bcd6f"
       }
     },
     {
@@ -2745,15 +2751,15 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "6ecfb680eec260f6a88125cafb6c0ae8f4d66314682acc8376e80a8d2462b4e1"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "211d965cc4210df1fa3432f16535ab0b2d597e38a31497857e72a47f193f7675"
       }
     },
     {
       "id": "mortar-description-list",
       "logicalId": "description-list",
       "name": "DescriptionList",
-      "description": "Mortar description list: label/value pairs for detail screens, in columns when wide and stacked when narrow, with optional row actions.",
+      "description": "Mortar description list: label/value pairs for detail screens, in columns when wide and stacked when narrow, with optional row actions and a striped variant. Inside a Card body it drops its outer dividers, so a card with the title shows the list in a card.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -2773,6 +2779,7 @@
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "items": "{ term: string; details: ReactNode; action?: ReactNode }[]",
           "layout": "\"columns\" | \"stacked\"",
+          "variant": "\"plain\" | \"striped\" (default \"plain\"; striped shades alternate rows instead of dividing them)",
           "id": "string",
           "className": "string"
         },
@@ -2806,9 +2813,14 @@
           "title": {
             "type": "string",
             "required": false
+          },
+          "variant": {
+            "type": "\"plain\" | \"striped\"",
+            "required": false,
+            "default": "\"plain\""
           }
         },
-        "usage": "Import { DescriptionList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { DescriptionList } from @tony-ui/mortar. Compose with the public typed props. For a list in a card, put it in a Card and give the Card the title and description, not the list.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -2822,8 +2834,8 @@
         "states": ["long"]
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "58d308ce2fca96ce4784555173d6b871f52b30e3aacffa8a488ff5414c66bc8c"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "dc15f68dfe51127bc20c0490c760c20bf96019a8f9de55875ac6d3ca9ff2024c"
       }
     },
     {
@@ -2884,8 +2896,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "d00e94fe5b43c5a8912eb08e6a1645e41c3d7abe7b73ba6301a998450808f240"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "bee7e824e5a74bbcf644789081efef39405b3456a22986dbe43f629cca856e7a"
       }
     },
     {
@@ -3006,8 +3018,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "bd1df6134804e09c8f0a3a4dc152b7895e57fc544b00bfea9db0586a6ff4db17"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "bb97dbbc0ff35b5c23e51cc208b3d3e905d50305285c6fb9ab56e288fcf3e86d"
       }
     },
     {
@@ -3090,8 +3102,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "c831d5c3d22d2c1f7fc472113f81186578d94cd6be2fcfbf007686d73aded367"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "b14a0dc4c6ae96a6fa88e2a09cb5a2a127d4239f4b750c290c87877580ffe1dc"
       }
     },
     {
@@ -3182,8 +3194,8 @@
         "states": []
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "89498cfd82de846ff972c3905b16ee5e2c0ad291532e23ad6cbcb1c366cf6e29"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "0999f075502b2e09630f1ece4755f8f84c633aeb5309efee89bf28d5b21ab8c8"
       }
     },
     {
@@ -3260,8 +3272,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "65f18b2c45ae0bf4b310bae6021a5a2ec1ab2d74f106120cb4e73e1fa57e2ad9"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "6a6bf78917444ccd4fb6c0cbc0e0305349671aeba559eaa764ca203670315077"
       }
     },
     {
@@ -3353,8 +3365,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "47cc957aab63af9f00f7e07b1ce395714313ea8bb8566f1b11fe414dc25e24d1"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "28ab973ddf4abd3388faf40fa5ff4f1740e74d9a7cbb7de5e5146da030318e07"
       }
     },
     {
@@ -3458,8 +3470,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "fef902a12c416eae383bd873dbee5c531b7685ef9a20fb63e7c75982090f4443"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "bd540e37099261072f05a8513f8bb4a5b1b70fc55a9f973c0b43982d9912f4b8"
       }
     },
     {
@@ -3523,8 +3535,8 @@
         "states": ["disabled"]
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "f756030f5e2dc379e1941c2b31babbb4b2c076b054adacfc5f3b332294f9225c"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "df658b9e27f4163e074cb1ce998c283aef519741172bd07c5a96f0e7833cf2f1"
       }
     },
     {
@@ -3583,8 +3595,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "eeda5b47e64f943120272674c43175fef0798b068b1e1ebfea42796b29b1d384"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "353a8845350e9f5095de934e4f3474b8ebdf906abca27a52293aab463bdace00"
       }
     },
     {
@@ -3650,8 +3662,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "6c8e38bfa5e7ce50c58c60f9d4014ae1337add1dab86eabb971eed7a014ea562"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "4b711664984b8eeb2a4a2e46ab38210103a48b33a5aebb1bd4bf0fbb6f14bd74"
       }
     },
     {
@@ -3748,8 +3760,8 @@
         "states": ["heading-3"]
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "6cd98699118706f14d2735a70ef029045a398a63c453fd46135e273927e21269"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "f9840bef48d91817853964d5bca45080c0818e3755bacbeeea6d5770c25b6da0"
       }
     },
     {
@@ -3821,8 +3833,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "3e6c062a0c1cec3ff9f3035f1ffa0bff6aeae9e3d1c468ff0598e09a04993a3d"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "55ae74d839e985ddb5c3df5d0e8bdfa3fc39b6391ca28a226e0ebb60165ea916"
       }
     },
     {
@@ -3916,8 +3928,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "0ba90f03f8330553a020dd54c8da44a2c06afab811a5c0e41138de3bdca4705c"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "0af54d67e92e1c5c27aa631ac6752780f161221d87cf538d186c89997fc31bb8"
       }
     },
     {
@@ -4015,8 +4027,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "d701ff787324664e4cad9cd8445755b182e26c11af47e4cbd49fd0cf6fcff538"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "6b5f5a6086a44fff9fb1ff62ce0196557bb4fdf0d614b7bce3ffefdb42c0fde7"
       }
     },
     {
@@ -4107,8 +4119,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "b9e8f0a02e686d39c502af9203c65f4bc7adcf03667440cfb999d5de60687408"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "2c85e4acc9e99b4507dee4e68f1966cbffd2adc8ef8239580e29c3eedcced3db"
       }
     },
     {
@@ -4157,8 +4169,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "41f9eedeacabe646ec20a808b73919b8d5f33ffe42ede102122a6e4d28f5d74d"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "cf75db59b902edf449f598b21cbde0ec3bf88a59ff28fea6529bf8c42a8d4e8a"
       }
     },
     {
@@ -4212,8 +4224,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "8fe966a1b275013a691678cec33cb561d4deb7a6fff1c9a97201ed72f9f2ead8"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "1660b1b1f3676af80dd6d002986ecbc6177ae5a0ea3d91747fbf50141d71383f"
       }
     },
     {
@@ -4305,8 +4317,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "5d4c772b6113a85165fa20edac29b4053d3d48359b3409620784df4498c67b0b",
-        "preview": "bc276e45c7b4424b0df9ba2fcc9f60ddb69c6aef1f0b546f28710e85552fe448"
+        "source": "e4a6de64d2c0dc910f99902b58840ae3e46d195f924982427f65f8f568e4ea95",
+        "preview": "9e2367f75dd63568dc3984e3610e19e44e6dbeb777707892c342f2dbe6aef526"
       }
     },
     {
@@ -4393,8 +4405,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "601d1179964560e7111408973f33ae6ff197069533c2e1fa375a29652cbc97df"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "89994074a98678e24c5a9f3deb6b7be88447071e77abe916becff4fce3a25a3c"
       }
     },
     {
@@ -4475,8 +4487,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "f30e8f53b0e5892060680435daf8834b5a6298e78a2cec0fe08854b820f0af77"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "1988e1811fae52574ab7609abe1ac0ac8f7dfa11274f1dd14329d95d2e29641d"
       }
     },
     {
@@ -4547,8 +4559,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "98e4c681caa039987b985552f87f4a16f179e34885eb4ee5146543e9bb23e23f"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "c6106461fe5b7a24a55a154958c454ebbd3ec1e974608c6b18d32d530e5f4a08"
       }
     },
     {
@@ -4608,8 +4620,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "290255ecce6419ae0cbb784c15bef1204814a5e0bf38a1159324f54e8d2d18bc"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "2841f898edc36778fe6e4df7b71790be61f75b697a5454a7f596850557c2e918"
       }
     },
     {
@@ -4679,8 +4691,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b4024c727c162d6ba0692ae2fd98aa7d484c4da8e25355f500f826d4c2e5606e",
-        "preview": "c074c0bf1895370a453f328c7df6dff34136029408db9cdb706a2f01e5448ed1"
+        "source": "e0f5f3070218d306534d63fe7b6132743fc8bd32c1efed7adabe501ee02f3f9e",
+        "preview": "c8dbbb8e4242049edb7d45456b52f51506f60f5a3194be9ce788d285635f09ca"
       }
     },
     {
@@ -4756,8 +4768,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "e6c656109807c540ca02add59bb47161ca2af9b3f47e3e36a29a7608115e3a93"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "582002841269e64809ddaaa2b271ddcc50a2d778e5e60e56e97938dc5ac9fb75"
       }
     },
     {
@@ -4840,8 +4852,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "82846a0e87986ae81aebb8b2d03bf727a8ae0eb0a036c0efdfd2aab63ed6e564"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "6c85fad197a9fd5e5c5aebe058a08a9efcd511046083ca76a5c71de7703ae9ef"
       }
     },
     {
@@ -4929,8 +4941,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "349bda854e0b58377bbbd741ae1ba7c08a056f0a1f83a5d2e32d00315e263753"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "340a18aa6447f95a912405c34894a1cfcf508c777b0a23a726cbf76cac691515"
       }
     },
     {
@@ -5016,8 +5028,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "f32a3cfef863a7d1ffb6471285953fd13be19dacdee11d222ba05f536ad01317"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "6f6c70fec41e5628c548bab741326ed28759fc6656dd1f9fa2b1a5dd7b2d0dc9"
       }
     },
     {
@@ -5104,15 +5116,15 @@
         "probe": "notice"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "ae585e7d7dd83102d56b63af761e73a154474e703876fb6104df9928469ebae4"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "07e2320a540de04b9f8265c8f9bb2c18d9d42f468cf102f00196ea0689a5468d"
       }
     },
     {
       "id": "mortar-order-history",
       "logicalId": "order-history",
       "name": "OrderHistory",
-      "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions; empty state when there are none.",
+      "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions and an optional delivery tracker (ProgressSteps bar: placed, processing, shipped, delivered); empty state when there are none.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -5127,7 +5139,7 @@
       },
       "contract": {
         "props": {
-          "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
+          "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; progress?: ProgressStep[] (delivery stages shown as a tracker under the status); items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; each order's heading and the empty state's title)",
           "empty": "{ title: string; description?: string; action?: ReactNode } (default \"No orders yet\")",
           "id": "string",
@@ -5160,7 +5172,7 @@
         "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": ["mortar-empty-state"]
+        "dependencies": ["mortar-empty-state", "mortar-progress-steps"]
       },
       "preview": {
         "source": "previews/OrderHistoryPreview.tsx"
@@ -5171,15 +5183,15 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "2a14c891a4987780068c8d3ce433c05280d65cb7f84d0b894c00293fe4d7ee50"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "16783d008ea51ff5243b00b78dc54873c27834e9603067785839aea46c7eefaa"
       }
     },
     {
       "id": "mortar-order-summary",
       "logicalId": "order-summary",
       "name": "OrderSummary",
-      "description": "Mortar order summary: cost lines, a distinguished total and a checkout action.",
+      "description": "Mortar order summary: cost lines with optional hints explaining estimates, a distinguished total and a checkout action.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -5195,7 +5207,7 @@
       "contract": {
         "props": {
           "title": "string",
-          "lines": "{ label: string; value: string }[]",
+          "lines": "{ label: string; value: string; hint?: ReactNode (explains an estimate under its label, e.g. a link to how shipping is worked out) }[]",
           "total": "{ label: string; value: string }",
           "action": "ReactNode",
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
@@ -5226,7 +5238,7 @@
             "required": false
           },
           "lines": {
-            "type": "{ label: string; value: string; }[]",
+            "type": "{ label: string; value: string; hint?: ReactNode; }[]",
             "required": true
           },
           "title": {
@@ -5253,8 +5265,8 @@
         "states": []
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "7cc403a33010ee944a5ac32818bd726e9ba2a1fa35427cf98919106ddfb9acf0"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "6c722d3706cbecc134d61eb16a9af0929a6faa9b8f49f56bcaf15205eed82302"
       }
     },
     {
@@ -5325,8 +5337,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "7f64a8fe52be731e03bbb0c7bcb0588abaf1ff904863eaa8713675ea9e7736e6"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "39cb6149a3e5ccf0e3683d4e7d1c9ee8255f2a8a276faba7c8341579a0c1f799"
       }
     },
     {
@@ -5417,8 +5429,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "e3f3f81db450ea7ecd9bc047538f644dd90de2a0af8a801bdec5731ce9b3c59b"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "bf55b132cecf53802328d6f55336c2769f663dfc6acee8c5bb473f256888366e"
       }
     },
     {
@@ -5483,8 +5495,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "c1cca3c72089a7811ec3834930ae62f926509c87033e314a4517f6aec0fbc502"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "087309229c1ff37d3d986d7faf3f8ddbf594b7c86dba55d8022bfa29702d8c4d"
       }
     },
     {
@@ -5561,8 +5573,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "ec0bdec92c95b87739463826e5041842bd34dce1f32c517a9e5a4208aa272282"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "1a0398614d0efb1ba1b1b71a56a63d5c582a8a45318317af4b51afdc963be79c"
       }
     },
     {
@@ -5642,8 +5654,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "fc8c625f2bdae6522523256889ed943debfbbb562233473dd0c62281d9c7b26e"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "649602c2f8f6ffdc2920b2996735907b2c6ccff2750053343efc33397d5000d4"
       }
     },
     {
@@ -5723,8 +5735,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "e36ddb4b5ee84fd79740e746ab188b780603f510497daec92ee392199b904e8c"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "e7646a7d4b93c8cb936471e126d13c326a5cbf228e53ee607415e83f27a4b188"
       }
     },
     {
@@ -5783,8 +5795,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7b82242794ef64f2c61aea2f20c40863c413201353088913cb5f4522f3c487c6",
-        "preview": "f0d9ab25922487a2f297035b89ccfc439f044d358b8f765ccb9ab41b442e8c87"
+        "source": "4488684b172d2a3795e0f7715b3e12994445d425f49a543b1ed3d7759ff5f46e",
+        "preview": "a8b2a77e5c4ef03341482518a96649234798269335bfe40a8e7601518adfcd0c"
       }
     },
     {
@@ -5883,8 +5895,8 @@
         "probe": "pricing"
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "96dee53efc6a66928c0c0037114826d9287e9a66c88271aefbcebde7ab2ea651"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "fd1a1d55621afcb28cb16911c4ec11c1f343881038b817a073b00454b32028da"
       }
     },
     {
@@ -5965,8 +5977,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "3db0edf06b078bc85acd36b5ba758d94a8af37a8a65ef35b85b5407efddd869e"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "baf850a37710399bf88be067bc37bf788d2bb2a137e93e7c33be4c8dcdb77730"
       }
     },
     {
@@ -6037,15 +6049,15 @@
         "states": []
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "38505ee4a4b570be3df2bee9474fa40422777cc7aa43bf231f133a7488c01551"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "35f5817477b677b2dce13e4331431a2690a5b2e0337839c423369e83a6a02e0d"
       }
     },
     {
       "id": "mortar-product-list",
       "logicalId": "product-list",
       "name": "ProductList",
-      "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card. Opt-in cards variant with supporting text, colour swatches (consumer-supplied colours, announced by label) and a per-card action.",
+      "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card. Opt-in cards variant with supporting text, colour swatches (consumer-supplied colours, announced by label) and a per-card action, and an overlay variant that sets the name and price on a panel over the image.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -6064,7 +6076,7 @@
           "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string }; meta?: string; badge?: string; description?: string; swatches?: { label: string; swatch: string }[]; action?: ReactNode })",
           "columns": "2 | 3 | 4",
           "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3; the level of each product name)",
-          "variant": "\"plain\" | \"cards\" (default \"plain\"; cards frames each product for full-detail listings)",
+          "variant": "\"plain\" | \"cards\" | \"overlay\" (default \"plain\"; cards frames each product for full-detail listings; overlay sets the name and price on a panel over the image)",
           "id": "string",
           "className": "string"
         },
@@ -6096,7 +6108,7 @@
             "required": true
           },
           "variant": {
-            "type": "\"cards\" | \"plain\"",
+            "type": "\"cards\" | \"overlay\" | \"plain\"",
             "required": false,
             "default": "\"plain\""
           }
@@ -6115,8 +6127,8 @@
         "states": []
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "a3c6c4119f1073e8e7efc43ff3c09919fe31b52b8a4c2a35caeeb9451dd90721"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "711589607f32dfb2fe8438ab48164ca76bb8b45e8b334caa9e8869f86102be2e"
       }
     },
     {
@@ -6249,8 +6261,8 @@
         "states": []
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "a7cb470c9d383c1388a86186f28a8c90cfd9a8bfac0c6064d7bcbb89cf607cd5"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "58c69bbd252d2ec9eb65dede30bfc7d7f681b76dfc8afc14afbcf88959f6cbaa"
       }
     },
     {
@@ -6385,15 +6397,15 @@
         "states": []
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "c970d3dc5d91fa107970cf0555cc2a200b407b77ee2aaae58a97a893e7c3ee6a"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "8b76d61545dad8416b55ffda8a88a0dbc4059cb8755cbbf4a7167ffe6b6cd14f"
       }
     },
     {
       "id": "mortar-product-reviews",
       "logicalId": "product-reviews",
       "name": "ProductReviews",
-      "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews.",
+      "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews, optionally with each reviewer's avatar.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -6412,8 +6424,9 @@
           "average": "number",
           "count": "number",
           "distribution": "{ stars: number; count: number }[]",
-          "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode })",
+          "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode; avatar?: string (photo URL used with avatars) })",
           "action": "ReactNode",
+          "avatars": "boolean (shows each reviewer's Avatar, their photo or initials, beside their name)",
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; review titles are one level below)",
           "id": "string",
           "className": "string"
@@ -6422,6 +6435,11 @@
           "action": {
             "type": "ReactNode",
             "required": false
+          },
+          "avatars": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
           },
           "average": {
             "type": "number",
@@ -6461,7 +6479,7 @@
         "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-avatar"]
       },
       "preview": {
         "source": "previews/ProductReviewsPreview.tsx"
@@ -6472,8 +6490,8 @@
         "states": []
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "0f1fb4d51ccd4a84099823bbd4138e36bf67b8e0a491d4662e02630ec41d050a"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "553af61a3d2be70e47cdb7a8605664d229bdb48b6a278c7e52fedd8413e45b6f"
       }
     },
     {
@@ -6543,15 +6561,15 @@
         "states": []
       },
       "integrity": {
-        "source": "7b223024ea3fb46ebb1c950fd300aec0f1ca4f6a6f7679f2b0dba080e6bab32f",
-        "preview": "7630aad0b0680aa12cb2752d13eaa3d1e9f60fc753fc1e7a7ad3dae3810c5422"
+        "source": "de440823ea742a53ddd200a441f24b0cb21b7df6b3d7dcf0efd47c54d1eace67",
+        "preview": "fcac83b6471bd6340de7b0b68f39383f914321d551df052252dd33381526d457"
       }
     },
     {
       "id": "mortar-progress-steps",
       "logicalId": "progress-steps",
       "name": "ProgressSteps",
-      "description": "Mortar progress steps: where someone is in a multi-step flow, as numbered bars, circles with descriptions or compact bullets, with the current step marked for assistive technology.",
+      "description": "Mortar progress steps: where someone is in a multi-step flow, as numbered bars, circles with descriptions, compact bullets or one filled track (bar) for status such as an order's delivery, with the current step marked for assistive technology. navigation={false} drops the navigation landmark for status-only progress.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -6568,7 +6586,8 @@
         "props": {
           "steps": "ProgressStep[] ({ id: string; name: string; description?: string; href?: string; status: \"complete\" | \"current\" | \"upcoming\" })",
           "label": "string",
-          "variant": "\"simple\" | \"circles\" | \"bullets\"",
+          "variant": "\"simple\" | \"circles\" | \"bullets\" | \"bar\"",
+          "navigation": "boolean (default true; false renders a labelled group instead of a navigation landmark, e.g. for an order tracker)",
           "className": "string"
         },
         "propTypes": {
@@ -6581,12 +6600,17 @@
             "required": false,
             "default": "\"Progress\""
           },
+          "navigation": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
+          },
           "steps": {
             "type": "ProgressStep[]",
             "required": true
           },
           "variant": {
-            "type": "\"bullets\" | \"circles\" | \"simple\"",
+            "type": "\"bar\" | \"bullets\" | \"circles\" | \"simple\"",
             "required": false,
             "default": "\"simple\""
           }
@@ -6605,8 +6629,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "63cce710cf0614fc0eb37e2c35d06c6c7e8d58c3344ae4fd08865a4985d6de3c"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "ca6284ec454552f2331057faa1906b015b25a23eaeb8debc6412fc00a8077d59"
       }
     },
     {
@@ -6655,8 +6679,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "4b0e4ffe65ff77d3603bd5c485a6cceeb7cc2a162a05fa1573c57bf7ce810b0a"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "5c96f7900533eada7ae44f1b51fc155be5dd83ce4b1d2a4a87c92014eef824e5"
       }
     },
     {
@@ -6738,8 +6762,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "64b736de53cf56aee4998844a0d71460cc0e79a5a4127307c6684063847cd895"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "5225184cd0062f99bafc64b02ad59eca03d7cd6178792c69ed3a464e4d7875dd"
       }
     },
     {
@@ -6814,8 +6838,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "f024a71413fb7fcc1c9e3eabd6c2fef8fe5ea26f69ebb11c19356da79c31a526"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "08812f4a81dbf14720f9f9b982c201e6e35de1e0cbf8edc196b7285defe99ad0"
       }
     },
     {
@@ -6904,8 +6928,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "3be0fbefa9ac7cf7d502cac3d3b8c394e8b05b15e673011f59d76a8c7ba55491",
-        "preview": "0c064a3265f2adac11ac20e38b47424e367bf19f9a9df0e94c500a655f2195c8"
+        "source": "6d9d29f45176ef9cdc4af526b14a0216b1a8a174f3d07c76be1bc3842b60e6d5",
+        "preview": "b302c8c9ca0ce3cfb039563d6c37041a4e0fd6392dde34fa8f5cf635ed1cf789"
       }
     },
     {
@@ -6975,8 +6999,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "8c69696175a0c1cce517e03ce051d4b661c15304939bacf92e06fe4d20784b89"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "2d1cd2195b1d6a0dde10f5eb32c9f28900bdca312f78199dc4115927bf9fa629"
       }
     },
     {
@@ -7032,8 +7056,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "379c604a057b9b1b79aa249c0911d27041c778c46b85e39258c247844eb6778c"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "8324633776342a897d16d028eee96b84d34496ce26088e3bca700487414f7598"
       }
     },
     {
@@ -7114,8 +7138,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "3a1e5daa23fc6e26041aee18d00648b843b24bc7568236b5c80c0a8d15b38f4a"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "35a5d13b77f048c83cd5871c6e46ba858f9fddcec2393ce9f8ffa9b9ab90112e"
       }
     },
     {
@@ -7202,8 +7226,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "cb5247a25b15e2304cd95df8219c461165ef16fe1bdba568362f744076a916a6"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "75f31f97fe3394cb92b4ce3a01401103b2f8dd23ba941af779800a0b725abc56"
       }
     },
     {
@@ -7268,8 +7292,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "7b82242794ef64f2c61aea2f20c40863c413201353088913cb5f4522f3c487c6",
-        "preview": "34d7649d973349cc457bcf21d9ea62fe43b88f6189dd75f10aaf7af7e8377cdb"
+        "source": "4488684b172d2a3795e0f7715b3e12994445d425f49a543b1ed3d7759ff5f46e",
+        "preview": "bea169625b4c1c177d4fc3c5d7ce247f5434cb16eb7eddcb130f5287c183dd27"
       }
     },
     {
@@ -7340,8 +7364,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "97ed0b15f1d55f057c539d84e719951b12884b876b84372ddb115cfff3eb9dbc"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "3b47e644e1f12bf53e2e94ef3302aaa6cf6e844976c39928737aaf9ac8731a7f"
       }
     },
     {
@@ -7411,15 +7435,15 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "10761004e404b5e57f1194c3ca4876209314df5e6b90b48ca626939de9361100"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "13d204ba0090bc61dfd7e2fa0966ca8a028891d149d0ce78bfda99659af1d121"
       }
     },
     {
       "id": "mortar-shopping-cart",
       "logicalId": "shopping-cart",
       "name": "ShoppingCart",
-      "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; focus moves to the next line after a removal. Shows an empty state when there are no items.",
+      "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; focus moves to the next line after a removal. Shows an empty state when there are no items. Optional summary column (e.g. an OrderSummary with estimates) and related products shown as a ProductList.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -7441,6 +7465,8 @@
           "maxQuantity": "number",
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3; each line's product name and the empty state's title)",
           "empty": "{ title: string; description?: string; action?: ReactNode } (default \"Your bag is empty\")",
+          "summary": "ReactNode (beside the lines when wide, below them when narrow; e.g. an OrderSummary)",
+          "related": "{ title: string; products: ProductCard[]; headingLevel?: 1 | 2 | 3 | 4 | 5 | 6 (default 2; product names one level below) } (suggestions under the bag, also shown when it is empty)",
           "id": "string",
           "className": "string"
         },
@@ -7451,13 +7477,11 @@
           },
           "empty": {
             "type": "EmptyContent",
-            "required": false,
-            "default": "{\n    title: \"Your bag is empty\",\n    description: \"Items you add will appear here.\",\n  }"
+            "required": false
           },
           "headingLevel": {
             "type": "1 | 2 | 3 | 4 | 5 | 6",
-            "required": false,
-            "default": "3"
+            "required": false
           },
           "id": {
             "type": "string",
@@ -7469,13 +7493,11 @@
           },
           "label": {
             "type": "string",
-            "required": false,
-            "default": "\"Items in your bag\""
+            "required": false
           },
           "maxQuantity": {
             "type": "number",
-            "required": false,
-            "default": "8"
+            "required": false
           },
           "onQuantityChange": {
             "type": "(id: string, quantity: number) => void",
@@ -7484,12 +7506,20 @@
           "onRemove": {
             "type": "(id: string) => void",
             "required": true
+          },
+          "related": {
+            "type": "{ title: string; products: ProductCard[]; headingLevel?: HeadingLevel | undefined; }",
+            "required": false
+          },
+          "summary": {
+            "type": "ReactNode",
+            "required": false
           }
         },
         "usage": "Import { ShoppingCart } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": ["mortar-empty-state"]
+        "dependencies": ["mortar-empty-state", "mortar-product-list"]
       },
       "preview": {
         "source": "previews/ShoppingCartPreview.tsx"
@@ -7501,8 +7531,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "6da82e442a2c7996c6d8cad09e7e1162a72da1df51cd6373d000c086c7211152",
-        "preview": "10643a55a605684fe9379a860f6a98de2bfa532c6a2c0a194951ac1faa3c4358"
+        "source": "83bc7999cdc2b8d99ad102bf967ca7f52fe9ddb8ef4c8874a1b478e44aca641a",
+        "preview": "7d3f4f0016e30e5cacb46b7bfd2097ea18bdd75654a3f00b48c90b7e3745d81f"
       }
     },
     {
@@ -7587,8 +7617,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "e625ce17f837f143c82c988201bb96ac95b8d4c8cc38db446fac01de82039534"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "ae768d6f1a32ff2fb83fd41fe08eba9a8a16cc476a078a14dcd6560a73af6e99"
       }
     },
     {
@@ -7686,8 +7716,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "217d85d41059702c853e875bcc8f07b7d73dd23a060f65a03d8fff8dca161614"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "d01f9be1ceb064d1fa682fb74f0b82fdb3ac84c929d3bc8006ec246792aeb8e7"
       }
     },
     {
@@ -7768,8 +7798,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "d846299c3af6517530fa8d69c7c337178b4a0caa8518810e397bdc8a366a73bc",
-        "preview": "cc6e9fa2568373f58f5061ac232a22c2eb02f2815bea2951b213f7ed3f2a28b9"
+        "source": "9831a659995d94149a0f65fcaa77f485898aec15dad642342a172e0889f3e543",
+        "preview": "3e24ca0a3e7b7f595257dd3fe6da00e2a80686b4c7d39ed8e0dbe9a14464d4d5"
       }
     },
     {
@@ -7852,15 +7882,15 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "50daed17068200ecd6410fa1f25febcc9c23b4380eac5fe08e36ea7fbd9c6d5a"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "40bebc5976cf988b611baf28a96845aedebbbf0edf3c5ba0d91f5ccc04493716"
       }
     },
     {
       "id": "mortar-stacked-list",
       "logicalId": "stacked-list",
       "name": "StackedList",
-      "description": "Mortar application stacked list, using central semantic tokens.",
+      "description": "Mortar application stacked list: rows with optional leading media, a second column of meta at the row end (wrapping under the text when narrow), trailing controls, link rows with optional chevrons, and grouped sections with sticky headings.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.6.0",
@@ -7877,8 +7907,9 @@
         "props": {
           "label": "string (accessible name; defaults to the title)",
           "action": "ReactNode",
-          "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? }; rendered before groups)",
+          "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; meta?: ReactNode (second column inside the row; no links or buttons); href? }; rendered before groups)",
           "groups": "{ label: string; items: StackedListItem[] }[]",
+          "chevrons": "boolean (ends each row that has an href with a chevron)",
           "title": "ReactNode",
           "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (title level, default 2; group headings sit one level below the title, or at this level without one)",
           "id": "string",
@@ -7888,6 +7919,11 @@
           "action": {
             "type": "ReactNode",
             "required": false
+          },
+          "chevrons": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
           },
           "className": {
             "type": "string",
@@ -7935,8 +7971,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d846299c3af6517530fa8d69c7c337178b4a0caa8518810e397bdc8a366a73bc",
-        "preview": "d9467910d0928557d0363aab90f3890c05be93e10d2f136ab8e537d4479e15f9"
+        "source": "9831a659995d94149a0f65fcaa77f485898aec15dad642342a172e0889f3e543",
+        "preview": "8bc226183c1a9beefb14d299caef0abeb6a0704e6b87cbbc15de6d52bd3e75d0"
       }
     },
     {
@@ -8028,8 +8064,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "4230f54a93a7b854dde336de9c5d170ae23d38d7c43a85e4a0cece04acd4f4b4"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "9ad6ca23422b638bed27236d57f2019ba85461e1682464766ff5fea6977c3d57"
       }
     },
     {
@@ -8099,8 +8135,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "1d99053ddb60e6e568bd1b6628a9e053b02bf0fba9b97853bdd722c98ca66bd5"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "abd9c1ebcaa301ddd0b39a6ccaabb7a713cddd6f4e264bf32058c54588950150"
       }
     },
     {
@@ -8160,8 +8196,8 @@
         "states": []
       },
       "integrity": {
-        "source": "e2465aec6deccb2ef0b4466b80184a2e03275432cfc14bb357acc07193cc04ba",
-        "preview": "6063650aadbc415bec3213ad317d9bfe820dd484d7ac0c5361c5b8ec1286a2b9"
+        "source": "399240b2e5188493e8a4e25de2a3eb85f86a8f84720ed240d257be6eb8baab20",
+        "preview": "7fa1c4055253591e6552d3df04aa4aeac1a4674550610e5f6847ffbdd9a6ddb3"
       }
     },
     {
@@ -8220,8 +8256,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "63a34662f3d4719abc1fe693940f6b7e03345348444f000730f17b4ac28d7594"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "4722fd7d918ce1b6e4a5e22d93c7599744e445f8a79535c0574e3aaa8eca5f6d"
       }
     },
     {
@@ -8287,8 +8323,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "c2da4a33044f9e10c84cbbf39362a2cbebd75b0a252c3611f9910d652c385bc8"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "3557d567fb1c695e819d27be2b1cedd5f61499d321819f67daff52fda9b3cc09"
       }
     },
     {
@@ -8376,8 +8412,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d92ff89ba84dbf9081a509b3257349c863f4c4938aa87bc1b30fa9e121532ae3",
-        "preview": "cf09f17d981ae5adb3a4410cefb34965f8f9301b31bf43943dc7779e0685f938"
+        "source": "c39223e0d1476c1b2f55a4c3e8b198d33f789282db28edeed489f23cb3fc2d7e",
+        "preview": "9361d66b2e315d9604c0b0b56342b209ee9f90cf88c5302e997bdab3986e66eb"
       }
     },
     {
@@ -8454,8 +8490,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "358ba6a7e7f5bbefd8f438afd34b6b070096f3ab30c59b2e5e53ff03b161cde9"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "1d0ecb9f73b06c90a219f7f00b2c1f88402f40227f18ab18a405165730c49e68"
       }
     },
     {
@@ -8525,8 +8561,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "de8533d05c0015f206fb8f9a980cb33444a2141c227f5a8f208a8e6111da0f9a"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "aaa24b9d07ec05013ca2c5d86762ea821e5afbf4449d6da52493e2cbbe7dff67"
       }
     },
     {
@@ -8591,8 +8627,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5eda7bc266baaba0d5ac4f0f9a185ec2feced3421e9c7e1089540b14a454332e",
-        "preview": "0de343204baa7391588e867ba84037cc5449119881c4e78ab1dcaf6ef72f7955"
+        "source": "af4ce84799b64cbe6d06f6ce44a84556a6ee121e054a811428239a2ea526bc34",
+        "preview": "98e86e2f20d58871a2ca4cc3a81f951c2f97a7648648cc1189131b75096e3f4f"
       }
     },
     {
@@ -8666,8 +8702,8 @@
         "states": []
       },
       "integrity": {
-        "source": "7067b78e46bcbeaecaed4441248cd891f4048c64f44aee7698fcfd2d0b253c9b",
-        "preview": "be80c79bc16a5109e9dd2cb5aa5edb861d9fe97fd24a95617f5cc890de5d2165"
+        "source": "3bff1c9be2ef0fe8ff40a8ce2b66854379f018b88b646a20f3a35792ae14e2e9",
+        "preview": "f964fad301994b9178ca2158367c59f382ad2ca84d4ee1d00109cb7cb00934dd"
       }
     },
     {
@@ -8733,8 +8769,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "91da75ffec8c73833701513adcca1862cc08c96cf96bf93944d5e7bdd28a66fc",
-        "preview": "c7e0ea08c0c62746a0efb431b82de0a9b2944f4fad789f72f2c6ae5b615516ee"
+        "source": "71a7ff9fe10cbe1406d13087a0d98e4f6592f3f6cfc8a33655f83aaa0be2d60e",
+        "preview": "7a3db45df64b08d8846e8bf273cb52e586c9de8bd36907edea513b4e8edba9e2"
       }
     },
     {
@@ -8807,8 +8843,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42a2e8c5ba4aa64b29f27103476c154581d83774858469aaad5fbe68a2a8dd7a",
-        "preview": "1533d33503b70fe98743b0b2ecb46b3aaa94b8c1b6b2dee36ddb0eca4d155aec"
+        "source": "04d258e167c8e8def88a60f6d370e6cc361454d0f6dba853dfbab604888edd3a",
+        "preview": "50883adbe116f48653d8538005ac012e5f55af5c23098e9dd41633292bc5870c"
       }
     },
     {
@@ -8897,8 +8933,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "375de977286f580ef14b25a754f794fa7a6dc8ef6f137b3272c93c798f43284f",
-        "preview": "1aa5812a37a5754154fbe5f0c499de62014da5db877e9b52334ee0fb20ce08bf"
+        "source": "d2430a4c88e089bab3cc20c04235b7940eb02553adc9650d21c35bc79391a5ee",
+        "preview": "a173c57ff1073e36f14c8d2b89ba9e607991be7fd611fb95405485ffd6a99fa6"
       }
     },
     {
@@ -8979,8 +9015,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "3be0fbefa9ac7cf7d502cac3d3b8c394e8b05b15e673011f59d76a8c7ba55491",
-        "preview": "9ff3a4656e2c768bfe552edd44edf85203ef1b21becf1db7f243403adcf6125b"
+        "source": "6d9d29f45176ef9cdc4af526b14a0216b1a8a174f3d07c76be1bc3842b60e6d5",
+        "preview": "85e6a3d2806deb4b7b1c8211e9f81c43429dffe4370e3379bde6a182586f46e8"
       }
     },
     {
@@ -9046,8 +9082,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "3be0fbefa9ac7cf7d502cac3d3b8c394e8b05b15e673011f59d76a8c7ba55491",
-        "preview": "86e1616c207a207ebe196f5b40693ffad81fe90bebbf96eb5d1bc0b08ba2276f"
+        "source": "6d9d29f45176ef9cdc4af526b14a0216b1a8a174f3d07c76be1bc3842b60e6d5",
+        "preview": "2e4235a39bd3f61765b7eed9feed8e6f3a2043e432819974a7cfa0b35b2822ab"
       }
     }
   ]
