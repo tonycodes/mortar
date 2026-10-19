@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { contractErrors, obligations } from "../scripts/test-contract.mjs";
+import {
+  contractErrors,
+  obligations,
+  states as allowedStates,
+} from "../scripts/test-contract.mjs";
+import { states as stateAssertions } from "./support/states.mjs";
 import { verifyEvidence } from "../scripts/contract-evidence.mjs";
 const component = {
   id: "button",
@@ -57,3 +62,8 @@ test("complete execution evidence is required; skipped, missing, duplicate and p
     ).length,
   );
 });
+test("every allowed state has an executable browser assertion", () =>
+  assert.deepEqual(
+    Object.keys(stateAssertions).sort(),
+    [...allowedStates].sort(),
+  ));

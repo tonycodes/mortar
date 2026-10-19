@@ -1,5 +1,6 @@
 import { expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { contrast as ratio } from "./color.mjs";
 export async function mount(page, component, params = {}) {
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -47,22 +48,11 @@ export async function accessibility(page, scope) {
  * ignored). An unparseable colour, such as an empty string, scores 0.
  */
 export function contrast(a, b) {
-  const channels = (value) =>
-    String(value)
-      .match(/[\d.]+/g)
-      ?.slice(0, 3);
-  if (channels(a)?.length !== 3 || channels(b)?.length !== 3) return 0;
-  const luminance = (value) =>
-    channels(value)
-      .map(Number)
-      .map((n) => {
-        const v = n / 255;
-        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-      })
-      .reduce((sum, n, i) => sum + n * [0.2126, 0.7152, 0.0722][i], 0);
-  const x = luminance(a),
-    y = luminance(b);
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  try {
+    return ratio(String(a), String(b));
+  } catch {
+    return 0;
+  }
 }
 /** A colour token as its computed `rgb()` value inside `within` (default: body). */
 export function tokenColor(page, token, within = page.locator("body")) {
