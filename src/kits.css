@@ -232,7 +232,7 @@
     border-top: 1px solid var(--m-line);
     background: var(--m-paper);
   }
-  .m-button-danger[data-solid]:not(:disabled) {
+  .m-button-danger[data-solid]:not(:disabled, [aria-disabled="true"]) {
     background: var(--m-danger);
     color: var(--m-on-feedback);
   }
@@ -5046,7 +5046,7 @@
 /* EmptyState variants (dashed, start-aligned, extra content) and Avatar
    icon placeholder / top status dot. */
 @layer components {
-  .m-empty > :is(h2, h4) {
+  .m-empty > :is(h2, h4, h5, h6) {
     font-size: 18px;
     font-weight: 600;
   }

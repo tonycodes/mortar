@@ -1140,7 +1140,7 @@ export function PreviewCase({ name }: { name: string }) {
       );
       break;
     case "PreviewFrame":
-      example = <UI.PreviewFrame title="Isolated example" src="about:blank" />;
+      example = <UI.PreviewFrame label="Isolated example" src="about:blank" />;
       break;
     default:
       example = (

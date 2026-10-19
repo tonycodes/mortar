@@ -21,7 +21,7 @@ test("CommentComposer shows an avatar, toolbar, counter, hint and error", () => 
   const markup = html(CommentComposer, {
     onSubmit() {},
     value: "Looks good",
-    onValueChange() {},
+    onChange() {},
     avatar: h("span", { "data-avatar": "" }),
     actions: h("button", { type: "button" }, "Attach"),
     maxLength: 280,
@@ -36,14 +36,15 @@ test("CommentComposer shows an avatar, toolbar, counter, hint and error", () => 
     /<div class="m-composer-actions"><button type="button">Attach<\/button><\/div>/,
   );
   assert.match(markup, /maxLength="280"/i);
-  assert.match(
-    markup,
-    /<span class="m-composer-count" aria-live="polite">10 \/ 280<\/span>/,
-  );
+  // The visible count is not live; only the remaining count near the limit is.
+  assert.match(markup, /<span class="m-composer-count">10 \/ 280<\/span>/);
+  assert.match(markup, /<span class="m-sr-only" role="status"><\/span>/);
   assert.match(markup, /aria-invalid="true"/);
   const describedBy = markup.match(/aria-describedby="([^"]+)"/)?.[1];
   assert.ok(
-    markup.includes(`<p id="${describedBy}" class="m-error">Too spicy</p>`),
+    markup.includes(
+      `<p id="${describedBy}" class="m-error" role="alert">Too spicy</p>`,
+    ),
   );
   assert.match(
     markup,

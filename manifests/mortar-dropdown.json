@@ -18,7 +18,8 @@
       "iconOnly": "boolean",
       "variant": "secondary | ghost",
       "align": "start | end",
-      "header": "ReactNode"
+      "header": "ReactNode",
+      "className": "string (on the trigger button)"
     },
     "usage": "Import { Dropdown } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

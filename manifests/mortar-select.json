@@ -17,8 +17,10 @@
       "value": "string",
       "onChange": "ChangeEventHandler<HTMLSelectElement>",
       "hint": "string",
-      "error": "string",
-      "id": "string (defaults to a generated id)"
+      "error": "string (announced when it appears)",
+      "id": "string (defaults to a generated id)",
+      "required": "boolean (native; adds a decorative marker to the label)",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Select } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

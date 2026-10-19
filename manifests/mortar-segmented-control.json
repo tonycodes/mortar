@@ -15,7 +15,8 @@
       "label": "string",
       "value": "string",
       "options": "{ value: string; label: string }[]",
-      "onChange": "(value: string) => void"
+      "onChange": "(value: string) => void",
+      "className": "string (on the root element)"
     },
     "usage": "Import { SegmentedControl } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

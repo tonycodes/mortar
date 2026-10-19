@@ -16,14 +16,15 @@
       "value": "string | number",
       "onChange": "ChangeEventHandler<HTMLInputElement>",
       "hint": "string",
-      "error": "string",
+      "error": "string (announced when it appears)",
       "prefix": "string",
       "suffix": "string",
       "leadingIcon": "ReactNode",
       "trailingIcon": "ReactNode",
       "action": "ReactNode",
       "id": "string (defaults to a generated id)",
-      "className": "string (applied to the input)"
+      "className": "string (on the root element)",
+      "required": "boolean (native; adds a decorative marker to the label)"
     },
     "usage": "Import { Input } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

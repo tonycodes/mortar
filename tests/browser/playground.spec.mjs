@@ -389,7 +389,8 @@ test("settings template shows and clears unsaved changes", async ({ page }) => {
   await page.goto("/?recipe=settings");
   const name = page.getByLabel("Workspace name");
   await name.fill("Northwind Labs");
-  const bar = page.getByText("You have unsaved changes");
+  // The bar's status region stays mounted (empty) so its message is announced.
+  const bar = page.getByRole("region", { name: "You have unsaved changes" });
   await expect(bar).toBeVisible();
   await page.getByRole("button", { name: "Discard" }).click();
   await expect(name).toHaveValue("Northwind");

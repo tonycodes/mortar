@@ -14,6 +14,7 @@ import {
   ComboboxOption,
 } from "@headlessui/react";
 import { Check, ChevronDown } from "./icons.js";
+import { RequiredMark, cx } from "./internal.js";
 
 export interface ChoiceOption {
   value: string;
@@ -31,8 +32,13 @@ interface ChoiceProps {
   onChange: (value: string | null) => void;
   placeholder?: string;
   hint?: string;
+  /** Marks the field invalid; the message is announced when it appears. */
   error?: string;
   disabled?: boolean;
+  /** Marks the field required and adds a decorative marker to the label. */
+  required?: boolean;
+  /** On the field's root element. */
+  className?: string;
 }
 
 function OptionContent({ option }: { option: ChoiceOption }) {
@@ -52,12 +58,34 @@ function OptionContent({ option }: { option: ChoiceOption }) {
   );
 }
 
+/** Label with the required marker; `spoken` adds "required" for controls that cannot carry aria-required. */
+function ChoiceLabel({
+  label,
+  required,
+  spoken = false,
+}: {
+  label: string;
+  required?: boolean;
+  spoken?: boolean;
+}) {
+  return (
+    <Label>
+      {label}
+      {required && <RequiredMark />}
+      {required && spoken && <span className="m-sr-only"> (required)</span>}
+    </Label>
+  );
+}
+
+/** The hint or error; the error is a separate alert so it is announced when it appears. */
 function Message({ hint, error }: { hint?: string; error?: string }) {
-  return error || hint ? (
-    <Description className={error ? "m-error" : ""}>
-      {error || hint}
-    </Description>
-  ) : null;
+  if (error)
+    return (
+      <Description key="error" className="m-error" role="alert">
+        {error}
+      </Description>
+    );
+  return hint ? <Description key="hint">{hint}</Description> : null;
 }
 
 /** Styled single select for rich options (avatars, descriptions). Use Select for plain native choices. */
@@ -70,11 +98,13 @@ export function Listbox({
   hint,
   error,
   disabled = false,
+  required,
+  className,
 }: ChoiceProps) {
   const selected = options.find((o) => o.value === value);
   return (
-    <Field className="m-field" disabled={disabled}>
-      <Label>{label}</Label>
+    <Field className={cx("m-field", className)} disabled={disabled}>
+      <ChoiceLabel label={label} required={required} spoken />
       <HeadlessListbox value={value} onChange={onChange}>
         <ListboxButton
           className="m-choice-control"
@@ -122,8 +152,13 @@ export function Combobox({
   hint,
   error,
   disabled = false,
-  emptyLabel = "No matches",
-}: ChoiceProps & { emptyLabel?: string }) {
+  required,
+  className,
+  empty = { title: "No matches" },
+}: ChoiceProps & {
+  /** Shown and announced when the typed text matches no option. */
+  empty?: { title: string; description?: string; action?: ReactNode };
+}) {
   const [query, setQuery] = useState("");
   const needle = query.trim().toLowerCase();
   const filtered = needle
@@ -132,9 +167,10 @@ export function Combobox({
   const leading = query
     ? undefined
     : options.find((o) => o.value === value)?.leading;
+  const nothing = !!needle && !filtered.length;
   return (
-    <Field className="m-field" disabled={disabled}>
-      <Label>{label}</Label>
+    <Field className={cx("m-field", className)} disabled={disabled}>
+      <ChoiceLabel label={label} required={required} />
       <HeadlessCombobox
         value={value}
         onChange={onChange}
@@ -150,6 +186,7 @@ export function Combobox({
             className="m-choice-control"
             placeholder={placeholder}
             aria-invalid={error ? true : undefined}
+            aria-required={required || undefined}
             displayValue={(v: string | null) =>
               options.find((o) => o.value === v)?.label ?? ""
             }
@@ -180,12 +217,15 @@ export function Combobox({
           </ComboboxOptions>
         )}
       </HeadlessCombobox>
-      <p
-        role="status"
-        className={needle && !filtered.length ? "" : "m-sr-only"}
-      >
-        {needle && !filtered.length ? emptyLabel : ""}
+      <p role="status" className={nothing ? undefined : "m-sr-only"}>
+        {nothing && (
+          <>
+            {empty.title}
+            {empty.description && <span> {empty.description}</span>}
+          </>
+        )}
       </p>
+      {nothing && empty.action}
       <Message hint={hint} error={error} />
     </Field>
   );

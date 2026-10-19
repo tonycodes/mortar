@@ -2,7 +2,7 @@
   "id": "mortar-toaster",
   "logicalId": "toaster",
   "name": "Toaster",
-  "description": "Mortar foundation toaster, using central semantic tokens.",
+  "description": "Mortar foundation toaster: a controlled region of toasts that announces each new toast once, assertively for danger.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "Toaster",
@@ -13,8 +13,10 @@
   "contract": {
     "props": {
       "items": "ToastItem[]",
-      "onDismiss": "(id: string) => void",
-      "label": "string"
+      "onDismiss": "(id: string) => void (focus moves to the next toast, else the region)",
+      "label": "string",
+      "id": "string",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Toaster } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

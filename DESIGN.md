@@ -31,6 +31,10 @@ Every component follows these rules. New props must fit them, and the code revie
   - A destructive action is `tone="danger"`, and a destructive item in a list is `danger: true`.
   - Tone renders as `data-tone`.
 - **State.** Busy work is `loading`. Empty content is `empty?: { title; description?; action? }`. Errors are `error` (string).
+  - A loading button stays focusable: it sets `aria-busy` and `aria-disabled` and ignores activation instead of becoming natively disabled.
+  - A field `error` is announced when it appears (`role="alert"`). `required` marks the control (native `required` or `aria-required`) and adds a decorative `*` after the label.
+  - Status and alert regions stay mounted, and their content changes, so each message is announced once.
+  - Dismissing or removing an element that holds focus moves focus to the next control, never to the page body.
 - **Callbacks.** Value changes use `onChange(value)`. Choosing an item or action uses `onSelect`. Dismissal uses `onDismiss` and closing uses `onClose`.
 - **Items.**
   - Links share `LinkItem` (`label`, `href`, `current?`, `icon?`, `count?`, `description?`), and grouped items share `{ label; items }`.

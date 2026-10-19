@@ -2,7 +2,7 @@
   "id": "mortar-banner",
   "logicalId": "banner",
   "name": "Banner",
-  "description": "Mortar banner: a site-wide announcement bar with an optional link and dismiss button, in inverse or neutral tone.",
+  "description": "Mortar banner: a site-wide announcement bar with an optional link and dismiss button, in the inverse or default tone.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "Banner",
@@ -17,7 +17,9 @@
       "onDismiss": "() => void",
       "label": "string",
       "dismissLabel": "string",
-      "tone": "\"inverse\" | \"neutral\""
+      "tone": "\"default\" | \"inverse\" (default \"inverse\")",
+      "id": "string",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Banner } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

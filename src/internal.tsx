@@ -2,7 +2,9 @@
 // exported from the package entry, so these can change without a release note.
 import {
   Fragment,
+  createContext,
   createElement,
+  useContext,
   useId,
   type HTMLAttributes,
   type ReactNode,
@@ -246,8 +248,10 @@ export function DialogFrame({
 }) {
   return (
     <Dialog open={open} onClose={onClose} className="m-dialog">
-      <div className="m-backdrop" aria-hidden="true" />
-      {children}
+      <ThemeScope>
+        <div className="m-backdrop" aria-hidden="true" />
+        {children}
+      </ThemeScope>
     </Dialog>
   );
 }
@@ -373,5 +377,94 @@ export function NavTreeLinks({
         ),
       )}
     </>
+  );
+}
+
+/**
+ * The hint or error under a field. Unlike FieldMessage, the error is its own
+ * role="alert" element, so it is announced when it appears.
+ */
+export function FieldFeedback({
+  id,
+  hint,
+  error,
+}: {
+  id: string;
+  hint?: string;
+  error?: string;
+}) {
+  if (error)
+    return (
+      <p key="error" id={id} className="m-error" role="alert">
+        {error}
+      </p>
+    );
+  return hint ? (
+    <p key="hint" id={id}>
+      {hint}
+    </p>
+  ) : null;
+}
+
+/** Decorative required marker after a field label; the control itself is marked required. */
+export function RequiredMark() {
+  return (
+    <span className="m-required" aria-hidden="true">
+      *
+    </span>
+  );
+}
+
+const TABBABLE =
+  'a[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
+/**
+ * Call before `element` is removed. If focus is inside it, move focus to the
+ * next tabbable element after it (within `scope`, default the document), else
+ * the previous one, else `fallback`, so focus never drops to the body.
+ */
+export function focusAway(
+  element: HTMLElement | null,
+  {
+    scope,
+    fallback,
+  }: { scope?: HTMLElement | null; fallback?: HTMLElement | null } = {},
+) {
+  if (!element) return;
+  const document = element.ownerDocument;
+  if (!element.contains(document.activeElement)) return;
+  const candidates = [
+    ...(scope ?? document.body).querySelectorAll<HTMLElement>(TABBABLE),
+  ].filter(
+    (el) =>
+      !element.contains(el) &&
+      !el.closest("[hidden], [inert]") &&
+      el.getClientRects().length > 0,
+  );
+  const following = (el: HTMLElement) =>
+    element.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING;
+  const after = candidates.find(following);
+  const before = candidates.filter((el) => !following(el)).pop();
+  (after ?? before ?? fallback)?.focus();
+}
+
+/**
+ * The data-mortar-* attributes of the nearest container-scoped ThemeProvider.
+ * Optional (undefined outside one), so it does not make dialogs depend on it.
+ */
+export const ThemeScopeContext = createContext<
+  Record<string, string> | undefined
+>(undefined);
+/**
+ * Re-applies a container-scoped theme to content rendered outside its wrapper
+ * (dialogs portal to the document body). The wrapper is display: contents, so
+ * it carries the tokens without adding a box.
+ */
+export function ThemeScope({ children }: { children: ReactNode }) {
+  const attributes = useContext(ThemeScopeContext);
+  if (!attributes) return <>{children}</>;
+  return (
+    <div {...attributes} className="m-theme-scope">
+      {children}
+    </div>
   );
 }

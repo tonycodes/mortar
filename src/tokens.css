@@ -1,6 +1,8 @@
 /* Project-agnostic semantic tokens derived from the supplied Mortar v2 designs.
-   Status colours deliberately differ from brand colours. No hosted service dependency. */
-:root {
+   Status colours deliberately differ from brand colours. No hosted service dependency.
+   Light values also apply to a light container inside a dark document. */
+:root,
+[data-mortar-appearance="light"] {
   --m-font:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
     sans-serif;
