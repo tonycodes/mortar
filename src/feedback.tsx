@@ -1,12 +1,9 @@
 import { useEffect, useId, useState, type ReactNode } from "react";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Description,
-} from "@headlessui/react";
+import { DialogPanel, DialogTitle, Description } from "@headlessui/react";
 import { Button, Input, type LinkAction, type Tone } from "./primitives.js";
 import { KitLink } from "./navigation.js";
+import { Close } from "./icons.js";
+import { DialogFrame } from "./internal.js";
 
 export interface ToastItem {
   id: string;
@@ -128,8 +125,7 @@ export function ConfirmDialog({
   }, [open]);
   const ready = !confirmationText || typed === confirmationText;
   return (
-    <Dialog open={open} onClose={onClose} className="m-dialog">
-      <div className="m-backdrop" aria-hidden="true" />
+    <DialogFrame open={open} onClose={onClose}>
       <div className="m-dialog-position">
         <DialogPanel className="m-dialog-panel m-confirm">
           <form
@@ -168,7 +164,7 @@ export function ConfirmDialog({
           </form>
         </DialogPanel>
       </div>
-    </Dialog>
+    </DialogFrame>
   );
 }
 
@@ -245,19 +241,7 @@ export function Banner({
       </p>
       {onDismiss && (
         <button type="button" aria-label={dismissLabel} onClick={onDismiss}>
-          <svg
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="m5 5 10 10M15 5 5 15"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-            />
-          </svg>
+          <Close />
         </button>
       )}
     </section>

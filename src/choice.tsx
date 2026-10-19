@@ -13,6 +13,7 @@ import {
   ComboboxOptions,
   ComboboxOption,
 } from "@headlessui/react";
+import { Check, ChevronDown } from "./icons.js";
 
 export interface ChoiceOption {
   value: string;
@@ -34,18 +35,6 @@ interface ChoiceProps {
   disabled?: boolean;
 }
 
-const chevron = (
-  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-    <path
-      d="m6 8 4 4 4-4"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 function OptionContent({ option }: { option: ChoiceOption }) {
   return (
     <>
@@ -58,21 +47,7 @@ function OptionContent({ option }: { option: ChoiceOption }) {
         <span>{option.label}</span>
         {option.description && <small>{option.description}</small>}
       </span>
-      <svg
-        className="m-choice-check"
-        viewBox="0 0 20 20"
-        fill="none"
-        aria-hidden="true"
-        focusable="false"
-      >
-        <path
-          d="m5 10 3.5 3.5L15 7"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <Check className="m-choice-check" />
     </>
   );
 }
@@ -117,7 +92,7 @@ export function Listbox({
           ) : (
             <span className="m-placeholder">{placeholder}</span>
           )}
-          {chevron}
+          <ChevronDown />
         </ListboxButton>
         <ListboxOptions anchor="bottom start" className="m-choice-options">
           {options.map((option) => (
@@ -184,7 +159,7 @@ export function Combobox({
             className="m-combobox-toggle"
             aria-label={`Show ${label} options`}
           >
-            {chevron}
+            <ChevronDown />
           </ComboboxButton>
         </div>
         {filtered.length > 0 && (

@@ -2,35 +2,8 @@ import { IconLinks, KitLink, type IconLink } from "./navigation.js";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { ActionLink, Button, Input, type LinkAction } from "./primitives.js";
 import { Avatar } from "./display.js";
-
-type HeadingLevel = 2 | 3 | 4;
-
-function headingTag(level: HeadingLevel) {
-  return `h${level}` as "h2" | "h3" | "h4";
-}
-
-function SectionIntro({
-  eyebrow,
-  title,
-  description,
-  id,
-  headingLevel = 2,
-}: {
-  eyebrow?: string;
-  title: string;
-  description?: string;
-  id?: string;
-  headingLevel?: HeadingLevel;
-}) {
-  const Heading = headingTag(headingLevel);
-  return (
-    <>
-      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <Heading id={id}>{title}</Heading>
-      {description && <p className="m-section-description">{description}</p>}
-    </>
-  );
-}
+import { childLevel, headingTag } from "./heading.js";
+import { ActionLinks, SectionIntro, TermList } from "./internal.js";
 
 export function BentoGrid({
   eyebrow,
@@ -49,9 +22,9 @@ export function BentoGrid({
     span?: 1 | 2;
     inverse?: boolean;
   }[];
-  headingLevel?: HeadingLevel;
+  headingLevel?: 2 | 3 | 4;
 }) {
-  const ItemHeading = headingTag(headingLevel === 2 ? 3 : 4);
+  const ItemHeading = headingTag(childLevel(headingLevel, 4));
   return (
     <section className="m-marketing-section" data-m-component="BentoGrid">
       <SectionIntro
@@ -89,21 +62,18 @@ export function StatGroup({
   items: { value: string; label: string; description?: string }[];
 }) {
   return (
-    <dl
+    <TermList
       className="m-stat-group"
       aria-label={label}
       data-m-component="StatGroup"
-    >
-      {items.map((item) => (
-        <div key={item.label}>
-          <dt>{item.label}</dt>
-          <dd>{item.value}</dd>
-          {item.description && (
-            <dd className="m-stat-description">{item.description}</dd>
-          )}
-        </div>
-      ))}
-    </dl>
+      items={items.map((item) => ({
+        term: item.label,
+        details: item.value,
+        after: item.description && (
+          <dd className="m-stat-description">{item.description}</dd>
+        ),
+      }))}
+    />
   );
 }
 
@@ -328,14 +298,9 @@ export function ContactSection({
       <div>
         <SectionIntro title={title} description={description} />
         {details.length > 0 && (
-          <dl>
-            {details.map((d) => (
-              <div key={d.label}>
-                <dt>{d.label}</dt>
-                <dd>{d.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <TermList
+            items={details.map((d) => ({ term: d.label, details: d.value }))}
+          />
         )}
       </div>
       <div className="m-contact-form">{children}</div>
@@ -366,8 +331,11 @@ export function Newsletter({
   return (
     <section className="m-newsletter" data-m-component="Newsletter">
       <div>
-        <h2>{title}</h2>
-        {description && <p>{description}</p>}
+        <SectionIntro
+          title={title}
+          description={description}
+          descriptionClassName={null}
+        />
       </div>
       <form onSubmit={submit} noValidate>
         <Input
@@ -412,15 +380,7 @@ export function NotFound({
       <p className="m-eyebrow">{code}</p>
       <h1>{title}</h1>
       <p>{description}</p>
-      <div className="m-actions">
-        {actions.map((action, i) => (
-          <ActionLink
-            key={`${action.label}:${action.href}:${i}`}
-            {...action}
-            variant={i === 0 ? "primary" : "secondary"}
-          />
-        ))}
-      </div>
+      <ActionLinks actions={actions} />
     </section>
   );
 }

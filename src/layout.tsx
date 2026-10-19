@@ -1,4 +1,5 @@
 import { useId, type ElementType, type ReactNode } from "react";
+import { SectionIntro, introSlots } from "./internal.js";
 
 type Space = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -107,9 +108,7 @@ export function Section({
       data-align={align}
       data-m-component="Section"
     >
-      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      {title && <h2>{title}</h2>}
-      {description && <p className="m-section-description">{description}</p>}
+      {...introSlots({ eyebrow, title: title || undefined, description })}
       {children && <div className="m-section-body">{children}</div>}
     </section>
   );
@@ -178,7 +177,6 @@ export function Card({
   children?: ReactNode;
 }) {
   const id = useId();
-  const Heading = `h${headingLevel}` as const;
   return (
     <Tag
       className="m-card"
@@ -190,8 +188,13 @@ export function Card({
         <header className="m-card-header">
           {title && (
             <div className="m-card-heading">
-              <Heading id={id}>{title}</Heading>
-              {description && <p>{description}</p>}
+              <SectionIntro
+                title={title}
+                description={description}
+                id={id}
+                headingLevel={headingLevel}
+                descriptionClassName={null}
+              />
             </div>
           )}
           {actions && <div className="m-card-actions">{actions}</div>}
@@ -249,15 +252,23 @@ export function SectionHeading({
   /** Page tabs (e.g. TabNav) below the title row; their underline replaces the divider. */
   tabs?: ReactNode;
 }) {
-  const Heading = `h${headingLevel}` as const;
   return (
     <div className="m-section-heading" data-divider={divider}>
       <div className="m-section-heading-text">
-        <Heading>{title}</Heading>
-        {description && <p>{description}</p>}
+        <SectionIntro
+          title={title}
+          description={description}
+          headingLevel={headingLevel}
+          descriptionClassName={null}
+        />
       </div>
       {actions && <div className="m-actions">{actions}</div>}
       {tabs && <div className="m-section-heading-tabs">{tabs}</div>}
     </div>
   );
+}
+
+/** Long-form copy with the kit's typographic rhythm. */
+export function Prose({ children }: { children: ReactNode }) {
+  return <div className="m-prose">{children}</div>;
 }

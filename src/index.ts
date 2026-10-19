@@ -105,6 +105,7 @@ export {
   Card,
   MediaObject,
   SectionHeading,
+  Prose,
 } from "./layout.js";
 export type { SectionTone } from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
@@ -131,7 +132,6 @@ export {
   Steps,
   Callout,
   FileTree,
-  Prose,
   CodeTabs,
   Release,
   ApiEndpoint,
