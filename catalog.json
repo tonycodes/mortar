@@ -135,8 +135,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "87e1343bccfb2624af6cabe7d37b74b7255984675603b01689c27fb7f2c97ad9"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "819d85fbbb23b5e3b1a252c3f0e818002232eb00626276e230d46bcc32388dc7"
       }
     },
     {
@@ -163,7 +163,9 @@
           "action": "ReactNode",
           "children": "ReactNode",
           "tone": "\"default\" | \"danger\"",
-          "headingLevel": "2 | 3"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "action": {
@@ -174,14 +176,22 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "title": {
             "type": "string",
@@ -207,8 +217,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "1a2ded6d68300c576b28f7f2fa0d2651d526d0d66c8b95261f2976bb89f64e8a"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "2850e77291d1a423c7cd2c10d40921d5e5ee9681f5b1ee37cd797969a2e0dbfc"
       }
     },
     {
@@ -231,9 +241,14 @@
       "contract": {
         "props": {
           "label": "string",
-          "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]"
+          "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "{ id: string; title: string; description?: string | undefined; time: string; tone?: Tone | undefined; actor?: ReactNode; body?: ReactNode; }[]",
             "required": true
@@ -257,8 +272,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "bebf84e6641a5115a77b13e9d735d04f5656e8a37e028aff69567e3e156e2fd1"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "47ee8c9a42bc13770d40f5fad93708d4a11f71aa17604bbc089185ae431b74c7"
       }
     },
     {
@@ -349,8 +364,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "8e61a813ce29f95ea2a89b005ca91a1a711ea147f9d95ceae6bfc6b49e4671cd"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "c7f98c51551164f775af46dfb59cde17ae7aadea7be7f0fa081de62791898dc5"
       }
     },
     {
@@ -375,14 +390,16 @@
           "brand": "string",
           "workspace": "string",
           "navigation": "NavigationItem[]",
-          "secondaryNavigation": "{ label: string; items: NavigationItem[] }[]",
-          "user": "ReactNode",
           "header": "ReactNode",
           "actions": "ReactNode",
           "children": "ReactNode",
           "logo": "ReactNode",
           "aside": "ReactNode",
-          "asideLabel": "string"
+          "asideLabel": "string",
+          "homeHref": "string",
+          "sections": "{ label: string; items: NavigationItem[] }[] (labelled link groups, as on Sidebar)",
+          "footer": "ReactNode (account menu pinned to the bottom of the sidebar)",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -406,8 +423,20 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
           "header": {
             "type": "ReactNode",
+            "required": false
+          },
+          "homeHref": {
+            "type": "string",
             "required": false
           },
           "logo": {
@@ -418,14 +447,10 @@
             "type": "NavigationItem[]",
             "required": true
           },
-          "secondaryNavigation": {
+          "sections": {
             "type": "ItemGroup<NavigationItem>[]",
             "required": false,
             "default": "[]"
-          },
-          "user": {
-            "type": "ReactNode",
-            "required": false
           },
           "workspace": {
             "type": "string",
@@ -447,8 +472,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "e1d0cfafbb272bc63ecbb1755f9a097fb55836160fa41aba9e497258b50dc426"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "0a5c638dd48b78ca1d2f2400de280491bc0b9e2872d2136b518f2efd5146b4d1"
       }
     },
     {
@@ -503,8 +528,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "28d9458577a100396f203dad702175d76c72db9b83d8057e7eaa16f2242acbca",
-        "preview": "e48c5fbf515d7814b15889fff3a3d9f596ea20ca1abfbc3c677bb43ca82ec6c5"
+        "source": "84fbc3b6c7a148b1eb9fdecfd02136906ced33d9551629caffc58de07644c4ce",
+        "preview": "260531fdfdcc23a4da31ed35275e46dea3b78d52a709e4e5517ece589fe576f1"
       }
     },
     {
@@ -527,9 +552,14 @@
       "contract": {
         "props": {
           "files": "Attachment[] ({ id: string; name: string; href: string; size?: string; actionLabel?: string; icon?: ReactNode })",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "files": {
             "type": "Attachment[]",
             "required": true
@@ -554,8 +584,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "a4242b00162358d455708cbb1a9e240bc539269564be982b5137ca65cc82d552"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "a483bbb6886b4d3877f94750d0e55a7682a59a3d80402f3bbd07881fc3fa4540"
       }
     },
     {
@@ -579,9 +609,14 @@
         "props": {
           "label": "string",
           "people": "{ name: string; src?: string }[]",
-          "max": "number"
+          "max": "number",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": true
@@ -610,8 +645,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "9b932a84a64a62d6ce85b66d20f567836b628e3ca11d4a58780c0762967d187a"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "57613d5e17a73481242986383bd1bd49696b17000e71a5020de91f6ad807b932"
       }
     },
     {
@@ -639,9 +674,20 @@
           "shape": "circle | square",
           "status": "online | offline",
           "statusPosition": "bottom | top",
-          "placeholder": "initials | icon"
+          "placeholder": "initials | icon",
+          "decorative": "boolean (hide from assistive technology when the name is visible beside it)",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "decorative": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
           "name": {
             "type": "string",
             "required": true
@@ -689,8 +735,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "cb244780c8059d7ddd6bb5c3419e6c603fe1446f3777ad1e85ad0816a2ccaf79"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "18e6a0b40678a83b89c757a48e349595718632d920788ff9468ba5fac75d7b20"
       }
     },
     {
@@ -745,8 +791,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "e036fa1afb4aa4e707d50ca230e2905796e15e6dbaf88ad69db62b9be63271f1"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "7efcb266a176a8d106a23cf7d63ec7195aab2dc23741228ef04accc4ca4b4087"
       }
     },
     {
@@ -829,8 +875,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
-        "preview": "0c09adb83033f7aabca7cea734f53dd395e4d9148152461a252d53d2a6ab29d3"
+        "source": "5e2de0705ab7f52aca46816b4bf8949fb58e4c278062373a55f8578327b615da",
+        "preview": "279e3991da46b683640f14b6fb24c1f988901c9ba8e5c8ae8819a4d41a7b11ca"
       }
     },
     {
@@ -883,7 +929,7 @@
             "required": false
           },
           "items": {
-            "type": "{ title: string; description: string; visual?: ReactNode; span?: 2 | 1 | undefined; tone?: SectionTone | undefined; }[]",
+            "type": "{ title: string; description: string; visual?: ReactNode; span?: 1 | 2 | undefined; tone?: SectionTone | undefined; }[]",
             "required": true
           },
           "title": {
@@ -905,8 +951,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "0a65a7bfe711e07ac70c99baeab1ccc3b328914947ad42ecc84e2cab1b4a9db4"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "6e83c6391f1bb4d1d81f2dbf1952c7106d47118688f264aee080fa9a0df6bf14"
       }
     },
     {
@@ -930,9 +976,14 @@
         "props": {
           "items": "{ label: string; href?: string }[]",
           "label": "string",
-          "separator": "\"slash\" | \"chevron\""
+          "separator": "\"slash\" | \"chevron\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "BreadcrumbItem[]",
             "required": true
@@ -962,8 +1013,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "6fed85549602c6ee61a1f9b64794e9da7611f83b122c501794b7f45b19eb2635"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "bfc2622373ba73c201fce33b742cbd2a829c0e2345a640fad79a7c2fc319eb34"
       }
     },
     {
@@ -1018,8 +1069,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "32acc0d6908a690ef5f210482ed3ef863c45329a972775d4b35063891452d212"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "67e277a823e132ab889535fd8eb8e0724ab7603ba429cf9445dc62f63b2edb22"
       }
     },
     {
@@ -1099,8 +1150,8 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "9f2203b516a1ecc86b7fb97816350eb3667a59418799ceca8de53d077fa478fc"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "18a61fcc285356ac0c40270372d1a54f4cba8822fb1f315938b8cdce2c70e410"
       }
     },
     {
@@ -1249,8 +1300,8 @@
         "states": []
       },
       "integrity": {
-        "source": "6745ff0cfe2357f842aa103f4deae2c99e831082a42149e29eae678315c14466",
-        "preview": "0f074a80a3ca85dd7535b925c852350212b981a5ea4d46336eed771ffb914106"
+        "source": "e6e34fb386552f70a3e13e2bc37af526c9adf4219e34f1129bc363920de007c3",
+        "preview": "a1ec4ccdfc4c3776488d6cf0015f5bc34e509c5f4b46ce00ce323cdbf56b394f"
       }
     },
     {
@@ -1331,8 +1382,8 @@
         "states": ["surface", "inverse"]
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "5e79bc362e727797f456d82f0b64cedaa9079421fe4523990a70dd0fca2c0b1c"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "81bb53493b043571fb2be1412bc1134589f8fbfabcd417aedd6c3f6a24e7faac"
       }
     },
     {
@@ -1397,8 +1448,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "1f4657a3a79c138f04111b512821355784c5bb042c08b215d182cb3a23ac3d9d"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "dda9fc7021479066ba9d9b1ce2e9914252da0d2bfd00b4e5311bd335edca93b2"
       }
     },
     {
@@ -1423,12 +1474,14 @@
           "as": "\"div\" | \"section\" | \"article\"",
           "title": "string",
           "description": "string",
-          "headingLevel": "2 | 3 | 4",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "actions": "ReactNode",
           "footer": "ReactNode",
           "padding": "\"default\" | \"compact\" | \"none\"",
-          "tone": "\"default\" | \"sunken\"",
-          "children": "ReactNode"
+          "tone": "\"default\" | \"muted\"",
+          "children": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -1444,6 +1497,10 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -1453,9 +1510,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "padding": {
             "type": "\"compact\" | \"default\" | \"none\"",
@@ -1467,7 +1528,7 @@
             "required": false
           },
           "tone": {
-            "type": "\"default\" | \"sunken\"",
+            "type": "\"default\" | \"muted\"",
             "required": false,
             "default": "\"default\""
           }
@@ -1486,8 +1547,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "991fda4e7fc525067884f87f12a0cb8fe03d37606c8b4f576228e92984b7d588"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "e9c475072c7959977ec1f6b152f2c10a4130bc4f38016811d55e6a67e6f90eb1"
       }
     },
     {
@@ -1575,8 +1636,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42114c1823c6a96a2247c1bbd2e067cffa16f933be9179b284a77de29e1e4f39",
-        "preview": "ca54ea80074da9dabf45f3862795531cc78f7c44c3930b858b74c3a9d72af662"
+        "source": "3a731c3b2b5b939f26edd2826feb6146b8b0b4245307bf48a498908d02a594d4",
+        "preview": "44001ea8d70dd88b772f837badd21b2d5a52d0ed9f8c8a8fc05ca976b42389f6"
       }
     },
     {
@@ -1601,9 +1662,14 @@
           "items": "ReactNode[]",
           "label": "string",
           "columns": "1 | 2",
-          "size": "\"sm\" | \"md\""
+          "size": "\"sm\" | \"md\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
             "type": "1 | 2",
             "required": false,
@@ -1637,8 +1703,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "648ac2c2838521bf9bbefdb3a0985708d0e8a16b19ad3cec680fa09e58b31699"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "f81e4694508f9f17d4ae66e1bafa65c3b3658686325b92dcdf32f5b35eb48dd2"
       }
     },
     {
@@ -1697,8 +1763,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "f7cf4ffce1a4bd280b872abb07efd7049b9fdd73c964d3623bbeeebc7c6a9bb8"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "e45a7b82967635a305645c655660cbb2971eabe284c8031689034330019c5c98"
       }
     },
     {
@@ -1753,8 +1819,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0ee644fb3be8bc7a41d157ddc4c60fb34410a2115e94e2fb7ec3abd8362a5424",
-        "preview": "d2daeb64c5636f4b86483176ce069c9641c6919974775bfcfbf50d6b9c53f383"
+        "source": "fade897b7b42b85339849ec6c7ead8d287e1f1b0d3bb9cfb828c2f2950544cce",
+        "preview": "83444647bda97fef3646d53d7b37eaa7311168ed0e1a98c33c5a756d2cc0cd3a"
       }
     },
     {
@@ -1836,8 +1902,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "400aee800c91d3b181cc3bea426a344bdd7a553199974cce64953cca7c8dd11a"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "c2c3de4a1e811679b208b8ee382fa088d1755830c04bc73fcfd6130cd8f0bd6b"
       }
     },
     {
@@ -1934,8 +2000,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "6ffe242d9091009dbb1475ade9134b37a5322b077a362ae8dbec063150878909",
-        "preview": "57ec82e64fec16a64622c4e6a8b2416c2c66d316a1beef1a3800abbfae8d8d49"
+        "source": "9c866a25deec97f5714b043a63622826a8824983935121f7b524859885fed458",
+        "preview": "2c4e2041ea7e8358d3483e18ef307263ba68d64c98a9b189a19b2eb0e7054c16"
       }
     },
     {
@@ -1964,12 +2030,17 @@
           "groups": "{ label: string; items: CommandItem[] }[] (CommandItem: { id; label; description?; meta?; shortcut?; match?; icon?; onSelect })",
           "label": "string",
           "placeholder": "string",
-          "emptyMessage": "string",
-          "footer": "ReactNode"
+          "footer": "ReactNode",
+          "empty": "{ title: string; description?: string } (announced when no group has items; default \"No results for “query”.\")",
+          "className": "string"
         },
         "propTypes": {
-          "emptyMessage": {
+          "className": {
             "type": "string",
+            "required": false
+          },
+          "empty": {
+            "type": "{ title: string; description?: string | undefined; }",
             "required": false
           },
           "footer": {
@@ -2022,8 +2093,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "f9ffdd2666393b073aa1b55a02ca04aa0e808e3e79b70304126bb7b75d5e741b",
-        "preview": "857e85eae0b3c8162db4f9f89904060b650a3d136a286be06558fa45b1318da6"
+        "source": "5dab19a1a32932fd2fd460cb4366a8db5bad40946e03558ef9768f772c2aa3b1",
+        "preview": "76b8d9dbe8858eb37807d0d524ba79fa0002803077cb146631bf7e195254218c"
       }
     },
     {
@@ -2149,8 +2220,8 @@
         "states": ["error"]
       },
       "integrity": {
-        "source": "e21f26887b43b88cd2ab3dc2557e74c59efea71554dadc4cb469e6ac8744378c",
-        "preview": "58eb0815607d8b82e8c42a9ec7de3786022ed7dc627c26eddbb63fe6564e111f"
+        "source": "87ba188f062a0f24d9613ec6864c40e540d98521cdfec61bfe0f2ceba1461faa",
+        "preview": "71a54bc1b0672392e3ea4aa6da1b9cfec24d4c98725c4b3dfab9bb08d170e952"
       }
     },
     {
@@ -2248,8 +2319,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
-        "preview": "7eb3f27bd3115b04480686b87ed2061f7bc38130fb97a7e37717dfd6bfca93a0"
+        "source": "5e2de0705ab7f52aca46816b4bf8949fb58e4c278062373a55f8578327b615da",
+        "preview": "90fa87ab8655c2dce5237f3a115b3ced4f2d1eaff7f72b8576e7d08887d97822"
       }
     },
     {
@@ -2325,8 +2396,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "2579203ef20dee18e56ecf3de8b70a66a636669f1902ce9bb0318860f38913bc"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "86d9dad98b5f9506dc94c998d76afd2462646b5ef4a79ecfac51a66596c8e070"
       }
     },
     {
@@ -2351,7 +2422,8 @@
           "as": "ElementType",
           "size": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
           "padded": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "as": {
@@ -2362,6 +2434,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "padded": {
             "type": "boolean",
@@ -2388,8 +2464,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "38110a7c2ae41c3e449c195ea9223281946a38f28031faa98279ae0653744e47"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "8f2a97742dc526f28154a8f1c10f34d815412c3c8717d81e2d30983b1c1523c9"
       }
     },
     {
@@ -2481,8 +2557,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "7ab02263c7f1929d0c2590a198a1c5fd7ffa4344ad9d9afc508c65fe21b3f45b"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "ea6d85b03e3af1c7249c665bea00583a9740c35ba96337229697f3d8eb824ed6"
       }
     },
     {
@@ -2511,17 +2587,15 @@
       "contract": {
         "props": {
           "caption": "string",
-          "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: left | right; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
+          "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: start | end; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
           "rows": "T[] where T extends { id: string }",
           "rowLabel": "(row: T) => string",
-          "selectedIds": "string[]",
+          "selectedIds": "string[] (may include rows on other pages; select all adds or removes only this page's rows)",
           "onSelectionChange": "(ids: string[]) => void",
           "toolbar": "ReactNode",
           "bulkActions": "ReactNode",
           "loading": "boolean",
           "error": "string",
-          "emptyTitle": "string",
-          "emptyDescription": "string",
           "rowHref": "(row: T) => string | undefined",
           "defaultSort": "{ key: string; direction: ascending | descending }",
           "sort": "{ key: string; direction: ascending | descending } | null",
@@ -2530,7 +2604,11 @@
           "maxHeight": "string",
           "density": "default | compact",
           "striped": "boolean",
-          "footer": "ReactNode"
+          "footer": "ReactNode",
+          "empty": "{ title: string; description?: string; action?: ReactNode } (default \"No records\")",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (empty state heading; default 3)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "bulkActions": {
@@ -2540,6 +2618,10 @@
           "caption": {
             "type": "string",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "columns": {
             "type": "DataTableColumn<T>[]",
@@ -2554,15 +2636,10 @@
             "required": false,
             "default": "\"default\""
           },
-          "emptyDescription": {
-            "type": "string",
+          "empty": {
+            "type": "{ title: string; description?: string | undefined; action?: ReactNode; }",
             "required": false,
-            "default": "\"Records will appear here when they are available.\""
-          },
-          "emptyTitle": {
-            "type": "string",
-            "required": false,
-            "default": "\"No records\""
+            "default": "{\n    title: \"No records\",\n    description: \"Records will appear here when they are available.\",\n  }"
           },
           "error": {
             "type": "string",
@@ -2574,6 +2651,15 @@
           },
           "groupBy": {
             "type": "(row: T) => string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "3"
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "loading": {
@@ -2638,8 +2724,8 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "b71d4bd0c47271c71935e72a26fae38e255f82b83cd385917ad11ef1d9179bdc"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "764903aa5b2a86bfd3e2bb5702706b0059b137eead5ace188a86559572010387"
       }
     },
     {
@@ -2663,19 +2749,29 @@
         "props": {
           "title": "string",
           "description": "string",
-          "headingLevel": "2 | 3 | 4",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "items": "{ term: string; details: ReactNode; action?: ReactNode }[]",
-          "layout": "\"columns\" | \"stacked\""
+          "layout": "\"columns\" | \"stacked\"",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "items": {
             "type": "{ term: string; details: ReactNode; action?: ReactNode; }[]",
@@ -2705,8 +2801,8 @@
         "states": ["long"]
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "7579cd250cec8fd7cb299ea84504a4cd2e09694cf409fdfd080273af2852acd2"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "07afe056581247b96e787b32ad32039804a84bbe63436d2eb9b6cab2c16b84d2"
       }
     },
     {
@@ -2730,9 +2826,14 @@
         "props": {
           "label": "string",
           "soft": "boolean",
-          "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\""
+          "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false
@@ -2762,8 +2863,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "7be8c8eb936f6dd505aeaffe540e9512ac0478fd45d0de86394fa48d81d852cd"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "f444bdcf09ddeca54e9c6d0b403e14397e8c0c2c511659341455efd90df0ab1e"
       }
     },
     {
@@ -2884,8 +2985,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "7629a369c7ce42af053e3f0052f9c2fcaf0d83caad2d3df2679b2235bd187476"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "4371906e46fc6aafa7038cfeeb90b7e1fb62255cfc01ae7ac5dd7b535fef2a40"
       }
     },
     {
@@ -2968,8 +3069,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "da21e634d54ca2e70286d9c58a1700e4614c2d2a68f9b26bb6cc3ac0d41903f4"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "4e95f189046ee8c288c78e8238bf6fad9db4ac2108f21f0874c722e067457878"
       }
     },
     {
@@ -3060,8 +3161,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "6cdd172a62697b9edd738f96391fe7de5bb2f9dc8cf15fc85eb824ff077816d0"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "cf190120a1e9c6e3fade78474dbf1b3ce02190c6c4d0a53a3e27e9d5ceac9540"
       }
     },
     {
@@ -3138,8 +3239,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "5cf40923de97f332f78eea9d68177e259b4ec9cd200335b32a4ada483c66f752"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "ebb22d66f07602d50e63f71ed33b4b28a4749a7ee91570c47587d1e168649fd7"
       }
     },
     {
@@ -3231,8 +3332,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "f222230e07f4b8ec5429e61f912836b89295d5ad88166e7f0faabceb218314af"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "8025d7ddd6cca73c262c5d3fee85758f228334049fe82026f55db3aecc20e56f"
       }
     },
     {
@@ -3330,8 +3431,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "239ee1a44447e9ec38279eebc64844dbd0fc4a194751d71f9e4dd4b9d1b31607"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "77533b8c72c7e938a864f065b6ea06c8646628b37acf0cfacf1d30ab2e1bd8ad"
       }
     },
     {
@@ -3395,8 +3496,8 @@
         "states": ["disabled"]
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "e715e44fd27c298366bf676959457b825f94846d2189dca49e61bbc3bfbc9d38"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "2bac7b0e0e2e8bb2e757e0a2b31675eefb90436df4c7940795738321a24ba7b4"
       }
     },
     {
@@ -3455,8 +3556,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "611490ba41e9f5b668d478baecc0f312e107f144d522702ac6c488051e860c7a"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "0c70305e1ae88a355d60db5296b3021960ff2407ef02ae090d3a19f6c98f3266"
       }
     },
     {
@@ -3481,9 +3582,14 @@
           "label": "ReactNode",
           "selected": "boolean",
           "onClick": "() => void",
-          "onRemove": "() => void"
+          "onRemove": "() => void",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "ReactNode",
             "required": true
@@ -3517,8 +3623,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "69a34f21f4b81a1b6d46699e57097c717d01316c4b246cbbe518b5c3a1b8f47a"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "6b0aaa66b5a06f8dd3774b4c77285641b8f0b4910ff9e4955641b36817428b59"
       }
     },
     {
@@ -3615,8 +3721,8 @@
         "states": ["heading-3"]
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "c6b291ae40afb8e37c84895c852e7562b23498b431f71e8cc297406b7f26f0d6"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "37aee2de387c200e9e2097733cbf1294bdb03894177f7ab7ed169aec4bf025c9"
       }
     },
     {
@@ -3641,8 +3747,9 @@
           "label": "string",
           "items": "GridListItem[] ({ id: string; title: string; description?: string; href?: string; media?: ReactNode; cover?: { src: string; alt: string }; meta?: ReactNode; details?: { term: string; details: ReactNode }[]; actions?: ReactNode })",
           "columns": "2 | 3 | 4",
-          "headingLevel": "2 | 3 | 4",
-          "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)"
+          "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)",
+          "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (each card title; default 3)",
+          "className": "string"
         },
         "propTypes": {
           "actionsLayout": {
@@ -3650,13 +3757,17 @@
             "required": false,
             "default": "\"inline\""
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
             "type": "2 | 3 | 4",
             "required": false,
             "default": "3"
           },
-          "headingLevel": {
-            "type": "2 | 3 | 4",
+          "itemHeadingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "3"
           },
@@ -3683,8 +3794,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "106d80bfc9f5b6252ea027a409f3e0ff033358befe796156aaf2c0e196dd5402"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "d5a324b7dff3ffbe73eb7414daf0ceb3708f3a0d8a18e7c6e36040021769c5b3"
       }
     },
     {
@@ -3778,8 +3889,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "03fdb63840c804871c483fa16af82fe40069813823556f027933aecea64b7fc0"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "2a3d1c6008f43a934ab389a0aef2c972da07e189ccdce66ec7137ff001bcdf7e"
       }
     },
     {
@@ -3871,8 +3982,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "91188333f913c43b1288858b2bca8d2a980f81ad8d5b2057df42175776b8f56f"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "0889a3601c378196b03ac6fa28b050fe16cf9526a9e1fa102e78389ad0eb5d45"
       }
     },
     {
@@ -3963,8 +4074,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "72bc432d0d8b9ecbe19c0a5cf76678c23006c474659579efabecafa89cfc40cf"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "1990af59d44b380a6012b787c559f081eb7bfa4b9adb6292f35babdbb8d63164"
       }
     },
     {
@@ -3986,9 +4097,14 @@
       },
       "contract": {
         "props": {
-          "keys": "string[]"
+          "keys": "string[]",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "keys": {
             "type": "string[]",
             "required": true
@@ -4008,8 +4124,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "861f753f696e7d1b7117b0911e249e55bf4742cb0b6b1925e4153c6235d74a7d"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "63767bf2be6ccbb2fbefee89c4c6ad7564b1ea7a4ab61d68d8addecc8ca0d962"
       }
     },
     {
@@ -4063,8 +4179,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "1fdef73ba3f01293475f7a729c30a273fddd5e2fde8308c0065e73cd119bfeb7"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "c871c03a8ebf0df87f7c2da8663592b694129707e41170e2894f89d9a7f190ba"
       }
     },
     {
@@ -4156,8 +4272,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "6ffe242d9091009dbb1475ade9134b37a5322b077a362ae8dbec063150878909",
-        "preview": "c23ffb3bb0ae025364dfba490a11d039ffa48bb5f31dd1986e619edf69fd722e"
+        "source": "9c866a25deec97f5714b043a63622826a8824983935121f7b524859885fed458",
+        "preview": "35d4e05ba49c25c6fe17898a711e8337cdedd74d7edd0dbc333f41fe02a01f03"
       }
     },
     {
@@ -4244,8 +4360,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "d7327660b54abce6ab9a65eba8558340679879d9d76aab05fdf43fa92e2da12b"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "77d14f9bd0f89363f4a46b2a5bd121c64017b4c59f5fe05fc6571810831c4c14"
       }
     },
     {
@@ -4326,8 +4442,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "e6aeed1f6f97e2454ef89081ff0355f791a115731a90cb7655383e3d3f3ac429"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "9a04ca5e08d5a335b4c0ae49f2b604d9b080e48c8bc7f9a19af3763e3788c178"
       }
     },
     {
@@ -4353,7 +4469,8 @@
           "title": "string",
           "align": "\"start\" | \"center\"",
           "reverse": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "align": {
@@ -4363,6 +4480,10 @@
           },
           "children": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "media": {
@@ -4393,8 +4514,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "e83a1a5f510e78c6aebbede5798aa51f4f2a72a7e9f88c4b414da97e13abcf1b"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "cf79f85f2ab5c9b9829d5f6436f72b337352b8acf05f6bebe6b432c653d36b27"
       }
     },
     {
@@ -4418,9 +4539,14 @@
         "props": {
           "label": "string",
           "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\")",
-          "variant": "\"shared\" | \"cards\" (default \"shared\")"
+          "variant": "\"shared\" | \"cards\" (default \"shared\")",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "{ label: string; value: string; change?: string | undefined; tone?: Tone | undefined; icon?: ReactNode; trend?: \"up\" | \"down\" | undefined; previous?: string | undefined; }[]",
             "required": true
@@ -4449,8 +4575,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "03fc1b346ce7dc1631fb9f898ee66f4fc5869e761dad162b04bd4759421444ba"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "db1946124b8cc79e36bf40dc1d6a55c6b4167f5f9bc91fec1ae6d1fe8fdc6952"
       }
     },
     {
@@ -4520,8 +4646,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42114c1823c6a96a2247c1bbd2e067cffa16f933be9179b284a77de29e1e4f39",
-        "preview": "22f3fb1ed9facce7320829bcd1795255f64bdeb40e24819373bc92366c91f10e"
+        "source": "3a731c3b2b5b939f26edd2826feb6146b8b0b4245307bf48a498908d02a594d4",
+        "preview": "393e98dc54cc493b6ec89a274e6eb95840488e38625b61a27b8998a30a8039b8"
       }
     },
     {
@@ -4597,8 +4723,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "65ae25ee68c031a4583637d897ae00ab4c5f37e9fd92c36d6d60b93002a3ab46"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "fbe308d127d1c3a94d717761aef2475e1bdda7cb1fb4a066355ca92bf845d98d"
       }
     },
     {
@@ -4629,9 +4755,10 @@
           "brand": "string",
           "logo": "ReactNode",
           "homeHref": "string",
-          "items": "NavigationItem[] ({ label: string; href: string; current?: boolean; count?: string; icon?: ReactNode })",
+          "items": "LinkItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode }; no sub-menus)",
           "actions": "ReactNode",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -4642,13 +4769,17 @@
             "type": "string",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "homeHref": {
             "type": "string",
             "required": false,
             "default": "\"/\""
           },
           "items": {
-            "type": "NavigationItem[]",
+            "type": "LinkItem[]",
             "required": true
           },
           "label": {
@@ -4676,8 +4807,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "453b3fe90ab5a00a7ab30b98ea0987834ddbdaa5e915e962b458fc2cc6313327"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "9b612abe7b44077b010607ef66f0821481ab8a6f816764bd5a78e731dd3a1056"
       }
     },
     {
@@ -4765,8 +4896,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "02af9e3ee117f5f1dd70297b5b6e419ac70887077643b2e456718b509fb9d20a"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "daa35aea6e4d09995d963f1005aaf2121b1d0c024e3edbfe20e055f50dca7500"
       }
     },
     {
@@ -4847,8 +4978,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "4b33afefa35309dedf6b1c9ef600b1a59cbb0cb112767ecba0ebdc2796010864"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "bcef7232c111c5624bc18160867e4ef52bf9778f4078456b56ea2df21a21ec0d"
       }
     },
     {
@@ -4935,8 +5066,8 @@
         "probe": "notice"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "add357f99a946c959fe39032ebf13b0910524d06df34ce0bd6e4f2c805d7b276"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "9416980376503446f5c5ad6b8ab5678389250e1a1ef6e5b515fbdfee21f26053"
       }
     },
     {
@@ -5002,8 +5133,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "19675e6f905dc4d7c4d9972e122a93c72b2d317180510bb4c5cf57af67984ec6"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "67b73c5e3818c8a9b5ba64c3a669cc07647ffce7f0488363f10188c75de6e327"
       }
     },
     {
@@ -5084,8 +5215,8 @@
         "states": []
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "46b27f76756b0bf01a676f24c051785b3735dffcb25bea405c66af90c7856045"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "7eff945ac48b9102f789b1f671a7481d951974bf3de6f67af9a2b618c2821c0b"
       }
     },
     {
@@ -5156,8 +5287,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "decea82836e5437788d35c30aec74a7ba14d5295f1edf5247f01df5b643f0add"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "0180a40b3d73d1c598bb4effde17de3a8943570cf65a2b4e81b6c490d6502932"
       }
     },
     {
@@ -5184,9 +5315,11 @@
           "eyebrow": "string",
           "actions": "ReactNode",
           "breadcrumbs": "{ label: string; href?: string }[]",
-          "headingLevel": "1 | 2",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
           "meta": "{ label: string; icon?: ReactNode }[]",
-          "avatar": "ReactNode"
+          "avatar": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -5201,6 +5334,10 @@
             "type": "BreadcrumbItem[]",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -5210,9 +5347,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "1 | 2",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "meta": {
             "type": "{ label: string; icon?: ReactNode; }[]",
@@ -5238,8 +5379,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "55446cc1a520e642aedb6aff6266e27bc1275a80389fd4b7156d300a62f16319"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "268c81c797f68e3fb6275a2af433ff30728f569cc67d2007c52a80ca1c3f2ad9"
       }
     },
     {
@@ -5304,8 +5445,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "beebf03d2440cffc434ded9257b56c62123cb6e583b7a76943152cebce6b0bbc"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "255a4881b55bee97cf5c3227a3ed32eb0e495c60bb21d1247a4d3deb8afa511c"
       }
     },
     {
@@ -5332,9 +5473,14 @@
           "onChange": "(page: number) => void",
           "numbered": "boolean",
           "summary": "{ from: number; to: number; total: number; noun?: string }",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false,
@@ -5377,8 +5523,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "b53bb210c7b1e694c1c1a33b26b31a451481c434f485494d5d7961754b72524c"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "c18ced0e27a98b71f0b85807da587a850a7ccf9030b82fee17944e7d9a70850f"
       }
     },
     {
@@ -5458,8 +5604,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "9c73ed520a1e2cd9b8ea4a8eb3639f805ebf22285194c54fe27f29a375a67b5a"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "0c6f43df4b191f6cac836c74e1b3f1d1941888fc98df87fb231731ad9a193d99"
       }
     },
     {
@@ -5539,8 +5685,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "3e87bca2aa357acff15d738fac96c287d05b53c1e44b1e81c984ca99a1d8f281"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "24076245d66d3ad641c4007d44441d329e8fa75bb878fc8832593c414a534b05"
       }
     },
     {
@@ -5599,8 +5745,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0ee644fb3be8bc7a41d157ddc4c60fb34410a2115e94e2fb7ec3abd8362a5424",
-        "preview": "ed4be8d3ace5893a4befad6cae984f079d6f6d9b7178aac925a0e8a540138785"
+        "source": "fade897b7b42b85339849ec6c7ead8d287e1f1b0d3bb9cfb828c2f2950544cce",
+        "preview": "c82e60f15bbdf561a6d6aaa5f4c9bbd895a26568a0f9f103e469697eba35982c"
       }
     },
     {
@@ -5694,8 +5840,8 @@
         "probe": "pricing"
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "fbb54efd314550dcae56367d0ec4bfd2c8562910e7f22a06bc89cb3329c406f8"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "2b52b57b15b5a4fd5c51958f84ba2279853f0b7ba10768de9524a53684239a83"
       }
     },
     {
@@ -5776,8 +5922,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "112a55c9241e956a3a6624c49a677a2a984a425ad38ea862adb7495b0f64e588"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "acd66d4ec40515f16fb943c633cb18af1b0610fe2185a361ca643491a0b6df79"
       }
     },
     {
@@ -5848,8 +5994,8 @@
         "states": []
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "b4d4bc08d346009af60af1dc70a8d2db6992af5b62ddcaeb061a1a14de747a98"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "0eb5e9fefc99fdad2c0cc225ff6348a67096456f04905036e2f72cfc2cea383c"
       }
     },
     {
@@ -5926,8 +6072,8 @@
         "states": []
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "040ff4f77ee360a176bacd4b7a7ecac72f4ec4c9dbcd7cc2147e344b79343c97"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "0ed48970503c650c78e0dc30d9875d10f44718d96d7b937be106bce9f55af515"
       }
     },
     {
@@ -6060,8 +6206,8 @@
         "states": []
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "f23816f24e2aabdf7fccd85a0aac940bf7878dfe7094f7195d6a704081874901"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "0ed1dd5e0e258a8e99220714cb74b415489582b6eb76dc069fb6eb299aa4c434"
       }
     },
     {
@@ -6196,8 +6342,8 @@
         "states": []
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "76301a6ee72f3a1dcc9dd54033cc00dc452cc366bd8ceefb5c3fff04147b08d8"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "9c6b319f2de2e0fdfd4b4ac76e1fe61dc7f5ec0f17419c8490998209b4a389ad"
       }
     },
     {
@@ -6283,8 +6429,8 @@
         "states": []
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "00973211d3dc08c45af5c88bb4667b2748c0cb22e3141a41695c29b21f152c69"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "5007b7b75baaace909c93c1134a60aef186603512ddd047eec635b9ab6320306"
       }
     },
     {
@@ -6310,9 +6456,14 @@
           "value": "number",
           "max": "number",
           "valueLabel": "string",
-          "tone": "primary | warning | danger"
+          "tone": "neutral | info | success | warning | danger (Tone; omit for the accent colour)",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": true
@@ -6323,9 +6474,8 @@
             "default": "100"
           },
           "tone": {
-            "type": "\"danger\" | \"primary\" | \"warning\"",
-            "required": false,
-            "default": "\"primary\""
+            "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+            "required": false
           },
           "value": {
             "type": "number",
@@ -6350,8 +6500,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
-        "preview": "7b0fbfcfd5cb2a7e0aed4d6fc22e5d26b891cc0c0468cdeb9f2b1427253535bc"
+        "source": "3a587a22fc1f750a636b56315444b8aa510ba57b58b5757b4e3363b64f8065ce",
+        "preview": "58d393c3b4b6fc7153a9fb11c66edcd4a0a61b2f8c7a1ba9892b07668ec072c5"
       }
     },
     {
@@ -6375,9 +6525,14 @@
         "props": {
           "steps": "ProgressStep[] ({ id: string; name: string; description?: string; href?: string; status: \"complete\" | \"current\" | \"upcoming\" })",
           "label": "string",
-          "variant": "\"simple\" | \"circles\" | \"bullets\""
+          "variant": "\"simple\" | \"circles\" | \"bullets\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false,
@@ -6407,8 +6562,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "a68e149b4c5aad672813b8e1c6bc8c881df55609d98e962548814f3f8512118c"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "593daf6eb1c4dec8b996116bee52efa634c250d8aaa0428eaae2d35ba3340cfc"
       }
     },
     {
@@ -6430,12 +6585,17 @@
       },
       "contract": {
         "props": {
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           }
         },
         "usage": "Import { Prose } from @tony-ui/mortar. Compose with the public typed props.",
@@ -6452,8 +6612,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "363b7ef50304ebe3dfaf741f632d9f03410f84373530d1afcefe9dd90409ea9b"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "27490178a3faf78e1f9eb3e76b38b3e6fa6a78dbe9e6c386056edb8616a77859"
       }
     },
     {
@@ -6535,8 +6695,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "c7bf9a4f83774ec45922f6a22b0a5e4c891db02280ae603a74117d90a9bbf2b3"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "1db46c584ed23450caa99076ce67176398ef8329a1c5d781dc6db78b1afdc968"
       }
     },
     {
@@ -6611,8 +6771,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "a09a3246e6f226a6a931dab02ec0f2f55f46c56d820820b6792c47a3c8e741cd"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "a1255d932788d4f810983ab160d51e3e88fd13cfddaa9447ff2567772656b31d"
       }
     },
     {
@@ -6701,8 +6861,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
-        "preview": "bcbe2bbaf2fd4911459478e2ef7dfc66021ecbce48edf13644df28c1d04e863f"
+        "source": "5e2de0705ab7f52aca46816b4bf8949fb58e4c278062373a55f8578327b615da",
+        "preview": "8533f263ba96e4687105c982ff36c39d587997e351aee959e58f36d642a8710f"
       }
     },
     {
@@ -6772,8 +6932,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "11b2fb7a2a39211e40f0fb7d64e1bfcb3e1d47c4d35f155d6a63617a2f387520"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "a70a999ed9939243b032e9f7284059464fad23709e2b8ffd6dc522d72eb3c001"
       }
     },
     {
@@ -6829,8 +6989,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "9a95935c2b0663218f102cecb4f2cc69cbedc2523ee09990bd2106cc2fd8d48f"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "85a85cd13aafff13cd9719568fd2a21497e2dd3dce6f4e8c5d6818980a318aeb"
       }
     },
     {
@@ -6855,13 +7015,19 @@
           "title": "string",
           "description": "string",
           "actions": "ReactNode",
-          "headingLevel": "2 | 3 | 4",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "divider": "boolean",
-          "tabs": "ReactNode"
+          "tabs": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -6874,9 +7040,13 @@
             "default": "true"
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "tabs": {
             "type": "ReactNode",
@@ -6901,8 +7071,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "3a05540167b56b30e2f8ff4f8d2f973cc5793352a0d8f4ec85fae31db9b409a3"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "39f0cb896d568029f3c622e1459d65d7cd451ca2e300ca9d1c58bfdef224117e"
       }
     },
     {
@@ -6930,7 +7100,9 @@
           "description": "string",
           "tone": "\"default\" | \"muted\" | \"inverse\"",
           "align": "\"start\" | \"center\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "className": "string"
         },
         "propTypes": {
           "align": {
@@ -6942,6 +7114,10 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -6949,6 +7125,11 @@
           "eyebrow": {
             "type": "string",
             "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
           },
           "id": {
             "type": "string",
@@ -6978,8 +7159,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "786b0d48bca8ddc0cf45b46dab2fd6a094e10159921f072f25adecf5916aacaa"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "29e5c7d6c3aceb49b64b018be3b37e0d06a62a57946058b31ba3323b352e6199"
       }
     },
     {
@@ -7044,8 +7225,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "0ee644fb3be8bc7a41d157ddc4c60fb34410a2115e94e2fb7ec3abd8362a5424",
-        "preview": "d6935a8f8c72bad36fa760ae7a2da687b0187738d30e6aa05672443e79f4d54a"
+        "source": "fade897b7b42b85339849ec6c7ead8d287e1f1b0d3bb9cfb828c2f2950544cce",
+        "preview": "e9f0e24372f22a0e22abb8e64593b53e67d9ee1a4f2f46bc8b4949c627cb5f3b"
       }
     },
     {
@@ -7116,8 +7297,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "209992e322fd1b5dac4937f1fb2be16e313e6ce468ad3f6bee89a63d78a642c0"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "c0bfc61199d7479d790070372bfa73887ab8345f3b1c07c99ced924fdc44cbfe"
       }
     },
     {
@@ -7141,14 +7322,30 @@
         "props": {
           "title": "string",
           "description": "string",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -7171,8 +7368,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "3cff790ec06f5cb5f53a9f88bcca23f4d15dd1ca8db6f92469a6a2a4353c92c4"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "48da9f77b5e92171526681d8ee967152535cfe1f67231c90709bf641ed5dbf4a"
       }
     },
     {
@@ -7261,8 +7458,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
-        "preview": "79da08636d96aa57fb0f884240fbfc44c9db7241f5585d58e6f5201d5e040fbb"
+        "source": "1d884d69ba166b6973ae642e5a504b25857f2ddf28149ccd093bde52df801d52",
+        "preview": "c41e2a9a51618e1af5df34e3f9c0a097d551ae459c5af4b8dccb333d4f032d45"
       }
     },
     {
@@ -7288,13 +7485,18 @@
           "logo": "ReactNode",
           "workspace": "string",
           "homeHref": "string",
-          "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] })",
+          "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] }; a parent with children is a disclosure whose own href is its first link)",
           "sections": "{ label: string; items: NavigationItem[] }[]",
           "footer": "ReactNode",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
           "brand": {
+            "type": "string",
+            "required": false
+          },
+          "className": {
             "type": "string",
             "required": false
           },
@@ -7342,8 +7544,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "95e355cb81f42615e7dd35402d8aaf6e013ddfae6709bf0448ed36ee582accab"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "74d167d12170d608a80a6bab81c717355417e34aaa5571a143944bc0beee9ee1"
       }
     },
     {
@@ -7372,12 +7574,18 @@
           "email": "{ onSubmit: (email: string) => void; label?; placeholder?; submitLabel?; status?: \"idle\" | \"submitting\" | \"success\" | \"error\"; message? }",
           "footer": "ReactNode",
           "dividerLabel": "string",
-          "headingLevel": "1 | 2",
-          "aside": "ReactNode"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+          "aside": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "aside": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -7398,9 +7606,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "1 | 2",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "logo": {
             "type": "ReactNode",
@@ -7431,8 +7643,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "f90e3bdd01c6f67aa05d63431830f627c65293bc4fd6f92bc598abbed774990a"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "182b173a476d9cde1e953823d29aa01f83d7956d51012f0ffcb5b9f53b2959bd"
       }
     },
     {
@@ -7460,7 +7672,8 @@
           "description": "string",
           "children": "ReactNode",
           "actions": "ReactNode",
-          "size": "md | lg | xl"
+          "size": "md | lg | xl",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -7470,6 +7683,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "description": {
             "type": "string",
@@ -7508,8 +7725,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "f9ffdd2666393b073aa1b55a02ca04aa0e808e3e79b70304126bb7b75d5e741b",
-        "preview": "5c9d18cd01b995924ad123cafce888b590d9cfca1c5090e6a7eaf6878ccda95a"
+        "source": "5dab19a1a32932fd2fd460cb4366a8db5bad40946e03558ef9768f772c2aa3b1",
+        "preview": "ab3d1d304e128e76e2574062c807a848c3840c53dd5c36120a6ee0a4bf0a46d3"
       }
     },
     {
@@ -7537,7 +7754,8 @@
           "align": "\"start\" | \"center\" | \"end\" | \"stretch\"",
           "justify": "\"start\" | \"center\" | \"end\" | \"between\"",
           "wrap": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "align": {
@@ -7552,6 +7770,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "direction": {
             "type": "\"column\" | \"row\"",
@@ -7587,8 +7809,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "ac5261cb3b08180b15a89cf3ab853c26adecc7a00af874965549a58b7bbf1643"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "8b2a1fc3826552fd01473eb369ddae0c08745094540ad80b4bed3f0069708768"
       }
     },
     {
@@ -7610,23 +7832,36 @@
       },
       "contract": {
         "props": {
-          "label": "string",
-          "heading": "ReactNode",
+          "label": "string (accessible name; defaults to the title)",
           "action": "ReactNode",
-          "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? })",
-          "groups": "{ label: string; items: StackedListItem[] }[]"
+          "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? }; rendered before groups)",
+          "groups": "{ label: string; items: StackedListItem[] }[]",
+          "title": "ReactNode",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (title level, default 2; group headings sit one level below the title, or at this level without one)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "action": {
             "type": "ReactNode",
             "required": false
           },
-          "groups": {
-            "type": "ItemGroup<StackedListItem>[]",
+          "className": {
+            "type": "string",
             "required": false
           },
-          "heading": {
-            "type": "ReactNode",
+          "groups": {
+            "type": "ItemGroup<StackedListItem>[]",
+            "required": false,
+            "default": "[]"
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "items": {
@@ -7636,7 +7871,11 @@
           },
           "label": {
             "type": "string",
-            "required": true
+            "required": false
+          },
+          "title": {
+            "type": "ReactNode",
+            "required": false
           }
         },
         "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
@@ -7653,8 +7892,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f9ffdd2666393b073aa1b55a02ca04aa0e808e3e79b70304126bb7b75d5e741b",
-        "preview": "b0fb7ba0ef1eb30d8750b5d8e6914e09b2467f8550df3fc6bcdc16e6295dfa66"
+        "source": "5dab19a1a32932fd2fd460cb4366a8db5bad40946e03558ef9768f772c2aa3b1",
+        "preview": "4e86c7bddc84666347df07e4607556ff23f7b787721fa59aa63dd01d8ecf5c21"
       }
     },
     {
@@ -7685,11 +7924,12 @@
           "brand": "string",
           "logo": "ReactNode",
           "homeHref": "string",
-          "navigation": "NavigationItem[]",
+          "navigation": "LinkItem[]",
           "actions": "ReactNode",
           "header": "ReactNode",
           "width": "\"md\" | \"lg\" | \"xl\" | \"full\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -7704,6 +7944,10 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "header": {
             "type": "ReactNode",
             "required": false
@@ -7717,7 +7961,7 @@
             "required": false
           },
           "navigation": {
-            "type": "NavigationItem[]",
+            "type": "LinkItem[]",
             "required": true
           },
           "width": {
@@ -7741,8 +7985,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "7463715fd5320f2c43d0b7652ebed3dcb9b429322a937c4656bbbb2774b34129"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "59a8d6b77e2534df2fd84cbbdbf1bfb6e96cf54a5d591a9001fe3f15e5d9cdbf"
       }
     },
     {
@@ -7801,8 +8045,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "23e758d6bc6652517cb8d7f6027593355bdda87a575e8a1d8af1c70a094535a4"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "6d1967ce0351a09e8c4fef17b3b2d18da7ca7764c7dffe1a830e8f9c30a2bf73"
       }
     },
     {
@@ -7862,8 +8106,8 @@
         "states": []
       },
       "integrity": {
-        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
-        "preview": "65b5fb615a6fc201594a6185654f27f994e6957b5d821958959740ba3286fabe"
+        "source": "ac5a33cbc3fc07f8d349de5ee16aa95894b1855b472d495870757cf5b0b39515",
+        "preview": "f3b97bffe9a50c5a0b5187222b7d11310d7a95d4c3f7fc56e863f59179fb76b5"
       }
     },
     {
@@ -7922,8 +8166,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "c35b57f64dcad00b7fd071d715feb35636ba0ded620bde31950e4125bfa7b815"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "1727279c897e0f8136ce1e939953b71ebab639e3fad09f4ba3c60b88eeffc92a"
       }
     },
     {
@@ -7948,9 +8192,14 @@
           "label": "string",
           "items": "TabNavItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode })",
           "variant": "\"underline\" | \"pills\"",
-          "fullWidth": "boolean"
+          "fullWidth": "boolean",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "fullWidth": {
             "type": "boolean",
             "required": false,
@@ -7984,8 +8233,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "1ba64a3e8ba1dd6156803bae9dc5cfee22eefbd828ad970620924e57ed57925f"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "89f3b2a70e5e1f7bcd2685875d1a6997a22c152068cf6a929cea57e770e6192f"
       }
     },
     {
@@ -8009,11 +8258,13 @@
         "props": {
           "caption": "string",
           "captionVisible": "boolean",
-          "columns": "{ key: string; label: string; align?: left | right }[]",
+          "columns": "{ key: string; label: string; align?: start | end }[]",
           "rows": "Record<string, ReactNode>[] (optional, default [])",
           "groups": "{ label: string; rows: Record<string, ReactNode>[] }[]",
           "rowHeaders": "boolean",
-          "striped": "boolean"
+          "striped": "boolean",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "caption": {
@@ -8025,12 +8276,20 @@
             "required": false,
             "default": "false"
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
-            "type": "{ key: string; label: string; align?: \"left\" | \"right\" | undefined; }[]",
+            "type": "{ key: string; label: string; align?: \"start\" | \"end\" | undefined; }[]",
             "required": true
           },
           "groups": {
             "type": "{ label: string; rows: Record<string, ReactNode>[]; }[]",
+            "required": false
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "rowHeaders": {
@@ -8063,8 +8322,8 @@
         "states": []
       },
       "integrity": {
-        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
-        "preview": "eb135fa8731cebe63d4b1e40be1ad1ab569e67daed5a07b467001471c9127a62"
+        "source": "2c0684df19f33ee6cf0a689bd66c4dbd98c34982aa9952e37bc2f535295939fa",
+        "preview": "a99874bd2326e10ee4e9a8de8cfcab93a3ac311f95946cfeee109ae64918d628"
       }
     },
     {
@@ -8141,8 +8400,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "7ecf6cf945f400416594dec349c9b2e27155c04c3af6843278b8bd9adc4c56b2"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "0dc0dae233cfa74f6b9206e4ed0bf18452ebc56504299fa22766c97b9abdc4a8"
       }
     },
     {
@@ -8212,8 +8471,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "0b76807f1c6ae06b2c46e6b20c06d74f03d903bb73a8cd1233aa3707d3062241"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "12bb873fe1b5cb0af9551e58ce4fa95cc351c36a4201880becfe172cb2b58127"
       }
     },
     {
@@ -8278,8 +8537,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
-        "preview": "7e8e8f665097abffde634a03f0e1e9ad634a120d4f0f95846dab2fca80360fd6"
+        "source": "767c346eaf04a7c085423e43e592632517c76ed156cbbf76c8a12e252019146b",
+        "preview": "ee1c007b898b59379f2a2bcff0aab76e9a93e47e5206822226ea5babdb727045"
       }
     },
     {
@@ -8353,8 +8612,8 @@
         "states": []
       },
       "integrity": {
-        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
-        "preview": "c9f13d37f2f7be12e13ae6ae42a5b942d65bc8c1afede99a46afb927cf57ad30"
+        "source": "e4e64b75a7e39104500996d380eb76e5a54661b5761bdc19241b37c7010cf728",
+        "preview": "64caf9c935e6768b4c847ba7913c65bd5266619dd1c1fa574dc5c824f572e5f0"
       }
     },
     {
@@ -8420,8 +8679,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
-        "preview": "07dfff1b81735c518f580b4371bab9eb15879dfc0890cd80053d303eb09306f5"
+        "source": "2909d441ca1e92b2fcfffa90d01cb79d4d4011e00bb819455978effef53bc86b",
+        "preview": "7e6dee05a7866b3158ff9e0f1f39c58d0a9956204b2566fb5657985c58b05fb8"
       }
     },
     {
@@ -8444,10 +8703,11 @@
       "contract": {
         "props": {
           "as": "ElementType",
-          "tone": "\"default\" | \"secondary\" | \"muted\"",
+          "color": "\"default\" | \"secondary\" | \"muted\" (data-color; tone is reserved for status and surfaces)",
           "size": "\"sm\" | \"md\" | \"lg\"",
           "weight": "\"regular\" | \"medium\" | \"semibold\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "as": {
@@ -8459,15 +8719,19 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "color": {
+            "type": "\"default\" | \"muted\" | \"secondary\"",
+            "required": false,
+            "default": "\"default\""
+          },
           "size": {
             "type": "\"lg\" | \"md\" | \"sm\"",
             "required": false,
             "default": "\"md\""
-          },
-          "tone": {
-            "type": "\"default\" | \"muted\" | \"secondary\"",
-            "required": false,
-            "default": "\"default\""
           },
           "weight": {
             "type": "\"medium\" | \"regular\" | \"semibold\"",
@@ -8489,8 +8753,8 @@
         "states": []
       },
       "integrity": {
-        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
-        "preview": "0beb857018d6c0cea0347fc25790d4901eb5f9b80722681dbe3def8937d9cc35"
+        "source": "69236237325e2b58ff60300c20a295dd15085066977f151334796e9de4b3158c",
+        "preview": "0797a2c8228ce70e7a36198ae0f48266b4775ba4079840f76aca68b95f50b76c"
       }
     },
     {
@@ -8579,8 +8843,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "28d9458577a100396f203dad702175d76c72db9b83d8057e7eaa16f2242acbca",
-        "preview": "1de5d0d50263bc716f92ca45c3a6b80835b11d357f3b5c77a159e5b21d1294e7"
+        "source": "84fbc3b6c7a148b1eb9fdecfd02136906ced33d9551629caffc58de07644c4ce",
+        "preview": "8060f72cc18ec2d576b9c7471bc513aee62b54d8d81da3a76864bd6b5debd64f"
       }
     },
     {
@@ -8661,8 +8925,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
-        "preview": "9c5b68d48ff80e28a9ad1c7a02cbe41baa60724371b8679ae88965d17462008f"
+        "source": "5e2de0705ab7f52aca46816b4bf8949fb58e4c278062373a55f8578327b615da",
+        "preview": "5680f837f6ccd0b330459332e0015aa8ad0cfdc80110256d40a5d37d5cbfddc7"
       }
     },
     {
@@ -8728,8 +8992,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
-        "preview": "2802efcdda0ca52465d5081e12fd481ec282bf77e2a0b044f370b2ed131c7ae0"
+        "source": "5e2de0705ab7f52aca46816b4bf8949fb58e4c278062373a55f8578327b615da",
+        "preview": "f10a2e443eacaec76333523f8e3ba29823f549ceec086e08dd93089cd97de475"
       }
     }
   ]
