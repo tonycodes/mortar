@@ -215,5 +215,11 @@ test("variant styles use semantic tokens and the hero joins the inverse remap", 
   ])
     assert.ok(block.includes(selector), `missing ${selector}`);
   assert.doesNotMatch(block, /#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(/);
-  assert.match(css, /\.m-banner,\s*\.m-hero\s*\)\[data-tone="inverse"\]/);
+  // The hero sets data-tone="inverse"; the generic inverse hook in tokens.css remaps it.
+  const tokens = await read("src/tokens.css");
+  const hook = tokens.slice(tokens.indexOf('[data-tone="inverse"] {'));
+  assert.match(
+    hook,
+    /^\[data-tone="inverse"\] \{[^}]*--m-paper: var\(--m-inv-paper\)/,
+  );
 });

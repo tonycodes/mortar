@@ -118,7 +118,7 @@
     min-height: calc(var(--m-control) - 8px);
     padding: 0 10px;
     border: 1px dashed var(--m-line-strong);
-    border-radius: 20px;
+    border-radius: var(--m-radius-full);
     background: transparent;
     color: var(--m-secondary);
     font-size: 12px;
@@ -152,7 +152,7 @@
     position: fixed;
     right: 20px;
     bottom: 20px;
-    z-index: 130;
+    z-index: var(--m-z-toast);
     width: min(380px, calc(100vw - 40px));
   }
   .m-toaster ol {
@@ -179,7 +179,7 @@
   }
   .m-toast strong {
     display: block;
-    font-size: 14px;
+    font-size: var(--m-font-size);
   }
   .m-toast p {
     color: var(--m-secondary);
@@ -237,7 +237,7 @@
   }
   .m-confirm-body > div:first-of-type {
     color: var(--m-secondary);
-    font-size: 14px;
+    font-size: var(--m-font-size);
     text-wrap: pretty;
   }
   .m-confirm-actions {
@@ -256,7 +256,7 @@
   .m-save-bar {
     position: sticky;
     bottom: 0;
-    z-index: 20;
+    z-index: var(--m-z-sticky);
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -265,7 +265,7 @@
     border-radius: var(--m-radius-lg);
     background: var(--m-ink);
     color: var(--m-paper);
-    font-size: 14px;
+    font-size: var(--m-font-size);
   }
   .m-save-bar > span {
     flex: 1;
@@ -404,7 +404,7 @@
   .m-palette-empty {
     padding: 32px 10px;
     text-align: center;
-    font-size: 14px;
+    font-size: var(--m-font-size);
     color: var(--m-muted);
   }
   .m-palette-footer {
@@ -777,7 +777,7 @@
   .m-docs-header {
     position: sticky;
     top: 0;
-    z-index: 30;
+    z-index: var(--m-z-sticky);
     display: flex;
     align-items: center;
     gap: 20px;
@@ -1616,39 +1616,8 @@
   .m-feature-section[data-tone="muted"] .m-feature-preview[data-framed="true"] {
     background: var(--m-surface);
   }
-  :is(
-    .m-marketing-section,
-    .m-feature-section,
-    .m-cta,
-    .m-banner,
-    .m-hero
-  )[data-tone="inverse"],
-  .m-pricing-grid article[data-featured="true"][data-tone="inverse"],
-  .m-bento article:is([data-inverse], [data-tone="inverse"]) {
-    color-scheme: var(--m-inv-color-scheme);
-    --m-line-strong: var(--m-inv-line-strong);
-    --m-primary-active: var(--m-inv-primary-active);
-    --m-selected: var(--m-inv-selected);
-    --m-success: var(--m-inv-success);
-    --m-warning: var(--m-inv-warning);
-    --m-info: var(--m-inv-info);
-    --m-danger: var(--m-inv-danger);
-    --m-on-feedback: var(--m-inv-on-feedback);
-    --m-paper: var(--m-inv-paper);
-    --m-surface: var(--m-inv-surface);
-    --m-sunken: var(--m-inv-surface);
-    --m-line: var(--m-inv-line);
-    --m-ink: var(--m-inv-ink);
-    --m-secondary: var(--m-inv-secondary);
-    --m-muted: var(--m-inv-muted);
-    --m-primary: var(--m-inv-primary);
-    --m-primary-hover: var(--m-inv-primary-hover);
-    --m-on-primary: var(--m-inv-on-primary);
-    --m-accent: var(--m-inv-accent);
-    --m-on-accent: var(--m-inv-on-accent);
-    --m-focus: var(--m-inv-focus);
-    --m-link: var(--m-inv-link);
-    --m-band: var(--m-inv-paper);
+  /* The inverse token remap lives in tokens.css; text follows the remapped ink. */
+  :where([data-tone="inverse"]) {
     color: var(--m-ink);
   }
 
@@ -1933,7 +1902,7 @@
   .m-chat-suggestions li {
     padding: 5px 12px;
     border: 1px solid var(--m-line);
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     color: var(--m-secondary);
     font-size: 13px;
   }
@@ -2659,7 +2628,7 @@
     height: 16px;
   }
   .m-choice-options {
-    z-index: 110;
+    z-index: var(--m-z-popover);
     width: var(--button-width);
     min-width: 200px;
     max-height: 280px;
@@ -3023,7 +2992,7 @@
   }
   .m-grid-list > li:has(.m-grid-list-text a:focus-visible) {
     outline: 2px solid var(--m-focus);
-    outline-offset: 3px;
+    outline-offset: var(--m-focus-offset);
   }
   .m-grid-list-text a:focus-visible {
     outline: none;
@@ -3409,7 +3378,7 @@
     transform: rotate(180deg);
   }
   .m-flyout-panel {
-    z-index: 120;
+    z-index: var(--m-z-popover);
     width: min(420px, calc(100vw - 32px));
     overflow: hidden;
     border: 1px solid var(--m-line);
@@ -3632,7 +3601,7 @@
     top: 10px;
     left: 10px;
     padding: 2px 8px;
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-surface);
     color: var(--m-ink);
     font-size: 12px;
@@ -3827,7 +3796,7 @@
     min-height: 36px;
     padding: 0;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+    box-shadow: inset 0 0 0 1px var(--m-swatch-ring);
   }
   .m-product-option[data-swatches] input:checked + .m-swatch {
     border-color: var(--m-surface);
@@ -4039,7 +4008,7 @@
     min-width: 20px;
     height: 20px;
     padding: 0 6px;
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-primary);
     color: var(--m-on-primary);
     font-size: 11px;
@@ -4114,21 +4083,21 @@
     height: 8px;
     appearance: none;
     border: 0;
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-sunken);
     overflow: hidden;
   }
   .m-reviews-distribution meter::-webkit-meter-bar {
     border: 0;
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-sunken);
   }
   .m-reviews-distribution meter::-webkit-meter-optimum-value {
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-ink);
   }
   .m-reviews-distribution meter::-moz-meter-bar {
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-ink);
   }
   .m-review-list {
@@ -4293,7 +4262,7 @@
     border-radius: 4px;
     background: none;
     color: var(--m-ink);
-    font-size: 14px;
+    font-size: var(--m-font-size);
     text-align: left;
     text-decoration: none;
     cursor: pointer;
@@ -4418,7 +4387,7 @@
     min-width: 22px;
     height: 20px;
     padding: 0 7px;
-    border-radius: 999px;
+    border-radius: var(--m-radius-full);
     background: var(--m-sunken);
     color: var(--m-secondary);
     font-size: 12px;
@@ -4448,7 +4417,7 @@
     border-radius: var(--m-radius);
     background: transparent;
     color: var(--m-secondary);
-    font-size: 14px;
+    font-size: var(--m-font-size);
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
@@ -4746,7 +4715,7 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+    box-shadow: inset 0 0 0 1px var(--m-swatch-ring);
   }
   .m-radio-group[data-layout="swatches"] input:checked + .m-swatch {
     outline: 2px solid var(--m-ink);
@@ -5310,7 +5279,7 @@
   }
   .m-progress-step-name {
     color: var(--m-ink);
-    font-size: 14px;
+    font-size: var(--m-font-size);
     font-weight: 600;
   }
   .m-progress-step-number {
@@ -5431,7 +5400,7 @@
   }
   .m-progress-steps[data-variant="bullets"] p {
     margin: 0;
-    font-size: 14px;
+    font-size: var(--m-font-size);
     font-weight: 600;
   }
   .m-progress-steps[data-variant="bullets"] ol {
@@ -5484,7 +5453,7 @@
     padding: 12px 4px;
     border-bottom: 2px solid transparent;
     color: var(--m-muted);
-    font-size: 14px;
+    font-size: var(--m-font-size);
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;

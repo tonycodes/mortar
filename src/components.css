@@ -28,7 +28,7 @@
       [tabindex]
     ):focus-visible {
     outline: 2px solid var(--m-focus);
-    outline-offset: 3px;
+    outline-offset: var(--m-focus-offset);
   }
   /* Zero-specificity host so any component class can set a link's colour. */
   :where([data-mortar]) a {
@@ -251,7 +251,7 @@
     width: 34px;
     height: 20px;
     border: 1px solid var(--m-line-strong);
-    border-radius: 20px;
+    border-radius: var(--m-radius-full);
     background: var(--m-sunken);
     position: relative;
   }
@@ -314,7 +314,7 @@
     font-size: 12px;
     font-weight: 600;
     border: 1px solid var(--m-line);
-    border-radius: 20px;
+    border-radius: var(--m-radius-full);
   }
   .m-badge::before {
     content: "";
@@ -358,7 +358,7 @@
     border-bottom: 2px solid transparent;
     background: none;
     color: var(--m-muted);
-    font-size: 14px;
+    font-size: var(--m-font-size);
     font-weight: 600;
     padding: 12px 0;
     white-space: nowrap;
@@ -375,7 +375,7 @@
     border: 1px solid var(--m-line);
     border-radius: var(--m-radius);
     padding: 16px;
-    font-size: 14px;
+    font-size: var(--m-font-size);
   }
   .m-notice > div {
     margin-top: 6px;
@@ -395,12 +395,12 @@
   .m-dialog {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    z-index: var(--m-z-overlay);
   }
   .m-backdrop {
     position: fixed;
     inset: 0;
-    background: rgb(0 0 0 / 0.5);
+    background: var(--m-scrim);
   }
   .m-dialog-position {
     position: fixed;
@@ -438,7 +438,7 @@
     justify-content: flex-end;
   }
   .m-menu {
-    z-index: 110;
+    z-index: var(--m-z-popover);
     min-width: 200px;
     border: 1px solid var(--m-line);
     padding: 6px;
@@ -474,7 +474,7 @@
     top: 8px;
     left: 8px;
     clip-path: none;
-    z-index: 120;
+    z-index: var(--m-z-skip);
     background: var(--m-surface);
   }
   .m-app-shell {
@@ -491,7 +491,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    z-index: 30;
+    z-index: var(--m-z-sticky);
   }
   .m-workspace {
     display: flex;
@@ -504,7 +504,7 @@
     text-decoration: none;
   }
   .m-workspace strong {
-    font-size: 14px;
+    font-size: var(--m-font-size);
     display: block;
   }
   .m-workspace small {
@@ -617,7 +617,7 @@
   .m-page-heading p {
     margin-top: 6px;
     color: var(--m-muted);
-    font-size: 14px;
+    font-size: var(--m-font-size);
   }
   .m-heading-row {
     display: flex;
