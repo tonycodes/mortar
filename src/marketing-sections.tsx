@@ -19,6 +19,7 @@ export function BentoGrid({
   title,
   description,
   items,
+  tone = "default",
   headingLevel = 2,
 }: {
   id?: string;
@@ -30,10 +31,15 @@ export function BentoGrid({
     title: string;
     description: string;
     visual?: ReactNode;
+    /** Columns the tile spans. */
     span?: 1 | 2;
+    /** Rows the tile spans, e.g. tall tiles at both ends of a three-column grid. */
+    rowSpan?: 1 | 2;
     /** The tile's surface; inverse remaps it to the inverse tokens. */
     tone?: SectionTone;
   }[];
+  /** The section's band; inverse gives a dark section whose tiles follow the remapped tokens. */
+  tone?: SectionTone;
   /** The section title's level; tile titles sit one level below. */
   headingLevel?: HeadingLevel;
 }) {
@@ -42,6 +48,7 @@ export function BentoGrid({
     <section
       id={id}
       className={cx("m-marketing-section", className)}
+      data-tone={sectionTone(tone)}
       data-m-component="BentoGrid"
     >
       <TitledIntro
@@ -52,7 +59,11 @@ export function BentoGrid({
       />
       <ul className="m-bento">
         {items.map((item, index) => (
-          <li key={`${item.title}:${index}`} data-span={item.span || 1}>
+          <li
+            key={`${item.title}:${index}`}
+            data-span={item.span || 1}
+            data-row-span={item.rowSpan === 2 ? 2 : undefined}
+          >
             <article data-tone={sectionTone(item.tone)}>
               {item.visual && (
                 <div className="m-bento-visual">{item.visual}</div>
@@ -72,19 +83,26 @@ export function StatGroup({
   className,
   label,
   items,
+  layout = "grid",
+  background,
 }: {
   id?: string;
   className?: string;
   label: string;
   /** description: optional supporting sentence under the value. */
   items: { value: string; label: string; description?: string }[];
+  /** grid: ruled columns. timeline: a dotted line through the items, for dated milestones (value is the date). stepped: cards that rise in height from first to last. */
+  layout?: "grid" | "timeline" | "stepped";
+  /** Decorative full-cover image behind the stats. The group switches to the inverse tone with a scrim so text keeps its contrast. */
+  background?: ReactNode;
 }) {
-  return (
+  const list = (
     <TermList
-      id={id}
-      className={cx("m-stat-group", className)}
+      id={background ? undefined : id}
+      className={cx("m-stat-group", !background && className)}
       aria-label={label}
-      data-m-component="StatGroup"
+      data-layout={layout === "grid" ? undefined : layout}
+      data-m-component={background ? undefined : "StatGroup"}
       items={items.map((item) => ({
         term: item.label,
         details: item.value,
@@ -94,6 +112,21 @@ export function StatGroup({
       }))}
     />
   );
+  if (!background) return list;
+  return (
+    <div
+      id={id}
+      className={cx("m-stat-band", className)}
+      data-m-component="StatGroup"
+      data-background="true"
+      data-tone="inverse"
+    >
+      <div className="m-cover-background" aria-hidden="true">
+        {background}
+      </div>
+      {list}
+    </div>
+  );
 }
 
 export function TestimonialGrid({
@@ -102,12 +135,22 @@ export function TestimonialGrid({
   title,
   items,
   headingLevel = 2,
+  layout = "masonry",
 }: {
   id?: string;
   className?: string;
   title?: string;
-  items: { quote: string; name: string; role?: string; avatar?: string }[];
+  items: {
+    quote: string;
+    name: string;
+    role?: string;
+    avatar?: string;
+    /** A larger quote that spans the grid's middle columns, or every column in masonry. */
+    featured?: boolean;
+  }[];
   headingLevel?: HeadingLevel;
+  /** masonry: quotes flow down balanced columns at their own heights. grid: rows of equal height. */
+  layout?: "masonry" | "grid";
 }) {
   const Heading = headingTag(headingLevel);
   return (
@@ -118,9 +161,15 @@ export function TestimonialGrid({
       data-m-component="TestimonialGrid"
     >
       {title && <Heading className="m-section-title">{title}</Heading>}
-      <div className="m-testimonial-grid">
+      <div
+        className="m-testimonial-grid"
+        data-layout={layout === "grid" ? "grid" : undefined}
+      >
         {items.map((item) => (
-          <figure key={item.name}>
+          <figure
+            key={item.name}
+            data-featured={item.featured ? "true" : undefined}
+          >
             <blockquote>{item.quote}</blockquote>
             <figcaption>
               <Avatar decorative name={item.name} src={item.avatar} size="sm" />
@@ -258,6 +307,8 @@ export function PostList({
     dateLabel: string;
     category?: string;
     image?: ReactNode;
+    /** Spans the full row with the image beside a larger title; usually the first post. */
+    featured?: boolean;
   }[];
   action?: LinkAction;
   headingLevel?: HeadingLevel;
@@ -283,7 +334,10 @@ export function PostList({
       </div>
       <ul className="m-post-list">
         {posts.map((post, index) => (
-          <li key={`${post.title}:${post.href}:${index}`}>
+          <li
+            key={`${post.title}:${post.href}:${index}`}
+            data-featured={post.featured ? "true" : undefined}
+          >
             <article>
               {post.image && <div className="m-post-image">{post.image}</div>}
               <p className="m-post-meta">
@@ -309,6 +363,7 @@ export function TeamGrid({
   description,
   members,
   headingLevel = 2,
+  layout = "grid",
 }: {
   id?: string;
   className?: string;
@@ -323,6 +378,8 @@ export function TeamGrid({
     links?: IconLink[];
   }[];
   headingLevel?: HeadingLevel;
+  /** grid: small square portraits. large: fewer columns of tall portraits. list: each portrait beside the name, role and bio. */
+  layout?: "grid" | "large" | "list";
 }) {
   return (
     <section
@@ -335,7 +392,10 @@ export function TeamGrid({
         description={description}
         headingLevel={headingLevel}
       />
-      <ul className="m-team-grid">
+      <ul
+        className="m-team-grid"
+        data-layout={layout === "grid" ? undefined : layout}
+      >
         {members.map((member) => (
           <li key={member.name}>
             <div className="m-team-portrait">
@@ -368,6 +428,8 @@ export function ContactSection({
   description,
   details = [],
   headingLevel = 2,
+  media,
+  offices = [],
   children,
 }: {
   id?: string;
@@ -376,28 +438,60 @@ export function ContactSection({
   description?: string;
   details?: { label: string; value: ReactNode }[];
   headingLevel?: HeadingLevel;
-  /** The consumer's form. Compose with Input, Select, TextArea and Button. */
-  children: ReactNode;
+  /** An image filling one half of a split layout, beside the intro and form; give it alt text or alt="" if decorative. */
+  media?: ReactNode;
+  /** Office locations in a grid below; each name is a heading one level below the title. */
+  offices?: { name: string; address: ReactNode }[];
+  /** The consumer's form. Compose with Input, Select, TextArea and Button. Optional when the section lists offices. */
+  children?: ReactNode;
 }) {
+  const OfficeHeading = headingTag(childLevel(headingLevel));
+  const intro = (
+    <>
+      <TitledIntro
+        title={title}
+        description={description}
+        headingLevel={headingLevel}
+      />
+      {details.length > 0 && (
+        <TermList
+          items={details.map((d) => ({ term: d.label, details: d.value }))}
+        />
+      )}
+    </>
+  );
+  const form = children && <div className="m-contact-form">{children}</div>;
   return (
     <section
       id={id}
       className={cx("m-contact", className)}
       data-m-component="ContactSection"
+      data-media={media ? "true" : undefined}
     >
-      <div>
-        <TitledIntro
-          title={title}
-          description={description}
-          headingLevel={headingLevel}
-        />
-        {details.length > 0 && (
-          <TermList
-            items={details.map((d) => ({ term: d.label, details: d.value }))}
-          />
-        )}
-      </div>
-      <div className="m-contact-form">{children}</div>
+      {media ? (
+        <>
+          <div className="m-contact-media">{media}</div>
+          <div className="m-contact-body">
+            <div>{intro}</div>
+            {form}
+          </div>
+        </>
+      ) : (
+        <>
+          <div>{intro}</div>
+          {form}
+        </>
+      )}
+      {offices.length > 0 && (
+        <ul className="m-contact-offices">
+          {offices.map((office, index) => (
+            <li key={`${office.name}:${index}`}>
+              <OfficeHeading>{office.name}</OfficeHeading>
+              <address>{office.address}</address>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
@@ -412,6 +506,8 @@ export function Newsletter({
   status = "idle",
   message,
   headingLevel = 2,
+  layout = "split",
+  variant = "plain",
 }: {
   id?: string;
   className?: string;
@@ -423,6 +519,10 @@ export function Newsletter({
   status?: "idle" | "submitting" | "success" | "error";
   message?: string;
   headingLevel?: HeadingLevel;
+  /** split: the copy beside the form. center: the copy above a centred form. */
+  layout?: "split" | "center";
+  /** plain: a section divided by a top rule. panel: a rounded, sunken card. */
+  variant?: "plain" | "panel";
 }) {
   const [email, setEmail] = useState("");
   const submitting = status === "submitting";
@@ -435,6 +535,8 @@ export function Newsletter({
       id={id}
       className={cx("m-newsletter", className)}
       data-m-component="Newsletter"
+      data-layout={layout === "split" ? undefined : layout}
+      data-variant={variant === "plain" ? undefined : variant}
     >
       <div>
         <TitledIntro
@@ -475,6 +577,7 @@ export function NotFound({
   description,
   actions,
   illustration,
+  background,
   headingLevel = 1,
 }: {
   id?: string;
@@ -485,6 +588,8 @@ export function NotFound({
   actions: LinkAction[];
   /** Decorative artwork above the code. */
   illustration?: ReactNode;
+  /** Decorative full-cover image behind the message. The section switches to the inverse tone with a scrim so text keeps its contrast. */
+  background?: ReactNode;
   headingLevel?: HeadingLevel;
 }) {
   const Heading = headingTag(headingLevel);
@@ -493,7 +598,14 @@ export function NotFound({
       id={id}
       className={cx("m-not-found", className)}
       data-m-component="NotFound"
+      data-background={background ? true : undefined}
+      data-tone={background ? "inverse" : undefined}
     >
+      {background && (
+        <div className="m-cover-background" aria-hidden="true">
+          {background}
+        </div>
+      )}
       {illustration && (
         <div className="m-not-found-art" aria-hidden="true">
           {illustration}

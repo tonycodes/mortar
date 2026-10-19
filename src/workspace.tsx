@@ -11,7 +11,7 @@ import {
 } from "@headlessui/react";
 import { Button } from "./primitives.js";
 import { Kbd } from "./display.js";
-import { Close } from "./icons.js";
+import { ChevronRight, Close } from "./icons.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import { DialogFrame, cx } from "./internal.js";
 
@@ -220,6 +220,12 @@ export interface StackedListItem {
   description?: ReactNode;
   leading?: ReactNode;
   trailing?: ReactNode;
+  /**
+   * Second column at the end of the row, e.g. a role and "Last seen 3h ago";
+   * it wraps under the text when narrow. It sits inside the row's link, so it
+   * must not contain links or buttons.
+   */
+  meta?: ReactNode;
   href?: string;
 }
 export interface StackedListProps {
@@ -235,6 +241,8 @@ export interface StackedListProps {
   items?: StackedListItem[];
   /** Sections with sticky headings, e.g. a directory grouped by letter. */
   groups?: ItemGroup<StackedListItem>[];
+  /** Ends each row that has an `href` with a chevron, so rows read as links. */
+  chevrons?: boolean;
   id?: string;
   className?: string;
 }
@@ -245,6 +253,7 @@ export function StackedList({
   action,
   items = [],
   groups = [],
+  chevrons = false,
   id,
   className,
 }: StackedListProps) {
@@ -262,6 +271,12 @@ export function StackedList({
           <strong>{item.title}</strong>
           {item.description && <span>{item.description}</span>}
         </span>
+        {item.meta && <span className="m-stacked-meta">{item.meta}</span>}
+        {chevrons && item.href && (
+          <span className="m-stacked-chevron" aria-hidden="true">
+            <ChevronRight />
+          </span>
+        )}
       </>
     );
     return (

@@ -2,7 +2,7 @@
   "id": "mortar-progress-steps",
   "logicalId": "progress-steps",
   "name": "ProgressSteps",
-  "description": "Mortar progress steps: where someone is in a multi-step flow, as numbered bars, circles with descriptions or compact bullets, with the current step marked for assistive technology.",
+  "description": "Mortar progress steps: where someone is in a multi-step flow, as numbered bars, circles with descriptions, compact bullets or one filled track (bar) for status such as an order's delivery, with the current step marked for assistive technology. navigation={false} drops the navigation landmark for status-only progress.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "ProgressSteps",
@@ -14,7 +14,8 @@
     "props": {
       "steps": "ProgressStep[] ({ id: string; name: string; description?: string; href?: string; status: \"complete\" | \"current\" | \"upcoming\" })",
       "label": "string",
-      "variant": "\"simple\" | \"circles\" | \"bullets\"",
+      "variant": "\"simple\" | \"circles\" | \"bullets\" | \"bar\"",
+      "navigation": "boolean (default true; false renders a labelled group instead of a navigation landmark, e.g. for an order tracker)",
       "className": "string"
     },
     "usage": "Import { ProgressSteps } from @tony-ui/mortar. Compose with the public typed props.",

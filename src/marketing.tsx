@@ -8,6 +8,8 @@ import {
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import {
   CloseButton,
+  DialogPanel,
+  DialogTitle,
   Popover,
   PopoverButton,
   PopoverPanel,
@@ -16,9 +18,11 @@ import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, Prose, type SectionTone } from "./layout.js";
 import { SegmentedControl } from "./inspection.js";
 import { ChevronDown } from "./icons.js";
+import { StatGroup } from "./marketing-sections.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import {
   ActionLinks,
+  DialogFrame,
   TermList,
   TitledIntro,
   cx,
@@ -33,27 +37,39 @@ export type FlyoutItem = Pick<
 >;
 /** A header link, or a labelled group that opens a flyout panel. */
 export type HeaderLink =
-  LinkAction | (ItemGroup<FlyoutItem> & { footer?: LinkAction[] });
+  | LinkAction
+  | (ItemGroup<FlyoutItem> & {
+      footer?: LinkAction[];
+      /** list: one column. columns: a wider panel in two columns. full: as wide as the viewport allows, up to four columns. */
+      layout?: "list" | "columns" | "full";
+    });
 
 function Flyout({
   label,
   items,
   footer = [],
+  layout = "list",
   onNavigate,
 }: {
   label: string;
   items: FlyoutItem[];
   footer?: LinkAction[];
+  layout?: "list" | "columns" | "full";
   onNavigate: () => void;
 }) {
+  const dataLayout = layout === "list" ? undefined : layout;
   return (
-    <Popover className="m-flyout">
+    <Popover className="m-flyout" data-layout={dataLayout}>
       <PopoverButton className="m-flyout-trigger">
         {label}
         <ChevronDown />
       </PopoverButton>
       {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off. */}
-      <PopoverPanel anchor="bottom" className="m-flyout-panel">
+      <PopoverPanel
+        anchor="bottom"
+        className="m-flyout-panel"
+        data-layout={dataLayout}
+      >
         <ul>
           {items.map((item, index) => (
             <li key={`${item.label}:${item.href}:${index}`}>
@@ -96,6 +112,8 @@ export function MarketingHeader({
   links,
   action,
   controls,
+  layout = "inline",
+  mobileMenu = "inline",
   className,
   id,
 }: {
@@ -106,57 +124,151 @@ export function MarketingHeader({
   links: HeaderLink[];
   action?: LinkAction;
   controls?: ReactNode;
+  /** inline: brand, links and actions in one row. center: links at the start, the brand centred, actions at the end. */
+  layout?: "inline" | "center";
+  /** How narrow screens show the links. inline: the menu button expands them under the header. panel: it opens a full-screen dialog. */
+  mobileMenu?: "inline" | "panel";
   className?: string;
   id?: string;
 }) {
   const [open, setOpen] = useState(false);
   // Generated so two headers on one page keep distinct, valid references.
   const navId = useDomId("m-marketing-nav");
+  const panel = mobileMenu === "panel";
+  const close = () => setOpen(false);
+  const brandLink = (
+    <KitLink className="m-brand" href={homeHref}>
+      <BrandMark logo={logo} />
+      {brand}
+    </KitLink>
+  );
+  const menuButton = (
+    <Button
+      variant="ghost"
+      className="m-menu-trigger"
+      aria-haspopup={panel ? "dialog" : undefined}
+      aria-expanded={open}
+      aria-controls={panel ? undefined : navId}
+      onClick={() => setOpen(!open)}
+    >
+      Menu
+    </Button>
+  );
+  const nav = (
+    <nav
+      id={navId}
+      aria-label="Primary"
+      data-open={(open && !panel) || undefined}
+    >
+      {links.map((link, index) =>
+        "items" in link ? (
+          <Flyout
+            key={`${link.label}:flyout:${index}`}
+            label={link.label}
+            items={link.items}
+            footer={link.footer}
+            layout={link.layout}
+            onNavigate={close}
+          />
+        ) : (
+          <KitLink
+            key={`${link.label}:${link.href}:${index}`}
+            href={link.href}
+            onClick={close}
+          >
+            {link.label}
+          </KitLink>
+        ),
+      )}
+    </nav>
+  );
+  const actions = (controls || action) && (
+    <>
+      {controls}
+      {action && <ActionLink {...action} />}
+    </>
+  );
   return (
     <header
       id={id}
       className={cx("m-marketing-header", className)}
       data-m-component="MarketingHeader"
+      data-layout={layout === "center" ? "center" : undefined}
+      data-menu={panel ? "panel" : undefined}
     >
-      <KitLink className="m-brand" href={homeHref}>
-        <BrandMark logo={logo} />
-        {brand}
-      </KitLink>
-      <Button
-        variant="ghost"
-        className="m-menu-trigger"
-        aria-expanded={open}
-        aria-controls={navId}
-        onClick={() => setOpen(!open)}
-      >
-        Menu
-      </Button>
-      <nav id={navId} aria-label="Primary" data-open={open || undefined}>
-        {links.map((link, index) =>
-          "items" in link ? (
-            <Flyout
-              key={`${link.label}:flyout:${index}`}
-              label={link.label}
-              items={link.items}
-              footer={link.footer}
-              onNavigate={() => setOpen(false)}
-            />
-          ) : (
-            <KitLink
-              key={`${link.label}:${link.href}:${index}`}
-              href={link.href}
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </KitLink>
-          ),
-        )}
-      </nav>
-      <div className="m-actions">
-        {controls}
-        {action && <ActionLink {...action} />}
-      </div>
+      {/* Centred, the DOM follows the visual order so focus moves from start to end. */}
+      {layout === "center" ? (
+        <>
+          {menuButton}
+          {nav}
+          {brandLink}
+        </>
+      ) : (
+        <>
+          {brandLink}
+          {menuButton}
+          {nav}
+        </>
+      )}
+      <div className="m-actions">{actions}</div>
+      {panel && (
+        <DialogFrame open={open} onClose={close}>
+          <DialogPanel className="m-marketing-panel">
+            <div className="m-dialog-heading">
+              <DialogTitle className="m-brand">
+                <BrandMark logo={logo} />
+                {brand}
+              </DialogTitle>
+              <Button variant="ghost" onClick={close}>
+                Close menu
+              </Button>
+            </div>
+            <PanelLinks links={links} onNavigate={close} />
+            {actions && <div className="m-actions">{actions}</div>}
+          </DialogPanel>
+        </DialogFrame>
+      )}
     </header>
+  );
+}
+/** The header's links in the full-screen mobile panel; flyout groups become disclosures. */
+function PanelLinks({
+  links,
+  onNavigate,
+}: {
+  links: HeaderLink[];
+  onNavigate: () => void;
+}) {
+  return (
+    <nav aria-label="Primary" className="m-marketing-panel-nav">
+      {links.map((link, index) =>
+        "items" in link ? (
+          <details key={`${link.label}:group:${index}`}>
+            <summary>
+              {link.label}
+              <ChevronDown />
+            </summary>
+            {[...link.items, ...(link.footer ?? [])].map((item, i) => (
+              <KitLink
+                key={`${item.label}:${item.href}:${i}`}
+                href={item.href}
+                onClick={onNavigate}
+              >
+                {item.label}
+              </KitLink>
+            ))}
+          </details>
+        ) : (
+          <KitLink
+            key={`${link.label}:${link.href}:${index}`}
+            href={link.href}
+            onClick={onNavigate}
+          >
+            {link.label}
+          </KitLink>
+        ),
+      )}
+    </nav>
   );
 }
 export function Hero({
@@ -170,6 +282,7 @@ export function Hero({
   layout = "center",
   headingLevel = 1,
   background,
+  images = [],
 }: {
   id?: string;
   className?: string;
@@ -178,11 +291,13 @@ export function Hero({
   description: string;
   actions?: LinkAction[];
   children?: ReactNode;
-  /** center: copy above the preview. split: copy beside the preview. */
-  layout?: "center" | "split";
+  /** center: copy above the preview. split: copy beside the preview. angled: copy beside an image that fills the end half to the edge, cut on a slant (pass one img or video as children). */
+  layout?: "center" | "split" | "angled";
   headingLevel?: HeadingLevel;
   /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
   background?: ReactNode;
+  /** Image tiles shown as a staggered collage beside (split) or below (center) the copy. Use instead of children; give each image its own alt text, or alt="" when decorative. */
+  images?: ReactNode[];
 }) {
   return (
     <section
@@ -206,6 +321,13 @@ export function Hero({
         <p className="m-hero-description">{description}</p>
         <ActionLinks actions={actions} />
       </div>
+      {images.length > 0 && (
+        <div className="m-hero-tiles">
+          {images.map((image, index) => (
+            <div key={index}>{image}</div>
+          ))}
+        </div>
+      )}
       {children && <div className="m-hero-preview">{children}</div>}
     </section>
   );
@@ -291,6 +413,7 @@ export function FeatureSection({
   reverse = false,
   tone = "default",
   framed = true,
+  offset = false,
   headingLevel = 2,
 }: {
   id?: string;
@@ -305,6 +428,8 @@ export function FeatureSection({
   tone?: SectionTone;
   /** Wrap the preview in the sunken frame. Disable when the child brings its own frame. */
   framed?: boolean;
+  /** Let a wide screenshot run past the section's end edge and crop there (wide screens only). */
+  offset?: boolean;
   headingLevel?: HeadingLevel;
 }) {
   const [eyebrowSlot, headingSlot] = titledIntroSlots({
@@ -317,6 +442,7 @@ export function FeatureSection({
       id={id}
       className={cx("m-feature-section", className)}
       data-reverse={reverse || undefined}
+      data-offset={offset || undefined}
       data-tone={sectionTone(tone)}
       data-m-component="FeatureSection"
     >
@@ -517,6 +643,15 @@ export interface PricingPlan {
   availability?: "available" | "coming-soon" | "unavailable";
   availabilityLabel?: string;
 }
+/** A full-width tier band under the pricing plans. */
+export interface PricingExtra {
+  name: string;
+  description: string;
+  /** Optional price, e.g. "$9" or "Custom". */
+  price?: string;
+  unit?: string;
+  action: LinkAction;
+}
 export function Pricing({
   id,
   className,
@@ -528,6 +663,7 @@ export function Pricing({
   layout = "cards",
   featuresLabel = "What’s included",
   headingLevel = 2,
+  extra,
 }: {
   id?: string;
   className?: string;
@@ -543,6 +679,8 @@ export function Pricing({
   featuresLabel?: string;
   /** The section title's level; plan names sit one level below. */
   headingLevel?: HeadingLevel;
+  /** A full-width tier band under the plans, such as an enterprise or discount row. */
+  extra?: PricingExtra;
 }) {
   const [annualChoice, setAnnual] = useState(true);
   const showToggle =
@@ -577,6 +715,7 @@ export function Pricing({
       <div
         className="m-pricing-grid"
         data-layout={layout === "detailed" ? "detailed" : undefined}
+        data-columns={layout === "cards" && plans.length === 4 ? 4 : undefined}
       >
         {plans.map((plan) => {
           const availability = plan.availability ?? "available";
@@ -642,6 +781,21 @@ export function Pricing({
             </article>
           );
         })}
+        {extra && (
+          <article className="m-pricing-extra">
+            <div>
+              <PlanHeading>{extra.name}</PlanHeading>
+              <p>{extra.description}</p>
+            </div>
+            {extra.price && (
+              <div className="m-price">
+                <strong>{extra.price}</strong>
+                {extra.unit && <span>{extra.unit}</span>}
+              </div>
+            )}
+            <ActionLink {...extra.action} variant="secondary" />
+          </article>
+        )}
       </div>
     </section>
   );
@@ -775,6 +929,8 @@ export function Footer({
   legal = [],
   itemHeadingLevel = 2,
   social = [],
+  layout = "columns",
+  newsletter,
 }: {
   id?: string;
   className?: string;
@@ -782,7 +938,7 @@ export function Footer({
   logo?: ReactNode;
   description: string;
   note?: ReactNode;
-  /** Link columns; each label is the column's visible heading and its navigation name. */
+  /** Link columns; each label is the column's visible heading and its navigation name. Centred, the label only names the navigation. */
   columns: ItemGroup<LinkAction>[];
   copyright: string;
   legal?: LinkAction[];
@@ -790,40 +946,60 @@ export function Footer({
   itemHeadingLevel?: HeadingLevel;
   /** Social profiles, usually icon-only; each label names its link. */
   social?: IconLink[];
+  /** columns: the brand beside headed link columns. center: brand, a row of links and social links, all centred. */
+  layout?: "columns" | "center";
+  /** A signup row above the copyright, usually a Newsletter; the footer removes its section padding. */
+  newsletter?: ReactNode;
 }) {
   const Heading = headingTag(itemHeadingLevel);
+  const center = layout === "center";
+  const identity = (
+    <>
+      <strong className="m-brand">
+        <BrandMark logo={logo} />
+        {brand}
+      </strong>
+      <p>{description}</p>
+      {note && <p>{note}</p>}
+    </>
+  );
+  const socialLinks = social.length > 0 && (
+    <IconLinks label="Social media" links={social} />
+  );
+  const navs = columns.map((column) => (
+    <nav key={column.label} aria-label={column.label}>
+      {/* Centred, the links sit in one row and the label only names the navigation. */}
+      {!center && <Heading>{column.label}</Heading>}
+      {column.items.map((link, index) => (
+        <KitLink href={link.href} key={`${link.label}:${link.href}:${index}`}>
+          {link.label}
+        </KitLink>
+      ))}
+    </nav>
+  ));
   return (
     <footer
       id={id}
       className={cx("m-footer", className)}
       data-m-component="Footer"
+      data-layout={center ? "center" : undefined}
     >
-      <div className="m-footer-grid">
-        <div>
-          <strong className="m-brand">
-            <BrandMark logo={logo} />
-            {brand}
-          </strong>
-          <p>{description}</p>
-          {note && <p>{note}</p>}
-          {social.length > 0 && (
-            <IconLinks label="Social media" links={social} />
-          )}
+      {center ? (
+        <div className="m-footer-center">
+          {identity}
+          {navs}
+          {socialLinks}
         </div>
-        {columns.map((column) => (
-          <nav key={column.label} aria-label={column.label}>
-            <Heading>{column.label}</Heading>
-            {column.items.map((link, index) => (
-              <KitLink
-                href={link.href}
-                key={`${link.label}:${link.href}:${index}`}
-              >
-                {link.label}
-              </KitLink>
-            ))}
-          </nav>
-        ))}
-      </div>
+      ) : (
+        <div className="m-footer-grid">
+          <div>
+            {identity}
+            {socialLinks}
+          </div>
+          {navs}
+        </div>
+      )}
+      {newsletter && <div className="m-footer-newsletter">{newsletter}</div>}
       <div className="m-footer-bottom">
         <span>{copyright}</span>
         <div>
@@ -919,6 +1095,8 @@ export function ContentSection({
   mediaPosition = "end",
   tone = "default",
   headingLevel = 2,
+  stats = [],
+  testimonial,
   children,
 }: {
   id?: string;
@@ -931,6 +1109,15 @@ export function ContentSection({
   mediaPosition?: "start" | "end";
   tone?: SectionTone;
   headingLevel?: HeadingLevel;
+  /** Figures under the copy, shown as a StatGroup named by the title. */
+  stats?: { label: string; value: string; description?: string }[];
+  /** A customer quote under the copy, shown as a Testimonial. */
+  testimonial?: {
+    quote: string;
+    name: string;
+    role?: string;
+    avatar?: ReactNode;
+  };
   children?: ReactNode;
 }) {
   const headingId = useId();
@@ -952,6 +1139,12 @@ export function ContentSection({
           headingLevel,
         })}
         {children && <Prose>{children}</Prose>}
+        {testimonial && (
+          <Testimonial className="m-content-quote" {...testimonial} />
+        )}
+        {stats.length > 0 && (
+          <StatGroup className="m-content-stats" label={title} items={stats} />
+        )}
       </div>
       {media && <figure className="m-content-media">{media}</figure>}
     </section>

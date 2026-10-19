@@ -15,10 +15,11 @@
       "eyebrow": "string",
       "title": "string",
       "description": "string",
-      "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; tone?: \"default\" | \"muted\" | \"inverse\" }[]",
+      "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; rowSpan?: 1 | 2; tone?: \"default\" | \"muted\" | \"inverse\" }[] (rowSpan 2 makes a tall tile, e.g. at both ends of three columns)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); tile titles sit one level below",
       "id": "string (the root element's id, e.g. an in-page link target)",
-      "className": "string (layout only: margins or grid placement)"
+      "className": "string (layout only: margins or grid placement)",
+      "tone": "\"default\" | \"muted\" | \"inverse\" (the section band; inverse gives a dark section)"
     },
     "usage": "Import { BentoGrid } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

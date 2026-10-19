@@ -324,14 +324,20 @@ export const implementations = {
     await root.getByRole("button", { name: "Monthly" }).click();
     await expect(root).toContainText("$20");
   },
-  async newsletter({ root }) {
+  async newsletter({ root: preview }) {
+    // The preview also shows the centred panel; exercise the first form.
+    const root = preview.locator(".m-newsletter").first();
     // The status region is mounted before the message so it is announced.
-    const status = root.locator(".m-newsletter").getByRole("status");
+    const status = root.getByRole("status");
     await expect(status).toHaveText("");
     await root.getByLabel("Email address").fill("reader@example.com");
     await root.getByRole("button", { name: "Subscribe" }).click();
-    await expect(root.getByLabel("Action result")).toHaveText("completed");
+    await expect(preview.getByLabel("Action result")).toHaveText("completed");
     await expect(status).toHaveText("Thanks. Check your inbox to confirm.");
+    // The panel variant keeps the same labelled field and status region.
+    const panel = preview.locator('.m-newsletter[data-variant="panel"]');
+    await expect(panel.getByLabel("Email address")).toBeVisible();
+    await expect(panel.getByRole("status")).toHaveText("");
   },
   async "sign-in"({ page, root }) {
     const provider = root.getByRole("button", { name: "Continue with GitHub" });
@@ -571,6 +577,44 @@ export const implementations = {
     );
     await switchTo("Year");
     await expect(week.getByRole("heading", { level: 2 })).toHaveText("2028");
+    // Agenda: the selected day's meetings, in time order, follow the selection.
+    const small = root.locator(".m-calendar").nth(3);
+    const agenda = small.getByRole("region", { name: /^Schedule for/ });
+    await expect(agenda).toHaveAccessibleName(
+      "Schedule for Wednesday, 21 October 2026",
+    );
+    await expect(agenda.getByRole("listitem")).toHaveCount(2);
+    await expect(agenda.getByRole("button").first()).toHaveAccessibleName(
+      "Michael Foster 09:00–10:00",
+    );
+    // Wide: the agenda sits beside the month; narrow: below it.
+    const [monthBox, agendaBox] = await Promise.all([
+      small.locator(".m-calendar-main").boundingBox(),
+      agenda.boundingBox(),
+    ]);
+    expect(agendaBox.x).toBeGreaterThan(monthBox.x + monthBox.width - 1);
+    await small
+      .getByRole("button", { name: /^Thursday, 22 October 2026/ })
+      .click();
+    await expect(agenda).toHaveAccessibleName(
+      "Schedule for Thursday, 22 October 2026",
+    );
+    await agenda.getByRole("button", { name: /Dries Vincent/ }).click();
+    await expect(root.getByLabel("Opened event")).toHaveText("Dries Vincent");
+    await small
+      .getByRole("button", { name: /^Friday, 23 October 2026/ })
+      .focus();
+    await page.keyboard.press("Enter");
+    await expect(agenda.getByText("No events")).toBeVisible();
+    await page.setViewportSize({ width: 390, height: 900 });
+    const [narrowMonth, narrowAgenda] = await Promise.all([
+      small.locator(".m-calendar-main").boundingBox(),
+      agenda.boundingBox(),
+    ]);
+    expect(narrowAgenda.y).toBeGreaterThan(
+      narrowMonth.y + narrowMonth.height - 1,
+    );
+    await page.setViewportSize({ width: 1280, height: 900 });
   },
   async product({ page, root }) {
     const bag = root.getByLabel("Bag", { exact: true });
@@ -655,6 +699,25 @@ export const implementations = {
     await expect(
       root.getByRole("link", { name: "Continue shopping" }),
     ).toBeVisible();
+    // The bag with a summary column and related products.
+    const layout = root.locator(".m-cart-layout");
+    const related = layout.getByRole("region", { name: "You may also like" });
+    await expect(
+      related
+        .getByRole("list", { name: "You may also like" })
+        .getByRole("heading", { level: 3 }),
+    ).toHaveCount(4);
+    const summary = layout.getByRole("region", { name: "Your order" });
+    await expect(
+      summary.getByRole("link", { name: "How shipping is worked out" }),
+    ).toBeVisible();
+    await layout.getByLabel("Quantity, Organic tee").selectOption("2");
+    await expect(layout.getByLabel("Quantity, Organic tee")).toHaveValue("2");
+    const [lines, side] = await Promise.all([
+      layout.locator(".m-cart").boundingBox(),
+      summary.boundingBox(),
+    ]);
+    expect(side.x).toBeGreaterThan(lines.x + lines.width - 1);
   },
   async sidebar({ page, root }) {
     const reports = root.locator("summary", { hasText: "Reports" });
@@ -684,9 +747,29 @@ export const implementations = {
     await expect(root.getByLabel("Banner state")).toHaveText("dismissed");
     await root.getByRole("button", { name: "Show announcement" }).click();
     await expect(banner).toBeVisible();
+    // The bottom banner is fixed (inside the example frame) and always has a way out.
+    const notice = root.getByRole("region", { name: "Cookie notice" });
+    await expect(notice).toHaveCSS("position", "fixed");
+    const dismiss = notice.getByRole("button", {
+      name: "Dismiss cookie notice",
+    });
+    await dismiss.focus();
+    await page.keyboard.press("Enter");
+    await expect(notice).toHaveCount(0);
+    // Focus moves on to the next control, not the page body.
+    expect(
+      await page.evaluate(() => document.activeElement !== document.body),
+    ).toBe(true);
+    await root.getByRole("button", { name: "Show cookie notice" }).click();
+    await expect(notice).toBeVisible();
   },
-  async navigation({ page, root, component }) {
+  async navigation({ page, root: preview, component }) {
     await page.setViewportSize({ width: 390, height: 900 });
+    // The MarketingHeader preview also shows a centred header; its own checks follow.
+    const root =
+      component.export === "MarketingHeader"
+        ? preview.locator(".m-marketing-header").first()
+        : preview;
     if (component.export === "MarketingHeader") {
       // Flyout groups are disclosures: keyboard opens, Escape closes and returns focus.
       await page.setViewportSize({ width: 1280, height: 900 });
@@ -709,6 +792,61 @@ export const implementations = {
       await expect(opener).toHaveAttribute("aria-expanded", "true");
       await root.getByRole("link", { name: "Features", exact: true }).click();
       await expect(opener).toHaveAttribute("aria-expanded", "false");
+
+      // Centred header: the brand sits between the links and the actions.
+      const atlas = preview.locator(".m-marketing-header").nth(1);
+      await page.setViewportSize({ width: 1280, height: 900 });
+      const [links, brand, actions] = await Promise.all(
+        ["nav", ".m-brand", ".m-actions"].map((selector) =>
+          atlas.locator(`:scope > ${selector}`).boundingBox(),
+        ),
+      );
+      expect(links.x + links.width).toBeLessThanOrEqual(brand.x);
+      expect(brand.x + brand.width).toBeLessThanOrEqual(actions.x);
+      // A full-width flyout spans the viewport less its padding; a two-column one lays out in two columns.
+      const solutions = atlas.getByRole("button", { name: "Solutions" });
+      await solutions.click();
+      const full = page.locator('.m-flyout-panel[data-layout="full"]');
+      await expect(full.getByRole("link", { name: /Retail/ })).toBeVisible();
+      const fullBox = await full.boundingBox();
+      expect(fullBox.width).toBeGreaterThanOrEqual(1240);
+      expect(fullBox.x).toBeGreaterThanOrEqual(0);
+      expect(fullBox.x + fullBox.width).toBeLessThanOrEqual(1280);
+      await expect(
+        full.getByRole("link", { name: "Book a demo" }),
+      ).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(solutions).toBeFocused();
+      await atlas.getByRole("button", { name: "Resources" }).click();
+      const columns = page.locator('.m-flyout-panel[data-layout="columns"]');
+      const [guides, api] = await Promise.all(
+        [/Guides/, /API/].map((name) =>
+          columns.getByRole("link", { name }).boundingBox(),
+        ),
+      );
+      expect(Math.abs(guides.y - api.y)).toBeLessThanOrEqual(1);
+      await expect(columns.getByRole("link", { name: "Status" })).toBeVisible();
+      await page.keyboard.press("Escape");
+
+      // Panel menu: a full-screen dialog that traps focus and returns it.
+      await page.setViewportSize({ width: 390, height: 900 });
+      const menu = atlas.getByRole("button", { name: "Menu", exact: true });
+      await expect(menu).toHaveAttribute("aria-haspopup", "dialog");
+      await menu.focus();
+      await page.keyboard.press("Enter");
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible();
+      const box = await dialog.boundingBox();
+      expect(box.width).toBeGreaterThanOrEqual(389);
+      await page.keyboard.press("Escape");
+      await expect(dialog).toHaveCount(0);
+      await expect(menu).toBeFocused();
+      await menu.click();
+      await dialog.locator("summary", { hasText: "Resources" }).click();
+      await dialog.getByRole("link", { name: "Guides" }).click();
+      await expect(page).toHaveURL(/#guides$/);
+      await expect(dialog).toHaveCount(0);
+      await expect(menu).toHaveAttribute("aria-expanded", "false");
     } else {
       // Both shells name the opener by its visible text (label in name) and
       // announce the dialog it opens.

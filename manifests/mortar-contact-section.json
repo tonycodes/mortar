@@ -15,7 +15,9 @@
       "title": "string",
       "description": "string",
       "details": "{ label: string; value: ReactNode }[]",
-      "children": "ReactNode",
+      "children": "ReactNode (the form; optional when the section lists offices)",
+      "media": "ReactNode (an image filling one half of a split layout beside the intro and form; give it alt text, or alt=\"\" when decorative)",
+      "offices": "{ name: string; address: ReactNode }[] (office locations; each name is a heading one level below headingLevel and each address an <address>. Without a form they sit beside the intro, otherwise in a row below)",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"

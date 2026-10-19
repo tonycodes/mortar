@@ -21,7 +21,8 @@
       "featuresLabel": "string",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
-      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); plan names sit one level below"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); plan names sit one level below",
+      "extra": "{ name: string; description: string; price?: string; unit?: string; action: LinkAction } (a full-width tier band under the plans, e.g. enterprise or a discount; four plans lay out 4, 2 then 1 across)"
     },
     "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

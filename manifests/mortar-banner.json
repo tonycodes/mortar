@@ -18,12 +18,14 @@
       "label": "string",
       "dismissLabel": "string",
       "tone": "\"default\" | \"inverse\" (default \"inverse\")",
+      "variant": "\"bar\" | \"floating\" (default \"bar\"; floating is an inset, rounded panel with a shadow)",
+      "placement": "\"inline\" | \"bottom\" (default \"inline\"; bottom fixes the banner to the bottom of the viewport and always shows the dismiss button, which hides it even when onDismiss is omitted)",
       "id": "string",
       "className": "string (on the root element)"
     },
     "usage": "Import { Banner } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The banner is a region named by label. Dismissing it moves focus to the next control. A bottom banner can always be dismissed, so it never covers page content for good.",
     "dependencies": []
   },
   "preview": {

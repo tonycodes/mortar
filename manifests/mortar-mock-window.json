@@ -14,7 +14,7 @@
     "props": {
       "label": "string",
       "address": "string",
-      "variant": "\"browser\" | \"app\" | \"plain\"",
+      "variant": "\"browser\" | \"app\" | \"plain\" | \"phone\" (phone: a portrait handset frame)",
       "children": "ReactNode",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)"

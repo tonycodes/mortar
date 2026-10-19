@@ -13,7 +13,8 @@
   "contract": {
     "props": {
       "title": "string",
-      "items": "{ quote; name; role?; avatar? }[]",
+      "items": "{ quote; name; role?; avatar?; featured?: boolean }[] (a featured quote is larger on a sunken card; it spans two columns and rows in the grid layout and every column in masonry)",
+      "layout": "\"masonry\" | \"grid\" (default \"masonry\": quotes flow down balanced columns at their own heights; grid: rows of equal height)",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"

@@ -116,6 +116,37 @@ export function LayoutCase({ name }: { name: string }) {
               ]}
             />
           </UI.Card>
+          <UI.DescriptionList
+            title="Billing details"
+            description="Plan, payment and invoices."
+            variant="striped"
+            items={[
+              { term: "Plan", details: "Team, billed yearly" },
+              { term: "Seats", details: "12 of 15 in use" },
+              { term: "Payment method", details: "Visa ending 4242" },
+              { term: "Next invoice", details: "1 November 2026" },
+            ]}
+          />
+          <UI.Card
+            title="Candidate"
+            description="Shown in a card: the card carries the title."
+            headingLevel={2}
+          >
+            <UI.DescriptionList
+              items={[
+                { term: "Full name", details: "Margot Foster" },
+                { term: "Role", details: "Backend developer" },
+                { term: "Email address", details: "margot@example.com" },
+                {
+                  term: "Stage",
+                  details: <UI.Badge tone="info">Interviewing</UI.Badge>,
+                  action: (
+                    <UI.ActionLink label="Move" href="#stage" variant="ghost" />
+                  ),
+                },
+              ]}
+            />
+          </UI.Card>
         </UI.Stack>
       );
       break;

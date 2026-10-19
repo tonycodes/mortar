@@ -25,3 +25,15 @@ export function customProperties(body) {
     ]),
   );
 }
+
+/**
+ * The `@layer components { … }` block of `css` that contains `selector`, so a
+ * test checks its own block wherever later contributions append theirs.
+ */
+export function layerBlockWith(css, selector) {
+  const at = css.indexOf(selector);
+  if (at < 0) return "";
+  const start = css.lastIndexOf("@layer components {", at);
+  const end = css.indexOf("@layer components {", at);
+  return css.slice(start, end === -1 ? undefined : end);
+}

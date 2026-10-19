@@ -469,9 +469,17 @@ export function focusAway(
   );
   const following = (el: HTMLElement) =>
     element.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING;
-  const after = candidates.find(following);
-  const before = candidates.filter((el) => !following(el)).pop();
-  (after ?? before ?? fallback)?.focus();
+  // Nearest first: following elements, then preceding ones from the closest.
+  // Some candidates have boxes but cannot take focus (content of a closed
+  // <details>), so keep trying until one does.
+  const ordered = [
+    ...candidates.filter(following),
+    ...candidates.filter((el) => !following(el)).reverse(),
+  ];
+  for (const el of fallback ? [...ordered, fallback] : ordered) {
+    el.focus();
+    if (document.activeElement === el) return;
+  }
 }
 
 /**

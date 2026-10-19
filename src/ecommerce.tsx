@@ -14,7 +14,8 @@ import {
   EmptyState,
   Modal,
 } from "./primitives.js";
-import { FilterChip } from "./display.js";
+import { Avatar, FilterChip } from "./display.js";
+import { ProgressSteps, type ProgressStep } from "./application.js";
 import { ChevronDown, Star } from "./icons.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import { Swatch, TermList, cx } from "./internal.js";
@@ -50,8 +51,11 @@ export interface ProductListProps {
   columns?: 2 | 3 | 4;
   /** Heading level of each product name (default 3). */
   itemHeadingLevel?: HeadingLevel;
-  /** `cards` frames each product with a border, for listings with full details. */
-  variant?: "plain" | "cards";
+  /**
+   * `cards` frames each product with a border, for listings with full
+   * details; `overlay` sets the name and price on a panel over the image.
+   */
+  variant?: "plain" | "cards" | "overlay";
   id?: string;
   className?: string;
 }
@@ -67,53 +71,62 @@ export function ProductList({
   className,
 }: ProductListProps) {
   const Heading = headingTag(itemHeadingLevel);
+  const overlay = variant === "overlay";
   return (
     <ul
       id={id}
       className={cx("m-product-list", className)}
       aria-label={label}
       data-columns={columns}
-      data-variant={variant === "cards" ? "cards" : undefined}
+      data-variant={variant === "plain" ? undefined : variant}
     >
-      {products.map((product) => (
-        <li key={product.id}>
-          <div className="m-product-image">
-            <img
-              src={product.image.src}
-              alt={product.image.alt}
-              loading="lazy"
-            />
-            {product.badge && (
-              <span className="m-product-badge">{product.badge}</span>
+      {products.map((product) => {
+        const text = (
+          <>
+            <div className="m-product-info">
+              <Heading className="m-product-name">
+                <KitLink href={product.href}>{product.name}</KitLink>
+              </Heading>
+              {product.meta && <p className="m-product-meta">{product.meta}</p>}
+              {product.description && (
+                <p className="m-product-summary">{product.description}</p>
+              )}
+            </div>
+            <p className="m-product-price">{product.price}</p>
+          </>
+        );
+        return (
+          <li key={product.id}>
+            <div className="m-product-image">
+              <img
+                src={product.image.src}
+                alt={product.image.alt}
+                loading="lazy"
+              />
+              {product.badge && (
+                <span className="m-product-badge">{product.badge}</span>
+              )}
+              {overlay && <div className="m-product-overlay">{text}</div>}
+            </div>
+            {!overlay && text}
+            {product.swatches && product.swatches.length > 0 && (
+              <ul
+                className="m-product-swatches"
+                aria-label={`${product.name} colours`}
+              >
+                {product.swatches.map((colour) => (
+                  <li key={colour.label}>
+                    <Swatch color={colour.swatch} label={colour.label} />
+                  </li>
+                ))}
+              </ul>
             )}
-          </div>
-          <div className="m-product-info">
-            <Heading className="m-product-name">
-              <KitLink href={product.href}>{product.name}</KitLink>
-            </Heading>
-            {product.meta && <p className="m-product-meta">{product.meta}</p>}
-            {product.description && (
-              <p className="m-product-summary">{product.description}</p>
+            {product.action && (
+              <div className="m-product-card-action">{product.action}</div>
             )}
-          </div>
-          <p className="m-product-price">{product.price}</p>
-          {product.swatches && product.swatches.length > 0 && (
-            <ul
-              className="m-product-swatches"
-              aria-label={`${product.name} colours`}
-            >
-              {product.swatches.map((colour) => (
-                <li key={colour.label}>
-                  <Swatch color={colour.swatch} label={colour.label} />
-                </li>
-              ))}
-            </ul>
-          )}
-          {product.action && (
-            <div className="m-product-card-action">{product.action}</div>
-          )}
-        </li>
-      ))}
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -329,6 +342,21 @@ export interface ShoppingCartProps {
   headingLevel?: HeadingLevel;
   /** Shown when there are no items. */
   empty?: EmptyContent;
+  /**
+   * Beside the lines when wide and below them when narrow, e.g. an
+   * OrderSummary with shipping and tax estimates and the checkout action.
+   */
+  summary?: ReactNode;
+  /**
+   * Products to suggest under the bag, shown as a ProductList with a heading
+   * (default level 2; product names one level below). Also shown when the
+   * bag is empty.
+   */
+  related?: {
+    title: string;
+    products: ProductCard[];
+    headingLevel?: HeadingLevel;
+  };
   id?: string;
   className?: string;
 }
@@ -339,6 +367,49 @@ export interface ShoppingCartProps {
  * last line), or to the empty state once the bag is empty.
  */
 export function ShoppingCart({
+  summary,
+  related,
+  id,
+  className,
+  ...props
+}: ShoppingCartProps) {
+  if (!summary && !related)
+    return <CartLines {...props} id={id} className={className} />;
+  return (
+    <div
+      id={id}
+      className={cx("m-cart-layout", className)}
+      data-summary={summary ? true : undefined}
+    >
+      <CartLines {...props} />
+      {summary && <div className="m-cart-summary">{summary}</div>}
+      {related && <CartRelated {...related} />}
+    </div>
+  );
+}
+
+function CartRelated({
+  title,
+  products,
+  headingLevel = 2,
+}: NonNullable<ShoppingCartProps["related"]>) {
+  const titleId = useId();
+  const Heading = headingTag(headingLevel);
+  return (
+    <section className="m-cart-related" aria-labelledby={titleId}>
+      <Heading id={titleId} className="m-cart-related-title">
+        {title}
+      </Heading>
+      <ProductList
+        label={title}
+        products={products}
+        itemHeadingLevel={childLevel(headingLevel)}
+      />
+    </section>
+  );
+}
+
+function CartLines({
   items,
   onQuantityChange,
   onRemove,
@@ -351,7 +422,7 @@ export function ShoppingCart({
   },
   id,
   className,
-}: ShoppingCartProps) {
+}: Omit<ShoppingCartProps, "summary" | "related">) {
   const base = useId();
   const Heading = headingTag(headingLevel);
   const root = useRef<HTMLElement>(null);
@@ -459,7 +530,11 @@ export function OrderSummary({
   className,
 }: {
   title?: string;
-  lines: { label: string; value: string }[];
+  /**
+   * Cost lines. `hint` explains an estimate under its label, e.g. "Calculated
+   * at checkout" or a link to how shipping is worked out.
+   */
+  lines: { label: string; value: string; hint?: ReactNode }[];
   total: { label: string; value: string };
   action?: ReactNode;
   headingLevel?: HeadingLevel;
@@ -480,7 +555,18 @@ export function OrderSummary({
         {title}
       </Heading>
       <TermList
-        items={lines.map((line) => ({ term: line.label, details: line.value }))}
+        items={lines.map((line) => ({
+          key: line.label,
+          term: line.hint ? (
+            <>
+              {line.label}
+              <span className="m-order-hint">{line.hint}</span>
+            </>
+          ) : (
+            line.label
+          ),
+          details: line.value,
+        }))}
       >
         <div className="m-order-total">
           <dt>{total.label}</dt>
@@ -676,6 +762,8 @@ export interface Review {
   date: string;
   title: string;
   body: ReactNode;
+  /** Reviewer's photo, shown with `avatars`; without it the Avatar shows initials. */
+  avatar?: string;
 }
 
 /** Rating summary with a star distribution, followed by individual reviews. */
@@ -686,6 +774,7 @@ export function ProductReviews({
   distribution,
   reviews,
   action,
+  avatars = false,
   headingLevel = 2,
   id,
   className,
@@ -697,6 +786,8 @@ export function ProductReviews({
   reviews: Review[];
   /** E.g. a "Write a review" button. */
   action?: ReactNode;
+  /** Shows each reviewer's Avatar (their `avatar` photo or initials) beside their name. */
+  avatars?: boolean;
   /** Level of the title; each review's title is one level below. */
   headingLevel?: HeadingLevel;
   id?: string;
@@ -710,6 +801,7 @@ export function ProductReviews({
       id={id}
       className={cx("m-reviews", className)}
       aria-labelledby={base}
+      data-avatars={avatars || undefined}
     >
       <div className="m-reviews-summary">
         <Heading id={base} className="m-reviews-title">
@@ -754,6 +846,14 @@ export function ProductReviews({
             aria-labelledby={`${base}-${review.id}`}
           >
             <header>
+              {avatars && (
+                <Avatar
+                  className="m-review-avatar"
+                  name={review.author}
+                  src={review.avatar}
+                  decorative
+                />
+              )}
               <Stars
                 value={review.rating}
                 label={`Rated ${review.rating} out of 5`}
@@ -785,6 +885,11 @@ export interface Order {
   href: string;
   /** Order-level controls in the header, e.g. "View invoice" or an actions menu. */
   actions?: ReactNode;
+  /**
+   * Delivery stages shown as a tracker under the status, e.g. Order placed,
+   * Processing, Shipped and Delivered, with the latest stage `current`.
+   */
+  progress?: ProgressStep[];
   items: {
     id: string;
     name: string;
@@ -853,6 +958,15 @@ export function OrderHistory({
               )}
             </header>
             <p className="m-order-status">{order.status}</p>
+            {order.progress && order.progress.length > 0 && (
+              <ProgressSteps
+                className="m-order-progress"
+                steps={order.progress}
+                variant="bar"
+                navigation={false}
+                label={`Order ${order.number} progress`}
+              />
+            )}
             <ul className="m-order-items">
               {order.items.map((item) => (
                 <li key={item.id}>

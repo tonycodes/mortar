@@ -2,6 +2,18 @@ import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 import { icons } from "./CompositionFixture.js";
+import { art, scenes } from "./MarketingArt.js";
+
+/** Inline SVG artwork, so previews never hit the network: a sky, hills and a sun in the given colours. */
+const scene = (width: number, height: number, sky: string, land: string) =>
+  `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${width} ${height}' preserveAspectRatio='xMidYMid slice'><rect width='${width}' height='${height}' fill='#${sky}'/><circle cx='${width * 0.7}' cy='${height * 0.3}' r='${Math.min(width, height) * 0.12}' fill='#fff6d5'/><path d='M0 ${height * 0.7} Q${width * 0.3} ${height * 0.45} ${width * 0.6} ${height * 0.68} T${width} ${height * 0.6} V${height} H0Z' fill='#${land}'/></svg>`,
+  )}`;
+/** A placeholder portrait: head and shoulders on a coloured ground. */
+const portrait = (ground: string, figure: string) =>
+  `data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500'><rect width='400' height='500' fill='#${ground}'/><circle cx='200' cy='200' r='80' fill='#${figure}'/><path d='M70 500c0-90 58-150 130-150s130 60 130 150z' fill='#${figure}'/></svg>`,
+  )}`;
 
 /** Fixtures for components added in the v2 kits PR. Kept apart from Fixture.tsx to keep the diff reviewable. */
 export function ExtendedCase({ name }: { name: string }) {
@@ -407,33 +419,71 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "ContentSection":
       example = (
-        <UI.ContentSection
-          eyebrow="Our story"
-          title="Why Mortar exists"
-          description="Every product we worked on rebuilt the same buttons, forms and page shells."
-          media={
-            <UI.MockWindow label="Northwind dashboard">
-              <UI.MetricGroup
-                label="This week"
-                items={[
-                  { label: "Deploys", value: "48" },
-                  { label: "Incidents", value: "1" },
-                ]}
-              />
-            </UI.MockWindow>
-          }
-        >
-          <p>
-            Each rebuild drifted: different focus rings, different dark modes,
-            different accessibility bugs. Fixing one product never fixed the
-            others.
-          </p>
-          <p>
-            Mortar puts those decisions in one place. Components ship with typed
-            contracts, both themes and executable accessibility checks, so a fix
-            lands everywhere at once.
-          </p>
-        </UI.ContentSection>
+        <>
+          <UI.ContentSection
+            eyebrow="Our story"
+            title="Why Mortar exists"
+            description="Every product we worked on rebuilt the same buttons, forms and page shells."
+            media={
+              <UI.MockWindow label="Northwind dashboard">
+                <UI.MetricGroup
+                  label="This week"
+                  items={[
+                    { label: "Deploys", value: "48" },
+                    { label: "Incidents", value: "1" },
+                  ]}
+                />
+              </UI.MockWindow>
+            }
+          >
+            <p>
+              Each rebuild drifted: different focus rings, different dark modes,
+              different accessibility bugs. Fixing one product never fixed the
+              others.
+            </p>
+            <p>
+              Mortar puts those decisions in one place. Components ship with
+              typed contracts, both themes and executable accessibility checks,
+              so a fix lands everywhere at once.
+            </p>
+          </UI.ContentSection>
+          <UI.ContentSection
+            eyebrow="Our mission"
+            title="On a mission to make shipping boring"
+            description="We want every release to feel like a non-event."
+            media={<img alt="" src={scenes[3]} />}
+            mediaPosition="start"
+            stats={[
+              { label: "Founded", value: "2021" },
+              { label: "Employees", value: "37" },
+              { label: "Countries", value: "12" },
+              { label: "Raised", value: "$25M" },
+            ]}
+          >
+            <p>
+              Releases used to take a war room. Now a typed contract and a
+              shared test suite catch the regressions before anyone has to.
+            </p>
+          </UI.ContentSection>
+          <UI.ContentSection
+            eyebrow="Case study"
+            title="How Wheelhouse halved its support queue"
+            description="One inbox for chats, bookings and follow-ups."
+            tone="muted"
+            testimonial={{
+              quote:
+                "We answered twice as many customers in the first month, without hiring.",
+              name: "Lindsay Walton",
+              role: "Owner, Wheelhouse Bikes",
+              avatar: <UI.Avatar name="Lindsay Walton" decorative />,
+            }}
+          >
+            <p>
+              Wheelhouse moved three channels into one shared queue and set up
+              saved replies for the questions they hear every day.
+            </p>
+          </UI.ContentSection>
+        </>
       );
       break;
     case "StackedList":
@@ -509,40 +559,102 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
+          <UI.StackedList
+            title="People"
+            chevrons
+            items={[
+              {
+                id: "leslie",
+                title: "Leslie Alexander",
+                description: "leslie.alexander@example.com",
+                leading: <UI.Avatar name="Leslie Alexander" decorative />,
+                meta: (
+                  <>
+                    <span>Co-founder / CEO</span>
+                    <span>Last seen 3h ago</span>
+                  </>
+                ),
+                href: "#leslie",
+              },
+              {
+                id: "michael",
+                title: "Michael Foster",
+                description: "michael.foster@example.com",
+                leading: <UI.Avatar name="Michael Foster" decorative />,
+                meta: (
+                  <>
+                    <span>Co-founder / CTO</span>
+                    <span>Online</span>
+                  </>
+                ),
+                href: "#michael",
+              },
+            ]}
+          />
         </UI.Stack>
       );
       break;
     case "BentoGrid":
       example = (
-        <UI.BentoGrid
-          title="Layout"
-          items={[
-            {
-              title: "Wide",
-              description: "Spans two columns.",
-              span: 2,
-              visual: (
-                <div
-                  style={{
-                    background: "var(--m-line)",
-                    minHeight: 72,
-                    borderRadius: 8,
-                  }}
-                />
-              ),
-            },
-            {
-              title: "Focus",
-              description: "An inverse tile.",
-              tone: "inverse",
-            },
-          ]}
-        />
+        <>
+          <UI.BentoGrid
+            title="Layout"
+            items={[
+              {
+                title: "Wide",
+                description: "Spans two columns.",
+                span: 2,
+                visual: (
+                  <div
+                    style={{
+                      background: "var(--m-line)",
+                      minHeight: 72,
+                      borderRadius: 8,
+                    }}
+                  />
+                ),
+              },
+              {
+                title: "Focus",
+                description: "An inverse tile.",
+                tone: "inverse",
+              },
+            ]}
+          />
+          <UI.BentoGrid
+            eyebrow="Platform"
+            title="Everything you need to ship"
+            description="Three columns, with tall tiles at both ends."
+            tone="inverse"
+            items={[
+              {
+                title: "Mobile friendly",
+                description: "Every screen adapts from phone to desktop.",
+                rowSpan: 2,
+                visual: <img alt="" src={scenes[1]} style={art} />,
+              },
+              {
+                title: "Performance",
+                description: "Pages render on the server and stream in.",
+              },
+              {
+                title: "Powerful APIs",
+                description: "Typed clients for every endpoint.",
+                rowSpan: 2,
+                visual: <img alt="" src={scenes[2]} style={art} />,
+              },
+              {
+                title: "Security",
+                description: "Single sign-on and audit logs on every plan.",
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "StatGroup":
       example = (
-        <>
+        <UI.Stack gap="xl">
           <UI.StatGroup
             label="Platform numbers"
             items={[
@@ -570,21 +682,143 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
-        </>
+          <UI.StatGroup
+            label="Company numbers"
+            background={<img alt="" src={scenes[0]} />}
+            items={[
+              { value: "8,000+", label: "Creators on the platform" },
+              { value: "3%", label: "Flat platform fee" },
+              { value: "99.9%", label: "Uptime guarantee" },
+              { value: "$70M", label: "Paid out to creators" },
+            ]}
+          />
+          <UI.StatGroup
+            label="Company milestones"
+            layout="timeline"
+            items={[
+              {
+                value: "Aug 2021",
+                label: "Founded company",
+                description: "Two engineers and a shared design system.",
+              },
+              {
+                value: "Dec 2021",
+                label: "Secured funding",
+                description: "A seed round to grow the team.",
+              },
+              {
+                value: "Feb 2022",
+                label: "Released beta",
+                description: "Forty teams joined in the first month.",
+              },
+              {
+                value: "Dec 2022",
+                label: "Global launch",
+                description: "Available in every region.",
+              },
+            ]}
+          />
+          <UI.StatGroup
+            label="Growth"
+            layout="stepped"
+            items={[
+              {
+                value: "250k",
+                label: "Users on the platform",
+                description: "Across 40 countries.",
+              },
+              {
+                value: "$8.9B",
+                label: "Processed every quarter",
+                description: "With no downtime last year.",
+              },
+              {
+                value: "401k",
+                label: "Projects created",
+                description: "Most in their first week.",
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "TestimonialGrid":
       example = (
-        <UI.TestimonialGrid
-          title="Teams ship faster"
-          items={[
-            {
-              quote: "Illustrative quote for the preview.",
-              name: "Example customer",
-              role: "Example role",
-            },
-          ]}
-        />
+        <div>
+          <UI.TestimonialGrid
+            title="Teams ship faster"
+            items={[
+              {
+                quote: "Illustrative quote for the preview.",
+                name: "Example customer",
+                role: "Example role",
+              },
+            ]}
+          />
+          <UI.TestimonialGrid
+            title="What support teams say"
+            headingLevel={3}
+            layout="grid"
+            items={[
+              {
+                quote:
+                  "We answered every booking request the same day for the first time. The shared inbox replaced three tools and a spreadsheet.",
+                name: "Ana Kovač",
+                role: "Owner, Harbour Bikes",
+                featured: true,
+              },
+              {
+                quote: "Setup took an afternoon.",
+                name: "Ben Lee",
+                role: "Office manager",
+              },
+              {
+                quote: "Our clients notice how quickly we reply now.",
+                name: "Cy Moreno",
+                role: "Agency lead",
+              },
+              {
+                quote: "Scheduling alone saves us hours a week.",
+                name: "Di Novak",
+                role: "Clinic director",
+              },
+              {
+                quote: "The reports are clear enough to share with the board.",
+                name: "Ed Okafor",
+                role: "Operations",
+              },
+            ]}
+          />
+          <UI.TestimonialGrid
+            title="Masonry with a featured quote"
+            headingLevel={3}
+            items={[
+              {
+                quote:
+                  "Northwind is the first support tool the whole team actually opens every morning.",
+                name: "Flo Park",
+                role: "Head of support",
+                featured: true,
+              },
+              {
+                quote: "Short and to the point.",
+                name: "Gil Ruiz",
+                role: "Founder",
+              },
+              {
+                quote:
+                  "A longer quote shows how masonry columns keep their own heights instead of stretching to match the tallest card in the row.",
+                name: "Hana Ito",
+                role: "Product lead",
+              },
+              {
+                quote: "Booking links changed how customers reach us.",
+                name: "Ivo Petrov",
+                role: "Studio owner",
+              },
+            ]}
+          />
+        </div>
       );
       break;
     case "PlanComparison":
@@ -607,92 +841,259 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "PostList":
       example = (
-        <UI.PostList
-          title="From the blog"
-          action={action}
-          posts={[
-            {
-              href: "#post",
-              title: "Example post title",
-              excerpt: "Illustrative excerpt.",
-              date: "2026-10-02",
-              dateLabel: "2 Oct 2026",
-              category: "Engineering",
-            },
-          ]}
-        />
+        <div>
+          <UI.PostList
+            title="From the blog"
+            action={action}
+            posts={[
+              {
+                href: "#post",
+                title: "Example post title",
+                excerpt: "Illustrative excerpt.",
+                date: "2026-10-02",
+                dateLabel: "2 Oct 2026",
+                category: "Engineering",
+              },
+            ]}
+          />
+          <UI.PostList
+            title="Latest stories"
+            headingLevel={3}
+            posts={[
+              {
+                href: "#featured-post",
+                title: "How a bike shop answers every booking the same day",
+                excerpt:
+                  "Harbour Bikes moved phone, email and chat into one inbox. Here is what changed in their first month.",
+                date: "2026-10-12",
+                dateLabel: "12 Oct 2026",
+                category: "Customers",
+                featured: true,
+                image: <img alt="" src={scene(800, 500, "bcd7f0", "4f7d5c")} />,
+              },
+              {
+                href: "#post-2",
+                title: "Designing a calmer notification inbox",
+                excerpt: "Fewer pings, clearer priorities.",
+                date: "2026-10-05",
+                dateLabel: "5 Oct 2026",
+                category: "Design",
+                image: <img alt="" src={scene(800, 500, "f6d8c4", "b0654a")} />,
+              },
+              {
+                href: "#post-3",
+                title: "What we learned from 1,000 support teams",
+                excerpt: "Patterns from a year of anonymised data.",
+                date: "2026-09-28",
+                dateLabel: "28 Sep 2026",
+                category: "Research",
+                image: <img alt="" src={scene(800, 500, "dcd3f2", "5a4c8f")} />,
+              },
+            ]}
+          />
+        </div>
       );
       break;
     case "TeamGrid":
       example = (
-        <UI.TeamGrid
-          title="The people behind the product"
-          members={[
-            {
-              name: "Ana Kovač",
-              role: "Founder",
-              bio: "Ran support for a bike shop before building Northwind.",
-              links: [
-                {
-                  label: "Ana Kovač's website",
-                  href: "#ana-web",
-                  icon: icons.globe,
-                },
-                {
-                  label: "Ana Kovač on GitHub",
-                  href: "#ana-gh",
-                  icon: icons.code,
-                },
-              ],
-            },
-            { name: "Ben Lee", role: "Engineering" },
-          ]}
-        />
+        <div>
+          <UI.TeamGrid
+            title="The people behind the product"
+            members={[
+              {
+                name: "Ana Kovač",
+                role: "Founder",
+                bio: "Ran support for a bike shop before building Northwind.",
+                links: [
+                  {
+                    label: "Ana Kovač's website",
+                    href: "#ana-web",
+                    icon: icons.globe,
+                  },
+                  {
+                    label: "Ana Kovač on GitHub",
+                    href: "#ana-gh",
+                    icon: icons.code,
+                  },
+                ],
+              },
+              { name: "Ben Lee", role: "Engineering" },
+            ]}
+          />
+          <UI.TeamGrid
+            title="Leadership"
+            headingLevel={3}
+            layout="large"
+            members={[
+              {
+                name: "Cy Moreno",
+                role: "Chief executive",
+                image: <img alt="" src={portrait("e9dccb", "8a6a4f")} />,
+              },
+              {
+                name: "Di Novak",
+                role: "Chief technology officer",
+                image: <img alt="" src={portrait("cfe0e8", "3f6577")} />,
+              },
+              {
+                name: "Ed Okafor",
+                role: "Head of design",
+                image: <img alt="" src={portrait("e3dcef", "5d4b85")} />,
+              },
+            ]}
+          />
+          <UI.TeamGrid
+            title="Support leads"
+            headingLevel={3}
+            layout="list"
+            members={[
+              {
+                name: "Flo Park",
+                role: "Support, Europe",
+                bio: "Leads a team of twelve across three time zones and writes most of our help centre.",
+                image: <img alt="" src={portrait("d8e8d0", "4d7550")} />,
+                links: [
+                  {
+                    label: "Flo Park on GitHub",
+                    href: "#flo-gh",
+                    icon: icons.code,
+                  },
+                ],
+              },
+              {
+                name: "Gil Ruiz",
+                role: "Support, Americas",
+                bio: "Joined from a customer team and still answers tickets every Friday.",
+                image: <img alt="" src={portrait("f2dcd6", "9a4f45")} />,
+              },
+            ]}
+          />
+        </div>
       );
       break;
     case "ContactSection":
       example = (
-        <UI.ContactSection
-          title="Talk to sales"
-          description="We reply within one business day."
-          details={[{ label: "Email", value: "sales@example.com" }]}
-        >
-          <UI.Input label="Work email" type="email" />
-          <UI.TextArea label="How can we help?" />
-          <UI.Button type="submit">Send message</UI.Button>
-        </UI.ContactSection>
+        <div>
+          <UI.ContactSection
+            title="Talk to sales"
+            description="We reply within one business day."
+            details={[{ label: "Email", value: "sales@example.com" }]}
+          >
+            <UI.Input label="Work email" type="email" />
+            <UI.TextArea label="How can we help?" />
+            <UI.Button type="submit">Send message</UI.Button>
+          </UI.ContactSection>
+          <UI.ContactSection
+            title="Visit or write to us"
+            headingLevel={3}
+            description="Our support team is online on weekdays."
+            details={[{ label: "Phone", value: "+44 20 7946 0000" }]}
+            media={<img alt="" src={scene(600, 800, "c9dcef", "51785f")} />}
+          >
+            <UI.Input label="Your email" type="email" />
+            <UI.TextArea label="Message" />
+            <UI.Button type="submit">Send</UI.Button>
+          </UI.ContactSection>
+          <UI.ContactSection
+            title="Our offices"
+            headingLevel={3}
+            description="Drop by any weekday between 9 and 5."
+            offices={[
+              {
+                name: "London",
+                address: (
+                  <>
+                    12 Example Street
+                    <br />
+                    London EC1A 1AA
+                  </>
+                ),
+              },
+              {
+                name: "Lisbon",
+                address: (
+                  <>
+                    Rua Exemplo 34
+                    <br />
+                    1200-001 Lisboa
+                  </>
+                ),
+              },
+              {
+                name: "Toronto",
+                address: (
+                  <>
+                    56 Sample Avenue
+                    <br />
+                    Toronto ON M5V 2T6
+                  </>
+                ),
+              },
+              {
+                name: "Sydney",
+                address: (
+                  <>
+                    78 Demo Road
+                    <br />
+                    Sydney NSW 2000
+                  </>
+                ),
+              },
+            ]}
+          />
+        </div>
       );
       break;
     case "Newsletter":
       example = (
-        <UI.Newsletter
-          title="Product updates, monthly"
-          description="No spam."
-          onSubmit={() => setSelected(true)}
-          status={selected ? "success" : "idle"}
-          message="Thanks. Check your inbox to confirm."
-        />
+        <div>
+          <UI.Newsletter
+            title="Product updates, monthly"
+            description="No spam."
+            onSubmit={() => setSelected(true)}
+            status={selected ? "success" : "idle"}
+            message="Thanks. Check your inbox to confirm."
+          />
+          <UI.Newsletter
+            title="Get the support playbook"
+            headingLevel={3}
+            description="Five short lessons, one a day. Unsubscribe any time."
+            layout="center"
+            variant="panel"
+            submitLabel="Send me the lessons"
+            onSubmit={() => undefined}
+          />
+        </div>
       );
       break;
     case "NotFound":
       example = (
-        <UI.NotFound
-          title="This page isn't deployed."
-          description="Check the URL or head back home."
-          actions={[{ label: "Go home", href: "/" }, action]}
-          illustration={
-            <svg
-              viewBox="0 0 120 80"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            >
-              <path d="M20 60h80M30 60V30l30-18 30 18v30M50 60V42h20v18" />
-              <path d="M88 14l14 14M102 14L88 28" />
-            </svg>
-          }
-        />
+        <>
+          <UI.NotFound
+            title="This page isn't deployed."
+            description="Check the URL or head back home."
+            actions={[{ label: "Go home", href: "/" }, action]}
+            illustration={
+              <svg
+                viewBox="0 0 120 80"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+              >
+                <path d="M20 60h80M30 60V30l30-18 30 18v30M50 60V42h20v18" />
+                <path d="M88 14l14 14M102 14L88 28" />
+              </svg>
+            }
+          />
+          <UI.NotFound
+            headingLevel={2}
+            title="This trail doesn't go anywhere."
+            description="The page you're looking for has moved or never existed."
+            actions={[{ label: "Back to home", href: "/" }]}
+            background={<img alt="" src={scenes[1]} />}
+          />
+        </>
       );
       break;
     case "DocsShell":
