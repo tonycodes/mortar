@@ -19,9 +19,16 @@ export default defineConfig({
       ? { executablePath: process.env.UI_TEST_CHROME }
       : {},
   },
+  // Tests run against a production playground build. Locally each run rebuilds
+  // it from the working tree. CI builds it once in `npm run check` and sets
+  // MORTAR_PLAYGROUND_PREBUILT=1 so the browser and visual suites serve that
+  // same playground-dist instead of rebuilding it.
   webServer: {
-    command:
-      "npm run build:playground && npx vite preview --host 127.0.0.1 --port 4340 --strictPort",
+    command: `${
+      process.env.MORTAR_PLAYGROUND_PREBUILT === "1"
+        ? "test -f playground-dist/index.html"
+        : "npm run build:playground"
+    } && npx vite preview --host 127.0.0.1 --port 4340 --strictPort`,
     url: "http://127.0.0.1:4340",
     reuseExistingServer: false,
   },
