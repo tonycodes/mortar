@@ -13,7 +13,12 @@ import { Button } from "./primitives.js";
 import { Kbd } from "./display.js";
 import { ChevronRight, Close } from "./icons.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
-import { DialogFrame, cx } from "./internal.js";
+import {
+  DialogFrame,
+  componentRoot,
+  cx,
+  useComponentName,
+} from "./internal.js";
 
 export interface SlideOverProps {
   open: boolean;
@@ -38,7 +43,7 @@ export function SlideOver({
   className,
 }: SlideOverProps) {
   return (
-    <DialogFrame open={open} onClose={onClose}>
+    <DialogFrame open={open} onClose={onClose} component="SlideOver">
       <DialogPanel
         className={cx("m-slide-over", className)}
         data-size={size === "md" ? undefined : size}
@@ -118,8 +123,9 @@ export function CommandPalette({
   className,
 }: CommandPaletteProps) {
   const total = groups.reduce((n, g) => n + g.items.length, 0);
+  const component = useComponentName("CommandPalette");
   return (
-    <DialogFrame open={open} onClose={onClose}>
+    <DialogFrame open={open} onClose={onClose} component={component}>
       <div className="m-dialog-position m-palette-position">
         <DialogPanel className={cx("m-palette", className)}>
           <DialogTitle className="m-sr-only">{label}</DialogTitle>
@@ -295,6 +301,7 @@ export function StackedList({
   return (
     <section
       id={id}
+      {...componentRoot("StackedList")}
       className={cx("m-stacked-list", className)}
       aria-label={label}
       aria-labelledby={label || !hasTitle ? undefined : `${base}-title`}

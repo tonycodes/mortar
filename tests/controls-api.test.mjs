@@ -51,31 +51,31 @@ test("Button loading stays focusable: aria-disabled and aria-busy, never native 
 
 test("className lands on each control's root element", () => {
   const input = html(Input, { label: "Name", className: "span-2" });
-  assert.match(input, /^<div class="m-field span-2">/);
+  assert.match(input, /^<div data-m-component="Input" class="m-field span-2">/);
   assert.doesNotMatch(input, /<input[^>]*class=/);
   assert.match(
     html(Select, { label: "Plan", options, className: "span-2" }),
-    /^<div class="m-field span-2">/,
+    /^<div data-m-component="Select" class="m-field span-2">/,
   );
   assert.match(
     html(TextArea, { label: "Notes", className: "span-2" }),
-    /^<div class="m-field span-2">/,
+    /^<div data-m-component="TextArea" class="m-field span-2">/,
   );
   assert.match(
     html(Checkbox, { label: "Agree", className: "mt" }),
-    /^<label class="m-choice mt"><input type="checkbox"\/>/,
+    /^<label data-m-component="Checkbox" class="m-choice mt"><input type="checkbox"\/>/,
   );
   assert.match(
     html(Switch, { label: "On", className: "mt" }),
-    /^<label class="m-choice mt"><input type="checkbox" role="switch" class="m-switch"\/>/,
+    /^<label data-m-component="Switch" class="m-choice mt"><input type="checkbox" role="switch" class="m-switch"\/>/,
   );
   assert.match(
     html(ButtonGroup, { label: "Actions", items: [], className: "mt" }),
-    /^<div class="m-button-group mt"/,
+    /^<div data-m-component="ButtonGroup" class="m-button-group mt"/,
   );
   assert.match(
     html(Badge, { className: "ml" }, "New"),
-    /^<span class="m-badge ml">/,
+    /^<span data-m-component="Badge" class="m-badge ml">/,
   );
   assert.match(
     html(Listbox, {
@@ -144,14 +144,17 @@ test("field errors are alerts, so they are announced when they appear", () => {
 });
 
 test("Badge, Notice and Toast tone through data-tone, omitted for neutral", () => {
-  assert.equal(html(Badge, {}, "Draft"), '<span class="m-badge">Draft</span>');
+  assert.equal(
+    html(Badge, {}, "Draft"),
+    '<span data-m-component="Badge" class="m-badge">Draft</span>',
+  );
   assert.equal(
     html(Badge, { tone: "success" }, "Live"),
-    '<span class="m-badge" data-tone="success">Live</span>',
+    '<span data-m-component="Badge" class="m-badge" data-tone="success">Live</span>',
   );
   assert.match(
     html(Notice, { title: "Failed", tone: "danger" }),
-    /^<div class="m-notice" data-tone="danger">/,
+    /^<div data-m-component="Notice" class="m-notice" data-tone="danger">/,
   );
   assert.doesNotMatch(html(Toast, { title: "Saved" }), /data-tone/);
   assert.match(
@@ -195,7 +198,7 @@ test("Toaster announces through persistent live regions, never a nested alert", 
   assert.match(markup, /<div class="m-sr-only" role="alert"><\/div>/);
   assert.match(
     markup,
-    /<section class="m-toaster" aria-label="Notifications" tabindex="-1">/,
+    /<section data-m-component="Toaster" class="m-toaster" aria-label="Notifications" tabindex="-1">/,
   );
 });
 
@@ -207,7 +210,7 @@ test("SaveBar keeps its status region mounted while closed", () => {
   });
   assert.match(
     closed,
-    /^<span id="[^"]+" role="status" class="m-sr-only"><\/span>$/,
+    /^<span data-m-component="SaveBar" id="[^"]+" role="status" class="m-sr-only"><\/span>$/,
   );
   const open = html(SaveBar, {
     open: true,
@@ -215,7 +218,9 @@ test("SaveBar keeps its status region mounted while closed", () => {
     onSave() {},
     onDiscard() {},
   });
-  const id = open.match(/<span id="([^"]+)" role="status"/)?.[1];
+  const id = open.match(
+    /<span data-m-component="SaveBar" id="([^"]+)" role="status"/,
+  )?.[1];
   assert.ok(id);
   assert.match(
     open,
@@ -229,22 +234,22 @@ test("SaveBar keeps its status region mounted while closed", () => {
   // Saving: Save keeps focus (aria-disabled), Discard is disabled.
   assert.match(
     open,
-    /<button type="button" aria-disabled="true" aria-busy="true"/,
+    /<button data-m-component="Button" type="button" aria-disabled="true" aria-busy="true"/,
   );
   assert.match(
     open,
-    /<button type="button" disabled=""[^>]*>Discard<\/button>/,
+    /<button data-m-component="Button" type="button" disabled=""[^>]*>Discard<\/button>/,
   );
 });
 
 test("Notice announce makes an atomic status region; danger is an alert", () => {
   assert.match(
     html(Notice, { title: "Saved", announce: true }),
-    /^<div class="m-notice" role="status" aria-atomic="true">/,
+    /^<div data-m-component="Notice" class="m-notice" role="status" aria-atomic="true">/,
   );
   assert.match(
     html(Notice, { title: "Failed", tone: "danger", announce: true }),
-    /^<div class="m-notice" data-tone="danger" role="alert">/,
+    /^<div data-m-component="Notice" class="m-notice" data-tone="danger" role="alert">/,
   );
 });
 
@@ -287,7 +292,7 @@ test("EmptyState takes any heading level and an optional description", () => {
   });
   assert.equal(
     markup,
-    '<div id="empty" class="m-empty mt"><h5>No results</h5></div>',
+    '<div id="empty" data-m-component="EmptyState" class="m-empty mt"><h5>No results</h5></div>',
   );
 });
 
@@ -318,7 +323,7 @@ test("PreviewFrame names its section and frame with label", () => {
   const markup = html(PreviewFrame, { label: "Example", src: "about:blank" });
   assert.match(
     markup,
-    /<section class="m-preview-frame" aria-label="Example">/,
+    /<section data-m-component="PreviewFrame" class="m-preview-frame" aria-label="Example">/,
   );
   assert.match(markup, /<iframe title="Example"/);
 });
@@ -346,7 +351,7 @@ test("CommentComposer loading keeps the submit button focusable", () => {
   });
   assert.match(
     markup,
-    /<button type="submit" aria-disabled="true" aria-busy="true"[^>]*>/,
+    /<button data-m-component="Button" type="submit" aria-disabled="true" aria-busy="true"[^>]*>/,
   );
 });
 
@@ -357,6 +362,6 @@ test("container ThemeProvider renders a light system appearance on the server", 
   );
   assert.match(
     markup,
-    /^<div data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light" class="frame">Hi<\/div>$/,
+    /^<div data-m-component="ThemeProvider" data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light" class="frame">Hi<\/div>$/,
   );
 });

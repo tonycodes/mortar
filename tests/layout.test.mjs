@@ -10,7 +10,10 @@ import {
 } from "./support/render.mjs";
 
 test("Divider is a thematic break, and a labelled divider names its separator", () => {
-  assert.match(html(Divider), /^<hr class="m-divider"/);
+  assert.match(
+    html(Divider),
+    /^<hr data-m-component="Divider" class="m-divider"/,
+  );
   const markup = html(Divider, { label: "Or continue with" });
   assert.match(markup, /role="separator"/);
   assert.match(markup, /aria-label="Or continue with"/);

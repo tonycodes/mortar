@@ -16,6 +16,52 @@ import { KitLink, type ItemGroup } from "./navigation.js";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 
+/**
+ * Names a catalogue component on its root: spread it on the outermost element
+ * the component renders, `<nav {...componentRoot("Pagination")}>`. A dialog
+ * marks its dialog root (portalled), and a component that renders sibling
+ * elements marks the first one it always renders. Pass `root = false` when
+ * this element is not the outermost one for the current props, e.g. a wrapper
+ * then takes the name. The attribute is a hook for tests and consumers, not
+ * for styling; the only selector on it is the internal Prose boundary.
+ */
+export function componentRoot(name: string, root = true) {
+  return { "data-m-component": root ? name : undefined };
+}
+
+const ComponentRootContext = createContext<
+  { name: string; of: string } | undefined
+>(undefined);
+/**
+ * Renders `children`, one `of` component, as the root of the component `name`:
+ * that root then carries `name` (SearchDialog renders a CommandPalette). Only
+ * an `of` component that reads `useComponentName` takes the name, so keep the
+ * same kind of component out of its slots.
+ */
+export function AsComponentRoot({
+  name,
+  of,
+  children,
+}: {
+  name: string;
+  of: string;
+  children: ReactNode;
+}) {
+  return (
+    <ComponentRootContext.Provider value={{ name, of }}>
+      {children}
+    </ComponentRootContext.Provider>
+  );
+}
+/**
+ * The root name of a component that another can render as its root: `name`,
+ * or the outer component's name inside its `AsComponentRoot`.
+ */
+export function useComponentName(name: string) {
+  const outer = useContext(ComponentRootContext);
+  return outer?.of === name ? outer.name : name;
+}
+
 /** Joins the truthy class names with single spaces. */
 export function cx(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -236,14 +282,22 @@ export function FieldMessage({
 export function DialogFrame({
   open,
   onClose,
+  component,
   children,
 }: {
   open: boolean;
   onClose: () => void;
+  /** The catalogue component this dialog is the root of, if any. */
+  component?: string;
   children: ReactNode;
 }) {
   return (
-    <Dialog open={open} onClose={onClose} className="m-dialog">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      className="m-dialog"
+      {...componentRoot(component ?? "", component !== undefined)}
+    >
       <ThemeScope>
         <div className="m-backdrop" aria-hidden="true" />
         {children}

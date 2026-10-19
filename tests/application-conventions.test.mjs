@@ -93,7 +93,9 @@ test("StackedList: title, heading levels, action-only header and items with grou
   // Without a label the section is named by its visible title.
   assert.match(
     titled,
-    new RegExp(`<section class="m-stacked-list" aria-labelledby="${titleId}">`),
+    new RegExp(
+      `<section data-m-component="StackedList" class="m-stacked-list" aria-labelledby="${titleId}">`,
+    ),
   );
   // Group headings sit one level below the title.
   assert.match(
@@ -187,13 +189,13 @@ test("Pagination keeps Previous and Next focusable at the ends", () => {
   const first = html(UI.Pagination, { page: 1, pageCount: 3, onChange() {} });
   assert.match(
     first,
-    /<button aria-disabled="true" type="button" class="m-button m-button-secondary ?">Previous<\/button>/,
+    /<button data-m-component="Button" aria-disabled="true" type="button" class="m-button m-button-secondary ?">Previous<\/button>/,
   );
   assert.doesNotMatch(first, /disabled=""/);
   const last = html(UI.Pagination, { page: 3, pageCount: 3, onChange() {} });
   assert.match(
     last,
-    /<button aria-disabled="true" type="button" class="m-button m-button-secondary ?">Next<\/button>/,
+    /<button data-m-component="Button" aria-disabled="true" type="button" class="m-button m-button-secondary ?">Next<\/button>/,
   );
 });
 
@@ -289,19 +291,19 @@ test("heading levels: SettingsSection, Section, Card, SectionHeading, Descriptio
 test("data attributes: booleans only when true, enums omitted at their default", () => {
   assert.match(
     html(UI.Container, { children: "x" }),
-    /^<div class="m-container" data-padded="true">/,
+    /^<div data-m-component="Container" class="m-container" data-padded="true">/,
   );
   assert.match(
     html(UI.Container, { padded: false, children: "x" }),
-    /^<div class="m-container">/,
+    /^<div data-m-component="Container" class="m-container">/,
   );
   assert.match(
     html(UI.SectionHeading, { title: "S", divider: false }),
-    /^<div class="m-section-heading">/,
+    /^<div data-m-component="SectionHeading" class="m-section-heading">/,
   );
   assert.match(
     html(UI.SectionHeading, { title: "S" }),
-    /^<div class="m-section-heading" data-divider="true">/,
+    /^<div data-m-component="SectionHeading" class="m-section-heading" data-divider="true">/,
   );
   assert.match(
     html(UI.Navbar, { brand: "B", items: nav }),
@@ -309,31 +311,40 @@ test("data attributes: booleans only when true, enums omitted at their default",
   );
   assert.match(
     html(UI.Stack, { children: "x" }),
-    /^<div class="m-layout-stack">/,
+    /^<div data-m-component="Stack" class="m-layout-stack">/,
   );
-  assert.match(html(UI.Text, { children: "x" }), /^<p class="m-text">/);
+  assert.match(
+    html(UI.Text, { children: "x" }),
+    /^<p data-m-component="Text" class="m-text">/,
+  );
   // Text colour has its own attribute; data-tone is for status and surfaces.
   assert.match(
     html(UI.Text, { color: "muted", children: "x" }),
-    /^<p class="m-text" data-color="muted">/,
+    /^<p data-m-component="Text" class="m-text" data-color="muted">/,
   );
-  assert.match(html(UI.Card, { children: "x" }), /^<div class="m-card">/);
+  assert.match(
+    html(UI.Card, { children: "x" }),
+    /^<div data-m-component="Card" class="m-card">/,
+  );
   assert.match(
     html(UI.Card, { tone: "muted", children: "x" }),
     /data-tone="muted"/,
   );
-  assert.match(html(UI.Divider, {}), /^<hr class="m-divider"\/>/);
+  assert.match(
+    html(UI.Divider, {}),
+    /^<hr data-m-component="Divider" class="m-divider"\/>/,
+  );
   assert.match(
     html(UI.Section, { title: "S" }),
     /^<section class="m-marketing-section m-section" data-m-component="Section">/,
   );
   assert.match(
     html(UI.ActionPanel, { title: "S" }),
-    /^<section class="m-action-panel" aria-labelledby="[^"]+">/,
+    /^<section data-m-component="ActionPanel" class="m-action-panel" aria-labelledby="[^"]+">/,
   );
   assert.match(
     html(UI.FilterChip, { label: "F", onRemove() {} }),
-    /^<span class="m-chip" data-selected="true">/,
+    /^<span data-m-component="FilterChip" class="m-chip" data-selected="true">/,
   );
   assert.match(
     html(UI.FilterChip, { label: "F", selected: true }),
@@ -354,7 +365,7 @@ test("Avatar can be decorative where its name is visible", () => {
   const avatar = html(UI.Avatar, { name: "Ana Kovač", decorative: true });
   assert.match(
     avatar,
-    /^<span class="m-avatar m-avatar-md" aria-hidden="true">/,
+    /^<span data-m-component="Avatar" class="m-avatar m-avatar-md" aria-hidden="true">/,
   );
   assert.doesNotMatch(avatar, /role="img"|aria-label/);
 });
@@ -370,10 +381,13 @@ test("ProgressBar is named by its visible label and takes a status tone", () => 
   assert.ok(id, bar);
   assert.match(bar, new RegExp(`role="progressbar" aria-labelledby="${id}"`));
   assert.doesNotMatch(bar, /aria-label=/);
-  assert.match(bar, /^<div class="m-progress" data-tone="warning">/);
+  assert.match(
+    bar,
+    /^<div data-m-component="ProgressBar" class="m-progress" data-tone="warning">/,
+  );
   assert.match(
     html(UI.ProgressBar, { label: "P", value: 1 }),
-    /^<div class="m-progress">/,
+    /^<div data-m-component="ProgressBar" class="m-progress">/,
   );
 });
 

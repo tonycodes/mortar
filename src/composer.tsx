@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Button, Tabs } from "./primitives.js";
-import { FieldFeedback, cx, useField } from "./internal.js";
+import { FieldFeedback, componentRoot, cx, useField } from "./internal.js";
 
 /** Characters left at which the count starts being announced. */
 const nearLimit = (maxLength: number) =>
@@ -86,6 +86,7 @@ export function CommentComposer({
   );
   return (
     <form
+      {...componentRoot("CommentComposer")}
       className={cx("m-composer", className)}
       onSubmit={(event) => {
         event.preventDefault();

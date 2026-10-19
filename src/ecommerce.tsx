@@ -18,7 +18,13 @@ import { Avatar, FilterChip } from "./display.js";
 import { ProgressSteps, type ProgressStep } from "./application.js";
 import { ChevronDown, Star } from "./icons.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
-import { Swatch, TermList, cx } from "./internal.js";
+import {
+  AsComponentRoot,
+  Swatch,
+  TermList,
+  componentRoot,
+  cx,
+} from "./internal.js";
 
 export interface ProductImage {
   src: string;
@@ -75,6 +81,7 @@ export function ProductList({
   return (
     <ul
       id={id}
+      {...componentRoot("ProductList")}
       className={cx("m-product-list", className)}
       aria-label={label}
       data-columns={columns}
@@ -201,7 +208,11 @@ export function ProductOverview({
   const Heading = headingTag(headingLevel);
   const shown = images[current] ?? images[0];
   return (
-    <div id={id} className={cx("m-product-overview", className)}>
+    <div
+      id={id}
+      {...componentRoot("ProductOverview")}
+      className={cx("m-product-overview", className)}
+    >
       {gallery === "grid" ? (
         <div className="m-product-gallery" data-gallery="grid">
           {images.map((image) => (
@@ -374,10 +385,11 @@ export function ShoppingCart({
   ...props
 }: ShoppingCartProps) {
   if (!summary && !related)
-    return <CartLines {...props} id={id} className={className} />;
+    return <CartLines {...props} id={id} className={className} root />;
   return (
     <div
       id={id}
+      {...componentRoot("ShoppingCart")}
       className={cx("m-cart-layout", className)}
       data-summary={summary ? true : undefined}
     >
@@ -422,7 +434,11 @@ function CartLines({
   },
   id,
   className,
-}: Omit<ShoppingCartProps, "summary" | "related">) {
+  root: isRoot = false,
+}: Omit<ShoppingCartProps, "summary" | "related"> & {
+  /** The lines are ShoppingCart's root (no summary or related products). */
+  root?: boolean;
+}) {
   const base = useId();
   const Heading = headingTag(headingLevel);
   const root = useRef<HTMLElement>(null);
@@ -442,6 +458,7 @@ function CartLines({
     return (
       <div
         id={id}
+        {...componentRoot("ShoppingCart", isRoot)}
         className={cx("m-cart-empty", className)}
         ref={root as RefObject<HTMLDivElement>}
         tabIndex={-1}
@@ -457,6 +474,7 @@ function CartLines({
   return (
     <ul
       id={id}
+      {...componentRoot("ShoppingCart", isRoot)}
       className={cx("m-cart", className)}
       aria-label={label}
       ref={root as RefObject<HTMLUListElement>}
@@ -548,6 +566,7 @@ export function OrderSummary({
   return (
     <section
       id={id}
+      {...componentRoot("OrderSummary")}
       className={cx("m-order-summary", className)}
       aria-labelledby={titleId}
     >
@@ -600,12 +619,14 @@ export function ProductQuickView({
   className?: string;
 }) {
   return (
-    <Modal open={open} onClose={onClose} title={product.name} size="lg">
-      <div className={cx("m-quick-view", className)}>
-        <ProductOverview {...product} hideName />
-        <ActionLink label={detailsLabel} href={href} variant="ghost" />
-      </div>
-    </Modal>
+    <AsComponentRoot name="ProductQuickView" of="Modal">
+      <Modal open={open} onClose={onClose} title={product.name} size="lg">
+        <div className={cx("m-quick-view", className)}>
+          <ProductOverview {...product} hideName />
+          <ActionLink label={detailsLabel} href={href} variant="ghost" />
+        </div>
+      </Modal>
+    </AsComponentRoot>
   );
 }
 
@@ -684,6 +705,7 @@ export function ProductFilters({
     <section
       id={id}
       ref={root}
+      {...componentRoot("ProductFilters")}
       className={cx("m-filters", className)}
       aria-label={label}
     >
@@ -799,6 +821,7 @@ export function ProductReviews({
   return (
     <section
       id={id}
+      {...componentRoot("ProductReviews")}
       className={cx("m-reviews", className)}
       aria-labelledby={base}
       data-avatars={avatars || undefined}
@@ -924,7 +947,11 @@ export function OrderHistory({
   const base = useId();
   if (!orders.length)
     return (
-      <div id={id} className={cx("m-order-history", className)}>
+      <div
+        id={id}
+        {...componentRoot("OrderHistory")}
+        className={cx("m-order-history", className)}
+      >
         <EmptyState
           title={empty.title}
           description={empty.description}
@@ -935,7 +962,11 @@ export function OrderHistory({
     );
   const Heading = headingTag(headingLevel);
   return (
-    <div id={id} className={cx("m-order-history", className)}>
+    <div
+      id={id}
+      {...componentRoot("OrderHistory")}
+      className={cx("m-order-history", className)}
+    >
       {orders.map((order) => {
         const titleId = `${base}-${order.id}`;
         return (

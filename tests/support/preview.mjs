@@ -93,6 +93,8 @@ export async function openOverlay(page, component, root) {
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveAttribute("aria-modal", "true");
+  // The portalled dialog root is the component's root (DESIGN.md, "Component marker").
+  await expect(dialog).toHaveAttribute("data-m-component", component.export);
   for (let i = 0; i < 6; i++) {
     await page.keyboard.press("Tab");
     expect(

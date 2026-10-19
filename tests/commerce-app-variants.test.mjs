@@ -53,7 +53,7 @@ test("default markup is unchanged by the commerce and application variants", () 
         events: [{ id: "e", date: "2026-10-20", title: "Call", time: "10:00" }],
       }),
     ),
-    "ebc65ba7c723928de40b0e293035bb736885ce317095407ea6d4e278f1f1f3ac",
+    "fc53e9779c1d8f64426c7ba7bfeffde78d4c7814503122fd183852e87a64e7c5",
   );
   assert.equal(
     html(ProgressSteps, {
@@ -62,11 +62,11 @@ test("default markup is unchanged by the commerce and application variants", () 
         { id: "b", name: "B", status: "current" },
       ],
     }),
-    '<nav class="m-progress-steps" aria-label="Progress"><ol><li data-status="complete"><span><span class="m-progress-step-text"><span class="m-progress-step-number">Step 1</span><span class="m-progress-step-name">A</span><span class="m-sr-only"> (completed)</span></span></span></li><li data-status="current"><span aria-current="step"><span class="m-progress-step-text"><span class="m-progress-step-number">Step 2</span><span class="m-progress-step-name">B</span></span></span></li></ol></nav>',
+    '<nav data-m-component="ProgressSteps" class="m-progress-steps" aria-label="Progress"><ol><li data-status="complete"><span><span class="m-progress-step-text"><span class="m-progress-step-number">Step 1</span><span class="m-progress-step-name">A</span><span class="m-sr-only"> (completed)</span></span></span></li><li data-status="current"><span aria-current="step"><span class="m-progress-step-text"><span class="m-progress-step-number">Step 2</span><span class="m-progress-step-name">B</span></span></span></li></ol></nav>',
   );
   assert.equal(
     html(OrderHistory, { orders: [order] }),
-    '<div class="m-order-history"><section class="m-order" aria-labelledby="_R_0_-o"><header class="m-order-header"><h2 id="_R_0_-o" class="m-order-title">Order 1</h2><dl><div><dt>Date placed</dt><dd>d</dd></div><div><dt>Total</dt><dd>t</dd></div></dl><a href="#o">View order<span class="m-sr-only"> 1</span></a></header><p class="m-order-status">s</p><ul class="m-order-items"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div><p class="m-order-item-name">N</p><p class="m-product-meta">Qty 1</p></div><p class="m-product-price">£1</p></li></ul></section></div>',
+    '<div data-m-component="OrderHistory" class="m-order-history"><section class="m-order" aria-labelledby="_R_0_-o"><header class="m-order-header"><h2 id="_R_0_-o" class="m-order-title">Order 1</h2><dl><div><dt>Date placed</dt><dd>d</dd></div><div><dt>Total</dt><dd>t</dd></div></dl><a href="#o">View order<span class="m-sr-only"> 1</span></a></header><p class="m-order-status">s</p><ul class="m-order-items"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div><p class="m-order-item-name">N</p><p class="m-product-meta">Qty 1</p></div><p class="m-product-price">£1</p></li></ul></section></div>',
   );
   assert.equal(
     html(OrderSummary, {
@@ -74,7 +74,7 @@ test("default markup is unchanged by the commerce and application variants", () 
       total: { label: "Total", value: "£1" },
       action: h("button", null, "Go"),
     }),
-    '<section class="m-order-summary" aria-labelledby="_R_0_"><h2 id="_R_0_" class="m-order-summary-title">Order summary</h2><dl><div><dt>Sub</dt><dd>£1</dd></div><div class="m-order-total"><dt>Total</dt><dd>£1</dd></div></dl><div class="m-order-action"><button>Go</button></div></section>',
+    '<section data-m-component="OrderSummary" class="m-order-summary" aria-labelledby="_R_0_"><h2 id="_R_0_" class="m-order-summary-title">Order summary</h2><dl><div><dt>Sub</dt><dd>£1</dd></div><div class="m-order-total"><dt>Total</dt><dd>£1</dd></div></dl><div class="m-order-action"><button>Go</button></div></section>',
   );
   assert.equal(
     html(ShoppingCart, {
@@ -82,11 +82,11 @@ test("default markup is unchanged by the commerce and application variants", () 
       onQuantityChange: noop,
       onRemove: noop,
     }),
-    '<ul class="m-cart" aria-label="Items in your bag"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div class="m-cart-info"><h3 class="m-cart-item-title"><a href="#a">Tote</a></h3><p class="m-product-price">£1</p></div><div class="m-cart-controls"><label class="m-sr-only" for="_R_0_-a">Quantity, Tote</label><div class="m-select-control"><select id="_R_0_-a"><option value="1" selected="">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><button type="button" class="m-cart-remove">Remove<span class="m-sr-only"> Tote</span></button></div></li></ul>',
+    '<ul data-m-component="ShoppingCart" class="m-cart" aria-label="Items in your bag"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div class="m-cart-info"><h3 class="m-cart-item-title"><a href="#a">Tote</a></h3><p class="m-product-price">£1</p></div><div class="m-cart-controls"><label class="m-sr-only" for="_R_0_-a">Quantity, Tote</label><div class="m-select-control"><select id="_R_0_-a"><option value="1" selected="">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><button type="button" class="m-cart-remove">Remove<span class="m-sr-only"> Tote</span></button></div></li></ul>',
   );
   assert.equal(
     html(ShoppingCart, { items: [], onQuantityChange: noop, onRemove: noop }),
-    '<div class="m-cart-empty" tabindex="-1"><div class="m-empty"><h3>Your bag is empty</h3><p>Items you add will appear here.</p></div></div>',
+    '<div data-m-component="ShoppingCart" class="m-cart-empty" tabindex="-1"><div data-m-component="EmptyState" class="m-empty"><h3>Your bag is empty</h3><p>Items you add will appear here.</p></div></div>',
   );
   assert.equal(
     sha(
@@ -97,7 +97,7 @@ test("default markup is unchanged by the commerce and application variants", () 
         reviews: [{ ...review, author: "Ana" }],
       }),
     ),
-    "bfd031b952259d2b1d7d86ae9824c69cd4f885273fd3837286794728102ca0a7",
+    "e5fef861009a60cd81788f5824fcea4d284d1285a889b3e0d8f93d0a6625ebca",
   );
   assert.equal(
     sha(
@@ -106,11 +106,11 @@ test("default markup is unchanged by the commerce and application variants", () 
         products: [{ ...tote, badge: "New" }],
       }),
     ),
-    "33caf8ded72afd5438f16ee3ce7c17ce734ed12e3f3b0eeba6dac45b10e35414",
+    "89e108e47f16a3c8f7ded31c40dc7bad290b0b6f70c5caf5c343b2c1598f6745",
   );
   assert.equal(
     html(DescriptionList, { title: "T", items: [{ term: "a", details: "b" }] }),
-    '<div class="m-description-list"><div class="m-description-heading"><h2 class="m-description-title">T</h2></div><dl><div><dt>a</dt><dd>b</dd></div></dl></div>',
+    '<div data-m-component="DescriptionList" class="m-description-list"><div class="m-description-heading"><h2 class="m-description-title">T</h2></div><dl><div><dt>a</dt><dd>b</dd></div></dl></div>',
   );
   assert.equal(
     html(StackedList, {
@@ -120,7 +120,7 @@ test("default markup is unchanged by the commerce and application variants", () 
         { id: "2", title: "B" },
       ],
     }),
-    '<section class="m-stacked-list" aria-labelledby="_R_0_-title"><header><h2 id="_R_0_-title" class="m-stacked-title">T</h2></header><ul><li><a href="#a"><span class="m-stacked-text"><strong>A</strong><span>d</span></span></a><div class="m-stacked-trailing">x</div></li><li><div><span class="m-stacked-text"><strong>B</strong></span></div></li></ul></section>',
+    '<section data-m-component="StackedList" class="m-stacked-list" aria-labelledby="_R_0_-title"><header><h2 id="_R_0_-title" class="m-stacked-title">T</h2></header><ul><li><a href="#a"><span class="m-stacked-text"><strong>A</strong><span>d</span></span></a><div class="m-stacked-trailing">x</div></li><li><div><span class="m-stacked-text"><strong>B</strong></span></div></li></ul></section>',
   );
 });
 
@@ -145,7 +145,7 @@ test("Calendar agenda lists the selected day's events in time order beside the m
   });
   assert.match(
     markup,
-    /^<div class="m-calendar" data-agenda="true"><div class="m-calendar-main"><div class="m-calendar-header">/,
+    /^<div data-m-component="Calendar" class="m-calendar" data-agenda="true"><div class="m-calendar-main"><div class="m-calendar-header">/,
   );
   assert.match(
     markup,
@@ -191,7 +191,7 @@ test("ProgressSteps bar renders names without markers, and navigation={false} dr
   });
   assert.match(
     bar,
-    /^<div class="m-progress-steps" role="group" aria-label="Order 1 progress" data-variant="bar"><ol>/,
+    /^<div data-m-component="ProgressSteps" class="m-progress-steps" role="group" aria-label="Order 1 progress" data-variant="bar"><ol>/,
   );
   assert.match(
     bar,
@@ -201,7 +201,7 @@ test("ProgressSteps bar renders names without markers, and navigation={false} dr
   assert.match(bar, /<\/ol><\/div>$/);
   assert.match(
     html(ProgressSteps, { variant: "bar", steps: tracker }),
-    /^<nav class="m-progress-steps" aria-label="Progress" data-variant="bar">/,
+    /^<nav data-m-component="ProgressSteps" class="m-progress-steps" aria-label="Progress" data-variant="bar">/,
   );
 });
 
@@ -211,7 +211,7 @@ test("OrderHistory shows an order's progress as a status tracker", () => {
   });
   assert.match(
     markup,
-    /<p class="m-order-status">s<\/p><div class="m-progress-steps m-order-progress" role="group" aria-label="Order WU1 progress" data-variant="bar"><ol>/,
+    /<p class="m-order-status">s<\/p><div data-m-component="ProgressSteps" class="m-progress-steps m-order-progress" role="group" aria-label="Order WU1 progress" data-variant="bar"><ol>/,
   );
   assert.equal((markup.match(/aria-current="step"/g) || []).length, 1);
   assert.doesNotMatch(
@@ -236,11 +236,11 @@ test("ShoppingCart composes a summary column and related products", () => {
   });
   assert.match(
     markup,
-    /^<div id="bag" class="m-cart-layout mt-4" data-summary="true"><ul class="m-cart" aria-label="Items in your bag">/,
+    /^<div id="bag" data-m-component="ShoppingCart" class="m-cart-layout mt-4" data-summary="true"><ul class="m-cart" aria-label="Items in your bag">/,
   );
   assert.match(
     markup,
-    /<\/ul><div class="m-cart-summary"><aside>Summary<\/aside><\/div><section class="m-cart-related" aria-labelledby="([^"]+)"><h2 id="\1" class="m-cart-related-title">You may also like<\/h2><ul class="m-product-list" aria-label="You may also like" data-columns="4"><li><div class="m-product-image"><img src="\/a.png" alt="A" loading="lazy"\/><\/div><div class="m-product-info"><h3 class="m-product-name"><a href="#b">Mug<\/a><\/h3>/,
+    /<\/ul><div class="m-cart-summary"><aside>Summary<\/aside><\/div><section class="m-cart-related" aria-labelledby="([^"]+)"><h2 id="\1" class="m-cart-related-title">You may also like<\/h2><ul data-m-component="ProductList" class="m-product-list" aria-label="You may also like" data-columns="4"><li><div class="m-product-image"><img src="\/a.png" alt="A" loading="lazy"\/><\/div><div class="m-product-info"><h3 class="m-product-name"><a href="#b">Mug<\/a><\/h3>/,
   );
   // Related products also follow an empty bag, at the chosen heading level.
   const empty = html(ShoppingCart, {
@@ -251,7 +251,7 @@ test("ShoppingCart composes a summary column and related products", () => {
   });
   assert.match(
     empty,
-    /^<div class="m-cart-layout"><div class="m-cart-empty" tabindex="-1">/,
+    /^<div data-m-component="ShoppingCart" class="m-cart-layout"><div class="m-cart-empty" tabindex="-1">/,
   );
   assert.match(empty, /<h3 id="[^"]+" class="m-cart-related-title">/);
   assert.match(empty, /<h4 class="m-product-name">/);
@@ -290,15 +290,15 @@ test("ProductReviews avatars show each reviewer's photo or initials, hidden from
   });
   assert.match(
     markup,
-    /<section class="m-reviews" aria-labelledby="[^"]+" data-avatars="true">/,
+    /<section data-m-component="ProductReviews" class="m-reviews" aria-labelledby="[^"]+" data-avatars="true">/,
   );
   assert.match(
     markup,
-    /<header><span class="m-avatar m-avatar-md m-review-avatar" aria-hidden="true"><span aria-hidden="true">AK<\/span><\/span><div class="m-stars"/,
+    /<header><span data-m-component="Avatar" class="m-avatar m-avatar-md m-review-avatar" aria-hidden="true"><span aria-hidden="true">AK<\/span><\/span><div class="m-stars"/,
   );
   assert.match(
     markup,
-    /<span class="m-avatar m-avatar-md m-review-avatar" aria-hidden="true"><img src="\/tom.png" alt=""\/><\/span>/,
+    /<span data-m-component="Avatar" class="m-avatar m-avatar-md m-review-avatar" aria-hidden="true"><img src="\/tom.png" alt=""\/><\/span>/,
   );
   assert.match(markup, /<p class="m-review-meta">Tom Cook · d<\/p>/);
 });
@@ -311,7 +311,7 @@ test("ProductList overlay sets the name and price on a panel inside the image", 
   });
   assert.equal(
     markup,
-    '<ul class="m-product-list" aria-label="L" data-columns="4" data-variant="overlay"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/><span class="m-product-badge">New</span><div class="m-product-overlay"><div class="m-product-info"><h3 class="m-product-name"><a href="#a">Tote</a></h3><p class="m-product-meta">Natural</p></div><p class="m-product-price">£1</p></div></div></li></ul>',
+    '<ul data-m-component="ProductList" class="m-product-list" aria-label="L" data-columns="4" data-variant="overlay"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/><span class="m-product-badge">New</span><div class="m-product-overlay"><div class="m-product-info"><h3 class="m-product-name"><a href="#a">Tote</a></h3><p class="m-product-meta">Natural</p></div><p class="m-product-price">£1</p></div></div></li></ul>',
   );
 });
 
@@ -319,7 +319,7 @@ test("DescriptionList striped variant is a data attribute; plain omits it", () =
   const items = [{ term: "a", details: "b" }];
   assert.match(
     html(DescriptionList, { items, variant: "striped" }),
-    /^<div class="m-description-list" data-variant="striped"><dl>/,
+    /^<div data-m-component="DescriptionList" class="m-description-list" data-variant="striped"><dl>/,
   );
   assert.doesNotMatch(
     html(DescriptionList, { items, variant: "plain" }),

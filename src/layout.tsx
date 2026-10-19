@@ -1,6 +1,11 @@
 import { useId, type ElementType, type ReactNode } from "react";
 import { type HeadingLevel } from "./heading.js";
-import { cx, classedIntroSlots, titledIntroSlots } from "./internal.js";
+import {
+  componentRoot,
+  cx,
+  classedIntroSlots,
+  titledIntroSlots,
+} from "./internal.js";
 
 type Space = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -27,6 +32,7 @@ export function Stack({
 }: StackProps) {
   return (
     <Tag
+      {...componentRoot("Stack")}
       className={cx("m-layout-stack", className)}
       data-gap={gap === "md" ? undefined : gap}
       data-direction={direction === "column" ? undefined : direction}
@@ -56,6 +62,7 @@ export function Container({
 }: ContainerProps) {
   return (
     <Tag
+      {...componentRoot("Container")}
       className={cx("m-container", className)}
       data-size={size === "lg" ? undefined : size}
       data-padded={padded || undefined}
@@ -85,6 +92,7 @@ export function Text({
 }: TextProps) {
   return (
     <Tag
+      {...componentRoot("Text")}
       className={cx("m-text", className)}
       data-color={color === "default" ? undefined : color}
       data-size={size === "md" ? undefined : size}
@@ -126,7 +134,7 @@ export function Section({
       className={cx("m-marketing-section m-section", className)}
       data-tone={tone === "default" ? undefined : tone}
       data-align={align === "start" ? undefined : align}
-      data-m-component="Section"
+      {...componentRoot("Section")}
     >
       {...titledIntroSlots({
         eyebrow,
@@ -164,6 +172,7 @@ export function Divider({
   className,
 }: DividerProps) {
   const attributes = {
+    ...componentRoot("Divider"),
     className: cx("m-divider", className),
     "data-soft": soft || undefined,
     "data-spacing": spacing === "md" ? undefined : spacing,
@@ -209,6 +218,7 @@ export function Card({
   return (
     <Tag
       id={id}
+      {...componentRoot("Card")}
       className={cx("m-card", className)}
       data-padding={padding === "default" ? undefined : padding}
       data-tone={tone === "default" ? undefined : tone}
@@ -258,6 +268,7 @@ export function MediaObject({
 }: MediaObjectProps) {
   return (
     <div
+      {...componentRoot("MediaObject")}
       className={cx("m-media-object", className)}
       data-align={align === "start" ? undefined : align}
       data-reverse={reverse || undefined}
@@ -296,6 +307,7 @@ export function SectionHeading({
   return (
     <div
       id={id}
+      {...componentRoot("SectionHeading")}
       className={cx("m-section-heading", className)}
       data-divider={divider || undefined}
     >
@@ -322,5 +334,9 @@ export interface ProseProps {
 }
 /** Long-form copy with the kit's typographic rhythm. */
 export function Prose({ children, className }: ProseProps) {
-  return <div className={cx("m-prose", className)}>{children}</div>;
+  return (
+    <div {...componentRoot("Prose")} className={cx("m-prose", className)}>
+      {children}
+    </div>
+  );
 }

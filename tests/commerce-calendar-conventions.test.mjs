@@ -28,7 +28,7 @@ test("ProductList sets item headings with itemHeadingLevel and merges className 
   });
   assert.match(
     markup,
-    /^<ul id="new" class="m-product-list my-list" aria-label="New" data-columns="4">/,
+    /^<ul id="new" data-m-component="ProductList" class="m-product-list my-list" aria-label="New" data-columns="4">/,
   );
   assert.match(
     markup,
@@ -46,7 +46,7 @@ test("ShoppingCart line headings follow headingLevel; the empty state gets the s
   });
   assert.match(
     items,
-    /<ul class="m-cart my-cart" aria-label="Items in your bag">/,
+    /<ul data-m-component="ShoppingCart" class="m-cart my-cart" aria-label="Items in your bag">/,
   );
   assert.match(
     items,
@@ -65,7 +65,10 @@ test("ShoppingCart line headings follow headingLevel; the empty state gets the s
     headingLevel: 2,
     empty: { title: "Nothing here", action: h("a", { href: "#shop" }, "Shop") },
   });
-  assert.match(empty, /^<div class="m-cart-empty" tabindex="-1">/);
+  assert.match(
+    empty,
+    /^<div data-m-component="ShoppingCart" class="m-cart-empty" tabindex="-1">/,
+  );
   assert.match(empty, /<h2>Nothing here<\/h2>/);
   assert.match(empty, /<a href="#shop">Shop<\/a>/);
   const defaults = html(ShoppingCart, {
@@ -85,7 +88,10 @@ test("OrderHistory passes its headingLevel and empty content to its empty state"
     headingLevel: 3,
     empty: { title: "No orders", description: "Place one." },
   });
-  assert.match(markup, /<div class="m-order-history"><div class="m-empty">/);
+  assert.match(
+    markup,
+    /<div data-m-component="OrderHistory" class="m-order-history"><div data-m-component="EmptyState" class="m-empty">/,
+  );
   assert.match(markup, /<h3>No orders<\/h3><p>Place one\.<\/p>/);
   assert.match(html(OrderHistory, { orders: [] }), /<h2>No orders yet<\/h2>/);
 });
@@ -109,7 +115,10 @@ test("ProductReviews and OrderSummary headings follow headingLevel", () => {
     id: "reviews",
     className: "my-reviews",
   });
-  assert.match(reviews, /^<section id="reviews" class="m-reviews my-reviews"/);
+  assert.match(
+    reviews,
+    /^<section id="reviews" data-m-component="ProductReviews" class="m-reviews my-reviews"/,
+  );
   assert.match(
     reviews,
     /<h3 id="[^"]+" class="m-reviews-title">Customer reviews<\/h3>/,
@@ -121,7 +130,10 @@ test("ProductReviews and OrderSummary headings follow headingLevel", () => {
     headingLevel: 4,
     id: "summary",
   });
-  assert.match(summary, /^<section id="summary" class="m-order-summary"/);
+  assert.match(
+    summary,
+    /^<section id="summary" data-m-component="OrderSummary" class="m-order-summary"/,
+  );
   assert.match(
     summary,
     /<h4 id="[^"]+" class="m-order-summary-title">Order summary<\/h4>/,
@@ -137,7 +149,7 @@ test("ProductOverview and ProductFilters accept id and className on their roots"
       id: "tote",
       className: "my-overview",
     }),
-    /<div id="tote" class="m-product-overview my-overview">/,
+    /<div id="tote" data-m-component="ProductOverview" class="m-product-overview my-overview">/,
   );
   assert.match(
     html(ProductFilters, {
@@ -147,7 +159,7 @@ test("ProductOverview and ProductFilters accept id and className on their roots"
       id: "filters",
       className: "my-filters",
     }),
-    /^<section id="filters" class="m-filters my-filters" aria-label="Filters">/,
+    /^<section id="filters" data-m-component="ProductFilters" class="m-filters my-filters" aria-label="Filters">/,
   );
 });
 
@@ -195,7 +207,7 @@ test("Calendar headings follow headingLevel; the default variant has no data-var
   });
   assert.match(
     month,
-    /^<div id="cal" class="m-calendar my-cal"><div class="m-calendar-header"><h3 /,
+    /^<div data-m-component="Calendar" id="cal" class="m-calendar my-cal"><div class="m-calendar-header"><h3 /,
   );
   assert.doesNotMatch(month, /data-variant/);
   const year = html(Calendar, {

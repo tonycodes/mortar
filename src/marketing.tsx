@@ -26,6 +26,7 @@ import {
   TermList,
   TitledIntro,
   cx,
+  componentRoot,
   titledIntroSlots,
   sectionTone,
   useDomId,
@@ -192,7 +193,7 @@ export function MarketingHeader({
     <header
       id={id}
       className={cx("m-marketing-header", className)}
-      data-m-component="MarketingHeader"
+      {...componentRoot("MarketingHeader")}
       data-layout={layout === "center" ? "center" : undefined}
       data-menu={panel ? "panel" : undefined}
     >
@@ -303,7 +304,7 @@ export function Hero({
     <section
       id={id}
       className={cx("m-hero", `m-hero-${layout}`, className)}
-      data-m-component="Hero"
+      {...componentRoot("Hero")}
       data-background={background ? true : undefined}
       data-tone={background ? "inverse" : undefined}
     >
@@ -371,7 +372,7 @@ export function FeatureGrid({
       id={id}
       className={cx("m-marketing-section", className)}
       data-tone={sectionTone(tone)}
-      data-m-component="FeatureGrid"
+      {...componentRoot("FeatureGrid")}
     >
       {...titledIntroSlots({ eyebrow, title, description, headingLevel })}
       <div className="m-feature-grid" data-columns={cols}>
@@ -444,7 +445,7 @@ export function FeatureSection({
       data-reverse={reverse || undefined}
       data-offset={offset || undefined}
       data-tone={sectionTone(tone)}
-      data-m-component="FeatureSection"
+      {...componentRoot("FeatureSection")}
     >
       <div>
         {eyebrowSlot}
@@ -484,7 +485,7 @@ export function ProcessSteps({
       id={id}
       className={cx("m-marketing-section", className)}
       data-tone={sectionTone(tone)}
-      data-m-component="ProcessSteps"
+      {...componentRoot("ProcessSteps")}
     >
       {...titledIntroSlots({ eyebrow, title, description, headingLevel })}
       <ol
@@ -533,7 +534,7 @@ export function Testimonial({
     <figure
       id={id}
       className={cx("m-testimonial", className)}
-      data-m-component="Testimonial"
+      {...componentRoot("Testimonial")}
     >
       {logo && <div className="m-testimonial-logo">{logo}</div>}
       <blockquote>{quote}</blockquote>
@@ -598,7 +599,7 @@ export function LogoCloud({
         id={id}
         className={cx("m-logo-cloud", className)}
         aria-label={label}
-        data-m-component="LogoCloud"
+        {...componentRoot("LogoCloud")}
         data-layout="split"
       >
         <div className="m-logo-cloud-copy">
@@ -621,7 +622,7 @@ export function LogoCloud({
       id={id}
       className={cx("m-logo-cloud", className)}
       aria-label={label}
-      data-m-component="LogoCloud"
+      {...componentRoot("LogoCloud")}
       data-layout={layout === "grid" ? "grid" : undefined}
     >
       <p>{label}</p>
@@ -694,7 +695,7 @@ export function Pricing({
     <section
       id={id}
       className={cx("m-marketing-section m-pricing", className)}
-      data-m-component="Pricing"
+      {...componentRoot("Pricing")}
     >
       <TitledIntro
         title={title}
@@ -830,7 +831,7 @@ export function FAQ({
       <section
         id={id}
         className={cx("m-faq", className)}
-        data-m-component="FAQ"
+        {...componentRoot("FAQ")}
         data-layout="grid"
       >
         {head}
@@ -848,7 +849,7 @@ export function FAQ({
     <section
       id={id}
       className={cx("m-faq", className)}
-      data-m-component="FAQ"
+      {...componentRoot("FAQ")}
       data-layout={layout === "center" ? "center" : undefined}
     >
       {head}
@@ -902,7 +903,7 @@ export function CallToAction({
     <section
       id={id}
       className={cx("m-cta", className)}
-      data-m-component="CallToAction"
+      {...componentRoot("CallToAction")}
       data-tone={sectionTone(tone)}
       data-layout={media ? "split" : undefined}
     >
@@ -981,7 +982,7 @@ export function Footer({
     <footer
       id={id}
       className={cx("m-footer", className)}
-      data-m-component="Footer"
+      {...componentRoot("Footer")}
       data-layout={center ? "center" : undefined}
     >
       {center ? (
@@ -1049,7 +1050,7 @@ export function HeaderSection({
       data-tone={sectionTone(tone)}
       data-align={align === "start" ? undefined : align}
       aria-labelledby={headingId}
-      data-m-component="HeaderSection"
+      {...componentRoot("HeaderSection")}
     >
       {...titledIntroSlots({
         eyebrow,
@@ -1128,7 +1129,7 @@ export function ContentSection({
       data-tone={sectionTone(tone)}
       data-media={media ? mediaPosition : undefined}
       aria-labelledby={headingId}
-      data-m-component="ContentSection"
+      {...componentRoot("ContentSection")}
     >
       <div className="m-content-copy">
         {...titledIntroSlots({

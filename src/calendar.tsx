@@ -12,7 +12,7 @@ import {
 import { SegmentedControl } from "./inspection.js";
 import { ChevronLeft, ChevronRight } from "./icons.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
-import { cx } from "./internal.js";
+import { componentRoot, cx } from "./internal.js";
 
 export interface CalendarEvent {
   id: string;
@@ -329,7 +329,12 @@ export function Calendar({
         byDay.get(day)?.length ?? 0,
       );
     return (
-      <div id={id} className={rootClass} data-view="year">
+      <div
+        id={id}
+        {...componentRoot("Calendar")}
+        className={rootClass}
+        data-view="year"
+      >
         <div className="m-calendar-header">
           <Heading
             id={headingId}
@@ -563,6 +568,7 @@ export function Calendar({
     </>
   );
   const rootProps = {
+    ...componentRoot("Calendar"),
     id,
     className: rootClass,
     "data-variant": variant === "full" ? "full" : undefined,
@@ -755,7 +761,12 @@ function TimeGrid({
     );
   };
   return (
-    <div id={id} className={className} data-view={view}>
+    <div
+      id={id}
+      {...componentRoot("Calendar")}
+      className={className}
+      data-view={view}
+    >
       <div className="m-calendar-header">
         <Heading id={headingId} className="m-calendar-title" aria-live="polite">
           {title}

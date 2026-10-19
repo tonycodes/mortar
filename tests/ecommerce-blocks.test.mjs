@@ -23,7 +23,10 @@ test("ProductFilters renders facets as labelled checkbox groups with counts and 
     selected: { colour: ["black"] },
     onChange() {},
   });
-  assert.match(markup, /<section class="m-filters" aria-label="Filters">/);
+  assert.match(
+    markup,
+    /<section data-m-component="ProductFilters" class="m-filters" aria-label="Filters">/,
+  );
   assert.match(
     markup,
     /<details open=""><summary>Colour<span class="m-filter-active">1<\/span><\/summary>/,
@@ -81,7 +84,10 @@ test("ProductReviews summarises ratings with an accessible distribution and list
       },
     ],
   });
-  assert.match(markup, /<section class="m-reviews" aria-labelledby="[^"]+">/);
+  assert.match(
+    markup,
+    /<section data-m-component="ProductReviews" class="m-reviews" aria-labelledby="[^"]+">/,
+  );
   assert.match(markup, /aria-label="Rated 4.4 out of 5 from 112 reviews"/);
   assert.match(
     markup,

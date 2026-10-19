@@ -12,7 +12,7 @@
     },
     {
       "id": "project-agnostic-chrome",
-      "instruction": "Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic. The marketing header logo is a slot. Marketing roots expose data-m-component for tests and consumers. It is not a styling hook."
+      "instruction": "Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic. The marketing header logo is a slot. Every component root exposes data-m-component with the component's name for tests and consumers. It is not a styling hook."
     },
     {
       "id": "central-fixes",

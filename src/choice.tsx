@@ -14,7 +14,7 @@ import {
   ComboboxOption,
 } from "@headlessui/react";
 import { Check, ChevronDown } from "./icons.js";
-import { RequiredMark, cx } from "./internal.js";
+import { RequiredMark, componentRoot, cx } from "./internal.js";
 
 export interface ChoiceOption {
   value: string;
@@ -103,7 +103,11 @@ export function Listbox({
 }: ChoiceProps) {
   const selected = options.find((o) => o.value === value);
   return (
-    <Field className={cx("m-field", className)} disabled={disabled}>
+    <Field
+      {...componentRoot("Listbox")}
+      className={cx("m-field", className)}
+      disabled={disabled}
+    >
       <ChoiceLabel label={label} required={required} spoken />
       <HeadlessListbox value={value} onChange={onChange}>
         <ListboxButton
@@ -169,7 +173,11 @@ export function Combobox({
     : options.find((o) => o.value === value)?.leading;
   const nothing = !!needle && !filtered.length;
   return (
-    <Field className={cx("m-field", className)} disabled={disabled}>
+    <Field
+      {...componentRoot("Combobox")}
+      className={cx("m-field", className)}
+      disabled={disabled}
+    >
       <ChoiceLabel label={label} required={required} />
       <HeadlessCombobox
         value={value}

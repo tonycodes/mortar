@@ -20,13 +20,16 @@ test("Breadcrumbs mark the current page and PageHeading reuses them", () => {
     { label: "Northwind" },
   ];
   const own = html(Breadcrumbs, { items, separator: "chevron" });
-  assert.match(own, /<nav class="m-breadcrumbs" aria-label="Breadcrumb"/);
+  assert.match(
+    own,
+    /<nav data-m-component="Breadcrumbs" class="m-breadcrumbs" aria-label="Breadcrumb"/,
+  );
   assert.match(own, /data-separator="chevron"/);
   assert.match(own, /<a href="#projects">Projects<\/a>/);
   assert.match(own, /<span aria-current="page">Northwind<\/span>/);
   assert.ok(
     html(PageHeading, { title: "Northwind", breadcrumbs: items }).includes(
-      '<nav class="m-breadcrumbs" aria-label="Breadcrumb"><ol>',
+      '<nav data-m-component="Breadcrumbs" class="m-breadcrumbs" aria-label="Breadcrumb"><ol>',
     ),
   );
 });
@@ -47,7 +50,10 @@ test("Sidebar renders labelled navigation with icons and counts, and AppShell ke
     sections: [{ label: "Teams", items: [{ label: "Design", href: "#d" }] }],
     footer: "Signed in",
   });
-  assert.match(own, /^<div class="m-sidebar-panel">/);
+  assert.match(
+    own,
+    /^<div data-m-component="Sidebar" class="m-sidebar-panel">/,
+  );
   assert.match(own, /<nav aria-label="Primary">/);
   assert.match(own, /aria-current="page"/);
   assert.match(own, /<span class="m-nav-icon" aria-hidden="true"><svg/);
@@ -101,7 +107,10 @@ test("Fieldset groups fields under a legend and disables them together", () => {
     },
     h(Input, { label: "Street" }),
   );
-  assert.match(own, /^<fieldset class="m-fieldset" disabled=""/);
+  assert.match(
+    own,
+    /^<fieldset data-m-component="Fieldset" class="m-fieldset" disabled=""/,
+  );
   assert.match(own, /<legend>Shipping<\/legend>/);
   const described = own.match(/aria-describedby="([^"]+)"/)?.[1];
   assert.ok(own.includes(`<p id="${described}">Where should we send it?</p>`));

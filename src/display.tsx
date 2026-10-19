@@ -6,6 +6,7 @@ import { headingTag, type HeadingLevel } from "./heading.js";
 import {
   TermList,
   cx,
+  componentRoot,
   focusAfterRemoval,
   classedIntroSlots,
 } from "./internal.js";
@@ -46,6 +47,7 @@ export function Avatar({
 }: AvatarProps) {
   return (
     <span
+      {...componentRoot("Avatar")}
       className={cx(`m-avatar m-avatar-${size}`, className)}
       data-shape={shape === "circle" ? undefined : shape}
       {...(decorative
@@ -89,7 +91,11 @@ export function AvatarGroup({
   const shown = people.slice(0, max),
     rest = people.length - shown.length;
   return (
-    <ul className={cx("m-avatar-group", className)} aria-label={label}>
+    <ul
+      {...componentRoot("AvatarGroup")}
+      className={cx("m-avatar-group", className)}
+      aria-label={label}
+    >
       {shown.map((person) => (
         <li key={person.name}>
           <Avatar name={person.name} src={person.src} size="sm" />
@@ -116,7 +122,7 @@ export interface KbdProps {
 }
 export function Kbd({ keys, className }: KbdProps) {
   return (
-    <span className={cx("m-kbd-group", className)}>
+    <span {...componentRoot("Kbd")} className={cx("m-kbd-group", className)}>
       {keys.map((key, i) => (
         <kbd key={i} className="m-kbd">
           {key}
@@ -146,7 +152,11 @@ export function ProgressBar({
   const labelId = useId();
   const percent = Math.min(100, Math.max(0, (value / max) * 100));
   return (
-    <div className={cx("m-progress", className)} data-tone={tone}>
+    <div
+      {...componentRoot("ProgressBar")}
+      className={cx("m-progress", className)}
+      data-tone={tone}
+    >
       <div className="m-progress-label">
         <span id={labelId}>{label}</span>
         {valueLabel && <span aria-hidden="true">{valueLabel}</span>}
@@ -183,7 +193,11 @@ export function FilterChip({
 }: FilterChipProps) {
   if (onRemove)
     return (
-      <span className={cx("m-chip", className)} data-selected="true">
+      <span
+        {...componentRoot("FilterChip")}
+        className={cx("m-chip", className)}
+        data-selected="true"
+      >
         {label}
         <button
           type="button"
@@ -201,6 +215,7 @@ export function FilterChip({
   return (
     <button
       type="button"
+      {...componentRoot("FilterChip")}
       className={cx("m-chip", className)}
       aria-pressed={selected}
       data-selected={selected || undefined}
@@ -229,6 +244,7 @@ export function CheckList({
 }: CheckListProps) {
   return (
     <ul
+      {...componentRoot("CheckList")}
       className={cx("m-check-list", className)}
       aria-label={label}
       data-columns={columns === 1 ? undefined : columns}
@@ -272,6 +288,7 @@ export function DescriptionList({
   return (
     <div
       id={id}
+      {...componentRoot("DescriptionList")}
       className={cx("m-description-list", className)}
       data-layout={layout === "columns" ? undefined : layout}
       data-variant={variant === "plain" ? undefined : variant}
@@ -345,6 +362,7 @@ export function GridList({
   const Heading = headingTag(itemHeadingLevel);
   return (
     <ul
+      {...componentRoot("GridList")}
       className={cx("m-grid-list", className)}
       aria-label={label}
       data-columns={columns === 3 ? undefined : columns}
@@ -407,7 +425,11 @@ export function AttachmentList({
   className,
 }: AttachmentListProps) {
   return (
-    <ul className={cx("m-attachments", className)} aria-label={label}>
+    <ul
+      {...componentRoot("AttachmentList")}
+      className={cx("m-attachments", className)}
+      aria-label={label}
+    >
       {files.map((file) => (
         <li key={file.id}>
           <span className="m-attachment-icon" aria-hidden="true">

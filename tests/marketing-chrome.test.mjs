@@ -39,7 +39,7 @@ const post = {
 test("default markup of the marketing chrome is unchanged", () => {
   assert.equal(
     markup(UI.MarketingHeader, headerProps),
-    '<header class="m-marketing-header" data-m-component="MarketingHeader"><a class="m-brand" href="/"><span class="m-mark" aria-hidden="true"></span>Acme</a><button aria-expanded="false" aria-controls="m-marketing-navR0" type="button" class="m-button m-button-ghost m-menu-trigger">Menu</button><nav id="m-marketing-navR0" aria-label="Primary"><div class="m-flyout" data-headlessui-state=""><button class="m-flyout-trigger" type="button" aria-expanded="false" data-headlessui-state="">Product<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></div><span hidden="" style="position:fixed;top:1px;left:1px;width:1px;height:0;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0;display:none"></span><a href="/pricing">Pricing</a></nav><div class="m-actions"><a class="m-button m-button-primary" href="/choose">Choose</a></div></header>',
+    '<header class="m-marketing-header" data-m-component="MarketingHeader"><a class="m-brand" href="/"><span class="m-mark" aria-hidden="true"></span>Acme</a><button data-m-component="Button" aria-expanded="false" aria-controls="m-marketing-navR0" type="button" class="m-button m-button-ghost m-menu-trigger">Menu</button><nav id="m-marketing-navR0" aria-label="Primary"><div class="m-flyout" data-headlessui-state=""><button class="m-flyout-trigger" type="button" aria-expanded="false" data-headlessui-state="">Product<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false"><path d="m6 8 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button></div><span hidden="" style="position:fixed;top:1px;left:1px;width:1px;height:0;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0;display:none"></span><a href="/pricing">Pricing</a></nav><div class="m-actions"><a data-m-component="ActionLink" class="m-button m-button-primary" href="/choose">Choose</a></div></header>',
   );
   assert.equal(
     markup(UI.Footer, footerProps),
@@ -55,7 +55,7 @@ test("default markup of the marketing chrome is unchanged", () => {
       description: "Monthly",
       onSubmit() {},
     }),
-    '<section class="m-newsletter" data-m-component="Newsletter"><div><h2 class="m-section-title">News</h2><p>Monthly</p></div><form><div class="m-field"><label for="_R_6_">Email address<span class="m-required" aria-hidden="true">*</span></label><div class="m-input-group"><input type="email" autoComplete="email" required="" id="_R_6_" value=""/></div></div><button type="submit" class="m-button m-button-primary">Subscribe</button><p role="status" class="m-newsletter-status"></p></form></section>',
+    '<section class="m-newsletter" data-m-component="Newsletter"><div><h2 class="m-section-title">News</h2><p>Monthly</p></div><form><div data-m-component="Input" class="m-field"><label for="_R_6_">Email address<span class="m-required" aria-hidden="true">*</span></label><div class="m-input-group"><input type="email" autoComplete="email" required="" id="_R_6_" value=""/></div></div><button data-m-component="Button" type="submit" class="m-button m-button-primary">Subscribe</button><p role="status" class="m-newsletter-status"></p></form></section>',
   );
   assert.equal(
     markup(UI.ContactSection, contactProps, h("p", null, "Form")),
@@ -66,18 +66,18 @@ test("default markup of the marketing chrome is unchanged", () => {
       title: "Team",
       members: [{ name: "Ana", role: "Founder", bio: "Bio" }],
     }),
-    '<section class="m-marketing-section" data-m-component="TeamGrid"><h2 class="m-section-title">Team</h2><ul class="m-team-grid"><li><div class="m-team-portrait"><span class="m-avatar m-avatar-lg" data-shape="square" aria-hidden="true"><span aria-hidden="true">A</span></span></div><strong>Ana</strong><span>Founder</span><p class="m-team-bio">Bio</p></li></ul></section>',
+    '<section class="m-marketing-section" data-m-component="TeamGrid"><h2 class="m-section-title">Team</h2><ul class="m-team-grid"><li><div class="m-team-portrait"><span data-m-component="Avatar" class="m-avatar m-avatar-lg" data-shape="square" aria-hidden="true"><span aria-hidden="true">A</span></span></div><strong>Ana</strong><span>Founder</span><p class="m-team-bio">Bio</p></li></ul></section>',
   );
   assert.equal(
     markup(UI.PostList, { title: "Blog", posts: [post], action }),
-    '<link rel="preload" as="image" href="/i.png"/><section class="m-marketing-section" data-m-component="PostList"><div class="m-section-heading-row"><div><h2 class="m-section-title">Blog</h2></div><a class="m-button m-button-secondary" href="/choose">Choose</a></div><ul class="m-post-list"><li><article><div class="m-post-image"><img alt="" src="/i.png"/></div><p class="m-post-meta"><span>News</span><time dateTime="2026-01-01">1 Jan</time></p><h3 class="m-post-title"><a href="/p">Post</a></h3><p>Ex</p></article></li></ul></section>',
+    '<link rel="preload" as="image" href="/i.png"/><section class="m-marketing-section" data-m-component="PostList"><div class="m-section-heading-row"><div><h2 class="m-section-title">Blog</h2></div><a data-m-component="ActionLink" class="m-button m-button-secondary" href="/choose">Choose</a></div><ul class="m-post-list"><li><article><div class="m-post-image"><img alt="" src="/i.png"/></div><p class="m-post-meta"><span>News</span><time dateTime="2026-01-01">1 Jan</time></p><h3 class="m-post-title"><a href="/p">Post</a></h3><p>Ex</p></article></li></ul></section>',
   );
   assert.equal(
     markup(UI.TestimonialGrid, {
       title: "Love",
       items: [{ quote: "Great", name: "Ana", role: "CEO" }],
     }),
-    '<section class="m-marketing-section" data-m-component="TestimonialGrid"><h2 class="m-section-title">Love</h2><div class="m-testimonial-grid"><figure><blockquote>Great</blockquote><figcaption><span class="m-avatar m-avatar-sm" aria-hidden="true"><span aria-hidden="true">A</span></span><span><strong>Ana</strong><span>CEO</span></span></figcaption></figure></div></section>',
+    '<section class="m-marketing-section" data-m-component="TestimonialGrid"><h2 class="m-section-title">Love</h2><div class="m-testimonial-grid"><figure><blockquote>Great</blockquote><figcaption><span data-m-component="Avatar" class="m-avatar m-avatar-sm" aria-hidden="true"><span aria-hidden="true">A</span></span><span><strong>Ana</strong><span>CEO</span></span></figcaption></figure></div></section>',
   );
 });
 
@@ -130,7 +130,7 @@ test("MarketingHeader panel menu opens a dialog instead of expanding the nav", (
   assert.match(html, /data-menu="panel"/);
   assert.match(
     html,
-    /<button aria-haspopup="dialog" aria-expanded="false" type="button" class="m-button m-button-ghost m-menu-trigger">Menu<\/button>/,
+    /<button data-m-component="Button" aria-haspopup="dialog" aria-expanded="false" type="button" class="m-button m-button-ghost m-menu-trigger">Menu<\/button>/,
   );
   assert.doesNotMatch(html, /aria-controls/);
   // The dialog renders only while open.

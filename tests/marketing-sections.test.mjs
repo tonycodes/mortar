@@ -84,7 +84,7 @@ test("ContentSection pairs prose with optional media", () => {
   );
   assert.match(
     markup,
-    /<div class="m-prose"><p>So we made one kit.<\/p><\/div>/,
+    /<div data-m-component="Prose" class="m-prose"><p>So we made one kit.<\/p><\/div>/,
   );
   assert.match(
     markup,

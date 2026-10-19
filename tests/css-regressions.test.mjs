@@ -102,3 +102,21 @@ test("busy (aria-disabled) buttons look like disabled ones", () => {
   assert.ok(rule, "busy buttons share the disabled rule");
   assert.equal(declaration(rule.body, "cursor"), "not-allowed");
 });
+
+test("Prose styles stop at nested component roots, not at m- class names", () => {
+  // Every component root carries data-m-component, so a utility class such as
+  // m-4 inside prose keeps its prose styles.
+  const prose = rules(Object.values(sources).join("\n")).filter(
+    ({ selector }) => /\.m-prose\s+\S/.test(selector),
+  );
+  const bounded = prose.filter(({ selector }) => selector.includes(":not("));
+  assert.ok(bounded.length >= 10, "expected the prose element rules");
+  for (const { selector } of bounded)
+    assert.match(
+      selector,
+      /:not\(\s*\[data-m-component\],\s*\.m-prose \[data-m-component\] \*\s*\)/,
+      selector,
+    );
+  for (const { selector } of prose)
+    assert.doesNotMatch(selector, /\[class[\^*]=/, selector);
+});

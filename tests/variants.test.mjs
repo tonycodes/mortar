@@ -14,7 +14,7 @@ const icon = h("svg", { viewBox: "0 0 20 20" });
 test("Button keeps its default markup and adds sizes and icons", () => {
   assert.equal(
     html(Button, {}, "Save"),
-    '<button type="button" class="m-button m-button-primary">Save</button>',
+    '<button data-m-component="Button" type="button" class="m-button m-button-primary">Save</button>',
   );
   assert.match(html(Button, { size: "sm" }, "Save"), /data-size="sm"/);
   assert.match(
@@ -37,7 +37,7 @@ test("Button keeps its default markup and adds sizes and icons", () => {
 test("Notice keeps its default markup and adds actions and dismiss", () => {
   assert.equal(
     html(Notice, { title: "Saved" }),
-    '<div class="m-notice"><strong>Saved</strong></div>',
+    '<div data-m-component="Notice" class="m-notice"><strong>Saved</strong></div>',
   );
   const full = html(
     Notice,
@@ -66,7 +66,7 @@ test("EmptyState shows a decorative icon only when given one", () => {
   );
   assert.match(
     html(EmptyState, { title: "None", description: "Nothing yet.", icon }),
-    /^<div class="m-empty"><span class="m-empty-icon" aria-hidden="true"><svg/,
+    /^<div data-m-component="EmptyState" class="m-empty"><span class="m-empty-icon" aria-hidden="true"><svg/,
   );
 });
 
@@ -89,7 +89,10 @@ test("Tabs show counts and icons inside the tab's accessible name", () => {
 
 test("Pagination keeps Previous/Next and adds numbered pages and a summary", () => {
   const plain = html(Pagination, { page: 2, pageCount: 5, onChange() {} });
-  assert.match(plain, /<nav class="m-pagination" aria-label="Pagination">/);
+  assert.match(
+    plain,
+    /<nav data-m-component="Pagination" class="m-pagination" aria-label="Pagination">/,
+  );
   assert.match(plain, /Page 2 of 5/);
   const numbered = html(Pagination, {
     page: 6,

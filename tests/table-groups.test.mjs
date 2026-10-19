@@ -13,7 +13,7 @@ test("Table without groups keeps its default markup", () => {
       columns,
       rows: [{ name: "Tom Cook", role: "Admin" }],
     }),
-    '<div class="m-table" role="region" aria-label="People" tabindex="0"><table><caption class="m-sr-only">People</caption><thead><tr><th scope="col">Name</th><th scope="col">Role</th></tr></thead><tbody><tr><th scope="row">Tom Cook</th><td>Admin</td></tr></tbody></table></div>',
+    '<div data-m-component="Table" class="m-table" role="region" aria-label="People" tabindex="0"><table><caption class="m-sr-only">People</caption><thead><tr><th scope="col">Name</th><th scope="col">Role</th></tr></thead><tbody><tr><th scope="row">Tom Cook</th><td>Admin</td></tr></tbody></table></div>',
   );
   assert.match(
     html(Table, { caption: "People", columns }),

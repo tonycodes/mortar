@@ -1,6 +1,10 @@
 import { NavigationContext, type Navigate } from "./navigation.js";
 import { SegmentedControl } from "./inspection.js";
-import { ThemeScopeContext } from "./internal.js";
+import {
+  AsComponentRoot,
+  ThemeScopeContext,
+  componentRoot,
+} from "./internal.js";
 import { Portal } from "@headlessui/react";
 import {
   createContext,
@@ -151,7 +155,11 @@ export function ThemeProvider({
   );
   if (scope === "container")
     return (
-      <div {...attributes} className={className}>
+      <div
+        {...componentRoot("ThemeProvider")}
+        {...attributes}
+        className={className}
+      >
         <ThemeScopeContext.Provider value={attributes}>
           <Portal.Group target={host}>{theme}</Portal.Group>
         </ThemeScopeContext.Provider>
@@ -182,15 +190,17 @@ export function AppearanceControl({
     else context!.setAppearance(next);
   };
   return (
-    <SegmentedControl
-      label="Appearance"
-      value={appearance!}
-      className={className}
-      options={(["light", "dark", "system"] as const).map((option) => ({
-        value: option,
-        label: option[0].toUpperCase() + option.slice(1),
-      }))}
-      onChange={(next) => select(next as Appearance)}
-    />
+    <AsComponentRoot name="AppearanceControl" of="SegmentedControl">
+      <SegmentedControl
+        label="Appearance"
+        value={appearance!}
+        className={className}
+        options={(["light", "dark", "system"] as const).map((option) => ({
+          value: option,
+          label: option[0].toUpperCase() + option.slice(1),
+        }))}
+        onChange={(next) => select(next as Appearance)}
+      />
+    </AsComponentRoot>
   );
 }
