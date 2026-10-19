@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "package": "@tony-ui/mortar",
   "version": "0.5.0",
-  "policyVersion": "1.2.0",
+  "policyVersion": "1.3.0",
   "tokens": [
     "--m-accent",
     "--m-code-bg",
@@ -79,8 +79,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -88,13 +87,21 @@
           "href": "string",
           "variant": "primary | secondary | ghost | danger"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "href": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "variant": {
+            "type": "\"danger\" | \"ghost\" | \"primary\" | \"secondary\"",
+            "required": false,
+            "default": "\"primary\""
+          }
+        },
         "usage": "Import { ActionLink } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -140,13 +147,34 @@
           "tone": "\"default\" | \"danger\"",
           "headingLevel": "2 | 3"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "2 | 3",
+            "required": false,
+            "default": "2"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"danger\" | \"default\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { ActionPanel } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -175,26 +203,28 @@
       "version": "0.5.0",
       "export": "ActivityFeed",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application", "status"],
+      "capabilities": ["theme", "application", "status", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
           "label": "string",
           "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "{ id: string; title: string; description?: string | undefined; time: string; tone?: Tone | undefined; actor?: ReactNode; body?: ReactNode; }[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { ActivityFeed } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -223,13 +253,12 @@
       "version": "0.5.0",
       "export": "ApiEndpoint",
       "source": "src/docs.tsx",
-      "capabilities": ["theme", "docs"],
+      "capabilities": ["theme", "docs", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -241,13 +270,37 @@
           "params": "{ name; type; required?; description }[]",
           "examples": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "examples": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "method": {
+            "type": "\"DELETE\" | \"GET\" | \"PATCH\" | \"POST\" | \"PUT\"",
+            "required": true
+          },
+          "params": {
+            "type": "{ name: string; type: string; required?: boolean | undefined; description: ReactNode; }[]",
+            "required": true
+          },
+          "paramsLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Body parameters\""
+          },
+          "path": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { ApiEndpoint } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -276,13 +329,12 @@
       "version": "0.5.0",
       "export": "AppShell",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "keyboard", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -298,13 +350,54 @@
           "aside": "ReactNode",
           "asideLabel": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "aside": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "asideLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Details\""
+          },
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "header": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "navigation": {
+            "type": "NavigationItem[]",
+            "required": true
+          },
+          "secondaryNavigation": {
+            "type": "{ label: string; items: NavigationItem[]; }[]",
+            "required": false,
+            "default": "[]"
+          },
+          "user": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "workspace": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { AppShell } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -334,26 +427,28 @@
       "version": "0.5.0",
       "export": "AppearanceControl",
       "source": "src/foundation.tsx",
-      "capabilities": ["theme", "foundation"],
+      "capabilities": ["theme", "foundation", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
           "value": "light | dark | system",
           "onChange": "(value: Appearance) => void"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "onChange": {
+            "type": "(value: Appearance) => void",
+            "required": false
+          },
+          "value": {
+            "type": "\"dark\" | \"light\" | \"system\"",
+            "required": false
+          }
+        },
         "usage": "Import { AppearanceControl } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -395,13 +490,17 @@
           "files": "Attachment[] ({ id: string; name: string; href: string; size?: string; actionLabel?: string; icon?: ReactNode })",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "files": {
+            "type": "Attachment[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Attachments\""
+          }
+        },
         "usage": "Import { AttachmentList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -435,8 +534,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -444,13 +542,21 @@
           "people": "{ name: string; src?: string }[]",
           "max": "number"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "max": {
+            "type": "number",
+            "required": false,
+            "default": "4"
+          },
+          "people": {
+            "type": "{ name: string; src?: string | undefined; }[]",
+            "required": true
+          }
+        },
         "usage": "Import { AvatarGroup } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -484,8 +590,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -497,13 +602,40 @@
           "statusPosition": "bottom | top",
           "placeholder": "initials | icon"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "placeholder": {
+            "type": "\"icon\" | \"initials\"",
+            "required": false,
+            "default": "\"initials\""
+          },
+          "shape": {
+            "type": "\"circle\" | \"square\"",
+            "required": false,
+            "default": "\"circle\""
+          },
+          "size": {
+            "type": "\"lg\" | \"md\" | \"sm\" | \"xl\" | \"xs\"",
+            "required": false,
+            "default": "\"md\""
+          },
+          "src": {
+            "type": "string",
+            "required": false
+          },
+          "status": {
+            "type": "\"offline\" | \"online\"",
+            "required": false
+          },
+          "statusPosition": {
+            "type": "\"bottom\" | \"top\"",
+            "required": false,
+            "default": "\"bottom\""
+          }
+        },
         "usage": "Import { Avatar } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -537,21 +669,24 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
           "children": "ReactNode",
           "tone": "neutral | info | success | warning | danger"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "tone": {
+            "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+            "required": false,
+            "default": "\"neutral\""
+          }
+        },
         "usage": "Import { Badge } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -596,13 +731,35 @@
           "dismissLabel": "string",
           "tone": "\"inverse\" | \"neutral\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "LinkAction",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "dismissLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Dismiss announcement\""
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Announcement\""
+          },
+          "onDismiss": {
+            "type": "() => void",
+            "required": false
+          },
+          "tone": {
+            "type": "\"inverse\" | \"neutral\"",
+            "required": false,
+            "default": "\"inverse\""
+          }
+        },
         "usage": "Import { Banner } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -632,13 +789,12 @@
       "version": "0.5.0",
       "export": "BentoGrid",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -648,13 +804,29 @@
           "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; inverse?: boolean }[]",
           "headingLevel": "2 | 3 | 4"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "2"
+          },
+          "items": {
+            "type": "{ title: string; description: string; visual?: ReactNode; span?: 2 | 1 | undefined; inverse?: boolean | undefined; }[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { BentoGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -696,13 +868,22 @@
           "label": "string",
           "separator": "\"slash\" | \"chevron\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "BreadcrumbItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Breadcrumb\""
+          },
+          "separator": {
+            "type": "\"chevron\" | \"slash\"",
+            "required": false,
+            "default": "\"slash\""
+          }
+        },
         "usage": "Import { Breadcrumbs } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -743,13 +924,16 @@
           "label": "string",
           "items": "{ label: string; onClick?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "ButtonGroupItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { ButtonGroup } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -784,8 +968,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -801,13 +984,37 @@
           "iconOnly": "boolean",
           "className": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "icon": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "iconOnly": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "iconPosition": {
+            "type": "\"end\" | \"start\"",
+            "required": false,
+            "default": "\"start\""
+          },
+          "loading": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "size": {
+            "type": "\"lg\" | \"md\" | \"sm\"",
+            "required": false,
+            "default": "\"md\""
+          },
+          "variant": {
+            "type": "\"danger\" | \"ghost\" | \"primary\" | \"secondary\"",
+            "required": false,
+            "default": "\"primary\""
+          }
+        },
         "usage": "Import { Button } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -863,17 +1070,84 @@
           "dayStartHour": "number",
           "dayEndHour": "number"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "dayEndHour": {
+            "type": "number",
+            "required": false,
+            "default": "19"
+          },
+          "dayStartHour": {
+            "type": "number",
+            "required": false,
+            "default": "8"
+          },
+          "events": {
+            "type": "CalendarEvent[]",
+            "required": false,
+            "default": "[]"
+          },
+          "locale": {
+            "type": "string",
+            "required": false,
+            "default": "\"en-GB\""
+          },
+          "maxEvents": {
+            "type": "number",
+            "required": false,
+            "default": "2"
+          },
+          "month": {
+            "type": "string",
+            "required": false
+          },
+          "onDateChange": {
+            "type": "(date: string) => void",
+            "required": false
+          },
+          "onEventSelect": {
+            "type": "(id: string) => void",
+            "required": false
+          },
+          "onMonthChange": {
+            "type": "(month: string) => void",
+            "required": false
+          },
+          "onSelect": {
+            "type": "(date: string) => void",
+            "required": false
+          },
+          "onViewChange": {
+            "type": "(view: CalendarView) => void",
+            "required": false
+          },
+          "selected": {
+            "type": "string",
+            "required": false
+          },
+          "today": {
+            "type": "string",
+            "required": false
+          },
+          "variant": {
+            "type": "\"compact\" | \"full\"",
+            "required": false,
+            "default": "\"compact\""
+          },
+          "view": {
+            "type": "\"day\" | \"month\" | \"week\" | \"year\"",
+            "required": false,
+            "default": "\"month\""
+          },
+          "weekStartsOn": {
+            "type": "0 | 1",
+            "required": false,
+            "default": "1"
+          }
+        },
         "usage": "Import { Calendar } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-segmented-control"]
       },
       "preview": {
         "source": "previews/CalendarPreview.tsx"
@@ -899,13 +1173,12 @@
       "version": "0.5.0",
       "export": "CallToAction",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -915,13 +1188,28 @@
           "tone": "\"surface\" | \"inverse\"",
           "media": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "LinkAction[]",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "media": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"inverse\" | \"surface\"",
+            "required": false
+          }
+        },
         "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -955,8 +1243,7 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -964,13 +1251,21 @@
           "title": "string",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          },
+          "type": {
+            "type": "\"breaking\" | \"note\" | \"tip\" | \"warning\"",
+            "required": false,
+            "default": "\"note\""
+          }
+        },
         "usage": "Import { Callout } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1018,13 +1313,48 @@
           "tone": "\"default\" | \"sunken\"",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "as": {
+            "type": "\"article\" | \"div\" | \"section\"",
+            "required": false,
+            "default": "\"div\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "2"
+          },
+          "padding": {
+            "type": "\"compact\" | \"default\" | \"none\"",
+            "required": false,
+            "default": "\"default\""
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          },
+          "tone": {
+            "type": "\"default\" | \"sunken\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { Card } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1053,7 +1383,7 @@
       "version": "0.5.0",
       "export": "ChatPreview",
       "source": "src/showcase.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
@@ -1070,13 +1400,40 @@
           "placeholder": "string",
           "assistantName": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "assistantName": {
+            "type": "string",
+            "required": false,
+            "default": "\"Assistant\""
+          },
+          "messages": {
+            "type": "ChatMessage[]",
+            "required": true
+          },
+          "placeholder": {
+            "type": "string",
+            "required": false,
+            "default": "\"Type a message…\""
+          },
+          "status": {
+            "type": "string",
+            "required": false
+          },
+          "suggestions": {
+            "type": "string[]",
+            "required": false,
+            "default": "[]"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "typing": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          }
+        },
         "usage": "Import { ChatPreview } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -1119,13 +1476,26 @@
           "columns": "1 | 2",
           "size": "\"sm\" | \"md\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "columns": {
+            "type": "1 | 2",
+            "required": false,
+            "default": "1"
+          },
+          "items": {
+            "type": "ReactNode[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "size": {
+            "type": "\"md\" | \"sm\"",
+            "required": false,
+            "default": "\"md\""
+          }
+        },
         "usage": "Import { CheckList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1165,8 +1535,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -1175,13 +1544,16 @@
           "onChange": "ChangeEventHandler<HTMLInputElement>",
           "description": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "label": {
+            "type": "ReactNode",
+            "required": true
+          }
+        },
         "usage": "Import { Checkbox } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1216,21 +1588,24 @@
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
           "code": "string",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "code": {
+            "type": "string",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Code\""
+          }
+        },
         "usage": "Import { CodeBlock } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1264,8 +1639,7 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -1276,13 +1650,34 @@
           "highlightLines": "number[]",
           "prompt": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "filename": {
+            "type": "string",
+            "required": false
+          },
+          "highlightLines": {
+            "type": "number[]",
+            "required": false,
+            "default": "[]"
+          },
+          "language": {
+            "type": "string",
+            "required": false
+          },
+          "lineNumbers": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "prompt": {
+            "type": "string",
+            "required": false
+          },
+          "tabs": {
+            "type": "{ id: string; label: string; code: string; }[]",
+            "required": true
+          }
+        },
         "usage": "Import { CodeTabs } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1331,13 +1726,46 @@
           "disabled": "boolean",
           "emptyLabel": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "emptyLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"No matches\""
+          },
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "hint": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "onChange": {
+            "type": "(value: string | null) => void",
+            "required": true
+          },
+          "options": {
+            "type": "ChoiceOption[]",
+            "required": true
+          },
+          "placeholder": {
+            "type": "string",
+            "required": false
+          },
+          "value": {
+            "type": "string | null",
+            "required": true
+          }
+        },
         "usage": "Import { Combobox } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1354,7 +1782,7 @@
       },
       "integrity": {
         "source": "a7163337c561b8d45c09171efac49fea80cbc2b4cc29ac7881c5d88ce4e874b2",
-        "preview": "2cf7795eda7f19337e27af05c9c0e16135c2176b65cb7cf29b09b3b86e512817"
+        "preview": "34467ca01ed379c75b9276e5727fbe19065595334fe236d3c7d48b68b6e3b02d"
       }
     },
     {
@@ -1372,8 +1800,7 @@
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "59cc40c87590db0193cfd5e1ef60d47f5783df1f8713e81d51bfca082bb1fa93"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -1387,13 +1814,46 @@
           "emptyMessage": "string",
           "footer": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "emptyMessage": {
+            "type": "string",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "groups": {
+            "type": "{ label: string; items: CommandItem[]; }[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Command menu\""
+          },
+          "onClose": {
+            "type": "() => void",
+            "required": true
+          },
+          "onQueryChange": {
+            "type": "(value: string) => void",
+            "required": true
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "placeholder": {
+            "type": "string",
+            "required": false,
+            "default": "\"Type a command or search\""
+          },
+          "query": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { CommandPalette } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1448,17 +1908,78 @@
           "error": "string",
           "rows": "number"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "avatar": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "hint": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Add your comment\""
+          },
+          "labelVisible": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "maxLength": {
+            "type": "number",
+            "required": false
+          },
+          "onSubmit": {
+            "type": "(value: string) => void",
+            "required": true
+          },
+          "onValueChange": {
+            "type": "(value: string) => void",
+            "required": false
+          },
+          "placeholder": {
+            "type": "string",
+            "required": false,
+            "default": "\"Add your comment…\""
+          },
+          "preview": {
+            "type": "(value: string) => ReactNode",
+            "required": false
+          },
+          "rows": {
+            "type": "number",
+            "required": false,
+            "default": "3"
+          },
+          "submitLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Comment\""
+          },
+          "submitting": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "value": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { CommentComposer } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-button", "mortar-tabs"]
       },
       "preview": {
         "source": "previews/CommentComposerPreview.tsx"
@@ -1489,8 +2010,7 @@
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -1505,13 +2025,51 @@
           "loading": "boolean",
           "destructive": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "cancelLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Cancel\""
+          },
+          "confirmationText": {
+            "type": "string",
+            "required": false
+          },
+          "confirmLabel": {
+            "type": "string",
+            "required": true
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "destructive": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
+          },
+          "loading": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "onClose": {
+            "type": "() => void",
+            "required": true
+          },
+          "onConfirm": {
+            "type": "() => void",
+            "required": true
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { ConfirmDialog } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1541,13 +2099,12 @@
       "version": "0.5.0",
       "export": "ContactSection",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -1556,13 +2113,25 @@
           "details": "{ label: string; value: ReactNode }[]",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "details": {
+            "type": "{ label: string; value: ReactNode; }[]",
+            "required": false,
+            "default": "[]"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { ContactSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -1591,7 +2160,7 @@
       "version": "0.5.0",
       "export": "Container",
       "source": "src/layout.tsx",
-      "capabilities": ["theme", "foundation"],
+      "capabilities": ["theme", "foundation", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
@@ -1605,13 +2174,27 @@
           "padded": "boolean",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "as": {
+            "type": "ElementType",
+            "required": false,
+            "default": "\"div\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "padded": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
+          },
+          "size": {
+            "type": "\"lg\" | \"md\" | \"sm\" | \"xl\"",
+            "required": false,
+            "default": "\"lg\""
+          }
+        },
         "usage": "Import { Container } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1640,13 +2223,12 @@
       "version": "0.5.0",
       "export": "ContentSection",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -1658,17 +2240,42 @@
           "tone": "\"default\" | \"muted\" | \"inverse\"",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "media": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "mediaPosition": {
+            "type": "\"end\" | \"start\"",
+            "required": false,
+            "default": "\"end\""
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { ContentSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
-        "dependencies": ["mortar-action-link"]
+        "dependencies": ["mortar-prose"]
       },
       "preview": {
         "source": "previews/ContentSectionPreview.tsx"
@@ -1693,13 +2300,18 @@
       "version": "0.5.0",
       "export": "DataTable",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application", "table"],
+      "capabilities": [
+        "theme",
+        "application",
+        "table",
+        "keyboard",
+        "responsive"
+      ],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -1725,13 +2337,97 @@
           "striped": "boolean",
           "footer": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "bulkActions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "caption": {
+            "type": "string",
+            "required": true
+          },
+          "columns": {
+            "type": "DataTableColumn<T>[]",
+            "required": true
+          },
+          "defaultSort": {
+            "type": "TableSort",
+            "required": false
+          },
+          "density": {
+            "type": "\"compact\" | \"default\"",
+            "required": false,
+            "default": "\"default\""
+          },
+          "emptyDescription": {
+            "type": "string",
+            "required": false,
+            "default": "\"Records will appear here when they are available.\""
+          },
+          "emptyTitle": {
+            "type": "string",
+            "required": false,
+            "default": "\"No records\""
+          },
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "groupBy": {
+            "type": "(row: T) => string",
+            "required": false
+          },
+          "loading": {
+            "type": "boolean",
+            "required": false
+          },
+          "maxHeight": {
+            "type": "string",
+            "required": false
+          },
+          "onSelectionChange": {
+            "type": "(ids: string[]) => void",
+            "required": false
+          },
+          "onSortChange": {
+            "type": "(sort: TableSort) => void",
+            "required": false
+          },
+          "rowHref": {
+            "type": "(row: T) => string | undefined",
+            "required": false
+          },
+          "rowLabel": {
+            "type": "(row: T) => string",
+            "required": true
+          },
+          "rows": {
+            "type": "T[]",
+            "required": true
+          },
+          "selectedIds": {
+            "type": "string[]",
+            "required": false,
+            "default": "[]"
+          },
+          "sort": {
+            "type": "TableSort | null",
+            "required": false
+          },
+          "striped": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "toolbar": {
+            "type": "ReactNode",
+            "required": false
+          }
+        },
         "usage": "Import { DataTable } from @tony-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1776,13 +2472,30 @@
           "items": "{ term: string; details: ReactNode; action?: ReactNode }[]",
           "layout": "\"columns\" | \"stacked\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "2"
+          },
+          "items": {
+            "type": "{ term: string; details: ReactNode; action?: ReactNode; }[]",
+            "required": true
+          },
+          "layout": {
+            "type": "\"columns\" | \"stacked\"",
+            "required": false,
+            "default": "\"columns\""
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { DescriptionList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1824,13 +2537,22 @@
           "soft": "boolean",
           "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "soft": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "spacing": {
+            "type": "\"lg\" | \"md\" | \"none\" | \"sm\"",
+            "required": false,
+            "default": "\"md\""
+          }
+        },
         "usage": "Import { Divider } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1859,13 +2581,12 @@
       "version": "0.5.0",
       "export": "DocsShell",
       "source": "src/docs.tsx",
-      "capabilities": ["theme", "docs", "keyboard"],
+      "capabilities": ["theme", "docs", "keyboard", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -1884,13 +2605,70 @@
           "navigationLabel": "string",
           "logo": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "homeHref": {
+            "type": "string",
+            "required": false,
+            "default": "\"/\""
+          },
+          "layout": {
+            "type": "\"article\" | \"wide\"",
+            "required": false,
+            "default": "\"article\""
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "navigation": {
+            "type": "{ title: string; items: NavigationItem[]; }[]",
+            "required": true
+          },
+          "navigationLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Documentation\""
+          },
+          "search": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "sections": {
+            "type": "(LinkAction & { current?: boolean | undefined; })[]",
+            "required": false,
+            "default": "[]"
+          },
+          "toc": {
+            "type": "{ id: string; label: string; current?: boolean | undefined; }[]",
+            "required": false,
+            "default": "[]"
+          },
+          "tocFooter": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "tocLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"On this page\""
+          },
+          "version": {
+            "type": "ReactNode",
+            "required": false
+          }
+        },
         "usage": "Import { DocsShell } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1925,8 +2703,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -1938,13 +2715,39 @@
           "align": "start | end",
           "header": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "align": {
+            "type": "\"end\" | \"start\"",
+            "required": false,
+            "default": "\"end\""
+          },
+          "header": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "icon": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "iconOnly": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "items": {
+            "type": "DropdownItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "variant": {
+            "type": "\"ghost\" | \"secondary\"",
+            "required": false,
+            "default": "\"secondary\""
+          }
+        },
         "usage": "Import { Dropdown } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -1979,8 +2782,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -1993,13 +2795,42 @@
           "headingLevel": "2 | 3 | 4",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "align": {
+            "type": "\"center\" | \"start\"",
+            "required": false,
+            "default": "\"center\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "dashed": {
+            "type": "boolean",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "3"
+          },
+          "icon": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { EmptyState } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2028,13 +2859,12 @@
       "version": "0.5.0",
       "export": "FAQ",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2043,13 +2873,25 @@
           "items": "{ question: string; answer: ReactNode }[]",
           "layout": "\"split\" | \"centered\" | \"grid\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "items": {
+            "type": "{ question: string; answer: ReactNode; }[]",
+            "required": true
+          },
+          "layout": {
+            "type": "\"centered\" | \"grid\" | \"split\"",
+            "required": false,
+            "default": "\"split\""
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { FAQ } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -2079,13 +2921,12 @@
       "version": "0.5.0",
       "export": "FeatureGrid",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2098,13 +2939,42 @@
           "columns": "2 | 3 | 4",
           "tone": "\"default\" | \"muted\" | \"inverse\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "columns": {
+            "type": "2 | 3 | 4",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "items": {
+            "type": "{ title: string; description: string; icon?: ReactNode; }[]",
+            "required": true
+          },
+          "marker": {
+            "type": "\"auto\" | \"icon\" | \"none\" | \"number\"",
+            "required": false,
+            "default": "\"auto\""
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { FeatureGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -2133,13 +3003,12 @@
       "version": "0.5.0",
       "export": "FeatureSection",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2153,13 +3022,47 @@
           "tone": "\"default\" | \"muted\" | \"inverse\"",
           "framed": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "details": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "framed": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "reverse": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { FeatureSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -2202,13 +3105,24 @@
           "disabled": "boolean",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false
+          },
+          "legend": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { Fieldset } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2242,21 +3156,23 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
           "label": "string",
           "items": "FileNode[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "FileNode[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { FileTree } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2290,8 +3206,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -2300,13 +3215,25 @@
           "onClick": "() => void",
           "onRemove": "() => void"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "onClick": {
+            "type": "() => void",
+            "required": false
+          },
+          "onRemove": {
+            "type": "() => void",
+            "required": false
+          },
+          "selected": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          }
+        },
         "usage": "Import { FilterChip } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2336,13 +3263,12 @@
       "version": "0.5.0",
       "export": "Footer",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2356,13 +3282,47 @@
           "note": "ReactNode",
           "social": "{ label: string; href: string; icon?: ReactNode }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "columns": {
+            "type": "{ title: string; links: LinkAction[]; }[]",
+            "required": true
+          },
+          "copyright": {
+            "type": "string",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "2"
+          },
+          "legal": {
+            "type": "LinkAction[]",
+            "required": false,
+            "default": "[]"
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "note": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "social": {
+            "type": "IconLink[]",
+            "required": false,
+            "default": "[]"
+          }
+        },
         "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -2406,13 +3366,31 @@
           "headingLevel": "2 | 3 | 4",
           "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actionsLayout": {
+            "type": "\"inline\" | \"split\"",
+            "required": false,
+            "default": "\"inline\""
+          },
+          "columns": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "3"
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "3"
+          },
+          "items": {
+            "type": "GridListItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { GridList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2441,13 +3419,12 @@
       "version": "0.5.0",
       "export": "HeaderSection",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2460,17 +3437,49 @@
           "align": "\"start\" | \"center\"",
           "headingLevel": "1 | 2"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "align": {
+            "type": "\"center\" | \"start\"",
+            "required": false,
+            "default": "\"start\""
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2",
+            "required": false,
+            "default": "1"
+          },
+          "links": {
+            "type": "LinkAction[]",
+            "required": false,
+            "default": "[]"
+          },
+          "stats": {
+            "type": "{ label: string; value: string; }[]",
+            "required": false,
+            "default": "[]"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { HeaderSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
-        "dependencies": ["mortar-action-link"]
+        "dependencies": []
       },
       "preview": {
         "source": "previews/HeaderSectionPreview.tsx"
@@ -2495,13 +3504,12 @@
       "version": "0.5.0",
       "export": "Hero",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2514,13 +3522,43 @@
           "headingLevel": "1 | 2",
           "background": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "LinkAction[]",
+            "required": false,
+            "default": "[]"
+          },
+          "align": {
+            "type": "\"center\" | \"split\"",
+            "required": false,
+            "default": "\"center\""
+          },
+          "background": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2",
+            "required": false,
+            "default": "1"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -2560,8 +3598,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -2578,13 +3615,40 @@
           "id": "string (defaults to a generated id)",
           "className": "string (applied to the input)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "hint": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "leadingIcon": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "prefix": {
+            "type": "string",
+            "required": false
+          },
+          "suffix": {
+            "type": "string",
+            "required": false
+          },
+          "trailingIcon": {
+            "type": "ReactNode",
+            "required": false
+          }
+        },
         "usage": "Import { Input } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2619,20 +3683,18 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
           "keys": "string[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "keys": {
+            "type": "string[]",
+            "required": true
+          }
+        },
         "usage": "Import { Kbd } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2661,25 +3723,23 @@
       "version": "0.5.0",
       "export": "LinkCards",
       "source": "src/docs.tsx",
-      "capabilities": ["theme", "docs"],
+      "capabilities": ["theme", "docs", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
           "items": "{ href; title; description? }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "{ href: string; title: string; description?: string | undefined; }[]",
+            "required": true
+          }
+        },
         "usage": "Import { LinkCards } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2726,13 +3786,42 @@
           "error": "string",
           "disabled": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "hint": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "onChange": {
+            "type": "(value: string | null) => void",
+            "required": true
+          },
+          "options": {
+            "type": "ChoiceOption[]",
+            "required": true
+          },
+          "placeholder": {
+            "type": "string",
+            "required": false,
+            "default": "\"Select…\""
+          },
+          "value": {
+            "type": "string | null",
+            "required": true
+          }
+        },
         "usage": "Import { Listbox } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2749,7 +3838,7 @@
       },
       "integrity": {
         "source": "a7163337c561b8d45c09171efac49fea80cbc2b4cc29ac7881c5d88ce4e874b2",
-        "preview": "a65446779030e57b25158aa345ca845e2452e9531083bbd43629885ab046c685"
+        "preview": "d3fab08fd1876265e75ad74947fdf2585371cb639c056435f8662358ad8fd654"
       }
     },
     {
@@ -2762,13 +3851,12 @@
       "version": "0.5.0",
       "export": "LogoCloud",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2779,13 +3867,34 @@
           "description": "string",
           "actions": "LinkAction[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "LinkAction[]",
+            "required": false,
+            "default": "[]"
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "items": {
+            "type": "{ name: string; image?: string | undefined; }[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "layout": {
+            "type": "\"grid\" | \"inline\" | \"split\"",
+            "required": false,
+            "default": "\"inline\""
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { LogoCloud } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -2814,13 +3923,12 @@
       "version": "0.5.0",
       "export": "MarketingHeader",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "keyboard", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -2833,17 +3941,45 @@
           "className": "string",
           "id": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "LinkAction",
+            "required": false
+          },
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "controls": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "homeHref": {
+            "type": "string",
+            "required": false,
+            "default": "\"/\""
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "links": {
+            "type": "HeaderLink[]",
+            "required": true
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          }
+        },
         "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
-        "dependencies": ["mortar-button", "mortar-action-link"]
+        "dependencies": ["mortar-action-link", "mortar-button"]
       },
       "preview": {
         "source": "previews/MarketingHeaderPreview.tsx"
@@ -2884,13 +4020,30 @@
           "reverse": "boolean",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "align": {
+            "type": "\"center\" | \"start\"",
+            "required": false,
+            "default": "\"start\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "media": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "reverse": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { MediaObject } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2924,8 +4077,7 @@
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -2933,13 +4085,21 @@
           "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\")",
           "variant": "\"shared\" | \"cards\" (default \"shared\")"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "{ label: string; value: string; change?: string | undefined; tone?: Tone | undefined; icon?: ReactNode; trend?: \"up\" | \"down\" | undefined; previous?: string | undefined; }[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "variant": {
+            "type": "\"cards\" | \"shared\"",
+            "required": false,
+            "default": "\"shared\""
+          }
+        },
         "usage": "Import { MetricGroup } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -2968,7 +4128,7 @@
       "version": "0.5.0",
       "export": "MockWindow",
       "source": "src/showcase.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
@@ -2982,13 +4142,25 @@
           "variant": "\"browser\" | \"app\" | \"plain\"",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "address": {
+            "type": "string",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "variant": {
+            "type": "\"app\" | \"browser\" | \"plain\"",
+            "required": false,
+            "default": "\"browser\""
+          }
+        },
         "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -3017,13 +4189,12 @@
       "version": "0.5.0",
       "export": "Modal",
       "source": "src/primitives.tsx",
-      "capabilities": ["theme", "foundation"],
+      "capabilities": ["theme", "foundation", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -3034,13 +4205,33 @@
           "actions": "ReactNode",
           "size": "\"md\" | \"lg\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "onClose": {
+            "type": "() => void",
+            "required": true
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "size": {
+            "type": "\"lg\" | \"md\"",
+            "required": false,
+            "default": "\"md\""
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { Modal } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3074,8 +4265,8 @@
         "theme",
         "application",
         "navigation",
-        "responsive",
-        "keyboard"
+        "keyboard",
+        "responsive"
       ],
       "owner": "Mortar maintainers",
       "kitId": "application",
@@ -3092,17 +4283,38 @@
           "actions": "ReactNode",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "homeHref": {
+            "type": "string",
+            "required": false,
+            "default": "\"/\""
+          },
+          "items": {
+            "type": "NavigationItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Primary\""
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          }
+        },
         "usage": "Import { Navbar } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-button"]
       },
       "preview": {
         "source": "previews/NavbarPreview.tsx"
@@ -3128,13 +4340,12 @@
       "version": "0.5.0",
       "export": "Newsletter",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -3145,17 +4356,38 @@
           "status": "idle | submitting | success | error",
           "message": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "message": {
+            "type": "string",
+            "required": false
+          },
+          "onSubmit": {
+            "type": "(email: string) => void",
+            "required": true
+          },
+          "status": {
+            "type": "\"error\" | \"idle\" | \"submitting\" | \"success\"",
+            "required": false,
+            "default": "\"idle\""
+          },
+          "submitLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Subscribe\""
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
-        "dependencies": ["mortar-input", "mortar-button"]
+        "dependencies": ["mortar-button", "mortar-input"]
       },
       "preview": {
         "source": "previews/NewsletterPreview.tsx"
@@ -3181,13 +4413,12 @@
       "version": "0.5.0",
       "export": "NotFound",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -3197,13 +4428,29 @@
           "actions": "LinkAction[]",
           "illustration": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "LinkAction[]",
+            "required": true
+          },
+          "code": {
+            "type": "string",
+            "required": false,
+            "default": "\"404\""
+          },
+          "description": {
+            "type": "string",
+            "required": true
+          },
+          "illustration": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { NotFound } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -3232,13 +4479,12 @@
       "version": "0.5.0",
       "export": "Notice",
       "source": "src/primitives.tsx",
-      "capabilities": ["theme", "foundation", "status"],
+      "capabilities": ["theme", "foundation", "status", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -3250,13 +4496,38 @@
           "onDismiss": "() => void",
           "dismissLabel": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "announce": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "dismissLabel": {
+            "type": "string",
+            "required": false
+          },
+          "onDismiss": {
+            "type": "() => void",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+            "required": false,
+            "default": "\"neutral\""
+          }
+        },
         "usage": "Import { Notice } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3300,17 +4571,31 @@
           "emptyTitle": "string",
           "emptyDescription": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "emptyDescription": {
+            "type": "string",
+            "required": false,
+            "default": "\"Orders you place will appear here.\""
+          },
+          "emptyTitle": {
+            "type": "string",
+            "required": false,
+            "default": "\"No orders yet\""
+          },
+          "headingLevel": {
+            "type": "2 | 3",
+            "required": false,
+            "default": "2"
+          },
+          "orders": {
+            "type": "Order[]",
+            "required": true
+          }
+        },
         "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-empty-state"]
       },
       "preview": {
         "source": "previews/OrderHistoryPreview.tsx"
@@ -3351,13 +4636,34 @@
           "headingLevel": "2 | 3",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "2 | 3",
+            "required": false,
+            "default": "2"
+          },
+          "lines": {
+            "type": "{ label: string; value: string; }[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false,
+            "default": "\"Order summary\""
+          },
+          "total": {
+            "type": "{ label: string; value: string; }",
+            "required": true
+          }
+        },
         "usage": "Import { OrderSummary } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3391,8 +4697,7 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -3401,13 +4706,25 @@
           "onChange": "(value: yes | no) => void",
           "updated": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "onChange": {
+            "type": "(value: \"yes\" | \"no\") => void",
+            "required": true
+          },
+          "question": {
+            "type": "string",
+            "required": false,
+            "default": "\"Was this page helpful?\""
+          },
+          "updated": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "value": {
+            "type": "\"no\" | \"yes\" | null",
+            "required": true
+          }
+        },
         "usage": "Import { PageFeedback } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3437,13 +4754,12 @@
       "version": "0.5.0",
       "export": "PageHeading",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -3456,17 +4772,46 @@
           "meta": "{ label: string; icon?: ReactNode }[]",
           "avatar": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "avatar": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "breadcrumbs": {
+            "type": "BreadcrumbItem[]",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2",
+            "required": false,
+            "default": "1"
+          },
+          "meta": {
+            "type": "{ label: string; icon?: ReactNode; }[]",
+            "required": false,
+            "default": "[]"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { PageHeading } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-breadcrumbs"]
       },
       "preview": {
         "source": "previews/PageHeadingPreview.tsx"
@@ -3491,26 +4836,28 @@
       "version": "0.5.0",
       "export": "PagerLinks",
       "source": "src/docs.tsx",
-      "capabilities": ["theme", "docs"],
+      "capabilities": ["theme", "docs", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
           "previous": "LinkAction",
           "next": "LinkAction"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "next": {
+            "type": "LinkAction",
+            "required": false
+          },
+          "previous": {
+            "type": "LinkAction",
+            "required": false
+          }
+        },
         "usage": "Import { PagerLinks } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3539,13 +4886,12 @@
       "version": "0.5.0",
       "export": "Pagination",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -3556,13 +4902,34 @@
           "summary": "{ from: number; to: number; total: number; noun?: string }",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Pagination\""
+          },
+          "numbered": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "onChange": {
+            "type": "(page: number) => void",
+            "required": true
+          },
+          "page": {
+            "type": "number",
+            "required": true
+          },
+          "pageCount": {
+            "type": "number",
+            "required": true
+          },
+          "summary": {
+            "type": "{ from: number; to: number; total: number; noun?: string | undefined; }",
+            "required": false
+          }
+        },
         "usage": "Import { Pagination } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3592,13 +4959,12 @@
       "version": "0.5.0",
       "export": "PlanComparison",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing", "keyboard"],
+      "capabilities": ["theme", "marketing", "keyboard", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -3608,13 +4974,28 @@
           "featuredPlan": "string",
           "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "featuredPlan": {
+            "type": "string",
+            "required": false
+          },
+          "groups": {
+            "type": "{ label: string; rows: { feature: string; values: (string | boolean)[]; }[]; }[]",
+            "required": true
+          },
+          "plans": {
+            "type": "string[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -3643,13 +5024,12 @@
       "version": "0.5.0",
       "export": "PostList",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -3658,13 +5038,24 @@
           "posts": "{ href; title; excerpt; date; dateLabel; category?; image? }[]",
           "action": "LinkAction"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "LinkAction",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "posts": {
+            "type": "{ href: string; title: string; excerpt: string; date: string; dateLabel: string; category?: string | undefined; image?: ReactNode; }[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { PostList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -3693,26 +5084,28 @@
       "version": "0.5.0",
       "export": "PreviewFrame",
       "source": "src/inspection.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
           "title": "string",
           "src": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "src": {
+            "type": "string",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { PreviewFrame } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3741,13 +5134,12 @@
       "version": "0.5.0",
       "export": "Pricing",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -3759,13 +5151,38 @@
           "layout": "\"cards\" | \"detailed\"",
           "featuresLabel": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "billingToggle": {
+            "type": "boolean",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "featuresLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"What’s included\""
+          },
+          "layout": {
+            "type": "\"cards\" | \"detailed\"",
+            "required": false,
+            "default": "\"cards\""
+          },
+          "plans": {
+            "type": "PricingPlan[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"inverse\" | \"surface\"",
+            "required": false
+          }
+        },
         "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -3795,7 +5212,7 @@
       "version": "0.5.0",
       "export": "ProcessSteps",
       "source": "src/marketing.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
@@ -3812,13 +5229,38 @@
           "tone": "\"default\" | \"muted\" | \"inverse\"",
           "headingLevel": "2 | 3 | 4"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "items": {
+            "type": "{ title: string; description: string; }[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { ProcessSteps } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -3861,17 +5303,29 @@
           "onChange": "(facet: string, values: string[]) => void",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "facets": {
+            "type": "FilterFacet[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Filters\""
+          },
+          "onChange": {
+            "type": "(facet: string, values: string[]) => void",
+            "required": true
+          },
+          "selected": {
+            "type": "Record<string, string[]>",
+            "required": true
+          }
+        },
         "usage": "Import { ProductFilters } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-checkbox", "mortar-filter-chip"]
       },
       "preview": {
         "source": "previews/ProductFiltersPreview.tsx"
@@ -3912,13 +5366,31 @@
           "headingLevel": "2 | 3 | 4",
           "variant": "\"plain\" | \"card\" (default \"plain\"; card frames each product for full-detail listings)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "columns": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "4"
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "3"
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "products": {
+            "type": "ProductCard[]",
+            "required": true
+          },
+          "variant": {
+            "type": "\"card\" | \"plain\"",
+            "required": false,
+            "default": "\"plain\""
+          }
+        },
         "usage": "Import { ProductList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -3972,17 +5444,80 @@
           "hideName": "boolean",
           "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "adding": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "addLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Add to bag\""
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "details": {
+            "type": "string[]",
+            "required": false,
+            "default": "[]"
+          },
+          "gallery": {
+            "type": "\"grid\" | \"thumbnails\"",
+            "required": false,
+            "default": "\"thumbnails\""
+          },
+          "headingLevel": {
+            "type": "1 | 2",
+            "required": false,
+            "default": "1"
+          },
+          "hideName": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "images": {
+            "type": "ProductImage[]",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "onAdd": {
+            "type": "() => void",
+            "required": false
+          },
+          "onSelect": {
+            "type": "(option: string, value: string) => void",
+            "required": false
+          },
+          "options": {
+            "type": "ProductOption[]",
+            "required": false,
+            "default": "[]"
+          },
+          "price": {
+            "type": "string",
+            "required": true
+          },
+          "rating": {
+            "type": "{ value: number; count: number; href?: string | undefined; }",
+            "required": false
+          },
+          "selected": {
+            "type": "Record<string, string>",
+            "required": false,
+            "default": "{}"
+          }
+        },
         "usage": "Import { ProductOverview } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-button"]
       },
       "preview": {
         "source": "previews/ProductOverviewPreview.tsx"
@@ -4021,19 +5556,99 @@
           "onClose": "() => void",
           "href": "string",
           "detailsLabel": "string",
-          "…ProductOverview props": "name, price, images, options, selected, onSelect, onAdd and the rest (not headingLevel or hideName)"
+          "name": "string",
+          "price": "string",
+          "description": "ReactNode",
+          "images": "{ src: string; alt: string }[]",
+          "rating": "{ value: number; count: number; href?: string }",
+          "options": "ProductOption[] ({ id: string; label: string; values: { value: string; label: string; swatch?: string; disabled?: boolean }[] })",
+          "selected": "Record<string, string>",
+          "onSelect": "(option: string, value: string) => void",
+          "onAdd": "() => void",
+          "addLabel": "string",
+          "adding": "boolean",
+          "details": "string[]",
+          "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "adding": {
+            "type": "boolean",
+            "required": false
+          },
+          "addLabel": {
+            "type": "string",
+            "required": false
+          },
+          "description": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "details": {
+            "type": "string[]",
+            "required": false
+          },
+          "detailsLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"View full details\""
+          },
+          "gallery": {
+            "type": "\"grid\" | \"thumbnails\"",
+            "required": false
+          },
+          "href": {
+            "type": "string",
+            "required": true
+          },
+          "images": {
+            "type": "ProductImage[]",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "onAdd": {
+            "type": "() => void",
+            "required": false
+          },
+          "onClose": {
+            "type": "() => void",
+            "required": true
+          },
+          "onSelect": {
+            "type": "(option: string, value: string) => void",
+            "required": false
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "options": {
+            "type": "ProductOption[]",
+            "required": false
+          },
+          "price": {
+            "type": "string",
+            "required": true
+          },
+          "rating": {
+            "type": "{ value: number; count: number; href?: string | undefined; }",
+            "required": false
+          },
+          "selected": {
+            "type": "Record<string, string>",
+            "required": false
+          }
+        },
         "usage": "Import { ProductQuickView } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [
+          "mortar-action-link",
+          "mortar-modal",
+          "mortar-product-overview"
+        ]
       },
       "preview": {
         "source": "previews/ProductQuickViewPreview.tsx"
@@ -4075,13 +5690,33 @@
           "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode })",
           "action": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "average": {
+            "type": "number",
+            "required": true
+          },
+          "count": {
+            "type": "number",
+            "required": true
+          },
+          "distribution": {
+            "type": "{ stars: number; count: number; }[]",
+            "required": true
+          },
+          "reviews": {
+            "type": "Review[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false,
+            "default": "\"Customer reviews\""
+          }
+        },
         "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4115,8 +5750,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -4126,13 +5760,30 @@
           "valueLabel": "string",
           "tone": "primary | warning | danger"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "max": {
+            "type": "number",
+            "required": false,
+            "default": "100"
+          },
+          "tone": {
+            "type": "\"danger\" | \"primary\" | \"warning\"",
+            "required": false,
+            "default": "\"primary\""
+          },
+          "value": {
+            "type": "number",
+            "required": true
+          },
+          "valueLabel": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { ProgressBar } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4174,13 +5825,22 @@
           "label": "string",
           "variant": "\"simple\" | \"circles\" | \"bullets\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Progress\""
+          },
+          "steps": {
+            "type": "ProgressStep[]",
+            "required": true
+          },
+          "variant": {
+            "type": "\"bullets\" | \"circles\" | \"simple\"",
+            "required": false,
+            "default": "\"simple\""
+          }
+        },
         "usage": "Import { ProgressSteps } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4214,20 +5874,18 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          }
+        },
         "usage": "Import { Prose } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4267,8 +5925,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -4279,13 +5936,33 @@
           "options": "{ value: string; label: string; description?: string; swatch?: string; disabled?: boolean }[]",
           "layout": "\"list\" | \"grid\" | \"swatches\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "layout": {
+            "type": "\"grid\" | \"list\" | \"swatches\"",
+            "required": false,
+            "default": "\"list\""
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "onChange": {
+            "type": "(value: string) => void",
+            "required": true
+          },
+          "options": {
+            "type": "{ value: string; label: string; description?: string | undefined; swatch?: string | undefined; disabled?: boolean | undefined; }[]",
+            "required": true
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4315,13 +5992,12 @@
       "version": "0.5.0",
       "export": "Release",
       "source": "src/docs.tsx",
-      "capabilities": ["theme", "docs"],
+      "capabilities": ["theme", "docs", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -4330,13 +6006,24 @@
           "dateLabel": "string",
           "changes": "{ type: added | changed | fixed | deprecated | removed; items: ReactNode[] }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "changes": {
+            "type": "{ type: \"added\" | \"changed\" | \"fixed\" | \"deprecated\" | \"removed\"; items: ReactNode[]; }[]",
+            "required": true
+          },
+          "date": {
+            "type": "string",
+            "required": true
+          },
+          "dateLabel": {
+            "type": "string",
+            "required": true
+          },
+          "version": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { Release } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4365,13 +6052,12 @@
       "version": "0.5.0",
       "export": "SaveBar",
       "source": "src/feedback.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -4383,13 +6069,40 @@
           "onDiscard": "() => void",
           "saving": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "discardLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Discard\""
+          },
+          "message": {
+            "type": "string",
+            "required": false,
+            "default": "\"You have unsaved changes.\""
+          },
+          "onDiscard": {
+            "type": "() => void",
+            "required": true
+          },
+          "onSave": {
+            "type": "() => void",
+            "required": true
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "saveLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"Save changes\""
+          },
+          "saving": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          }
+        },
         "usage": "Import { SaveBar } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4424,8 +6137,7 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
@@ -4436,17 +6148,36 @@
           "groups": "{ label: string; items: CommandItem[] }[]",
           "attribution": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "attribution": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "groups": {
+            "type": "{ label: string; items: CommandItem[]; }[]",
+            "required": true
+          },
+          "onClose": {
+            "type": "() => void",
+            "required": true
+          },
+          "onQueryChange": {
+            "type": "(value: string) => void",
+            "required": true
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "query": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { SearchDialog } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": ["mortar-command-palette"]
+        "dependencies": ["mortar-command-palette", "mortar-kbd"]
       },
       "preview": {
         "source": "previews/SearchDialogPreview.tsx"
@@ -4477,21 +6208,24 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
           "onOpen": "() => void",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Search docs\""
+          },
+          "onOpen": {
+            "type": "() => void",
+            "required": true
+          }
+        },
         "usage": "Import { SearchTrigger } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4537,13 +6271,34 @@
           "divider": "boolean",
           "tabs": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "divider": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
+          },
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "2"
+          },
+          "tabs": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { SectionHeading } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4572,7 +6327,7 @@
       "version": "0.5.0",
       "export": "Section",
       "source": "src/layout.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
@@ -4589,13 +6344,38 @@
           "align": "\"start\" | \"center\"",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "align": {
+            "type": "\"center\" | \"start\"",
+            "required": false,
+            "default": "\"start\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          },
+          "tone": {
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
+          }
+        },
         "usage": "Import { Section } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -4629,8 +6409,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -4639,13 +6418,24 @@
           "options": "{ value: string; label: string }[]",
           "onChange": "(value: string) => void"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "onChange": {
+            "type": "(value: string) => void",
+            "required": true
+          },
+          "options": {
+            "type": "{ value: string; label: string; }[]",
+            "required": true
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { SegmentedControl } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4686,8 +6476,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -4699,13 +6488,24 @@
           "error": "string",
           "id": "string (defaults to a generated id)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "hint": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "options": {
+            "type": "{ value: string; label: string; }[]",
+            "required": true
+          }
+        },
         "usage": "Import { Select } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4735,13 +6535,12 @@
       "version": "0.5.0",
       "export": "SettingsSection",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -4749,13 +6548,20 @@
           "description": "string",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { SettingsSection } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4802,17 +6608,48 @@
           "emptyDescription": "string",
           "emptyAction": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "emptyAction": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "emptyDescription": {
+            "type": "string",
+            "required": false,
+            "default": "\"Items you add will appear here.\""
+          },
+          "emptyTitle": {
+            "type": "string",
+            "required": false,
+            "default": "\"Your bag is empty\""
+          },
+          "items": {
+            "type": "CartItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Items in your bag\""
+          },
+          "maxQuantity": {
+            "type": "number",
+            "required": false,
+            "default": "8"
+          },
+          "onQuantityChange": {
+            "type": "(id: string, quantity: number) => void",
+            "required": true
+          },
+          "onRemove": {
+            "type": "(id: string) => void",
+            "required": true
+          }
+        },
         "usage": "Import { ShoppingCart } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-empty-state"]
       },
       "preview": {
         "source": "previews/ShoppingCartPreview.tsx"
@@ -4838,7 +6675,7 @@
       "version": "0.5.0",
       "export": "Sidebar",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application", "navigation"],
+      "capabilities": ["theme", "application", "navigation", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
@@ -4856,13 +6693,40 @@
           "footer": "ReactNode",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "brand": {
+            "type": "string",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "homeHref": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": false
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "navigation": {
+            "type": "NavigationItem[]",
+            "required": true
+          },
+          "sections": {
+            "type": "{ label: string; items: NavigationItem[]; }[]",
+            "required": false
+          },
+          "workspace": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { Sidebar } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -4911,17 +6775,51 @@
           "headingLevel": "1 | 2",
           "aside": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "aside": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "dividerLabel": {
+            "type": "string",
+            "required": false,
+            "default": "\"or\""
+          },
+          "email": {
+            "type": "{ onSubmit: (email: string) => void; label?: string | undefined; placeholder?: string | undefined; submitLabel?: string | undefined; status?: \"success\" | \"error\" | \"idle\" | \"submitting\" | undefined; message?: string | undefined; }",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2",
+            "required": false,
+            "default": "1"
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "providers": {
+            "type": "SignInProvider[]",
+            "required": false,
+            "default": "[]"
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { SignInPanel } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-button", "mortar-input"]
       },
       "preview": {
         "source": "previews/SignInPanelPreview.tsx"
@@ -4952,8 +6850,7 @@
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "59cc40c87590db0193cfd5e1ef60d47f5783df1f8713e81d51bfca082bb1fa93"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -4965,13 +6862,37 @@
           "actions": "ReactNode",
           "size": "md | lg | xl"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "onClose": {
+            "type": "() => void",
+            "required": true
+          },
+          "open": {
+            "type": "boolean",
+            "required": true
+          },
+          "size": {
+            "type": "\"lg\" | \"md\" | \"xl\"",
+            "required": false,
+            "default": "\"md\""
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { SlideOver } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5018,13 +6939,40 @@
           "wrap": "boolean",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "align": {
+            "type": "\"center\" | \"end\" | \"start\" | \"stretch\"",
+            "required": false
+          },
+          "as": {
+            "type": "ElementType",
+            "required": false,
+            "default": "\"div\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "direction": {
+            "type": "\"column\" | \"row\"",
+            "required": false,
+            "default": "\"column\""
+          },
+          "gap": {
+            "type": "\"lg\" | \"md\" | \"none\" | \"sm\" | \"xl\" | \"xs\"",
+            "required": false,
+            "default": "\"md\""
+          },
+          "justify": {
+            "type": "\"between\" | \"center\" | \"end\" | \"start\"",
+            "required": false
+          },
+          "wrap": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          }
+        },
         "usage": "Import { Stack } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5053,13 +7001,12 @@
       "version": "0.5.0",
       "export": "StackedList",
       "source": "src/workspace.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
         "kitId": "application",
-        "exampleId": "mortar-application-reference",
-        "sourceDigest": "59cc40c87590db0193cfd5e1ef60d47f5783df1f8713e81d51bfca082bb1fa93"
+        "exampleId": "mortar-application-reference"
       },
       "contract": {
         "props": {
@@ -5069,13 +7016,29 @@
           "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? })",
           "groups": "{ label: string; items: StackedListItem[] }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "groups": {
+            "type": "{ label: string; items: StackedListItem[]; }[]",
+            "required": false
+          },
+          "heading": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "items": {
+            "type": "StackedListItem[]",
+            "required": false,
+            "default": "[]"
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5108,8 +7071,8 @@
         "theme",
         "application",
         "navigation",
-        "responsive",
-        "keyboard"
+        "keyboard",
+        "responsive"
       ],
       "owner": "Mortar maintainers",
       "kitId": "application",
@@ -5128,17 +7091,45 @@
           "width": "\"md\" | \"lg\" | \"xl\" | \"full\"",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "actions": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "brand": {
+            "type": "string",
+            "required": true
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "header": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "homeHref": {
+            "type": "string",
+            "required": false
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "navigation": {
+            "type": "NavigationItem[]",
+            "required": true
+          },
+          "width": {
+            "type": "\"full\" | \"lg\" | \"md\" | \"xl\"",
+            "required": false,
+            "default": "\"lg\""
+          }
+        },
         "usage": "Import { StackedShell } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": ["mortar-navbar"]
       },
       "preview": {
         "source": "previews/StackedShellPreview.tsx"
@@ -5164,26 +7155,28 @@
       "version": "0.5.0",
       "export": "StatGroup",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
           "label": "string",
           "items": "{ value: string; label: string; description?: string }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "{ value: string; label: string; description?: string | undefined; }[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { StatGroup } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -5217,21 +7210,24 @@
       "kitId": "docs",
       "provenance": {
         "kitId": "docs",
-        "exampleId": "mortar-docs-reference",
-        "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
+        "exampleId": "mortar-docs-reference"
       },
       "contract": {
         "props": {
           "items": "{ title; id?; description?; content? }[]",
           "headingLevel": "2 | 3 | 4"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "headingLevel": {
+            "type": "2 | 3 | 4",
+            "required": false,
+            "default": "3"
+          },
+          "items": {
+            "type": "{ title: string; id?: string | undefined; description?: ReactNode; content?: ReactNode; }[]",
+            "required": true
+          }
+        },
         "usage": "Import { Steps } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5271,8 +7267,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -5281,13 +7276,16 @@
           "onChange": "ChangeEventHandler<HTMLInputElement>",
           "description": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { Switch } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5331,13 +7329,26 @@
           "variant": "\"underline\" | \"pills\"",
           "fullWidth": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "fullWidth": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "items": {
+            "type": "TabNavItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "variant": {
+            "type": "\"pills\" | \"underline\"",
+            "required": false,
+            "default": "\"underline\""
+          }
+        },
         "usage": "Import { TabNav } from @tony-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5366,7 +7377,7 @@
       "version": "0.5.0",
       "export": "Table",
       "source": "src/application.tsx",
-      "capabilities": ["theme", "application"],
+      "capabilities": ["theme", "application", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "application",
       "provenance": {
@@ -5383,13 +7394,40 @@
           "rowHeaders": "boolean",
           "striped": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "caption": {
+            "type": "string",
+            "required": true
+          },
+          "captionVisible": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "columns": {
+            "type": "{ key: string; label: string; align?: \"left\" | \"right\" | undefined; }[]",
+            "required": true
+          },
+          "groups": {
+            "type": "{ label: string; rows: Record<string, ReactNode>[]; }[]",
+            "required": false
+          },
+          "rowHeaders": {
+            "type": "boolean",
+            "required": false,
+            "default": "true"
+          },
+          "rows": {
+            "type": "Record<string, ReactNode>[]",
+            "required": false,
+            "default": "[]"
+          },
+          "striped": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          }
+        },
         "usage": "Import { Table } from @tony-ui/mortar. Pass groups to render each labelled group as its own tbody under a full-width header row (th scope=rowgroup); ungrouped rows render first. Use DataTable instead when rows need selection, sorting, links or loading states.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5423,8 +7461,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -5435,13 +7472,34 @@
           "variant": "\"underline\" | \"pills\"",
           "fullWidth": "boolean"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "fullWidth": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
+          "items": {
+            "type": "{ id: string; label: string; content: ReactNode; count?: string | number | undefined; icon?: ReactNode; }[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          },
+          "onChange": {
+            "type": "(value: string) => void",
+            "required": true
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          },
+          "variant": {
+            "type": "\"pills\" | \"underline\"",
+            "required": false,
+            "default": "\"underline\""
+          }
+        },
         "usage": "Import { Tabs } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5471,13 +7529,12 @@
       "version": "0.5.0",
       "export": "TeamGrid",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -5485,13 +7542,20 @@
           "description": "string",
           "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "members": {
+            "type": "{ name: string; role: string; image?: ReactNode; bio?: string | undefined; links?: IconLink[] | undefined; }[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -5520,26 +7584,28 @@
       "version": "0.5.0",
       "export": "TestimonialGrid",
       "source": "src/marketing-sections.tsx",
-      "capabilities": ["theme", "marketing"],
+      "capabilities": ["theme", "marketing", "responsive"],
       "owner": "Mortar maintainers",
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
           "title": "string",
           "items": "{ quote; name; role?; avatar? }[]"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "{ quote: string; name: string; role?: string | undefined; avatar?: string | undefined; }[]",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -5573,8 +7639,7 @@
       "kitId": "marketing",
       "provenance": {
         "kitId": "marketing",
-        "exampleId": "mortar-marketing-reference",
-        "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
+        "exampleId": "mortar-marketing-reference"
       },
       "contract": {
         "props": {
@@ -5584,13 +7649,28 @@
           "logo": "ReactNode",
           "avatar": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "avatar": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "logo": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "quote": {
+            "type": "string",
+            "required": true
+          },
+          "role": {
+            "type": "string",
+            "required": false
+          }
+        },
         "usage": "Import { Testimonial } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -5630,8 +7710,7 @@
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -5642,13 +7721,20 @@
           "error": "string",
           "id": "string (defaults to a generated id)"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "error": {
+            "type": "string",
+            "required": false
+          },
+          "hint": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": true
+          }
+        },
         "usage": "Import { TextArea } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5693,13 +7779,32 @@
           "weight": "\"regular\" | \"medium\" | \"semibold\"",
           "children": "ReactNode"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "as": {
+            "type": "ElementType",
+            "required": false,
+            "default": "\"p\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "size": {
+            "type": "\"lg\" | \"md\" | \"sm\"",
+            "required": false,
+            "default": "\"md\""
+          },
+          "tone": {
+            "type": "\"default\" | \"muted\" | \"secondary\"",
+            "required": false,
+            "default": "\"default\""
+          },
+          "weight": {
+            "type": "\"medium\" | \"regular\" | \"semibold\"",
+            "required": false,
+            "default": "\"regular\""
+          }
+        },
         "usage": "Import { Text } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5728,13 +7833,12 @@
       "version": "0.5.0",
       "export": "ThemeProvider",
       "source": "src/foundation.tsx",
-      "capabilities": ["theme", "foundation"],
+      "capabilities": ["theme", "foundation", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -5742,18 +7846,49 @@
           "initialAppearance": "light | dark | system",
           "brand": "neutral | green",
           "density": "compact | comfortable | spacious",
-          "appearance": "Optional controlled light | dark | system",
+          "appearance": "\"light\" | \"dark\" | \"system\" (optional; controlled together with onAppearanceChange)",
           "onAppearanceChange": "(appearance: Appearance) => void",
           "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation.",
           "scope": "\"document\" | \"container\""
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "appearance": {
+            "type": "\"dark\" | \"light\" | \"system\"",
+            "required": false
+          },
+          "brand": {
+            "type": "\"green\" | \"neutral\"",
+            "required": false,
+            "default": "\"neutral\""
+          },
+          "children": {
+            "type": "ReactNode",
+            "required": true
+          },
+          "density": {
+            "type": "\"comfortable\" | \"compact\" | \"spacious\"",
+            "required": false,
+            "default": "\"comfortable\""
+          },
+          "initialAppearance": {
+            "type": "\"dark\" | \"light\" | \"system\"",
+            "required": false,
+            "default": "\"system\""
+          },
+          "navigate": {
+            "type": "Navigate",
+            "required": false
+          },
+          "onAppearanceChange": {
+            "type": "(value: Appearance) => void",
+            "required": false
+          },
+          "scope": {
+            "type": "\"container\" | \"document\"",
+            "required": false,
+            "default": "\"document\""
+          }
+        },
         "usage": "Import { ThemeProvider } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5783,31 +7918,54 @@
       "version": "0.5.0",
       "export": "Toast",
       "source": "src/feedback.tsx",
-      "capabilities": ["theme", "foundation"],
+      "capabilities": ["theme", "foundation", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
           "title": "string",
           "description": "string",
-          "tone": "Tone",
+          "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (Tone; default \"neutral\")",
           "action": "{ label: string; onClick: () => void }",
           "onDismiss": "() => void",
           "leading": "ReactNode",
           "secondaryAction": "{ label: string; onClick: () => void }"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "action": {
+            "type": "{ label: string; onClick: () => void; }",
+            "required": false
+          },
+          "description": {
+            "type": "string",
+            "required": false
+          },
+          "leading": {
+            "type": "ReactNode",
+            "required": false
+          },
+          "onDismiss": {
+            "type": "() => void",
+            "required": false
+          },
+          "secondaryAction": {
+            "type": "{ label: string; onClick: () => void; }",
+            "required": false
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "tone": {
+            "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+            "required": false,
+            "default": "\"neutral\""
+          }
+        },
         "usage": "Import { Toast } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -5837,13 +7995,12 @@
       "version": "0.5.0",
       "export": "Toaster",
       "source": "src/feedback.tsx",
-      "capabilities": ["theme", "foundation"],
+      "capabilities": ["theme", "foundation", "keyboard"],
       "owner": "Mortar maintainers",
       "kitId": "foundation",
       "provenance": {
         "kitId": "foundation",
-        "exampleId": "mortar-foundation-reference",
-        "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
+        "exampleId": "mortar-foundation-reference"
       },
       "contract": {
         "props": {
@@ -5851,13 +8008,21 @@
           "onDismiss": "(id: string) => void",
           "label": "string"
         },
-        "states": [
-          "Light",
-          "Dark",
-          "Neutral brand",
-          "Green brand",
-          "Keyboard and focus"
-        ],
+        "propTypes": {
+          "items": {
+            "type": "ToastItem[]",
+            "required": true
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Notifications\""
+          },
+          "onDismiss": {
+            "type": "(id: string) => void",
+            "required": true
+          }
+        },
         "usage": "Import { Toaster } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",

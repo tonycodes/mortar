@@ -7,13 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "SignInPanel",
   "source": "src/application.tsx",
-  "capabilities": ["theme", "application", "action", "keyboard"],
+  "capabilities": ["action"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "title": "string",
@@ -26,17 +22,10 @@
       "headingLevel": "1 | 2",
       "aside": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { SignInPanel } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-button", "mortar-input"]
   },
   "preview": {
     "source": "previews/SignInPanelPreview.tsx"

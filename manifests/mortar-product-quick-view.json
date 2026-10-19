@@ -7,32 +7,37 @@
   "package": "@tony-ui/mortar",
   "export": "ProductQuickView",
   "source": "src/ecommerce.tsx",
-  "capabilities": ["theme", "ecommerce", "keyboard"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "ecommerce",
-  "provenance": {
-    "kitId": "ecommerce",
-    "exampleId": "mortar-ecommerce-reference"
-  },
   "contract": {
     "props": {
       "open": "boolean",
       "onClose": "() => void",
       "href": "string",
       "detailsLabel": "string",
-      "…ProductOverview props": "name, price, images, options, selected, onSelect, onAdd and the rest (not headingLevel or hideName)"
+      "name": "string",
+      "price": "string",
+      "description": "ReactNode",
+      "images": "{ src: string; alt: string }[]",
+      "rating": "{ value: number; count: number; href?: string }",
+      "options": "ProductOption[] ({ id: string; label: string; values: { value: string; label: string; swatch?: string; disabled?: boolean }[] })",
+      "selected": "Record<string, string>",
+      "onSelect": "(option: string, value: string) => void",
+      "onAdd": "() => void",
+      "addLabel": "string",
+      "adding": "boolean",
+      "details": "string[]",
+      "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { ProductQuickView } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": [
+      "mortar-action-link",
+      "mortar-modal",
+      "mortar-product-overview"
+    ]
   },
   "preview": {
     "source": "previews/ProductQuickViewPreview.tsx"

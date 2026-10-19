@@ -7,13 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "OrderHistory",
   "source": "src/ecommerce.tsx",
-  "capabilities": ["theme", "ecommerce", "responsive"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "ecommerce",
-  "provenance": {
-    "kitId": "ecommerce",
-    "exampleId": "mortar-ecommerce-reference"
-  },
   "contract": {
     "props": {
       "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
@@ -21,17 +17,10 @@
       "emptyTitle": "string",
       "emptyDescription": "string"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-empty-state"]
   },
   "preview": {
     "source": "previews/OrderHistoryPreview.tsx"

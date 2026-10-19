@@ -7,14 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "FilterChip",
   "source": "src/display.tsx",
-  "capabilities": ["theme", "foundation", "keyboard"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference",
-    "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
-  },
   "contract": {
     "props": {
       "label": "ReactNode",
@@ -22,13 +17,6 @@
       "onClick": "() => void",
       "onRemove": "() => void"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { FilterChip } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",

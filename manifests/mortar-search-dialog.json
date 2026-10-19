@@ -7,14 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "SearchDialog",
   "source": "src/docs.tsx",
-  "capabilities": ["theme", "docs", "keyboard"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "docs",
-  "provenance": {
-    "kitId": "docs",
-    "exampleId": "mortar-docs-reference",
-    "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
-  },
   "contract": {
     "props": {
       "open": "boolean",
@@ -24,17 +19,10 @@
       "groups": "{ label: string; items: CommandItem[] }[]",
       "attribution": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { SearchDialog } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": ["mortar-command-palette"]
+    "dependencies": ["mortar-command-palette", "mortar-kbd"]
   },
   "preview": {
     "source": "previews/SearchDialogPreview.tsx"
