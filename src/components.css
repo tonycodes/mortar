@@ -30,7 +30,8 @@
     outline: 2px solid var(--m-focus);
     outline-offset: 3px;
   }
-  [data-mortar] a {
+  /* Zero-specificity host so any component class can set a link's colour. */
+  :where([data-mortar]) a {
     color: var(--m-link);
   }
   [data-mortar] :where(h1, h2, h3, p, figure, dl) {
@@ -53,7 +54,7 @@
   }
   .m-button-primary {
     background: var(--m-primary);
-    color: var(--m-on-primary) !important;
+    color: var(--m-on-primary);
     border-color: var(--m-primary);
   }
   .m-button-primary:hover {
@@ -88,7 +89,7 @@
   }
   .m-button:disabled {
     background: var(--m-sunken);
-    color: var(--m-muted) !important;
+    color: var(--m-muted);
     border: 1px dashed var(--m-line-strong);
     cursor: not-allowed;
   }
@@ -152,9 +153,11 @@
   .m-field [aria-invalid="true"] {
     border-color: var(--m-danger);
   }
+  .m-field select {
+    min-height: var(--m-control);
+  }
   .m-field select,
   .m-field textarea {
-    min-height: var(--m-control);
     padding: 6px var(--m-pad);
     border: 1px solid var(--m-line-strong);
     border-radius: var(--m-radius);
@@ -365,7 +368,7 @@
     color: var(--m-link);
     border-bottom-color: var(--m-link);
   }
-  [role="tabpanel"]:not([hidden]) {
+  :where(.m-tabs) ~ [role="tabpanel"]:not([hidden]) {
     padding-top: 24px;
   }
   .m-notice {
@@ -443,24 +446,6 @@
     background: var(--m-surface);
     box-shadow: var(--m-float);
     --anchor-gap: 6px;
-  }
-  .m-menu button {
-    display: block;
-    width: 100%;
-    text-align: left;
-    border: 0;
-    background: none;
-    padding: 8px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .m-menu button[data-focus] {
-    background: var(--m-selected);
-  }
-  .m-menu button[data-disabled] {
-    color: var(--m-muted);
-    cursor: not-allowed;
   }
   .m-actions {
     display: flex;
@@ -664,7 +649,7 @@
   .m-eyebrow {
     font: 12px var(--m-mono);
     color: var(--m-muted);
-    margin-bottom: 16px !important;
+    margin-bottom: 16px;
   }
   .m-metrics {
     display: grid;
@@ -748,6 +733,10 @@
   .m-data-table [data-selected] {
     background: var(--m-selected);
   }
+  /* --m-selected is close to --m-sunken, so selection also gets a non-colour cue. */
+  .m-data-table tr[data-selected] > :first-child {
+    box-shadow: inset 3px 0 0 var(--m-primary);
+  }
   .m-table-state {
     padding: 32px;
     color: var(--m-muted);
@@ -768,11 +757,11 @@
     border-bottom: 1px solid var(--m-line);
     padding: 28px 0;
   }
-  .m-settings-section h2 {
+  .m-settings-section > :where(div:first-child) > h2 {
     font-size: 16px;
     font-weight: 600;
   }
-  .m-settings-section p {
+  .m-settings-section > :where(div:first-child) > p {
     margin-top: 6px;
     font-size: 13px;
     color: var(--m-muted);
@@ -857,7 +846,7 @@
     color: var(--m-secondary);
     font-size: 18px;
     max-width: 660px;
-    margin: 28px auto !important;
+    margin: 28px auto;
     text-wrap: pretty;
   }
   .m-hero-center .m-actions {
@@ -889,7 +878,16 @@
     padding: 80px 32px;
     border-top: 1px solid var(--m-line);
   }
-  :is(.m-marketing-section, .m-feature-section, .m-faq, .m-cta) h2 {
+  /* Section titles only: slot content keeps its own heading styles. */
+  :is(
+      .m-marketing-section,
+      .m-cta,
+      .m-cta-copy,
+      .m-content-copy,
+      :where(.m-faq, .m-feature-section, .m-section-heading-row)
+        > :where(div:first-child)
+    )
+    > h2 {
     font-size: clamp(30px, 3.5vw, 48px);
     font-weight: 600;
     letter-spacing: -0.035em;
@@ -900,7 +898,7 @@
   .m-section-description {
     color: var(--m-secondary);
     font-size: 16px;
-    margin-top: 18px !important;
+    margin-top: 18px;
     max-width: 640px;
   }
   .m-feature-grid {
@@ -924,7 +922,7 @@
     font-weight: 600;
   }
   .m-feature-grid p,
-  .m-feature-section p {
+  .m-feature-section > :where(div:first-child) > p:where(:not([class])) {
     color: var(--m-secondary);
     font-size: 15px;
     margin-top: 10px;
@@ -1097,10 +1095,10 @@
     color: var(--m-ink);
     padding: 96px 32px;
   }
-  .m-cta h2 {
+  :is(.m-cta, .m-cta-copy) > h2 {
     margin: auto;
   }
-  .m-cta p {
+  :is(.m-cta, .m-cta-copy) > p {
     margin: 20px auto;
     max-width: 640px;
   }
@@ -1244,12 +1242,45 @@
       font-size: 24px;
     }
   }
+  /* One reduced-motion rule covers every Mortar element, its content and pseudo-elements. */
   @media (prefers-reduced-motion: reduce) {
-    .m-spinner {
-      animation: none;
+    :where([data-mortar], [class^="m-"], [class*=" m-"]),
+    :where([data-mortar], [class^="m-"], [class*=" m-"]) *,
+    :where([data-mortar], [class^="m-"], [class*=" m-"]) ::before,
+    :where([data-mortar], [class^="m-"], [class*=" m-"]) ::after,
+    :where([class^="m-"], [class*=" m-"])::before,
+    :where([class^="m-"], [class*=" m-"])::after {
+      animation: none !important;
+      transition: none !important;
     }
-    .m-switch::after {
-      transition: none;
+  }
+  /* Forced colours drop backgrounds and shadows, so selected and current states
+     use system highlight colours (and today's date an outline) instead. */
+  @media (forced-colors: active) {
+    :where([data-mortar], [class^="m-"], [class*=" m-"])
+      :is(
+        button[aria-pressed="true"],
+        [role="tab"][aria-selected="true"],
+        [role="option"][aria-selected="true"],
+        .m-pagination-pages [aria-current],
+        .m-chip[data-selected],
+        .m-calendar td[aria-selected="true"] > button,
+        .m-calendar-column h3[aria-current="date"] strong,
+        .m-data-table tr[data-selected] > *,
+        .m-progress-steps [data-status="current"] .m-progress-step-marker
+      ),
+    :where([data-mortar], [class^="m-"], [class*=" m-"])
+      :is(nav, [role="navigation"])
+      a[aria-current]:not([aria-current="false"]) {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+      border-color: Highlight;
+    }
+    :where([data-mortar], [class^="m-"], [class*=" m-"])
+      :is(.m-calendar [aria-current="date"], .m-radio-card:has(:checked)) {
+      outline: 2px solid CanvasText;
+      outline-offset: -2px;
     }
   }
   @media (pointer: coarse) {
