@@ -5676,26 +5676,16 @@
     flex: 1;
   }
 
-  /* Flyout: two columns, or a panel spanning the header. */
+  /* Flyout: two columns, or a panel as wide as the viewport allows. The
+     anchor keeps it inside the viewport padding. */
   .m-flyout-panel[data-layout="columns"] {
     width: min(640px, calc(100vw - 32px));
   }
   .m-flyout-panel[data-layout="columns"] ul {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .m-flyout[data-layout="full"] {
-    position: static;
-  }
-  .m-marketing-header:has(.m-flyout[data-layout="full"]) {
-    position: relative;
-  }
   .m-flyout-panel[data-layout="full"] {
-    position: absolute;
-    top: 100%;
-    inset-inline: 0;
-    width: auto;
-    margin-top: 1px;
-    border-radius: 0 0 var(--m-radius-lg) var(--m-radius-lg);
+    width: min(1248px, calc(100vw - 32px));
   }
   .m-flyout-panel[data-layout="full"] ul {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
@@ -5856,6 +5846,7 @@
   .m-contact:not([data-media]):not(:has(.m-contact-form)) > .m-contact-offices {
     grid-column: 2;
     grid-row: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-self: start;
     padding-top: 0;
     border-top: 0;
@@ -5958,6 +5949,16 @@
   }
 
   @media (max-width: 900px) {
+    /* Menu, brand and actions keep one row; the brand takes the spare width. */
+    .m-marketing-header[data-layout="center"] {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+    .m-marketing-header[data-layout="center"] > .m-brand {
+      justify-self: center;
+    }
+    .m-marketing-header[data-layout="center"] > .m-actions .m-button {
+      white-space: nowrap;
+    }
     .m-marketing-header[data-layout="center"] > .m-menu-trigger {
       grid-column: 1;
       grid-row: 1;
@@ -5967,11 +5968,6 @@
     .m-marketing-header[data-layout="center"] > nav {
       grid-column: 1 / -1;
       grid-row: 2;
-    }
-    .m-flyout-panel[data-layout="full"] {
-      position: static;
-      margin-top: 8px;
-      border-radius: var(--m-radius-lg);
     }
     .m-contact[data-media="true"] {
       grid-template-columns: minmax(0, 1fr);
@@ -6000,6 +5996,11 @@
   }
   @media (max-width: 560px) {
     .m-flyout-panel[data-layout="columns"] ul {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-contact-offices,
+    .m-contact:not([data-media]):not(:has(.m-contact-form))
+      > .m-contact-offices {
       grid-template-columns: minmax(0, 1fr);
     }
     .m-newsletter[data-variant="panel"] {

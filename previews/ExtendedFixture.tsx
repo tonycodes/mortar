@@ -586,7 +586,7 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "TestimonialGrid":
       example = (
-        <>
+        <div>
           <UI.TestimonialGrid
             title="Teams ship faster"
             items={[
@@ -660,7 +660,7 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
-        </>
+        </div>
       );
       break;
     case "PlanComparison":
@@ -683,7 +683,7 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "PostList":
       example = (
-        <>
+        <div>
           <UI.PostList
             title="From the blog"
             action={action}
@@ -733,12 +733,12 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
-        </>
+        </div>
       );
       break;
     case "TeamGrid":
       example = (
-        <>
+        <div>
           <UI.TeamGrid
             title="The people behind the product"
             members={[
@@ -810,12 +810,12 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
-        </>
+        </div>
       );
       break;
     case "ContactSection":
       example = (
-        <>
+        <div>
           <UI.ContactSection
             title="Talk to sales"
             description="We reply within one business day."
@@ -883,12 +883,12 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
-        </>
+        </div>
       );
       break;
     case "Newsletter":
       example = (
-        <>
+        <div>
           <UI.Newsletter
             title="Product updates, monthly"
             description="No spam."
@@ -905,7 +905,7 @@ export function ExtendedCase({ name }: { name: string }) {
             submitLabel="Send me the lessons"
             onSubmit={() => undefined}
           />
-        </>
+        </div>
       );
       break;
     case "NotFound":

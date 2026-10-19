@@ -746,14 +746,15 @@ export const implementations = {
       );
       expect(links.x + links.width).toBeLessThanOrEqual(brand.x);
       expect(brand.x + brand.width).toBeLessThanOrEqual(actions.x);
-      // A full-width flyout spans the header; a two-column one lays out in two columns.
+      // A full-width flyout spans the viewport less its padding; a two-column one lays out in two columns.
       const solutions = atlas.getByRole("button", { name: "Solutions" });
       await solutions.click();
       const full = page.locator('.m-flyout-panel[data-layout="full"]');
       await expect(full.getByRole("link", { name: /Retail/ })).toBeVisible();
-      const header = await atlas.boundingBox();
       const fullBox = await full.boundingBox();
-      expect(Math.abs(fullBox.width - header.width)).toBeLessThanOrEqual(2);
+      expect(fullBox.width).toBeGreaterThanOrEqual(1240);
+      expect(fullBox.x).toBeGreaterThanOrEqual(0);
+      expect(fullBox.x + fullBox.width).toBeLessThanOrEqual(1280);
       await expect(
         full.getByRole("link", { name: "Book a demo" }),
       ).toBeVisible();

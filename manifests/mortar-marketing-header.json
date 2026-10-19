@@ -14,7 +14,7 @@
     "props": {
       "brand": "string",
       "homeHref": "string",
-      "links": "HeaderLink[] (LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[]; layout?: \"list\" | \"columns\" | \"full\" }; a group's layout picks its flyout: list (default) one column, columns a wider two-column panel, full a panel spanning the header with up to four columns; footer is a row of actions under the items)",
+      "links": "HeaderLink[] (LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[]; layout?: \"list\" | \"columns\" | \"full\" }; a group's layout picks its flyout: list (default) one column, columns a wider two-column panel, full a panel as wide as the viewport allows (up to 1248px) with up to four columns; footer is a row of actions under the items)",
       "action": "LinkAction",
       "controls": "ReactNode",
       "layout": "\"inline\" | \"center\" (default \"inline\"; center puts the links at the start, the brand in the middle and the actions at the end, in that DOM order)",

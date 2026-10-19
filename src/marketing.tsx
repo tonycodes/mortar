@@ -39,7 +39,7 @@ export type HeaderLink =
   | LinkAction
   | (ItemGroup<FlyoutItem> & {
       footer?: LinkAction[];
-      /** list: one column. columns: a wider panel in two columns. full: spans the header's width, up to four columns. */
+      /** list: one column. columns: a wider panel in two columns. full: as wide as the viewport allows, up to four columns. */
       layout?: "list" | "columns" | "full";
     });
 
@@ -56,7 +56,6 @@ function Flyout({
   layout?: "list" | "columns" | "full";
   onNavigate: () => void;
 }) {
-  const full = layout === "full";
   const dataLayout = layout === "list" ? undefined : layout;
   return (
     <Popover className="m-flyout" data-layout={dataLayout}>
@@ -64,10 +63,9 @@ function Flyout({
         {label}
         <ChevronDown />
       </PopoverButton>
-      {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off.
-          A full-width panel stays in place so it can span the header. */}
+      {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off. */}
       <PopoverPanel
-        anchor={full ? undefined : "bottom"}
+        anchor="bottom"
         className="m-flyout-panel"
         data-layout={dataLayout}
       >
