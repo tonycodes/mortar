@@ -5,7 +5,6 @@
   "description": "Mortar documentation file tree, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "FileTree",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -40,9 +39,5 @@
     "profile": "display",
     "target": ".m-file-tree",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "e5e71083d63be7a5baefea9f8c5ab0137cc09e4b7e271008b9118692632efced"
   }
 }

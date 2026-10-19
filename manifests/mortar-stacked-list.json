@@ -5,7 +5,6 @@
   "description": "Mortar application stacked list, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "StackedList",
   "source": "src/workspace.tsx",
   "capabilities": ["theme", "application"],
@@ -43,9 +42,5 @@
     "profile": "composite",
     "target": ".m-stacked-list",
     "states": []
-  },
-  "integrity": {
-    "source": "9b9b2c3606dfaac2258b62f607fd2b2e9293a803b620228153403e94ab7dc572",
-    "preview": "eca996b7e84171cd48af0f5285c8ec6c0ffa7125e1a7b6da384d91ba3ded647d"
   }
 }

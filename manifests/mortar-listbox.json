@@ -5,7 +5,6 @@
   "description": "Mortar listbox: a styled single select for rich options with avatars, descriptions and disabled items. Use Select for plain native choices.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Listbox",
   "source": "src/choice.tsx",
   "capabilities": ["theme", "foundation", "form", "keyboard"],
@@ -46,9 +45,5 @@
     "target": ".m-choice-control",
     "probe": "listbox",
     "states": ["disabled", "error", "long"]
-  },
-  "integrity": {
-    "source": "a7163337c561b8d45c09171efac49fea80cbc2b4cc29ac7881c5d88ce4e874b2",
-    "preview": "a65446779030e57b25158aa345ca845e2452e9531083bbd43629885ab046c685"
   }
 }

@@ -5,7 +5,6 @@
   "description": "Mortar product filters: collapsible checkbox facets with counts and removable chips for active filters, with Clear all.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ProductFilters",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce", "keyboard"],
@@ -42,9 +41,5 @@
     "target": ".m-filters",
     "probe": "filters",
     "states": []
-  },
-  "integrity": {
-    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
-    "preview": "ce09ded5cd69e3dce5e0d6865f5421c4a549ea0f2264128ac6ec5657d80e3812"
   }
 }

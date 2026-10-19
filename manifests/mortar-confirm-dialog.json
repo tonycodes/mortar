@@ -5,7 +5,6 @@
   "description": "Mortar application confirm dialog, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ConfirmDialog",
   "source": "src/feedback.tsx",
   "capabilities": ["theme", "application", "keyboard"],
@@ -49,9 +48,5 @@
     "target": ".m-button",
     "states": ["loading", "long"],
     "probe": "dialog"
-  },
-  "integrity": {
-    "source": "41a2586daf5cd116d707ebb0ab9f89744b62b614ffc44819a036f2415669a5ff",
-    "preview": "f7525552562d89995ef9f6e57c3776e4fd2265deaff938f6d5125d567efe7873"
   }
 }

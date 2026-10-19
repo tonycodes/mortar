@@ -5,7 +5,6 @@
   "description": "Mortar order summary: cost lines, a distinguished total and a checkout action.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "OrderSummary",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce"],
@@ -43,9 +42,5 @@
     "profile": "display",
     "target": ".m-order-summary",
     "states": []
-  },
-  "integrity": {
-    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
-    "preview": "2682e0b20f4396e5801f3b9af5409cc6e95fd239d743880c10b1a0188907f957"
   }
 }

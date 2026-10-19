@@ -5,7 +5,6 @@
   "description": "Mortar marketing testimonial, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Testimonial",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -43,9 +42,5 @@
     "profile": "display",
     "target": ".m-testimonial",
     "states": []
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "cdfc81b8853c12ec7be827cbb152806493ddc885574fe9f40b7d77e28661ee64"
   }
 }

@@ -14,3 +14,6 @@ visual-candidates/
 playground-production/
 release.tar.gz
 __pycache__/
+
+# Agent worktrees
+.claude/worktrees/

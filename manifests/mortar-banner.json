@@ -5,7 +5,6 @@
   "description": "Mortar banner: a site-wide announcement bar with an optional link and dismiss button, in inverse or neutral tone.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Banner",
   "source": "src/feedback.tsx",
   "capabilities": ["theme", "marketing", "keyboard"],
@@ -44,9 +43,5 @@
     "target": ".m-banner",
     "probe": "banner",
     "states": []
-  },
-  "integrity": {
-    "source": "41a2586daf5cd116d707ebb0ab9f89744b62b614ffc44819a036f2415669a5ff",
-    "preview": "ca9e6f48021ff33ec7f762a74db1e5a011cc10ccccde30d5268934dadaae25ef"
   }
 }

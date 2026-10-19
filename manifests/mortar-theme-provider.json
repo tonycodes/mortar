@@ -5,7 +5,6 @@
   "description": "Mortar foundation theme provider, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ThemeProvider",
   "source": "src/foundation.tsx",
   "capabilities": ["theme", "foundation"],
@@ -47,9 +46,5 @@
     "target": ".m-segmented",
     "states": ["scope-container"],
     "probe": "appearance"
-  },
-  "integrity": {
-    "source": "570f3a8aed00037781506d8d6767efd0a7d42e68c9286753ced70b25199ab72d",
-    "preview": "3d10af21e1fe5994d728cb606b81e875dd7fa4baf7c71b6b943b5d1596104b46"
   }
 }

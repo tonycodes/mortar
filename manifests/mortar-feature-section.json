@@ -5,7 +5,6 @@
   "description": "Mortar marketing feature section, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "FeatureSection",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -47,9 +46,5 @@
     "profile": "composite",
     "target": ".m-feature-section",
     "states": []
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "4672b7e0c7544bb9d9a9fbaab82d756b41d93530b16d85089b199f5d4f83df39"
   }
 }

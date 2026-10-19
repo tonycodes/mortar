@@ -5,7 +5,6 @@
   "description": "Mortar marketing logo cloud, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "LogoCloud",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -44,9 +43,5 @@
     "profile": "composite",
     "target": ".m-logo-cloud",
     "states": []
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "e16e0db2077b4a4bc54961eb7fc58541f70623d2f4a20d60b4b033a7c92f3f8c"
   }
 }

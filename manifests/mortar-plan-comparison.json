@@ -5,7 +5,6 @@
   "description": "Mortar marketing plan comparison, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "PlanComparison",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing", "keyboard"],
@@ -43,9 +42,5 @@
     "profile": "composite",
     "target": ".m-comparison",
     "states": []
-  },
-  "integrity": {
-    "source": "9ba2f1ba84a31ab8cb6520ee9bada8c7546dda523828b73899b4d519d7110964",
-    "preview": "cee74983ee664c740e29c3663bef24518cd54405d7e044ecb5a00c776c34b2a0"
   }
 }

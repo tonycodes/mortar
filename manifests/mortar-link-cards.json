@@ -5,7 +5,6 @@
   "description": "Mortar documentation link cards, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "LinkCards",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -39,9 +38,5 @@
     "profile": "composite",
     "target": ".m-link-cards",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "3ae4904218887d2cde7c9e54381fb2790f07bd7215d4cf84a17d916a5fafa2e5"
   }
 }

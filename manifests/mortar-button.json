@@ -5,7 +5,6 @@
   "description": "Mortar foundation button, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Button",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "action", "keyboard"],
@@ -50,9 +49,5 @@
     "target": ".m-button",
     "states": ["disabled", "loading"],
     "probe": "button"
-  },
-  "integrity": {
-    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
-    "preview": "c4c16aa52c331085579d085ac49458c0022adb22f0876044f170cb60f9330d2d"
   }
 }

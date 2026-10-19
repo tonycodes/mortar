@@ -5,7 +5,6 @@
   "description": "Mortar foundation radio group, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "RadioGroup",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
@@ -45,9 +44,5 @@
     "target": ".m-radio-group",
     "states": [],
     "probe": "radio"
-  },
-  "integrity": {
-    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
-    "preview": "99df5b1769388eb38e893557229841095b6f9897e0d07c0378b19b386965b66d"
   }
 }

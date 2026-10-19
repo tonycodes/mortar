@@ -5,7 +5,6 @@
   "description": "Mortar foundation appearance control, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "AppearanceControl",
   "source": "src/foundation.tsx",
   "capabilities": ["theme", "foundation"],
@@ -41,9 +40,5 @@
     "target": ".m-segmented",
     "states": ["controlled"],
     "probe": "appearance"
-  },
-  "integrity": {
-    "source": "570f3a8aed00037781506d8d6767efd0a7d42e68c9286753ced70b25199ab72d",
-    "preview": "c47f6131d832661699b5af3b889803bb47c72cf06da653b3513b0a5e2d93bb70"
   }
 }

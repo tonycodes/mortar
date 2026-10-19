@@ -11,7 +11,7 @@ npm run test:browser
 npm run test:visual
 ```
 
-`npm run catalog` refreshes the catalogue and separate source/preview integrity hashes. The hashes cover local import closures; source identity also includes shared styles. They identify changes, not approval or a security signature. Formatting source after regeneration requires regenerating again. `npm run check` never rewrites the catalogue: drift fails M007/M008.
+`npm run catalog` refreshes the catalogue, stamping each entry with the package version and separate source/preview integrity hashes. Manifests hold only the hand-written contract, so shared changes no longer rewrite them. The hashes cover local import closures; source identity also includes shared styles. They identify changes, not approval or a security signature. Formatting source after regeneration requires regenerating again. `npm run check` never rewrites the catalogue: drift fails M007/M008.
 
 ## Every component
 

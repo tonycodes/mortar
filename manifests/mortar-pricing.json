@@ -5,7 +5,6 @@
   "description": "Mortar marketing pricing, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Pricing",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -46,9 +45,5 @@
     "target": ".m-pricing",
     "states": ["surface", "inverse", "coming-soon"],
     "probe": "pricing"
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "1bdc4e014a21feff99a9aa22e071316698992a6f1c3f488c6632c210059d39bb"
   }
 }

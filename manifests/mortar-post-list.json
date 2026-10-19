@@ -5,7 +5,6 @@
   "description": "Mortar marketing post list, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "PostList",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -42,9 +41,5 @@
     "profile": "composite",
     "target": ".m-post-list",
     "states": []
-  },
-  "integrity": {
-    "source": "9ba2f1ba84a31ab8cb6520ee9bada8c7546dda523828b73899b4d519d7110964",
-    "preview": "2496aa4e0c58b101603f3b42146ff39f439553ea5b16a44feaa534ceb4e7e0b7"
   }
 }

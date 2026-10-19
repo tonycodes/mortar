@@ -5,7 +5,6 @@
   "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions; empty state when there are none.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "OrderHistory",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce", "responsive"],
@@ -41,9 +40,5 @@
     "profile": "composite",
     "target": ".m-order-history",
     "states": ["empty"]
-  },
-  "integrity": {
-    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
-    "preview": "b182fa18011402cf11e3b87c911ed3a8ee0f01f30d94d78b4e51cd9b8e878bd5"
   }
 }

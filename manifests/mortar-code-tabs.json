@@ -5,7 +5,6 @@
   "description": "Mortar documentation code tabs, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "CodeTabs",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs", "keyboard"],
@@ -45,9 +44,5 @@
     "target": ".m-code-tabs",
     "states": [],
     "probe": "code-tabs"
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "c5f0925fd18320bc9a7c6b7efc26873879e215c791021c9039b8bbc1b3d62724"
   }
 }

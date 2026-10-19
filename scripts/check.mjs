@@ -239,20 +239,28 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       )
       .digest("hex");
   }
-  if (!findings.some((f) => f.rule === "M002")) {
-    for (const c of manifests) {
-      try {
-        const integrity = {
-          source: await digest(c.source, true),
-          preview: await digest(c.preview.source),
-        };
-        if (refresh) c.integrity = integrity;
-        else if (JSON.stringify(c.integrity) !== JSON.stringify(integrity))
+  // Manifests hold the hand-written contract only. The package version and the
+  // fingerprints are generated into the catalogue, so a shared change never
+  // rewrites every manifest.
+  for (const c of manifests)
+    for (const field of ["version", "integrity"])
+      if (field in c) {
+        if (refresh) delete c[field];
+        else
           add(
             "M007",
             `manifests/${c.id}.json`,
-            "Source or preview fingerprint is stale. Run npm run catalog and review the changed content.",
+            `"${field}" is generated into catalog.json; remove it from the manifest.`,
           );
+      }
+  const fingerprints = new Map();
+  if (!findings.some((f) => f.rule === "M002")) {
+    for (const c of manifests) {
+      try {
+        fingerprints.set(c.id, {
+          source: await digest(c.source, true),
+          preview: await digest(c.preview.source),
+        });
       } catch {
         add(
           "M007",
@@ -299,13 +307,22 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
           line,
         );
   }
+  const components = manifests.map((c) => {
+    const entry = {};
+    for (const [key, value] of Object.entries(c)) {
+      entry[key] = value;
+      if (key === "package") entry.version = pkg.version;
+    }
+    entry.integrity = fingerprints.get(c.id);
+    return entry;
+  });
   const catalog = {
     schemaVersion: 1,
     package: pkg.name,
     version: pkg.version,
     policyVersion: policy.version,
     tokens,
-    components: manifests,
+    components,
   };
   if (refresh && findings.length === 0) {
     for (const c of manifests)
@@ -318,19 +335,41 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       await format(JSON.stringify(catalog, null, 2), { parser: "json" }),
     );
   } else if (!refresh) {
+    let stored;
     try {
-      if (
-        JSON.stringify(
-          JSON.parse(await readFile(resolve(root, "catalog.json"), "utf8")),
-        ) !== JSON.stringify(catalog)
-      )
+      stored = JSON.parse(
+        await readFile(resolve(root, "catalog.json"), "utf8"),
+      );
+    } catch {
+      add("M008", "catalog.json", "Missing or invalid catalogue.");
+    }
+    if (stored) {
+      const previous = new Map(
+        (stored.components || []).map((c) => [c.id, c.integrity]),
+      );
+      for (const c of components)
+        if (
+          c.integrity &&
+          JSON.stringify(previous.get(c.id)) !== JSON.stringify(c.integrity)
+        )
+          add(
+            "M007",
+            `manifests/${c.id}.json`,
+            "Source or preview fingerprint is stale. Run npm run catalog and review the changed content.",
+          );
+      const withoutIntegrity = (value) =>
+        JSON.stringify({
+          ...value,
+          components: (value.components || []).map(
+            ({ integrity, ...rest }) => rest,
+          ),
+        });
+      if (withoutIntegrity(stored) !== withoutIntegrity(catalog))
         add(
           "M008",
           "catalog.json",
           "Catalogue does not match manifests. Run npm run catalog.",
         );
-    } catch {
-      add("M008", "catalog.json", "Missing or invalid catalogue.");
     }
   }
   return {

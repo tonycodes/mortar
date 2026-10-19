@@ -5,7 +5,6 @@
   "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; shows an empty state when there are no items.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ShoppingCart",
   "source": "src/ecommerce.tsx",
   "capabilities": ["theme", "ecommerce", "keyboard"],
@@ -46,9 +45,5 @@
     "target": ".m-cart",
     "probe": "cart",
     "states": ["empty"]
-  },
-  "integrity": {
-    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
-    "preview": "f7326c0ed6fae6f481cf37a908ca08f98e3b7461e724cd02ef3aee78ce4f1513"
   }
 }

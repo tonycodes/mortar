@@ -119,3 +119,37 @@ test("baseline rejects stale source/preview closure, catalogue drift and undocum
     await rm(dir, { recursive: true, force: true });
   }
 });
+
+test("a shared CSS change invalidates fingerprints but regenerates only the catalogue", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "mortar-css-"));
+  try {
+    for (const name of [
+      "src",
+      "previews",
+      "playground",
+      "manifests",
+      "styles.css",
+      "catalog.json",
+      "package.json",
+      "baseline-policy.json",
+    ])
+      await cp(join(ROOT, name), join(dir, name), { recursive: true });
+    const manifest = join(dir, "manifests/mortar-button.json");
+    const before = await readFile(manifest, "utf8");
+    await writeFile(join(dir, "src/kits.css"), "\n/* restyle */\n", {
+      flag: "a",
+    });
+    const stale = await checkKit(dir);
+    assert.ok(
+      stale.findings.some(
+        (f) => f.rule === "M007" && f.file.includes("mortar-button"),
+      ),
+      "A CSS-only edit must invalidate Button",
+    );
+    assert.equal((await checkKit(dir, { refresh: true })).passed, true);
+    assert.equal(await readFile(manifest, "utf8"), before);
+    assert.equal((await checkKit(dir)).passed, true);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});

@@ -5,7 +5,6 @@
   "description": "Mortar documentation steps, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Steps",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -40,9 +39,5 @@
     "profile": "display",
     "target": ".m-steps",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "6244e1aa9dc83f6b7698a1db716401a37d52ac6d974d3305eda459b425691e9d"
   }
 }

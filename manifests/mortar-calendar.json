@@ -5,7 +5,6 @@
   "description": "Mortar calendar: a month grid with keyboard navigation, a twelve-month year view with one roving tab stop, and week and day time grids where timed events sit on an hour scale and collapse to an agenda when narrow. Dates are YYYY-MM-DD strings handled in UTC.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Calendar",
   "source": "src/calendar.tsx",
   "capabilities": ["theme", "application", "keyboard", "responsive"],
@@ -54,9 +53,5 @@
     "target": ".m-calendar",
     "probe": "calendar",
     "states": []
-  },
-  "integrity": {
-    "source": "21e4e2b3bed267803796d703e8d25cf29a812fb3e957221e7860fc3e44d3cfd9",
-    "preview": "a9249228eb04d343b74c6ef7d75b7b3ee9ed2a24be1529b2ffd5b0c5ca666ffa"
   }
 }

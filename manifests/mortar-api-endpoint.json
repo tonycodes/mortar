@@ -5,7 +5,6 @@
   "description": "Mortar documentation api endpoint, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ApiEndpoint",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs"],
@@ -45,9 +44,5 @@
     "profile": "composite",
     "target": ".m-api-endpoint",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "ea4a26a1bd3ac030e2e4bfc27908023e5a440c0769031f82abbdbe9e5466ee0b"
   }
 }

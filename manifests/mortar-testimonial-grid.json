@@ -5,7 +5,6 @@
   "description": "Mortar marketing testimonial grid, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "TestimonialGrid",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -40,9 +39,5 @@
     "profile": "composite",
     "target": ".m-testimonial-grid",
     "states": []
-  },
-  "integrity": {
-    "source": "9ba2f1ba84a31ab8cb6520ee9bada8c7546dda523828b73899b4d519d7110964",
-    "preview": "3f6c55ce0420a998b6d8ad9e5414866667aa1d24afd4a330203d5fee03529ccd"
   }
 }

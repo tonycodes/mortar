@@ -5,7 +5,6 @@
   "description": "Mortar documentation docs shell, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "DocsShell",
   "source": "src/docs.tsx",
   "capabilities": ["theme", "docs", "keyboard"],
@@ -53,9 +52,5 @@
     "target": ".m-docs-shell",
     "states": [],
     "probe": "navigation"
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "469130a051a67bfff5ae2893b52df83711f84507e8e5181fa0fa0d1e2f94a6d5"
   }
 }

@@ -5,7 +5,6 @@
   "description": "Mortar foundation modal, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Modal",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation"],
@@ -45,9 +44,5 @@
     "target": ".m-button",
     "states": [],
     "probe": "dialog"
-  },
-  "integrity": {
-    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
-    "preview": "29e572940eae4f0609f1e3dd1205cf6c67f32900a54e00f17a8c2d08175e9f69"
   }
 }

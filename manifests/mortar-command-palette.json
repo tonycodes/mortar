@@ -5,7 +5,6 @@
   "description": "Mortar application command palette, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "CommandPalette",
   "source": "src/workspace.tsx",
   "capabilities": ["theme", "application", "keyboard"],
@@ -48,9 +47,5 @@
     "target": ".m-button",
     "states": [],
     "probe": "dialog"
-  },
-  "integrity": {
-    "source": "9b9b2c3606dfaac2258b62f607fd2b2e9293a803b620228153403e94ab7dc572",
-    "preview": "cf0fac432935e2b249c8dd62118b2957eb309367fc9c0b46f67524e5bc88cd05"
   }
 }

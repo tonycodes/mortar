@@ -5,7 +5,6 @@
   "description": "Mortar header section: an intro band for inner pages with eyebrow, h1 title, description, inline links and stats, in default, muted or inverse tone.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "HeaderSection",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -46,9 +45,5 @@
     "profile": "composite",
     "target": ".m-header-section",
     "states": []
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "74c4398b24bc14e609e877ec3c896fa0007a514870519778de429f8495538d5b"
   }
 }

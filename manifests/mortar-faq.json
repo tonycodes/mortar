@@ -5,7 +5,6 @@
   "description": "Mortar marketing faq, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "FAQ",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -43,9 +42,5 @@
     "target": ".m-faq",
     "states": [],
     "probe": "faq"
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "ec280862e87eb6d25fc15309907bbd0967247541541919d2fe3b9282f806d209"
   }
 }

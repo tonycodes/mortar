@@ -5,7 +5,6 @@
   "description": "Mortar marketing footer, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Footer",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -47,9 +46,5 @@
     "profile": "composite",
     "target": ".m-footer",
     "states": ["heading-3"]
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "14e97518773e731fb99e3c51d6b0a5ddb837910ca440b4dc501e05e244863a47"
   }
 }

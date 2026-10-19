@@ -5,7 +5,6 @@
   "description": "Mortar foundation select, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Select",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
@@ -46,9 +45,5 @@
     "target": ".m-select-control select",
     "states": ["disabled", "error"],
     "probe": "select"
-  },
-  "integrity": {
-    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
-    "preview": "5ef6ddb634577f42bf7591ace3cae1064fe85be458840dcd96a2b23783c71eac"
   }
 }

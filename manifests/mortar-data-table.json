@@ -5,7 +5,6 @@
   "description": "Mortar application data table, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "DataTable",
   "source": "src/application.tsx",
   "capabilities": ["theme", "application", "table"],
@@ -60,9 +59,5 @@
     "target": ".m-data-table",
     "states": ["loading", "error", "empty"],
     "probe": "table-sort"
-  },
-  "integrity": {
-    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
-    "preview": "77a39895fcc57883f74e22ab94e5f9aa7ecf833de67c99d5d49f71e77e2713f8"
   }
 }

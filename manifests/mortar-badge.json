@@ -5,7 +5,6 @@
   "description": "Mortar foundation badge, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Badge",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "status"],
@@ -40,9 +39,5 @@
     "profile": "display",
     "target": ".m-badge",
     "states": []
-  },
-  "integrity": {
-    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
-    "preview": "a64942b1cb1e12faa9c7536e62934d655bc22777ffe5a097f08b158c9b4c4c0e"
   }
 }

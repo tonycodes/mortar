@@ -5,7 +5,6 @@
   "description": "Mortar navbar: horizontal application navigation with brand, current-page indicator and actions, collapsing into a disclosure menu on narrow screens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Navbar",
   "source": "src/application.tsx",
   "capabilities": [
@@ -50,9 +49,5 @@
     "target": ".m-navbar",
     "probe": "navbar",
     "states": []
-  },
-  "integrity": {
-    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
-    "preview": "c4957a7277a26e4d45cf22231386921bc20362ae32f5742ebb567ffb2b8f77eb"
   }
 }

@@ -5,7 +5,6 @@
   "description": "Mortar marketing call to action, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "CallToAction",
   "source": "src/marketing.tsx",
   "capabilities": ["theme", "marketing"],
@@ -43,9 +42,5 @@
     "profile": "composite",
     "target": ".m-cta",
     "states": ["surface", "inverse"]
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "7f3995ceed3049e033dcc9af2f9b61b053f2919a62d4fba2a778cee9e3bbea7e"
   }
 }

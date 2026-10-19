@@ -5,7 +5,6 @@
   "description": "Mortar marketing team grid, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "TeamGrid",
   "source": "src/marketing-sections.tsx",
   "capabilities": ["theme", "marketing"],
@@ -41,9 +40,5 @@
     "profile": "composite",
     "target": ".m-team-grid",
     "states": []
-  },
-  "integrity": {
-    "source": "9ba2f1ba84a31ab8cb6520ee9bada8c7546dda523828b73899b4d519d7110964",
-    "preview": "fdc8ad2cb68ac65a3c3d5b02b481154798e2ac9de5e69819d5d3182a82b3bc50"
   }
 }

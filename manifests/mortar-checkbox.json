@@ -5,7 +5,6 @@
   "description": "Mortar foundation checkbox, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Checkbox",
   "source": "src/primitives.tsx",
   "capabilities": ["theme", "foundation", "input", "validation", "keyboard"],
@@ -43,9 +42,5 @@
     "target": ".m-choice input",
     "states": ["disabled"],
     "probe": "checkbox"
-  },
-  "integrity": {
-    "source": "95ae5a683e5a003a240164c9ac3058a38d29d0e0a540b68c7599534959cc6d87",
-    "preview": "2cb6169f4a8d9bc473c478da4a3e3939cd7b0bcf015214d9f12e83d31a855fce"
   }
 }
