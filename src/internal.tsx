@@ -2,12 +2,17 @@
 // exported from the package entry, so these can change without a release note.
 import {
   Fragment,
+  createContext,
   createElement,
+  useContext,
   useId,
   type HTMLAttributes,
   type ReactNode,
+  cloneElement,
+  isValidElement,
 } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { KitLink, type ItemGroup } from "./navigation.js";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 
@@ -114,9 +119,7 @@ export function TermList({
 
 /**
  * Icon, label and count inside a navigation link or tab. `prefix` picks the
- * class family (`m-nav-*` or `m-tab-*`). Navigation links show a count when it
- * is truthy and tabs whenever it is defined (`countWhen`); the API phase
- * settles on one rule. Without `countWhen` there is no count slot at all.
+ * class family (`m-nav-*` or `m-tab-*`). A count shows whenever it is defined.
  */
 export function LinkContent({
   prefix,
@@ -124,7 +127,6 @@ export function LinkContent({
   icon,
   count,
   marker = false,
-  countWhen,
 }: {
   prefix: "nav" | "tab";
   label: ReactNode;
@@ -132,16 +134,14 @@ export function LinkContent({
   count?: number | string;
   /** Show the dot marker when there is no icon (sidebar links). */
   marker?: boolean;
-  countWhen?: "truthy" | "defined";
 }) {
   const glyph = (
     <span className={`m-${prefix}-icon`} aria-hidden="true">
       {icon}
     </span>
   );
-  const shown = countWhen === "defined" ? count !== undefined : count;
-  // createElement keeps the child count of the markup this replaced, so useId
-  // values inside a consumer's icon stay put.
+  // createElement keeps a fixed child count, so useId values inside a
+  // consumer's icon stay put.
   return createElement(
     Fragment,
     null,
@@ -155,9 +155,7 @@ export function LinkContent({
       icon && glyph
     ),
     label,
-    ...(countWhen
-      ? [shown && <span className={`m-${prefix}-count`}>{count}</span>]
-      : []),
+    count !== undefined && <span className={`m-${prefix}-count`}>{count}</span>,
   );
 }
 
@@ -246,8 +244,10 @@ export function DialogFrame({
 }) {
   return (
     <Dialog open={open} onClose={onClose} className="m-dialog">
-      <div className="m-backdrop" aria-hidden="true" />
-      {children}
+      <ThemeScope>
+        <div className="m-backdrop" aria-hidden="true" />
+        {children}
+      </ThemeScope>
     </Dialog>
   );
 }
@@ -277,4 +277,276 @@ export function MobileNavDialog({
       </DialogPanel>
     </DialogFrame>
   );
+}
+
+/** `introSlots` with the shared `m-section-title` class on the heading. */
+export function titledIntroSlots(props: IntroProps): ReactNode[] {
+  return classedIntroSlots(props, "m-section-title");
+}
+/** `data-tone` for a section surface tone; the default tone sets no attribute. */
+export function sectionTone(tone?: "default" | "muted" | "inverse") {
+  return tone && tone !== "default" ? tone : undefined;
+}
+
+/** `SectionIntro` with the `m-section-title` heading class. */
+export function TitledIntro(props: IntroProps) {
+  return <>{...titledIntroSlots(props)}</>;
+}
+
+/** A navigation link with optional sub-pages (NavigationItem's shape). */
+export interface NavTreeItem {
+  label: string;
+  href: string;
+  current?: boolean;
+  icon?: ReactNode;
+  count?: number | string;
+  children?: NavTreeItem[];
+}
+/**
+ * Navigation links with icon and count. An item with children becomes a
+ * disclosure, open when it or a child is current; its own page is the first
+ * link inside.
+ */
+export function NavTreeLinks({
+  items,
+  marker = false,
+  onNavigate,
+}: {
+  items: NavTreeItem[];
+  /** Show the dot marker when an item has no icon (sidebar links). */
+  marker?: boolean;
+  onNavigate?: () => void;
+}) {
+  const link = (item: NavTreeItem, key: string) => (
+    <KitLink
+      key={key}
+      href={item.href}
+      aria-current={item.current ? "page" : undefined}
+      onClick={onNavigate}
+    >
+      <LinkContent
+        prefix="nav"
+        marker={marker}
+        icon={item.icon}
+        label={item.label}
+        count={item.count}
+      />
+    </KitLink>
+  );
+  return (
+    <>
+      {items.map((item, index) => {
+        const key = `${item.label}:${item.href}:${index}`;
+        return item.children?.length ? (
+          <details
+            key={key}
+            className="m-nav-group"
+            open={
+              item.current ||
+              item.children.some((child) => child.current) ||
+              undefined
+            }
+          >
+            <summary>
+              <LinkContent
+                prefix="nav"
+                marker={marker}
+                icon={item.icon}
+                label={item.label}
+              />
+            </summary>
+            <div className="m-nav-children">
+              {item.href && link({ ...item, icon: undefined }, "parent")}
+              <NavTreeLinks
+                items={item.children}
+                marker={marker}
+                onNavigate={onNavigate}
+              />
+            </div>
+          </details>
+        ) : (
+          link(item, key)
+        );
+      })}
+    </>
+  );
+}
+/**
+ * Labelled groups of navigation links. Group labels are not headings, so the
+ * page's own h1 stays first in the heading outline.
+ */
+export function NavGroups({
+  groups,
+  marker,
+  onNavigate,
+}: {
+  groups: ItemGroup<NavTreeItem>[];
+  marker?: boolean;
+  onNavigate?: () => void;
+}) {
+  const groupId = useDomId("m-nav-group-");
+  return (
+    <>
+      {groups.map((group, index) => (
+        <div
+          key={group.label}
+          role="group"
+          aria-labelledby={`${groupId}-${index}`}
+        >
+          <p id={`${groupId}-${index}`} className="m-nav-group-title">
+            {group.label}
+          </p>
+          <NavTreeLinks
+            items={group.items}
+            marker={marker}
+            onNavigate={onNavigate}
+          />
+        </div>
+      ))}
+    </>
+  );
+}
+
+/**
+ * The hint or error under a field. Unlike FieldMessage, the error is its own
+ * role="alert" element, so it is announced when it appears.
+ */
+export function FieldFeedback({
+  id,
+  hint,
+  error,
+}: {
+  id: string;
+  hint?: string;
+  error?: string;
+}) {
+  if (error)
+    return (
+      <p key="error" id={id} className="m-error" role="alert">
+        {error}
+      </p>
+    );
+  return hint ? (
+    <p key="hint" id={id}>
+      {hint}
+    </p>
+  ) : null;
+}
+
+/** Decorative required marker after a field label; the control itself is marked required. */
+export function RequiredMark() {
+  return (
+    <span className="m-required" aria-hidden="true">
+      *
+    </span>
+  );
+}
+
+const TABBABLE =
+  'a[href], button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
+/**
+ * Call before `element` is removed. If focus is inside it, move focus to the
+ * next tabbable element after it (within `scope`, default the document), else
+ * the previous one, else `fallback`, so focus never drops to the body.
+ */
+export function focusAway(
+  element: HTMLElement | null,
+  {
+    scope,
+    fallback,
+  }: { scope?: HTMLElement | null; fallback?: HTMLElement | null } = {},
+) {
+  if (!element) return;
+  const document = element.ownerDocument;
+  if (!element.contains(document.activeElement)) return;
+  const candidates = [
+    ...(scope ?? document.body).querySelectorAll<HTMLElement>(TABBABLE),
+  ].filter(
+    (el) =>
+      !element.contains(el) &&
+      !el.closest("[hidden], [inert]") &&
+      el.getClientRects().length > 0,
+  );
+  const following = (el: HTMLElement) =>
+    element.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING;
+  const after = candidates.find(following);
+  const before = candidates.filter((el) => !following(el)).pop();
+  (after ?? before ?? fallback)?.focus();
+}
+
+/**
+ * The data-mortar-* attributes of the nearest container-scoped ThemeProvider.
+ * Optional (undefined outside one), so it does not make dialogs depend on it.
+ */
+export const ThemeScopeContext = createContext<
+  Record<string, string> | undefined
+>(undefined);
+/**
+ * Re-applies a container-scoped theme to content rendered outside its wrapper
+ * (dialogs portal to the document body). The wrapper is display: contents, so
+ * it carries the tokens without adding a box.
+ */
+export function ThemeScope({ children }: { children: ReactNode }) {
+  const attributes = useContext(ThemeScopeContext);
+  if (!attributes) return <>{children}</>;
+  return (
+    <div {...attributes} className="m-theme-scope">
+      {children}
+    </div>
+  );
+}
+
+/**
+ * introSlots with a class on the heading, so a title keeps its styles at any
+ * `headingLevel` instead of only as an h2.
+ */
+export function classedIntroSlots(
+  props: IntroProps,
+  titleClassName: string,
+): ReactNode[] {
+  const [eyebrow, heading, description] = introSlots(props);
+  return [
+    eyebrow,
+    isValidElement<{ className?: string }>(heading)
+      ? cloneElement(heading, { className: titleClassName })
+      : heading,
+    description,
+  ];
+}
+
+/**
+ * Call before a consumer callback that removes `element` (e.g. a chip's
+ * remove button). Once the removal has rendered, if focus fell to the body,
+ * it moves to the nearest focusable element that took the removed one's place,
+ * or the one before it, searching up through the ancestors that remain.
+ */
+export function focusAfterRemoval(element: HTMLElement) {
+  const trail: [HTMLElement, number][] = [];
+  for (let node: HTMLElement | null = element; node?.parentElement;) {
+    const parent: HTMLElement = node.parentElement;
+    trail.push([parent, [...parent.children].indexOf(node)]);
+    node = parent;
+  }
+  setTimeout(() => {
+    const active = element.ownerDocument.activeElement;
+    if (
+      element.isConnected ||
+      (active && active !== element.ownerDocument.body)
+    )
+      return;
+    for (const [parent, index] of trail) {
+      if (!parent.isConnected) continue;
+      const siblings = [...parent.children] as HTMLElement[];
+      const candidates = [
+        ...siblings.slice(index),
+        ...siblings.slice(0, index).reverse(),
+      ];
+      for (const candidate of candidates) {
+        const target = candidate.matches(TABBABLE)
+          ? candidate
+          : candidate.querySelector<HTMLElement>(TABBABLE);
+        if (target) return target.focus();
+      }
+    }
+  });
 }

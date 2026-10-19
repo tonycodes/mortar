@@ -14,11 +14,13 @@
     "props": {
       "title": "string",
       "children": "ReactNode",
-      "tone": "neutral | info | success | warning | danger",
-      "announce": "boolean",
+      "tone": "neutral | info | success | warning | danger (rendered as data-tone, omitted for neutral)",
+      "announce": "boolean (status, or alert for danger; announced when it appears)",
       "actions": "ReactNode",
-      "onDismiss": "() => void",
-      "dismissLabel": "string"
+      "onDismiss": "() => void (focus moves to the next control)",
+      "dismissLabel": "string",
+      "id": "string",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Notice } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

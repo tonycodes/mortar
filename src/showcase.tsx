@@ -1,12 +1,17 @@
 import type { ReactNode } from "react";
+import { cx } from "./internal.js";
 
 /** Framed product screenshot or illustration for heroes and feature sections. */
 export function MockWindow({
+  id,
+  className,
   label,
   address,
   variant = "browser",
   children,
 }: {
+  id?: string;
+  className?: string;
   /** Accessible description of what the mock shows. */
   label: string;
   /** Optional URL or file name shown in the title bar. */
@@ -16,8 +21,9 @@ export function MockWindow({
 }) {
   return (
     <figure
-      className="m-mock-window"
-      data-variant={variant}
+      id={id}
+      className={cx("m-mock-window", className)}
+      data-variant={variant === "browser" ? undefined : variant}
       aria-label={label}
       data-m-component="MockWindow"
     >
@@ -43,6 +49,8 @@ export interface ChatMessage {
 
 /** Static, illustrative chat conversation for marketing a conversational product. */
 export function ChatPreview({
+  id,
+  className,
   title,
   status,
   messages,
@@ -51,6 +59,8 @@ export function ChatPreview({
   placeholder = "Type a message…",
   assistantName = "Assistant",
 }: {
+  id?: string;
+  className?: string;
   title: string;
   status?: string;
   messages: ChatMessage[];
@@ -61,7 +71,8 @@ export function ChatPreview({
 }) {
   return (
     <figure
-      className="m-chat-preview"
+      id={id}
+      className={cx("m-chat-preview", className)}
       aria-label={`${title} conversation`}
       data-m-component="ChatPreview"
     >

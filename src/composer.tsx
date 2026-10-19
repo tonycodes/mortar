@@ -1,17 +1,21 @@
 import { useState, type ReactNode } from "react";
 import { Button, Tabs } from "./primitives.js";
-import { FieldMessage, useField } from "./internal.js";
+import { FieldFeedback, cx, useField } from "./internal.js";
+
+/** Characters left at which the count starts being announced. */
+const nearLimit = (maxLength: number) =>
+  Math.max(10, Math.ceil(maxLength * 0.1));
 
 /** Comment box with optional avatar, toolbar, Write/Preview tabs and a character count. */
 export function CommentComposer({
   onSubmit,
   value: controlled,
-  onValueChange,
+  onChange,
   label = "Add your comment",
   labelVisible = false,
   placeholder = "Add your comment…",
   submitLabel = "Comment",
-  submitting = false,
+  loading = false,
   avatar,
   actions,
   preview,
@@ -19,26 +23,32 @@ export function CommentComposer({
   hint,
   error,
   rows = 3,
+  className,
 }: {
   onSubmit: (value: string) => void;
   /** Controlled text; omit to let the composer manage and clear it. */
   value?: string;
-  onValueChange?: (value: string) => void;
+  /** Called with the text on every edit. */
+  onChange?: (value: string) => void;
   label?: string;
   labelVisible?: boolean;
   placeholder?: string;
   submitLabel?: string;
-  submitting?: boolean;
+  /** Busy submitting: the submit button keeps focus but ignores activation. */
+  loading?: boolean;
   /** Author avatar shown beside the box (decorative). */
   avatar?: ReactNode;
   /** Toolbar controls such as attach or emoji buttons. */
   actions?: ReactNode;
   /** Renders a preview of the text and enables Write/Preview tabs. */
   preview?: (value: string) => ReactNode;
+  /** Shows a visible count; the remaining characters are announced only near the limit. */
   maxLength?: number;
   hint?: string;
+  /** Marks the text invalid; the message is announced when it appears. */
   error?: string;
   rows?: number;
+  className?: string;
 }) {
   const { fieldId: id, messageId, describedBy } = useField({ hint, error });
   const [own, setOwn] = useState("");
@@ -46,14 +56,15 @@ export function CommentComposer({
   const value = controlled ?? own;
   const setValue = (next: string) => {
     if (controlled === undefined) setOwn(next);
-    onValueChange?.(next);
+    onChange?.(next);
   };
   const empty = !value.trim();
   const submit = () => {
-    if (empty || submitting) return;
+    if (empty || loading) return;
     onSubmit(value);
     if (controlled === undefined) setOwn("");
   };
+  const remaining = maxLength === undefined ? 0 : maxLength - value.length;
   const field = (
     <textarea
       id={id}
@@ -75,7 +86,7 @@ export function CommentComposer({
   );
   return (
     <form
-      className="m-composer"
+      className={cx("m-composer", className)}
       onSubmit={(event) => {
         event.preventDefault();
         submit();
@@ -122,16 +133,24 @@ export function CommentComposer({
           <div className="m-composer-bar">
             {actions && <div className="m-composer-actions">{actions}</div>}
             {maxLength !== undefined && (
-              <span className="m-composer-count" aria-live="polite">
+              <span className="m-composer-count">
                 {value.length} / {maxLength}
               </span>
             )}
-            <Button type="submit" disabled={empty} loading={submitting}>
+            <Button type="submit" disabled={empty} loading={loading}>
               {submitLabel}
             </Button>
+            {maxLength !== undefined && (
+              <span className="m-sr-only" role="status">
+                {remaining <= nearLimit(maxLength) &&
+                  (remaining > 0
+                    ? `${remaining} ${remaining === 1 ? "character" : "characters"} left`
+                    : "Character limit reached")}
+              </span>
+            )}
           </div>
         </div>
-        <FieldMessage id={messageId} hint={hint} error={error} />
+        <FieldFeedback id={messageId} hint={hint} error={error} />
       </div>
     </form>
   );

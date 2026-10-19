@@ -18,7 +18,9 @@
       "discardLabel": "string",
       "onSave": "() => void",
       "onDiscard": "() => void",
-      "saving": "boolean"
+      "loading": "boolean",
+      "id": "string",
+      "className": "string (on the root element)"
     },
     "usage": "Import { SaveBar } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -15,12 +15,14 @@
       "as": "\"div\" | \"section\" | \"article\"",
       "title": "string",
       "description": "string",
-      "headingLevel": "2 | 3 | 4",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
       "actions": "ReactNode",
       "footer": "ReactNode",
       "padding": "\"default\" | \"compact\" | \"none\"",
-      "tone": "\"default\" | \"sunken\"",
-      "children": "ReactNode"
+      "tone": "\"default\" | \"muted\"",
+      "children": "ReactNode",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { Card } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

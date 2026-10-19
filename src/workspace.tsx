@@ -11,17 +11,11 @@ import {
 } from "@headlessui/react";
 import { Button } from "./primitives.js";
 import { Kbd } from "./display.js";
-import { DialogFrame } from "./internal.js";
+import { Close } from "./icons.js";
+import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
+import { DialogFrame, cx } from "./internal.js";
 
-export function SlideOver({
-  open,
-  onClose,
-  title,
-  description,
-  children,
-  actions,
-  size = "md",
-}: {
+export interface SlideOverProps {
   open: boolean;
   onClose: () => void;
   title: string;
@@ -30,11 +24,23 @@ export function SlideOver({
   actions?: ReactNode;
   /** Panel width: md (default), lg or xl. */
   size?: "md" | "lg" | "xl";
-}) {
+  /** Class on the sliding panel. */
+  className?: string;
+}
+export function SlideOver({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+  actions,
+  size = "md",
+  className,
+}: SlideOverProps) {
   return (
     <DialogFrame open={open} onClose={onClose}>
       <DialogPanel
-        className="m-slide-over"
+        className={cx("m-slide-over", className)}
         data-size={size === "md" ? undefined : size}
       >
         <header>
@@ -43,7 +49,7 @@ export function SlideOver({
             {description && <Description>{description}</Description>}
           </div>
           <Button variant="ghost" onClick={onClose} aria-label="Close panel">
-            <span aria-hidden="true">✕</span>
+            <Close />
           </Button>
         </header>
         <div className="m-slide-over-body">{children}</div>
@@ -84,6 +90,20 @@ function Highlight({
   );
 }
 
+export interface CommandPaletteProps {
+  open: boolean;
+  onClose: () => void;
+  query: string;
+  onQueryChange: (value: string) => void;
+  groups: ItemGroup<CommandItem>[];
+  label?: string;
+  placeholder?: string;
+  /** Announced when no group has items; defaults to "No results for “query”.". */
+  empty?: { title: string; description?: string };
+  footer?: ReactNode;
+  /** Class on the palette panel. */
+  className?: string;
+}
 /** Controlled ⌘K palette. Filtering and ranking stay with the consumer. */
 export function CommandPalette({
   open,
@@ -93,24 +113,15 @@ export function CommandPalette({
   groups,
   label = "Command menu",
   placeholder = "Type a command or search",
-  emptyMessage,
+  empty,
   footer,
-}: {
-  open: boolean;
-  onClose: () => void;
-  query: string;
-  onQueryChange: (value: string) => void;
-  groups: ItemGroup<CommandItem>[];
-  label?: string;
-  placeholder?: string;
-  emptyMessage?: string;
-  footer?: ReactNode;
-}) {
+  className,
+}: CommandPaletteProps) {
   const total = groups.reduce((n, g) => n + g.items.length, 0);
   return (
     <DialogFrame open={open} onClose={onClose}>
       <div className="m-dialog-position m-palette-position">
-        <DialogPanel className="m-palette">
+        <DialogPanel className={cx("m-palette", className)}>
           <DialogTitle className="m-sr-only">{label}</DialogTitle>
           <Combobox<CommandItem | null>
             value={null}
@@ -137,7 +148,7 @@ export function CommandPalette({
               />
               <Kbd keys={["esc"]} />
             </div>
-            <ComboboxOptions static className="m-palette-results">
+            <ComboboxOptions static modal={false} className="m-palette-results">
               {groups
                 .filter((g) => g.items.length)
                 .map((group) => (
@@ -178,13 +189,24 @@ export function CommandPalette({
                     ))}
                   </div>
                 ))}
-              {!total && (
-                <p className="m-palette-empty" role="status">
-                  {emptyMessage || `No results for “${query}”.`}
-                </p>
-              )}
             </ComboboxOptions>
           </Combobox>
+          {/* Always mounted, so "no results" is announced when it appears.
+              It sits outside the listbox, which only allows options; the
+              options are not modal so this stays exposed (the dialog already
+              is). */}
+          <p className={total ? "m-sr-only" : "m-palette-empty"} role="status">
+            {total ? (
+              ""
+            ) : empty ? (
+              <>
+                {empty.title}
+                {empty.description && <span> {empty.description}</span>}
+              </>
+            ) : (
+              `No results for “${query}”.`
+            )}
+          </p>
           {footer && <div className="m-palette-footer">{footer}</div>}
         </DialogPanel>
       </div>
@@ -200,21 +222,38 @@ export interface StackedListItem {
   trailing?: ReactNode;
   href?: string;
 }
-export function StackedList({
-  label,
-  heading,
-  action,
-  items = [],
-  groups,
-}: {
-  label: string;
-  heading?: ReactNode;
+export interface StackedListProps {
+  /** Accessible name; defaults to the visible `title`. */
+  label?: string;
+  /** Visible heading above the list. */
+  title?: ReactNode;
+  /** Level of the title, or of the group headings when there is no title. Group headings sit one level below the title. */
+  headingLevel?: HeadingLevel;
+  /** Button or link in the header, e.g. "View all". */
   action?: ReactNode;
+  /** Rows; with `groups` they render first, ungrouped. */
   items?: StackedListItem[];
   /** Sections with sticky headings, e.g. a directory grouped by letter. */
   groups?: ItemGroup<StackedListItem>[];
-}) {
+  id?: string;
+  className?: string;
+}
+export function StackedList({
+  label,
+  title,
+  headingLevel = 2,
+  action,
+  items = [],
+  groups = [],
+  id,
+  className,
+}: StackedListProps) {
   const base = useId();
+  const hasTitle = title !== undefined && title !== null && title !== "";
+  const Title = headingTag(headingLevel);
+  const GroupHeading = headingTag(
+    hasTitle ? childLevel(headingLevel) : headingLevel,
+  );
   const row = (item: StackedListItem) => {
     const body = (
       <>
@@ -239,25 +278,34 @@ export function StackedList({
     );
   };
   return (
-    <section className="m-stacked-list" aria-label={label}>
-      {(heading || action) && (
+    <section
+      id={id}
+      className={cx("m-stacked-list", className)}
+      aria-label={label}
+      aria-labelledby={label || !hasTitle ? undefined : `${base}-title`}
+    >
+      {(hasTitle || action) && (
         <header>
-          <h2>{heading}</h2>
-          {action}
+          {hasTitle && (
+            <Title id={`${base}-title`} className="m-stacked-title">
+              {title}
+            </Title>
+          )}
+          {action && <div className="m-stacked-action">{action}</div>}
         </header>
       )}
-      {groups ? (
-        groups.map((group, index) => (
-          <div key={group.label} className="m-stacked-group">
-            <h3 id={`${base}-${index}`} className="m-stacked-group-heading">
-              {group.label}
-            </h3>
-            <ul aria-labelledby={`${base}-${index}`}>{group.items.map(row)}</ul>
-          </div>
-        ))
-      ) : (
-        <ul>{items.map(row)}</ul>
-      )}
+      {(items.length > 0 || !groups.length) && <ul>{items.map(row)}</ul>}
+      {groups.map((group, index) => (
+        <div key={group.label} className="m-stacked-group">
+          <GroupHeading
+            id={`${base}-${index}`}
+            className="m-stacked-group-heading"
+          >
+            {group.label}
+          </GroupHeading>
+          <ul aria-labelledby={`${base}-${index}`}>{group.items.map(row)}</ul>
+        </div>
+      ))}
     </section>
   );
 }

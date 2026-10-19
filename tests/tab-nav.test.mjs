@@ -39,11 +39,11 @@ test("TabNav pills and full width use data attributes", () => {
 test("SectionHeading keeps its default markup and renders tabs below", () => {
   assert.equal(
     html(SectionHeading, { title: "Jobs", description: "Open roles" }),
-    '<div class="m-section-heading" data-divider="true"><div class="m-section-heading-text"><h2>Jobs</h2><p>Open roles</p></div></div>',
+    '<div class="m-section-heading" data-divider="true"><div class="m-section-heading-text"><h2 class="m-section-heading-title">Jobs</h2><p>Open roles</p></div></div>',
   );
   assert.equal(
     html(SectionHeading, { title: "Jobs", actions: "Add", divider: false }),
-    '<div class="m-section-heading" data-divider="false"><div class="m-section-heading-text"><h2>Jobs</h2></div><div class="m-actions">Add</div></div>',
+    '<div class="m-section-heading"><div class="m-section-heading-text"><h2 class="m-section-heading-title">Jobs</h2></div><div class="m-actions">Add</div></div>',
   );
   const withTabs = html(SectionHeading, {
     title: "Candidates",

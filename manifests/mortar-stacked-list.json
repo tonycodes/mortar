@@ -12,11 +12,14 @@
   "kitId": "application",
   "contract": {
     "props": {
-      "label": "string",
-      "heading": "ReactNode",
+      "label": "string (accessible name; defaults to the title)",
       "action": "ReactNode",
-      "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? })",
-      "groups": "{ label: string; items: StackedListItem[] }[]"
+      "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? }; rendered before groups)",
+      "groups": "{ label: string; items: StackedListItem[] }[]",
+      "title": "ReactNode",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (title level, default 2; group headings sit one level below the title, or at this level without one)",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -13,7 +13,8 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ label: string; onClick?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]"
+      "items": "{ label: string; onSelect?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]",
+      "className": "string (on the root element)"
     },
     "usage": "Import { ButtonGroup } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

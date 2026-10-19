@@ -19,7 +19,7 @@ export function SaasLandingRecipe() {
       />
       <main>
         <UI.Hero
-          align="split"
+          layout="split"
           eyebrow="Open beta — free to join"
           title="AI chat and booking for your website"
           description="An assistant trained on your business that answers questions, books appointments and captures leads."
@@ -232,15 +232,15 @@ export function SaasLandingRecipe() {
         description="Example product"
         columns={[
           {
-            title: "Product",
-            links: [
+            label: "Product",
+            items: [
               { label: "Features", href: "#features" },
               { label: "Pricing", href: "#pricing" },
             ],
           },
           {
-            title: "Legal",
-            links: [
+            label: "Legal",
+            items: [
               { label: "Terms", href: "#terms" },
               { label: "Privacy", href: "#privacy" },
             ],
@@ -319,19 +319,19 @@ export function ProjectWorkspaceRecipe() {
               id: "ana",
               title: "Ana Kovač",
               description: "Engineering",
-              media: <UI.Avatar name="Ana Kovač" />,
+              media: <UI.Avatar name="Ana Kovač" decorative />,
             },
             {
               id: "tom",
               title: "Tom Cook",
               description: "Design",
-              media: <UI.Avatar name="Tom Cook" />,
+              media: <UI.Avatar name="Tom Cook" decorative />,
             },
             {
               id: "lw",
               title: "Lindsay Walton",
               description: "Support",
-              media: <UI.Avatar name="Lindsay Walton" />,
+              media: <UI.Avatar name="Lindsay Walton" decorative />,
             },
           ]}
         />

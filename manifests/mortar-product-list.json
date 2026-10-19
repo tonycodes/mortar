@@ -2,7 +2,7 @@
   "id": "mortar-product-list",
   "logicalId": "product-list",
   "name": "ProductList",
-  "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card. Opt-in card variant with supporting text, colour swatches (consumer-supplied colours, announced by label) and a per-card action.",
+  "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card. Opt-in cards variant with supporting text, colour swatches (consumer-supplied colours, announced by label) and a per-card action.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "ProductList",
@@ -15,8 +15,10 @@
       "label": "string",
       "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string }; meta?: string; badge?: string; description?: string; swatches?: { label: string; swatch: string }[]; action?: ReactNode })",
       "columns": "2 | 3 | 4",
-      "headingLevel": "2 | 3 | 4",
-      "variant": "\"plain\" | \"card\" (default \"plain\"; card frames each product for full-detail listings)"
+      "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3; the level of each product name)",
+      "variant": "\"plain\" | \"cards\" (default \"plain\"; cards frames each product for full-detail listings)",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { ProductList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

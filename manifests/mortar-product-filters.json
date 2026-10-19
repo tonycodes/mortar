@@ -2,7 +2,7 @@
   "id": "mortar-product-filters",
   "logicalId": "product-filters",
   "name": "ProductFilters",
-  "description": "Mortar product filters: collapsible checkbox facets with counts and removable chips for active filters, with Clear all.",
+  "description": "Mortar product filters: collapsible checkbox facets with counts and removable chips for active filters, with Clear all. Every change calls onChange once with the complete next selection.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "ProductFilters",
@@ -14,8 +14,10 @@
     "props": {
       "facets": "FilterFacet[] ({ id: string; label: string; options: { value: string; label: string; count?: number }[] })",
       "selected": "Record<string, string[]>",
-      "onChange": "(facet: string, values: string[]) => void",
-      "label": "string"
+      "onChange": "(selected: Record<string, string[]>) => void (the complete next selection)",
+      "label": "string",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { ProductFilters } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

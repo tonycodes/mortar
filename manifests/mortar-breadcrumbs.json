@@ -14,7 +14,8 @@
     "props": {
       "items": "{ label: string; href?: string }[]",
       "label": "string",
-      "separator": "\"slash\" | \"chevron\""
+      "separator": "\"slash\" | \"chevron\"",
+      "className": "string"
     },
     "usage": "Import { Breadcrumbs } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -23,7 +23,7 @@ const phone = {
   async DocsShell(page) {
     await page
       .locator('[data-mortar-preview="DocsShell"]')
-      .getByRole("button", { name: "Open navigation" })
+      .getByRole("button", { name: "Menu", exact: true })
       .click();
     return true;
   },

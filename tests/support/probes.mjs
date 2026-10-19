@@ -293,7 +293,14 @@ export const implementations = {
     await next.focus();
     await page.keyboard.press("Enter");
     await expect(simple).toContainText("Page 2 of 5");
-    await simple.getByRole("button", { name: "Previous" }).click();
+    // Reaching the first page keeps focus on Previous instead of the body.
+    const previous = simple.getByRole("button", { name: "Previous" });
+    await previous.focus();
+    await page.keyboard.press("Enter");
+    await expect(simple).toContainText("Page 1 of 5");
+    await expect(previous).toBeFocused();
+    await expect(previous).toHaveAttribute("aria-disabled", "true");
+    await page.keyboard.press("Enter");
     await expect(simple).toContainText("Page 1 of 5");
     const results = root.getByRole("navigation", { name: "Results pages" });
     await expect(
@@ -318,9 +325,13 @@ export const implementations = {
     await expect(root).toContainText("$20");
   },
   async newsletter({ root }) {
+    // The status region is mounted before the message so it is announced.
+    const status = root.locator(".m-newsletter").getByRole("status");
+    await expect(status).toHaveText("");
     await root.getByLabel("Email address").fill("reader@example.com");
     await root.getByRole("button", { name: "Subscribe" }).click();
     await expect(root.getByLabel("Action result")).toHaveText("completed");
+    await expect(status).toHaveText("Thanks. Check your inbox to confirm.");
   },
   async "sign-in"({ page, root }) {
     const provider = root.getByRole("button", { name: "Continue with GitHub" });
@@ -438,11 +449,24 @@ export const implementations = {
     await expect(day("Thursday, 1 October 2026")).toBeFocused();
     await page.keyboard.press("Enter");
     await expect(root.getByLabel("Selected date")).toHaveText("2026-10-01");
+    await expect(day("Thursday, 1 October 2026")).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
     await calendar.getByRole("button", { name: "Next month" }).click();
     await expect(
       calendar.getByRole("heading", { name: "November 2026" }),
     ).toBeVisible();
     await expect(calendar.locator('[tabindex="0"]')).toHaveCount(1);
+    // A changed `selected` prop brings its month into view with the day focusable.
+    await root.getByRole("button", { name: "Select 3 December" }).click();
+    await expect(
+      calendar.getByRole("heading", { name: "December 2026" }),
+    ).toBeVisible();
+    await expect(day("Thursday, 3 December 2026")).toHaveAttribute(
+      "tabindex",
+      "0",
+    );
     // The full variant names each day's events through aria-describedby.
     const busy = root
       .locator(".m-calendar")
@@ -467,11 +491,16 @@ export const implementations = {
     await expect(week.getByRole("heading", { level: 2 })).toHaveText(
       /19\s.\s25 October 2026/,
     );
-    const tuesday = week.getByRole("region", {
+    // Days are named groups, not seven landmarks.
+    await expect(week.getByRole("region")).toHaveCount(0);
+    const tuesday = week.getByRole("group", {
       name: "Tuesday, 20 October 2026",
     });
     await expect(tuesday.getByRole("listitem")).toHaveCount(3);
-    await tuesday.getByRole("button", { name: /Design review/ }).click();
+    // Title and time are separate words in the event's name.
+    await tuesday
+      .getByRole("button", { name: "Design review 10:30–12:00", exact: true })
+      .click();
     await expect(root.getByLabel("Opened event")).toHaveText("Design review");
     await expect(
       week.getByRole("heading", { name: "Wednesday, 21 October 2026" }),
@@ -520,6 +549,28 @@ export const implementations = {
     await week.getByRole("button", { name: "Next year" }).click();
     await expect(week.getByRole("heading", { level: 2 })).toHaveText("2027");
     await expect(week.locator('[tabindex="0"]')).toHaveCount(1);
+    // One current date across views: months paged in the month view carry
+    // over to the week view (it used to show the week it started on).
+    const switchTo = (name) =>
+      week
+        .getByRole("group", { name: "Calendar view" })
+        .getByRole("button", { name })
+        .click();
+    await switchTo("Month");
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      "December 2027",
+    );
+    for (let i = 0; i < 3; i++)
+      await week.getByRole("button", { name: "Next month" }).click();
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      "March 2028",
+    );
+    await switchTo("Week");
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText(
+      /28 February\s.\s5 March 2028/,
+    );
+    await switchTo("Year");
+    await expect(week.getByRole("heading", { level: 2 })).toHaveText("2028");
   },
   async product({ page, root }) {
     const bag = root.getByLabel("Bag", { exact: true });
@@ -538,8 +589,19 @@ export const implementations = {
     await page.keyboard.press("ArrowLeft");
     await expect(sizes.getByRole("radio", { name: "Small" })).toBeChecked();
     await expect(sizes.getByRole("radio", { name: "Travel" })).toBeDisabled();
+    // Black swaps the gallery to the black tote's photos, from the first one.
     await root.getByRole("radio", { name: "Black" }).check();
-    await root.getByRole("button", { name: "Add to bag" }).click();
+    await expect(
+      root.locator(
+        ".m-product-gallery:not([data-gallery]) > .m-product-image img",
+      ),
+    ).toHaveAttribute("alt", "Black canvas tote bag, front");
+    await expect(
+      thumbs.getByRole("button", { name: /Show image 1 of 2/ }),
+    ).toHaveAttribute("aria-pressed", "true");
+    const add = root.getByRole("button", { name: "Add to bag" });
+    await expect(add).toHaveAttribute("type", "submit");
+    await add.click();
     await expect(bag).toHaveText("1 added · black · small");
   },
   async filters({ page, root }) {
@@ -553,13 +615,21 @@ export const implementations = {
     const chips = root.getByRole("group", { name: "Active filters" });
     await chips.getByRole("button", { name: "Remove Black" }).click();
     await expect(applied).toHaveText("colour: sage");
+    // Focus moves to the chip that took the removed one's place.
+    await expect(
+      chips.getByRole("button", { name: "Remove Sage" }),
+    ).toBeFocused();
     await expect(
       colour.getByRole("checkbox", { name: /Black/ }),
     ).not.toBeChecked();
+    // Clear all is one change: a consumer that replaces its state with the
+    // value it receives clears every facet, not just the last one.
     await root.getByRole("checkbox", { name: /Kitchen/ }).check();
+    await expect(applied).toHaveText("colour: sage; category: kitchen");
     await root.getByRole("button", { name: "Clear all" }).click();
     await expect(applied).toHaveText("none");
     await expect(chips).toHaveCount(0);
+    await expect(root.locator("summary").first()).toBeFocused();
     // Facets are native disclosures.
     await root.locator("summary", { hasText: "Category" }).click();
     await expect(root.getByRole("checkbox", { name: /Kitchen/ })).toBeHidden();
@@ -574,8 +644,14 @@ export const implementations = {
       0,
     );
     await expect(count).toHaveText("4");
-    await root.getByRole("button", { name: "Remove Stoneware mug" }).click();
+    // Focus stays in the cart: on the line that moved up, then the empty state.
+    const removeMug = root.getByRole("button", {
+      name: "Remove Stoneware mug",
+    });
+    await expect(removeMug).toBeFocused();
+    await removeMug.click();
     await expect(root.getByText("Your bag is empty")).toBeVisible();
+    await expect(root.locator(".m-cart-empty")).toBeFocused();
     await expect(
       root.getByRole("link", { name: "Continue shopping" }),
     ).toBeVisible();
@@ -634,7 +710,12 @@ export const implementations = {
       await root.getByRole("link", { name: "Features", exact: true }).click();
       await expect(opener).toHaveAttribute("aria-expanded", "false");
     } else {
-      const opener = root.getByRole("button", { name: "Open navigation" });
+      // Both shells name the opener by its visible text (label in name) and
+      // announce the dialog it opens.
+      const opener = root.getByRole("button", { name: "Menu", exact: true });
+      await expect(opener).not.toHaveAttribute("aria-label");
+      await expect(opener).toHaveAttribute("aria-haspopup", "dialog");
+      await expect(opener).toHaveAttribute("aria-expanded", "false");
       await opener.focus();
       await page.keyboard.press("Enter");
       await expect(page.getByRole("dialog")).toBeVisible();

@@ -16,7 +16,8 @@
       "title": "string",
       "align": "\"start\" | \"center\"",
       "reverse": "boolean",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "className": "string"
     },
     "usage": "Import { MediaObject } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -18,9 +18,11 @@
       "onChange": "(value: string | null) => void",
       "placeholder": "string",
       "hint": "string",
-      "error": "string",
+      "error": "string (announced when it appears)",
       "disabled": "boolean",
-      "emptyLabel": "string"
+      "required": "boolean (aria-required and a decorative marker)",
+      "empty": "{ title: string; description?: string; action?: ReactNode } (default { title: \"No matches\" })",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Combobox } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

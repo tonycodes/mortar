@@ -38,7 +38,7 @@ export function LayoutCase({ name }: { name: string }) {
           <UI.Divider />
           <UI.Text>Notification preferences</UI.Text>
           <UI.Divider soft spacing="sm" />
-          <UI.Text tone="secondary">
+          <UI.Text color="secondary">
             A soft divider separates related rows.
           </UI.Text>
           <UI.Divider label="Or continue with" />
@@ -61,9 +61,9 @@ export function LayoutCase({ name }: { name: string }) {
               period.
             </UI.Text>
           </UI.Card>
-          <UI.Card tone="sunken" padding="compact">
-            <UI.Text tone="secondary">
-              A sunken, compact card works as a well for secondary content.
+          <UI.Card tone="muted" padding="compact">
+            <UI.Text color="secondary">
+              A muted, compact card works as a well for secondary content.
             </UI.Text>
           </UI.Card>
         </UI.Stack>
@@ -125,8 +125,8 @@ export function LayoutCase({ name }: { name: string }) {
           <UI.ButtonGroup
             label="Record actions"
             items={[
-              { label: "Copy", onClick: () => setLast("Copy") },
-              { label: "Duplicate", onClick: () => setLast("Duplicate") },
+              { label: "Copy", onSelect: () => setLast("Copy") },
+              { label: "Duplicate", onSelect: () => setLast("Duplicate") },
               { label: "Archive", disabled: true },
             ]}
           />
@@ -137,13 +137,13 @@ export function LayoutCase({ name }: { name: string }) {
                 label: "Previous",
                 iconOnly: true,
                 icon: icon("M15 18l-6-6 6-6"),
-                onClick: () => setLast("Previous"),
+                onSelect: () => setLast("Previous"),
               },
               {
                 label: "Next",
                 iconOnly: true,
                 icon: icon("M9 18l6-6-6-6"),
-                onClick: () => setLast("Next"),
+                onSelect: () => setLast("Next"),
               },
             ]}
           />

@@ -18,7 +18,8 @@
       "description": "string",
       "items": "{ title: string; description: string }[]",
       "tone": "\"default\" | \"muted\" | \"inverse\"",
-      "headingLevel": "2 | 3 | 4"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); step titles sit one level below",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { ProcessSteps } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

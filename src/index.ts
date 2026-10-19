@@ -61,6 +61,19 @@ export type {
   BreadcrumbItem,
   ProgressStep,
   TabNavItem,
+  StackedShellProps,
+  NavbarProps,
+  BreadcrumbsProps,
+  TabNavProps,
+  ProgressStepsProps,
+  ActionPanelProps,
+  PageHeadingProps,
+  MetricGroupProps,
+  TableProps,
+  PaginationProps,
+  SettingsSectionProps,
+  ActivityFeedProps,
+  SignInPanelProps,
 } from "./application.js";
 export {
   MarketingHeader,
@@ -77,12 +90,7 @@ export {
   HeaderSection,
   ContentSection,
 } from "./marketing.js";
-export type {
-  PricingPlan,
-  MarketingTone,
-  HeaderLink,
-  FlyoutItem,
-} from "./marketing.js";
+export type { PricingPlan, HeaderLink, FlyoutItem } from "./marketing.js";
 export { SegmentedControl, CodeBlock, PreviewFrame } from "./inspection.js";
 export {
   Avatar,
@@ -95,7 +103,19 @@ export {
   GridList,
   AttachmentList,
 } from "./display.js";
-export type { GridListItem, Attachment } from "./display.js";
+export type {
+  GridListItem,
+  Attachment,
+  AvatarProps,
+  AvatarGroupProps,
+  KbdProps,
+  ProgressBarProps,
+  FilterChipProps,
+  CheckListProps,
+  DescriptionListProps,
+  GridListProps,
+  AttachmentListProps,
+} from "./display.js";
 export {
   Stack,
   Container,
@@ -107,13 +127,30 @@ export {
   SectionHeading,
   Prose,
 } from "./layout.js";
-export type { SectionTone } from "./layout.js";
+export type {
+  SectionTone,
+  StackProps,
+  ContainerProps,
+  TextProps,
+  SectionProps,
+  DividerProps,
+  CardProps,
+  MediaObjectProps,
+  SectionHeadingProps,
+  ProseProps,
+} from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
 export type { ChatMessage } from "./showcase.js";
 export { Toast, Toaster, ConfirmDialog, SaveBar, Banner } from "./feedback.js";
-export type { ToastItem } from "./feedback.js";
+export type { ToastItem, ToastAction } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
-export type { CommandItem, StackedListItem } from "./workspace.js";
+export type {
+  CommandItem,
+  StackedListItem,
+  SlideOverProps,
+  CommandPaletteProps,
+  StackedListProps,
+} from "./workspace.js";
 export {
   BentoGrid,
   StatGroup,
@@ -143,7 +180,7 @@ export type { DocsShellProps, FileNode } from "./docs.js";
 export { Listbox, Combobox } from "./choice.js";
 export type { ChoiceOption } from "./choice.js";
 export { Calendar } from "./calendar.js";
-export type { CalendarEvent, CalendarView } from "./calendar.js";
+export type { CalendarEvent, CalendarView, CalendarProps } from "./calendar.js";
 export {
   ProductList,
   ProductOverview,
@@ -162,6 +199,10 @@ export type {
   FilterFacet,
   Review,
   Order,
+  ProductListProps,
+  ProductOverviewProps,
+  ShoppingCartProps,
 } from "./ecommerce.js";
 export { CommentComposer } from "./composer.js";
 export type { LinkItem, ItemGroup } from "./navigation.js";
+export type { HeadingLevel } from "./heading.js";

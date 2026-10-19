@@ -45,13 +45,13 @@ test("HeaderSection is a labelled intro band with an h1 by default", () => {
     stats: [{ label: "Components", value: "100" }],
   });
   const id = markup.match(
-    /<h1 id="([^"]+)">We build shared foundations<\/h1>/,
+    /<h1 id="([^"]+)" class="m-section-title">We build shared foundations<\/h1>/,
   )?.[1];
   assert.ok(id, markup);
   assert.match(
     markup,
     new RegExp(
-      `^<section class="m-marketing-section m-header-section" data-tone="muted" data-align="start" aria-labelledby="${id}" data-m-component="HeaderSection">`,
+      `^<section class="m-marketing-section m-header-section" data-tone="muted" aria-labelledby="${id}" data-m-component="HeaderSection">`,
     ),
   );
   assert.match(
@@ -78,7 +78,10 @@ test("ContentSection pairs prose with optional media", () => {
   );
   assert.match(markup, /data-m-component="ContentSection"/);
   assert.match(markup, /data-media="start"/);
-  assert.match(markup, /<h2 id="[^"]+">Why Mortar exists<\/h2>/);
+  assert.match(
+    markup,
+    /<h2 id="[^"]+" class="m-section-title">Why Mortar exists<\/h2>/,
+  );
   assert.match(
     markup,
     /<div class="m-prose"><p>So we made one kit.<\/p><\/div>/,

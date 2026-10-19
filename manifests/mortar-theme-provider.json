@@ -18,8 +18,9 @@
       "density": "compact | comfortable | spacious",
       "appearance": "\"light\" | \"dark\" | \"system\" (optional; controlled together with onAppearanceChange)",
       "onAppearanceChange": "(appearance: Appearance) => void",
-      "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation.",
-      "scope": "\"document\" | \"container\""
+      "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation. A nested provider without it keeps the outer router.",
+      "scope": "\"document\" | \"container\" (container overlays keep the container's theme)",
+      "className": "string (on the container wrapper)"
     },
     "usage": "Import { ThemeProvider } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

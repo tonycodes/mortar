@@ -15,7 +15,8 @@
       "label": "string",
       "checked": "boolean",
       "onChange": "ChangeEventHandler<HTMLInputElement>",
-      "description": "ReactNode"
+      "description": "ReactNode",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Switch } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

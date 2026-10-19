@@ -23,10 +23,20 @@ async function inert({ page, component, fixture, scope }) {
   await expect(fixture.getByLabel("Callback count")).toHaveText("0");
 }
 
-/** The toned element and the document-level colour it must paint. */
+/**
+ * The toned element and the document-level colour it must paint. The default
+ * tone sets no data-tone, so it is found by its component class instead.
+ */
 async function toned({ page, fixture }, tone, background, ink) {
-  const element = fixture.locator("[data-tone]").first();
-  await expect(element).toHaveAttribute("data-tone", tone);
+  const element =
+    tone === "default"
+      ? fixture
+          .locator('.m-cta, .m-pricing-grid article[data-featured="true"]')
+          .first()
+      : fixture.locator("[data-tone]").first();
+  if (tone === "default")
+    await expect(element).not.toHaveAttribute("data-tone");
+  else await expect(element).toHaveAttribute("data-tone", tone);
   const painted = await element.evaluate((el) => {
     const s = getComputedStyle(el);
     return [s.backgroundColor, s.color];
@@ -73,16 +83,20 @@ export const states = Object.freeze({
       "Check your inbox",
     );
   },
-  // tone="surface" keeps the page surface; tone="inverse" remaps the tokens.
+  // The default tone keeps the page surface; tone="inverse" remaps the tokens.
   async surface(context) {
-    await toned(context, "surface", "--m-surface", "--m-ink");
+    await toned(context, "default", "--m-surface", "--m-ink");
   },
   async inverse(context) {
     await toned(context, "inverse", "--m-inv-surface", "--m-inv-ink");
   },
   async "coming-soon"({ scope }) {
     const plan = scope.locator('article[data-availability="coming-soon"]');
-    await expect(plan.getByRole("status")).toHaveText("Coming soon");
+    // Static availability text, not a live region.
+    await expect(plan.locator(".m-pricing-availability")).toHaveText(
+      "Coming soon",
+    );
+    await expect(plan.getByRole("status")).toHaveCount(0);
     await expect(plan.getByRole("link")).toHaveCount(0);
   },
   async "duplicate-links"({ page, scope }) {

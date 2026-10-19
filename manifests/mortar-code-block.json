@@ -13,7 +13,8 @@
   "contract": {
     "props": {
       "code": "string",
-      "label": "string"
+      "label": "string (visible caption; names the figure)",
+      "className": "string (on the root element)"
     },
     "usage": "Import { CodeBlock } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

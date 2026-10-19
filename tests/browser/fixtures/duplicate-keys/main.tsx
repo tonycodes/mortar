@@ -31,8 +31,8 @@ createRoot(root).render(
       description="Example product"
       columns={[
         {
-          title: "Product",
-          links: [link("Pricing", "/pricing"), link("Plans", "/pricing")],
+          label: "Product",
+          items: [link("Pricing", "/pricing"), link("Plans", "/pricing")],
         },
       ]}
       legal={[link("Terms", "/legal"), link("Privacy", "/legal")]}

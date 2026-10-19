@@ -17,10 +17,10 @@ test("Hero default markup is unchanged", () => {
       title: "Build",
       description: "Desc",
       actions: [action, { label: "More", href: "/more" }],
-      align: "split",
+      layout: "split",
       children: h("p", null, "Shot"),
     }),
-    '<section class="m-hero m-hero-split" data-m-component="Hero"><div><p class="m-eyebrow">New</p><h1>Build</h1><p class="m-hero-description">Desc</p><div class="m-actions"><a class="m-button m-button-primary" href="/choose">Choose</a><a class="m-button m-button-secondary" href="/more">More</a></div></div><div class="m-hero-preview"><p>Shot</p></div></section>',
+    '<section class="m-hero m-hero-split" data-m-component="Hero"><div><p class="m-eyebrow">New</p><h1 class="m-section-title">Build</h1><p class="m-hero-description">Desc</p><div class="m-actions"><a class="m-button m-button-primary" href="/choose">Choose</a><a class="m-button m-button-secondary" href="/more">More</a></div></div><div class="m-hero-preview"><p>Shot</p></div></section>',
   );
 });
 
@@ -32,7 +32,7 @@ test("Hero background is decorative and switches to the inverse tone", () => {
   });
   assert.match(
     html,
-    /<section class="m-hero m-hero-center" data-m-component="Hero" data-background="true" data-tone="inverse"><div class="m-hero-background" aria-hidden="true"><img src="\/bg.jpg" alt=""\/><\/div><div><h1>Build<\/h1>/,
+    /<section class="m-hero m-hero-center" data-m-component="Hero" data-background="true" data-tone="inverse"><div class="m-hero-background" aria-hidden="true"><img src="\/bg.jpg" alt=""\/><\/div><div><h1 class="m-section-title">Build<\/h1>/,
   );
 });
 
@@ -46,11 +46,11 @@ test("FAQ default markup is unchanged", () => {
         { question: "Q2?", answer: "A2." },
       ],
     }),
-    '<section class="m-faq" data-m-component="FAQ"><div><h2>Questions</h2><div>Help</div></div><div><details><summary>Q1?<span aria-hidden="true">+</span></summary><div>A1.</div></details><details><summary>Q2?<span aria-hidden="true">+</span></summary><div>A2.</div></details></div></section>',
+    '<section class="m-faq" data-m-component="FAQ"><div><h2 class="m-section-title">Questions</h2><div>Help</div></div><div><details><summary>Q1?<span aria-hidden="true">+</span></summary><div>A1.</div></details><details><summary>Q2?<span aria-hidden="true">+</span></summary><div>A2.</div></details></div></section>',
   );
 });
 
-test("FAQ grid shows every answer in a description list; centered keeps the accordion", () => {
+test("FAQ grid shows every answer in a description list; center keeps the accordion", () => {
   const items = [
     { question: "Q1?", answer: "A1." },
     { question: "Q2?", answer: "A2." },
@@ -62,13 +62,13 @@ test("FAQ grid shows every answer in a description list; centered keeps the acco
     /<dl class="m-faq-grid"><div><dt>Q1\?<\/dt><dd>A1\.<\/dd><\/div><div><dt>Q2\?<\/dt><dd>A2\.<\/dd><\/div><\/dl>/,
   );
   assert.doesNotMatch(grid, /<details|<summary/);
-  const centered = markup(UI.FAQ, {
+  const center = markup(UI.FAQ, {
     title: "Questions",
     items,
-    layout: "centered",
+    layout: "center",
   });
-  assert.match(centered, /data-layout="centered"/);
-  assert.equal((centered.match(/<details>/g) || []).length, 2);
+  assert.match(center, /data-layout="center"/);
+  assert.equal((center.match(/<details>/g) || []).length, 2);
 });
 
 const pricingPlans = [
@@ -106,7 +106,7 @@ test("Pricing default markup is unchanged", () => {
       plans: pricingPlans,
       tone: "inverse",
     }),
-    '<section class="m-marketing-section m-pricing" data-m-component="Pricing"><h2>Plans</h2><p class="m-section-description">Prices</p><div class="m-segmented" role="group" aria-label="Billing interval"><button type="button" aria-pressed="true">Annual</button><button type="button" aria-pressed="false">Monthly</button></div><div class="m-pricing-grid"><article><h3>Basic</h3><p>Personal</p><div class="m-price"><strong>$0</strong><span>/year</span></div><ul><li>One</li></ul><a class="m-button m-button-secondary" href="/choose">Choose</a></article><article data-featured="true" data-tone="inverse" data-availability="coming-soon"><h3>Team</h3><p>Teams</p><div class="m-price"><strong>$16</strong><span>/year</span></div><ul><li>Two</li></ul><p role="status">Coming soon</p></article></div></section>',
+    '<section class="m-marketing-section m-pricing" data-m-component="Pricing"><h2 class="m-section-title">Plans</h2><p class="m-section-description">Prices</p><div class="m-segmented" role="group" aria-label="Billing interval"><button type="button" aria-pressed="true">Annual</button><button type="button" aria-pressed="false">Monthly</button></div><div class="m-pricing-grid"><article><h3>Basic</h3><p>Personal</p><div class="m-price"><strong>$0</strong><span>/year</span></div><ul><li>One</li></ul><a class="m-button m-button-secondary" href="/choose">Choose</a></article><article data-featured="true" data-tone="inverse" data-availability="coming-soon"><h3>Team</h3><p>Teams</p><div class="m-price"><strong>$16</strong><span>/year</span></div><ul><li>Two</li></ul><p class="m-pricing-availability">Coming soon</p></article></div></section>',
   );
 });
 
@@ -133,13 +133,15 @@ test("Pricing detailed layout puts features beside a price panel", () => {
     html,
     /<article><div class="m-pricing-detail"><h3>Lifetime<\/h3><p>Pay once<\/p><p class="m-pricing-features-label">Included<\/p><ul><li>Forum<\/li><li>Resources<\/li><\/ul><\/div><div class="m-pricing-offer"><div class="m-price"><strong>\$349<\/strong><span>One-time payment<\/span><\/div><a class="m-button m-button-primary" href="\/buy">Get access<\/a><\/div><\/article>/,
   );
-  // Unavailable plans still expose a status, never a purchase link.
+  // Unavailable plans still show their status, never a purchase link. The
+  // text is static, so it is not a live region.
   const blocked = markup(UI.Pricing, {
     title: "Plans",
     layout: "detailed",
     plans: [{ ...pricingPlans[0], availability: "unavailable" }],
   });
-  assert.match(blocked, /<p role="status">Unavailable<\/p>/);
+  assert.match(blocked, /<p class="m-pricing-availability">Unavailable<\/p>/);
+  assert.doesNotMatch(blocked, /role="status"/);
   assert.doesNotMatch(blocked, /href="\/choose"/);
   assert.match(blocked, /What’s included/);
 });
@@ -185,7 +187,7 @@ test("LogoCloud default markup is unchanged; grid and split layouts", () => {
   });
   assert.match(
     split,
-    /aria-label="Companies" data-m-component="LogoCloud" data-layout="split"><div class="m-logo-cloud-copy"><h2>Trusted by teams<\/h2><p class="m-section-description">Big and small\.<\/p><div class="m-actions"><a class="m-button m-button-primary" href="\/cases">Case studies<\/a><\/div><\/div><ul>/,
+    /aria-label="Companies" data-m-component="LogoCloud" data-layout="split"><div class="m-logo-cloud-copy"><h2 class="m-section-title">Trusted by teams<\/h2><p class="m-section-description">Big and small\.<\/p><div class="m-actions"><a class="m-button m-button-primary" href="\/cases">Case studies<\/a><\/div><\/div><ul>/,
   );
   // Without a title the split layout falls back to the visible label.
   assert.match(

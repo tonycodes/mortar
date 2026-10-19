@@ -17,11 +17,13 @@
       "language": "string",
       "lineNumbers": "boolean",
       "highlightLines": "number[]",
-      "prompt": "string"
+      "prompt": "string",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { CodeTabs } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Tabs follow the tabs pattern: arrows, Home and End move and select; each tab controls the code panel. A failed copy says so.",
     "dependencies": []
   },
   "preview": {

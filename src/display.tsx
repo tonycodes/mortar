@@ -1,8 +1,14 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { KitLink } from "./navigation.js";
-import { Check, Paperclip, Person } from "./icons.js";
-import { headingTag } from "./heading.js";
-import { SectionIntro, TermList } from "./internal.js";
+import type { Tone } from "./primitives.js";
+import { Check, Close, Paperclip, Person } from "./icons.js";
+import { headingTag, type HeadingLevel } from "./heading.js";
+import {
+  TermList,
+  cx,
+  focusAfterRemoval,
+  classedIntroSlots,
+} from "./internal.js";
 
 function initials(name: string) {
   return name
@@ -13,15 +19,7 @@ function initials(name: string) {
     .join("");
 }
 
-export function Avatar({
-  name,
-  src,
-  size = "md",
-  shape = "circle",
-  status,
-  statusPosition = "bottom",
-  placeholder = "initials",
-}: {
+export interface AvatarProps {
   name: string;
   src?: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
@@ -31,13 +29,31 @@ export function Avatar({
   statusPosition?: "bottom" | "top";
   /** Shown when there is no `src`: the name's initials or a generic person icon. */
   placeholder?: "initials" | "icon";
-}) {
+  /** Hide the avatar from assistive technology when the name is already visible beside it. */
+  decorative?: boolean;
+  className?: string;
+}
+export function Avatar({
+  name,
+  src,
+  size = "md",
+  shape = "circle",
+  status,
+  statusPosition = "bottom",
+  placeholder = "initials",
+  decorative = false,
+  className,
+}: AvatarProps) {
   return (
     <span
-      className={`m-avatar m-avatar-${size}`}
-      data-shape={shape}
-      role="img"
-      aria-label={status ? `${name}, ${status}` : name}
+      className={cx(`m-avatar m-avatar-${size}`, className)}
+      data-shape={shape === "circle" ? undefined : shape}
+      {...(decorative
+        ? { "aria-hidden": true }
+        : {
+            role: "img",
+            "aria-label": status ? `${name}, ${status}` : name,
+          })}
     >
       {src ? (
         <img src={src} alt="" />
@@ -58,19 +74,22 @@ export function Avatar({
   );
 }
 
+export interface AvatarGroupProps {
+  label: string;
+  people: { name: string; src?: string }[];
+  max?: number;
+  className?: string;
+}
 export function AvatarGroup({
   label,
   people,
   max = 4,
-}: {
-  label: string;
-  people: { name: string; src?: string }[];
-  max?: number;
-}) {
+  className,
+}: AvatarGroupProps) {
   const shown = people.slice(0, max),
     rest = people.length - shown.length;
   return (
-    <ul className="m-avatar-group" aria-label={label}>
+    <ul className={cx("m-avatar-group", className)} aria-label={label}>
       {shown.map((person) => (
         <li key={person.name}>
           <Avatar name={person.name} src={person.src} size="sm" />
@@ -91,9 +110,13 @@ export function AvatarGroup({
   );
 }
 
-export function Kbd({ keys }: { keys: string[] }) {
+export interface KbdProps {
+  keys: string[];
+  className?: string;
+}
+export function Kbd({ keys, className }: KbdProps) {
   return (
-    <span className="m-kbd-group">
+    <span className={cx("m-kbd-group", className)}>
       {keys.map((key, i) => (
         <kbd key={i} className="m-kbd">
           {key}
@@ -103,30 +126,35 @@ export function Kbd({ keys }: { keys: string[] }) {
   );
 }
 
+export interface ProgressBarProps {
+  label: string;
+  value: number;
+  max?: number;
+  valueLabel?: string;
+  /** Status colour for the bar; omit for the accent colour. */
+  tone?: Tone;
+  className?: string;
+}
 export function ProgressBar({
   label,
   value,
   max = 100,
   valueLabel,
-  tone = "primary",
-}: {
-  label: string;
-  value: number;
-  max?: number;
-  valueLabel?: string;
-  tone?: "primary" | "warning" | "danger";
-}) {
+  tone,
+  className,
+}: ProgressBarProps) {
+  const labelId = useId();
   const percent = Math.min(100, Math.max(0, (value / max) * 100));
   return (
-    <div className="m-progress" data-tone={tone}>
+    <div className={cx("m-progress", className)} data-tone={tone}>
       <div className="m-progress-label">
-        <span>{label}</span>
-        {valueLabel && <span>{valueLabel}</span>}
+        <span id={labelId}>{label}</span>
+        {valueLabel && <span aria-hidden="true">{valueLabel}</span>}
       </div>
       <div
         className="m-progress-track"
         role="progressbar"
-        aria-label={label}
+        aria-labelledby={labelId}
         aria-valuemin={0}
         aria-valuemax={max}
         aria-valuenow={value}
@@ -138,34 +166,42 @@ export function ProgressBar({
   );
 }
 
+export interface FilterChipProps {
+  label: ReactNode;
+  selected?: boolean;
+  onClick?: () => void;
+  /** Shows a remove button; focus moves to the next chip once the chip is gone. */
+  onRemove?: () => void;
+  className?: string;
+}
 export function FilterChip({
   label,
   selected = false,
   onClick,
   onRemove,
-}: {
-  label: ReactNode;
-  selected?: boolean;
-  onClick?: () => void;
-  onRemove?: () => void;
-}) {
+  className,
+}: FilterChipProps) {
   if (onRemove)
     return (
-      <span className="m-chip" data-selected>
+      <span className={cx("m-chip", className)} data-selected="true">
         {label}
         <button
           type="button"
-          onClick={onRemove}
+          onClick={(event) => {
+            const chip = event.currentTarget.parentElement;
+            if (chip) focusAfterRemoval(chip);
+            onRemove();
+          }}
           aria-label={`Remove ${typeof label === "string" ? label : "filter"}`}
         >
-          <span aria-hidden="true">✕</span>
+          <Close />
         </button>
       </span>
     );
   return (
     <button
       type="button"
-      className="m-chip"
+      className={cx("m-chip", className)}
       aria-pressed={selected}
       data-selected={selected || undefined}
       onClick={onClick}
@@ -176,24 +212,27 @@ export function FilterChip({
   );
 }
 
+export interface CheckListProps {
+  items: ReactNode[];
+  label?: string;
+  columns?: 1 | 2;
+  size?: "sm" | "md";
+  className?: string;
+}
 /** Feature or inclusion list with a check marker; replaces ad-hoc list-disc styling. */
 export function CheckList({
   items,
   label,
   columns = 1,
   size = "md",
-}: {
-  items: ReactNode[];
-  label?: string;
-  columns?: 1 | 2;
-  size?: "sm" | "md";
-}) {
+  className,
+}: CheckListProps) {
   return (
     <ul
-      className="m-check-list"
+      className={cx("m-check-list", className)}
       aria-label={label}
-      data-columns={columns}
-      data-size={size}
+      data-columns={columns === 1 ? undefined : columns}
+      data-size={size === "md" ? undefined : size}
     >
       {items.map((item, i) => (
         <li key={i}>
@@ -205,6 +244,15 @@ export function CheckList({
   );
 }
 
+export interface DescriptionListProps {
+  title?: string;
+  description?: string;
+  headingLevel?: HeadingLevel;
+  items: { term: string; details: ReactNode; action?: ReactNode }[];
+  layout?: "columns" | "stacked";
+  id?: string;
+  className?: string;
+}
 /** Label/value pairs for detail screens, stacked on narrow screens and in columns when wide. */
 export function DescriptionList({
   title,
@@ -212,23 +260,26 @@ export function DescriptionList({
   headingLevel = 2,
   items,
   layout = "columns",
-}: {
-  title?: string;
-  description?: string;
-  headingLevel?: 2 | 3 | 4;
-  items: { term: string; details: ReactNode; action?: ReactNode }[];
-  layout?: "columns" | "stacked";
-}) {
+  id,
+  className,
+}: DescriptionListProps) {
   return (
-    <div className="m-description-list" data-layout={layout}>
+    <div
+      id={id}
+      className={cx("m-description-list", className)}
+      data-layout={layout === "columns" ? undefined : layout}
+    >
       {title && (
         <div className="m-description-heading">
-          <SectionIntro
-            title={title}
-            description={description}
-            headingLevel={headingLevel}
-            descriptionClassName={null}
-          />
+          {...classedIntroSlots(
+            {
+              title,
+              description,
+              headingLevel,
+              descriptionClassName: null,
+            },
+            "m-description-title",
+          )}
         </div>
       )}
       <TermList
@@ -261,27 +312,35 @@ export interface GridListItem {
   details?: { term: string; details: ReactNode }[];
   actions?: ReactNode;
 }
-/** Responsive grid of cards for people, projects or files. */
+export interface GridListProps {
+  label: string;
+  items: GridListItem[];
+  columns?: 2 | 3 | 4;
+  /** Level of each card's title. */
+  itemHeadingLevel?: HeadingLevel;
+  /** `split` gives each action an equal cell divided by shared borders, e.g. Email | Call. */
+  actionsLayout?: "inline" | "split";
+  className?: string;
+}
+/**
+ * Responsive grid of cards for people, projects or files. A card's title link
+ * covers the card; links and buttons in `media`, `meta`, `details` and
+ * `actions` sit above it and stay clickable.
+ */
 export function GridList({
   label,
   items,
   columns = 3,
-  headingLevel = 3,
+  itemHeadingLevel = 3,
   actionsLayout = "inline",
-}: {
-  label: string;
-  items: GridListItem[];
-  columns?: 2 | 3 | 4;
-  headingLevel?: 2 | 3 | 4;
-  /** `split` gives each action an equal cell divided by shared borders, e.g. Email | Call. */
-  actionsLayout?: "inline" | "split";
-}) {
-  const Heading = headingTag(headingLevel);
+  className,
+}: GridListProps) {
+  const Heading = headingTag(itemHeadingLevel);
   return (
     <ul
-      className="m-grid-list"
+      className={cx("m-grid-list", className)}
       aria-label={label}
-      data-columns={columns}
+      data-columns={columns === 3 ? undefined : columns}
       data-actions={actionsLayout === "split" ? "split" : undefined}
     >
       {items.map((item) => (
@@ -296,7 +355,7 @@ export function GridList({
               <span className="m-grid-list-media">{item.media}</span>
             )}
             <div className="m-grid-list-text">
-              <Heading>
+              <Heading className="m-grid-list-title">
                 {item.href ? (
                   <KitLink href={item.href}>{item.title}</KitLink>
                 ) : (
@@ -329,16 +388,19 @@ export interface Attachment {
   actionLabel?: string;
   icon?: ReactNode;
 }
+export interface AttachmentListProps {
+  files: Attachment[];
+  label?: string;
+  className?: string;
+}
 /** Files attached to a record, each with a size and a named download link. */
 export function AttachmentList({
   files,
   label = "Attachments",
-}: {
-  files: Attachment[];
-  label?: string;
-}) {
+  className,
+}: AttachmentListProps) {
   return (
-    <ul className="m-attachments" aria-label={label}>
+    <ul className={cx("m-attachments", className)} aria-label={label}>
       {files.map((file) => (
         <li key={file.id}>
           <span className="m-attachment-icon" aria-hidden="true">

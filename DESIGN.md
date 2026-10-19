@@ -18,7 +18,7 @@ The machine-readable contract is design-principles.json. Both the local contribu
 
 Every component follows these rules. New props must fit them, and the code review checks them.
 
-- **Headings.** `headingLevel` sets the component's outermost heading (`2`–`6`, using the shared `HeadingLevel` type). Nested headings derive from it (`level + 1`). `itemHeadingLevel` is added only where items need their own level. No component hard-codes a heading that sits inside a page section. `h1` belongs to the page, so only PageHeading and NotFound default to it.
+- **Headings.** `headingLevel` sets the component's outermost heading (`1`–`6`, using the shared `HeadingLevel` type). Nested headings derive from it (`level + 1`). `itemHeadingLevel` is added only where items need their own level. No component hard-codes a heading that sits inside a page section. `h1` belongs to the page, so only components that open a page default to it: PageHeading, NotFound, Hero, HeaderSection and ProductOverview. Use a lower level when one of them sits below another page heading.
 - **Layout, variant and align.**
   - `layout` chooses the structural arrangement, for example `"split" | "grid" | "center"`.
   - `variant` chooses the visual treatment, for example `"underline" | "pills"` or `"plain" | "cards"`.
@@ -31,6 +31,10 @@ Every component follows these rules. New props must fit them, and the code revie
   - A destructive action is `tone="danger"`, and a destructive item in a list is `danger: true`.
   - Tone renders as `data-tone`.
 - **State.** Busy work is `loading`. Empty content is `empty?: { title; description?; action? }`. Errors are `error` (string).
+  - A loading button stays focusable: it sets `aria-busy` and `aria-disabled` and ignores activation instead of becoming natively disabled.
+  - A field `error` is announced when it appears (`role="alert"`). `required` marks the control (native `required` or `aria-required`) and adds a decorative `*` after the label.
+  - Status and alert regions stay mounted, and their content changes, so each message is announced once.
+  - Dismissing or removing an element that holds focus moves focus to the next control, never to the page body.
 - **Callbacks.** Value changes use `onChange(value)`. Choosing an item or action uses `onSelect`. Dismissal uses `onDismiss` and closing uses `onClose`.
 - **Items.**
   - Links share `LinkItem` (`label`, `href`, `current?`, `icon?`, `count?`, `description?`), and grouped items share `{ label; items }`.

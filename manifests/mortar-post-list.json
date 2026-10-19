@@ -15,7 +15,11 @@
       "title": "string",
       "description": "string",
       "posts": "{ href; title; excerpt; date; dateLabel; category?; image? }[]",
-      "action": "LinkAction"
+      "action": "LinkAction",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+      "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default: one below headingLevel)"
     },
     "usage": "Import { PostList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

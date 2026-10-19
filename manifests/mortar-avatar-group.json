@@ -14,7 +14,8 @@
     "props": {
       "label": "string",
       "people": "{ name: string; src?: string }[]",
-      "max": "number"
+      "max": "number",
+      "className": "string"
     },
     "usage": "Import { AvatarGroup } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -16,10 +16,11 @@
       "logo": "ReactNode",
       "workspace": "string",
       "homeHref": "string",
-      "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] })",
+      "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] }; a parent with children is a disclosure whose own href is its first link)",
       "sections": "{ label: string; items: NavigationItem[] }[]",
       "footer": "ReactNode",
-      "label": "string"
+      "label": "string",
+      "className": "string"
     },
     "usage": "Import { Sidebar } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

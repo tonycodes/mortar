@@ -15,7 +15,8 @@
       "as": "ElementType",
       "size": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
       "padded": "boolean",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "className": "string"
     },
     "usage": "Import { Container } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

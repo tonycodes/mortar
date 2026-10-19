@@ -18,7 +18,8 @@
       "align": "\"start\" | \"center\" | \"end\" | \"stretch\"",
       "justify": "\"start\" | \"center\" | \"end\" | \"between\"",
       "wrap": "boolean",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "className": "string"
     },
     "usage": "Import { Stack } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

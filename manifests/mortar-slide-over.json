@@ -18,7 +18,8 @@
       "description": "string",
       "children": "ReactNode",
       "actions": "ReactNode",
-      "size": "md | lg | xl"
+      "size": "md | lg | xl",
+      "className": "string"
     },
     "usage": "Import { SlideOver } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
 import { accessibility } from "../support/preview.mjs";
+import AxeBuilder from "@axe-core/playwright";
 for (const width of [320, 768, 1280]) {
   test(`playground browsing and settings at ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -59,9 +60,7 @@ for (const width of [320, 768, 1280]) {
     await accessibility(page);
     if (width < 900) {
       await page.getByLabel("Find a component").fill("");
-      await page
-        .getByRole("button", { name: "Open navigation", exact: true })
-        .click();
+      await page.getByRole("button", { name: "Menu", exact: true }).click();
       await page
         .getByRole("dialog")
         .getByRole("link", { name: "ActionLink", exact: true })
@@ -238,7 +237,7 @@ test("component code view shows the example source and is shareable", async ({
   await expect(code).toContainText(
     'import { Button, Card, Stack, Text } from "@tony-ui/mortar";',
   );
-  await expect(code).toContainText('<Card tone="sunken" padding="compact">');
+  await expect(code).toContainText('<Card tone="muted" padding="compact">');
   await expect(code).not.toContainText("UI.");
   await page.reload();
   await expect(code).toContainText("<Card");
@@ -258,7 +257,7 @@ for (const width of [390, 1280])
     await expect(
       aside.getByRole("grid", { name: "October 2026" }),
     ).toBeVisible();
-    const main = await page.locator("#m-content").boundingBox();
+    const main = await page.getByRole("main").boundingBox();
     const side = await aside.boundingBox();
     // Side by side on wide screens, stacked below the main column on narrow ones.
     if (width >= 1280) expect(side.x).toBeGreaterThan(main.x + main.width - 1);
@@ -348,6 +347,27 @@ for (const id of templateIds)
       expect(errors).toEqual([]);
     });
 
+// Shop templates keep a gapless outline below their single h1 (the cart page
+// used to jump from h1 to the bag lines' h3).
+for (const id of [
+  "product-page",
+  "cart-page",
+  "category-page",
+  "checkout-page",
+  "order-history",
+])
+  test(`page template ${id} keeps its heading order`, async ({ page }) => {
+    await page.goto(`/?recipe=${id}`);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    const result = await new AxeBuilder({ page })
+      .include("main")
+      .withRules(["heading-order"])
+      .analyze();
+    expect(
+      result.violations.flatMap((v) => v.nodes.map((n) => n.html)),
+    ).toEqual([]);
+  });
+
 test("overview links every page template", async ({ page }) => {
   await page.goto("/");
   const section = page.getByRole("region", { name: "Page templates" });
@@ -369,7 +389,8 @@ test("settings template shows and clears unsaved changes", async ({ page }) => {
   await page.goto("/?recipe=settings");
   const name = page.getByLabel("Workspace name");
   await name.fill("Northwind Labs");
-  const bar = page.getByText("You have unsaved changes");
+  // The bar's status region stays mounted (empty) so its message is announced.
+  const bar = page.getByRole("region", { name: "You have unsaved changes" });
   await expect(bar).toBeVisible();
   await page.getByRole("button", { name: "Discard" }).click();
   await expect(name).toHaveValue("Northwind");

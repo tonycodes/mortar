@@ -52,7 +52,7 @@ function Playground({
   );
   const navigation = [
     {
-      title: "Browse",
+      label: "Browse",
       items: [
         {
           label: "All components",
@@ -63,7 +63,7 @@ function Playground({
     },
     ...kits.flatMap((kit) =>
       kit.categories.map((cat) => ({
-        title: cat.title,
+        label: cat.title,
         items: cat.components
           .filter((name) => matches.some((c) => c.export === name))
           .map((name) => ({
@@ -76,7 +76,7 @@ function Playground({
   ]
     .filter((group) => group.items.length)
     .concat({
-      title: "Page templates",
+      label: "Page templates",
       items: templates.map((template) => ({
         label: template.title,
         href: url("recipe", template.id),

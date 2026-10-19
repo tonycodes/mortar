@@ -20,7 +20,10 @@ test("Calendar lays out six whole weeks starting on the chosen weekday", () => {
   assert.equal(cells.length, 42);
   assert.equal(cells[0], "2026-09-28");
   assert.equal(cells[41], "2026-11-08");
-  assert.match(monday, /<h2 id="[^"]+" aria-live="polite">October 2026<\/h2>/);
+  assert.match(
+    monday,
+    /<h2 id="[^"]+" class="m-calendar-title" aria-live="polite">October 2026<\/h2>/,
+  );
   const sunday = days(
     html(Calendar, { month: "2026-10", today: "2026-10-17", weekStartsOn: 0 }),
   );
@@ -52,7 +55,7 @@ test("Calendar exposes a grid with one tab stop, today, selection and event coun
   assert.equal(markup.match(/tabindex="0"/g)?.length, 1);
   assert.match(
     markup,
-    /<td aria-selected="true"[^>]*><button[^>]*tabindex="0"[^>]*aria-label="Tuesday, 20 October 2026, 2 events"/,
+    /<td aria-selected="true"[^>]*><button[^>]*tabindex="0"[^>]*aria-pressed="true"[^>]*aria-label="Tuesday, 20 October 2026, 2 events"/,
   );
   assert.match(
     markup,
@@ -114,6 +117,6 @@ test("AppShell adds a labelled secondary column only when given one", () => {
   });
   assert.match(
     columns,
-    /<div class="m-app-columns"><main id="m-content" tabindex="-1">Body<\/main><aside class="m-app-aside" aria-label="Recent activity">Activity<\/aside><\/div>/,
+    /<div class="m-app-columns"><main id="m-content-[^"]+" tabindex="-1">Body<\/main><aside class="m-app-aside" aria-label="Recent activity">Activity<\/aside><\/div>/,
   );
 });

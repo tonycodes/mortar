@@ -2,16 +2,27 @@ import { IconLinks, KitLink, type IconLink } from "./navigation.js";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { ActionLink, Button, Input, type LinkAction } from "./primitives.js";
 import { Avatar } from "./display.js";
-import { childLevel, headingTag } from "./heading.js";
-import { ActionLinks, SectionIntro, TermList } from "./internal.js";
+import type { SectionTone } from "./layout.js";
+import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
+import {
+  ActionLinks,
+  TermList,
+  TitledIntro,
+  cx,
+  sectionTone,
+} from "./internal.js";
 
 export function BentoGrid({
+  id,
+  className,
   eyebrow,
   title,
   description,
   items,
   headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -20,14 +31,20 @@ export function BentoGrid({
     description: string;
     visual?: ReactNode;
     span?: 1 | 2;
-    inverse?: boolean;
+    /** The tile's surface; inverse remaps it to the inverse tokens. */
+    tone?: SectionTone;
   }[];
-  headingLevel?: 2 | 3 | 4;
+  /** The section title's level; tile titles sit one level below. */
+  headingLevel?: HeadingLevel;
 }) {
-  const ItemHeading = headingTag(childLevel(headingLevel, 4));
+  const ItemHeading = headingTag(childLevel(headingLevel));
   return (
-    <section className="m-marketing-section" data-m-component="BentoGrid">
-      <SectionIntro
+    <section
+      id={id}
+      className={cx("m-marketing-section", className)}
+      data-m-component="BentoGrid"
+    >
+      <TitledIntro
         eyebrow={eyebrow}
         title={title}
         description={description}
@@ -36,10 +53,7 @@ export function BentoGrid({
       <ul className="m-bento">
         {items.map((item, index) => (
           <li key={`${item.title}:${index}`} data-span={item.span || 1}>
-            <article
-              data-inverse={item.inverse || undefined}
-              data-tone={item.inverse ? "inverse" : undefined}
-            >
+            <article data-tone={sectionTone(item.tone)}>
               {item.visual && (
                 <div className="m-bento-visual">{item.visual}</div>
               )}
@@ -54,16 +68,21 @@ export function BentoGrid({
 }
 
 export function StatGroup({
+  id,
+  className,
   label,
   items,
 }: {
+  id?: string;
+  className?: string;
   label: string;
   /** description: optional supporting sentence under the value. */
   items: { value: string; label: string; description?: string }[];
 }) {
   return (
     <TermList
-      className="m-stat-group"
+      id={id}
+      className={cx("m-stat-group", className)}
       aria-label={label}
       data-m-component="StatGroup"
       items={items.map((item) => ({
@@ -78,25 +97,33 @@ export function StatGroup({
 }
 
 export function TestimonialGrid({
+  id,
+  className,
   title,
   items,
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title?: string;
   items: { quote: string; name: string; role?: string; avatar?: string }[];
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
   return (
     <section
-      className="m-marketing-section"
+      id={id}
+      className={cx("m-marketing-section", className)}
       aria-label={title ? undefined : "Testimonials"}
       data-m-component="TestimonialGrid"
     >
-      {title && <h2>{title}</h2>}
+      {title && <Heading className="m-section-title">{title}</Heading>}
       <div className="m-testimonial-grid">
         {items.map((item) => (
           <figure key={item.name}>
             <blockquote>{item.quote}</blockquote>
             <figcaption>
-              <Avatar name={item.name} src={item.avatar} size="sm" />
+              <Avatar decorative name={item.name} src={item.avatar} size="sm" />
               <span>
                 <strong>{item.name}</strong>
                 {item.role && <span>{item.role}</span>}
@@ -110,12 +137,17 @@ export function TestimonialGrid({
 }
 
 export function PlanComparison({
+  id,
+  className,
   title,
   description,
   plans,
   featuredPlan,
   groups,
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   plans: string[];
@@ -124,15 +156,22 @@ export function PlanComparison({
     label: string;
     rows: { feature: string; values: (boolean | string)[] }[];
   }[];
+  headingLevel?: HeadingLevel;
 }) {
-  const id = useId();
+  const headingId = useId();
   return (
     <section
-      className="m-marketing-section"
-      aria-labelledby={id}
+      id={id}
+      className={cx("m-marketing-section", className)}
+      aria-labelledby={headingId}
       data-m-component="PlanComparison"
     >
-      <SectionIntro id={id} title={title} description={description} />
+      <TitledIntro
+        id={headingId}
+        title={title}
+        description={description}
+        headingLevel={headingLevel}
+      />
       <div
         className="m-table-scroll m-comparison"
         role="region"
@@ -169,15 +208,19 @@ export function PlanComparison({
                       key={plans[i]}
                       data-featured={plans[i] === featuredPlan || undefined}
                     >
-                      {value === true ? (
-                        <span aria-label="Included">✓</span>
-                      ) : value === false ? (
-                        <span
-                          aria-label="Not included"
-                          className="m-comparison-no"
-                        >
-                          —
-                        </span>
+                      {typeof value === "boolean" ? (
+                        // The glyph is decoration; the cell's text is the meaning.
+                        <>
+                          <span
+                            aria-hidden="true"
+                            className={value ? undefined : "m-comparison-no"}
+                          >
+                            {value ? "✓" : "—"}
+                          </span>
+                          <span className="m-sr-only">
+                            {value ? "Included" : "Not included"}
+                          </span>
+                        </>
                       ) : (
                         value
                       )}
@@ -194,11 +237,17 @@ export function PlanComparison({
 }
 
 export function PostList({
+  id,
+  className,
   title,
   description,
   posts,
   action,
+  headingLevel = 2,
+  itemHeadingLevel,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   posts: {
@@ -211,12 +260,24 @@ export function PostList({
     image?: ReactNode;
   }[];
   action?: LinkAction;
+  headingLevel?: HeadingLevel;
+  /** Level of each post title; defaults to one below `headingLevel`. */
+  itemHeadingLevel?: HeadingLevel;
 }) {
+  const PostHeading = headingTag(itemHeadingLevel ?? childLevel(headingLevel));
   return (
-    <section className="m-marketing-section" data-m-component="PostList">
+    <section
+      id={id}
+      className={cx("m-marketing-section", className)}
+      data-m-component="PostList"
+    >
       <div className="m-section-heading-row">
         <div>
-          <SectionIntro title={title} description={description} />
+          <TitledIntro
+            title={title}
+            description={description}
+            headingLevel={headingLevel}
+          />
         </div>
         {action && <ActionLink {...action} variant="secondary" />}
       </div>
@@ -229,9 +290,9 @@ export function PostList({
                 {post.category && <span>{post.category}</span>}
                 <time dateTime={post.date}>{post.dateLabel}</time>
               </p>
-              <h3>
+              <PostHeading className="m-post-title">
                 <KitLink href={post.href}>{post.title}</KitLink>
-              </h3>
+              </PostHeading>
               <p>{post.excerpt}</p>
             </article>
           </li>
@@ -242,10 +303,15 @@ export function PostList({
 }
 
 export function TeamGrid({
+  id,
+  className,
   title,
   description,
   members,
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   members: {
@@ -256,16 +322,30 @@ export function TeamGrid({
     /** Profile links, e.g. icon-only social links named "Ana on LinkedIn". */
     links?: IconLink[];
   }[];
+  headingLevel?: HeadingLevel;
 }) {
   return (
-    <section className="m-marketing-section" data-m-component="TeamGrid">
-      <SectionIntro title={title} description={description} />
+    <section
+      id={id}
+      className={cx("m-marketing-section", className)}
+      data-m-component="TeamGrid"
+    >
+      <TitledIntro
+        title={title}
+        description={description}
+        headingLevel={headingLevel}
+      />
       <ul className="m-team-grid">
         {members.map((member) => (
           <li key={member.name}>
             <div className="m-team-portrait">
               {member.image || (
-                <Avatar name={member.name} size="lg" shape="square" />
+                <Avatar
+                  decorative
+                  name={member.name}
+                  size="lg"
+                  shape="square"
+                />
               )}
             </div>
             <strong>{member.name}</strong>
@@ -282,21 +362,35 @@ export function TeamGrid({
 }
 
 export function ContactSection({
+  id,
+  className,
   title,
   description,
   details = [],
+  headingLevel = 2,
   children,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   details?: { label: string; value: ReactNode }[];
+  headingLevel?: HeadingLevel;
   /** The consumer's form. Compose with Input, Select, TextArea and Button. */
   children: ReactNode;
 }) {
   return (
-    <section className="m-contact" data-m-component="ContactSection">
+    <section
+      id={id}
+      className={cx("m-contact", className)}
+      data-m-component="ContactSection"
+    >
       <div>
-        <SectionIntro title={title} description={description} />
+        <TitledIntro
+          title={title}
+          description={description}
+          headingLevel={headingLevel}
+        />
         {details.length > 0 && (
           <TermList
             items={details.map((d) => ({ term: d.label, details: d.value }))}
@@ -309,35 +403,48 @@ export function ContactSection({
 }
 
 export function Newsletter({
+  id,
+  className,
   title,
   description,
   onSubmit,
   submitLabel = "Subscribe",
   status = "idle",
   message,
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   onSubmit: (email: string) => void;
   submitLabel?: string;
+  /** submitting: busy and inert. success: announces `message`. error: shows `message` on the field. */
   status?: "idle" | "submitting" | "success" | "error";
   message?: string;
+  headingLevel?: HeadingLevel;
 }) {
   const [email, setEmail] = useState("");
+  const submitting = status === "submitting";
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(email);
+    if (!submitting) onSubmit(email);
   };
   return (
-    <section className="m-newsletter" data-m-component="Newsletter">
+    <section
+      id={id}
+      className={cx("m-newsletter", className)}
+      data-m-component="Newsletter"
+    >
       <div>
-        <SectionIntro
+        <TitledIntro
           title={title}
           description={description}
           descriptionClassName={null}
+          headingLevel={headingLevel}
         />
       </div>
-      <form onSubmit={submit} noValidate>
+      <form onSubmit={submit} aria-busy={submitting || undefined}>
         <Input
           label="Email address"
           type="email"
@@ -346,39 +453,54 @@ export function Newsletter({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={status === "error" ? message : undefined}
-          hint={status === "success" ? message : undefined}
+          disabled={submitting}
         />
-        <Button type="submit" loading={status === "submitting"}>
+        <Button type="submit" loading={submitting}>
           {submitLabel}
         </Button>
+        {/* Mounted empty so the success text is announced when it arrives. */}
+        <p role="status" className="m-newsletter-status">
+          {status === "success" ? message || "Thanks for subscribing." : ""}
+        </p>
       </form>
     </section>
   );
 }
 
 export function NotFound({
+  id,
+  className,
   code = "404",
   title,
   description,
   actions,
   illustration,
+  headingLevel = 1,
 }: {
+  id?: string;
+  className?: string;
   code?: string;
   title: string;
   description: string;
   actions: LinkAction[];
   /** Decorative artwork above the code. */
   illustration?: ReactNode;
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
   return (
-    <section className="m-not-found" data-m-component="NotFound">
+    <section
+      id={id}
+      className={cx("m-not-found", className)}
+      data-m-component="NotFound"
+    >
       {illustration && (
         <div className="m-not-found-art" aria-hidden="true">
           {illustration}
         </div>
       )}
       <p className="m-eyebrow">{code}</p>
-      <h1>{title}</h1>
+      <Heading className="m-section-title">{title}</Heading>
       <p>{description}</p>
       <ActionLinks actions={actions} />
     </section>

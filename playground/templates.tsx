@@ -53,15 +53,15 @@ function SiteFooter() {
       description="Chat and booking for small businesses."
       columns={[
         {
-          title: "Product",
-          links: [
+          label: "Product",
+          items: [
             { label: "Pricing", href: "?recipe=pricing" },
             { label: "Changelog", href: "#changelog" },
           ],
         },
         {
-          title: "Company",
-          links: [
+          label: "Company",
+          items: [
             { label: "About", href: "?recipe=about" },
             { label: "Careers", href: "#careers" },
           ],
@@ -395,15 +395,15 @@ function StoreFooter() {
       description="Everyday goods, made to last."
       columns={[
         {
-          title: "Shop",
-          links: [
+          label: "Shop",
+          items: [
             { label: "Bags", href: "?recipe=product-page" },
             { label: "Kitchen", href: "#kitchen" },
           ],
         },
         {
-          title: "Help",
-          links: [
+          label: "Help",
+          items: [
             { label: "Delivery", href: "#delivery" },
             { label: "Returns", href: "#returns" },
           ],
@@ -510,12 +510,17 @@ export function CartPageTemplate() {
               onRemove={(id) =>
                 setItems((current) => current.filter((item) => item.id !== id))
               }
-              emptyAction={
-                <UI.ActionLink
-                  label="Continue shopping"
-                  href="?recipe=product-page"
-                />
-              }
+              headingLevel={2}
+              empty={{
+                title: "Your bag is empty",
+                description: "Items you add will appear here.",
+                action: (
+                  <UI.ActionLink
+                    label="Continue shopping"
+                    href="?recipe=product-page"
+                  />
+                ),
+              }}
             />
             <UI.OrderSummary
               lines={[
@@ -553,9 +558,11 @@ export function CategoryPageTemplate() {
             title="Shop all"
             description="Everyday goods in natural materials."
           />
+          <UI.SectionHeading title="Shop by category" divider={false} />
           <UI.GridList
             label="Shop by category"
             columns={3}
+            itemHeadingLevel={2}
             items={[
               {
                 id: "bags",
@@ -584,16 +591,20 @@ export function CategoryPageTemplate() {
             <UI.ProductFilters
               facets={facets}
               selected={selected}
-              onChange={(facet, values) =>
-                setSelected((current) => ({ ...current, [facet]: values }))
-              }
+              onChange={setSelected}
             />
             {shown.length ? (
-              <UI.ProductList label="Products" products={shown} columns={3} />
+              <UI.ProductList
+                label="Products"
+                products={shown}
+                columns={3}
+                itemHeadingLevel={2}
+              />
             ) : (
               <UI.EmptyState
                 title="No matching products"
                 description="Try removing a filter."
+                headingLevel={2}
               />
             )}
           </div>

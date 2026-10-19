@@ -26,7 +26,7 @@ test("Breadcrumbs mark the current page and PageHeading reuses them", () => {
   assert.match(own, /<span aria-current="page">Northwind<\/span>/);
   assert.ok(
     html(PageHeading, { title: "Northwind", breadcrumbs: items }).includes(
-      '<nav class="m-breadcrumbs" aria-label="Breadcrumb" data-separator="slash">',
+      '<nav class="m-breadcrumbs" aria-label="Breadcrumb"><ol>',
     ),
   );
 });
@@ -53,7 +53,12 @@ test("Sidebar renders labelled navigation with icons and counts, and AppShell ke
   assert.match(own, /<span class="m-nav-icon" aria-hidden="true"><svg/);
   const inbox = own.match(/<a href="#inbox"[^]*?<\/a>/)[0];
   assert.doesNotMatch(inbox, /m-nav-marker/);
-  assert.match(own, /<h2>Teams<\/h2>/);
+  // Group labels name a group inside the navigation; they are not headings.
+  assert.match(
+    own,
+    /<div role="group" aria-labelledby="([^"]+)"><p id="\1" class="m-nav-group-title">Teams<\/p>/,
+  );
+  assert.doesNotMatch(own, /<h2/);
   assert.match(own, /<div class="m-user">Signed in<\/div>/);
   const shell = html(AppShell, {
     brand: "Northwind",
@@ -82,10 +87,7 @@ test("Navbar links its mobile menu button to the navigation it controls", () => 
   const controls = own.match(/aria-controls="([^"]+)"/)?.[1];
   assert.ok(controls, own);
   assert.match(own, /aria-expanded="false"/);
-  assert.match(
-    own,
-    new RegExp(`<nav id="${controls}" aria-label="Primary" data-open="false">`),
-  );
+  assert.match(own, new RegExp(`<nav id="${controls}" aria-label="Primary">`));
   assert.match(own, /<a href="#dash" aria-current="page">Dashboard<\/a>/);
 });
 

@@ -18,8 +18,10 @@
       "onChange": "(value: string | null) => void",
       "placeholder": "string",
       "hint": "string",
-      "error": "string",
-      "disabled": "boolean"
+      "error": "string (announced when it appears)",
+      "disabled": "boolean",
+      "required": "boolean (decorative marker; the label says \"required\")",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Listbox } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -14,7 +14,7 @@ const icon = h("svg", { viewBox: "0 0 20 20" });
 test("Button keeps its default markup and adds sizes and icons", () => {
   assert.equal(
     html(Button, {}, "Save"),
-    '<button type="button" class="m-button m-button-primary ">Save</button>',
+    '<button type="button" class="m-button m-button-primary">Save</button>',
   );
   assert.match(html(Button, { size: "sm" }, "Save"), /data-size="sm"/);
   assert.match(
@@ -37,7 +37,7 @@ test("Button keeps its default markup and adds sizes and icons", () => {
 test("Notice keeps its default markup and adds actions and dismiss", () => {
   assert.equal(
     html(Notice, { title: "Saved" }),
-    '<div class="m-notice m-tone-neutral"><strong>Saved</strong></div>',
+    '<div class="m-notice"><strong>Saved</strong></div>',
   );
   const full = html(
     Notice,

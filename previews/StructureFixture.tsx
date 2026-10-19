@@ -344,7 +344,7 @@ export function StructureCase({ name }: { name: string }) {
               Mortar 1.0 is out with 92 components.
             </UI.Banner>
           )}
-          <UI.Banner label="Maintenance notice" tone="neutral">
+          <UI.Banner label="Maintenance notice" tone="default">
             Scheduled maintenance on Sunday from 02:00 to 03:00 UTC.
           </UI.Banner>
           <output aria-label="Banner state">
@@ -364,6 +364,9 @@ export function StructureCase({ name }: { name: string }) {
               events={meetings}
             />
             <output aria-label="Selected date">{day}</output>
+            <UI.Button variant="ghost" onClick={() => setDay("2026-12-03")}>
+              Select 3 December
+            </UI.Button>
           </div>
           <UI.Calendar
             today="2026-10-17"

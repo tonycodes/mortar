@@ -1,4 +1,11 @@
-import { useId, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { KitLink } from "./navigation.js";
 import {
   ActionLink,
@@ -9,8 +16,8 @@ import {
 } from "./primitives.js";
 import { FilterChip } from "./display.js";
 import { ChevronDown, Star } from "./icons.js";
-import { headingTag } from "./heading.js";
-import { Swatch, TermList } from "./internal.js";
+import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
+import { Swatch, TermList, cx } from "./internal.js";
 
 export interface ProductImage {
   src: string;
@@ -36,28 +43,37 @@ export interface ProductCard {
   action?: ReactNode;
 }
 
+export interface ProductListProps {
+  /** Accessible name of the list. */
+  label: string;
+  products: ProductCard[];
+  columns?: 2 | 3 | 4;
+  /** Heading level of each product name (default 3). */
+  itemHeadingLevel?: HeadingLevel;
+  /** `cards` frames each product with a border, for listings with full details. */
+  variant?: "plain" | "cards";
+  id?: string;
+  className?: string;
+}
+
 /** Grid of product cards; each card's name link covers the card. */
 export function ProductList({
   label,
   products,
   columns = 4,
-  headingLevel = 3,
+  itemHeadingLevel = 3,
   variant = "plain",
-}: {
-  label: string;
-  products: ProductCard[];
-  columns?: 2 | 3 | 4;
-  headingLevel?: 2 | 3 | 4;
-  /** `card` frames each product with a border, for listings with full details. */
-  variant?: "plain" | "card";
-}) {
-  const Heading = headingTag(headingLevel);
+  id,
+  className,
+}: ProductListProps) {
+  const Heading = headingTag(itemHeadingLevel);
   return (
     <ul
-      className="m-product-list"
+      id={id}
+      className={cx("m-product-list", className)}
       aria-label={label}
       data-columns={columns}
-      data-variant={variant === "card" ? "card" : undefined}
+      data-variant={variant === "cards" ? "cards" : undefined}
     >
       {products.map((product) => (
         <li key={product.id}>
@@ -72,7 +88,7 @@ export function ProductList({
             )}
           </div>
           <div className="m-product-info">
-            <Heading>
+            <Heading className="m-product-name">
               <KitLink href={product.href}>{product.name}</KitLink>
             </Heading>
             {product.meta && <p className="m-product-meta">{product.meta}</p>}
@@ -114,6 +130,32 @@ export interface ProductOption {
   }[];
 }
 
+export interface ProductOverviewProps {
+  name: string;
+  price: string;
+  description?: ReactNode;
+  images: ProductImage[];
+  rating?: { value: number; count: number; href?: string };
+  options?: ProductOption[];
+  /** Selected value per option id. */
+  selected?: Record<string, string>;
+  onSelect?: (option: string, value: string) => void;
+  /** Called when the add form is submitted (button click or Enter). */
+  onAdd?: () => void;
+  addLabel?: string;
+  /** Shows the add button as busy while the item is being added. */
+  loading?: boolean;
+  details?: string[];
+  /** Level of the product name heading (default 1: the product page's title). */
+  headingLevel?: HeadingLevel;
+  /** Omit the name heading when a container (e.g. a dialog title) already shows it. */
+  hideName?: boolean;
+  /** `grid` shows every image at once: the first large, the rest tiered beneath it. */
+  gallery?: "thumbnails" | "grid";
+  id?: string;
+  className?: string;
+}
+
 /** Product page body: gallery, price, rating, option pickers, add to bag and details. */
 export function ProductOverview({
   name,
@@ -126,37 +168,27 @@ export function ProductOverview({
   onSelect,
   onAdd,
   addLabel = "Add to bag",
-  adding = false,
+  loading = false,
   details = [],
   headingLevel = 1,
   hideName = false,
   gallery = "thumbnails",
-}: {
-  name: string;
-  price: string;
-  description?: ReactNode;
-  images: ProductImage[];
-  rating?: { value: number; count: number; href?: string };
-  options?: ProductOption[];
-  /** Selected value per option id. */
-  selected?: Record<string, string>;
-  onSelect?: (option: string, value: string) => void;
-  onAdd?: () => void;
-  addLabel?: string;
-  adding?: boolean;
-  details?: string[];
-  headingLevel?: 1 | 2;
-  /** Omit the name heading when a container (e.g. a dialog title) already shows it. */
-  hideName?: boolean;
-  /** `grid` shows every image at once: the first large, the rest tiered beneath it. */
-  gallery?: "thumbnails" | "grid";
-}) {
+  id,
+  className,
+}: ProductOverviewProps) {
   const [current, setCurrent] = useState(0);
+  // A new image set (another product, or another colour) starts at its first image.
+  const imageKey = images.map((image) => image.src).join("\n");
+  const [shownKey, setShownKey] = useState(imageKey);
+  if (shownKey !== imageKey) {
+    setShownKey(imageKey);
+    setCurrent(0);
+  }
   const group = useId();
   const Heading = headingTag(headingLevel);
   const shown = images[current] ?? images[0];
   return (
-    <div className="m-product-overview">
+    <div id={id} className={cx("m-product-overview", className)}>
       {gallery === "grid" ? (
         <div className="m-product-gallery" data-gallery="grid">
           {images.map((image) => (
@@ -194,7 +226,7 @@ export function ProductOverview({
         </div>
       )}
       <div className="m-product-details">
-        {!hideName && <Heading>{name}</Heading>}
+        {!hideName && <Heading className="m-product-name">{name}</Heading>}
         <p className="m-product-price">{price}</p>
         {rating && (
           <div className="m-rating">
@@ -216,7 +248,7 @@ export function ProductOverview({
           className="m-product-form"
           onSubmit={(event) => {
             event.preventDefault();
-            onAdd?.();
+            if (!loading) onAdd?.();
           }}
         >
           {options.map((option) => (
@@ -250,7 +282,7 @@ export function ProductOverview({
               </div>
             </fieldset>
           ))}
-          <Button type="button" onClick={onAdd} loading={adding}>
+          <Button type="submit" loading={loading}>
             {addLabel}
           </Button>
         </form>
@@ -279,38 +311,86 @@ export interface CartItem {
   stock?: string;
 }
 
-/** Bag contents with per-line quantity and remove controls. */
+/** Content of an empty state: a title, an optional description and action. */
+export interface EmptyContent {
+  title: string;
+  description?: string;
+  action?: ReactNode;
+}
+
+export interface ShoppingCartProps {
+  items: CartItem[];
+  onQuantityChange: (id: string, quantity: number) => void;
+  onRemove: (id: string) => void;
+  /** Accessible name of the list of lines. */
+  label?: string;
+  maxQuantity?: number;
+  /** Level of each line's product name, and of the empty state's title (default 3). */
+  headingLevel?: HeadingLevel;
+  /** Shown when there are no items. */
+  empty?: EmptyContent;
+  id?: string;
+  className?: string;
+}
+
+/**
+ * Bag contents with per-line quantity and remove controls. After a removal,
+ * focus moves to the next line's Remove button (the previous one after the
+ * last line), or to the empty state once the bag is empty.
+ */
 export function ShoppingCart({
   items,
   onQuantityChange,
   onRemove,
   label = "Items in your bag",
   maxQuantity = 8,
-  emptyTitle = "Your bag is empty",
-  emptyDescription = "Items you add will appear here.",
-  emptyAction,
-}: {
-  items: CartItem[];
-  onQuantityChange: (id: string, quantity: number) => void;
-  onRemove: (id: string) => void;
-  label?: string;
-  maxQuantity?: number;
-  emptyTitle?: string;
-  emptyDescription?: string;
-  emptyAction?: ReactNode;
-}) {
+  headingLevel = 3,
+  empty = {
+    title: "Your bag is empty",
+    description: "Items you add will appear here.",
+  },
+  id,
+  className,
+}: ShoppingCartProps) {
   const base = useId();
+  const Heading = headingTag(headingLevel);
+  const root = useRef<HTMLElement>(null);
+  // The line whose Remove button was pressed, until the consumer drops it.
+  const removing = useRef<{ index: number; id: string } | null>(null);
+  useEffect(() => {
+    const pending = removing.current;
+    if (!pending || items.some((item) => item.id === pending.id)) return;
+    removing.current = null;
+    const buttons =
+      root.current?.querySelectorAll<HTMLButtonElement>(".m-cart-remove");
+    if (buttons?.length)
+      buttons[Math.min(pending.index, buttons.length - 1)].focus();
+    else root.current?.focus();
+  }, [items]);
   if (!items.length)
     return (
-      <EmptyState
-        title={emptyTitle}
-        description={emptyDescription}
-        action={emptyAction}
-      />
+      <div
+        id={id}
+        className={cx("m-cart-empty", className)}
+        ref={root as RefObject<HTMLDivElement>}
+        tabIndex={-1}
+      >
+        <EmptyState
+          title={empty.title}
+          description={empty.description}
+          action={empty.action}
+          headingLevel={headingLevel}
+        />
+      </div>
     );
   return (
-    <ul className="m-cart" aria-label={label}>
-      {items.map((item) => {
+    <ul
+      id={id}
+      className={cx("m-cart", className)}
+      aria-label={label}
+      ref={root as RefObject<HTMLUListElement>}
+    >
+      {items.map((item, index) => {
         const quantityId = `${base}-${item.id}`;
         const choices = Array.from(
           { length: Math.max(maxQuantity, item.quantity) },
@@ -322,9 +402,9 @@ export function ShoppingCart({
               <img src={item.image.src} alt={item.image.alt} loading="lazy" />
             </div>
             <div className="m-cart-info">
-              <h3>
+              <Heading className="m-cart-item-title">
                 <KitLink href={item.href}>{item.name}</KitLink>
-              </h3>
+              </Heading>
               {item.meta && <p className="m-product-meta">{item.meta}</p>}
               <p className="m-product-price">{item.price}</p>
               {item.stock && <p className="m-cart-stock">{item.stock}</p>}
@@ -352,7 +432,10 @@ export function ShoppingCart({
               <button
                 type="button"
                 className="m-cart-remove"
-                onClick={() => onRemove(item.id)}
+                onClick={() => {
+                  removing.current = { index, id: item.id };
+                  onRemove(item.id);
+                }}
               >
                 Remove<span className="m-sr-only"> {item.name}</span>
               </button>
@@ -372,20 +455,30 @@ export function OrderSummary({
   action,
   headingLevel = 2,
   children,
+  id,
+  className,
 }: {
   title?: string;
   lines: { label: string; value: string }[];
   total: { label: string; value: string };
   action?: ReactNode;
-  headingLevel?: 2 | 3;
+  headingLevel?: HeadingLevel;
   /** Notes such as a discount code field or delivery estimate. */
   children?: ReactNode;
+  id?: string;
+  className?: string;
 }) {
-  const id = useId();
+  const titleId = useId();
   const Heading = headingTag(headingLevel);
   return (
-    <section className="m-order-summary" aria-labelledby={id}>
-      <Heading id={id}>{title}</Heading>
+    <section
+      id={id}
+      className={cx("m-order-summary", className)}
+      aria-labelledby={titleId}
+    >
+      <Heading id={titleId} className="m-order-summary-title">
+        {title}
+      </Heading>
       <TermList
         items={lines.map((line) => ({ term: line.label, details: line.value }))}
       >
@@ -400,25 +493,29 @@ export function OrderSummary({
   );
 }
 
-type OverviewProps = Parameters<typeof ProductOverview>[0];
-
 /** Product overview in a dialog, with a link to the full product page. */
 export function ProductQuickView({
   open,
   onClose,
   href,
   detailsLabel = "View full details",
+  className,
   ...product
-}: Omit<OverviewProps, "headingLevel" | "hideName"> & {
+}: Omit<
+  ProductOverviewProps,
+  "headingLevel" | "hideName" | "id" | "className"
+> & {
   open: boolean;
   onClose: () => void;
   /** Full product page. */
   href: string;
   detailsLabel?: string;
+  /** Class on the dialog's content wrapper. */
+  className?: string;
 }) {
   return (
     <Modal open={open} onClose={onClose} title={product.name} size="lg">
-      <div className="m-quick-view">
+      <div className={cx("m-quick-view", className)}>
         <ProductOverview {...product} hideName />
         <ActionLink label={detailsLabel} href={href} variant="ghost" />
       </div>
@@ -432,19 +529,29 @@ export interface FilterFacet {
   options: { value: string; label: string; count?: number }[];
 }
 
-/** Collapsible checkbox facets with counts, plus removable chips for active filters. */
+/**
+ * Collapsible checkbox facets with counts, plus removable chips for active
+ * filters. Every change, Clear all included, calls `onChange` once with the
+ * complete next selection.
+ */
 export function ProductFilters({
   facets,
   selected,
   onChange,
   label = "Filters",
+  id,
+  className,
 }: {
   facets: FilterFacet[];
   /** Selected values per facet id. */
   selected: Record<string, string[]>;
-  onChange: (facet: string, values: string[]) => void;
+  /** The complete next selection, keyed by facet id. */
+  onChange: (selected: Record<string, string[]>) => void;
   label?: string;
+  id?: string;
+  className?: string;
 }) {
+  const root = useRef<HTMLElement>(null);
   const active = facets.flatMap((facet) =>
     (selected[facet.id] || []).map((value) => ({
       facet,
@@ -455,31 +562,62 @@ export function ProductFilters({
   );
   const toggle = (facet: string, value: string, on: boolean) => {
     const current = selected[facet] || [];
-    onChange(
-      facet,
-      on ? [...current, value] : current.filter((v) => v !== value),
-    );
+    onChange({
+      ...selected,
+      [facet]: on ? [...current, value] : current.filter((v) => v !== value),
+    });
   };
+  const clearAll = () => {
+    onChange(
+      Object.fromEntries(
+        [...Object.keys(selected), ...facets.map((facet) => facet.id)].map(
+          (facet) => [facet, []],
+        ),
+      ),
+    );
+    // The chips and this button disappear: continue from the first facet.
+    root.current?.querySelector("summary")?.focus();
+  };
+  // A removed chip takes its button with it: focus the chip that takes its
+  // place (or the previous one), else the first facet.
+  const removedChip = useRef<number | null>(null);
+  const activeKey = active
+    .map((item) => `${item.facet.id}:${item.value}`)
+    .join();
+  useEffect(() => {
+    const index = removedChip.current;
+    if (index === null) return;
+    removedChip.current = null;
+    const buttons = root.current?.querySelectorAll<HTMLButtonElement>(
+      ".m-filter-chips .m-chip button",
+    );
+    if (buttons?.length) buttons[Math.min(index, buttons.length - 1)].focus();
+    else root.current?.querySelector("summary")?.focus();
+  }, [activeKey]);
   return (
-    <section className="m-filters" aria-label={label}>
+    <section
+      id={id}
+      ref={root}
+      className={cx("m-filters", className)}
+      aria-label={label}
+    >
       {active.length > 0 && (
         <div
           className="m-filter-chips"
           role="group"
           aria-label="Active filters"
         >
-          {active.map((item) => (
+          {active.map((item, index) => (
             <FilterChip
               key={`${item.facet.id}:${item.value}`}
               label={item.label}
-              onRemove={() => toggle(item.facet.id, item.value, false)}
+              onRemove={() => {
+                removedChip.current = index;
+                toggle(item.facet.id, item.value, false);
+              }}
             />
           ))}
-          <button
-            type="button"
-            className="m-filter-clear"
-            onClick={() => facets.forEach((facet) => onChange(facet.id, []))}
-          >
+          <button type="button" className="m-filter-clear" onClick={clearAll}>
             Clear all
           </button>
         </div>
@@ -548,6 +686,9 @@ export function ProductReviews({
   distribution,
   reviews,
   action,
+  headingLevel = 2,
+  id,
+  className,
 }: {
   title?: string;
   average: number;
@@ -556,12 +697,24 @@ export function ProductReviews({
   reviews: Review[];
   /** E.g. a "Write a review" button. */
   action?: ReactNode;
+  /** Level of the title; each review's title is one level below. */
+  headingLevel?: HeadingLevel;
+  id?: string;
+  className?: string;
 }) {
-  const id = useId();
+  const base = useId();
+  const Heading = headingTag(headingLevel);
+  const ReviewHeading = headingTag(childLevel(headingLevel));
   return (
-    <section className="m-reviews" aria-labelledby={id}>
+    <section
+      id={id}
+      className={cx("m-reviews", className)}
+      aria-labelledby={base}
+    >
       <div className="m-reviews-summary">
-        <h2 id={id}>{title}</h2>
+        <Heading id={base} className="m-reviews-title">
+          {title}
+        </Heading>
         <div className="m-rating">
           <Stars
             value={average}
@@ -598,14 +751,19 @@ export function ProductReviews({
           <article
             key={review.id}
             className="m-review"
-            aria-labelledby={`${id}-${review.id}`}
+            aria-labelledby={`${base}-${review.id}`}
           >
             <header>
               <Stars
                 value={review.rating}
                 label={`Rated ${review.rating} out of 5`}
               />
-              <h3 id={`${id}-${review.id}`}>{review.title}</h3>
+              <ReviewHeading
+                id={`${base}-${review.id}`}
+                className="m-review-title"
+              >
+                {review.title}
+              </ReviewHeading>
               <p className="m-review-meta">
                 {review.author} · {review.date}
               </p>
@@ -643,26 +801,44 @@ export interface Order {
 export function OrderHistory({
   orders,
   headingLevel = 2,
-  emptyTitle = "No orders yet",
-  emptyDescription = "Orders you place will appear here.",
+  empty = {
+    title: "No orders yet",
+    description: "Orders you place will appear here.",
+  },
+  id,
+  className,
 }: {
   orders: Order[];
-  headingLevel?: 2 | 3;
-  emptyTitle?: string;
-  emptyDescription?: string;
+  /** Level of each order's heading, and of the empty state's title (default 2). */
+  headingLevel?: HeadingLevel;
+  /** Shown when there are no orders. */
+  empty?: EmptyContent;
+  id?: string;
+  className?: string;
 }) {
   const base = useId();
   if (!orders.length)
-    return <EmptyState title={emptyTitle} description={emptyDescription} />;
+    return (
+      <div id={id} className={cx("m-order-history", className)}>
+        <EmptyState
+          title={empty.title}
+          description={empty.description}
+          action={empty.action}
+          headingLevel={headingLevel}
+        />
+      </div>
+    );
   const Heading = headingTag(headingLevel);
   return (
-    <div className="m-order-history">
+    <div id={id} className={cx("m-order-history", className)}>
       {orders.map((order) => {
-        const id = `${base}-${order.id}`;
+        const titleId = `${base}-${order.id}`;
         return (
-          <section key={order.id} className="m-order" aria-labelledby={id}>
+          <section key={order.id} className="m-order" aria-labelledby={titleId}>
             <header className="m-order-header">
-              <Heading id={id}>Order {order.number}</Heading>
+              <Heading id={titleId} className="m-order-title">
+                Order {order.number}
+              </Heading>
               <TermList
                 items={[
                   { term: "Date placed", details: order.date },

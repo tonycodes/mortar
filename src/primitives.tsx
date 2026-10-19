@@ -2,7 +2,10 @@ import { KitLink } from "./navigation.js";
 import {
   Fragment,
   forwardRef,
+  useEffect,
   useId,
+  useRef,
+  useState,
   type ButtonHTMLAttributes,
   type InputHTMLAttributes,
   type SelectHTMLAttributes,
@@ -21,17 +24,24 @@ import {
   MenuSeparator,
 } from "@headlessui/react";
 import { ChevronDown, Close } from "./icons.js";
-import { headingTag } from "./heading.js";
+import { headingTag, type HeadingLevel } from "./heading.js";
 import {
   DialogFrame,
-  FieldMessage,
+  FieldFeedback,
   LinkContent,
+  RequiredMark,
   Swatch,
+  cx,
+  focusAway,
   rovingIndex,
   useField,
 } from "./internal.js";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "danger";
+  /**
+   * Busy: shows a spinner, sets aria-busy and aria-disabled and ignores
+   * activation. The button stays focusable, so focus is never lost.
+   */
   loading?: boolean;
   size?: "sm" | "md" | "lg";
   /** Decorative icon; the text remains the accessible name. */
@@ -47,12 +57,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       loading = false,
       disabled,
       children,
-      className = "",
+      className,
       type = "button",
       size = "md",
       icon,
       iconPosition = "start",
       iconOnly = false,
+      onClick,
       ...props
     },
     ref,
@@ -67,9 +78,15 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
         ref={ref}
         type={type}
-        disabled={disabled || loading}
+        disabled={disabled}
+        aria-disabled={(loading && !disabled) || props["aria-disabled"]}
         aria-busy={loading || undefined}
-        className={`m-button m-button-${variant} ${className}`}
+        onClick={(event) => {
+          // A busy button keeps focus but must not act or submit its form.
+          if (loading) event.preventDefault();
+          else onClick?.(event);
+        }}
+        className={cx("m-button", `m-button-${variant}`, className)}
         data-size={size === "md" ? undefined : size}
         data-icon-only={iconOnly && icon ? true : undefined}
       >
@@ -93,16 +110,21 @@ export function ActionLink({
   label,
   href,
   variant = "primary",
-}: LinkAction & { variant?: ButtonProps["variant"] }) {
+  className,
+}: LinkAction & { variant?: ButtonProps["variant"]; className?: string }) {
   return (
-    <KitLink className={`m-button m-button-${variant}`} href={href}>
+    <KitLink
+      className={cx("m-button", `m-button-${variant}`, className)}
+      href={href}
+    >
       {label}
     </KitLink>
   );
 }
 export interface ButtonGroupItem {
   label: string;
-  onClick?: () => void;
+  /** Run the item's action. Use href instead for navigation. */
+  onSelect?: () => void;
   href?: string;
   icon?: ReactNode;
   /** Show only the icon; the label remains the accessible name. */
@@ -113,12 +135,18 @@ export interface ButtonGroupItem {
 export function ButtonGroup({
   label,
   items,
+  className,
 }: {
   label: string;
   items: ButtonGroupItem[];
+  className?: string;
 }) {
   return (
-    <div className="m-button-group" role="group" aria-label={label}>
+    <div
+      className={cx("m-button-group", className)}
+      role="group"
+      aria-label={label}
+    >
       {items.map((item) => {
         const content = (
           <>
@@ -141,7 +169,7 @@ export function ButtonGroup({
             type="button"
             aria-label={name}
             disabled={item.disabled}
-            onClick={item.onClick}
+            onClick={item.onSelect}
           >
             {content}
           </button>
@@ -154,16 +182,45 @@ export type Tone = "neutral" | "info" | "success" | "warning" | "danger";
 export function Badge({
   children,
   tone = "neutral",
+  className,
 }: {
   children: ReactNode;
   tone?: Tone;
+  className?: string;
 }) {
-  return <span className={`m-badge m-tone-${tone}`}>{children}</span>;
+  return (
+    <span
+      className={cx("m-badge", className)}
+      data-tone={tone === "neutral" ? undefined : tone}
+    >
+      {children}
+    </span>
+  );
 }
 interface FieldDescription {
   label: string;
   hint?: string;
+  /** Marks the field invalid; the message is announced when it appears. */
   error?: string;
+  /** On the field's root element. */
+  className?: string;
+}
+/** The field label; a required field adds a decorative marker after the text. */
+function FieldLabel({
+  htmlFor,
+  label,
+  required,
+}: {
+  htmlFor: string;
+  label: string;
+  required?: boolean;
+}) {
+  return (
+    <label htmlFor={htmlFor}>
+      {label}
+      {required && <RequiredMark />}
+    </label>
+  );
 }
 export interface InputProps
   extends InputHTMLAttributes<HTMLInputElement>, FieldDescription {
@@ -187,7 +244,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     leadingIcon,
     trailingIcon,
     action,
-    className = "",
+    className,
     ...props
   },
   ref,
@@ -199,8 +256,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     describedBy: props["aria-describedby"],
   });
   return (
-    <div className="m-field">
-      <label htmlFor={fieldId}>{label}</label>
+    <div className={cx("m-field", className)}>
+      <FieldLabel htmlFor={fieldId} label={label} required={props.required} />
       <div
         className="m-input-group"
         data-invalid={!!error || undefined}
@@ -217,7 +274,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           {...props}
           ref={ref}
           id={fieldId}
-          className={className}
           aria-invalid={!!error || props["aria-invalid"]}
           aria-describedby={describedBy}
         />
@@ -229,7 +285,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         {suffix && <span>{suffix}</span>}
         {action && <div className="m-input-action">{action}</div>}
       </div>
-      <FieldMessage id={messageId} hint={hint} error={error} />
+      <FieldFeedback id={messageId} hint={hint} error={error} />
     </div>
   );
 });
@@ -239,6 +295,7 @@ export function Select({
   id,
   hint,
   error,
+  className,
   ...props
 }: SelectHTMLAttributes<HTMLSelectElement> &
   FieldDescription & { options: { value: string; label: string }[] }) {
@@ -250,8 +307,8 @@ export function Select({
   });
   const listbox = !!props.multiple || (props.size || 0) > 1;
   return (
-    <div className="m-field">
-      <label htmlFor={fieldId}>{label}</label>
+    <div className={cx("m-field", className)}>
+      <FieldLabel htmlFor={fieldId} label={label} required={props.required} />
       <div className="m-select-control" data-listbox={listbox || undefined}>
         <select
           {...props}
@@ -267,7 +324,7 @@ export function Select({
         </select>
         {!listbox && <ChevronDown />}
       </div>
-      <FieldMessage id={messageId} hint={hint} error={error} />
+      <FieldFeedback id={messageId} hint={hint} error={error} />
     </div>
   );
 }
@@ -277,16 +334,18 @@ export function Fieldset({
   description,
   disabled,
   children,
+  className,
 }: {
   legend: string;
   description?: string;
   disabled?: boolean;
   children: ReactNode;
+  className?: string;
 }) {
   const id = useId();
   return (
     <fieldset
-      className="m-fieldset"
+      className={cx("m-fieldset", className)}
       disabled={disabled}
       aria-describedby={description ? id : undefined}
     >
@@ -301,6 +360,7 @@ export function TextArea({
   id,
   hint,
   error,
+  className,
   ...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement> & FieldDescription) {
   const { fieldId, messageId, describedBy } = useField({
@@ -310,15 +370,15 @@ export function TextArea({
     describedBy: props["aria-describedby"],
   });
   return (
-    <div className="m-field">
-      <label htmlFor={fieldId}>{label}</label>
+    <div className={cx("m-field", className)}>
+      <FieldLabel htmlFor={fieldId} label={label} required={props.required} />
       <textarea
         {...props}
         id={fieldId}
         aria-invalid={!!error || props["aria-invalid"]}
         aria-describedby={describedBy}
       />
-      <FieldMessage id={messageId} hint={hint} error={error} />
+      <FieldFeedback id={messageId} hint={hint} error={error} />
     </div>
   );
 }
@@ -328,17 +388,19 @@ function DescribedChoice({
   id,
   label,
   description,
+  className,
 }: {
   input: (attrs: { id: string; "aria-describedby": string }) => ReactNode;
   id?: string;
   label: ReactNode;
   description: ReactNode;
+  className?: string;
 }) {
   const generated = useId();
   const fieldId = id || generated;
   const descriptionId = `${fieldId}-description`;
   return (
-    <div className="m-choice m-choice-described">
+    <div className={cx("m-choice", "m-choice-described", className)}>
       {input({ id: fieldId, "aria-describedby": descriptionId })}
       <div className="m-choice-text">
         <label htmlFor={fieldId}>{label}</label>
@@ -350,6 +412,7 @@ function DescribedChoice({
 export function Checkbox({
   label,
   description,
+  className,
   ...props
 }: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
   label: ReactNode;
@@ -362,11 +425,12 @@ export function Checkbox({
         id={props.id}
         label={label}
         description={description}
+        className={className}
         input={(attrs) => <input {...props} {...attrs} type="checkbox" />}
       />
     );
   return (
-    <label className="m-choice">
+    <label className={cx("m-choice", className)}>
       <input {...props} type="checkbox" />
       {label}
     </label>
@@ -375,6 +439,7 @@ export function Checkbox({
 export function Switch({
   label,
   description,
+  className,
   ...props
 }: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "role"> & {
   label: string;
@@ -387,6 +452,7 @@ export function Switch({
         id={props.id}
         label={label}
         description={description}
+        className={className}
         input={(attrs) => (
           <input
             {...props}
@@ -399,7 +465,7 @@ export function Switch({
       />
     );
   return (
-    <label className="m-choice">
+    <label className={cx("m-choice", className)}>
       <input {...props} type="checkbox" role="switch" className="m-switch" />
       {label}
     </label>
@@ -412,6 +478,7 @@ export function RadioGroup({
   onChange,
   options,
   layout = "list",
+  className,
 }: {
   label: string;
   name: string;
@@ -427,10 +494,11 @@ export function RadioGroup({
   }[];
   /** Stacked cards, a card grid, or colour swatches. */
   layout?: "list" | "grid" | "swatches";
+  className?: string;
 }) {
   return (
     <fieldset
-      className="m-radio-group"
+      className={cx("m-radio-group", className)}
       data-layout={layout === "list" ? undefined : layout}
     >
       <legend>{label}</legend>
@@ -457,6 +525,13 @@ export function RadioGroup({
     </fieldset>
   );
 }
+/** Arrow keys follow reading direction: in right-to-left text ArrowLeft moves forward. */
+function logicalKey(key: string, element: Element) {
+  if (getComputedStyle(element).direction !== "rtl") return key;
+  if (key === "ArrowLeft") return "ArrowRight";
+  if (key === "ArrowRight") return "ArrowLeft";
+  return key;
+}
 export function Tabs({
   label,
   value,
@@ -464,8 +539,10 @@ export function Tabs({
   items,
   variant = "underline",
   fullWidth = false,
+  className,
 }: {
   label: string;
+  /** The selected tab's id. A value matching no tab leaves the first tab in the tab order. */
   value: string;
   onChange: (value: string) => void;
   /** Underlined tabs (default) or filled pills. */
@@ -476,14 +553,20 @@ export function Tabs({
     id: string;
     label: string;
     content: ReactNode;
-    /** Shown after the label, e.g. a number of items. */
+    /** Shown after the label whenever it is defined, including 0. */
     count?: number | string;
     icon?: ReactNode;
   }[];
+  className?: string;
 }) {
   const base = useId();
+  const tabId = (id: string) => `${base}-${id}-tab`;
+  // The tab in the tab order: the selected one, or the first when none matches.
+  const focusable = items.some((item) => item.id === value)
+    ? value
+    : items[0]?.id;
   return (
-    <div>
+    <div className={className}>
       <div
         className="m-tabs"
         role="tablist"
@@ -491,26 +574,31 @@ export function Tabs({
         data-variant={variant === "underline" ? undefined : variant}
         data-full-width={fullWidth || undefined}
         onKeyDown={(e) => {
+          const focused = items.findIndex(
+            (item) => tabId(item.id) === (e.target as Element).id,
+          );
           const next = rovingIndex(
-            e.key,
-            items.findIndex((item) => item.id === value),
+            logicalKey(e.key, e.currentTarget),
+            focused >= 0
+              ? focused
+              : items.findIndex((item) => item.id === focusable),
             items.length,
           );
           if (next === null) return;
           e.preventDefault();
           onChange(items[next].id);
-          document.getElementById(`${base}-${items[next].id}-tab`)?.focus();
+          document.getElementById(tabId(items[next].id))?.focus();
         }}
       >
         {items.map((item) => (
           <button
             key={item.id}
-            id={`${base}-${item.id}-tab`}
+            id={tabId(item.id)}
             type="button"
             role="tab"
             aria-selected={item.id === value}
             aria-controls={`${base}-${item.id}-panel`}
-            tabIndex={item.id === value ? 0 : -1}
+            tabIndex={item.id === focusable ? 0 : -1}
             onClick={() => onChange(item.id)}
           >
             <LinkContent
@@ -518,7 +606,6 @@ export function Tabs({
               icon={item.icon}
               label={item.label}
               count={item.count}
-              countWhen="defined"
             />
           </button>
         ))}
@@ -529,7 +616,7 @@ export function Tabs({
           hidden={item.id !== value}
           role="tabpanel"
           id={`${base}-${item.id}-panel`}
-          aria-labelledby={`${base}-${item.id}-tab`}
+          aria-labelledby={tabId(item.id)}
           tabIndex={0}
         >
           {item.content}
@@ -545,6 +632,7 @@ export function Modal({
   children,
   actions,
   size = "md",
+  className,
 }: {
   open: boolean;
   onClose: () => void;
@@ -553,11 +641,16 @@ export function Modal({
   actions?: ReactNode;
   /** "lg" widens the panel for rich content such as a product quick view. */
   size?: "md" | "lg";
+  /** On the dialog panel. */
+  className?: string;
 }) {
   return (
     <DialogFrame open={open} onClose={onClose}>
       <div className="m-dialog-position">
-        <DialogPanel className="m-dialog-panel" data-size={size}>
+        <DialogPanel
+          className={cx("m-dialog-panel", className)}
+          data-size={size === "md" ? undefined : size}
+        >
           <div className="m-dialog-heading">
             <DialogTitle>{title}</DialogTitle>
             <Button variant="ghost" onClick={onClose} aria-label="Close dialog">
@@ -591,6 +684,7 @@ export function Dropdown({
   variant = "secondary",
   align = "end",
   header,
+  className,
 }: {
   /** Trigger text, and its accessible name when iconOnly. */
   label: string;
@@ -602,6 +696,8 @@ export function Dropdown({
   align?: "start" | "end";
   /** Content above the items, e.g. "Signed in as …". */
   header?: ReactNode;
+  /** On the trigger button. */
+  className?: string;
 }) {
   const groups: { section?: string; items: DropdownItem[] }[] = [];
   for (const item of items) {
@@ -648,7 +744,7 @@ export function Dropdown({
   return (
     <Menu>
       <MenuButton
-        className={`m-button m-button-${variant}`}
+        className={cx("m-button", `m-button-${variant}`, className)}
         aria-label={iconOnly && icon ? label : undefined}
         data-icon-only={iconOnly && icon ? true : undefined}
       >
@@ -658,7 +754,11 @@ export function Dropdown({
           </span>
         )}
         {!(iconOnly && icon) && label}
-        {!(iconOnly && icon) && <span aria-hidden="true">⌄</span>}
+        {!(iconOnly && icon) && (
+          <span className="m-button-icon" aria-hidden="true">
+            <ChevronDown />
+          </span>
+        )}
       </MenuButton>
       <MenuItems anchor={`bottom ${align}`} className="m-menu">
         {header && <div className="m-menu-header">{header}</div>}
@@ -692,24 +792,46 @@ export function Notice({
   actions,
   onDismiss,
   dismissLabel,
+  id,
+  className,
 }: {
   title: string;
   children?: ReactNode;
   tone?: Tone;
+  /**
+   * Announce the notice to assistive technology when it appears and when its
+   * title changes: politely, or assertively for the danger tone.
+   */
   announce?: boolean;
   /** Links or buttons such as "View details". */
   actions?: ReactNode;
+  /** Called by the dismiss button; focus moves to the next control on the page. */
   onDismiss?: () => void;
   /** Accessible name for the dismiss button; defaults to "Dismiss {title}". */
   dismissLabel?: string;
+  id?: string;
+  className?: string;
 }) {
+  const root = useRef<HTMLDivElement>(null);
+  // A status region only announces changes made after it is in the document,
+  // so a polite notice re-inserts its title once it has mounted; the region is
+  // atomic, so the whole notice is read. An alert is announced on insertion.
+  const polite = announce && tone !== "danger";
+  const [live, setLive] = useState(false);
+  useEffect(() => {
+    if (polite) setLive(true);
+  }, [polite]);
   return (
     <div
-      className={`m-notice m-tone-${tone}`}
+      ref={root}
+      id={id}
+      className={cx("m-notice", className)}
+      data-tone={tone === "neutral" ? undefined : tone}
       role={announce ? (tone === "danger" ? "alert" : "status") : undefined}
+      aria-atomic={polite || undefined}
       data-dismissible={onDismiss ? true : undefined}
     >
-      <strong>{title}</strong>
+      <strong key={live ? "live" : "initial"}>{title}</strong>
       {children && <div>{children}</div>}
       {actions && <div className="m-notice-actions">{actions}</div>}
       {onDismiss && (
@@ -717,7 +839,10 @@ export function Notice({
           type="button"
           className="m-notice-dismiss"
           aria-label={dismissLabel ?? `Dismiss ${title}`}
-          onClick={onDismiss}
+          onClick={() => {
+            onDismiss();
+            focusAway(root.current);
+          }}
         >
           <Close />
         </button>
@@ -734,9 +859,11 @@ export function EmptyState({
   align = "center",
   headingLevel = 3,
   children,
+  id,
+  className,
 }: {
   title: string;
-  description: string;
+  description?: string;
   action?: ReactNode;
   /** Decorative illustration or icon above the title. */
   icon?: ReactNode;
@@ -744,15 +871,18 @@ export function EmptyState({
   dashed?: boolean;
   /** `start` left-aligns the content for starting-point and template layouts. */
   align?: "center" | "start";
-  /** Heading level for the title so the page keeps a correct outline. */
-  headingLevel?: 2 | 3 | 4;
+  /** Level of the title heading, so the page keeps a correct outline. */
+  headingLevel?: HeadingLevel;
   /** Extra content after the action, e.g. starting points or recommendations. */
   children?: ReactNode;
+  id?: string;
+  className?: string;
 }) {
   const Heading = headingTag(headingLevel);
   return (
     <div
-      className="m-empty"
+      id={id}
+      className={cx("m-empty", className)}
       data-dashed={dashed || undefined}
       data-align={align === "start" ? "start" : undefined}
     >
@@ -762,7 +892,7 @@ export function EmptyState({
         </span>
       )}
       <Heading>{title}</Heading>
-      <p>{description}</p>
+      {description && <p>{description}</p>}
       {action}
       {children && <div className="m-empty-extra">{children}</div>}
     </div>
