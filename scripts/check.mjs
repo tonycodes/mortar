@@ -11,6 +11,18 @@ import { createHash } from "node:crypto";
 import ts from "typescript";
 import { format } from "prettier";
 import { contractErrors } from "./test-contract.mjs";
+/** Every declaration block whose selector list contains `selector`, joined. */
+export function selectorBody(css, selector) {
+  const bodies = [];
+  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = match[1]
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .split(",")
+      .map((item) => item.trim());
+    if (selectors.includes(selector)) bodies.push(match[2]);
+  }
+  return bodies.join("\n");
+}
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export async function checkKit(root = ROOT, { refresh = false } = {}) {
   root = await realpath(root);
@@ -276,17 +288,6 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       [...tokensCss.matchAll(/(--m-[a-z0-9-]+)\s*:/g)].map((match) => match[1]),
     ),
   ].sort();
-  const selectorBody = (selector) => {
-    const bodies = [];
-    for (const match of tokensCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const selectors = match[1]
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .split(",")
-        .map((item) => item.trim());
-      if (selectors.includes(selector)) bodies.push(match[2]);
-    }
-    return bodies.join("\n");
-  };
   const declares = (body, name) =>
     new RegExp(`(?:^|[\\s;{])${name}\\s*:`).test(body);
   for (const selector of [
@@ -295,7 +296,7 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
     '[data-mortar-brand="green"]',
     '[data-mortar-brand="green"][data-mortar-appearance="dark"]',
   ]) {
-    const body = selectorBody(selector);
+    const body = selectorBody(tokensCss, selector);
     const at = tokensCss.indexOf(selector);
     const line = at < 0 ? 1 : tokensCss.slice(0, at).split("\n").length;
     for (const name of ["--m-accent", "--m-on-accent"])
