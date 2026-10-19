@@ -2,7 +2,7 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
-## Unreleased
+## 0.7.0 (2026-10-19)
 
 Additive: no exports removed, no prop types narrowed, and every default renders unchanged.
 
