@@ -63,10 +63,6 @@ export function findCategory(path: string | null) {
 }
 
 const fixtures = import.meta.glob("../previews/*Preview.tsx");
-const sources = import.meta.glob("../previews/*.tsx", {
-  query: "?raw",
-  import: "default",
-});
 const previews = new Map<string, LazyExoticComponent<ComponentType>>();
 export function previewFor(name: string) {
   const entry = entries.get(name);
@@ -80,45 +76,16 @@ export function previewFor(name: string) {
   return previews.get(name)!;
 }
 
-/** Recover the JSX for one fixture case so the Code view shows what the preview renders. */
+/**
+ * The JSX one fixture case renders, extracted at build time from the fixture's
+ * TypeScript AST (playground/examples.mjs) and loaded on first use.
+ */
 export async function exampleSource(entry: Entry): Promise<string> {
-  const load = (path: string) =>
-    (sources[path] as (() => Promise<string>) | undefined)?.();
-  const preview = await load(`../${entry.preview.source}`);
-  const fixture = preview?.match(/from "\.\/(\w+)"/)?.[1];
-  const text = fixture && (await load(`../previews/${fixture}.tsx`));
-  let body: string | undefined;
-  if (text) {
-    const start = text.indexOf(`case "${entry.export}":`);
-    if (start >= 0) {
-      const rest = text.slice(start);
-      const end = rest.search(/\n\s*break;/);
-      const block = end >= 0 ? rest.slice(0, end) : "";
-      const open = block.indexOf("= (");
-      const close = block.lastIndexOf(");");
-      if (open >= 0 && close > open) body = block.slice(open + 3, close);
-    }
-  }
-  const imports = `import { ${entry.export} } from "@tony-ui/mortar";`;
-  if (!body) return imports;
-  const lines = body.replace(/\bUI\./g, "").split("\n");
-  while (lines.length && !lines[0].trim()) lines.shift();
-  while (lines.length && !lines[lines.length - 1].trim()) lines.pop();
-  const indent = Math.min(
-    ...lines.filter((l) => l.trim()).map((l) => l.match(/^ */)![0].length),
+  const { default: examples } = await import("virtual:mortar-examples");
+  return (
+    examples[entry.export] ??
+    `import { ${entry.export} } from "@tony-ui/mortar";`
   );
-  const used = [
-    ...new Set(
-      [...body.matchAll(/<UI\.(\w+)/g)]
-        .map((m) => m[1])
-        .filter((n) => entries.has(n)),
-    ),
-  ].sort();
-  return [
-    `import { ${(used.length ? used : [entry.export]).join(", ")} } from "@tony-ui/mortar";`,
-    "",
-    ...lines.map((l) => l.slice(indent)),
-  ].join("\n");
 }
 
 function ExampleCode({ entry }: { entry: Entry }) {
