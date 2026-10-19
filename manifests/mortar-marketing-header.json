@@ -14,16 +14,18 @@
     "props": {
       "brand": "string",
       "homeHref": "string",
-      "links": "HeaderLink[] (LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[] })",
+      "links": "HeaderLink[] (LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[]; layout?: \"list\" | \"columns\" | \"full\" }; a group's layout picks its flyout: list (default) one column, columns a wider two-column panel, full a panel spanning the header with up to four columns; footer is a row of actions under the items)",
       "action": "LinkAction",
       "controls": "ReactNode",
+      "layout": "\"inline\" | \"center\" (default \"inline\"; center puts the links at the start, the brand in the middle and the actions at the end, in that DOM order)",
+      "mobileMenu": "\"inline\" | \"panel\" (default \"inline\"; panel makes the narrow-screen menu button open a full-screen dialog with the links, groups as disclosures, and the actions)",
       "logo": "ReactNode",
       "className": "string",
       "id": "string"
     },
     "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. The menu button controls a navigation element with a generated id.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. The menu button controls a navigation element with a generated id. With mobileMenu=\"panel\" it has aria-haspopup=\"dialog\" and opens a modal dialog titled with the brand; Escape or Close menu closes it and returns focus to the button.",
     "dependencies": ["mortar-action-link", "mortar-button"]
   },
   "preview": {

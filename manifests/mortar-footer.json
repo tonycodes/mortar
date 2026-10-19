@@ -22,7 +22,9 @@
       "social": "{ label: string; href: string; icon?: ReactNode }[]",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
-      "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); the column headings"
+      "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); the column headings",
+      "layout": "\"columns\" | \"center\" (default \"columns\"; center stacks the brand, one row of links per column and the social links, all centred, and the column label only names its navigation)",
+      "newsletter": "ReactNode (a signup row above the copyright, usually a Newsletter; inside the footer it loses its section padding and rule)"
     },
     "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

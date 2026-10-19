@@ -316,6 +316,8 @@ export function Banner({
   label = "Announcement",
   dismissLabel = "Dismiss announcement",
   tone = "inverse",
+  variant = "bar",
+  placement = "inline",
   id,
   className,
 }: {
@@ -326,10 +328,26 @@ export function Banner({
   dismissLabel?: string;
   /** "inverse" (default) flips the colours; "default" uses the page surface. */
   tone?: "default" | "inverse";
+  /** bar: an edge-to-edge strip. floating: an inset, rounded panel with a shadow. */
+  variant?: "bar" | "floating";
+  /** inline: in the page flow. bottom: fixed to the bottom of the viewport, always with a dismiss button so it never covers content for good. */
+  placement?: "inline" | "bottom";
   id?: string;
   className?: string;
 }) {
   const root = useRef<HTMLElement>(null);
+  const [dismissed, setDismissed] = useState(false);
+  const fixed = placement === "bottom";
+  // A fixed banner hides itself when dismissed, even if the page keeps it mounted.
+  if (dismissed) return null;
+  const dismiss =
+    onDismiss || fixed
+      ? () => {
+          onDismiss?.();
+          focusAway(root.current);
+          if (fixed) setDismissed(true);
+        }
+      : undefined;
   return (
     <section
       ref={root}
@@ -337,6 +355,8 @@ export function Banner({
       className={cx("m-banner", className)}
       aria-label={label}
       data-tone={tone === "default" ? undefined : tone}
+      data-variant={variant === "bar" ? undefined : variant}
+      data-placement={fixed ? "bottom" : undefined}
       data-m-component="Banner"
     >
       <p>
@@ -351,15 +371,8 @@ export function Banner({
           </>
         )}
       </p>
-      {onDismiss && (
-        <button
-          type="button"
-          aria-label={dismissLabel}
-          onClick={() => {
-            onDismiss();
-            focusAway(root.current);
-          }}
-        >
+      {dismiss && (
+        <button type="button" aria-label={dismissLabel} onClick={dismiss}>
           <Close />
         </button>
       )}

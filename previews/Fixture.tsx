@@ -826,48 +826,127 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "MarketingHeader":
       example = (
-        <UI.MarketingHeader
-          brand="Northwind"
-          id="site-header"
-          logo={
-            <img
-              alt=""
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='currentColor'/%3E%3C/svg%3E"
-            />
-          }
-          links={[
-            {
-              label: "Product",
-              items: [
-                {
-                  label: "Analytics",
-                  href: "#analytics",
-                  description: "See where your visitors come from.",
-                  icon: icons.clock,
-                },
-                {
-                  label: "Inbox",
-                  href: "#inbox",
-                  description: "Every conversation in one place.",
-                  icon: icons.inbox,
-                },
-                {
-                  label: "Scheduling",
-                  href: "#scheduling",
-                  description: "Let customers book time with you.",
-                  icon: icons.calendar,
-                },
-              ],
-              footer: [
-                { label: "Watch demo", href: "#demo" },
-                { label: "Contact sales", href: "#sales" },
-              ],
-            },
-            { label: "Features", href: "#features" },
-            { label: "Pricing", href: "#pricing" },
-          ]}
-          action={action}
-        />
+        <>
+          <UI.MarketingHeader
+            brand="Northwind"
+            id="site-header"
+            logo={
+              <img
+                alt=""
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='currentColor'/%3E%3C/svg%3E"
+              />
+            }
+            links={[
+              {
+                label: "Product",
+                items: [
+                  {
+                    label: "Analytics",
+                    href: "#analytics",
+                    description: "See where your visitors come from.",
+                    icon: icons.clock,
+                  },
+                  {
+                    label: "Inbox",
+                    href: "#inbox",
+                    description: "Every conversation in one place.",
+                    icon: icons.inbox,
+                  },
+                  {
+                    label: "Scheduling",
+                    href: "#scheduling",
+                    description: "Let customers book time with you.",
+                    icon: icons.calendar,
+                  },
+                ],
+                footer: [
+                  { label: "Watch demo", href: "#demo" },
+                  { label: "Contact sales", href: "#sales" },
+                ],
+              },
+              { label: "Features", href: "#features" },
+              { label: "Pricing", href: "#pricing" },
+            ]}
+            action={action}
+          />
+          <UI.MarketingHeader
+            brand="Atlas"
+            homeHref="#atlas"
+            layout="center"
+            mobileMenu="panel"
+            links={[
+              {
+                label: "Solutions",
+                layout: "full",
+                items: [
+                  {
+                    label: "Retail",
+                    href: "#retail",
+                    description: "Stock and orders across every shop.",
+                    icon: icons.inbox,
+                  },
+                  {
+                    label: "Clinics",
+                    href: "#clinics",
+                    description: "Appointments patients can book.",
+                    icon: icons.calendar,
+                  },
+                  {
+                    label: "Agencies",
+                    href: "#agencies",
+                    description: "Time tracked against every client.",
+                    icon: icons.clock,
+                  },
+                  {
+                    label: "Nonprofits",
+                    href: "#nonprofits",
+                    description: "Donor records in one place.",
+                    icon: icons.globe,
+                  },
+                ],
+                footer: [
+                  { label: "Customer stories", href: "#stories" },
+                  { label: "Book a demo", href: "#book" },
+                ],
+              },
+              {
+                label: "Resources",
+                layout: "columns",
+                items: [
+                  {
+                    label: "Guides",
+                    href: "#guides",
+                    description: "Step-by-step setup help.",
+                    icon: icons.edit,
+                  },
+                  {
+                    label: "API",
+                    href: "#api",
+                    description: "Build on Atlas.",
+                    icon: icons.code,
+                  },
+                  {
+                    label: "Webinars",
+                    href: "#webinars",
+                    description: "Live sessions every month.",
+                    icon: icons.clock,
+                  },
+                  {
+                    label: "Support",
+                    href: "#support",
+                    description: "Talk to a person.",
+                    icon: icons.mail,
+                  },
+                ],
+                footer: [
+                  { label: "Status", href: "#status" },
+                  { label: "Changelog", href: "#changelog" },
+                ],
+              },
+            ]}
+            action={{ label: "Sign in", href: "#sign-in" }}
+          />
+        </>
       );
       break;
     case "Hero":
@@ -1104,18 +1183,74 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "Footer":
       example = (
-        <UI.Footer
-          brand="Northwind"
-          description="Example product"
-          note="Weekdays 9 to 5"
-          columns={[{ label: "Product", items: [action] }]}
-          copyright="© Example company"
-          social={[
-            { label: "Northwind website", href: "#website", icon: icons.globe },
-            { label: "Northwind on GitHub", href: "#github", icon: icons.code },
-            { label: "Email Northwind", href: "#email", icon: icons.mail },
-          ]}
-        />
+        <>
+          <UI.Footer
+            brand="Northwind"
+            description="Example product"
+            note="Weekdays 9 to 5"
+            columns={[{ label: "Product", items: [action] }]}
+            copyright="© Example company"
+            social={[
+              {
+                label: "Northwind website",
+                href: "#website",
+                icon: icons.globe,
+              },
+              {
+                label: "Northwind on GitHub",
+                href: "#github",
+                icon: icons.code,
+              },
+              { label: "Email Northwind", href: "#email", icon: icons.mail },
+            ]}
+          />
+          <UI.Footer
+            brand="Northwind"
+            description="Support software for small teams."
+            columns={[
+              {
+                label: "Company",
+                items: [
+                  { label: "About", href: "#about" },
+                  { label: "Customers", href: "#customers" },
+                  { label: "Careers", href: "#careers" },
+                ],
+              },
+            ]}
+            copyright="© Example company"
+            legal={[{ label: "Privacy", href: "#privacy" }]}
+            newsletter={
+              <UI.Newsletter
+                title="Subscribe to product news"
+                description="One email a month. Unsubscribe any time."
+                onSubmit={() => setExtra(true)}
+                status={extra ? "success" : "idle"}
+              />
+            }
+          />
+          <UI.Footer
+            layout="center"
+            brand="Atlas"
+            description="Scheduling for clinics and agencies."
+            columns={[
+              {
+                label: "Footer",
+                items: [
+                  { label: "About", href: "#about-atlas" },
+                  { label: "Blog", href: "#blog" },
+                  { label: "Jobs", href: "#jobs" },
+                  { label: "Press", href: "#press" },
+                  { label: "Accessibility", href: "#accessibility" },
+                ],
+              },
+            ]}
+            copyright="© Example company"
+            social={[
+              { label: "Atlas website", href: "#atlas-web", icon: icons.globe },
+              { label: "Atlas on GitHub", href: "#atlas-gh", icon: icons.code },
+            ]}
+          />
+        </>
       );
       break;
     case "SegmentedControl":
