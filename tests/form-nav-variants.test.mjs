@@ -88,7 +88,7 @@ test("navigation items with children render as disclosures, open when a child is
   });
   assert.match(
     markup,
-    /<details class="m-nav-group" open=""><summary>[^]*?Projects<\/summary><div class="m-nav-children"><a href="#design" aria-current="page">/,
+    /<details class="m-nav-group" open=""><summary>[^]*?Projects<\/summary><div class="m-nav-children"><a href="#projects"><span class="m-nav-marker" aria-hidden="true"><\/span>Projects<\/a><a href="#design" aria-current="page">/,
   );
   assert.match(
     markup,

@@ -14,11 +14,13 @@
     "props": {
       "caption": "string",
       "captionVisible": "boolean",
-      "columns": "{ key: string; label: string; align?: left | right }[]",
+      "columns": "{ key: string; label: string; align?: start | end }[]",
       "rows": "Record<string, ReactNode>[] (optional, default [])",
       "groups": "{ label: string; rows: Record<string, ReactNode>[] }[]",
       "rowHeaders": "boolean",
-      "striped": "boolean"
+      "striped": "boolean",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { Table } from @tony-ui/mortar. Pass groups to render each labelled group as its own tbody under a full-width header row (th scope=rowgroup); ungrouped rows render first. Use DataTable instead when rows need selection, sorting, links or loading states.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

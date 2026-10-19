@@ -15,7 +15,8 @@
       "items": "ReactNode[]",
       "label": "string",
       "columns": "1 | 2",
-      "size": "\"sm\" | \"md\""
+      "size": "\"sm\" | \"md\"",
+      "className": "string"
     },
     "usage": "Import { CheckList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

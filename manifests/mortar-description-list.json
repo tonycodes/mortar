@@ -14,9 +14,11 @@
     "props": {
       "title": "string",
       "description": "string",
-      "headingLevel": "2 | 3 | 4",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
       "items": "{ term: string; details: ReactNode; action?: ReactNode }[]",
-      "layout": "\"columns\" | \"stacked\""
+      "layout": "\"columns\" | \"stacked\"",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { DescriptionList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

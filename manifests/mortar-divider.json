@@ -14,7 +14,8 @@
     "props": {
       "label": "string",
       "soft": "boolean",
-      "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\""
+      "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\"",
+      "className": "string"
     },
     "usage": "Import { Divider } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

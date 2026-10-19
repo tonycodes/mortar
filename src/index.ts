@@ -61,6 +61,19 @@ export type {
   BreadcrumbItem,
   ProgressStep,
   TabNavItem,
+  StackedShellProps,
+  NavbarProps,
+  BreadcrumbsProps,
+  TabNavProps,
+  ProgressStepsProps,
+  ActionPanelProps,
+  PageHeadingProps,
+  MetricGroupProps,
+  TableProps,
+  PaginationProps,
+  SettingsSectionProps,
+  ActivityFeedProps,
+  SignInPanelProps,
 } from "./application.js";
 export {
   MarketingHeader,
@@ -90,7 +103,19 @@ export {
   GridList,
   AttachmentList,
 } from "./display.js";
-export type { GridListItem, Attachment } from "./display.js";
+export type {
+  GridListItem,
+  Attachment,
+  AvatarProps,
+  AvatarGroupProps,
+  KbdProps,
+  ProgressBarProps,
+  FilterChipProps,
+  CheckListProps,
+  DescriptionListProps,
+  GridListProps,
+  AttachmentListProps,
+} from "./display.js";
 export {
   Stack,
   Container,
@@ -102,13 +127,30 @@ export {
   SectionHeading,
   Prose,
 } from "./layout.js";
-export type { SectionTone } from "./layout.js";
+export type {
+  SectionTone,
+  StackProps,
+  ContainerProps,
+  TextProps,
+  SectionProps,
+  DividerProps,
+  CardProps,
+  MediaObjectProps,
+  SectionHeadingProps,
+  ProseProps,
+} from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
 export type { ChatMessage } from "./showcase.js";
 export { Toast, Toaster, ConfirmDialog, SaveBar, Banner } from "./feedback.js";
 export type { ToastItem, ToastAction } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
-export type { CommandItem, StackedListItem } from "./workspace.js";
+export type {
+  CommandItem,
+  StackedListItem,
+  SlideOverProps,
+  CommandPaletteProps,
+  StackedListProps,
+} from "./workspace.js";
 export {
   BentoGrid,
   StatGroup,

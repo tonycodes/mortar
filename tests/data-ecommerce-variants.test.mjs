@@ -134,10 +134,7 @@ test("GridList renders details as a description list and opts into split actions
     { id: "a", title: "Tuple", actions: h("a", { href: "#e" }, "Email") },
   ];
   const plain = html(GridList, { label: "Clients", items });
-  assert.match(
-    plain,
-    /<ul class="m-grid-list" aria-label="Clients" data-columns="3">/,
-  );
+  assert.match(plain, /<ul class="m-grid-list" aria-label="Clients">/);
   assert.doesNotMatch(plain, /data-actions|m-grid-list-details/);
   const rich = html(GridList, {
     label: "Clients",
@@ -152,7 +149,7 @@ test("GridList renders details as a description list and opts into split actions
       },
     ],
   });
-  assert.match(rich, /data-columns="3" data-actions="split"/);
+  assert.match(rich, /aria-label="Clients" data-actions="split"/);
   assert.match(
     rich,
     /<dl class="m-grid-list-details"><div><dt>Last invoice<\/dt><dd>14 Oct<\/dd><\/div><div><dt>Amount<\/dt><dd>£2,000<\/dd><\/div><\/dl><div class="m-grid-list-actions">/,
@@ -168,7 +165,7 @@ test("MetricGroup announces trends and shows previous values; defaults unchanged
   });
   assert.equal(
     plain,
-    '<dl class="m-metrics" aria-label="Summary"><div><dt>Requests</dt><dd><strong>1.4M</strong><span class="m-tone-success">+12%</span></dd></div></dl>',
+    '<dl class="m-metrics" aria-label="Summary"><div><dt>Requests</dt><dd><strong>1.4M</strong><span class="m-metric-change" data-tone="success">+12%</span></dd></div></dl>',
   );
   const trend = html(MetricGroup, {
     label: "Summary",
@@ -198,7 +195,7 @@ test("MetricGroup announces trends and shows previous values; defaults unchanged
   assert.match(trend, /<span class="m-metric-previous">from 70,946<\/span>/);
   assert.match(
     trend,
-    /<span class="m-tone-success" data-trend="up"><svg[^>]*aria-hidden="true"[^>]*>.*?<\/svg><span class="m-sr-only">Increased by <\/span>12%<\/span>/,
+    /<span class="m-metric-change" data-tone="success" data-trend="up"><svg[^>]*aria-hidden="true"[^>]*>.*?<\/svg><span class="m-sr-only">Increased by <\/span>12%<\/span>/,
   );
   assert.match(trend, /<span class="m-sr-only">Decreased by <\/span>4%/);
 });

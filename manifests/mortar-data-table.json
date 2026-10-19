@@ -13,17 +13,15 @@
   "contract": {
     "props": {
       "caption": "string",
-      "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: left | right; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
+      "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: start | end; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
       "rows": "T[] where T extends { id: string }",
       "rowLabel": "(row: T) => string",
-      "selectedIds": "string[]",
+      "selectedIds": "string[] (may include rows on other pages; select all adds or removes only this page's rows)",
       "onSelectionChange": "(ids: string[]) => void",
       "toolbar": "ReactNode",
       "bulkActions": "ReactNode",
       "loading": "boolean",
       "error": "string",
-      "emptyTitle": "string",
-      "emptyDescription": "string",
       "rowHref": "(row: T) => string | undefined",
       "defaultSort": "{ key: string; direction: ascending | descending }",
       "sort": "{ key: string; direction: ascending | descending } | null",
@@ -32,7 +30,11 @@
       "maxHeight": "string",
       "density": "default | compact",
       "striped": "boolean",
-      "footer": "ReactNode"
+      "footer": "ReactNode",
+      "empty": "{ title: string; description?: string; action?: ReactNode } (default \"No records\")",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (empty state heading; default 3)",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { DataTable } from @tony-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -293,7 +293,14 @@ export const implementations = {
     await next.focus();
     await page.keyboard.press("Enter");
     await expect(simple).toContainText("Page 2 of 5");
-    await simple.getByRole("button", { name: "Previous" }).click();
+    // Reaching the first page keeps focus on Previous instead of the body.
+    const previous = simple.getByRole("button", { name: "Previous" });
+    await previous.focus();
+    await page.keyboard.press("Enter");
+    await expect(simple).toContainText("Page 1 of 5");
+    await expect(previous).toBeFocused();
+    await expect(previous).toHaveAttribute("aria-disabled", "true");
+    await page.keyboard.press("Enter");
     await expect(simple).toContainText("Page 1 of 5");
     const results = root.getByRole("navigation", { name: "Results pages" });
     await expect(
@@ -703,14 +710,12 @@ export const implementations = {
       await root.getByRole("link", { name: "Features", exact: true }).click();
       await expect(opener).toHaveAttribute("aria-expanded", "false");
     } else {
-      // DocsShell's visible "Menu" is its accessible name (label in name).
-      // AppShell keeps "Open navigation" until its family adopts the same fix.
-      const docs = component.export === "DocsShell";
-      const opener = root.getByRole("button", {
-        name: docs ? "Menu" : /^(Menu|Open navigation)$/,
-        exact: docs || undefined,
-      });
-      if (docs) await expect(opener).toHaveAttribute("aria-haspopup", "dialog");
+      // Both shells name the opener by its visible text (label in name) and
+      // announce the dialog it opens.
+      const opener = root.getByRole("button", { name: "Menu", exact: true });
+      await expect(opener).not.toHaveAttribute("aria-label");
+      await expect(opener).toHaveAttribute("aria-haspopup", "dialog");
+      await expect(opener).toHaveAttribute("aria-expanded", "false");
       await opener.focus();
       await page.keyboard.press("Enter");
       await expect(page.getByRole("dialog")).toBeVisible();

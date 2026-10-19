@@ -562,6 +562,7 @@ export function CategoryPageTemplate() {
           <UI.GridList
             label="Shop by category"
             columns={3}
+            itemHeadingLevel={2}
             items={[
               {
                 id: "bags",

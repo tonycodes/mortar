@@ -64,7 +64,7 @@ test("StackedList groups items under labelled sticky headings", () => {
   });
   const headings = [
     ...grouped.matchAll(
-      /<h3 id="([^"]+)" class="m-stacked-group-heading">([A-Z])<\/h3><ul aria-labelledby="\1">/g,
+      /<h2 id="([^"]+)" class="m-stacked-group-heading">([A-Z])<\/h2><ul aria-labelledby="\1">/g,
     ),
   ];
   assert.deepEqual(

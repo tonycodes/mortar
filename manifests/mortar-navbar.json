@@ -15,9 +15,10 @@
       "brand": "string",
       "logo": "ReactNode",
       "homeHref": "string",
-      "items": "NavigationItem[] ({ label: string; href: string; current?: boolean; count?: string; icon?: ReactNode })",
+      "items": "LinkItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode }; no sub-menus)",
       "actions": "ReactNode",
-      "label": "string"
+      "label": "string",
+      "className": "string"
     },
     "usage": "Import { Navbar } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

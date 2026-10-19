@@ -42,7 +42,7 @@ test("EmptyState dashed, start alignment, heading level and children", () => {
 test("Avatar default markup is unchanged", () => {
   assert.equal(
     html(Avatar, { name: "Ana Kovač", status: "online" }),
-    '<span class="m-avatar m-avatar-md" data-shape="circle" role="img" aria-label="Ana Kovač, online"><span aria-hidden="true">AK</span><span class="m-avatar-status" data-status="online" aria-hidden="true"></span></span>',
+    '<span class="m-avatar m-avatar-md" role="img" aria-label="Ana Kovač, online"><span aria-hidden="true">AK</span><span class="m-avatar-status" data-status="online" aria-hidden="true"></span></span>',
   );
 });
 

@@ -117,6 +117,6 @@ test("AppShell adds a labelled secondary column only when given one", () => {
   });
   assert.match(
     columns,
-    /<div class="m-app-columns"><main id="m-content" tabindex="-1">Body<\/main><aside class="m-app-aside" aria-label="Recent activity">Activity<\/aside><\/div>/,
+    /<div class="m-app-columns"><main id="m-content-[^"]+" tabindex="-1">Body<\/main><aside class="m-app-aside" aria-label="Recent activity">Activity<\/aside><\/div>/,
   );
 });

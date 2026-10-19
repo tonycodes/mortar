@@ -459,7 +459,7 @@ export function PreviewCase({ name }: { name: string }) {
                   id: person,
                   title: person,
                   description: "Designer",
-                  leading: <UI.Avatar name={person} size="sm" />,
+                  leading: <UI.Avatar name={person} size="sm" decorative />,
                   trailing: (
                     <UI.Button
                       variant="secondary"
@@ -610,7 +610,7 @@ export function PreviewCase({ name }: { name: string }) {
               {
                 key: "requests",
                 label: "Requests",
-                align: "right",
+                align: "end",
                 render: (row) => row.requests.toLocaleString("en-GB"),
                 sortable: true,
               },
@@ -723,7 +723,7 @@ export function PreviewCase({ name }: { name: string }) {
             captionVisible
             columns={[
               { key: "plan", label: "Plan" },
-              { key: "conversations", label: "Conversations", align: "right" },
+              { key: "conversations", label: "Conversations", align: "end" },
               { key: "support", label: "Support" },
             ]}
             rows={[

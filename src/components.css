@@ -833,7 +833,9 @@
     font: 11px var(--m-mono);
     color: var(--m-muted);
   }
-  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel) nav h2 {
+  :is(.m-sidebar, .m-mobile-sidebar, .m-sidebar-panel)
+    nav
+    :is(h2, .m-nav-group-title) {
     margin: 24px 10px 6px;
     text-transform: uppercase;
     font-size: 11px;
@@ -879,7 +881,7 @@
     background: var(--m-sunken);
     overflow-y: auto;
   }
-  .m-page-heading :is(h1, h2) {
+  .m-page-heading .m-page-title {
     font-size: 28px;
     letter-spacing: -0.025em;
     line-height: 1.2;
@@ -1062,7 +1064,7 @@
   .m-data-table tr:last-child :is(th, td) {
     border-bottom: 0;
   }
-  :is(.m-data-table, .m-table) [data-align="right"] {
+  :is(.m-data-table, .m-table) [data-align="end"] {
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
@@ -1093,7 +1095,7 @@
     border-bottom: 1px solid var(--m-line);
     padding: 28px 0;
   }
-  .m-settings-section > :where(div:first-child) > h2 {
+  .m-settings-section > :where(div:first-child) > .m-settings-title {
     font-size: 16px;
     font-weight: 600;
   }

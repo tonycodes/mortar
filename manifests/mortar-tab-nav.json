@@ -15,7 +15,8 @@
       "label": "string",
       "items": "TabNavItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode })",
       "variant": "\"underline\" | \"pills\"",
-      "fullWidth": "boolean"
+      "fullWidth": "boolean",
+      "className": "string"
     },
     "usage": "Import { TabNav } from @tony-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

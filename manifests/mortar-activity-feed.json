@@ -13,7 +13,8 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]"
+      "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]",
+      "className": "string"
     },
     "usage": "Import { ActivityFeed } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

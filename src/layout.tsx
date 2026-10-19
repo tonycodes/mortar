@@ -1,8 +1,19 @@
 import { useId, type ElementType, type ReactNode } from "react";
-import { SectionIntro, introSlots } from "./internal.js";
+import { type HeadingLevel } from "./heading.js";
+import { cx, classedIntroSlots, titledIntroSlots } from "./internal.js";
 
 type Space = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 
+export interface StackProps {
+  as?: ElementType;
+  gap?: Space;
+  direction?: "column" | "row";
+  align?: "start" | "center" | "end" | "stretch";
+  justify?: "start" | "center" | "end" | "between";
+  wrap?: boolean;
+  children: ReactNode;
+  className?: string;
+}
 /** Vertical or horizontal rhythm without consumer flex/gap utilities. */
 export function Stack({
   as: Tag = "div",
@@ -12,20 +23,13 @@ export function Stack({
   justify,
   wrap = false,
   children,
-}: {
-  as?: ElementType;
-  gap?: Space;
-  direction?: "column" | "row";
-  align?: "start" | "center" | "end" | "stretch";
-  justify?: "start" | "center" | "end" | "between";
-  wrap?: boolean;
-  children: ReactNode;
-}) {
+  className,
+}: StackProps) {
   return (
     <Tag
-      className="m-layout-stack"
-      data-gap={gap}
-      data-direction={direction}
+      className={cx("m-layout-stack", className)}
+      data-gap={gap === "md" ? undefined : gap}
+      data-direction={direction === "column" ? undefined : direction}
       data-align={align}
       data-justify={justify}
       data-wrap={wrap || undefined}
@@ -35,45 +39,56 @@ export function Stack({
   );
 }
 
+export interface ContainerProps {
+  as?: ElementType;
+  size?: "sm" | "md" | "lg" | "xl";
+  padded?: boolean;
+  children: ReactNode;
+  className?: string;
+}
 /** Centred page width with the shared gutters used by marketing and application pages. */
 export function Container({
   as: Tag = "div",
   size = "lg",
   padded = true,
   children,
-}: {
-  as?: ElementType;
-  size?: "sm" | "md" | "lg" | "xl";
-  padded?: boolean;
-  children: ReactNode;
-}) {
+  className,
+}: ContainerProps) {
   return (
-    <Tag className="m-container" data-size={size} data-padded={padded}>
+    <Tag
+      className={cx("m-container", className)}
+      data-size={size === "lg" ? undefined : size}
+      data-padded={padded || undefined}
+    >
       {children}
     </Tag>
   );
 }
 
-/** Body copy with semantic tone and size, instead of text-muted/text-ink utilities. */
-export function Text({
-  as: Tag = "p",
-  tone = "default",
-  size = "md",
-  weight = "regular",
-  children,
-}: {
+export interface TextProps {
   as?: ElementType;
-  tone?: "default" | "secondary" | "muted";
+  /** Text colour; `data-tone` stays reserved for status and surface tones. */
+  color?: "default" | "secondary" | "muted";
   size?: "sm" | "md" | "lg";
   weight?: "regular" | "medium" | "semibold";
   children: ReactNode;
-}) {
+  className?: string;
+}
+/** Body copy with semantic colour and size, instead of text-muted/text-ink utilities. */
+export function Text({
+  as: Tag = "p",
+  color = "default",
+  size = "md",
+  weight = "regular",
+  children,
+  className,
+}: TextProps) {
   return (
     <Tag
-      className="m-text"
-      data-tone={tone}
-      data-size={size}
-      data-weight={weight}
+      className={cx("m-text", className)}
+      data-color={color === "default" ? undefined : color}
+      data-size={size === "md" ? undefined : size}
+      data-weight={weight === "regular" ? undefined : weight}
     >
       {children}
     </Tag>
@@ -82,6 +97,17 @@ export function Text({
 
 export type SectionTone = "default" | "muted" | "inverse";
 
+export interface SectionProps {
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  tone?: SectionTone;
+  align?: "start" | "center";
+  headingLevel?: HeadingLevel;
+  children?: ReactNode;
+  className?: string;
+}
 /** Full-bleed marketing band for content that is not a grid or split feature. */
 export function Section({
   id,
@@ -90,25 +116,24 @@ export function Section({
   description,
   tone = "default",
   align = "start",
+  headingLevel = 2,
   children,
-}: {
-  id?: string;
-  eyebrow?: string;
-  title?: string;
-  description?: string;
-  tone?: SectionTone;
-  align?: "start" | "center";
-  children?: ReactNode;
-}) {
+  className,
+}: SectionProps) {
   return (
     <section
       id={id}
-      className="m-marketing-section m-section"
-      data-tone={tone}
-      data-align={align}
+      className={cx("m-marketing-section m-section", className)}
+      data-tone={tone === "default" ? undefined : tone}
+      data-align={align === "start" ? undefined : align}
       data-m-component="Section"
     >
-      {...introSlots({ eyebrow, title: title || undefined, description })}
+      {...titledIntroSlots({
+        eyebrow,
+        title: title || undefined,
+        description,
+        headingLevel,
+      })}
       {children && <div className="m-section-body">{children}</div>}
     </section>
   );
@@ -125,35 +150,47 @@ export function BrandMark({ logo }: { logo?: ReactNode }) {
   );
 }
 
+export interface DividerProps {
+  label?: string;
+  soft?: boolean;
+  spacing?: "none" | "sm" | "md" | "lg";
+  className?: string;
+}
 /** Horizontal rule between groups; a label names the break for assistive technology. */
 export function Divider({
   label,
   soft = false,
   spacing = "md",
-}: {
-  label?: string;
-  soft?: boolean;
-  spacing?: "none" | "sm" | "md" | "lg";
-}) {
+  className,
+}: DividerProps) {
+  const attributes = {
+    className: cx("m-divider", className),
+    "data-soft": soft || undefined,
+    "data-spacing": spacing === "md" ? undefined : spacing,
+  };
   return label ? (
-    <div
-      className="m-divider"
-      role="separator"
-      aria-label={label}
-      data-soft={soft || undefined}
-      data-spacing={spacing}
-    >
+    <div {...attributes} role="separator" aria-label={label}>
       <span aria-hidden="true">{label}</span>
     </div>
   ) : (
-    <hr
-      className="m-divider"
-      data-soft={soft || undefined}
-      data-spacing={spacing}
-    />
+    <hr {...attributes} />
   );
 }
 
+export interface CardProps {
+  as?: "div" | "section" | "article";
+  title?: string;
+  description?: string;
+  headingLevel?: HeadingLevel;
+  actions?: ReactNode;
+  footer?: ReactNode;
+  padding?: "default" | "compact" | "none";
+  /** `muted` sets the card on the sunken surface. */
+  tone?: "default" | "muted";
+  children?: ReactNode;
+  id?: string;
+  className?: string;
+}
 /** Bordered surface with optional heading, header actions and footer. */
 export function Card({
   as: Tag = "div",
@@ -165,36 +202,32 @@ export function Card({
   padding = "default",
   tone = "default",
   children,
-}: {
-  as?: "div" | "section" | "article";
-  title?: string;
-  description?: string;
-  headingLevel?: 2 | 3 | 4;
-  actions?: ReactNode;
-  footer?: ReactNode;
-  padding?: "default" | "compact" | "none";
-  tone?: "default" | "sunken";
-  children?: ReactNode;
-}) {
-  const id = useId();
+  id,
+  className,
+}: CardProps) {
+  const headingId = useId();
   return (
     <Tag
-      className="m-card"
-      data-padding={padding}
-      data-tone={tone}
-      aria-labelledby={title && Tag !== "div" ? id : undefined}
+      id={id}
+      className={cx("m-card", className)}
+      data-padding={padding === "default" ? undefined : padding}
+      data-tone={tone === "default" ? undefined : tone}
+      aria-labelledby={title && Tag !== "div" ? headingId : undefined}
     >
       {(title || actions) && (
         <header className="m-card-header">
           {title && (
             <div className="m-card-heading">
-              <SectionIntro
-                title={title}
-                description={description}
-                id={id}
-                headingLevel={headingLevel}
-                descriptionClassName={null}
-              />
+              {...classedIntroSlots(
+                {
+                  title,
+                  description,
+                  id: headingId,
+                  headingLevel,
+                  descriptionClassName: null,
+                },
+                "m-card-title",
+              )}
             </div>
           )}
           {actions && <div className="m-card-actions">{actions}</div>}
@@ -206,6 +239,14 @@ export function Card({
   );
 }
 
+export interface MediaObjectProps {
+  media: ReactNode;
+  title?: string;
+  align?: "start" | "center";
+  reverse?: boolean;
+  children?: ReactNode;
+  className?: string;
+}
 /** Image, avatar or icon beside text, e.g. comments and list rows. */
 export function MediaObject({
   media,
@@ -213,17 +254,12 @@ export function MediaObject({
   align = "start",
   reverse = false,
   children,
-}: {
-  media: ReactNode;
-  title?: string;
-  align?: "start" | "center";
-  reverse?: boolean;
-  children?: ReactNode;
-}) {
+  className,
+}: MediaObjectProps) {
   return (
     <div
-      className="m-media-object"
-      data-align={align}
+      className={cx("m-media-object", className)}
+      data-align={align === "start" ? undefined : align}
       data-reverse={reverse || undefined}
     >
       <div className="m-media-object-media">{media}</div>
@@ -235,6 +271,17 @@ export function MediaObject({
   );
 }
 
+export interface SectionHeadingProps {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+  headingLevel?: HeadingLevel;
+  divider?: boolean;
+  /** Page tabs (e.g. TabNav) below the title row; their underline replaces the divider. */
+  tabs?: ReactNode;
+  id?: string;
+  className?: string;
+}
 /** Heading for a section within a page, with optional description and actions. */
 export function SectionHeading({
   title,
@@ -243,24 +290,25 @@ export function SectionHeading({
   headingLevel = 2,
   divider = true,
   tabs,
-}: {
-  title: string;
-  description?: string;
-  actions?: ReactNode;
-  headingLevel?: 2 | 3 | 4;
-  divider?: boolean;
-  /** Page tabs (e.g. TabNav) below the title row; their underline replaces the divider. */
-  tabs?: ReactNode;
-}) {
+  id,
+  className,
+}: SectionHeadingProps) {
   return (
-    <div className="m-section-heading" data-divider={divider}>
+    <div
+      id={id}
+      className={cx("m-section-heading", className)}
+      data-divider={divider || undefined}
+    >
       <div className="m-section-heading-text">
-        <SectionIntro
-          title={title}
-          description={description}
-          headingLevel={headingLevel}
-          descriptionClassName={null}
-        />
+        {...classedIntroSlots(
+          {
+            title,
+            description,
+            headingLevel,
+            descriptionClassName: null,
+          },
+          "m-section-heading-title",
+        )}
       </div>
       {actions && <div className="m-actions">{actions}</div>}
       {tabs && <div className="m-section-heading-tabs">{tabs}</div>}
@@ -268,7 +316,11 @@ export function SectionHeading({
   );
 }
 
+export interface ProseProps {
+  children: ReactNode;
+  className?: string;
+}
 /** Long-form copy with the kit's typographic rhythm. */
-export function Prose({ children }: { children: ReactNode }) {
-  return <div className="m-prose">{children}</div>;
+export function Prose({ children, className }: ProseProps) {
+  return <div className={cx("m-prose", className)}>{children}</div>;
 }

@@ -468,3 +468,63 @@ export function ThemeScope({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+// Application helpers, appended after the marketing and docs ones.
+
+/**
+ * introSlots with a component-specific class on the heading (titledIntroSlots
+ * always uses m-section-title), so a title keeps its
+ * styles at any `headingLevel` instead of only as an h2.
+ */
+export function classedIntroSlots(
+  props: IntroProps,
+  titleClassName: string,
+): ReactNode[] {
+  const [eyebrow, heading, description] = introSlots(props);
+  return [
+    eyebrow,
+    isValidElement<{ className?: string }>(heading)
+      ? cloneElement(heading, { className: titleClassName })
+      : heading,
+    description,
+  ];
+}
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+/**
+ * Call before a consumer callback that removes `element` (e.g. a chip's
+ * remove button). Once the removal has rendered, if focus fell to the body,
+ * it moves to the nearest focusable element that took the removed one's place,
+ * or the one before it, searching up through the ancestors that remain.
+ */
+export function focusAfterRemoval(element: HTMLElement) {
+  const trail: [HTMLElement, number][] = [];
+  for (let node: HTMLElement | null = element; node?.parentElement;) {
+    const parent: HTMLElement = node.parentElement;
+    trail.push([parent, [...parent.children].indexOf(node)]);
+    node = parent;
+  }
+  setTimeout(() => {
+    const active = element.ownerDocument.activeElement;
+    if (
+      element.isConnected ||
+      (active && active !== element.ownerDocument.body)
+    )
+      return;
+    for (const [parent, index] of trail) {
+      if (!parent.isConnected) continue;
+      const siblings = [...parent.children] as HTMLElement[];
+      const candidates = [
+        ...siblings.slice(index),
+        ...siblings.slice(0, index).reverse(),
+      ];
+      for (const candidate of candidates) {
+        const target = candidate.matches(FOCUSABLE)
+          ? candidate
+          : candidate.querySelector<HTMLElement>(FOCUSABLE);
+        if (target) return target.focus();
+      }
+    }
+  });
+}

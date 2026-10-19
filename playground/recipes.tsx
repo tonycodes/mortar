@@ -319,19 +319,19 @@ export function ProjectWorkspaceRecipe() {
               id: "ana",
               title: "Ana Kovač",
               description: "Engineering",
-              media: <UI.Avatar name="Ana Kovač" />,
+              media: <UI.Avatar name="Ana Kovač" decorative />,
             },
             {
               id: "tom",
               title: "Tom Cook",
               description: "Design",
-              media: <UI.Avatar name="Tom Cook" />,
+              media: <UI.Avatar name="Tom Cook" decorative />,
             },
             {
               id: "lw",
               title: "Lindsay Walton",
               description: "Support",
-              media: <UI.Avatar name="Lindsay Walton" />,
+              media: <UI.Avatar name="Lindsay Walton" decorative />,
             },
           ]}
         />

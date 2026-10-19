@@ -29,15 +29,15 @@ test("GridList is a labelled list whose linked titles name each card", () => {
       },
     ],
   });
+  assert.match(own, /^<ul class="m-grid-list" aria-label="Team members">/);
+  assert.equal(own.match(/<li>/g)?.length, 2);
   assert.match(
     own,
-    /^<ul class="m-grid-list" aria-label="Team members" data-columns="3">/,
+    /<h3 class="m-grid-list-title"><a href="#ana">Ana Kovač<\/a><\/h3>/,
   );
-  assert.equal(own.match(/<li>/g)?.length, 2);
-  assert.match(own, /<h3><a href="#ana">Ana Kovač<\/a><\/h3>/);
   assert.match(own, /<div class="m-grid-list-actions"><button>Email<\/button>/);
   assert.match(own, /<img src="\/plan.png" alt="" loading="lazy"\/>/);
-  assert.match(own, /<h3>Q4 plan.pdf<\/h3>/);
+  assert.match(own, /<h3 class="m-grid-list-title">Q4 plan.pdf<\/h3>/);
 });
 
 test("MediaObject places media beside its content", () => {
@@ -71,7 +71,10 @@ test("SectionHeading renders a heading with description and actions", () => {
     actions: h("button", {}, "Create"),
   });
   assert.match(own, /^<div class="m-section-heading" data-divider="true">/);
-  assert.match(own, /<h3>Job postings<\/h3><p>Open roles across teams.<\/p>/);
+  assert.match(
+    own,
+    /<h3 class="m-section-heading-title">Job postings<\/h3><p>Open roles across teams.<\/p>/,
+  );
   assert.match(own, /<div class="m-actions"><button>Create<\/button><\/div>/);
 });
 

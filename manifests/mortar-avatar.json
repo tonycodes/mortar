@@ -18,7 +18,9 @@
       "shape": "circle | square",
       "status": "online | offline",
       "statusPosition": "bottom | top",
-      "placeholder": "initials | icon"
+      "placeholder": "initials | icon",
+      "decorative": "boolean (hide from assistive technology when the name is visible beside it)",
+      "className": "string"
     },
     "usage": "Import { Avatar } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
