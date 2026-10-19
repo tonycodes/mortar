@@ -1,20 +1,5 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
-function contrast(a, b) {
-  const luminance = (rgb) =>
-    rgb
-      .match(/[\d.]+/g)
-      .slice(0, 3)
-      .map(Number)
-      .map((n) => {
-        const v = n / 255;
-        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-      })
-      .reduce((sum, n, i) => sum + n * [0.2126, 0.7152, 0.0722][i], 0);
-  const x = luminance(a),
-    y = luminance(b);
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-}
+import { accessibility, contrast } from "../support/preview.mjs";
 for (const theme of ["light", "dark"])
   for (const brand of ["neutral", "green"]) {
     test(`inverse section contrast ${theme} ${brand}`, async ({ page }) => {
@@ -42,10 +27,6 @@ for (const theme of ["light", "dark"])
       } finally {
         await page.mouse.up();
       }
-      const results = await new AxeBuilder({ page })
-        .include('[data-mortar-preview="Section"]')
-        .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
-        .analyze();
-      expect(results.violations).toEqual([]);
+      await accessibility(page, '[data-mortar-preview="Section"]');
     });
   }

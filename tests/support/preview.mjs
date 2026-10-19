@@ -25,24 +25,55 @@ export async function assertPreview(root, target, timeout = 5000) {
   });
   await expect(root.locator(target).first()).toBeVisible({ timeout });
 }
+const violations = (results) =>
+  results.violations.map((v) => ({
+    id: v.id,
+    nodes: v.nodes.map((n) => n.target),
+  }));
+/**
+ * WCAG 2.1 A/AA axe checks of the whole page. With a scope, the scoped region
+ * is checked first; the whole-page pass then catches landmark and naming
+ * problems outside the component.
+ */
 export async function accessibility(page, scope) {
   const build = () =>
     new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]);
-  const scoped = await build().include(scope).analyze();
-  expect(
-    scoped.violations.map((v) => ({
-      id: v.id,
-      nodes: v.nodes.map((n) => n.target),
-    })),
-  ).toEqual([]);
-  // Integration checks catch landmark and naming problems outside the component.
-  const whole = await build().analyze();
-  expect(
-    whole.violations.map((v) => ({
-      id: v.id,
-      nodes: v.nodes.map((n) => n.target),
-    })),
-  ).toEqual([]);
+  if (scope)
+    expect(violations(await build().include(scope).analyze())).toEqual([]);
+  expect(violations(await build().analyze())).toEqual([]);
+}
+/**
+ * WCAG contrast ratio of two computed `rgb()`/`rgba()` colours (alpha
+ * ignored). An unparseable colour, such as an empty string, scores 0.
+ */
+export function contrast(a, b) {
+  const channels = (value) =>
+    String(value)
+      .match(/[\d.]+/g)
+      ?.slice(0, 3);
+  if (channels(a)?.length !== 3 || channels(b)?.length !== 3) return 0;
+  const luminance = (value) =>
+    channels(value)
+      .map(Number)
+      .map((n) => {
+        const v = n / 255;
+        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+      })
+      .reduce((sum, n, i) => sum + n * [0.2126, 0.7152, 0.0722][i], 0);
+  const x = luminance(a),
+    y = luminance(b);
+  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+}
+/** A colour token as its computed `rgb()` value inside `within` (default: body). */
+export function tokenColor(page, token, within = page.locator("body")) {
+  return within.evaluate((el, token) => {
+    const probe = el.ownerDocument.createElement("span");
+    probe.style.backgroundColor = `var(${token})`;
+    el.appendChild(probe);
+    const value = getComputedStyle(probe).backgroundColor;
+    probe.remove();
+    return value;
+  }, token);
 }
 export async function overflow(page) {
   expect(
