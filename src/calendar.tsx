@@ -25,6 +25,8 @@ export interface CalendarEvent {
   start?: string;
   /** End as HH:MM; defaults to an hour after start. */
   end?: string;
+  /** Avatar or icon beside the event in the month view's `agenda`. */
+  media?: ReactNode;
 }
 export type CalendarView = "year" | "month" | "week" | "day";
 
@@ -144,8 +146,14 @@ export interface CalendarProps {
   view?: CalendarView;
   /** Shows a Year/Month/Week/Day switcher when provided. */
   onViewChange?: (view: CalendarView) => void;
-  /** Makes events in week and day views buttons. */
+  /** Makes events in week and day views, and in the agenda, buttons. */
   onEventSelect?: (id: string) => void;
+  /**
+   * Month view only: lists the events of the selected day (or the current
+   * date when nothing is selected) beside the month, or below it when
+   * narrow, under a "Schedule for" heading one level below the title.
+   */
+  agenda?: boolean;
   /**
    * First and last hour shown in week and day views. Events that start or
    * end outside them are drawn at the edge with a dashed border and keep
@@ -182,6 +190,7 @@ export function Calendar({
   view = "month",
   onViewChange,
   onEventSelect,
+  agenda = false,
   dayStartHour = 8,
   dayEndHour = 19,
   headingLevel = 2,
@@ -451,12 +460,8 @@ export function Calendar({
       />
     );
 
-  return (
-    <div
-      id={id}
-      className={rootClass}
-      data-variant={variant === "full" ? "full" : undefined}
-    >
+  const monthGrid = (
+    <>
       <div className="m-calendar-header">
         <Heading id={headingId} className="m-calendar-title" aria-live="polite">
           {formats.title.format(new Date(toTime(first)))}
@@ -555,6 +560,79 @@ export function Calendar({
           ))}
         </tbody>
       </table>
+    </>
+  );
+  const rootProps = {
+    id,
+    className: rootClass,
+    "data-variant": variant === "full" ? "full" : undefined,
+  };
+  if (!agenda) return <div {...rootProps}>{monthGrid}</div>;
+  const agendaDay = selected ?? date;
+  const agendaEvents = [...(byDay.get(agendaDay) || [])].sort((a, b) =>
+    (a.start ?? a.time ?? "").localeCompare(b.start ?? b.time ?? ""),
+  );
+  const agendaId = `${headingId}-agenda`;
+  return (
+    <div {...rootProps} data-agenda="true">
+      <div className="m-calendar-main">{monthGrid}</div>
+      <section className="m-calendar-agenda" aria-labelledby={agendaId}>
+        <SubHeading
+          id={agendaId}
+          className="m-calendar-agenda-title"
+          aria-live="polite"
+        >
+          Schedule for{" "}
+          <time dateTime={agendaDay}>
+            {formats.day.format(new Date(toTime(agendaDay)))}
+          </time>
+        </SubHeading>
+        {agendaEvents.length ? (
+          <ol className="m-calendar-agenda-list">
+            {agendaEvents.map((event) => {
+              const when = event.start ? (
+                <>
+                  <time>{event.start}</time>
+                  {event.end && (
+                    <>
+                      –<time>{event.end}</time>
+                    </>
+                  )}
+                </>
+              ) : event.time ? (
+                <time>{event.time}</time>
+              ) : (
+                "All day"
+              );
+              // The space keeps the title and time apart in a button's name.
+              const text = (
+                <>
+                  <strong>{event.title}</strong>{" "}
+                  <span className="m-calendar-event-time">{when}</span>
+                </>
+              );
+              return (
+                <li key={event.id}>
+                  {event.media}
+                  {onEventSelect ? (
+                    <button
+                      type="button"
+                      className="m-calendar-agenda-text"
+                      onClick={() => onEventSelect(event.id)}
+                    >
+                      {text}
+                    </button>
+                  ) : (
+                    <p className="m-calendar-agenda-text">{text}</p>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        ) : (
+          <p className="m-calendar-none">No events</p>
+        )}
+      </section>
     </div>
   );
 }

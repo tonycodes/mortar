@@ -2,7 +2,7 @@
   "id": "mortar-product-reviews",
   "logicalId": "product-reviews",
   "name": "ProductReviews",
-  "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews.",
+  "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews, optionally with each reviewer's avatar.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "ProductReviews",
@@ -16,8 +16,9 @@
       "average": "number",
       "count": "number",
       "distribution": "{ stars: number; count: number }[]",
-      "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode })",
+      "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode; avatar?: string (photo URL used with avatars) })",
       "action": "ReactNode",
+      "avatars": "boolean (shows each reviewer's Avatar, their photo or initials, beside their name)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; review titles are one level below)",
       "id": "string",
       "className": "string"
@@ -25,7 +26,7 @@
     "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-avatar"]
   },
   "preview": {
     "source": "previews/ProductReviewsPreview.tsx"

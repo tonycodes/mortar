@@ -373,8 +373,18 @@ export interface ProgressStep {
 export interface ProgressStepsProps {
   steps: ProgressStep[];
   label?: string;
-  /** simple: bars with step numbers; circles: vertical with descriptions; bullets: "Step 2 of 4" with dots. */
-  variant?: "simple" | "circles" | "bullets";
+  /**
+   * simple: bars with step numbers; circles: vertical with descriptions;
+   * bullets: "Step 2 of 4" with dots; bar: one track filled up to the current
+   * step with the names beneath, e.g. an order's delivery progress.
+   */
+  variant?: "simple" | "circles" | "bullets" | "bar";
+  /**
+   * `false` renders a labelled group instead of a navigation landmark, for
+   * progress that reports status rather than offering wayfinding, e.g. an
+   * order tracker (default true).
+   */
+  navigation?: boolean;
   className?: string;
 }
 /** Where someone is in a multi-step flow. The current step is marked aria-current="step". */
@@ -382,12 +392,15 @@ export function ProgressSteps({
   steps,
   label = "Progress",
   variant = "simple",
+  navigation = true,
   className,
 }: ProgressStepsProps) {
   const current = steps.findIndex((step) => step.status === "current");
+  const Root = navigation ? "nav" : "div";
   return (
-    <nav
+    <Root
       className={cx("m-progress-steps", className)}
+      role={navigation ? undefined : "group"}
       aria-label={label}
       data-variant={variant === "simple" ? undefined : variant}
     >
@@ -400,7 +413,7 @@ export function ProgressSteps({
         {steps.map((step, index) => {
           const body = (
             <>
-              {variant !== "simple" && (
+              {(variant === "circles" || variant === "bullets") && (
                 <span className="m-progress-step-marker" aria-hidden="true">
                   {variant === "circles" && step.status === "complete" && (
                     <Check variant="step" />
@@ -444,7 +457,7 @@ export function ProgressSteps({
           );
         })}
       </ol>
-    </nav>
+    </Root>
   );
 }
 export interface ActionPanelProps {

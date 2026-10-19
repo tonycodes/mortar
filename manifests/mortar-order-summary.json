@@ -2,7 +2,7 @@
   "id": "mortar-order-summary",
   "logicalId": "order-summary",
   "name": "OrderSummary",
-  "description": "Mortar order summary: cost lines, a distinguished total and a checkout action.",
+  "description": "Mortar order summary: cost lines with optional hints explaining estimates, a distinguished total and a checkout action.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "OrderSummary",
@@ -13,7 +13,7 @@
   "contract": {
     "props": {
       "title": "string",
-      "lines": "{ label: string; value: string }[]",
+      "lines": "{ label: string; value: string; hint?: ReactNode (explains an estimate under its label, e.g. a link to how shipping is worked out) }[]",
       "total": "{ label: string; value: string }",
       "action": "ReactNode",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",

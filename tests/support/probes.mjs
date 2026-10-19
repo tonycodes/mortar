@@ -571,6 +571,44 @@ export const implementations = {
     );
     await switchTo("Year");
     await expect(week.getByRole("heading", { level: 2 })).toHaveText("2028");
+    // Agenda: the selected day's meetings, in time order, follow the selection.
+    const small = root.locator(".m-calendar").nth(3);
+    const agenda = small.getByRole("region", { name: /^Schedule for/ });
+    await expect(agenda).toHaveAccessibleName(
+      "Schedule for Wednesday, 21 October 2026",
+    );
+    await expect(agenda.getByRole("listitem")).toHaveCount(2);
+    await expect(agenda.getByRole("button").first()).toHaveAccessibleName(
+      "Michael Foster 09:00–10:00",
+    );
+    // Wide: the agenda sits beside the month; narrow: below it.
+    const [monthBox, agendaBox] = await Promise.all([
+      small.locator(".m-calendar-main").boundingBox(),
+      agenda.boundingBox(),
+    ]);
+    expect(agendaBox.x).toBeGreaterThan(monthBox.x + monthBox.width - 1);
+    await small
+      .getByRole("button", { name: /^Thursday, 22 October 2026/ })
+      .click();
+    await expect(agenda).toHaveAccessibleName(
+      "Schedule for Thursday, 22 October 2026",
+    );
+    await agenda.getByRole("button", { name: /Dries Vincent/ }).click();
+    await expect(root.getByLabel("Opened event")).toHaveText("Dries Vincent");
+    await small
+      .getByRole("button", { name: /^Friday, 23 October 2026/ })
+      .focus();
+    await page.keyboard.press("Enter");
+    await expect(agenda.getByText("No events")).toBeVisible();
+    await page.setViewportSize({ width: 390, height: 900 });
+    const [narrowMonth, narrowAgenda] = await Promise.all([
+      small.locator(".m-calendar-main").boundingBox(),
+      agenda.boundingBox(),
+    ]);
+    expect(narrowAgenda.y).toBeGreaterThan(
+      narrowMonth.y + narrowMonth.height - 1,
+    );
+    await page.setViewportSize({ width: 1280, height: 900 });
   },
   async product({ page, root }) {
     const bag = root.getByLabel("Bag", { exact: true });
@@ -655,6 +693,25 @@ export const implementations = {
     await expect(
       root.getByRole("link", { name: "Continue shopping" }),
     ).toBeVisible();
+    // The bag with a summary column and related products.
+    const layout = root.locator(".m-cart-layout");
+    const related = layout.getByRole("region", { name: "You may also like" });
+    await expect(
+      related
+        .getByRole("list", { name: "You may also like" })
+        .getByRole("heading", { level: 3 }),
+    ).toHaveCount(4);
+    const summary = layout.getByRole("region", { name: "Your order" });
+    await expect(
+      summary.getByRole("link", { name: "How shipping is worked out" }),
+    ).toBeVisible();
+    await layout.getByLabel("Quantity, Organic tee").selectOption("2");
+    await expect(layout.getByLabel("Quantity, Organic tee")).toHaveValue("2");
+    const [lines, side] = await Promise.all([
+      layout.locator(".m-cart").boundingBox(),
+      summary.boundingBox(),
+    ]);
+    expect(side.x).toBeGreaterThan(lines.x + lines.width - 1);
   },
   async sidebar({ page, root }) {
     const reports = root.locator("summary", { hasText: "Reports" });

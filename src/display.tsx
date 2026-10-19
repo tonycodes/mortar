@@ -250,6 +250,11 @@ export interface DescriptionListProps {
   headingLevel?: HeadingLevel;
   items: { term: string; details: ReactNode; action?: ReactNode }[];
   layout?: "columns" | "stacked";
+  /**
+   * `striped` shades alternate rows instead of dividing them. To show the
+   * list in a card, place it in a Card with the title on the card.
+   */
+  variant?: "plain" | "striped";
   id?: string;
   className?: string;
 }
@@ -260,6 +265,7 @@ export function DescriptionList({
   headingLevel = 2,
   items,
   layout = "columns",
+  variant = "plain",
   id,
   className,
 }: DescriptionListProps) {
@@ -268,6 +274,7 @@ export function DescriptionList({
       id={id}
       className={cx("m-description-list", className)}
       data-layout={layout === "columns" ? undefined : layout}
+      data-variant={variant === "plain" ? undefined : variant}
     >
       {title && (
         <div className="m-description-heading">
