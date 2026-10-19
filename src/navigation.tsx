@@ -67,6 +67,25 @@ export function KitLink({
   );
 }
 
+/** A navigation link: sidebar and navbar items, page tabs and flyout entries. */
+export interface LinkItem {
+  label: string;
+  href: string;
+  /** The page being shown; marked aria-current="page". */
+  current?: boolean;
+  /** Icon shown before the label. */
+  icon?: ReactNode;
+  /** Shown after the label, e.g. a number of items. */
+  count?: number | string;
+  description?: string;
+}
+
+/** Items gathered under a visible group label. */
+export interface ItemGroup<T> {
+  label: string;
+  items: T[];
+}
+
 export interface IconLink {
   /** Accessible name; also the visible text when there is no icon. */
   label: string;
