@@ -1,0 +1,350 @@
+/* Workspace overlays: dialogs, panels, palette and toasts.
+   Every rule sits in @layer components, so equal-specificity rules resolve by source
+   order. styles.css loads tokens, foundation, overlays, application, data, calendar,
+   marketing, docs and ecommerce in that order; inside a file each component keeps
+   one section, ordered base, then variants and states, then media and container
+   queries, except where that would change which equal-specificity rule wins. */
+@layer components {
+  /* == Modal == */
+  .m-dialog {
+    position: fixed;
+    inset: 0;
+    z-index: var(--m-z-overlay);
+  }
+  .m-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--m-scrim);
+  }
+  .m-dialog-position {
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 24px;
+  }
+  .m-dialog-panel {
+    margin-block: auto;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 520px;
+    padding: 24px;
+    box-shadow: var(--m-float);
+  }
+  .m-dialog-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .m-dialog-heading h2 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .m-dialog-panel > .m-actions {
+    margin-top: 24px;
+    justify-content: flex-end;
+  }
+  .m-dialog-panel[data-size="lg"] {
+    max-width: 880px;
+  }
+
+  /* == ConfirmDialog == */
+  .m-confirm {
+    padding: 0;
+    max-width: 420px;
+    overflow: hidden;
+  }
+  .m-confirm-body {
+    display: grid;
+    gap: 10px;
+    padding: 22px 22px 18px;
+  }
+  .m-confirm-body > h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .m-confirm-body > div:first-of-type {
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    text-wrap: pretty;
+  }
+  .m-confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 22px;
+    border-top: 1px solid var(--m-line);
+    background: var(--m-paper);
+  }
+
+  /* == SlideOver == */
+  /* Workspace overlays and lists */
+  .m-slide-over {
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(420px, 92vw);
+    display: flex;
+    flex-direction: column;
+    background: var(--m-surface);
+    border-left: 1px solid var(--m-line);
+    box-shadow: var(--m-float);
+  }
+  .m-slide-over > header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-slide-over > header > div {
+    flex: 1;
+  }
+  .m-slide-over > :where(header > div) > h2 {
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .m-slide-over > :where(header > div) > p {
+    font-size: 13px;
+    color: var(--m-muted);
+  }
+  .m-slide-over-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .m-slide-over > footer {
+    justify-content: flex-end;
+    padding: 12px 20px;
+    border-top: 1px solid var(--m-line);
+    background: var(--m-paper);
+  }
+  .m-slide-over[data-size="lg"] {
+    width: min(640px, 96vw);
+  }
+  .m-slide-over[data-size="xl"] {
+    width: min(880px, 100vw);
+  }
+
+  /* == CommandPalette == */
+  .m-palette-position {
+    align-items: flex-start;
+    padding-top: 12vh;
+  }
+  .m-palette {
+    width: 100%;
+    max-width: 600px;
+    box-shadow: var(--m-float);
+    overflow: hidden;
+  }
+  .m-palette-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 54px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-palette-input input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font-size: 16px;
+    outline: none;
+  }
+  .m-palette-results {
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 6px;
+  }
+  .m-palette-group {
+    padding: 10px 10px 4px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--m-muted);
+  }
+  .m-palette-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: var(--m-control);
+    padding: 6px 10px;
+    border-radius: var(--m-radius);
+    font-size: var(--m-font-size);
+    cursor: pointer;
+  }
+  .m-palette-item small {
+    display: block;
+    font-size: 12px;
+    color: var(--m-muted);
+  }
+  .m-palette-item mark {
+    background: none;
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .m-palette-meta {
+    font-size: 12px;
+    color: var(--m-muted);
+    white-space: nowrap;
+  }
+  .m-palette-empty {
+    padding: 32px 10px;
+    text-align: center;
+    font-size: var(--m-font-size);
+    color: var(--m-muted);
+  }
+  .m-palette-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--m-line);
+    background: var(--m-paper);
+    font-size: 12px;
+    color: var(--m-muted);
+  }
+  .m-palette-attribution {
+    margin-left: auto;
+  }
+  .m-palette-icon {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--m-radius);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+  }
+  /* With an icon, the label takes the space so it stays beside the icon. */
+  .m-palette-icon + span {
+    flex: 1;
+    min-width: 0;
+  }
+  /* With no results the empty listbox takes no space above the message. */
+  .m-palette-results:empty {
+    display: none;
+  }
+  .m-palette-input:has(input:focus-visible) {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  .m-palette-item[data-focus] {
+    background: var(--m-selected);
+  }
+
+  /* == Toast and Toaster == */
+  .m-toast-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+  /* Feedback */
+  .m-toaster {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: var(--m-z-toast);
+    width: min(380px, calc(100vw - 40px));
+  }
+  .m-toaster ol {
+    display: grid;
+    gap: 10px;
+  }
+  .m-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    box-shadow: var(--m-float);
+    font-size: 13px;
+  }
+  .m-toast > div:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+  }
+  .m-toast strong {
+    display: block;
+    font-size: var(--m-font-size);
+  }
+  .m-toast p {
+    color: var(--m-secondary);
+  }
+  .m-toast .m-actions {
+    gap: 2px;
+    flex-wrap: nowrap;
+  }
+  .m-toast .m-button {
+    min-height: 28px;
+    padding: 2px 8px;
+  }
+  .m-toast-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--m-ink);
+    color: var(--m-paper);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .m-toast-leading {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-toast:is(
+      [data-tone="success"],
+      [data-tone="warning"],
+      [data-tone="danger"],
+      [data-tone="info"]
+    )
+    .m-toast-icon {
+    background: var(--m-tone);
+    color: var(--m-on-feedback);
+  }
+
+  /* == SaveBar == */
+  .m-save-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: var(--m-z-sticky);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: var(--m-radius-lg);
+    background: var(--m-ink);
+    color: var(--m-paper);
+    font-size: var(--m-font-size);
+  }
+  .m-save-bar > span {
+    flex: 1;
+  }
+  .m-save-bar .m-button-secondary {
+    background: transparent;
+    color: var(--m-paper);
+    border-color: var(--m-secondary);
+  }
+  .m-save-bar .m-button-primary {
+    background: var(--m-paper);
+    color: var(--m-ink);
+    border-color: var(--m-paper);
+  }
+}

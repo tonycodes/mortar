@@ -1,0 +1,725 @@
+/* Data: tables, lists and description lists.
+   Every rule sits in @layer components, so equal-specificity rules resolve by source
+   order. styles.css loads tokens, foundation, overlays, application, data, calendar,
+   marketing, docs and ecommerce in that order; inside a file each component keeps
+   one section, ordered base, then variants and states, then media and container
+   queries, except where that would change which equal-specificity rule wins. */
+@layer components {
+  /* == Tables: DataTable, Table and table state == */
+  /* One table base for DataTable, Table, PlanComparison and prose tables. Each sets
+     its cell padding; DataTable and Table follow density through --m-row-pad. */
+  .m-data-table {
+    overflow: hidden;
+    min-width: 0;
+    --m-cell-pad-y: var(--m-row-pad);
+    --m-cell-pad-x: var(--m-row-pad);
+  }
+  .m-table-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px;
+    border-bottom: 1px solid var(--m-line);
+    font-size: 13px;
+  }
+  .m-table-scroll {
+    overflow-x: auto;
+  }
+  .m-table {
+    --m-cell-pad-y: calc(var(--m-row-pad) - 4px);
+    --m-cell-pad-x: var(--m-row-pad);
+  }
+  :is(.m-data-table, .m-table, .m-comparison) table,
+  .m-prose
+    table:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+  }
+  :is(.m-data-table, .m-table, .m-comparison) table {
+    width: 100%;
+  }
+  .m-data-table table {
+    font-size: var(--m-font-size);
+  }
+  :is(.m-data-table, .m-table, .m-comparison) :is(th, td),
+  .m-prose
+    :is(th, td):where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    padding: var(--m-cell-pad-y) var(--m-cell-pad-x);
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-data-table :is(th, td) {
+    white-space: nowrap;
+  }
+  .m-table :is(th, td),
+  .m-prose
+    :is(th, td):where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    vertical-align: top;
+  }
+  :is(.m-data-table, .m-table) thead th,
+  .m-prose
+    thead
+    th:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    color: var(--m-muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .m-data-table thead th {
+    background: var(--m-paper);
+  }
+  .m-table thead th,
+  .m-prose
+    thead
+    th:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    white-space: nowrap;
+  }
+  :is(.m-data-table, .m-table) tbody th {
+    font-weight: 600;
+  }
+  .m-data-table tr:last-child :is(th, td) {
+    border-bottom: 0;
+  }
+  .m-table-state {
+    padding: 32px;
+    color: var(--m-muted);
+  }
+  .m-sort-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: var(--m-cell-pad-y) var(--m-cell-pad-x);
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    --m-icon-size: 12px;
+  }
+  .m-sort-button svg {
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .m-sort-button svg path {
+    opacity: 0.35;
+  }
+  .m-data-table colgroup .m-table-select-col {
+    width: 44px;
+  }
+  .m-truncate {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-row-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .m-row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .m-table-footer {
+    padding: 10px 12px;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-table,
+  .m-prose
+    table:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    min-width: 0;
+    overflow-x: auto;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  .m-table caption:not(.m-sr-only) {
+    padding: 12px 14px 0;
+    text-align: left;
+    font-weight: 600;
+  }
+  :is(
+    .m-table tbody tr:last-child :is(th, td),
+    .m-prose
+      tbody
+      tr:last-child
+      :is(th, td):where(
+        :not(
+          :is([class^="m-"], [class*=" m-"]),
+          .m-prose :is([class^="m-"], [class*=" m-"]) *
+        )
+      )
+  ) {
+    border-bottom: 0;
+  }
+  :is(.m-data-table, .m-table) .m-table-group th {
+    padding-block: 6px;
+    border-top: 1px solid var(--m-line);
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-ink);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+  }
+  /* The column header row already draws the line above the first group. */
+  :is(.m-data-table, .m-table) thead + tbody > .m-table-group th {
+    border-top: 0;
+  }
+  .m-data-table[data-density="compact"] {
+    --m-cell-pad-y: 6px;
+    --m-cell-pad-x: 10px;
+  }
+  :is(.m-data-table, .m-table) [data-align="end"] {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-data-table [data-selected] {
+    background: var(--m-selected);
+  }
+  /* --m-selected is close to --m-sunken, so selection also gets a non-colour cue. */
+  .m-data-table tr[data-selected] > :first-child {
+    box-shadow: inset 3px 0 0 var(--m-primary);
+  }
+  .m-data-table thead th[aria-sort] {
+    padding: 0;
+  }
+  [data-align="end"] > .m-sort-button {
+    justify-content: flex-end;
+  }
+  .m-sort-button:hover {
+    color: var(--m-ink);
+  }
+  th[aria-sort="ascending"] .m-sort-button,
+  th[aria-sort="descending"] .m-sort-button {
+    color: var(--m-ink);
+  }
+  .m-sort-button svg path[data-active] {
+    opacity: 1;
+  }
+  .m-table-scroll[data-sticky] {
+    overflow: auto;
+  }
+  .m-table-scroll[data-sticky] thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    box-shadow: inset 0 -1px 0 var(--m-line);
+  }
+  .m-data-table [data-truncate] {
+    max-width: 0;
+  }
+  .m-data-table tr[data-linked] {
+    position: relative;
+  }
+  .m-data-table tr[data-linked]:hover {
+    background: var(--m-sunken);
+  }
+  .m-row-link:hover {
+    text-decoration: underline;
+  }
+  .m-row-link:focus-visible {
+    outline: none;
+  }
+  .m-row-link:focus-visible::after {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  /* Cell actions remain independent of the stretched row navigation link. */
+  .m-data-table
+    tr[data-linked]
+    :is(
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      a:not(.m-row-link),
+      [role="button"],
+      [tabindex]
+    ) {
+    position: relative;
+    z-index: 1;
+  }
+  .m-data-table[data-density="compact"] table {
+    font-size: 13px;
+  }
+  /* Zero specificity: hover and selection always win over stripes. */
+  :where(
+    :is(.m-data-table, .m-table)[data-striped]
+      tbody
+      tr:nth-child(even of :not(.m-table-group))
+  ) {
+    background: var(--m-sunken);
+  }
+  .m-data-table[data-density="compact"] .m-table-group th {
+    padding-block: 4px;
+  }
+  @media (max-width: 640px) {
+    /* Narrow screens scroll the table instead of collapsing truncated columns. */
+    .m-data-table [data-truncate] {
+      max-width: none;
+    }
+    .m-truncate {
+      max-width: 14rem;
+    }
+  }
+
+  /* == StackedList == */
+  .m-stacked-list {
+    overflow: hidden;
+  }
+  .m-stacked-list > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-stacked-list > :where(header) > .m-stacked-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-stacked-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: var(--m-row-pad) 18px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-stacked-list li:last-child {
+    border-bottom: 0;
+  }
+  .m-stacked-list li > :is(a, div):first-child {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .m-stacked-text {
+    min-width: 0;
+    line-height: 1.3;
+  }
+  .m-stacked-text strong {
+    display: block;
+    font-size: var(--m-font-size);
+  }
+  .m-stacked-text span {
+    display: block;
+    font-size: 12px;
+    color: var(--m-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* clip, not hidden: hidden makes the list a scroll container and stops headings sticking. */
+  .m-stacked-list:has(> .m-stacked-group) {
+    overflow: clip;
+  }
+  .m-stacked-group-heading {
+    position: sticky;
+    /* Set --m-sticky-top to the height of a fixed app header so headings stop below it. */
+    top: var(--m-sticky-top, 0px);
+    z-index: 1;
+    margin: 0;
+    padding: 6px 18px;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .m-stacked-list > .m-stacked-group:not(:last-child) li:last-child {
+    border-bottom: 1px solid var(--m-line);
+  }
+  /* A header with only an action keeps the action at the end. */
+  .m-stacked-action {
+    display: flex;
+    gap: 8px;
+    margin-inline-start: auto;
+  }
+  /* StackedList second column and link chevrons. */
+  .m-stacked-list:has(.m-stacked-meta) {
+    container: m-stacked-list / inline-size;
+  }
+  .m-stacked-list li > :is(a, div):first-child:has(> .m-stacked-meta) {
+    flex-wrap: wrap;
+  }
+  .m-stacked-list
+    li
+    > :is(a, div):has(> :is(.m-stacked-meta, .m-stacked-chevron))
+    > .m-stacked-text {
+    flex: 1 1 0;
+  }
+  .m-stacked-meta {
+    display: grid;
+    flex-shrink: 0;
+    gap: 2px;
+    max-width: 50%;
+    color: var(--m-ink);
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: end;
+  }
+  .m-stacked-meta > :not(:first-child) {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-stacked-chevron {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--m-muted);
+  }
+  .m-stacked-chevron svg {
+    width: 18px;
+    height: 18px;
+  }
+  @container m-stacked-list (max-width: 480px) {
+    .m-stacked-meta {
+      order: 3;
+      flex-basis: 100%;
+      max-width: none;
+      text-align: start;
+    }
+  }
+
+  /* == GridList == */
+  .m-grid-list {
+    display: grid;
+    grid-template-columns: repeat(var(--m-grid-columns, 3), minmax(0, 1fr));
+    gap: 20px;
+  }
+  .m-grid-list > li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .m-grid-list-cover {
+    aspect-ratio: 16 / 9;
+    background: var(--m-sunken);
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-grid-list-cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .m-grid-list-body {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+    padding: 16px;
+  }
+  .m-grid-list-media {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-grid-list-text {
+    min-width: 0;
+  }
+  .m-grid-list-title {
+    margin: 0;
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+  .m-grid-list-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* The title link covers the card; actions sit above it so they stay clickable. */
+  .m-grid-list-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .m-grid-list-text p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-grid-list-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .m-grid-list-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-grid-list-details {
+    margin: 0;
+    padding: 0 16px 8px;
+    font-size: 13px;
+  }
+  .m-grid-list-details > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-grid-list-details dt {
+    color: var(--m-muted);
+  }
+  .m-grid-list-details dd {
+    margin: 0;
+    color: var(--m-ink);
+    font-weight: 500;
+    text-align: right;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  /* Links and controls in a card's media, meta and details sit above the
+     stretched title link, so they stay clickable. */
+  :is(.m-grid-list-media, .m-grid-list-meta, .m-grid-list-details)
+    :is(a, button, input, select, textarea, summary, [tabindex]) {
+    position: relative;
+    z-index: 1;
+  }
+  .m-grid-list[data-columns="2"] {
+    --m-grid-columns: 2;
+  }
+  .m-grid-list[data-columns="4"] {
+    --m-grid-columns: 4;
+  }
+  .m-grid-list > li:has(.m-grid-list-text a:focus-visible) {
+    outline: 2px solid var(--m-focus);
+    outline-offset: var(--m-focus-offset);
+  }
+  .m-grid-list-text a:focus-visible {
+    outline: none;
+  }
+  .m-grid-list > li:has(a:hover) {
+    border-color: var(--m-line-strong);
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions {
+    flex-wrap: nowrap;
+    gap: 0;
+    padding: 0;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > * {
+    display: inline-flex;
+    flex: 1 1 0;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+    min-height: 44px;
+    margin: 0;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--m-ink);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > * + * {
+    border-left: 1px solid var(--m-line);
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > :hover {
+    background: var(--m-sunken);
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions > :focus-visible {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  .m-grid-list[data-actions="split"] .m-grid-list-actions svg {
+    flex-shrink: 0;
+    color: var(--m-muted);
+  }
+  @media (max-width: 900px) {
+    .m-grid-list:is([data-columns], :not([data-columns])) {
+      --m-grid-columns: 2;
+    }
+  }
+  @media (max-width: 560px) {
+    .m-grid-list:is([data-columns], :not([data-columns])) {
+      --m-grid-columns: 1;
+    }
+  }
+
+  /* == DescriptionList == */
+  .m-description-list {
+    container: m-description-list / inline-size;
+    min-width: 0;
+  }
+  .m-description-heading {
+    padding-bottom: 14px;
+  }
+  .m-description-heading .m-description-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-description-heading p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-description-list dl {
+    margin: 0;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-description-list dl > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px 16px;
+    padding: var(--m-row-pad) 0;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-description-list dt {
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+  }
+  .m-description-list dd {
+    margin: 0;
+    min-width: 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    overflow-wrap: anywhere;
+  }
+  .m-description-list dl > div > :is(dt, dd) {
+    grid-column: 1;
+  }
+  .m-description-list dl > div > .m-description-action {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  .m-description-list dl > div[data-action] {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  /* DescriptionList striped: shaded alternate rows instead of dividers. */
+  .m-description-list[data-variant="striped"] dl {
+    border-top: 0;
+  }
+  .m-description-list[data-variant="striped"] dl > div {
+    padding-inline: 16px;
+    border-bottom: 0;
+    border-radius: var(--m-radius);
+  }
+  .m-description-list[data-variant="striped"] dl > div:nth-child(odd) {
+    background: var(--m-sunken);
+  }
+  @container m-description-list (min-width: 560px) {
+    /* Rows share one set of tracks so details align whether or not a row has an action. */
+    .m-description-list:not([data-layout]) dl {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+    }
+    .m-description-list:not([data-layout]) dl > div {
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: baseline;
+    }
+    .m-description-list:not([data-layout]) dl > div > :is(dt, dd) {
+      grid-row: 1;
+      grid-column: 2;
+    }
+    .m-description-list:not([data-layout]) dl > div > dt {
+      grid-column: 1;
+    }
+    .m-description-list:not([data-layout]) dl > div > .m-description-action {
+      grid-column: 3;
+      align-self: baseline;
+    }
+  }
+
+  /* == AttachmentList == */
+  .m-attachments {
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+  }
+  .m-attachments li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--m-line);
+    font-size: var(--m-font-size);
+  }
+  .m-attachments li:last-child {
+    border-bottom: 0;
+  }
+  .m-attachment-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--m-muted);
+    --m-icon-size: 18px;
+  }
+  .m-attachment-text {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+    min-width: 0;
+  }
+  .m-attachment-name {
+    overflow: hidden;
+    color: var(--m-ink);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-attachment-size {
+    color: var(--m-muted);
+  }
+  .m-attachments a {
+    flex-shrink: 0;
+    color: var(--m-link);
+    font-weight: 600;
+  }
+}

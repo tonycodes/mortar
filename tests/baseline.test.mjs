@@ -88,7 +88,7 @@ test("baseline rejects stale source/preview closure, catalogue drift and undocum
       "An extensionless fixture edit must invalidate Button without a source or CSS edit",
     );
     await writeFile(
-      join(dir, "src/components.css"),
+      join(dir, "src/foundation.css"),
       "\n/* changed central style */\n",
       { flag: "a" },
     );
@@ -134,7 +134,7 @@ test("a shared CSS change invalidates fingerprints but regenerates only the cata
       await cp(join(ROOT, name), join(dir, name), { recursive: true });
     const manifest = join(dir, "manifests/mortar-button.json");
     const before = await readFile(manifest, "utf8");
-    await writeFile(join(dir, "src/kits.css"), "\n/* restyle */\n", {
+    await writeFile(join(dir, "src/marketing.css"), "\n/* restyle */\n", {
       flag: "a",
     });
     const stale = await checkKit(dir);
@@ -182,7 +182,7 @@ test("baseline derives dependencies, closes capabilities and finds fixed colours
     await edit("mortar-badge", (c) => c.capabilities.push("sparkly"));
     await edit("mortar-toast", (c) => (c.contract.states = ["Light"]));
     await writeFile(
-      join(dir, "src/kits.css"),
+      join(dir, "src/marketing.css"),
       "\n.m-new { color: #123456; border-color: hsl(0 0% 0%); }\n/* #abcdef in a comment */\n",
       { flag: "a" },
     );
@@ -210,7 +210,7 @@ test("baseline derives dependencies, closes capabilities and finds fixed colours
     assert.match(at("M006", "mortar-badge")[0]?.message, /Unknown capability/);
     assert.match(at("M007", "mortar-toast")[0]?.message, /contract\.states/);
     assert.equal(
-      at("M005", "src/kits.css").length,
+      at("M005", "src/marketing.css").length,
       1,
       "one raw colour line; comments are ignored",
     );

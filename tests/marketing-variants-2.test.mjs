@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { layerBlockWith } from "./support/css.mjs";
+import { section } from "./support/css.mjs";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -198,17 +198,18 @@ test("LogoCloud default markup is unchanged; grid and split layouts", () => {
 });
 
 test("variant styles use semantic tokens and the hero joins the inverse remap", async () => {
-  const css = await read("src/kits.css");
-  const block = layerBlockWith(css, ".m-hero[data-background]");
-  for (const selector of [
-    ".m-hero-background::after",
-    ".m-faq-grid",
-    ".m-pricing-offer",
-    ".m-stat-group .m-stat-description",
-    '.m-logo-cloud[data-layout="split"]',
-  ])
-    assert.ok(block.includes(selector), `missing ${selector}`);
-  assert.doesNotMatch(block, /#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(/);
+  const css = await read("src/marketing.css");
+  for (const [selector, component] of [
+    [".m-hero-background::after", "Hero"],
+    [".m-faq-grid", "FAQ"],
+    [".m-pricing-offer", "Pricing"],
+    [".m-stat-group .m-stat-description", "StatGroup"],
+    ['.m-logo-cloud[data-layout="split"]', "LogoCloud"],
+  ]) {
+    const styles = section(css, component);
+    assert.ok(styles.includes(selector), `${component} styles ${selector}`);
+    assert.doesNotMatch(styles, /#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(/);
+  }
   // The hero sets data-tone="inverse"; the generic inverse hook in tokens.css remaps it.
   const tokens = await read("src/tokens.css");
   const hook = tokens.slice(tokens.indexOf('[data-tone="inverse"] {'));

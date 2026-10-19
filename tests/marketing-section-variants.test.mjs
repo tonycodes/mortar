@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { h, html as markup, UI } from "./support/render.mjs";
-import { readSource, layerBlockWith } from "./support/css.mjs";
+import { readSource, section } from "./support/css.mjs";
 
 const go = { label: "Go", href: "/go" };
 const img = (src) => h("img", { alt: "", src });
@@ -238,25 +238,29 @@ test("NotFound background is decorative and switches to the inverse tone", () =>
   );
 });
 
-test("variant styles sit in one block of kits.css with semantic tokens", async () => {
-  const css = await readSource("src/kits.css");
-  const block = layerBlockWith(css, ".m-hero-tiles");
-  for (const selector of [
-    ".m-hero-tiles",
-    ".m-hero-angled .m-hero-preview",
-    '.m-mock-window[data-variant="phone"]',
-    '.m-feature-section[data-offset="true"]',
-    '.m-bento > li[data-row-span="2"]',
-    '.m-stat-group[data-layout="timeline"]',
-    '.m-stat-group[data-layout="stepped"]',
-    ".m-cover-background::after",
-    ".m-stat-band",
-    ".m-not-found[data-background]",
-    '.m-pricing-grid[data-columns="4"]',
-    ".m-pricing-grid article.m-pricing-extra",
-    ".m-testimonial.m-content-quote",
-    ".m-content-copy > .m-content-stats",
-  ])
-    assert.ok(block.includes(selector), `missing ${selector}`);
-  assert.doesNotMatch(block, /#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(/);
+test("variant styles sit in their component's section of marketing.css with semantic tokens", async () => {
+  const css = await readSource("src/marketing.css");
+  for (const [selector, component] of [
+    [".m-hero-tiles", "Hero"],
+    [".m-hero-angled .m-hero-preview", "Hero"],
+    ['.m-mock-window[data-variant="phone"]', "MockWindow"],
+    ['.m-feature-section[data-offset="true"]', "FeatureSection"],
+    ['.m-bento > li[data-row-span="2"]', "BentoGrid"],
+    ['.m-stat-group[data-layout="timeline"]', "StatGroup"],
+    ['.m-stat-group[data-layout="stepped"]', "StatGroup"],
+    [
+      ".m-cover-background::after",
+      "Cover background: StatGroup band and NotFound",
+    ],
+    [".m-stat-band", "StatGroup"],
+    [".m-not-found[data-background]", "NotFound"],
+    ['.m-pricing-grid[data-columns="4"]', "Pricing"],
+    [".m-pricing-grid article.m-pricing-extra", "Pricing"],
+    [".m-testimonial.m-content-quote", "Testimonial and TestimonialGrid"],
+    [".m-content-copy > .m-content-stats", "ContentSection"],
+  ]) {
+    const styles = section(css, component);
+    assert.ok(styles.includes(selector), `${component} styles ${selector}`);
+    assert.doesNotMatch(styles, /#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(/);
+  }
 });

@@ -22,7 +22,7 @@ function pricing(props) {
   });
 }
 test("dark surface tokens for CallToAction and featured pricing", async () => {
-  const css = await readSource("src/components.css");
+  const css = await readSource("src/marketing.css");
   const cta = selectorBody(css, ".m-cta");
   const featured = selectorBody(
     css,
