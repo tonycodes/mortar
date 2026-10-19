@@ -1,4 +1,4 @@
-import { KitLink } from "./navigation.js";
+import { KitLink, type ItemGroup, type LinkItem } from "./navigation.js";
 import {
   useId,
   useRef,
@@ -7,16 +7,20 @@ import {
   type FormEvent,
   type ReactNode,
 } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { Button, EmptyState, Input, Notice, type Tone } from "./primitives.js";
 import { BrandMark } from "./layout.js";
-export interface NavigationItem {
-  label: string;
-  href: string;
-  current?: boolean;
-  count?: string;
-  /** Icon shown instead of the default marker. */
-  icon?: ReactNode;
+import { ArrowDown, ArrowUp, Check, SortArrows } from "./icons.js";
+import { headingTag } from "./heading.js";
+import {
+  LinkContent,
+  MobileNavDialog,
+  SectionIntro,
+  TermList,
+  introSlots,
+  useDomId,
+} from "./internal.js";
+/** A navigation link; `icon` replaces the default marker in the sidebar. */
+export interface NavigationItem extends LinkItem {
   /** Sub-pages; the item becomes a disclosure, open when a child is current. */
   children?: NavigationItem[];
 }
@@ -27,7 +31,7 @@ export interface AppShellProps {
   workspace?: string;
   user?: ReactNode;
   navigation: NavigationItem[];
-  secondaryNavigation?: { label: string; items: NavigationItem[] }[];
+  secondaryNavigation?: ItemGroup<NavigationItem>[];
   header?: ReactNode;
   actions?: ReactNode;
   /** Secondary column beside the main content (multi-column layout). */
@@ -47,14 +51,6 @@ function SidebarContent({
   label = "Primary",
   onNavigate,
 }: SidebarProps & { onNavigate?: () => void }) {
-  const lead = (item: NavigationItem) =>
-    item.icon ? (
-      <span className="m-nav-icon" aria-hidden="true">
-        {item.icon}
-      </span>
-    ) : (
-      <span className="m-nav-marker" aria-hidden="true" />
-    );
   const links = (items: NavigationItem[]): ReactNode[] =>
     items.map((item, index) =>
       item.children?.length ? (
@@ -64,8 +60,12 @@ function SidebarContent({
           open={item.children.some((child) => child.current) || undefined}
         >
           <summary>
-            {lead(item)}
-            {item.label}
+            <LinkContent
+              prefix="nav"
+              marker
+              icon={item.icon}
+              label={item.label}
+            />
           </summary>
           <div className="m-nav-children">{links(item.children)}</div>
         </details>
@@ -76,9 +76,14 @@ function SidebarContent({
           aria-current={item.current ? "page" : undefined}
           onClick={onNavigate}
         >
-          {lead(item)}
-          {item.label}
-          {item.count && <span className="m-nav-count">{item.count}</span>}
+          <LinkContent
+            prefix="nav"
+            marker
+            icon={item.icon}
+            label={item.label}
+            count={item.count}
+            countWhen="truthy"
+          />
         </KitLink>
       ),
     );
@@ -116,7 +121,7 @@ export interface SidebarProps {
   /** Destination for the brand link; defaults to the first navigation item. */
   homeHref?: string;
   navigation: NavigationItem[];
-  sections?: { label: string; items: NavigationItem[] }[];
+  sections?: ItemGroup<NavigationItem>[];
   /** Account menu or other content pinned to the bottom. */
   footer?: ReactNode;
   label?: string;
@@ -187,18 +192,9 @@ export function AppShell({
           </main>
         )}
       </div>
-      <Dialog open={open} onClose={() => setOpen(false)} className="m-dialog">
-        <div className="m-backdrop" aria-hidden="true" />
-        <DialogPanel className="m-mobile-sidebar">
-          <div className="m-dialog-heading">
-            <DialogTitle>{brand}</DialogTitle>
-            <Button variant="ghost" onClick={() => setOpen(false)}>
-              Close navigation
-            </Button>
-          </div>
-          <SidebarContent {...sidebar} onNavigate={() => setOpen(false)} />
-        </DialogPanel>
-      </Dialog>
+      <MobileNavDialog open={open} onClose={() => setOpen(false)} title={brand}>
+        <SidebarContent {...sidebar} onNavigate={() => setOpen(false)} />
+      </MobileNavDialog>
     </div>
   );
 }
@@ -223,7 +219,7 @@ export function StackedShell({
   width?: "md" | "lg" | "xl" | "full";
   children: ReactNode;
 }) {
-  const contentId = "m-stacked-" + useId().replace(/[^a-zA-Z0-9-]/g, "");
+  const contentId = useDomId("m-stacked-");
   return (
     <div className="m-stacked-shell">
       <KitLink className="m-skip" href={`#${contentId}`}>
@@ -284,13 +280,13 @@ export function Navbar({
             aria-current={item.current ? "page" : undefined}
             onClick={() => setOpen(false)}
           >
-            {item.icon && (
-              <span className="m-nav-icon" aria-hidden="true">
-                {item.icon}
-              </span>
-            )}
-            {item.label}
-            {item.count && <span className="m-nav-count">{item.count}</span>}
+            <LinkContent
+              prefix="nav"
+              icon={item.icon}
+              label={item.label}
+              count={item.count}
+              countWhen="truthy"
+            />
           </KitLink>
         ))}
       </nav>
@@ -332,15 +328,7 @@ export function Breadcrumbs({
     </nav>
   );
 }
-export interface TabNavItem {
-  label: string;
-  href: string;
-  /** The page being shown; marked aria-current="page". */
-  current?: boolean;
-  /** Shown after the label, e.g. a number of items. */
-  count?: number | string;
-  icon?: ReactNode;
-}
+export type TabNavItem = LinkItem;
 /** Tabs that link between pages, e.g. settings sections. Uses links, not ARIA tabs. */
 export function TabNav({
   label,
@@ -369,15 +357,13 @@ export function TabNav({
               href={item.href}
               aria-current={item.current ? "page" : undefined}
             >
-              {item.icon && (
-                <span className="m-tab-icon" aria-hidden="true">
-                  {item.icon}
-                </span>
-              )}
-              {item.label}
-              {item.count !== undefined && (
-                <span className="m-tab-count">{item.count}</span>
-              )}
+              <LinkContent
+                prefix="tab"
+                icon={item.icon}
+                label={item.label}
+                count={item.count}
+                countWhen="defined"
+              />
             </KitLink>
           </li>
         ))}
@@ -393,15 +379,6 @@ export interface ProgressStep {
   href?: string;
   status: "complete" | "current" | "upcoming";
 }
-const stepCheck = (
-  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5">
-    <path
-      d="M5 10.5l3.5 3.5L15 7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 /** Where someone is in a multi-step flow. The current step is marked aria-current="step". */
 export function ProgressSteps({
   steps,
@@ -427,9 +404,9 @@ export function ProgressSteps({
             <>
               {variant !== "simple" && (
                 <span className="m-progress-step-marker" aria-hidden="true">
-                  {variant === "circles" &&
-                    step.status === "complete" &&
-                    stepCheck}
+                  {variant === "circles" && step.status === "complete" && (
+                    <Check variant="step" />
+                  )}
                 </span>
               )}
               <span
@@ -489,12 +466,18 @@ export function ActionPanel({
   headingLevel?: 2 | 3;
 }) {
   const id = useId();
-  const Heading = headingLevel === 2 ? "h2" : "h3";
+  const [, headingSlot, descriptionSlot] = introSlots({
+    title,
+    description,
+    id,
+    headingLevel,
+    descriptionClassName: null,
+  });
   return (
     <section className="m-action-panel" aria-labelledby={id} data-tone={tone}>
       <div className="m-action-panel-text">
-        <Heading id={id}>{title}</Heading>
-        {description && <p>{description}</p>}
+        {headingSlot}
+        {descriptionSlot}
         {children}
       </div>
       {action && <div className="m-action-panel-action">{action}</div>}
@@ -522,12 +505,15 @@ export function PageHeading({
   /** Avatar or logo beside the title (decorative). */
   avatar?: ReactNode;
 }) {
-  const Heading = headingLevel === 1 ? "h1" : "h2";
   const text = (
     <div>
-      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <Heading>{title}</Heading>
-      {description && <p>{description}</p>}
+      {...introSlots({
+        eyebrow,
+        title,
+        description,
+        headingLevel,
+        descriptionClassName: null,
+      })}
       {meta.length > 0 && (
         <ul className="m-heading-meta">
           {meta.map((item, index) => (
@@ -559,10 +545,6 @@ export function PageHeading({
     </header>
   );
 }
-const trendArrow = {
-  up: "M10 15V5m0 0-4 4m4-4 4 4",
-  down: "M10 5v10m0 0-4-4m4 4 4-4",
-};
 export function MetricGroup({
   label,
   items,
@@ -585,22 +567,24 @@ export function MetricGroup({
   variant?: "shared" | "cards";
 }) {
   return (
-    <dl
+    <TermList
       className="m-metrics"
       aria-label={label}
       data-variant={variant === "cards" ? "cards" : undefined}
-    >
-      {items.map((item) => (
-        <div key={item.label}>
-          <dt>
+      items={items.map((item) => ({
+        key: item.label,
+        term: (
+          <>
             {item.icon && (
               <span className="m-metric-icon" aria-hidden="true">
                 {item.icon}
               </span>
             )}
             {item.label}
-          </dt>
-          <dd>
+          </>
+        ),
+        details: (
+          <>
             <strong>{item.value}</strong>
             {item.previous && (
               <span className="m-metric-previous">from {item.previous}</span>
@@ -612,20 +596,7 @@ export function MetricGroup({
               >
                 {item.trend && (
                   <>
-                    <svg
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      aria-hidden="true"
-                      focusable="false"
-                    >
-                      <path
-                        d={trendArrow[item.trend]}
-                        stroke="currentColor"
-                        strokeWidth="1.75"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                    {item.trend === "up" ? <ArrowUp /> : <ArrowDown />}
                     <span className="m-sr-only">
                       {item.trend === "up" ? "Increased by " : "Decreased by "}
                     </span>
@@ -634,10 +605,10 @@ export function MetricGroup({
                 {item.change}
               </span>
             )}
-          </dd>
-        </div>
-      ))}
-    </dl>
+          </>
+        ),
+      }))}
+    />
   );
 }
 export type SortDirection = "ascending" | "descending";
@@ -691,10 +662,10 @@ const collator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base",
 });
+const isEmpty = (v: unknown) => v === null || v === undefined || v === "";
 function compareValues(a: unknown, b: unknown) {
-  const empty = (v: unknown) => v === null || v === undefined || v === "";
-  if (empty(a) || empty(b))
-    return empty(a) === empty(b) ? 0 : empty(a) ? 1 : -1;
+  if (isEmpty(a) || isEmpty(b))
+    return isEmpty(a) === isEmpty(b) ? 0 : isEmpty(a) ? 1 : -1;
   if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
   if (typeof a === "number" && typeof b === "number") return a - b;
   return collator.compare(String(a), String(b));
@@ -711,27 +682,13 @@ export function sortRows<T>(
   const sign = direction === "ascending" ? 1 : -1;
   return rows
     .map((row, index) => ({ row, index, v: value(row) }))
-    .sort((a, b) => {
-      const empty = (v: unknown) => v === null || v === undefined || v === "";
-      if (empty(a.v) || empty(b.v))
-        return compareValues(a.v, b.v) || a.index - b.index;
-      return sign * compareValues(a.v, b.v) || a.index - b.index;
-    })
+    .sort(
+      (a, b) =>
+        // Empty values sort last in both directions, so only real values flip.
+        (isEmpty(a.v) || isEmpty(b.v) ? 1 : sign) * compareValues(a.v, b.v) ||
+        a.index - b.index,
+    )
     .map((entry) => entry.row);
-}
-function SortIcon({ direction }: { direction?: SortDirection }) {
-  return (
-    <svg viewBox="0 0 12 12" aria-hidden="true" focusable="false">
-      <path
-        d="M3.5 4.5 6 2l2.5 2.5"
-        data-active={direction === "ascending" || undefined}
-      />
-      <path
-        d="M3.5 7.5 6 10l2.5-2.5"
-        data-active={direction === "descending" || undefined}
-      />
-    </svg>
-  );
 }
 function SelectAll({
   checked,
@@ -967,7 +924,7 @@ export function DataTable<T extends { id: string }>({
                           onClick={() => toggleSort(col.key)}
                         >
                           {col.label}
-                          <SortIcon direction={direction} />
+                          <SortArrows direction={direction} />
                         </button>
                       ) : (
                         col.label
@@ -1163,8 +1120,12 @@ export function SettingsSection({
   return (
     <section className="m-settings-section" aria-labelledby={id}>
       <div>
-        <h2 id={id}>{title}</h2>
-        {description && <p>{description}</p>}
+        <SectionIntro
+          title={title}
+          description={description}
+          id={id}
+          descriptionClassName={null}
+        />
       </div>
       <div className="m-stack">{children}</div>
     </section>
@@ -1255,7 +1216,7 @@ export function SignInPanel({
 }) {
   const [value, setValue] = useState("");
   const headingId = useId();
-  const Heading = headingLevel === 1 ? "h1" : "h2";
+  const Heading = headingTag(headingLevel);
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (email?.status !== "submitting") email?.onSubmit(value);

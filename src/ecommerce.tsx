@@ -8,6 +8,9 @@ import {
   Modal,
 } from "./primitives.js";
 import { FilterChip } from "./display.js";
+import { ChevronDown, Star } from "./icons.js";
+import { headingTag } from "./heading.js";
+import { Swatch, TermList } from "./internal.js";
 
 export interface ProductImage {
   src: string;
@@ -48,7 +51,7 @@ export function ProductList({
   /** `card` frames each product with a border, for listings with full details. */
   variant?: "plain" | "card";
 }) {
-  const Heading = `h${headingLevel}` as const;
+  const Heading = headingTag(headingLevel);
   return (
     <ul
       className="m-product-list"
@@ -85,12 +88,7 @@ export function ProductList({
             >
               {product.swatches.map((colour) => (
                 <li key={colour.label}>
-                  <span
-                    className="m-swatch"
-                    aria-hidden="true"
-                    style={{ background: colour.swatch }}
-                  />
-                  <span className="m-sr-only">{colour.label}</span>
+                  <Swatch color={colour.swatch} label={colour.label} />
                 </li>
               ))}
             </ul>
@@ -115,15 +113,6 @@ export interface ProductOption {
     disabled?: boolean;
   }[];
 }
-
-const star = (
-  <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-    <path
-      d="M10 1.8l2.5 5.3 5.8.7-4.3 4 1.1 5.7L10 14.7l-5.1 2.8 1.1-5.7-4.3-4 5.8-.7z"
-      fill="currentColor"
-    />
-  </svg>
-);
 
 /** Product page body: gallery, price, rating, option pickers, add to bag and details. */
 export function ProductOverview({
@@ -164,7 +153,7 @@ export function ProductOverview({
 }) {
   const [current, setCurrent] = useState(0);
   const group = useId();
-  const Heading = headingLevel === 1 ? "h1" : "h2";
+  const Heading = headingTag(headingLevel);
   const shown = images[current] ?? images[0];
   return (
     <div className="m-product-overview">
@@ -252,14 +241,7 @@ export function ProductOverview({
                       onChange={() => onSelect?.(option.id, value.value)}
                     />
                     {value.swatch ? (
-                      <>
-                        <span
-                          className="m-swatch"
-                          aria-hidden="true"
-                          style={{ background: value.swatch }}
-                        />
-                        <span className="m-sr-only">{value.label}</span>
-                      </>
+                      <Swatch color={value.swatch} label={value.label} />
                     ) : (
                       <span>{value.label}</span>
                     )}
@@ -365,20 +347,7 @@ export function ShoppingCart({
                     </option>
                   ))}
                 </select>
-                <svg
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path
-                    d="m6 8 4 4 4-4"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <ChevronDown />
               </div>
               <button
                 type="button"
@@ -413,22 +382,18 @@ export function OrderSummary({
   children?: ReactNode;
 }) {
   const id = useId();
-  const Heading = headingLevel === 2 ? "h2" : "h3";
+  const Heading = headingTag(headingLevel);
   return (
     <section className="m-order-summary" aria-labelledby={id}>
       <Heading id={id}>{title}</Heading>
-      <dl>
-        {lines.map((line) => (
-          <div key={line.label}>
-            <dt>{line.label}</dt>
-            <dd>{line.value}</dd>
-          </div>
-        ))}
+      <TermList
+        items={lines.map((line) => ({ term: line.label, details: line.value }))}
+      >
         <div className="m-order-total">
           <dt>{total.label}</dt>
           <dd>{total.value}</dd>
         </div>
-      </dl>
+      </TermList>
       {children}
       {action && <div className="m-order-action">{action}</div>}
     </section>
@@ -559,7 +524,7 @@ function Stars({ value, label }: { value: number; label: string }) {
     <div className="m-stars" role="img" aria-label={label}>
       {[1, 2, 3, 4, 5].map((n) => (
         <span key={n} data-filled={value >= n - 0.25 || undefined}>
-          {star}
+          <Star />
         </span>
       ))}
     </div>
@@ -604,13 +569,17 @@ export function ProductReviews({
           />
           <span aria-hidden="true">Based on {count} reviews</span>
         </div>
-        <dl className="m-reviews-distribution">
-          {distribution.map((row) => (
-            <div key={row.stars}>
-              <dt>
+        <TermList
+          className="m-reviews-distribution"
+          items={distribution.map((row) => ({
+            key: String(row.stars),
+            term: (
+              <>
                 {row.stars} {row.stars === 1 ? "star" : "stars"}
-              </dt>
-              <dd>
+              </>
+            ),
+            details: (
+              <>
                 <meter
                   min={0}
                   max={count}
@@ -618,10 +587,10 @@ export function ProductReviews({
                   aria-label={`${row.stars} ${row.stars === 1 ? "star" : "stars"}: ${row.count} ${row.count === 1 ? "review" : "reviews"}`}
                 />
                 <span>{row.count}</span>
-              </dd>
-            </div>
-          ))}
-        </dl>
+              </>
+            ),
+          }))}
+        />
         {action}
       </div>
       <div className="m-review-list">
@@ -685,7 +654,7 @@ export function OrderHistory({
   const base = useId();
   if (!orders.length)
     return <EmptyState title={emptyTitle} description={emptyDescription} />;
-  const Heading = headingLevel === 2 ? "h2" : "h3";
+  const Heading = headingTag(headingLevel);
   return (
     <div className="m-order-history">
       {orders.map((order) => {
@@ -694,16 +663,12 @@ export function OrderHistory({
           <section key={order.id} className="m-order" aria-labelledby={id}>
             <header className="m-order-header">
               <Heading id={id}>Order {order.number}</Heading>
-              <dl>
-                <div>
-                  <dt>Date placed</dt>
-                  <dd>{order.date}</dd>
-                </div>
-                <div>
-                  <dt>Total</dt>
-                  <dd>{order.total}</dd>
-                </div>
-              </dl>
+              <TermList
+                items={[
+                  { term: "Date placed", details: order.date },
+                  { term: "Total", details: order.total },
+                ]}
+              />
               <KitLink href={order.href}>
                 View order<span className="m-sr-only"> {order.number}</span>
               </KitLink>

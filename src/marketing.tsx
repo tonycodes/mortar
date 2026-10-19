@@ -1,4 +1,10 @@
-import { IconLinks, KitLink, type IconLink } from "./navigation.js";
+import {
+  IconLinks,
+  KitLink,
+  type IconLink,
+  type ItemGroup,
+  type LinkItem,
+} from "./navigation.js";
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import {
   CloseButton,
@@ -7,28 +13,27 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
-import { BrandMark, type SectionTone } from "./layout.js";
-import { Prose } from "./docs.js";
+import { BrandMark, Prose, type SectionTone } from "./layout.js";
+import { SegmentedControl } from "./inspection.js";
+import { ChevronDown } from "./icons.js";
+import { childLevel, headingTag } from "./heading.js";
+import {
+  ActionLinks,
+  SectionIntro,
+  TermList,
+  cx,
+  introSlots,
+} from "./internal.js";
 
 export type MarketingTone = "surface" | "inverse";
-type HeadingLevel = 2 | 3 | 4;
 
-function headingTag(level: HeadingLevel) {
-  return `h${level}` as "h2" | "h3" | "h4";
-}
-function childHeading(level: HeadingLevel) {
-  return headingTag(level === 2 ? 3 : 4);
-}
-
-export interface FlyoutItem {
-  label: string;
-  href: string;
-  description?: string;
-  icon?: ReactNode;
-}
+export type FlyoutItem = Pick<
+  LinkItem,
+  "label" | "href" | "description" | "icon"
+>;
 /** A header link, or a labelled group that opens a flyout panel. */
 export type HeaderLink =
-  LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[] };
+  LinkAction | (ItemGroup<FlyoutItem> & { footer?: LinkAction[] });
 
 function Flyout({
   label,
@@ -45,20 +50,7 @@ function Flyout({
     <Popover className="m-flyout">
       <PopoverButton className="m-flyout-trigger">
         {label}
-        <svg
-          viewBox="0 0 20 20"
-          fill="none"
-          aria-hidden="true"
-          focusable="false"
-        >
-          <path
-            d="m6 8 4 4 4-4"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <ChevronDown />
       </PopoverButton>
       {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off. */}
       <PopoverPanel anchor="bottom" className="m-flyout-panel">
@@ -121,9 +113,7 @@ export function MarketingHeader({
   return (
     <header
       id={id}
-      className={
-        className ? `m-marketing-header ${className}` : "m-marketing-header"
-      }
+      className={cx("m-marketing-header", className)}
       data-m-component="MarketingHeader"
     >
       <KitLink className="m-brand" href={homeHref}>
@@ -187,7 +177,6 @@ export function Hero({
   /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
   background?: ReactNode;
 }) {
-  const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <section
       className={`m-hero m-hero-${align}`}
@@ -201,18 +190,13 @@ export function Hero({
         </div>
       )}
       <div>
-        {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-        <Heading>{title}</Heading>
+        <SectionIntro
+          eyebrow={eyebrow}
+          title={title}
+          headingLevel={headingLevel}
+        />
         <p className="m-hero-description">{description}</p>
-        <div className="m-actions">
-          {actions.map((action, i) => (
-            <ActionLink
-              key={`${action.label}:${action.href}:${i}`}
-              {...action}
-              variant={i === 0 ? "primary" : "secondary"}
-            />
-          ))}
-        </div>
+        <ActionLinks actions={actions} />
       </div>
       {children && <div className="m-hero-preview">{children}</div>}
     </section>
@@ -253,9 +237,7 @@ export function FeatureGrid({
       data-tone={tone}
       data-m-component="FeatureGrid"
     >
-      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <h2>{title}</h2>
-      {description && <p className="m-section-description">{description}</p>}
+      {...introSlots({ eyebrow, title, description })}
       <div className="m-feature-grid" data-columns={cols}>
         {items.map((item, i) => {
           const content =
@@ -307,6 +289,7 @@ export function FeatureSection({
   /** Wrap the preview in the sunken frame. Disable when the child brings its own frame. */
   framed?: boolean;
 }) {
+  const [eyebrowSlot, headingSlot] = introSlots({ eyebrow, title });
   return (
     <section
       id={id}
@@ -316,8 +299,8 @@ export function FeatureSection({
       data-m-component="FeatureSection"
     >
       <div>
-        {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-        <h2>{title}</h2>
+        {eyebrowSlot}
+        {headingSlot}
         <p>{description}</p>
         {details && <div className="m-feature-details">{details}</div>}
       </div>
@@ -343,10 +326,9 @@ export function ProcessSteps({
   description?: string;
   items: { title: string; description: string }[];
   tone?: SectionTone;
-  headingLevel?: HeadingLevel;
+  headingLevel?: 2 | 3 | 4;
 }) {
-  const Heading = headingTag(headingLevel);
-  const ItemHeading = childHeading(headingLevel);
+  const ItemHeading = headingTag(childLevel(headingLevel, 4));
   return (
     <section
       id={id}
@@ -354,9 +336,7 @@ export function ProcessSteps({
       data-tone={tone}
       data-m-component="ProcessSteps"
     >
-      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <Heading>{title}</Heading>
-      {description && <p className="m-section-description">{description}</p>}
+      {...introSlots({ eyebrow, title, description, headingLevel })}
       <ol
         className="m-process-steps"
         style={{ "--m-steps": items.length } as CSSProperties}
@@ -459,17 +439,7 @@ export function LogoCloud({
           {description && (
             <p className="m-section-description">{description}</p>
           )}
-          {actions.length > 0 && (
-            <div className="m-actions">
-              {actions.map((action, i) => (
-                <ActionLink
-                  key={`${action.label}:${action.href}:${i}`}
-                  {...action}
-                  variant={i === 0 ? "primary" : "secondary"}
-                />
-              ))}
-            </div>
-          )}
+          {actions.length > 0 && <ActionLinks actions={actions} />}
         </div>
         {list}
       </section>
@@ -483,17 +453,7 @@ export function LogoCloud({
       data-layout={layout === "grid" ? "grid" : undefined}
     >
       <p>{label}</p>
-      <ul>
-        {items.map((item) => (
-          <li key={item.name}>
-            {item.image ? (
-              <img src={item.image} alt={item.name} />
-            ) : (
-              <span>{item.name}</span>
-            )}
-          </li>
-        ))}
-      </ul>
+      {list}
     </section>
   );
 }
@@ -540,25 +500,17 @@ export function Pricing({
       className="m-marketing-section m-pricing"
       data-m-component="Pricing"
     >
-      <h2>{title}</h2>
-      {description && <p className="m-section-description">{description}</p>}
+      <SectionIntro title={title} description={description} />
       {showToggle && (
-        <div className="m-segmented" role="group" aria-label="Billing interval">
-          <button
-            type="button"
-            aria-pressed={annual}
-            onClick={() => setAnnual(true)}
-          >
-            Annual
-          </button>
-          <button
-            type="button"
-            aria-pressed={!annual}
-            onClick={() => setAnnual(false)}
-          >
-            Monthly
-          </button>
-        </div>
+        <SegmentedControl
+          label="Billing interval"
+          value={annual ? "annual" : "monthly"}
+          options={[
+            { value: "annual", label: "Annual" },
+            { value: "monthly", label: "Monthly" },
+          ]}
+          onChange={(value) => setAnnual(value === "annual")}
+        />
       )}
       <div
         className="m-pricing-grid"
@@ -653,14 +605,13 @@ export function FAQ({
     return (
       <section className="m-faq" data-m-component="FAQ" data-layout="grid">
         {head}
-        <dl className="m-faq-grid">
-          {items.map((item) => (
-            <div key={item.question}>
-              <dt>{item.question}</dt>
-              <dd>{item.answer}</dd>
-            </div>
-          ))}
-        </dl>
+        <TermList
+          className="m-faq-grid"
+          items={items.map((item) => ({
+            term: item.question,
+            details: item.answer,
+          }))}
+        />
       </section>
     );
   }
@@ -701,17 +652,12 @@ export function CallToAction({
 }) {
   const copy = (
     <>
-      <h2>{title}</h2>
-      {description && <p>{description}</p>}
-      <div className="m-actions">
-        {actions.map((action, i) => (
-          <ActionLink
-            key={`${action.label}:${action.href}:${i}`}
-            {...action}
-            variant={i === 0 ? "primary" : "secondary"}
-          />
-        ))}
-      </div>
+      <SectionIntro
+        title={title}
+        description={description}
+        descriptionClassName={null}
+      />
+      <ActionLinks actions={actions} />
     </>
   );
   return (
@@ -750,7 +696,7 @@ export function Footer({
   columns: { title: string; links: LinkAction[] }[];
   copyright: string;
   legal?: LinkAction[];
-  headingLevel?: HeadingLevel;
+  headingLevel?: 2 | 3 | 4;
   /** Social profiles, usually icon-only; each label names its link. */
   social?: IconLink[];
 }) {
@@ -821,7 +767,6 @@ export function HeaderSection({
   headingLevel?: 1 | 2;
 }) {
   const id = useId();
-  const Heading = headingLevel === 1 ? "h1" : "h2";
   return (
     <section
       className="m-marketing-section m-header-section"
@@ -830,9 +775,7 @@ export function HeaderSection({
       aria-labelledby={id}
       data-m-component="HeaderSection"
     >
-      {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-      <Heading id={id}>{title}</Heading>
-      {description && <p className="m-section-description">{description}</p>}
+      {...introSlots({ eyebrow, title, description, id, headingLevel })}
       {links.length > 0 && (
         <div className="m-header-links">
           {links.map((link, index) => (
@@ -847,14 +790,13 @@ export function HeaderSection({
         </div>
       )}
       {stats.length > 0 && (
-        <dl className="m-header-stats">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <dt>{stat.label}</dt>
-              <dd>{stat.value}</dd>
-            </div>
-          ))}
-        </dl>
+        <TermList
+          className="m-header-stats"
+          items={stats.map((stat) => ({
+            term: stat.label,
+            details: stat.value,
+          }))}
+        />
       )}
     </section>
   );
@@ -889,9 +831,7 @@ export function ContentSection({
       data-m-component="ContentSection"
     >
       <div className="m-content-copy">
-        {eyebrow && <p className="m-eyebrow">{eyebrow}</p>}
-        <h2 id={id}>{title}</h2>
-        {description && <p className="m-section-description">{description}</p>}
+        {...introSlots({ eyebrow, title, description, id })}
         {children && <Prose>{children}</Prose>}
       </div>
       {media && <figure className="m-content-media">{media}</figure>}

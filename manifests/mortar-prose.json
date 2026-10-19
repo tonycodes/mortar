@@ -6,7 +6,7 @@
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "Prose",
-  "source": "src/docs.tsx",
+  "source": "src/layout.tsx",
   "capabilities": ["theme", "docs"],
   "owner": "Mortar maintainers",
   "kitId": "docs",

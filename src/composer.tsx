@@ -1,5 +1,6 @@
-import { useId, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button, Tabs } from "./primitives.js";
+import { FieldMessage, useField } from "./internal.js";
 
 /** Comment box with optional avatar, toolbar, Write/Preview tabs and a character count. */
 export function CommentComposer({
@@ -39,8 +40,7 @@ export function CommentComposer({
   error?: string;
   rows?: number;
 }) {
-  const id = useId();
-  const messageId = `${id}-message`;
+  const { fieldId: id, messageId, describedBy } = useField({ hint, error });
   const [own, setOwn] = useState("");
   const [mode, setMode] = useState("write");
   const value = controlled ?? own;
@@ -62,7 +62,7 @@ export function CommentComposer({
       placeholder={placeholder}
       maxLength={maxLength}
       aria-invalid={error ? true : undefined}
-      aria-describedby={error || hint ? messageId : undefined}
+      aria-describedby={describedBy}
       aria-keyshortcuts="Control+Enter Meta+Enter"
       onChange={(event) => setValue(event.target.value)}
       onKeyDown={(event) => {
@@ -131,11 +131,7 @@ export function CommentComposer({
             </Button>
           </div>
         </div>
-        {(error || hint) && (
-          <p id={messageId} className={error ? "m-error" : ""}>
-            {error || hint}
-          </p>
-        )}
+        <FieldMessage id={messageId} hint={hint} error={error} />
       </div>
     </form>
   );
