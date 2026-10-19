@@ -111,7 +111,7 @@ export type { SectionTone } from "./layout.js";
 export { MockWindow, ChatPreview } from "./showcase.js";
 export type { ChatMessage } from "./showcase.js";
 export { Toast, Toaster, ConfirmDialog, SaveBar, Banner } from "./feedback.js";
-export type { ToastItem } from "./feedback.js";
+export type { ToastItem, ToastAction } from "./feedback.js";
 export { SlideOver, CommandPalette, StackedList } from "./workspace.js";
 export type { CommandItem, StackedListItem } from "./workspace.js";
 export {

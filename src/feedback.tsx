@@ -1,26 +1,31 @@
-import { useEffect, useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { DialogPanel, DialogTitle, Description } from "@headlessui/react";
 import { Button, Input, type LinkAction, type Tone } from "./primitives.js";
 import { KitLink } from "./navigation.js";
-import { Close } from "./icons.js";
-import { DialogFrame } from "./internal.js";
+import { Check, Close } from "./icons.js";
+import { DialogFrame, cx, focusAway } from "./internal.js";
+
+export interface ToastAction {
+  label: string;
+  onSelect: () => void;
+}
 
 export interface ToastItem {
   id: string;
   title: string;
   description?: string;
   tone?: Tone;
-  action?: { label: string; onClick: () => void };
+  action?: ToastAction;
   /** A second action shown after the first, e.g. Decline next to Accept. */
-  secondaryAction?: { label: string; onClick: () => void };
+  secondaryAction?: ToastAction;
   /** Avatar or icon shown instead of the tone icon, e.g. who replied. */
   leading?: ReactNode;
 }
 
-const glyph: Record<Tone, string> = {
+const glyph: Record<Tone, ReactNode> = {
   neutral: "i",
   info: "i",
-  success: "✓",
+  success: <Check />,
   warning: "!",
   danger: "!",
 };
@@ -33,9 +38,19 @@ export function Toast({
   onDismiss,
   leading,
   secondaryAction,
-}: Omit<ToastItem, "id"> & { onDismiss?: () => void }) {
+  className,
+}: Omit<ToastItem, "id"> & {
+  /** Shows a dismiss button. Focus then moves to the next control, never to the page body. */
+  onDismiss?: () => void;
+  className?: string;
+}) {
+  const root = useRef<HTMLDivElement>(null);
   return (
-    <div className="m-toast" data-tone={tone}>
+    <div
+      ref={root}
+      className={cx("m-toast", className)}
+      data-tone={tone === "neutral" ? undefined : tone}
+    >
       {leading ? (
         <span className="m-toast-leading">{leading}</span>
       ) : (
@@ -49,22 +64,26 @@ export function Toast({
       </div>
       <div className="m-actions">
         {action && (
-          <Button variant="ghost" onClick={action.onClick}>
+          <Button variant="ghost" onClick={action.onSelect}>
             {action.label}
           </Button>
         )}
         {secondaryAction && (
-          <Button variant="ghost" onClick={secondaryAction.onClick}>
+          <Button variant="ghost" onClick={secondaryAction.onSelect}>
             {secondaryAction.label}
           </Button>
         )}
         {onDismiss && (
           <Button
             variant="ghost"
-            onClick={onDismiss}
-            aria-label={`Dismiss ${title}`}
+            icon={<Close />}
+            iconOnly
+            onClick={() => {
+              onDismiss();
+              focusAway(root.current);
+            }}
           >
-            <span aria-hidden="true">✕</span>
+            {`Dismiss ${title}`}
           </Button>
         )}
       </div>
@@ -72,25 +91,88 @@ export function Toast({
   );
 }
 
-/** Controlled toast region. The consumer owns the queue and timeouts. */
+const spoken = (items: ToastItem[]) =>
+  items
+    .map((item) => [item.title, item.description].filter(Boolean).join(". "))
+    .join(". ");
+
+/**
+ * Controlled toast region. The consumer owns the queue and timeouts. New
+ * toasts are announced once, through two persistent live regions: danger
+ * assertively, every other tone politely.
+ */
 export function Toaster({
   items,
   onDismiss,
   label = "Notifications",
+  id,
+  className,
 }: {
   items: ToastItem[];
   onDismiss: (id: string) => void;
   label?: string;
+  id?: string;
+  className?: string;
 }) {
+  const region = useRef<HTMLElement>(null);
+  const seen = useRef<Set<string> | null>(null);
+  const [announcement, setAnnouncement] = useState({
+    polite: "",
+    assertive: "",
+    count: 0,
+  });
+  useEffect(() => {
+    const known = seen.current;
+    seen.current = new Set(items.map((item) => item.id));
+    // Toasts present on mount are content, not news.
+    if (!known) return;
+    const fresh = items.filter((item) => !known.has(item.id));
+    if (!fresh.length) return;
+    const urgent = fresh.filter((item) => item.tone === "danger");
+    const calm = fresh.filter((item) => item.tone !== "danger");
+    setAnnouncement((previous) => ({
+      polite: calm.length ? spoken(calm) : "",
+      assertive: urgent.length ? spoken(urgent) : "",
+      count: previous.count + 1,
+    }));
+  }, [items]);
   return (
-    <section className="m-toaster" aria-label={label}>
-      <ol aria-live="polite" aria-relevant="additions">
+    <section
+      ref={region}
+      id={id}
+      className={cx("m-toaster", className)}
+      aria-label={label}
+      tabIndex={-1}
+    >
+      <ol>
         {items.map(({ id, ...item }) => (
-          <li key={id} role={item.tone === "danger" ? "alert" : undefined}>
-            <Toast {...item} onDismiss={() => onDismiss(id)} />
+          <li key={id}>
+            <Toast
+              {...item}
+              onDismiss={() => {
+                const section = region.current;
+                const toast = section?.ownerDocument.activeElement?.closest(
+                  "li",
+                ) as HTMLElement | null | undefined;
+                if (section && toast && section.contains(toast))
+                  focusAway(toast, { scope: section, fallback: section });
+                onDismiss(id);
+              }}
+            />
           </li>
         ))}
       </ol>
+      {/* A new span per announcement, so a repeated message is read again. */}
+      <div className="m-sr-only" role="status">
+        {announcement.polite && (
+          <span key={announcement.count}>{announcement.polite}</span>
+        )}
+      </div>
+      <div className="m-sr-only" role="alert">
+        {announcement.assertive && (
+          <span key={announcement.count}>{announcement.assertive}</span>
+        )}
+      </div>
     </section>
   );
 }
@@ -105,7 +187,8 @@ export function ConfirmDialog({
   cancelLabel = "Cancel",
   confirmationText,
   loading = false,
-  destructive = true,
+  tone = "danger",
+  className,
 }: {
   open: boolean;
   onClose: () => void;
@@ -116,22 +199,27 @@ export function ConfirmDialog({
   cancelLabel?: string;
   /** When set, the user must type this value before confirming. */
   confirmationText?: string;
+  /** Busy confirming: the confirm button keeps focus but ignores activation. */
   loading?: boolean;
-  destructive?: boolean;
+  /** "danger" (default) for a destructive action; "default" for a primary one. */
+  tone?: "default" | "danger";
+  /** On the dialog panel. */
+  className?: string;
 }) {
   const [typed, setTyped] = useState("");
   useEffect(() => {
     if (!open) setTyped("");
   }, [open]);
   const ready = !confirmationText || typed === confirmationText;
+  const danger = tone === "danger";
   return (
     <DialogFrame open={open} onClose={onClose}>
       <div className="m-dialog-position">
-        <DialogPanel className="m-dialog-panel m-confirm">
+        <DialogPanel className={cx("m-dialog-panel", "m-confirm", className)}>
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              if (ready) onConfirm();
+              if (ready && !loading) onConfirm();
             }}
           >
             <div className="m-confirm-body">
@@ -153,8 +241,8 @@ export function ConfirmDialog({
               </Button>
               <Button
                 type="submit"
-                variant={destructive ? "danger" : "primary"}
-                data-solid={destructive || undefined}
+                variant={danger ? "danger" : "primary"}
+                data-solid={danger || undefined}
                 disabled={!ready}
                 loading={loading}
               >
@@ -175,32 +263,48 @@ export function SaveBar({
   discardLabel = "Discard",
   onSave,
   onDiscard,
-  saving = false,
+  loading = false,
+  id,
+  className,
 }: {
+  /** Shows the bar. Its message is announced each time it opens. */
   open: boolean;
   message?: string;
   saveLabel?: string;
   discardLabel?: string;
   onSave: () => void;
   onDiscard: () => void;
-  saving?: boolean;
+  /** Busy saving: Save keeps focus but ignores activation; Discard is disabled. */
+  loading?: boolean;
+  id?: string;
+  className?: string;
 }) {
-  const id = useId();
-  if (!open) return null;
+  const messageId = useId();
   return (
-    <div className="m-save-bar" role="region" aria-labelledby={id}>
-      <span id={id} role="status">
-        {message}
+    <>
+      {/* Always rendered, so the message is announced when the bar opens. */}
+      <span id={messageId} role="status" className="m-sr-only">
+        {open ? message : ""}
       </span>
-      <div className="m-actions">
-        <Button variant="secondary" onClick={onDiscard} disabled={saving}>
-          {discardLabel}
-        </Button>
-        <Button onClick={onSave} loading={saving}>
-          {saveLabel}
-        </Button>
-      </div>
-    </div>
+      {open && (
+        <div
+          id={id}
+          className={cx("m-save-bar", className)}
+          role="region"
+          aria-labelledby={messageId}
+        >
+          <span aria-hidden="true">{message}</span>
+          <div className="m-actions">
+            <Button variant="secondary" onClick={onDiscard} disabled={loading}>
+              {discardLabel}
+            </Button>
+            <Button onClick={onSave} loading={loading}>
+              {saveLabel}
+            </Button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -212,19 +316,27 @@ export function Banner({
   label = "Announcement",
   dismissLabel = "Dismiss announcement",
   tone = "inverse",
+  id,
+  className,
 }: {
   children: ReactNode;
   action?: LinkAction;
   onDismiss?: () => void;
   label?: string;
   dismissLabel?: string;
-  tone?: "inverse" | "neutral";
+  /** "inverse" (default) flips the colours; "default" uses the page surface. */
+  tone?: "default" | "inverse";
+  id?: string;
+  className?: string;
 }) {
+  const root = useRef<HTMLElement>(null);
   return (
     <section
-      className="m-banner"
+      ref={root}
+      id={id}
+      className={cx("m-banner", className)}
       aria-label={label}
-      data-tone={tone}
+      data-tone={tone === "default" ? undefined : tone}
       data-m-component="Banner"
     >
       <p>
@@ -240,7 +352,14 @@ export function Banner({
         )}
       </p>
       {onDismiss && (
-        <button type="button" aria-label={dismissLabel} onClick={onDismiss}>
+        <button
+          type="button"
+          aria-label={dismissLabel}
+          onClick={() => {
+            onDismiss();
+            focusAway(root.current);
+          }}
+        >
           <Close />
         </button>
       )}

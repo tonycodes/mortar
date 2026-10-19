@@ -14,7 +14,7 @@
     "props": {
       "children": "ReactNode",
       "variant": "primary | secondary | ghost | danger",
-      "loading": "boolean",
+      "loading": "boolean (busy: aria-busy and aria-disabled, ignores activation, stays focusable)",
       "disabled": "boolean",
       "type": "button | submit | reset",
       "onClick": "MouseEventHandler<HTMLButtonElement>",
@@ -22,7 +22,7 @@
       "icon": "ReactNode",
       "iconPosition": "start | end",
       "iconOnly": "boolean",
-      "className": "string"
+      "className": "string (on the root element)"
     },
     "usage": "Import { Button } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -17,7 +17,8 @@
       "onClose": "() => void",
       "children": "ReactNode",
       "actions": "ReactNode",
-      "size": "\"md\" | \"lg\""
+      "size": "\"md\" | \"lg\"",
+      "className": "string (on the dialog panel)"
     },
     "usage": "Import { Modal } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

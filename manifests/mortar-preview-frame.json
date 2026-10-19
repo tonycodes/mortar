@@ -12,8 +12,10 @@
   "kitId": "application",
   "contract": {
     "props": {
-      "title": "string",
-      "src": "string"
+      "src": "string",
+      "label": "string (accessible name of the section and frame)",
+      "id": "string",
+      "className": "string (on the root element)"
     },
     "usage": "Import { PreviewFrame } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

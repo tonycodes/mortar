@@ -114,14 +114,14 @@ export function ExtendedCase({ name }: { name: string }) {
             title="Payment method expired"
             description="Update it to keep builds running."
             tone="danger"
-            action={{ label: "Update", onClick: () => setSelected(true) }}
+            action={{ label: "Update", onSelect: () => setSelected(true) }}
           />
           <UI.Toast
             title="Ana Kovač replied"
             description="“Looks good — ship it on Friday.”"
             leading={<UI.Avatar name="Ana Kovač" size="sm" />}
-            action={{ label: "Reply", onClick: () => {} }}
-            secondaryAction={{ label: "Mark as read", onClick: () => {} }}
+            action={{ label: "Reply", onSelect: () => {} }}
+            secondaryAction={{ label: "Mark as read", onSelect: () => {} }}
           />
         </UI.Stack>
       );

@@ -14,7 +14,8 @@
     "props": {
       "label": "string",
       "href": "string",
-      "variant": "primary | secondary | ghost | danger"
+      "variant": "primary | secondary | ghost | danger",
+      "className": "string (on the root element)"
     },
     "usage": "Import { ActionLink } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

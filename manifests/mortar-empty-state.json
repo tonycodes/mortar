@@ -18,8 +18,10 @@
       "icon": "ReactNode",
       "dashed": "boolean",
       "align": "center | start",
-      "headingLevel": "2 | 3 | 4",
-      "children": "ReactNode"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (HeadingLevel; default 3)",
+      "children": "ReactNode",
+      "id": "string",
+      "className": "string (on the root element)"
     },
     "usage": "Import { EmptyState } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

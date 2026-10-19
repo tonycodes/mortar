@@ -266,10 +266,10 @@
   .m-button-danger:hover {
     background: var(--m-sunken);
   }
-  .m-button:active:not(:disabled) {
+  .m-button:active:not(:disabled, [aria-disabled="true"]) {
     transform: translateY(1px);
   }
-  .m-button:disabled {
+  .m-button:is(:disabled, [aria-disabled="true"]) {
     background: var(--m-sunken);
     color: var(--m-muted);
     border: 1px dashed var(--m-line-strong);
@@ -395,7 +395,7 @@
     cursor: not-allowed;
   }
   /* Tone: each status value sets --m-tone once; components read it. */
-  :where(.m-tone-neutral) {
+  :where(.m-tone-neutral, .m-badge, .m-notice) {
     --m-tone: var(--m-secondary);
   }
   :where([data-tone="success"], .m-tone-success) {
@@ -412,6 +412,8 @@
   }
   :is(
     .m-error,
+    .m-badge,
+    .m-notice,
     .m-tone-neutral,
     .m-tone-success,
     .m-tone-warning,
@@ -1650,5 +1652,20 @@
     border: 1px solid var(--m-line);
     border-radius: 0.5rem;
     background: var(--m-paper);
+  }
+}
+/* Required field marker, container-theme scope and toast glyph sizing. */
+@layer components {
+  .m-required {
+    margin-inline-start: 2px;
+    color: var(--m-danger);
+  }
+  /* Carries a container-scoped theme into portalled overlays without a box. */
+  .m-theme-scope {
+    display: contents;
+  }
+  .m-toast-icon svg {
+    width: 12px;
+    height: 12px;
   }
 }

@@ -15,10 +15,11 @@
       "title": "string",
       "description": "string",
       "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (Tone; default \"neutral\")",
-      "action": "{ label: string; onClick: () => void }",
-      "onDismiss": "() => void",
+      "action": "ToastAction ({ label: string; onSelect: () => void })",
+      "onDismiss": "() => void (focus moves to the next control)",
       "leading": "ReactNode",
-      "secondaryAction": "{ label: string; onClick: () => void }"
+      "secondaryAction": "ToastAction ({ label: string; onSelect: () => void })",
+      "className": "string (on the root element)"
     },
     "usage": "Import { Toast } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

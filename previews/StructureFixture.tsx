@@ -344,7 +344,7 @@ export function StructureCase({ name }: { name: string }) {
               Mortar 1.0 is out with 92 components.
             </UI.Banner>
           )}
-          <UI.Banner label="Maintenance notice" tone="neutral">
+          <UI.Banner label="Maintenance notice" tone="default">
             Scheduled maintenance on Sunday from 02:00 to 03:00 UTC.
           </UI.Banner>
           <output aria-label="Banner state">

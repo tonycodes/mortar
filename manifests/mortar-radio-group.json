@@ -17,7 +17,8 @@
       "value": "string",
       "onChange": "(value: string) => void",
       "options": "{ value: string; label: string; description?: string; swatch?: string; disabled?: boolean }[]",
-      "layout": "\"list\" | \"grid\" | \"swatches\""
+      "layout": "\"list\" | \"grid\" | \"swatches\"",
+      "className": "string (on the root element)"
     },
     "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
