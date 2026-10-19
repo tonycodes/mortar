@@ -5870,7 +5870,10 @@
     display: inline-flex;
     flex-shrink: 0;
     color: var(--m-muted);
-    --m-icon-size: 18px;
+  }
+  .m-stacked-chevron svg {
+    width: 18px;
+    height: 18px;
   }
   @container m-stacked-list (max-width: 480px) {
     .m-stacked-meta {
