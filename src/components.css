@@ -1163,7 +1163,7 @@
   .m-hero-center {
     text-align: center;
   }
-  .m-hero :is(h1, h2) {
+  .m-hero .m-section-title {
     font-size: clamp(42px, 6vw, 80px);
     font-weight: 600;
     letter-spacing: -0.045em;
@@ -1188,7 +1188,7 @@
     gap: 56px;
     align-items: center;
   }
-  .m-hero-split :is(h1, h2) {
+  .m-hero-split .m-section-title {
     font-size: clamp(40px, 5vw, 64px);
   }
   .m-hero-preview {
@@ -1208,7 +1208,8 @@
     padding: 80px 32px;
     border-top: 1px solid var(--m-line);
   }
-  /* Section titles only: slot content keeps its own heading styles. */
+  /* Section titles only: slot content keeps its own heading styles. The
+     m-section-title class keeps the style at any headingLevel. */
   :is(
       .m-marketing-section,
       .m-cta,
@@ -1217,7 +1218,7 @@
       :where(.m-faq, .m-feature-section, .m-section-heading-row)
         > :where(div:first-child)
     )
-    > h2 {
+    > :is(h2, :where(.m-section-title)) {
     font-size: clamp(30px, 3.5vw, 48px);
     font-weight: 600;
     letter-spacing: -0.035em;
@@ -1247,7 +1248,7 @@
     font: 12px var(--m-mono);
     margin-bottom: 16px;
   }
-  .m-feature-grid h3 {
+  .m-feature-grid :is(h2, h3, h4, h5, h6) {
     font-size: 16px;
     font-weight: 600;
   }
@@ -1338,7 +1339,7 @@
     background: var(--m-sunken);
     border-color: var(--m-line);
   }
-  .m-pricing-grid h3 {
+  .m-pricing-grid :is(h2, h3, h4, h5, h6) {
     font-size: 18px;
     font-weight: 600;
   }
@@ -1421,7 +1422,7 @@
     color: var(--m-ink);
     padding: 96px 32px;
   }
-  :is(.m-cta, .m-cta-copy) > h2 {
+  :is(.m-cta, .m-cta-copy) > :is(h2, :where(.m-section-title)) {
     margin: auto;
   }
   :is(.m-cta, .m-cta-copy) > p {
@@ -1448,7 +1449,7 @@
     font-size: 14px;
     max-width: 260px;
   }
-  .m-footer-grid :is(h2, h3, h4) {
+  .m-footer-grid :is(h2, h3, h4, h5, h6) {
     font-size: 13px;
     font-weight: 600;
     margin: 0 0 12px;

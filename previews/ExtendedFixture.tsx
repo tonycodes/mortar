@@ -498,7 +498,7 @@ export function ExtendedCase({ name }: { name: string }) {
             {
               title: "Focus",
               description: "An inverse tile.",
-              inverse: true,
+              tone: "inverse",
             },
           ]}
         />
@@ -633,6 +633,8 @@ export function ExtendedCase({ name }: { name: string }) {
           title="Product updates, monthly"
           description="No spam."
           onSubmit={() => setSelected(true)}
+          status={selected ? "success" : "idle"}
+          message="Thanks. Check your inbox to confirm."
         />
       );
       break;
@@ -668,7 +670,7 @@ export function ExtendedCase({ name }: { name: string }) {
           ]}
           navigation={[
             {
-              title: "Getting started",
+              label: "Getting started",
               items: [
                 { label: "Quickstart", href: "#quickstart", current: true },
                 { label: "Project structure", href: "#structure" },
@@ -711,10 +713,12 @@ export function ExtendedCase({ name }: { name: string }) {
       example = (
         <>
           <UI.Callout>Builds time out after 45 minutes.</UI.Callout>
-          <UI.Callout type="warning">
+          <UI.Callout tone="warning">
             Changing the output directory invalidates the cache.
           </UI.Callout>
-          <UI.Callout type="breaking">This flag is removed in v4.</UI.Callout>
+          <UI.Callout tone="danger" title="Breaking">
+            This flag is removed in v4.
+          </UI.Callout>
         </>
       );
       break;
@@ -818,7 +822,7 @@ export function ExtendedCase({ name }: { name: string }) {
           items={[
             {
               href: "#env",
-              title: "Environment variables",
+              label: "Environment variables",
               description: "Add secrets per environment.",
             },
           ]}

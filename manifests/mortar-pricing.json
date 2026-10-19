@@ -15,14 +15,17 @@
       "title": "string",
       "description": "string",
       "plans": "{ id: string; name: string; description: string; monthly: string; annual?: string; unit?: string; annualUnit?: string; features: string[]; action: LinkAction; featured?: boolean; availability?: \"available\" | \"coming-soon\" | \"unavailable\"; availabilityLabel?: string }[]",
-      "tone": "\"surface\" | \"inverse\"",
+      "tone": "\"default\" | \"muted\" | \"inverse\" (applied to featured cards only)",
       "billingToggle": "boolean",
       "layout": "\"cards\" | \"detailed\"",
-      "featuresLabel": "string"
+      "featuresLabel": "string",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); plan names sit one level below"
     },
     "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Annual prices show only while the billing toggle is visible. Unavailable plans show static status text and no purchase link.",
     "dependencies": ["mortar-action-link", "mortar-segmented-control"]
   },
   "preview": {

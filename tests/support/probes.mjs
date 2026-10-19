@@ -318,9 +318,13 @@ export const implementations = {
     await expect(root).toContainText("$20");
   },
   async newsletter({ root }) {
+    // The status region is mounted before the message so it is announced.
+    const status = root.locator(".m-newsletter").getByRole("status");
+    await expect(status).toHaveText("");
     await root.getByLabel("Email address").fill("reader@example.com");
     await root.getByRole("button", { name: "Subscribe" }).click();
     await expect(root.getByLabel("Action result")).toHaveText("completed");
+    await expect(status).toHaveText("Thanks. Check your inbox to confirm.");
   },
   async "sign-in"({ page, root }) {
     const provider = root.getByRole("button", { name: "Continue with GitHub" });
@@ -699,7 +703,14 @@ export const implementations = {
       await root.getByRole("link", { name: "Features", exact: true }).click();
       await expect(opener).toHaveAttribute("aria-expanded", "false");
     } else {
-      const opener = root.getByRole("button", { name: "Open navigation" });
+      // DocsShell's visible "Menu" is its accessible name (label in name).
+      // AppShell keeps "Open navigation" until its family adopts the same fix.
+      const docs = component.export === "DocsShell";
+      const opener = root.getByRole("button", {
+        name: docs ? "Menu" : /^(Menu|Open navigation)$/,
+        exact: docs || undefined,
+      });
+      if (docs) await expect(opener).toHaveAttribute("aria-haspopup", "dialog");
       await opener.focus();
       await page.keyboard.press("Enter");
       await expect(page.getByRole("dialog")).toBeVisible();

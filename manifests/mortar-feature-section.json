@@ -20,7 +20,9 @@
       "eyebrow": "string",
       "details": "ReactNode",
       "tone": "\"default\" | \"muted\" | \"inverse\"",
-      "framed": "boolean"
+      "framed": "boolean",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
     "usage": "Import { FeatureSection } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

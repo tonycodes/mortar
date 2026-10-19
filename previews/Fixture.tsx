@@ -1108,7 +1108,7 @@ export function PreviewCase({ name }: { name: string }) {
           brand="Northwind"
           description="Example product"
           note="Weekdays 9 to 5"
-          columns={[{ title: "Product", links: [action] }]}
+          columns={[{ label: "Product", items: [action] }]}
           copyright="© Example company"
           social={[
             { label: "Northwind website", href: "#website", icon: icons.globe },

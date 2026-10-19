@@ -193,7 +193,7 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
           title="Start your next project"
           description="Use one shared foundation."
           actions={[{ label: "Start", href: "#start" }]}
-          tone={state === "inverse" ? "inverse" : "surface"}
+          tone={state === "inverse" ? "inverse" : "default"}
         />
       );
       break;
@@ -220,7 +220,7 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
           <UI.Pricing
             title="Example plans"
             description="Illustrative pricing, not a purchase."
-            tone={state === "inverse" ? "inverse" : "surface"}
+            tone={state === "inverse" ? "inverse" : "default"}
             plans={[
               {
                 id: "team",
@@ -254,11 +254,11 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         <UI.Footer
           brand="Northwind"
           description="Example product"
-          headingLevel={3}
+          itemHeadingLevel={3}
           columns={[
             {
-              title: "Product",
-              links: [{ label: "Pricing", href: "#pricing" }],
+              label: "Product",
+              items: [{ label: "Pricing", href: "#pricing" }],
             },
           ]}
           copyright="© Example company"

@@ -17,9 +17,11 @@
       "description": "string",
       "actions": "LinkAction[]",
       "children": "ReactNode",
-      "align": "center | split",
-      "headingLevel": "1 | 2",
-      "background": "ReactNode"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+      "background": "ReactNode",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "layout": "\"center\" | \"split\" (default center)"
     },
     "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

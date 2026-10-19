@@ -278,3 +278,100 @@ export function MobileNavDialog({
     </DialogFrame>
   );
 }
+
+// Marketing and docs helpers, appended; the helpers above are unchanged.
+import { cloneElement, isValidElement } from "react";
+import { KitLink } from "./navigation.js";
+
+/**
+ * `introSlots` with the shared `m-section-title` class on the heading, so a
+ * section title keeps its style at any `headingLevel`.
+ */
+export function titledIntroSlots(props: IntroProps): ReactNode[] {
+  const slots = introSlots(props);
+  const heading = slots[1];
+  if (isValidElement<{ className?: string }>(heading))
+    slots[1] = cloneElement(heading, { className: "m-section-title" });
+  return slots;
+}
+/** `data-tone` for a section surface tone; the default tone sets no attribute. */
+export function sectionTone(tone?: "default" | "muted" | "inverse") {
+  return tone && tone !== "default" ? tone : undefined;
+}
+
+/** `SectionIntro` with the `m-section-title` heading class. */
+export function TitledIntro(props: IntroProps) {
+  return <>{...titledIntroSlots(props)}</>;
+}
+
+/** A navigation link with optional sub-pages (NavigationItem's shape). */
+export interface NavTreeItem {
+  label: string;
+  href: string;
+  current?: boolean;
+  icon?: ReactNode;
+  count?: number | string;
+  children?: NavTreeItem[];
+}
+/**
+ * Navigation links with icon and count. An item with children becomes a
+ * disclosure, open when a child is current. A count shows whenever defined.
+ */
+export function NavTreeLinks({
+  items,
+  marker = false,
+  onNavigate,
+}: {
+  items: NavTreeItem[];
+  /** Show the dot marker when an item has no icon (sidebar links). */
+  marker?: boolean;
+  onNavigate?: () => void;
+}) {
+  return (
+    <>
+      {items.map((item, index) =>
+        item.children?.length ? (
+          <details
+            key={`${item.label}:${item.href}:${index}`}
+            className="m-nav-group"
+            open={item.children.some((child) => child.current) || undefined}
+          >
+            <summary>
+              <LinkContent
+                prefix="nav"
+                marker={marker}
+                icon={item.icon}
+                label={item.label}
+                count={item.count}
+                countWhen="defined"
+              />
+            </summary>
+            <div className="m-nav-children">
+              <NavTreeLinks
+                items={item.children}
+                marker={marker}
+                onNavigate={onNavigate}
+              />
+            </div>
+          </details>
+        ) : (
+          <KitLink
+            key={`${item.label}:${item.href}:${index}`}
+            href={item.href}
+            aria-current={item.current ? "page" : undefined}
+            onClick={onNavigate}
+          >
+            <LinkContent
+              prefix="nav"
+              marker={marker}
+              icon={item.icon}
+              label={item.label}
+              count={item.count}
+              countWhen="defined"
+            />
+          </KitLink>
+        ),
+      )}
+    </>
+  );
+}

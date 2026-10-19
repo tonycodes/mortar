@@ -53,15 +53,15 @@ function SiteFooter() {
       description="Chat and booking for small businesses."
       columns={[
         {
-          title: "Product",
-          links: [
+          label: "Product",
+          items: [
             { label: "Pricing", href: "?recipe=pricing" },
             { label: "Changelog", href: "#changelog" },
           ],
         },
         {
-          title: "Company",
-          links: [
+          label: "Company",
+          items: [
             { label: "About", href: "?recipe=about" },
             { label: "Careers", href: "#careers" },
           ],
@@ -395,15 +395,15 @@ function StoreFooter() {
       description="Everyday goods, made to last."
       columns={[
         {
-          title: "Shop",
-          links: [
+          label: "Shop",
+          items: [
             { label: "Bags", href: "?recipe=product-page" },
             { label: "Kitchen", href: "#kitchen" },
           ],
         },
         {
-          title: "Help",
-          links: [
+          label: "Help",
+          items: [
             { label: "Delivery", href: "#delivery" },
             { label: "Returns", href: "#returns" },
           ],

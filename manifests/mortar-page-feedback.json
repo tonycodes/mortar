@@ -15,7 +15,9 @@
       "question": "string",
       "value": "yes | no | null",
       "onChange": "(value: yes | no) => void",
-      "updated": "ReactNode"
+      "updated": "ReactNode",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { PageFeedback } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

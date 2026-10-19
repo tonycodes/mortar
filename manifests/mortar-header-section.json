@@ -19,7 +19,9 @@
       "stats": "{ label: string; value: string }[]",
       "tone": "\"default\" | \"muted\" | \"inverse\"",
       "align": "\"start\" | \"center\"",
-      "headingLevel": "1 | 2"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { HeaderSection } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -1,15 +1,22 @@
 import { KitLink } from "./navigation.js";
 import { useEffect, useId, useState, type ReactNode } from "react";
-import { Button, type LinkAction } from "./primitives.js";
+import { Button, type LinkAction, type Tone } from "./primitives.js";
 import type { NavigationItem } from "./application.js";
 import { CommandPalette, type CommandItem } from "./workspace.js";
 import { Kbd } from "./display.js";
 import { BrandMark } from "./layout.js";
 import type { ItemGroup, LinkItem } from "./navigation.js";
-import { headingTag } from "./heading.js";
-import { MobileNavDialog, TermList, rovingIndex } from "./internal.js";
+import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
+import {
+  MobileNavDialog,
+  NavTreeLinks,
+  TermList,
+  cx,
+  rovingIndex,
+} from "./internal.js";
 
 export interface DocsShellProps {
+  className?: string;
   brand: string;
   /** Logo node shown in place of the placeholder brand mark. */
   logo?: ReactNode;
@@ -19,7 +26,8 @@ export interface DocsShellProps {
   homeHref?: string;
   version?: ReactNode;
   sections?: Pick<LinkItem, "label" | "href" | "current">[];
-  navigation: { title: string; items: NavigationItem[] }[];
+  /** Groups of pages; items show their icon and count, and children become disclosures. */
+  navigation: ItemGroup<NavigationItem>[];
   toc?: { id: string; label: string; current?: boolean }[];
   tocLabel?: string;
   tocFooter?: ReactNode;
@@ -29,6 +37,7 @@ export interface DocsShellProps {
 }
 
 export function DocsShell({
+  className,
   brand,
   logo,
   layout = "article",
@@ -49,24 +58,18 @@ export function DocsShell({
   const tree = (
     <nav aria-label={navigationLabel}>
       {navigation.map((group) => (
-        <section key={group.title}>
-          <h2>{group.title}</h2>
-          {group.items.map((item, index) => (
-            <KitLink
-              key={`${item.label}:${item.href}:${index}`}
-              href={item.href}
-              aria-current={item.current ? "page" : undefined}
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </KitLink>
-          ))}
+        <section key={group.label}>
+          <h2>{group.label}</h2>
+          <NavTreeLinks items={group.items} onNavigate={() => setOpen(false)} />
         </section>
       ))}
     </nav>
   );
   return (
-    <div className="m-docs-shell" data-layout={layout}>
+    <div
+      className={cx("m-docs-shell", className)}
+      data-layout={layout === "article" ? undefined : layout}
+    >
       <KitLink className="m-skip" href={`#${contentId}`}>
         Skip to content
       </KitLink>
@@ -75,7 +78,8 @@ export function DocsShell({
           variant="ghost"
           className="m-menu-trigger"
           onClick={() => setOpen(true)}
-          aria-label="Open navigation"
+          aria-haspopup="dialog"
+          aria-expanded={open}
         >
           Menu
         </Button>
@@ -132,19 +136,48 @@ export function DocsShell({
   );
 }
 
+/** True when a key press belongs to a text field or an open dialog, not the page. */
+function ownedKeyPress(target: EventTarget | null) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(
+    target.closest(
+      'input, textarea, select, [contenteditable]:not([contenteditable="false"]), [role="dialog"], [role="alertdialog"], dialog[open]',
+    ),
+  );
+}
+
 export function SearchTrigger({
+  className,
   onOpen,
   label = "Search docs",
 }: {
+  className?: string;
   onOpen: () => void;
   label?: string;
 }) {
+  // The shortcut hint is platform-specific; it renders after mount so server
+  // and client markup agree.
+  const [apple, setApple] = useState<boolean>();
+  useEffect(() => {
+    setApple(
+      /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent),
+    );
+  }, []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        onOpen();
-      }
+      if (
+        !(e.metaKey || e.ctrlKey) ||
+        e.altKey ||
+        e.shiftKey ||
+        e.key.toLowerCase() !== "k" ||
+        e.repeat ||
+        // Another trigger on the page already handled this press.
+        e.defaultPrevented ||
+        ownedKeyPress(e.target)
+      )
+        return;
+      e.preventDefault();
+      onOpen();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -152,12 +185,12 @@ export function SearchTrigger({
   return (
     <button
       type="button"
-      className="m-search-trigger"
+      className={cx("m-search-trigger", className)}
       onClick={onOpen}
       aria-keyshortcuts="Meta+K Control+K"
     >
       <span>{label}</span>
-      <Kbd keys={["⌘K"]} />
+      {apple !== undefined && <Kbd keys={[apple ? "⌘K" : "Ctrl K"]} />}
     </button>
   );
 }
@@ -193,20 +226,25 @@ export function SearchDialog(props: {
 }
 
 export function Steps({
+  id,
+  className,
   items,
-  headingLevel = 3,
+  itemHeadingLevel = 3,
 }: {
+  id?: string;
+  className?: string;
   items: {
     title: string;
     id?: string;
     description?: ReactNode;
     content?: ReactNode;
   }[];
-  headingLevel?: 2 | 3 | 4;
+  /** Level of each step's title. */
+  itemHeadingLevel?: HeadingLevel;
 }) {
-  const Heading = headingTag(headingLevel);
+  const Heading = headingTag(itemHeadingLevel);
   return (
-    <ol className="m-steps">
+    <ol id={id} className={cx("m-steps", className)}>
       {items.map((item, i) => (
         <li key={`${item.title}:${i}`}>
           <span className="m-step-number" aria-hidden="true">
@@ -225,32 +263,42 @@ export function Steps({
   );
 }
 
-const calloutLabel = {
-  note: "Note",
-  tip: "Tip",
+const calloutLabel: Record<Tone, string> = {
+  neutral: "Note",
+  info: "Note",
+  success: "Tip",
   warning: "Warning",
-  breaking: "Breaking",
-} as const;
+  danger: "Caution",
+};
 
 export function Callout({
-  type = "note",
+  id,
+  className,
+  tone = "neutral",
   title,
   children,
 }: {
-  type?: keyof typeof calloutLabel;
+  id?: string;
+  className?: string;
+  /** neutral: a note. info: a highlighted note. success: a tip. warning and danger: a caution, e.g. a breaking change. */
+  tone?: Tone;
+  /** Visible lead-in that also names the note; defaults to the tone's word, e.g. "Warning". */
   title?: string;
   children: ReactNode;
 }) {
+  const labelId = useId();
   return (
-    <aside
-      className="m-callout"
-      data-type={type}
-      aria-label={title || calloutLabel[type]}
+    <div
+      id={id}
+      className={cx("m-callout", className)}
+      role="note"
+      aria-labelledby={labelId}
+      data-tone={tone === "neutral" ? undefined : tone}
     >
-      <strong>{title || calloutLabel[type]}</strong>
+      <strong id={labelId}>{title || calloutLabel[tone]}</strong>
       <span aria-hidden="true"> · </span>
       <div>{children}</div>
-    </aside>
+    </div>
   );
 }
 
@@ -285,41 +333,62 @@ function FileBranch({ nodes }: { nodes: FileNode[] }) {
 }
 
 export function FileTree({
+  id,
+  className,
   label,
   items,
 }: {
+  id?: string;
+  className?: string;
   label: string;
   items: FileNode[];
 }) {
   return (
-    <figure className="m-file-tree" aria-label={label}>
+    <figure id={id} className={cx("m-file-tree", className)} aria-label={label}>
       <FileBranch nodes={items} />
     </figure>
   );
 }
 
 function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
+  const [result, setResult] = useState<"copied" | "failed">();
   useEffect(() => {
-    if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 1600);
+    if (!result) return;
+    const t = setTimeout(() => setResult(undefined), 1600);
     return () => clearTimeout(t);
-  }, [copied]);
+  }, [result]);
+  const copy = async () => {
+    try {
+      // A missing API (insecure context) and a denied permission both fail.
+      if (!navigator.clipboard) throw Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(text);
+      setResult("copied");
+    } catch {
+      setResult("failed");
+    }
+  };
   return (
     <button
       type="button"
       className="m-code-copy"
-      onClick={() =>
-        navigator.clipboard?.writeText(text).then(() => setCopied(true))
-      }
+      data-result={result}
+      onClick={copy}
     >
-      <span aria-live="polite">{copied ? "Copied" : "Copy"}</span>
+      <span aria-live="polite">
+        {result === "copied"
+          ? "Copied"
+          : result === "failed"
+            ? "Copy failed"
+            : "Copy"}
+      </span>
     </button>
   );
 }
 
 /** Dark code surface with optional language tabs, filename, line numbers and highlighted lines. */
 export function CodeTabs({
+  id,
+  className,
   tabs,
   filename,
   language,
@@ -327,6 +396,8 @@ export function CodeTabs({
   highlightLines = [],
   prompt,
 }: {
+  id?: string;
+  className?: string;
   tabs: { id: string; label: string; code: string }[];
   filename?: string;
   language?: string;
@@ -339,8 +410,10 @@ export function CodeTabs({
   const current = tabs.find((t) => t.id === active) || tabs[0];
   if (!current) return null;
   const lines = current.code.split("\n");
+  const tabId = (tab: { id: string }) => `${base}-tab-${tab.id}`;
+  const panelId = `${base}-panel`;
   return (
-    <figure className="m-code-tabs">
+    <figure id={id} className={cx("m-code-tabs", className)}>
       <div className="m-code-bar">
         {tabs.length > 1 ? (
           <div role="tablist" aria-label={filename || "Code examples"}>
@@ -349,22 +422,22 @@ export function CodeTabs({
                 key={t.id}
                 type="button"
                 role="tab"
-                id={`${base}-${t.id}`}
+                id={tabId(t)}
                 aria-selected={t.id === current.id}
+                aria-controls={panelId}
                 tabIndex={t.id === current.id ? 0 : -1}
                 onClick={() => setActive(t.id)}
                 onKeyDown={(e) => {
-                  // Arrows only, without preventDefault: Tabs also handles
-                  // Home/End; the API phase aligns the two.
-                  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
                   const n = rovingIndex(
                     e.key,
                     tabs.findIndex((x) => x.id === current.id),
                     tabs.length,
-                  )!;
+                  );
+                  if (n === null) return;
+                  e.preventDefault();
                   const next = tabs[n]!;
                   setActive(next.id);
-                  document.getElementById(`${base}-${next.id}`)?.focus();
+                  document.getElementById(tabId(next))?.focus();
                 }}
               >
                 {t.label}
@@ -379,8 +452,9 @@ export function CodeTabs({
       </div>
       <pre
         tabIndex={0}
+        id={tabs.length > 1 ? panelId : undefined}
         role={tabs.length > 1 ? "tabpanel" : undefined}
-        aria-labelledby={tabs.length > 1 ? `${base}-${current.id}` : undefined}
+        aria-labelledby={tabs.length > 1 ? tabId(current) : undefined}
       >
         <code>
           {lines.map((line, i) => (
@@ -409,11 +483,18 @@ export function CodeTabs({
 }
 
 export function Release({
+  id,
+  className,
   version,
   date,
   dateLabel,
   changes,
+  headingLevel = 3,
 }: {
+  id?: string;
+  className?: string;
+  /** Level of the version heading; change groups sit one level below. */
+  headingLevel?: HeadingLevel;
   version: string;
   date: string;
   dateLabel: string;
@@ -422,16 +503,20 @@ export function Release({
     items: ReactNode[];
   }[];
 }) {
+  const Heading = headingTag(headingLevel);
+  const GroupHeading = headingTag(childLevel(headingLevel));
   return (
-    <article className="m-release">
+    <article id={id} className={cx("m-release", className)}>
       <header>
-        <h3>{version}</h3>
+        <Heading className="m-release-version">{version}</Heading>
         <time dateTime={date}>{dateLabel}</time>
       </header>
       <div>
         {changes.map((c) => (
           <section key={c.type} data-type={c.type}>
-            <h4>{c.type.charAt(0).toUpperCase() + c.type.slice(1)}</h4>
+            <GroupHeading className="m-release-type">
+              {c.type.charAt(0).toUpperCase() + c.type.slice(1)}
+            </GroupHeading>
             <ul>
               {c.items.map((item, i) => (
                 <li key={i}>{item}</li>
@@ -445,6 +530,9 @@ export function Release({
 }
 
 export function ApiEndpoint({
+  id,
+  className,
+  headingLevel = 2,
   method,
   path,
   title,
@@ -453,6 +541,10 @@ export function ApiEndpoint({
   params,
   examples,
 }: {
+  id?: string;
+  className?: string;
+  /** Level of the endpoint title; the parameters heading sits one level below. */
+  headingLevel?: HeadingLevel;
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
   title: string;
@@ -467,17 +559,27 @@ export function ApiEndpoint({
   /** Request/response samples, typically CodeTabs. */
   examples?: ReactNode;
 }) {
-  const id = useId();
+  const headingId = useId();
+  const Heading = headingTag(headingLevel);
+  const ParamsHeading = headingTag(childLevel(headingLevel));
   return (
-    <section className="m-api-endpoint" aria-labelledby={id}>
+    <section
+      id={id}
+      className={cx("m-api-endpoint", className)}
+      aria-labelledby={headingId}
+    >
       <div className="m-api-text">
         <p className="m-api-route">
           <span data-method={method}>{method}</span>
           <code>{path}</code>
         </p>
-        <h2 id={id}>{title}</h2>
+        <Heading id={headingId} className="m-api-title">
+          {title}
+        </Heading>
         {description && <div className="m-api-description">{description}</div>}
-        <h3>{paramsLabel}</h3>
+        <ParamsHeading className="m-api-params-title">
+          {paramsLabel}
+        </ParamsHeading>
         <TermList
           className="m-param-list"
           items={params.map((p) => ({
@@ -501,18 +603,22 @@ export function ApiEndpoint({
 }
 
 export function PageFeedback({
+  id,
+  className,
   question = "Was this page helpful?",
   value,
   onChange,
   updated,
 }: {
+  id?: string;
+  className?: string;
   question?: string;
   value: "yes" | "no" | null;
   onChange: (value: "yes" | "no") => void;
   updated?: ReactNode;
 }) {
   return (
-    <div className="m-page-feedback">
+    <div id={id} className={cx("m-page-feedback", className)}>
       <div role="group" aria-label={question}>
         <span>{question}</span>
         {(["yes", "no"] as const).map((v) => (
@@ -532,26 +638,39 @@ export function PageFeedback({
 }
 
 export function PagerLinks({
+  id,
+  className,
   previous,
   next,
+  label = "Previous and next page",
 }: {
+  id?: string;
+  className?: string;
   previous?: LinkAction;
   next?: LinkAction;
+  /** Names the navigation landmark; keep it distinct from other navigation on the page. */
+  label?: string;
 }) {
   return (
-    <nav className="m-pager" aria-label="Pagination">
+    <nav id={id} className={cx("m-pager", className)} aria-label={label}>
       {previous ? (
         <KitLink href={previous.href} rel="prev">
           <small>Previous</small>
-          <span>← {previous.label}</span>
+          <span>
+            <span aria-hidden="true">← </span>
+            {previous.label}
+          </span>
         </KitLink>
       ) : (
         <span />
       )}
       {next && (
-        <KitLink href={next.href} rel="next" data-next>
+        <KitLink href={next.href} rel="next" data-next="true">
           <small>Next</small>
-          <span>{next.label} →</span>
+          <span>
+            {next.label}
+            <span aria-hidden="true"> →</span>
+          </span>
         </KitLink>
       )}
     </nav>
@@ -559,16 +678,23 @@ export function PagerLinks({
 }
 
 export function LinkCards({
+  id,
+  className,
   items,
 }: {
-  items: { href: string; title: string; description?: string }[];
+  id?: string;
+  className?: string;
+  items: Pick<LinkItem, "label" | "href" | "description">[];
 }) {
   return (
-    <ul className="m-link-cards">
+    <ul id={id} className={cx("m-link-cards", className)}>
       {items.map((item, index) => (
-        <li key={`${item.title}:${item.href}:${index}`}>
+        <li key={`${item.label}:${item.href}:${index}`}>
           <KitLink href={item.href}>
-            <strong>{item.title} →</strong>
+            <strong>
+              {item.label}
+              <span aria-hidden="true"> →</span>
+            </strong>
             {item.description && <span>{item.description}</span>}
           </KitLink>
         </li>

@@ -15,7 +15,9 @@
       "label": "string",
       "address": "string",
       "variant": "\"browser\" | \"app\" | \"plain\"",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
