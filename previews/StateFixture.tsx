@@ -131,13 +131,13 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
       );
       break;
     case "OrderHistory":
-      content = <UI.OrderHistory orders={[]} emptyTitle="No records" />;
+      content = <UI.OrderHistory orders={[]} empty={{ title: "No records" }} />;
       break;
     case "ShoppingCart":
       content = (
         <UI.ShoppingCart
           items={[]}
-          emptyTitle="No records"
+          empty={{ title: "No records" }}
           onQuantityChange={changed}
           onRemove={changed}
         />

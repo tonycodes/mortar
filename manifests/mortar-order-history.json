@@ -13,9 +13,10 @@
   "contract": {
     "props": {
       "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
-      "headingLevel": "2 | 3",
-      "emptyTitle": "string",
-      "emptyDescription": "string"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; each order's heading and the empty state's title)",
+      "empty": "{ title: string; description?: string; action?: ReactNode } (default \"No orders yet\")",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

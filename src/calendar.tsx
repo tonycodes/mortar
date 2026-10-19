@@ -11,6 +11,8 @@ import {
 } from "react";
 import { SegmentedControl } from "./inspection.js";
 import { ChevronLeft, ChevronRight } from "./icons.js";
+import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
+import { cx } from "./internal.js";
 
 export interface CalendarEvent {
   id: string;
@@ -57,15 +59,31 @@ const toMinutes = (time: string) => {
   return h * 60 + (m || 0);
 };
 
-/** Assign overlapping timed events to side-by-side lanes. */
-function layout(events: CalendarEvent[]) {
+/** Shortest drawn event, in minutes, so an event at the edge stays visible. */
+const MIN_DRAWN = 30;
+
+/**
+ * Place timed events between `min` and `max` minutes and assign overlapping
+ * ones to side-by-side lanes. Events that start before `min` or end after
+ * `max` are drawn at the edge and flagged as clipped.
+ */
+function layout(events: CalendarEvent[], min: number, max: number) {
   const timed = events
     .filter((e) => e.start)
     .map((e) => {
       const start = toMinutes(e.start!);
-      return { event: e, start, end: e.end ? toMinutes(e.end) : start + 60 };
+      const end = e.end ? toMinutes(e.end) : start + 60;
+      const top = Math.min(Math.max(start, min), max - MIN_DRAWN);
+      const bottom = Math.max(Math.min(end, max), top + MIN_DRAWN);
+      return {
+        event: e,
+        top,
+        bottom,
+        clippedStart: start < min,
+        clippedEnd: end > max,
+      };
     })
-    .sort((a, b) => a.start - b.start || a.end - b.end);
+    .sort((a, b) => a.top - b.top || a.bottom - b.bottom);
   type Placed = (typeof timed)[number] & { lane: number; lanes: number };
   const out: Placed[] = [];
   let cluster: Placed[] = [];
@@ -80,14 +98,14 @@ function layout(events: CalendarEvent[]) {
     clusterEnd = -1;
   };
   for (const item of timed) {
-    if (cluster.length && item.start >= clusterEnd) flush();
-    let lane = laneEnds.findIndex((end) => end <= item.start);
+    if (cluster.length && item.top >= clusterEnd) flush();
+    let lane = laneEnds.findIndex((end) => end <= item.top);
     if (lane < 0) {
       lane = laneEnds.length;
-      laneEnds.push(item.end);
-    } else laneEnds[lane] = item.end;
+      laneEnds.push(item.bottom);
+    } else laneEnds[lane] = item.bottom;
     cluster.push({ ...item, lane, lanes: 1 });
-    clusterEnd = Math.max(clusterEnd, item.end);
+    clusterEnd = Math.max(clusterEnd, item.bottom);
   }
   if (cluster.length) flush();
   return out;
@@ -97,10 +115,62 @@ function localToday() {
   return toDate(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
 }
 
-/** Month grid with keyboard navigation; compact for picking dates, full for showing events. */
+export interface CalendarProps {
+  /** Displayed month as YYYY-MM. Omit to follow `date`. */
+  month?: string;
+  /** Called with YYYY-MM whenever the current date moves into another month, in any view. */
+  onMonthChange?: (month: string) => void;
+  /**
+   * The current date as YYYY-MM-DD: the month view's focusable day, the
+   * year shown in the year view and the week or day shown in the time views.
+   * Omit to let the calendar manage it; it starts at `selected` or today.
+   */
+  date?: string;
+  /** Called with the new current date after navigation in any view. */
+  onDateChange?: (date: string) => void;
+  /** Selected day as YYYY-MM-DD. */
+  selected?: string;
+  onSelect?: (date: string) => void;
+  events?: CalendarEvent[];
+  /** Month view only: `full` lists each day's events in its cell. */
+  variant?: "compact" | "full";
+  weekStartsOn?: 0 | 1;
+  /** Override today's date (YYYY-MM-DD), e.g. for tests or a user's time zone. */
+  today?: string;
+  locale?: string;
+  /** Month view with `variant="full"` only: events listed per day before "+N more". */
+  maxEvents?: number;
+  /** Twelve months, one month grid, or a time grid for one week or one day. */
+  view?: CalendarView;
+  /** Shows a Year/Month/Week/Day switcher when provided. */
+  onViewChange?: (view: CalendarView) => void;
+  /** Makes events in week and day views buttons. */
+  onEventSelect?: (id: string) => void;
+  /**
+   * First and last hour shown in week and day views. Events that start or
+   * end outside them are drawn at the edge with a dashed border and keep
+   * their real times in their text.
+   */
+  dayStartHour?: number;
+  dayEndHour?: number;
+  /** Level of the title (month, year, week or day); month and day headings are one below. */
+  headingLevel?: HeadingLevel;
+  id?: string;
+  className?: string;
+}
+
+/**
+ * Calendar with year, month, week and day views. One current date (`date`)
+ * is shared by every view, so moving through months and then switching to
+ * the week view shows a week of the month you reached. The month and year
+ * views are grids with keyboard navigation; the week and day views place
+ * timed events on an hour grid.
+ */
 export function Calendar({
   month: controlledMonth,
   onMonthChange,
+  date: controlledDate,
+  onDateChange,
   selected,
   onSelect,
   events = [],
@@ -112,47 +182,39 @@ export function Calendar({
   view = "month",
   onViewChange,
   onEventSelect,
-  onDateChange,
   dayStartHour = 8,
   dayEndHour = 19,
-}: {
-  /** Displayed month as YYYY-MM. Omit to let the calendar manage it. */
-  month?: string;
-  onMonthChange?: (month: string) => void;
-  /** Selected day as YYYY-MM-DD. */
-  selected?: string;
-  onSelect?: (date: string) => void;
-  events?: CalendarEvent[];
-  variant?: "compact" | "full";
-  weekStartsOn?: 0 | 1;
-  /** Override today's date (YYYY-MM-DD), e.g. for tests or a user's time zone. */
-  today?: string;
-  locale?: string;
-  /** Events listed per day in the full variant before "+N more". */
-  maxEvents?: number;
-  /** Twelve months, one month grid, or a time grid for one week or one day. */
-  view?: CalendarView;
-  /** Shows a Month/Week/Day switcher when provided. */
-  onViewChange?: (view: CalendarView) => void;
-  /** Makes events in week and day views buttons. */
-  onEventSelect?: (id: string) => void;
-  /** Week and day views: called with the new anchor date after Previous/Next. */
-  onDateChange?: (date: string) => void;
-  /** First and last hour shown in week and day views. */
-  dayStartHour?: number;
-  dayEndHour?: number;
-}) {
+  headingLevel = 2,
+  id,
+  className,
+}: CalendarProps) {
   const today = todayProp || localToday();
-  const [ownMonth, setOwnMonth] = useState(
-    controlledMonth || monthOf(selected || today),
-  );
-  const month = controlledMonth || ownMonth;
-  const [focused, setFocused] = useState(selected || today);
-  const focusDate = monthOf(focused) === month ? focused : `${month}-01`;
+  const [ownDate, setOwnDate] = useState(() => {
+    const start = selected || today;
+    return controlledMonth && monthOf(start) !== controlledMonth
+      ? `${controlledMonth}-01`
+      : start;
+  });
+  // Follow a changed `selected` or `month` prop when the date is uncontrolled.
+  const [seen, setSeen] = useState({ selected, month: controlledMonth });
+  if (seen.selected !== selected || seen.month !== controlledMonth) {
+    setSeen({ selected, month: controlledMonth });
+    if (controlledDate === undefined) {
+      let next = selected && selected !== seen.selected ? selected : ownDate;
+      if (controlledMonth && monthOf(next) !== controlledMonth)
+        next = `${controlledMonth}-01`;
+      if (next !== ownDate) setOwnDate(next);
+    }
+  }
+  const date = controlledDate ?? ownDate;
+  const month = controlledMonth ?? monthOf(date);
+  const focusDate = monthOf(date) === month ? date : `${month}-01`;
   const moved = useRef(false);
   const grid = useRef<HTMLElement>(null);
   const headingId = useId();
-  const [anchor, setAnchor] = useState(selected || today);
+  const Heading = headingTag(headingLevel);
+  const SubHeading = headingTag(childLevel(headingLevel));
+  const rootClass = cx("m-calendar", className);
 
   const formats = useMemo(
     () => ({
@@ -200,52 +262,42 @@ export function Calendar({
     Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)),
   );
 
-  function showMonth(next: string) {
-    if (!controlledMonth) setOwnMonth(next);
-    onMonthChange?.(next);
+  function setDate(next: string) {
+    if (next === date) return;
+    if (controlledDate === undefined) setOwnDate(next);
+    onDateChange?.(next);
+    if (monthOf(next) !== month) onMonthChange?.(monthOf(next));
   }
-  const year = anchor.slice(0, 4);
-  const yearFocus = focused.slice(0, 4) === year ? focused : `${year}-01-01`;
-  const showAnchor = (date: string) => {
-    setAnchor(date);
-    onDateChange?.(date);
-  };
-  function move(date: string) {
+  const year = date.slice(0, 4);
+  function move(next: string) {
     moved.current = true;
-    setFocused(date);
-    if (view === "year") {
-      if (date.slice(0, 4) !== year) showAnchor(date);
-    } else if (monthOf(date) !== month) showMonth(monthOf(date));
+    setDate(next);
   }
   useEffect(() => {
     if (!moved.current) return;
     moved.current = false;
-    const target = view === "year" ? yearFocus : focusDate;
+    const target = view === "year" ? date : focusDate;
     grid.current
       ?.querySelector<HTMLButtonElement>(`[data-date="${target}"]`)
       ?.focus();
   });
-  function onKeyDown(event: KeyboardEvent<HTMLButtonElement>, date: string) {
-    const weekday = weekdayIndex(date, weekStartsOn);
+  function onKeyDown(event: KeyboardEvent<HTMLButtonElement>, day: string) {
+    const weekday = weekdayIndex(day, weekStartsOn);
     const next = {
-      ArrowLeft: () => addDays(date, -1),
-      ArrowRight: () => addDays(date, 1),
-      ArrowUp: () => addDays(date, -7),
-      ArrowDown: () => addDays(date, 7),
-      Home: () => addDays(date, -weekday),
-      End: () => addDays(date, 6 - weekday),
-      PageUp: () => addMonths(date, event.shiftKey ? -12 : -1),
-      PageDown: () => addMonths(date, event.shiftKey ? 12 : 1),
+      ArrowLeft: () => addDays(day, -1),
+      ArrowRight: () => addDays(day, 1),
+      ArrowUp: () => addDays(day, -7),
+      ArrowDown: () => addDays(day, 7),
+      Home: () => addDays(day, -weekday),
+      End: () => addDays(day, 6 - weekday),
+      PageUp: () => addMonths(day, event.shiftKey ? -12 : -1),
+      PageDown: () => addMonths(day, event.shiftKey ? 12 : 1),
     }[event.key];
     if (!next) return;
     event.preventDefault();
     move(next());
   }
-  const step = (months: number) => {
-    const next = addMonths(`${month}-01`, months);
-    showMonth(monthOf(next));
-    setFocused(monthOf(focused) === monthOf(next) ? focused : next);
-  };
+  const step = (months: number) => setDate(addMonths(focusDate, months));
 
   const switcher = onViewChange && (
     <SegmentedControl
@@ -261,21 +313,22 @@ export function Calendar({
     />
   );
   if (view === "year") {
-    const shiftYear = (by: number) => {
-      showAnchor(addMonths(anchor, 12 * by));
-      setFocused(addMonths(yearFocus, 12 * by));
-    };
-    const label = (date: string) =>
+    const shiftYear = (by: number) => setDate(addMonths(date, 12 * by));
+    const label = (day: string) =>
       dayLabel(
-        formats.day.format(new Date(toTime(date))),
-        byDay.get(date)?.length ?? 0,
+        formats.day.format(new Date(toTime(day))),
+        byDay.get(day)?.length ?? 0,
       );
     return (
-      <div className="m-calendar" data-view="year">
+      <div id={id} className={rootClass} data-view="year">
         <div className="m-calendar-header">
-          <h2 id={headingId} aria-live="polite">
+          <Heading
+            id={headingId}
+            className="m-calendar-title"
+            aria-live="polite"
+          >
             {year}
-          </h2>
+          </Heading>
           {switcher}
           <div className="m-calendar-nav">
             <NavButton
@@ -308,17 +361,17 @@ export function Calendar({
                 className="m-calendar-month"
                 aria-labelledby={titleId}
               >
-                <h3 id={titleId}>
+                <SubHeading id={titleId} className="m-calendar-month-title">
                   {formats.monthName.format(new Date(toTime(firstDay)))}
-                </h3>
+                </SubHeading>
                 <table>
                   <thead>
                     <tr>
-                      {cells.slice(0, 7).map((date) => {
-                        const d = new Date(toTime(date));
+                      {cells.slice(0, 7).map((day) => {
+                        const d = new Date(toTime(day));
                         return (
                           <th
-                            key={date}
+                            key={day}
                             scope="col"
                             abbr={formats.long.format(d)}
                           >
@@ -331,28 +384,28 @@ export function Calendar({
                   <tbody>
                     {Array.from({ length: 6 }, (_, w) => (
                       <tr key={w}>
-                        {cells.slice(w * 7, w * 7 + 7).map((date) =>
-                          monthOf(date) === `${year}-${mm}` ? (
-                            <td key={date}>
+                        {cells.slice(w * 7, w * 7 + 7).map((day) =>
+                          monthOf(day) === `${year}-${mm}` ? (
+                            <td key={day}>
                               <button
                                 type="button"
-                                data-date={date}
-                                tabIndex={date === yearFocus ? 0 : -1}
+                                data-date={day}
+                                tabIndex={day === date ? 0 : -1}
                                 aria-current={
-                                  date === today ? "date" : undefined
+                                  day === today ? "date" : undefined
                                 }
-                                aria-pressed={date === selected}
-                                aria-label={label(date)}
+                                aria-pressed={day === selected}
+                                aria-label={label(day)}
                                 onClick={() => {
-                                  setFocused(date);
-                                  onSelect?.(date);
+                                  setDate(day);
+                                  onSelect?.(day);
                                 }}
-                                onKeyDown={(event) => onKeyDown(event, date)}
+                                onKeyDown={(event) => onKeyDown(event, day)}
                               >
                                 <span className="m-calendar-day">
-                                  {Number(date.slice(8))}
+                                  {Number(day.slice(8))}
                                 </span>
-                                {byDay.has(date) && (
+                                {byDay.has(day) && (
                                   <span
                                     className="m-calendar-dot"
                                     aria-hidden="true"
@@ -361,7 +414,7 @@ export function Calendar({
                               </button>
                             </td>
                           ) : (
-                            <td key={date} />
+                            <td key={day} />
                           ),
                         )}
                       </tr>
@@ -379,8 +432,8 @@ export function Calendar({
     return (
       <TimeGrid
         view={view}
-        anchor={anchor}
-        onAnchorChange={showAnchor}
+        date={date}
+        onDateChange={setDate}
         events={byDay}
         today={today}
         selected={selected}
@@ -388,19 +441,26 @@ export function Calendar({
         locale={locale}
         formats={formats}
         headingId={headingId}
+        headingLevel={headingLevel}
         switcher={switcher}
         onEventSelect={onEventSelect}
         dayStartHour={dayStartHour}
         dayEndHour={dayEndHour}
+        id={id}
+        className={rootClass}
       />
     );
 
   return (
-    <div className="m-calendar" data-variant={variant}>
+    <div
+      id={id}
+      className={rootClass}
+      data-variant={variant === "full" ? "full" : undefined}
+    >
       <div className="m-calendar-header">
-        <h2 id={headingId} aria-live="polite">
+        <Heading id={headingId} className="m-calendar-title" aria-live="polite">
           {formats.title.format(new Date(toTime(first)))}
-        </h2>
+        </Heading>
         {switcher}
         <div className="m-calendar-nav">
           <NavButton
@@ -422,10 +482,10 @@ export function Calendar({
       >
         <thead>
           <tr>
-            {weeks[0].map((date) => {
-              const d = new Date(toTime(date));
+            {weeks[0].map((day) => {
+              const d = new Date(toTime(day));
               return (
-                <th key={date} scope="col" abbr={formats.long.format(d)}>
+                <th key={day} scope="col" abbr={formats.long.format(d)}>
                   {formats.short.format(d)}
                 </th>
               );
@@ -435,35 +495,35 @@ export function Calendar({
         <tbody>
           {weeks.map((week) => (
             <tr key={week[0]}>
-              {week.map((date) => {
-                const dayEvents = byDay.get(date) || [];
+              {week.map((day) => {
+                const dayEvents = byDay.get(day) || [];
                 const count = dayEvents.length;
-                const name = formats.day.format(new Date(toTime(date)));
+                const name = formats.day.format(new Date(toTime(day)));
                 const listed = variant === "full" && count > 0;
                 return (
                   <td
-                    key={date}
-                    aria-selected={date === selected ? true : undefined}
-                    data-outside={monthOf(date) !== month || undefined}
+                    key={day}
+                    aria-selected={day === selected ? true : undefined}
+                    data-outside={monthOf(day) !== month || undefined}
                   >
                     <button
                       type="button"
-                      data-date={date}
-                      tabIndex={date === focusDate ? 0 : -1}
-                      aria-current={date === today ? "date" : undefined}
+                      data-date={day}
+                      tabIndex={day === focusDate ? 0 : -1}
+                      aria-current={day === today ? "date" : undefined}
+                      aria-pressed={day === selected}
                       aria-describedby={
-                        listed ? `${headingId}-${date}` : undefined
+                        listed ? `${headingId}-${day}` : undefined
                       }
                       aria-label={dayLabel(name, count)}
                       onClick={() => {
-                        setFocused(date);
-                        if (monthOf(date) !== month) showMonth(monthOf(date));
-                        onSelect?.(date);
+                        setDate(day);
+                        onSelect?.(day);
                       }}
-                      onKeyDown={(event) => onKeyDown(event, date)}
+                      onKeyDown={(event) => onKeyDown(event, day)}
                     >
                       <span className="m-calendar-day">
-                        {Number(date.slice(8))}
+                        {Number(day.slice(8))}
                       </span>
                       {count > 0 && (
                         <span className="m-calendar-dot" aria-hidden="true" />
@@ -472,7 +532,7 @@ export function Calendar({
                     {listed && (
                       <ol
                         className="m-calendar-events"
-                        id={`${headingId}-${date}`}
+                        id={`${headingId}-${day}`}
                       >
                         {dayEvents.slice(0, maxEvents).map((event) => (
                           <li key={event.id}>
@@ -515,11 +575,11 @@ function NavButton({
   );
 }
 
-/** Week and day views: labelled day sections whose events are positioned on an hour grid. */
+/** Week and day views: labelled day groups whose events are positioned on an hour grid. */
 function TimeGrid({
   view,
-  anchor,
-  onAnchorChange,
+  date,
+  onDateChange,
   events,
   today,
   selected,
@@ -527,14 +587,17 @@ function TimeGrid({
   locale,
   formats,
   headingId,
+  headingLevel,
   switcher,
   onEventSelect,
   dayStartHour,
   dayEndHour,
+  id,
+  className,
 }: {
   view: "week" | "day";
-  anchor: string;
-  onAnchorChange: (date: string) => void;
+  date: string;
+  onDateChange: (date: string) => void;
   events: Map<string, CalendarEvent[]>;
   today: string;
   selected?: string;
@@ -542,16 +605,21 @@ function TimeGrid({
   locale: string;
   formats: { day: Intl.DateTimeFormat; short: Intl.DateTimeFormat };
   headingId: string;
+  headingLevel: HeadingLevel;
   switcher: ReactNode;
   onEventSelect?: (id: string) => void;
   dayStartHour: number;
   dayEndHour: number;
+  id?: string;
+  className: string;
 }) {
-  const offset = weekdayIndex(anchor, weekStartsOn);
+  const Heading = headingTag(headingLevel);
+  const DayHeading = headingTag(childLevel(headingLevel));
+  const offset = weekdayIndex(date, weekStartsOn);
   const days =
     view === "week"
-      ? Array.from({ length: 7 }, (_, i) => addDays(anchor, i - offset))
-      : [anchor];
+      ? Array.from({ length: 7 }, (_, i) => addDays(date, i - offset))
+      : [date];
   const step = view === "week" ? 7 : 1;
   const unit = view === "week" ? "week" : "day";
   const range = new Intl.DateTimeFormat(locale, {
@@ -566,7 +634,7 @@ function TimeGrid({
           new Date(toTime(days[0])),
           new Date(toTime(days[days.length - 1])),
         )
-      : formats.day.format(new Date(toTime(anchor)));
+      : formats.day.format(new Date(toTime(date)));
   const first = dayStartHour * 60;
   const span = Math.max(60, (dayEndHour - dayStartHour) * 60);
   const pct = (n: number) =>
@@ -586,9 +654,11 @@ function TimeGrid({
     </span>
   );
   const item = (event: CalendarEvent, timed: boolean) => {
+    // The space keeps the title and time apart in the accessible name.
     const inner = (
       <>
         {event.title}
+        {timed && " "}
         {timed && times(event)}
       </>
     );
@@ -607,22 +677,22 @@ function TimeGrid({
     );
   };
   return (
-    <div className="m-calendar" data-view={view}>
+    <div id={id} className={className} data-view={view}>
       <div className="m-calendar-header">
-        <h2 id={headingId} aria-live="polite">
+        <Heading id={headingId} className="m-calendar-title" aria-live="polite">
           {title}
-        </h2>
+        </Heading>
         {switcher}
         <div className="m-calendar-nav">
           <NavButton
             label={`Previous ${unit}`}
             direction="back"
-            onClick={() => onAnchorChange(addDays(anchor, -step))}
+            onClick={() => onDateChange(addDays(date, -step))}
           />
           <NavButton
             label={`Next ${unit}`}
             direction="forward"
-            onClick={() => onAnchorChange(addDays(anchor, step))}
+            onClick={() => onDateChange(addDays(date, step))}
           />
         </div>
       </div>
@@ -641,29 +711,31 @@ function TimeGrid({
           ))}
         </div>
         <div className="m-calendar-columns" data-count={days.length}>
-          {days.map((date) => {
-            const dayEvents = events.get(date) || [];
+          {days.map((day) => {
+            const dayEvents = events.get(day) || [];
             const allDay = dayEvents.filter((e) => !e.start);
-            const timed = layout(dayEvents);
-            const d = new Date(toTime(date));
-            const labelId = `${headingId}-${date}`;
+            const timed = layout(dayEvents, first, first + span);
+            const d = new Date(toTime(day));
+            const labelId = `${headingId}-${day}`;
             return (
-              <section
-                key={date}
+              <div
+                key={day}
+                role="group"
                 className="m-calendar-column"
                 aria-labelledby={labelId}
-                data-selected={date === selected || undefined}
+                data-selected={day === selected || undefined}
               >
-                <h3
+                <DayHeading
                   id={labelId}
-                  aria-current={date === today ? "date" : undefined}
+                  className="m-calendar-column-heading"
+                  aria-current={day === today ? "date" : undefined}
                 >
                   <span className="m-calendar-column-label" aria-hidden="true">
                     <span>{formats.short.format(d)}</span>
-                    <strong>{Number(date.slice(8))}</strong>
+                    <strong>{Number(day.slice(8))}</strong>
                   </span>
                   <span className="m-sr-only">{formats.day.format(d)}</span>
-                </h3>
+                </DayHeading>
                 {allDay.length > 0 && (
                   <ul className="m-calendar-allday" aria-label="All day">
                     {allDay.map((event) => (
@@ -676,10 +748,12 @@ function TimeGrid({
                     {timed.map((t) => (
                       <li
                         key={t.event.id}
+                        data-clipped-start={t.clippedStart || undefined}
+                        data-clipped-end={t.clippedEnd || undefined}
                         style={
                           {
-                            "--m-top": pct((t.start - first) / span),
-                            "--m-height": pct((t.end - t.start) / span),
+                            "--m-top": pct((t.top - first) / span),
+                            "--m-height": pct((t.bottom - t.top) / span),
                             "--m-lane": t.lane,
                             "--m-lanes": t.lanes,
                           } as CSSProperties
@@ -695,7 +769,7 @@ function TimeGrid({
                 ) : (
                   <p className="m-calendar-none">No events</p>
                 )}
-              </section>
+              </div>
             );
           })}
         </div>

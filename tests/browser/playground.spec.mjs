@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
 import { accessibility } from "../support/preview.mjs";
+import AxeBuilder from "@axe-core/playwright";
 for (const width of [320, 768, 1280]) {
   test(`playground browsing and settings at ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -347,6 +348,27 @@ for (const id of templateIds)
       expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
       expect(errors).toEqual([]);
     });
+
+// Shop templates keep a gapless outline below their single h1 (the cart page
+// used to jump from h1 to the bag lines' h3).
+for (const id of [
+  "product-page",
+  "cart-page",
+  "category-page",
+  "checkout-page",
+  "order-history",
+])
+  test(`page template ${id} keeps its heading order`, async ({ page }) => {
+    await page.goto(`/?recipe=${id}`);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
+    const result = await new AxeBuilder({ page })
+      .include("main")
+      .withRules(["heading-order"])
+      .analyze();
+    expect(
+      result.violations.flatMap((v) => v.nodes.map((n) => n.html)),
+    ).toEqual([]);
+  });
 
 test("overview links every page template", async ({ page }) => {
   await page.goto("/");

@@ -49,7 +49,10 @@ test("ProductOverview can hide its name when a dialog already titles it", () => 
     price: "£32",
     images: [{ src: "/a.png", alt: "Tote" }],
   };
-  assert.match(html(ProductOverview, props), /<h1>Canvas tote<\/h1>/);
+  assert.match(
+    html(ProductOverview, props),
+    /<h1 class="m-product-name">Canvas tote<\/h1>/,
+  );
   assert.doesNotMatch(
     html(ProductOverview, { ...props, hideName: true }),
     /Canvas tote<\/h/,
@@ -90,7 +93,14 @@ test("ProductReviews summarises ratings with an accessible distribution and list
   );
   assert.match(markup, /<article class="m-review" aria-labelledby="[^"]+">/);
   assert.match(markup, /aria-label="Rated 5 out of 5"/);
-  assert.match(markup, /<h3 id="[^"]+">Holds everything<\/h3>/);
+  assert.match(
+    markup,
+    /<h2 id="([^"]+)" class="m-reviews-title">Customer reviews<\/h2>/,
+  );
+  assert.match(
+    markup,
+    /<h3 id="[^"]+" class="m-review-title">Holds everything<\/h3>/,
+  );
   assert.match(markup, /Ana K\./);
 });
 
@@ -117,7 +127,10 @@ test("OrderHistory lists each order with its number, status and line items", () 
     ],
   });
   assert.match(markup, /<section class="m-order" aria-labelledby="([^"]+)">/);
-  assert.match(markup, /<h2 id="[^"]+">Order WU88191111<\/h2>/);
+  assert.match(
+    markup,
+    /<h2 id="[^"]+" class="m-order-title">Order WU88191111<\/h2>/,
+  );
   assert.match(markup, /<dt>Date placed<\/dt><dd>6 October 2026<\/dd>/);
   assert.match(markup, /<dt>Total<\/dt><dd>£82.95<\/dd>/);
   assert.match(

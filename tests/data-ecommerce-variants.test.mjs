@@ -27,14 +27,14 @@ test("ProductList default markup is unchanged by the card, swatch and action opt
   });
   assert.equal(
     markup,
-    '<ul class="m-product-list" aria-label="New" data-columns="4"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div class="m-product-info"><h3><a href="#a">Tote</a></h3><p class="m-product-meta">Natural</p></div><p class="m-product-price">£1</p></li></ul>',
+    '<ul class="m-product-list" aria-label="New" data-columns="4"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div class="m-product-info"><h3 class="m-product-name"><a href="#a">Tote</a></h3><p class="m-product-meta">Natural</p></div><p class="m-product-price">£1</p></li></ul>',
   );
 });
 
-test("ProductList card variant renders description, labelled swatches and an action", () => {
+test("ProductList cards variant renders description, labelled swatches and an action", () => {
   const markup = html(ProductList, {
     label: "Bags",
-    variant: "card",
+    variant: "cards",
     products: [
       {
         id: "a",
@@ -51,7 +51,7 @@ test("ProductList card variant renders description, labelled swatches and an act
       },
     ],
   });
-  assert.match(markup, /data-variant="card"/);
+  assert.match(markup, /data-variant="cards"/);
   assert.match(markup, /<p class="m-product-summary">Heavy canvas\.<\/p>/);
   assert.match(
     markup,

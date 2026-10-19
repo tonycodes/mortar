@@ -81,6 +81,12 @@ export const toteImages: UI.ProductImage[] = [
   { src: tote("26262a"), alt: "Black canvas tote bag, front" },
 ];
 
+/** The black tote's own photos: choosing Black swaps the gallery. */
+export const blackToteImages: UI.ProductImage[] = [
+  { src: tote("26262a"), alt: "Black canvas tote bag, front" },
+  { src: tote("26262a", "e4e1d8"), alt: "Black canvas tote bag, in use" },
+];
+
 export const cartItems: UI.CartItem[] = [
   {
     id: "tote",
@@ -213,7 +219,7 @@ export function EcommerceCase({ name }: { name: string }) {
           <UI.ProductList label="New arrivals" products={products} />
           <UI.ProductList
             label="Bags and kitchen"
-            variant="card"
+            variant="cards"
             columns={3}
             products={[
               {
@@ -272,7 +278,7 @@ export function EcommerceCase({ name }: { name: string }) {
             name="Canvas tote"
             price="£32"
             description="Heavy organic cotton canvas with vegetable-tanned leather handles and an inside pocket."
-            images={toteImages}
+            images={selected.colour === "black" ? blackToteImages : toteImages}
             rating={{ value: 4.5, count: 112, href: "#reviews" }}
             options={[
               {
@@ -340,9 +346,11 @@ export function EcommerceCase({ name }: { name: string }) {
             onRemove={(id) =>
               setItems((current) => current.filter((item) => item.id !== id))
             }
-            emptyAction={
-              <UI.ActionLink label="Continue shopping" href="#shop" />
-            }
+            empty={{
+              title: "Your bag is empty",
+              description: "Items you add will appear here.",
+              action: <UI.ActionLink label="Continue shopping" href="#shop" />,
+            }}
           />
           <output aria-label="Bag count">
             {items.reduce((n, item) => n + item.quantity, 0)}
@@ -405,9 +413,7 @@ export function EcommerceCase({ name }: { name: string }) {
           <UI.ProductFilters
             facets={facets}
             selected={filters}
-            onChange={(facet, values) =>
-              setFilters((current) => ({ ...current, [facet]: values }))
-            }
+            onChange={(next) => setFilters(next)}
           />
           <output aria-label="Applied filters">
             {Object.entries(filters)

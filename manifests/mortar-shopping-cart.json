@@ -2,7 +2,7 @@
   "id": "mortar-shopping-cart",
   "logicalId": "shopping-cart",
   "name": "ShoppingCart",
-  "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; shows an empty state when there are no items.",
+  "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; focus moves to the next line after a removal. Shows an empty state when there are no items.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "ShoppingCart",
@@ -17,9 +17,10 @@
       "onRemove": "(id: string) => void",
       "label": "string",
       "maxQuantity": "number",
-      "emptyTitle": "string",
-      "emptyDescription": "string",
-      "emptyAction": "ReactNode"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3; each line's product name and the empty state's title)",
+      "empty": "{ title: string; description?: string; action?: ReactNode } (default \"Your bag is empty\")",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { ShoppingCart } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

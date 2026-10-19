@@ -32,19 +32,21 @@ const base = {
   events,
 };
 
-test("week view shows the selected week as labelled day sections", () => {
+test("week view shows the selected week as labelled day groups", () => {
   const markup = html(Calendar, { ...base, view: "week" });
   assert.match(markup, /data-view="week"/);
   assert.match(
     markup,
-    /<h2 id="[^"]+" aria-live="polite">19\s.\s25 October 2026<\/h2>/,
+    /<h2 id="[^"]+" class="m-calendar-title" aria-live="polite">19\s.\s25 October 2026<\/h2>/,
   );
   const days = [
     ...markup.matchAll(
-      /<section class="m-calendar-column"[^>]*aria-labelledby="([^"]+)"/g,
+      /<div role="group" class="m-calendar-column"[^>]*aria-labelledby="([^"]+)"[^>]*><h3 id="\1" class="m-calendar-column-heading"/g,
     ),
   ];
   assert.equal(days.length, 7);
+  // Seven day landmarks would crowd the landmark list.
+  assert.doesNotMatch(markup, /<section/);
   assert.match(
     markup,
     /<span class="m-sr-only">Monday, 19 October 2026<\/span>/,
@@ -86,12 +88,12 @@ test("timed events are listed in order with times; untimed ones are all-day", ()
 test("day view shows one day and steps by day", () => {
   const markup = html(Calendar, { ...base, view: "day" });
   assert.equal(
-    [...markup.matchAll(/<section class="m-calendar-column"/g)].length,
+    [...markup.matchAll(/<div role="group" class="m-calendar-column"/g)].length,
     1,
   );
   assert.match(
     markup,
-    /<h2 id="[^"]+" aria-live="polite">Tuesday, 20 October 2026<\/h2>/,
+    /<h2 id="[^"]+" class="m-calendar-title" aria-live="polite">Tuesday, 20 October 2026<\/h2>/,
   );
   assert.match(markup, /aria-label="Previous day"/);
   assert.match(markup, /Design review/);
