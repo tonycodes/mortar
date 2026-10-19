@@ -35,4 +35,9 @@ test("the published archive is the provenance-checked one and versions are never
   assert.match(publish, /already points at/);
   assert.match(publish, /npm publish "tony-ui-mortar-\$VERSION\.tgz"/);
   assert.match(publish, /differs from provenance/);
+  assert.match(
+    prepare,
+    /node scripts\/release-notes\.mjs "\$VERSION" > "\$DIR\/notes\.md"/,
+  );
+  assert.match(publish, /--notes-file notes\.md/);
 });
