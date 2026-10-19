@@ -633,6 +633,8 @@ export function ExtendedCase({ name }: { name: string }) {
           title="Product updates, monthly"
           description="No spam."
           onSubmit={() => setSelected(true)}
+          status={selected ? "success" : "idle"}
+          message="Thanks. Check your inbox to confirm."
         />
       );
       break;

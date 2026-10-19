@@ -18,7 +18,7 @@
     },
     "usage": "Import { SearchTrigger } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Cmd/Ctrl+K shortcut is ignored inside text fields and dialogs and when another trigger handled it; the hint shows the platform modifier.",
     "dependencies": ["mortar-kbd"]
   },
   "preview": {

@@ -345,7 +345,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "6dd9a794951542ad8fc6c90555d4ae2e4bab53f2689698c285c60f87ef095427"
+        "preview": "c7f2725620f47d30c4e44955e13db674e31993cfc2b3854e9f97ea61ebdb60fe"
       }
     },
     {
@@ -601,7 +601,7 @@
       },
       "integrity": {
         "source": "ef9bea65cc180f9a68ae5ec385d8c30fde764e943b4c174545f93d250c5e12b0",
-        "preview": "3c43a0cec59733cb260ee03ee5dbb4d2b72a746ee45e868a7e4e5358a141555f"
+        "preview": "42cebc0859b222496fe167f14e6e81ea9f64ba8a1e03712fc9689e0ac3dce62e"
       }
     },
     {
@@ -680,7 +680,7 @@
       },
       "integrity": {
         "source": "ef9bea65cc180f9a68ae5ec385d8c30fde764e943b4c174545f93d250c5e12b0",
-        "preview": "c9db6e3837ffafb002fe0211bb77822948bbaf95fc2876784f1c4cbe4b3bae4d"
+        "preview": "ec8c14ac074d4bd6973f23deb5a66cccc49f82b3aa88ec2d238d63ccf25d8181"
       }
     },
     {
@@ -881,7 +881,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "cf0ae71643e1d44b386e99af3a7db28a58212755955d2c7f6bdbfb3ab6f7fbd9"
+        "preview": "f0caaaf0714b3c241b6e18a983d9d161357bd4c3f2113684f6defc3f4ae97dfd"
       }
     },
     {
@@ -1334,7 +1334,7 @@
         },
         "usage": "Import { Callout } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Renders a div with role=\"note\" named by its visible title.",
         "dependencies": []
       },
       "preview": {
@@ -1347,7 +1347,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "20be7121f80221043cc75836d37076cf46a6fd51607a3e91a39e4347e59b062d"
+        "preview": "028b5e1bf2657b0e6a2295355d5253330f4638bef6c7fdff349cb1e0a4eab6f8"
       }
     },
     {
@@ -1766,7 +1766,7 @@
         },
         "usage": "Import { CodeTabs } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Tabs follow the tabs pattern: arrows, Home and End move and select; each tab controls the code panel. A failed copy says so.",
         "dependencies": []
       },
       "preview": {
@@ -1780,7 +1780,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "005a67eb620f424a855eceeae866621cb08526b0c1d537289fb851e482ba4398"
+        "preview": "2bf57253f157bb4238454da9811cd019a5b527383db71c37839ac39740de0849"
       }
     },
     {
@@ -1956,7 +1956,7 @@
       },
       "integrity": {
         "source": "3590666b2277acf606765ab0c07a62a6535dc1e284eb062e3c64beeb5c5034b8",
-        "preview": "474988f60928ee7f2236aad16c44a502b0bb829e2dd609533f707e40e16945fc"
+        "preview": "a21a8cfbbc592d6f055b5ccf02c8e65053f0a9b72fb274893b810af17fd506c2"
       }
     },
     {
@@ -2172,7 +2172,7 @@
       },
       "integrity": {
         "source": "48f0460f5abfd4f8863d04bcea72e1022cdfbdff3eaeccc7b21dd3e43dc1df88",
-        "preview": "c32a2fbccf901164c8462a08a65998575f975f3374f3b3c5746dff423f32c03d"
+        "preview": "e2627a9e69b88ee64ed5e5f5ed75adc01b06c9692b3154a5c106a100cde315e0"
       }
     },
     {
@@ -2249,7 +2249,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "d5df48cf4dea8b6750580e1e70315df3fec05a492e0d91c5e65f7b0e65582666"
+        "preview": "6988dbb1eb26d250228245a829a9c9f04004a3a9682dbd3419b02c7b96ad772e"
       }
     },
     {
@@ -2405,7 +2405,7 @@
       },
       "integrity": {
         "source": "34ca81749e6ff58870a59a60c9a67ea3a18418045dde9d1ac239acac7439614b",
-        "preview": "5c1c6d4b7638abe96fd07b9212ec48dd0e907aaa20e8095de8d60b3e09e9f29f"
+        "preview": "35f336ff4737d5944be05c9b82e3301dd1c7378f131a0377b7e1e2cc3d164c80"
       }
     },
     {
@@ -2794,7 +2794,7 @@
         },
         "usage": "Import { DocsShell } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Menu button keeps its visible name and declares aria-haspopup=\"dialog\".",
         "dependencies": ["mortar-button"]
       },
       "preview": {
@@ -2808,7 +2808,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "75e8247aeac2dda87c1764d0e3f39afd7b978874fdbda522e7bd6ca3a8b95a2a"
+        "preview": "a2deb66f9e6b3c945f34fb12be0399a0b595295b3c37cc6012255ade2488d3d1"
       }
     },
     {
@@ -3359,7 +3359,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "6c3dea76cea174e21b8127c63373ef030fc58899a99bd90091e81cc2dad0db9f"
+        "preview": "9445f2a2f5dbd1afeec6312e38a7dbf0839c216b0e7cedeca8013dc6af3373bc"
       }
     },
     {
@@ -3421,7 +3421,7 @@
       },
       "integrity": {
         "source": "ef9bea65cc180f9a68ae5ec385d8c30fde764e943b4c174545f93d250c5e12b0",
-        "preview": "b9511879c8d1ff0727e50276053a4cdd93a6f0f4692d22b9793e05d4fe2de908"
+        "preview": "b1c94baa04b368e88bf87fe8479f48c55c0d428071551a737af0a034f1fa72a3"
       }
     },
     {
@@ -3587,7 +3587,7 @@
       },
       "integrity": {
         "source": "ef9bea65cc180f9a68ae5ec385d8c30fde764e943b4c174545f93d250c5e12b0",
-        "preview": "084e4b404a82abf764fbb2ec680df11943df42cf277c146ca5f730ccbe470d67"
+        "preview": "bb73814bc0385140d951e873e93c7fe9ef462cc745650b850a2b45597a66cfd8"
       }
     },
     {
@@ -3682,7 +3682,7 @@
       },
       "integrity": {
         "source": "34ca81749e6ff58870a59a60c9a67ea3a18418045dde9d1ac239acac7439614b",
-        "preview": "8e183660abfa856b02c4305ba8701490b192fe1c091de3eb449a09f93bb2aa64"
+        "preview": "213d5532c2a9a72092b05ec5a007c94e7388e3ac9381c97021cb8f421f7a4371"
       }
     },
     {
@@ -3911,7 +3911,7 @@
       },
       "integrity": {
         "source": "ef9bea65cc180f9a68ae5ec385d8c30fde764e943b4c174545f93d250c5e12b0",
-        "preview": "7dd60548af578303bc333aa4c8a19cbb08b8b4bf52daa1701c1005d09478a02f"
+        "preview": "891259c944afd8ae7259c900ffb584dd4aca95ee57f1ff6573cefc2652723469"
       }
     },
     {
@@ -3966,7 +3966,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "155cbb65bb5fe4c1239d35a11b7e930ef2e8878be5219562b6d6a1c0dab3796b"
+        "preview": "d7c836562fdc7fa7d46f99732266b28fbf2e498687de21667d7500c55e68f648"
       }
     },
     {
@@ -4205,7 +4205,7 @@
         },
         "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. The menu button controls a navigation element with a generated id.",
         "dependencies": ["mortar-action-link", "mortar-button"]
       },
       "preview": {
@@ -4639,7 +4639,7 @@
         },
         "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. A persistent role=\"status\" region announces the success message; errors stay on the field.",
         "dependencies": ["mortar-button", "mortar-input"]
       },
       "preview": {
@@ -4653,7 +4653,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "61c6ef9aa34de542ca2f70dd93725931e3e70c9aeec56d3490858266c0b513d8"
+        "preview": "0cd4832e506d48f9d7f7a628ce44f573c25d38d9ec96eeefd1ce49df144d36a4"
       }
     },
     {
@@ -4735,7 +4735,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "eda02f05100c877c65ce243427d09a1930780e9101898f22e4d60e73621e8a0e"
+        "preview": "d9f362d914b0d9dc7c5a58b8bdacc7f8b5e0dd442a0bc47c3dc089586c5b9791"
       }
     },
     {
@@ -5020,7 +5020,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "8ed15e0f78da15e3dae531339a938a661ee5c9854dd1a1c6c88a38abfc08aa6e"
+        "preview": "3432817da67757d14f0e43941e9489f0addb278a708c7be379469ceeaf32b3ba"
       }
     },
     {
@@ -5155,7 +5155,7 @@
         },
         "usage": "Import { PagerLinks } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Name the landmark with label so it stays distinct from Pagination. Arrows are hidden from assistive technology.",
         "dependencies": []
       },
       "preview": {
@@ -5168,7 +5168,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "dd80f9bab1be2068f804f3ea91345e8951fedfe93ab5f84b17f65b48920addbf"
+        "preview": "24464553c262135801a454c7f5a1bd50267c05b8f0f188fa0b37f1cdd276ee2b"
       }
     },
     {
@@ -5309,7 +5309,7 @@
         },
         "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Included and not-included cells hide their glyph and carry screen-reader text.",
         "dependencies": []
       },
       "preview": {
@@ -5322,7 +5322,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "6d653cac7c7c557a6a4972c06cfc7d706506e99ff108ced1ffd46bc6ca2bcb2c"
+        "preview": "6565f587e4bace4d21afa1d01dea9445549e78cec0ab990649b2a13686ae305e"
       }
     },
     {
@@ -5403,7 +5403,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "475b52635ec66533739db5c4bcb5e7ed55674fad1b975883c9ff5d76a2b150b7"
+        "preview": "61d2570521e18d4079c48e35f780403faa76378476c3aa5327b85f90394638a1"
       }
     },
     {
@@ -5534,7 +5534,7 @@
         },
         "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Annual prices show only while the billing toggle is visible. Unavailable plans show static status text and no purchase link.",
         "dependencies": ["mortar-action-link", "mortar-segmented-control"]
       },
       "preview": {
@@ -6153,7 +6153,7 @@
       },
       "integrity": {
         "source": "ef9bea65cc180f9a68ae5ec385d8c30fde764e943b4c174545f93d250c5e12b0",
-        "preview": "d836f499c248289d0e09f1e9ff8f9320915f4ea2678ded8ec98a9ec2e0bb3c82"
+        "preview": "fa3ed53853f99e4025e43816e7e7b18df69f5caeb6f731a1e948ef408b6adc25"
       }
     },
     {
@@ -6255,7 +6255,7 @@
       },
       "integrity": {
         "source": "3ed2dc6f168062f3e2f39ea523f3cc3c30deb475c285fc5750b5fa4203cb8c2c",
-        "preview": "6997f0438a4574588bc9bf27a8a86d3bf50c0d3fd6845c1f746ada8378f906de"
+        "preview": "ac4a4a3084d63a816d40e4f332114c3ca41416a34d0599e789ccd5eec1999f03"
       }
     },
     {
@@ -6409,7 +6409,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "d7e3d010e843b8ed0b91a42e22e7d9e3a1e1aabaea891efe9c4af79ff3444422"
+        "preview": "27f457302f4e1b28f03edec59a77282e89d7515fc5380e1c3ac0c4108accc077"
       }
     },
     {
@@ -6489,7 +6489,7 @@
       },
       "integrity": {
         "source": "48f0460f5abfd4f8863d04bcea72e1022cdfbdff3eaeccc7b21dd3e43dc1df88",
-        "preview": "ab2e2b0ee1b3f69af076354b656eb00112cfc53b0be33fe5335072d3757d2b9e"
+        "preview": "df1b1018c82558d28a1bb4ce66b8f853e546d1df63e4333f77d8d9b68c3fc99d"
       }
     },
     {
@@ -6560,7 +6560,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "f360f27b0d1747b0a7efe996a9bc11853a6969a118ab9f190401c442f4cca81f"
+        "preview": "88b2bdd60bda0e568e23b1de0b35cef05308db406400f7cee21d27594b656e19"
       }
     },
     {
@@ -6603,7 +6603,7 @@
         },
         "usage": "Import { SearchTrigger } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Cmd/Ctrl+K shortcut is ignored inside text fields and dialogs and when another trigger handled it; the hint shows the platform modifier.",
         "dependencies": ["mortar-kbd"]
       },
       "preview": {
@@ -6617,7 +6617,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "4c8c7ae1813304b6019f1f4b535e64907f4f44140ba4e8051f840099829be04a"
+        "preview": "3814c5799bc916594b0ffbe16f5b35bceef89ac6a39904c0be87acc7f1ffdf10"
       }
     },
     {
@@ -7284,7 +7284,7 @@
       },
       "integrity": {
         "source": "3590666b2277acf606765ab0c07a62a6535dc1e284eb062e3c64beeb5c5034b8",
-        "preview": "999334ed426e908658f3790759cf99791e9ba59294121e790ac85cc94fe105c5"
+        "preview": "d5873d5f9ab97fb1a418e52441f851dec6a1f6828fd2e911e34805bc1ecf13ae"
       }
     },
     {
@@ -7429,7 +7429,7 @@
       },
       "integrity": {
         "source": "3590666b2277acf606765ab0c07a62a6535dc1e284eb062e3c64beeb5c5034b8",
-        "preview": "2048207db79a7644ecc95df6685b21f697d14a1187c5ebd23f96c635fe3777d9"
+        "preview": "ddc8ab85d83ee3a665847578ad9d6a7b14ffd2696120980f2b402eeefe799794"
       }
     },
     {
@@ -7577,7 +7577,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "7b9401c1be638c860c861088dae3a44e1f70cc58ae6fbc429d455fa217328c48"
+        "preview": "bb805b918c921c0a58416d3365f17279752646e472697e1995f58caa79345c2c"
       }
     },
     {
@@ -7638,7 +7638,7 @@
       },
       "integrity": {
         "source": "63cf8887ad53d56c24a400841e48009d0cf3d8d57fe497bd25960e38325a8a93",
-        "preview": "650f944e552a0acaa363f87dd469745fd95941885f436fe4b86ca93ab71c5e83"
+        "preview": "2aa6e8d26c5926fcd080e75438ce42fc6e4f81f7686e627ae505d93a8bb79bb0"
       }
     },
     {
@@ -7969,7 +7969,7 @@
         },
         "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Placeholder avatars are hidden because the name is visible.",
         "dependencies": ["mortar-avatar"]
       },
       "preview": {
@@ -7982,7 +7982,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "12fd51b27f863b2d3b56beabee0d17431fdcaa631cdf42b1dcbe9a656dafe335"
+        "preview": "2b6286880c2e9323f67b7be28840dc6d37074c6454c940a46a3bcc9be8e32367"
       }
     },
     {
@@ -8035,7 +8035,7 @@
         },
         "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Avatars are hidden because the name is visible.",
         "dependencies": ["mortar-avatar"]
       },
       "preview": {
@@ -8048,7 +8048,7 @@
       },
       "integrity": {
         "source": "aa35d53184e8d55a9e52dd5da21a0a8dc79041a0767394954c4af52c56f233b5",
-        "preview": "ae53005991dac198c3c558fc17030fb00615bc6295e9f553979286e3c4d83f20"
+        "preview": "3e3f7ecb205781891d70319c1380f92596df2f2acaf45bc8fae0b365c1679431"
       }
     },
     {
@@ -8419,7 +8419,7 @@
       },
       "integrity": {
         "source": "48f0460f5abfd4f8863d04bcea72e1022cdfbdff3eaeccc7b21dd3e43dc1df88",
-        "preview": "6512f537380904a0b0a26ac545103f1437ca240ee96939fb02084089f702e76b"
+        "preview": "7c94073c320c52ead8df924b699e75a66dc1766c72a830bbefe8a74f5ee7d725"
       }
     },
     {
@@ -8476,7 +8476,7 @@
       },
       "integrity": {
         "source": "48f0460f5abfd4f8863d04bcea72e1022cdfbdff3eaeccc7b21dd3e43dc1df88",
-        "preview": "8dbd638e1aba0e00da205c46a9f9df43f5ce4bf11af2fb7cc6ef5276917faac0"
+        "preview": "a3e48b424185d9c356029528d6e9956ba91a9ec6dbd1e89607a838aea18ccd91"
       }
     }
   ]

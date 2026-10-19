@@ -20,7 +20,7 @@
     },
     "usage": "Import { PagerLinks } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Name the landmark with label so it stays distinct from Pagination. Arrows are hidden from assistive technology.",
     "dependencies": []
   },
   "preview": {
