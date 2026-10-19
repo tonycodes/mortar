@@ -920,13 +920,22 @@
     border-radius: 50%;
     font-weight: 600;
   }
-  :is(
-    .m-steps li:last-child .m-step-number,
-    .m-process-steps li:first-child .m-process-number,
-    .m-progress-steps[data-variant="circles"]
-      [data-status="complete"]
-      .m-progress-step-marker
-  ) {
+  /* The last step's marker is filled (ProcessSteps and ProgressSteps fill theirs the same way). */
+  .m-steps li:last-child .m-step-number {
+    border-color: var(--m-primary);
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+  }
+  /* The first step's number is filled (as in Steps and ProgressSteps). */
+  .m-process-steps li:first-child .m-process-number {
+    border-color: var(--m-primary);
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+  }
+  /* Complete circle markers are filled (as in Steps and ProcessSteps). */
+  .m-progress-steps[data-variant="circles"]
+    [data-status="complete"]
+    .m-progress-step-marker {
     border-color: var(--m-primary);
     background: var(--m-primary);
     color: var(--m-on-primary);
@@ -3951,12 +3960,13 @@
 /* Component variants: button sizes and icons, rich dropdowns, notice actions,
    empty-state icons, tab counts and numbered pagination. */
 @layer components {
-  .m-button[data-size="sm"] {
+  /* Sizes and icon-only buttons carry :is(button, a) (a .m-button is always one) so they outrank equal-specificity context rules that load later: Toast, InputGroup action, ProductOverview form and OrderSummary action. */
+  :is(button, a).m-button[data-size="sm"] {
     min-height: 30px;
     padding: 2px 10px;
     font-size: 13px;
   }
-  .m-button[data-size="lg"] {
+  :is(button, a).m-button[data-size="lg"] {
     min-height: 44px;
     padding: 6px 20px;
     font-size: 15px;
@@ -3966,7 +3976,7 @@
     flex-shrink: 0;
   }
 
-  .m-button[data-icon-only] {
+  :is(button, a).m-button[data-icon-only] {
     min-width: var(--m-control);
     padding-inline: 0;
   }
