@@ -98,9 +98,14 @@
         "props": {
           "label": "string",
           "href": "string",
-          "variant": "primary | secondary | ghost | danger"
+          "variant": "primary | secondary | ghost | danger",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "href": {
             "type": "string",
             "required": true
@@ -130,8 +135,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "3ad98f5d5e0fbbdbfee2818b92f741ea6d5990e68ba0317dd70d8279d693af99"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "87e1343bccfb2624af6cabe7d37b74b7255984675603b01689c27fb7f2c97ad9"
       }
     },
     {
@@ -202,8 +207,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "3e7429bba9adc3c700c869bb19063a180e31ef37d98d369979de7657220d5c48"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "1a2ded6d68300c576b28f7f2fa0d2651d526d0d66c8b95261f2976bb89f64e8a"
       }
     },
     {
@@ -252,8 +257,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "fccd4ef685663e46a4acec7e608912b186b2118e8eba692472fdd9ac2127a33d"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "bebf84e6641a5115a77b13e9d735d04f5656e8a37e028aff69567e3e156e2fd1"
       }
     },
     {
@@ -344,8 +349,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "cbf9f506c4c2587e74165ab86f62d5f85a0ddd09e4386c5b4e46250745c47671"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "8e61a813ce29f95ea2a89b005ca91a1a711ea147f9d95ceae6bfc6b49e4671cd"
       }
     },
     {
@@ -442,8 +447,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "dea17ba1b9643cbbd7d7d8786c5dd11ea61b6168f1bf0e55e70aecec9886a5e9"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "e1d0cfafbb272bc63ecbb1755f9a097fb55836160fa41aba9e497258b50dc426"
       }
     },
     {
@@ -466,9 +471,14 @@
       "contract": {
         "props": {
           "value": "light | dark | system",
-          "onChange": "(value: Appearance) => void"
+          "onChange": "(value: Appearance) => void",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "onChange": {
             "type": "(value: Appearance) => void",
             "required": false
@@ -493,8 +503,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "0f41c4d9ab7c3185eebe91d14b249dd08b1967835ac65d30f7572071515b49c2",
-        "preview": "0a0ed4874402ed77e52e8fcec893d79c3818c3ee4a94bfae5371db98d916d3da"
+        "source": "28d9458577a100396f203dad702175d76c72db9b83d8057e7eaa16f2242acbca",
+        "preview": "e48c5fbf515d7814b15889fff3a3d9f596ea20ca1abfbc3c677bb43ca82ec6c5"
       }
     },
     {
@@ -544,8 +554,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "16b1300389e04ac7175086c070a9d7fa4597126e710da79b76bc3957ca47e985"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "a4242b00162358d455708cbb1a9e240bc539269564be982b5137ca65cc82d552"
       }
     },
     {
@@ -600,8 +610,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "8afa545519a3a53d185a5bdee4e45ffee4b769401c8107a3ac5bac1ca43cd40f"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "9b932a84a64a62d6ce85b66d20f567836b628e3ca11d4a58780c0762967d187a"
       }
     },
     {
@@ -679,8 +689,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "ea64d24d44e34de7692f63d8ca42d58a387fc62658905aa4373cc194753be05e"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "cb244780c8059d7ddd6bb5c3419e6c603fe1446f3777ad1e85ad0816a2ccaf79"
       }
     },
     {
@@ -703,12 +713,17 @@
       "contract": {
         "props": {
           "children": "ReactNode",
-          "tone": "neutral | info | success | warning | danger"
+          "tone": "neutral | info | success | warning | danger (rendered as data-tone, omitted for neutral)",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "tone": {
             "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
@@ -730,15 +745,15 @@
         "states": []
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "5d893d1c63d74ec3c3e1e41f604a981ac15002557e28c0bdd94a15cdb64335ca"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "e036fa1afb4aa4e707d50ca230e2905796e15e6dbaf88ad69db62b9be63271f1"
       }
     },
     {
       "id": "mortar-banner",
       "logicalId": "banner",
       "name": "Banner",
-      "description": "Mortar banner: a site-wide announcement bar with an optional link and dismiss button, in inverse or neutral tone.",
+      "description": "Mortar banner: a site-wide announcement bar with an optional link and dismiss button, in the inverse or default tone.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.5.0",
@@ -758,7 +773,9 @@
           "onDismiss": "() => void",
           "label": "string",
           "dismissLabel": "string",
-          "tone": "\"inverse\" | \"neutral\""
+          "tone": "\"default\" | \"inverse\" (default \"inverse\")",
+          "id": "string",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "action": {
@@ -769,10 +786,18 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "dismissLabel": {
             "type": "string",
             "required": false,
             "default": "\"Dismiss announcement\""
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "label": {
             "type": "string",
@@ -784,7 +809,7 @@
             "required": false
           },
           "tone": {
-            "type": "\"inverse\" | \"neutral\"",
+            "type": "\"default\" | \"inverse\"",
             "required": false,
             "default": "\"inverse\""
           }
@@ -804,8 +829,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
-        "preview": "1e3bed8787252117e89384dd2e7813b8f166ecf39825bf1b08e1d47957a49eb7"
+        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
+        "preview": "0c09adb83033f7aabca7cea734f53dd395e4d9148152461a252d53d2a6ab29d3"
       }
     },
     {
@@ -880,8 +905,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "216f8d2dcd22489e8ea47dcffd2c0e09fb34346d84926aa09693d763e22d1973"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "0a65a7bfe711e07ac70c99baeab1ccc3b328914947ad42ecc84e2cab1b4a9db4"
       }
     },
     {
@@ -937,8 +962,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "ee84bc43d0e10bae6050e7290745f20edc47529820b07d301d169d7631347ff7"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "6fed85549602c6ee61a1f9b64794e9da7611f83b122c501794b7f45b19eb2635"
       }
     },
     {
@@ -961,9 +986,14 @@
       "contract": {
         "props": {
           "label": "string",
-          "items": "{ label: string; onClick?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]"
+          "items": "{ label: string; onSelect?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "ButtonGroupItem[]",
             "required": true
@@ -988,8 +1018,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "d94eeb817b90f31d66518813499625c3c090d48adcad718d32920b8d2aa80c97"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "32acc0d6908a690ef5f210482ed3ef863c45329a972775d4b35063891452d212"
       }
     },
     {
@@ -1013,7 +1043,7 @@
         "props": {
           "children": "ReactNode",
           "variant": "primary | secondary | ghost | danger",
-          "loading": "boolean",
+          "loading": "boolean (busy: aria-busy and aria-disabled, ignores activation, stays focusable)",
           "disabled": "boolean",
           "type": "button | submit | reset",
           "onClick": "MouseEventHandler<HTMLButtonElement>",
@@ -1021,7 +1051,7 @@
           "icon": "ReactNode",
           "iconPosition": "start | end",
           "iconOnly": "boolean",
-          "className": "string"
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "icon": {
@@ -1069,8 +1099,8 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "b8fd7b33a255efc8c4017fe688da4119834f9ddaf01ae765ff92ac91f5974211"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "9f2203b516a1ecc86b7fb97816350eb3667a59418799ceca8de53d077fa478fc"
       }
     },
     {
@@ -1219,8 +1249,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc72c2df70a7993a490f46f7546ebc3038dd1b9490e692e4c41f7555815afbae",
-        "preview": "03ff7e4db99216002abb6b22a58858e6afbbaa20ea0eb9f70b9d497148f08908"
+        "source": "6745ff0cfe2357f842aa103f4deae2c99e831082a42149e29eae678315c14466",
+        "preview": "0f074a80a3ca85dd7535b925c852350212b981a5ea4d46336eed771ffb914106"
       }
     },
     {
@@ -1301,8 +1331,8 @@
         "states": ["surface", "inverse"]
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "b015f79f63172c6983659cc769760865e8086a56b690980d78bf8743e32e1dd1"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "5e79bc362e727797f456d82f0b64cedaa9079421fe4523990a70dd0fca2c0b1c"
       }
     },
     {
@@ -1367,8 +1397,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "00ab8c2938b6bda9ba3d7a04438150209fa7d2b7873fc628ac7b7b257d3cd1e3"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "1f4657a3a79c138f04111b512821355784c5bb042c08b215d182cb3a23ac3d9d"
       }
     },
     {
@@ -1456,8 +1486,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "1fc7d11bb63c5754d0b9216bfa082826d73f586f93f86676fba07b23b406e12e"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "991fda4e7fc525067884f87f12a0cb8fe03d37606c8b4f576228e92984b7d588"
       }
     },
     {
@@ -1545,8 +1575,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c13138ba7584bf348a22446fb5e93fffaeeee48accc98dc8c0cf1eefb3980e2",
-        "preview": "3adca032a2a915de2ab3e796599352d022311f5fcba59c5e18abdb203a6d9199"
+        "source": "42114c1823c6a96a2247c1bbd2e067cffa16f933be9179b284a77de29e1e4f39",
+        "preview": "ca54ea80074da9dabf45f3862795531cc78f7c44c3930b858b74c3a9d72af662"
       }
     },
     {
@@ -1607,8 +1637,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "e5f473f77fa1230efd6b15876d9961d63ab966b958d5a2d9603f8c34d4a61a2b"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "648ac2c2838521bf9bbefdb3a0985708d0e8a16b19ad3cec680fa09e58b31699"
       }
     },
     {
@@ -1639,7 +1669,8 @@
           "label": "ReactNode",
           "checked": "boolean",
           "onChange": "ChangeEventHandler<HTMLInputElement>",
-          "description": "ReactNode"
+          "description": "ReactNode",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "description": {
@@ -1666,8 +1697,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "d5e8caeb48c29b5e914b64c3379132f023e2166c02bea43a5cc3af2c34729966"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "f7cf4ffce1a4bd280b872abb07efd7049b9fdd73c964d3623bbeeebc7c6a9bb8"
       }
     },
     {
@@ -1690,9 +1721,14 @@
       "contract": {
         "props": {
           "code": "string",
-          "label": "string"
+          "label": "string (visible caption; names the figure)",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "code": {
             "type": "string",
             "required": true
@@ -1717,8 +1753,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fcdcea889192bd25251de1fd6c70f4db8032aeea2b9a4c15ac35bae63732b646",
-        "preview": "ed979be5da3e83c2c3818ab42802f55b888ec6e881ba31dde7d2dc2f2501efce"
+        "source": "0ee644fb3be8bc7a41d157ddc4c60fb34410a2115e94e2fb7ec3abd8362a5424",
+        "preview": "d2daeb64c5636f4b86483176ce069c9641c6919974775bfcfbf50d6b9c53f383"
       }
     },
     {
@@ -1800,8 +1836,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "d4fda97853a0e2cfd568a28321817e2d708969f7ba1deb91e63885e6cccf40e2"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "400aee800c91d3b181cc3bea426a344bdd7a553199974cce64953cca7c8dd11a"
       }
     },
     {
@@ -1829,20 +1865,26 @@
           "onChange": "(value: string | null) => void",
           "placeholder": "string",
           "hint": "string",
-          "error": "string",
+          "error": "string (announced when it appears)",
           "disabled": "boolean",
-          "emptyLabel": "string"
+          "required": "boolean (aria-required and a decorative marker)",
+          "empty": "{ title: string; description?: string; action?: ReactNode } (default { title: \"No matches\" })",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "disabled": {
             "type": "boolean",
             "required": false,
             "default": "false"
           },
-          "emptyLabel": {
-            "type": "string",
+          "empty": {
+            "type": "{ title: string; description?: string | undefined; action?: ReactNode; }",
             "required": false,
-            "default": "\"No matches\""
+            "default": "{ title: \"No matches\" }"
           },
           "error": {
             "type": "string",
@@ -1868,6 +1910,10 @@
             "type": "string",
             "required": false
           },
+          "required": {
+            "type": "boolean",
+            "required": false
+          },
           "value": {
             "type": "string | null",
             "required": true
@@ -1888,8 +1934,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "eb571e8ffb5248f2d25dda14dce7fbdd7df6b1d4822f30b2f24fababc031a784",
-        "preview": "0098719df222dcd3cc2d5a2d44a0e6f629bbf26aeb1e64837aeb4d3ca69fc016"
+        "source": "6ffe242d9091009dbb1475ade9134b37a5322b077a362ae8dbec063150878909",
+        "preview": "57ec82e64fec16a64622c4e6a8b2416c2c66d316a1beef1a3800abbfae8d8d49"
       }
     },
     {
@@ -1976,8 +2022,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "42f47ccef61616096638c0e1b1de72d31d3a796bbe256b61fd1d3e904dd4f4a4",
-        "preview": "5f6e3e195652746e46a8ded2be40076f364491973e7213235edcc2d31060a89e"
+        "source": "f9ffdd2666393b073aa1b55a02ca04aa0e808e3e79b70304126bb7b75d5e741b",
+        "preview": "857e85eae0b3c8162db4f9f89904060b650a3d136a286be06558fa45b1318da6"
       }
     },
     {
@@ -2001,19 +2047,20 @@
         "props": {
           "onSubmit": "(value: string) => void",
           "value": "string",
-          "onValueChange": "(value: string) => void",
           "label": "string",
           "labelVisible": "boolean",
           "placeholder": "string",
           "submitLabel": "string",
-          "submitting": "boolean",
           "avatar": "ReactNode",
           "actions": "ReactNode",
           "preview": "(value: string) => ReactNode",
-          "maxLength": "number",
+          "maxLength": "number (remaining characters are announced only near the limit)",
           "hint": "string",
-          "error": "string",
-          "rows": "number"
+          "error": "string (announced when it appears)",
+          "rows": "number",
+          "onChange": "(value: string) => void",
+          "loading": "boolean",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "actions": {
@@ -2022,6 +2069,10 @@
           },
           "avatar": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "error": {
@@ -2042,17 +2093,22 @@
             "required": false,
             "default": "false"
           },
+          "loading": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
           "maxLength": {
             "type": "number",
+            "required": false
+          },
+          "onChange": {
+            "type": "(value: string) => void",
             "required": false
           },
           "onSubmit": {
             "type": "(value: string) => void",
             "required": true
-          },
-          "onValueChange": {
-            "type": "(value: string) => void",
-            "required": false
           },
           "placeholder": {
             "type": "string",
@@ -2072,11 +2128,6 @@
             "type": "string",
             "required": false,
             "default": "\"Comment\""
-          },
-          "submitting": {
-            "type": "boolean",
-            "required": false,
-            "default": "false"
           },
           "value": {
             "type": "string",
@@ -2098,8 +2149,8 @@
         "states": ["error"]
       },
       "integrity": {
-        "source": "685f909d7484cdea8116a59d77dea9841528d7527a7d780d299db3ef7bb0297e",
-        "preview": "1cce680d782699a7cddbc3a1e607f8a05709ec3f1650f00a5d3464c812d4cf55"
+        "source": "e21f26887b43b88cd2ab3dc2557e74c59efea71554dadc4cb469e6ac8744378c",
+        "preview": "58eb0815607d8b82e8c42a9ec7de3786022ed7dc627c26eddbb63fe6564e111f"
       }
     },
     {
@@ -2129,14 +2180,19 @@
           "confirmLabel": "string",
           "cancelLabel": "string",
           "confirmationText": "string",
-          "loading": "boolean",
-          "destructive": "boolean"
+          "loading": "boolean (the confirm button keeps focus and ignores activation)",
+          "tone": "\"default\" | \"danger\" (default \"danger\")",
+          "className": "string (on the dialog panel)"
         },
         "propTypes": {
           "cancelLabel": {
             "type": "string",
             "required": false,
             "default": "\"Cancel\""
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "confirmationText": {
             "type": "string",
@@ -2149,11 +2205,6 @@
           "description": {
             "type": "ReactNode",
             "required": true
-          },
-          "destructive": {
-            "type": "boolean",
-            "required": false,
-            "default": "true"
           },
           "loading": {
             "type": "boolean",
@@ -2175,6 +2226,11 @@
           "title": {
             "type": "string",
             "required": true
+          },
+          "tone": {
+            "type": "\"danger\" | \"default\"",
+            "required": false,
+            "default": "\"danger\""
           }
         },
         "usage": "Import { ConfirmDialog } from @tony-ui/mortar. Compose with the public typed props.",
@@ -2192,8 +2248,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
-        "preview": "a247dba7bca1cd51df5e2be84746f22ed33fba2e2d5f1e2e5f9ef288e00d835d"
+        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
+        "preview": "7eb3f27bd3115b04480686b87ed2061f7bc38130fb97a7e37717dfd6bfca93a0"
       }
     },
     {
@@ -2269,8 +2325,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "f614dc443cd3b028be5c30d1c5f5d3e5e63a589d6a985a0822151d8517674fb3"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "2579203ef20dee18e56ecf3de8b70a66a636669f1902ce9bb0318860f38913bc"
       }
     },
     {
@@ -2332,8 +2388,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "b713499e760b44bc966f7e58ccebe5f28d600e07ab9208d3f9ece882a5cedc98"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "38110a7c2ae41c3e449c195ea9223281946a38f28031faa98279ae0653744e47"
       }
     },
     {
@@ -2425,8 +2481,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "6bd67eaaf58f29b581c192ee960550d843e87758be49e83a8ec48da045ee7b14"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "7ab02263c7f1929d0c2590a198a1c5fd7ffa4344ad9d9afc508c65fe21b3f45b"
       }
     },
     {
@@ -2582,8 +2638,8 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "528b496090a7e9a5c23a20cdbde169eec3f8f950b5b5be1095c686b031e21743"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "b71d4bd0c47271c71935e72a26fae38e255f82b83cd385917ad11ef1d9179bdc"
       }
     },
     {
@@ -2649,8 +2705,8 @@
         "states": ["long"]
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "a71ee4342ea9ea7923bcee827584a4361e8d39e19ffbd10656bc25ef451a0329"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "7579cd250cec8fd7cb299ea84504a4cd2e09694cf409fdfd080273af2852acd2"
       }
     },
     {
@@ -2706,8 +2762,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "cc55ca43a183971fa82d1467317a87c9432d22237a6b29dc013c7af76b34a116"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "7be8c8eb936f6dd505aeaffe540e9512ac0478fd45d0de86394fa48d81d852cd"
       }
     },
     {
@@ -2828,8 +2884,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "91f2f9b29d10a1c831996fe4243be46df6371c81c9dbbd92a4d53a62d87d5caf"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "7629a369c7ce42af053e3f0052f9c2fcaf0d83caad2d3df2679b2235bd187476"
       }
     },
     {
@@ -2857,13 +2913,18 @@
           "iconOnly": "boolean",
           "variant": "secondary | ghost",
           "align": "start | end",
-          "header": "ReactNode"
+          "header": "ReactNode",
+          "className": "string (on the trigger button)"
         },
         "propTypes": {
           "align": {
             "type": "\"end\" | \"start\"",
             "required": false,
             "default": "\"end\""
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "header": {
             "type": "ReactNode",
@@ -2907,8 +2968,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "f071b0db6a62aa0f1db1c34107dad898ddf30159a4b3d581f7027a67f3a71d6d"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "da21e634d54ca2e70286d9c58a1700e4614c2d2a68f9b26bb6cc3ac0d41903f4"
       }
     },
     {
@@ -2936,8 +2997,10 @@
           "icon": "ReactNode",
           "dashed": "boolean",
           "align": "center | start",
-          "headingLevel": "2 | 3 | 4",
-          "children": "ReactNode"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (HeadingLevel; default 3)",
+          "children": "ReactNode",
+          "id": "string",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "action": {
@@ -2953,21 +3016,29 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "dashed": {
             "type": "boolean",
             "required": false
           },
           "description": {
             "type": "string",
-            "required": true
+            "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "3"
           },
           "icon": {
             "type": "ReactNode",
+            "required": false
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "title": {
@@ -2989,8 +3060,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "630ddfff4a6198ee137ff36e9fdbbf1520af247aa80cb83667fc6b46db618f4f"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "6cdd172a62697b9edd738f96391fe7de5bb2f9dc8cf15fc85eb824ff077816d0"
       }
     },
     {
@@ -3067,8 +3138,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "ffe9d42ba87094b12dba591db3eb9d9a501ded28391f5043e0fdb99136955db1"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "5cf40923de97f332f78eea9d68177e259b4ec9cd200335b32a4ada483c66f752"
       }
     },
     {
@@ -3160,8 +3231,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "49120266048be8965584bd7dbd1c93744a9fb8036f7753451757339cf8ce0839"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "f222230e07f4b8ec5429e61f912836b89295d5ad88166e7f0faabceb218314af"
       }
     },
     {
@@ -3259,8 +3330,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "6850c6cd293fb7f10b088988315683002d28fca1638e1df794629c01db638954"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "239ee1a44447e9ec38279eebc64844dbd0fc4a194751d71f9e4dd4b9d1b31607"
       }
     },
     {
@@ -3285,12 +3356,17 @@
           "legend": "string",
           "description": "string",
           "disabled": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "description": {
             "type": "string",
@@ -3319,8 +3395,8 @@
         "states": ["disabled"]
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "86e890fe48954676fe9dbf502046a7f017cc031f424bde77ce90dee2b430f822"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "e715e44fd27c298366bf676959457b825f94846d2189dca49e61bbc3bfbc9d38"
       }
     },
     {
@@ -3379,8 +3455,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "b09a6e5d5369040077ff2ad10968509cc47a2c9387b969d6efa28c957e2113f4"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "611490ba41e9f5b668d478baecc0f312e107f144d522702ac6c488051e860c7a"
       }
     },
     {
@@ -3441,8 +3517,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "da184287732a3c4b3f77f535727da7f43d8b8d175901885e786ad834d9f80e0e"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "69a34f21f4b81a1b6d46699e57097c717d01316c4b246cbbe518b5c3a1b8f47a"
       }
     },
     {
@@ -3539,8 +3615,8 @@
         "states": ["heading-3"]
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "fedb2a444da0cca3c18e38e5a620bb5919273899a28da597c788824d1d8cbe52"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "c6b291ae40afb8e37c84895c852e7562b23498b431f71e8cc297406b7f26f0d6"
       }
     },
     {
@@ -3607,8 +3683,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "b2e2f66a64dc7e8988ac651420328d138ebf67d503e639e1c4552d8831694a28"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "106d80bfc9f5b6252ea027a409f3e0ff033358befe796156aaf2c0e196dd5402"
       }
     },
     {
@@ -3702,8 +3778,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "b3567af594b567ab47baf3a48bfbcb4b39268de93c98fd740a654e8b8c5084d2"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "03fdb63840c804871c483fa16af82fe40069813823556f027933aecea64b7fc0"
       }
     },
     {
@@ -3795,8 +3871,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "1d989ca8582759a9a890f10a06a1bc122dc175c6654d4c707b0fd49be6718df6"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "91188333f913c43b1288858b2bca8d2a980f81ad8d5b2057df42175776b8f56f"
       }
     },
     {
@@ -3828,14 +3904,15 @@
           "value": "string | number",
           "onChange": "ChangeEventHandler<HTMLInputElement>",
           "hint": "string",
-          "error": "string",
+          "error": "string (announced when it appears)",
           "prefix": "string",
           "suffix": "string",
           "leadingIcon": "ReactNode",
           "trailingIcon": "ReactNode",
           "action": "ReactNode",
           "id": "string (defaults to a generated id)",
-          "className": "string (applied to the input)"
+          "className": "string (on the root element)",
+          "required": "boolean (native; adds a decorative marker to the label)"
         },
         "propTypes": {
           "action": {
@@ -3886,8 +3963,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "1e22030543703cac0f08972457f4554a97a92b136404536a610abada0206c4fc"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "72bc432d0d8b9ecbe19c0a5cf76678c23006c474659579efabecafa89cfc40cf"
       }
     },
     {
@@ -3931,8 +4008,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "34567ebd519119d1b0471ccd1dceedf2f442c739571b93e84fdf5e25d4f75495"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "861f753f696e7d1b7117b0911e249e55bf4742cb0b6b1925e4153c6235d74a7d"
       }
     },
     {
@@ -3986,8 +4063,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "ae8d933a884f2c1cd2ffef070a54eddf4ff6597cbf37c9e34a8e922094456de9"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "1fdef73ba3f01293475f7a729c30a273fddd5e2fde8308c0065e73cd119bfeb7"
       }
     },
     {
@@ -4015,10 +4092,16 @@
           "onChange": "(value: string | null) => void",
           "placeholder": "string",
           "hint": "string",
-          "error": "string",
-          "disabled": "boolean"
+          "error": "string (announced when it appears)",
+          "disabled": "boolean",
+          "required": "boolean (decorative marker; the label says \"required\")",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "disabled": {
             "type": "boolean",
             "required": false,
@@ -4049,6 +4132,10 @@
             "required": false,
             "default": "\"Select…\""
           },
+          "required": {
+            "type": "boolean",
+            "required": false
+          },
           "value": {
             "type": "string | null",
             "required": true
@@ -4069,8 +4156,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "eb571e8ffb5248f2d25dda14dce7fbdd7df6b1d4822f30b2f24fababc031a784",
-        "preview": "3e4d6debc8fec489dec285621dcf6af8a8ad0c3e51639b86958f604c80ae274b"
+        "source": "6ffe242d9091009dbb1475ade9134b37a5322b077a362ae8dbec063150878909",
+        "preview": "c23ffb3bb0ae025364dfba490a11d039ffa48bb5f31dd1986e619edf69fd722e"
       }
     },
     {
@@ -4157,8 +4244,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "c745b9da68e1ce047e51404218a0c27c31884916d242f2e3fdb6162346d0dc4f"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "d7327660b54abce6ab9a65eba8558340679879d9d76aab05fdf43fa92e2da12b"
       }
     },
     {
@@ -4239,8 +4326,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "3612ef2b00b9fe53d0ca8ed360be6c07db78c4c1d09ed2aedcbd0bf7e6895eb1"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "e6aeed1f6f97e2454ef89081ff0355f791a115731a90cb7655383e3d3f3ac429"
       }
     },
     {
@@ -4306,8 +4393,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "b5f1dfa855781f0379307414788802bba4dad021f6445028d0fa5e6b15980ea7"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "e83a1a5f510e78c6aebbede5798aa51f4f2a72a7e9f88c4b414da97e13abcf1b"
       }
     },
     {
@@ -4362,8 +4449,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "0c5f4807074533f86286d1f097fde0c68bbdceb47789968385bca22cd55df57e"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "03fc1b346ce7dc1631fb9f898ee66f4fc5869e761dad162b04bd4759421444ba"
       }
     },
     {
@@ -4433,8 +4520,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c13138ba7584bf348a22446fb5e93fffaeeee48accc98dc8c0cf1eefb3980e2",
-        "preview": "276d68ef67d24917b08b0ce2003aaa75baccf3fcd8053793405f502af009824f"
+        "source": "42114c1823c6a96a2247c1bbd2e067cffa16f933be9179b284a77de29e1e4f39",
+        "preview": "22f3fb1ed9facce7320829bcd1795255f64bdeb40e24819373bc92366c91f10e"
       }
     },
     {
@@ -4461,7 +4548,8 @@
           "onClose": "() => void",
           "children": "ReactNode",
           "actions": "ReactNode",
-          "size": "\"md\" | \"lg\""
+          "size": "\"md\" | \"lg\"",
+          "className": "string (on the dialog panel)"
         },
         "propTypes": {
           "actions": {
@@ -4471,6 +4559,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "onClose": {
             "type": "() => void",
@@ -4505,8 +4597,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "bc6c17ad57c0f9b472a85b63bfed24ad36de428aff81751f771f8c13f5ec8f40"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "65ae25ee68c031a4583637d897ae00ab4c5f37e9fd92c36d6d60b93002a3ab46"
       }
     },
     {
@@ -4584,8 +4676,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "314a485d7d4bf7e6616250a53c888bcf692a5e22d37b7ce24c19c03adc7c2860"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "453b3fe90ab5a00a7ab30b98ea0987834ddbdaa5e915e962b458fc2cc6313327"
       }
     },
     {
@@ -4673,8 +4765,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "a9a69a672059b59a2fd8979c96e9d7e21dc5e73a8eb3d23a15105aba03e0f8dd"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "02af9e3ee117f5f1dd70297b5b6e419ac70887077643b2e456718b509fb9d20a"
       }
     },
     {
@@ -4755,8 +4847,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "ddc74781bce99263ce0caf4caf61875abf34e4d83dd28a7fcb6ee3216ec95c95"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "4b33afefa35309dedf6b1c9ef600b1a59cbb0cb112767ecba0ebdc2796010864"
       }
     },
     {
@@ -4780,11 +4872,13 @@
         "props": {
           "title": "string",
           "children": "ReactNode",
-          "tone": "neutral | info | success | warning | danger",
-          "announce": "boolean",
+          "tone": "neutral | info | success | warning | danger (rendered as data-tone, omitted for neutral)",
+          "announce": "boolean (status, or alert for danger; announced when it appears)",
           "actions": "ReactNode",
-          "onDismiss": "() => void",
-          "dismissLabel": "string"
+          "onDismiss": "() => void (focus moves to the next control)",
+          "dismissLabel": "string",
+          "id": "string",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "actions": {
@@ -4800,7 +4894,15 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "dismissLabel": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -4833,8 +4935,8 @@
         "probe": "notice"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "599d691dcaa1fced988d3a339e55083401131b5cb80aece8c968970fecaa4e1c"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "add357f99a946c959fe39032ebf13b0910524d06df34ce0bd6e4f2c805d7b276"
       }
     },
     {
@@ -4900,8 +5002,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "931be66cf4e5637c7b4a860c5bacadfaf5e59572dcc5dcae66d1e2dff1bd47e7"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "19675e6f905dc4d7c4d9972e122a93c72b2d317180510bb4c5cf57af67984ec6"
       }
     },
     {
@@ -4982,8 +5084,8 @@
         "states": []
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "0d3b467bef0a08d33cac59f0cde2b3c70e3e6d1c932a40f5f5bf0edd05cec85f"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "46b27f76756b0bf01a676f24c051785b3735dffcb25bea405c66af90c7856045"
       }
     },
     {
@@ -5054,8 +5156,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "692bc031f0a5246d766dc52537b644a5168dd3f99ed91e29b3895436aa477b70"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "decea82836e5437788d35c30aec74a7ba14d5295f1edf5247f01df5b643f0add"
       }
     },
     {
@@ -5136,8 +5238,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "91272e77f62c64641e891fa444d7819ff6379e2b4ee2bc6a0148e7ff7d254f10"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "55446cc1a520e642aedb6aff6266e27bc1275a80389fd4b7156d300a62f16319"
       }
     },
     {
@@ -5202,8 +5304,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "02e4385ebb9c007111c2e635f60ce6c1b39755c6e31aa65b991c58cc42338d28"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "beebf03d2440cffc434ded9257b56c62123cb6e583b7a76943152cebce6b0bbc"
       }
     },
     {
@@ -5275,8 +5377,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "472e7d7fd6c737eb5c26c94c01e742026f5126138afb4666f7cf837a9c5d2554"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "b53bb210c7b1e694c1c1a33b26b31a451481c434f485494d5d7961754b72524c"
       }
     },
     {
@@ -5356,8 +5458,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "f568b0c0b3d96ebe06b523efc9c2c1cb69ed7d36148d3aad951cb12af0d243fd"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "9c73ed520a1e2cd9b8ea4a8eb3639f805ebf22285194c54fe27f29a375a67b5a"
       }
     },
     {
@@ -5437,8 +5539,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "208d51a846e6486bdf4e7337ccc2c2d1a7d4f3e58c03b357d7c32c3e05ac15a6"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "3e87bca2aa357acff15d738fac96c287d05b53c1e44b1e81c984ca99a1d8f281"
       }
     },
     {
@@ -5460,15 +5562,25 @@
       },
       "contract": {
         "props": {
-          "title": "string",
-          "src": "string"
+          "src": "string",
+          "label": "string (accessible name of the section and frame)",
+          "id": "string",
+          "className": "string (on the root element)"
         },
         "propTypes": {
-          "src": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
             "type": "string",
             "required": true
           },
-          "title": {
+          "src": {
             "type": "string",
             "required": true
           }
@@ -5487,8 +5599,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fcdcea889192bd25251de1fd6c70f4db8032aeea2b9a4c15ac35bae63732b646",
-        "preview": "315fddc7d76ed032339e6dda3a559e4af0d7bc8300cbeb5dec437f769b9651c7"
+        "source": "0ee644fb3be8bc7a41d157ddc4c60fb34410a2115e94e2fb7ec3abd8362a5424",
+        "preview": "ed4be8d3ace5893a4befad6cae984f079d6f6d9b7178aac925a0e8a540138785"
       }
     },
     {
@@ -5582,8 +5694,8 @@
         "probe": "pricing"
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "b689ab104584d14c746ad7e6415182cadff2aa326a4d264ce9462cabc21ee6d7"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "fbb54efd314550dcae56367d0ec4bfd2c8562910e7f22a06bc89cb3329c406f8"
       }
     },
     {
@@ -5664,8 +5776,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "670e9cb2f13e9bfcb7fcbddc53f9bbb96aafb89ea722fd8e318a0880ae70ccdb"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "112a55c9241e956a3a6624c49a677a2a984a425ad38ea862adb7495b0f64e588"
       }
     },
     {
@@ -5736,8 +5848,8 @@
         "states": []
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "9ca747020219a73fa1d8d1d6b3064ce5f4cab60dd0bfa4ee1f45a41ceea1531f"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "b4d4bc08d346009af60af1dc70a8d2db6992af5b62ddcaeb061a1a14de747a98"
       }
     },
     {
@@ -5814,8 +5926,8 @@
         "states": []
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "fac94d6f6f70c6765ad37aedef027f4467b5c4cb56fcf42aebdd0ce44c670980"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "040ff4f77ee360a176bacd4b7a7ecac72f4ec4c9dbcd7cc2147e344b79343c97"
       }
     },
     {
@@ -5948,8 +6060,8 @@
         "states": []
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "29cd93555453576ebe4d2864f1b7b96f3221aa454e3e38f9ac549f038aaa51fd"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "f23816f24e2aabdf7fccd85a0aac940bf7878dfe7094f7195d6a704081874901"
       }
     },
     {
@@ -6084,8 +6196,8 @@
         "states": []
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "d7d263cae7b3cfdcde89623a4303f938d93771d9129710e63c16198b88b0ea96"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "76301a6ee72f3a1dcc9dd54033cc00dc452cc366bd8ceefb5c3fff04147b08d8"
       }
     },
     {
@@ -6171,8 +6283,8 @@
         "states": []
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "ef8a6f41112887754dfc7d769ad9b3e9c65c23c02d26c7155a0b8154096e7b52"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "00973211d3dc08c45af5c88bb4667b2748c0cb22e3141a41695c29b21f152c69"
       }
     },
     {
@@ -6238,8 +6350,8 @@
         "states": []
       },
       "integrity": {
-        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
-        "preview": "360c724be4b1820e17df5b0f975b355084e836f55643148d16276b708a2ee6a4"
+        "source": "9acddde7c7a26d5c10ddfa2e9e15fd41907cfb6dc8c865765ef6ee2573092050",
+        "preview": "7b0fbfcfd5cb2a7e0aed4d6fc22e5d26b891cc0c0468cdeb9f2b1427253535bc"
       }
     },
     {
@@ -6295,8 +6407,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "78ff4fcd6f7c1ae4402d5e3ddb12fada1ace7f2179de806a75c578903e03d627"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "a68e149b4c5aad672813b8e1c6bc8c881df55609d98e962548814f3f8512118c"
       }
     },
     {
@@ -6340,8 +6452,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "7d09cfac1a44218b02a4e715a5c19fa9c5c1b8172deedec2824a9c6acb197e92"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "363b7ef50304ebe3dfaf741f632d9f03410f84373530d1afcefe9dd90409ea9b"
       }
     },
     {
@@ -6374,9 +6486,14 @@
           "value": "string",
           "onChange": "(value: string) => void",
           "options": "{ value: string; label: string; description?: string; swatch?: string; disabled?: boolean }[]",
-          "layout": "\"list\" | \"grid\" | \"swatches\""
+          "layout": "\"list\" | \"grid\" | \"swatches\"",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": true
@@ -6418,8 +6535,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "3961c9318c77d931dcf3123f12f725d3c37319aab8b6411c819a66786ca7dead"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "c7bf9a4f83774ec45922f6a22b0a5e4c891db02280ae603a74117d90a9bbf2b3"
       }
     },
     {
@@ -6494,8 +6611,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "100d97cd0a62467053b92c8d756915e4360f6d369bf26b49738ea6b0c51a0979"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "a09a3246e6f226a6a931dab02ec0f2f55f46c56d820820b6792c47a3c8e741cd"
       }
     },
     {
@@ -6523,13 +6640,28 @@
           "discardLabel": "string",
           "onSave": "() => void",
           "onDiscard": "() => void",
-          "saving": "boolean"
+          "loading": "boolean",
+          "id": "string",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "discardLabel": {
             "type": "string",
             "required": false,
             "default": "\"Discard\""
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "loading": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
           },
           "message": {
             "type": "string",
@@ -6552,11 +6684,6 @@
             "type": "string",
             "required": false,
             "default": "\"Save changes\""
-          },
-          "saving": {
-            "type": "boolean",
-            "required": false,
-            "default": "false"
           }
         },
         "usage": "Import { SaveBar } from @tony-ui/mortar. Compose with the public typed props.",
@@ -6574,8 +6701,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
-        "preview": "734c6f1ec77fd8629a4f6c4092f6713d2122c794da4755feb05121caa28a88c3"
+        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
+        "preview": "bcbe2bbaf2fd4911459478e2ef7dfc66021ecbce48edf13644df28c1d04e863f"
       }
     },
     {
@@ -6645,8 +6772,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "1729f72e938a221e473493e36920cf1aca40274eb5a88136930ca1d57c89075b"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "11b2fb7a2a39211e40f0fb7d64e1bfcb3e1d47c4d35f155d6a63617a2f387520"
       }
     },
     {
@@ -6702,8 +6829,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "365ab912ac4c45b2b3436411b4ae1b5377136af1cf2bcefd15250883bd6a0dd9"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "9a95935c2b0663218f102cecb4f2cc69cbedc2523ee09990bd2106cc2fd8d48f"
       }
     },
     {
@@ -6774,8 +6901,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "96f612ea7e36c8080f9cc1ace48bbd83413372199338b064763779847c5d59e9"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "3a05540167b56b30e2f8ff4f8d2f973cc5793352a0d8f4ec85fae31db9b409a3"
       }
     },
     {
@@ -6851,8 +6978,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "1ecafc65049397cfef36dfd4f7cbcb75a892c5c0a0af5e7be2a7038403f6d2e0"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "786b0d48bca8ddc0cf45b46dab2fd6a094e10159921f072f25adecf5916aacaa"
       }
     },
     {
@@ -6877,9 +7004,14 @@
           "label": "string",
           "value": "string",
           "options": "{ value: string; label: string }[]",
-          "onChange": "(value: string) => void"
+          "onChange": "(value: string) => void",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": true
@@ -6912,8 +7044,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "fcdcea889192bd25251de1fd6c70f4db8032aeea2b9a4c15ac35bae63732b646",
-        "preview": "dcac5f34f08d4438f2717e1ce6923a4ed883a8a95f619b102d54800d2f2e920c"
+        "source": "0ee644fb3be8bc7a41d157ddc4c60fb34410a2115e94e2fb7ec3abd8362a5424",
+        "preview": "d6935a8f8c72bad36fa760ae7a2da687b0187738d30e6aa05672443e79f4d54a"
       }
     },
     {
@@ -6946,8 +7078,10 @@
           "value": "string",
           "onChange": "ChangeEventHandler<HTMLSelectElement>",
           "hint": "string",
-          "error": "string",
-          "id": "string (defaults to a generated id)"
+          "error": "string (announced when it appears)",
+          "id": "string (defaults to a generated id)",
+          "required": "boolean (native; adds a decorative marker to the label)",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "error": {
@@ -6982,8 +7116,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "daae9feb017ba723719fd9b21248688c31541823ab6665647ca239324d2a5fc4"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "209992e322fd1b5dac4937f1fb2be16e313e6ce468ad3f6bee89a63d78a642c0"
       }
     },
     {
@@ -7037,8 +7171,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "8377a9628f7c764c66dd5318e373fb6eac16cf5cc5cecb181788d49640ecf9bd"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "3cff790ec06f5cb5f53a9f88bcca23f4d15dd1ca8db6f92469a6a2a4353c92c4"
       }
     },
     {
@@ -7127,8 +7261,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
-        "preview": "f59961836553bf799229329e5246c6ddb6deb78d5338b2e58c7895c8dbf2def6"
+        "source": "07b742583bd313d91ba2bee45598d0007390b3de496532cfe377581d6005c1a7",
+        "preview": "79da08636d96aa57fb0f884240fbfc44c9db7241f5585d58e6f5201d5e040fbb"
       }
     },
     {
@@ -7208,8 +7342,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "e97a98dc96cdd9b4c543c56ea873ee3c22135ce26e13de807e538f63123ad4fb"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "95e355cb81f42615e7dd35402d8aaf6e013ddfae6709bf0448ed36ee582accab"
       }
     },
     {
@@ -7297,8 +7431,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "2db17906d10740c3e9bfa1767c589d4be6b2e1bffcedbc42bb47b8b6d48a0463"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "f90e3bdd01c6f67aa05d63431830f627c65293bc4fd6f92bc598abbed774990a"
       }
     },
     {
@@ -7374,8 +7508,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "42f47ccef61616096638c0e1b1de72d31d3a796bbe256b61fd1d3e904dd4f4a4",
-        "preview": "4b2d9433ae02dafafa4dabbd8f7e8eb55098132831d693d1a1d1e8efad537029"
+        "source": "f9ffdd2666393b073aa1b55a02ca04aa0e808e3e79b70304126bb7b75d5e741b",
+        "preview": "5c9d18cd01b995924ad123cafce888b590d9cfca1c5090e6a7eaf6878ccda95a"
       }
     },
     {
@@ -7453,8 +7587,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "248bd97287b64c703fb1ab16f92a0af2ffad872c145388e93821961dab3a8a07"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "ac5261cb3b08180b15a89cf3ab853c26adecc7a00af874965549a58b7bbf1643"
       }
     },
     {
@@ -7519,8 +7653,8 @@
         "states": []
       },
       "integrity": {
-        "source": "42f47ccef61616096638c0e1b1de72d31d3a796bbe256b61fd1d3e904dd4f4a4",
-        "preview": "3a45c9930160a2168866688c8452f927511add9964dc49341d3e7f9ca4229363"
+        "source": "f9ffdd2666393b073aa1b55a02ca04aa0e808e3e79b70304126bb7b75d5e741b",
+        "preview": "b0fb7ba0ef1eb30d8750b5d8e6914e09b2467f8550df3fc6bcdc16e6295dfa66"
       }
     },
     {
@@ -7607,8 +7741,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "d0eb4d65a12c5a5ea3e86dee85a98e18b2114ce9e79541a5b7fb89c40fd8b170"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "7463715fd5320f2c43d0b7652ebed3dcb9b429322a937c4656bbbb2774b34129"
       }
     },
     {
@@ -7667,8 +7801,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "9a028e96f6156134daf9862e4f67916120d29e41fd5702391651fb132be3f428"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "23e758d6bc6652517cb8d7f6027593355bdda87a575e8a1d8af1c70a094535a4"
       }
     },
     {
@@ -7728,8 +7862,8 @@
         "states": []
       },
       "integrity": {
-        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
-        "preview": "46a46d24d4d168a9cd1081763f48b784aa11e85b979b615389fbb0115fcf24c6"
+        "source": "9d60c436215cc4ca63cad0456476bcec4f3304f9d0da0f4e5704cc6860c90d9f",
+        "preview": "65b5fb615a6fc201594a6185654f27f994e6957b5d821958959740ba3286fabe"
       }
     },
     {
@@ -7760,7 +7894,8 @@
           "label": "string",
           "checked": "boolean",
           "onChange": "ChangeEventHandler<HTMLInputElement>",
-          "description": "ReactNode"
+          "description": "ReactNode",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "description": {
@@ -7787,8 +7922,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "97e2f4224012cf54b53139a3489e58eb3501624a2b4e47421686fbb449eb39e1"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "c35b57f64dcad00b7fd071d715feb35636ba0ded620bde31950e4125bfa7b815"
       }
     },
     {
@@ -7849,8 +7984,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "7707934f92cd5c523b2eb814e0c9fdad817387db00062ace760e0e9c6ffe5522"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "1ba64a3e8ba1dd6156803bae9dc5cfee22eefbd828ad970620924e57ed57925f"
       }
     },
     {
@@ -7928,8 +8063,8 @@
         "states": []
       },
       "integrity": {
-        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
-        "preview": "d383a84f5ce7992c34483bbed5b773b89eb6500eb1332f7811bc7764becdaf33"
+        "source": "89a944a4b592ef87a425d13a1487bab2aa7d996dfabbd325cda2e942bc69a009",
+        "preview": "eb135fa8731cebe63d4b1e40be1ad1ab569e67daed5a07b467001471c9127a62"
       }
     },
     {
@@ -7954,11 +8089,16 @@
           "label": "string",
           "value": "string",
           "onChange": "(value: string) => void",
-          "items": "{ id: string; label: string; content: ReactNode; count?: number | string; icon?: ReactNode }[]",
+          "items": "{ id: string; label: string; content: ReactNode; count?: number | string; icon?: ReactNode }[] (count shown when defined, including 0)",
           "variant": "\"underline\" | \"pills\"",
-          "fullWidth": "boolean"
+          "fullWidth": "boolean",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "fullWidth": {
             "type": "boolean",
             "required": false,
@@ -8001,8 +8141,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "b9d80a87b7047c81f3698787549020d1cae28e16a19f0ff53a38f3469ed33f43"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "7ecf6cf945f400416594dec349c9b2e27155c04c3af6843278b8bd9adc4c56b2"
       }
     },
     {
@@ -8072,8 +8212,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "668927e7dd04010428b473caccdbffd7196c698a053dcfd0e52345b6393b3b44"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "0b76807f1c6ae06b2c46e6b20c06d74f03d903bb73a8cd1233aa3707d3062241"
       }
     },
     {
@@ -8138,8 +8278,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
-        "preview": "7abdbe98a17b9e62732eab4ecee2b29258e21b7619079acd05eacbe1bd22c4d2"
+        "source": "eddc6182113d8f1ec2e0942418a8a4fcbc6145813f9e99be0bf8c4d21907ed79",
+        "preview": "7e8e8f665097abffde634a03f0e1e9ad634a120d4f0f95846dab2fca80360fd6"
       }
     },
     {
@@ -8213,8 +8353,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
-        "preview": "aa424610f13b26b070dfb7a682cedb4755611cb74d4f42f640f1634b5cce80d5"
+        "source": "0a7c3ad26465a3e352f6371489cbc760b307ce27939d43df34594b53c92458e0",
+        "preview": "c9f13d37f2f7be12e13ae6ae42a5b942d65bc8c1afede99a46afb927cf57ad30"
       }
     },
     {
@@ -8246,8 +8386,10 @@
           "value": "string",
           "onChange": "ChangeEventHandler<HTMLTextAreaElement>",
           "hint": "string",
-          "error": "string",
-          "id": "string (defaults to a generated id)"
+          "error": "string (announced when it appears)",
+          "id": "string (defaults to a generated id)",
+          "required": "boolean (native; adds a decorative marker to the label)",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "error": {
@@ -8278,8 +8420,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
-        "preview": "8994fbe18fa2fee054375b3c31827da73ddd4cb52a4586e171efb4af3e85229e"
+        "source": "b158a417a845157e6455062001f5c55f9ba7358c5aa74c09ad97389b7386e45e",
+        "preview": "07dfff1b81735c518f580b4371bab9eb15879dfc0890cd80053d303eb09306f5"
       }
     },
     {
@@ -8347,8 +8489,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
-        "preview": "4dc310584f867e2f8fc2a94c914fe0e9e05b19f3266a0eb0f31e2ab09cca61e8"
+        "source": "a4403b1e3fd29c15c1064609f4a8776ee5d52bd6ae08d7de39e0069819f80472",
+        "preview": "0beb857018d6c0cea0347fc25790d4901eb5f9b80722681dbe3def8937d9cc35"
       }
     },
     {
@@ -8376,8 +8518,9 @@
           "density": "compact | comfortable | spacious",
           "appearance": "\"light\" | \"dark\" | \"system\" (optional; controlled together with onAppearanceChange)",
           "onAppearanceChange": "(appearance: Appearance) => void",
-          "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation.",
-          "scope": "\"document\" | \"container\""
+          "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation. A nested provider without it keeps the outer router.",
+          "scope": "\"document\" | \"container\" (container overlays keep the container's theme)",
+          "className": "string (on the container wrapper)"
         },
         "propTypes": {
           "appearance": {
@@ -8392,6 +8535,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "density": {
             "type": "\"comfortable\" | \"compact\" | \"spacious\"",
@@ -8432,8 +8579,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "0f41c4d9ab7c3185eebe91d14b249dd08b1967835ac65d30f7572071515b49c2",
-        "preview": "90ff4de9704781b49800bb2540009172cc0356ae981b437420401fbcd5dcdcd0"
+        "source": "28d9458577a100396f203dad702175d76c72db9b83d8057e7eaa16f2242acbca",
+        "preview": "1de5d0d50263bc716f92ca45c3a6b80835b11d357f3b5c77a159e5b21d1294e7"
       }
     },
     {
@@ -8458,14 +8605,19 @@
           "title": "string",
           "description": "string",
           "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (Tone; default \"neutral\")",
-          "action": "{ label: string; onClick: () => void }",
-          "onDismiss": "() => void",
+          "action": "ToastAction ({ label: string; onSelect: () => void })",
+          "onDismiss": "() => void (focus moves to the next control)",
           "leading": "ReactNode",
-          "secondaryAction": "{ label: string; onClick: () => void }"
+          "secondaryAction": "ToastAction ({ label: string; onSelect: () => void })",
+          "className": "string (on the root element)"
         },
         "propTypes": {
           "action": {
-            "type": "{ label: string; onClick: () => void; }",
+            "type": "ToastAction",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -8481,7 +8633,7 @@
             "required": false
           },
           "secondaryAction": {
-            "type": "{ label: string; onClick: () => void; }",
+            "type": "ToastAction",
             "required": false
           },
           "title": {
@@ -8509,15 +8661,15 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
-        "preview": "fb7f24b9b33e45fbc90a7a7266f9cf3ec28cf4da3ac570c2140c8a34f49e288f"
+        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
+        "preview": "9c5b68d48ff80e28a9ad1c7a02cbe41baa60724371b8679ae88965d17462008f"
       }
     },
     {
       "id": "mortar-toaster",
       "logicalId": "toaster",
       "name": "Toaster",
-      "description": "Mortar foundation toaster, using central semantic tokens.",
+      "description": "Mortar foundation toaster: a controlled region of toasts that announces each new toast once, assertively for danger.",
       "stack": "react-tailwind",
       "package": "@tony-ui/mortar",
       "version": "0.5.0",
@@ -8533,10 +8685,20 @@
       "contract": {
         "props": {
           "items": "ToastItem[]",
-          "onDismiss": "(id: string) => void",
-          "label": "string"
+          "onDismiss": "(id: string) => void (focus moves to the next toast, else the region)",
+          "label": "string",
+          "id": "string",
+          "className": "string (on the root element)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "ToastItem[]",
             "required": true
@@ -8566,8 +8728,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
-        "preview": "d762d111cd6be10997d776cf7ab6c352e4e0654a0a3f50f32a7ab8f3de6a3a54"
+        "source": "f9a4dc2bf60b6ca0825455a28911b38e81170eebb9d2e1b6c2fbb62c7e3792d1",
+        "preview": "2802efcdda0ca52465d5081e12fd481ec282bf77e2a0b044f370b2ed131c7ae0"
       }
     }
   ]

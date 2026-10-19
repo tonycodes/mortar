@@ -95,7 +95,8 @@ test("ProductOverview groups options as radio fieldsets and labels the gallery",
   });
   assert.match(
     busy,
-    /<button type="submit"[^>]*disabled=""[^>]*aria-busy="true"/,
+    // Loading keeps the button focusable: aria-disabled, not native disabled.
+    /<button type="submit" aria-disabled="true" aria-busy="true"/,
   );
 });
 
