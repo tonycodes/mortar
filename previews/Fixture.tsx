@@ -2,6 +2,7 @@ import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 import { icons } from "./CompositionFixture.js";
+import { scenes, screenshot } from "./MarketingArt.js";
 export function PreviewCase({ name }: { name: string }) {
   const [value, setValue] = useState("first"),
     [checked, setChecked] = useState(false),
@@ -891,6 +892,56 @@ export function PreviewCase({ name }: { name: string }) {
               />
             }
           />
+          <UI.Hero
+            headingLevel={2}
+            layout="split"
+            title="Your inbox, in your pocket."
+            description="Reply to customers from anywhere with the mobile app."
+            actions={[action]}
+          >
+            <UI.MockWindow variant="phone" label="Northwind mobile inbox">
+              <UI.StackedList
+                label="Conversations"
+                items={[
+                  {
+                    id: "ana",
+                    title: "Ana Kovač",
+                    description: "Can I move my booking?",
+                  },
+                  {
+                    id: "tom",
+                    title: "Tom Cook",
+                    description: "Thanks, that worked.",
+                  },
+                  {
+                    id: "lia",
+                    title: "Lia Chen",
+                    description: "Is parking included?",
+                  },
+                ]}
+              />
+            </UI.MockWindow>
+          </UI.Hero>
+          <UI.Hero
+            headingLevel={2}
+            layout="split"
+            title="Every trip, in one shared place."
+            description="Photos, plans and bookings stay together for the whole group."
+            actions={[action]}
+            images={scenes.map((src) => (
+              <img key={src} alt="" src={src} />
+            ))}
+          />
+          <UI.Hero
+            headingLevel={2}
+            layout="angled"
+            eyebrow="Field notes"
+            title="Plan the route before you leave."
+            description="Offline maps and shared checklists for every expedition."
+            actions={[action]}
+          >
+            <img alt="" src={scenes[1]} />
+          </UI.Hero>
         </>
       );
       break;
@@ -915,14 +966,45 @@ export function PreviewCase({ name }: { name: string }) {
       break;
     case "FeatureSection":
       example = (
-        <UI.FeatureSection
-          eyebrow="Theming"
-          title="Your brand, centrally managed"
-          description="Choose a theme in one place."
-          details={<UI.CheckList items={["Light and dark", "Brand colours"]} />}
-        >
-          {controls}
-        </UI.FeatureSection>
+        <>
+          <UI.FeatureSection
+            eyebrow="Theming"
+            title="Your brand, centrally managed"
+            description="Choose a theme in one place."
+            details={
+              <UI.CheckList items={["Light and dark", "Brand colours"]} />
+            }
+          >
+            {controls}
+          </UI.FeatureSection>
+          <UI.FeatureSection
+            eyebrow="Dashboard"
+            title="See the whole account at a glance"
+            description="The screenshot runs past the edge so the product feels bigger than the page."
+            offset
+            framed={false}
+          >
+            <UI.MockWindow label="Northwind dashboard" address="northwind.app">
+              <img
+                alt="Dashboard with revenue cards and recent orders"
+                src={screenshot}
+              />
+            </UI.MockWindow>
+          </UI.FeatureSection>
+          <UI.FeatureSection
+            eyebrow="API"
+            title="Ship your first request in minutes"
+            description="One typed client for every endpoint."
+            tone="inverse"
+            framed={false}
+            reverse
+          >
+            <UI.CodeBlock
+              label="send-invite.ts"
+              code={`import { Northwind } from "@northwind/sdk";\n\nconst client = new Northwind(key);\n\nawait client.invites.create({\n  email: "ana@example.com",\n  role: "editor",\n});`}
+            />
+          </UI.FeatureSection>
+        </>
       );
       break;
     case "Testimonial":
@@ -1037,6 +1119,32 @@ export function PreviewCase({ name }: { name: string }) {
                 action: { label: "Get access", href: "#access" },
               },
             ]}
+          />
+          <UI.Pricing
+            title="A plan for every stage"
+            description="Four tiers, with a discount for non-profits."
+            plans={[
+              ["hobby", "Hobby", "Side projects", "$0"],
+              ["starter", "Starter", "Solo founders", "$12"],
+              ["growth", "Growth", "Growing teams", "$39"],
+              ["scale", "Scale", "Large organisations", "$99"],
+            ].map(([id, name, description, monthly]) => ({
+              id,
+              name,
+              description,
+              monthly,
+              unit: "/month",
+              features: ["Unlimited projects", "Email support"],
+              action,
+            }))}
+            extra={{
+              name: "Non-profit",
+              description:
+                "Every Growth feature at a reduced price for registered charities.",
+              price: "$19",
+              unit: "/month",
+              action: { label: "Apply for the discount", href: "#nonprofit" },
+            }}
           />
         </>
       );

@@ -16,6 +16,7 @@ import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, Prose, type SectionTone } from "./layout.js";
 import { SegmentedControl } from "./inspection.js";
 import { ChevronDown } from "./icons.js";
+import { StatGroup } from "./marketing-sections.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import {
   ActionLinks,
@@ -170,6 +171,7 @@ export function Hero({
   layout = "center",
   headingLevel = 1,
   background,
+  images = [],
 }: {
   id?: string;
   className?: string;
@@ -178,11 +180,13 @@ export function Hero({
   description: string;
   actions?: LinkAction[];
   children?: ReactNode;
-  /** center: copy above the preview. split: copy beside the preview. */
-  layout?: "center" | "split";
+  /** center: copy above the preview. split: copy beside the preview. angled: copy beside an image that fills the end half to the edge, cut on a slant (pass one img or video as children). */
+  layout?: "center" | "split" | "angled";
   headingLevel?: HeadingLevel;
   /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
   background?: ReactNode;
+  /** Image tiles shown as a staggered collage beside (split) or below (center) the copy. Use instead of children; give each image its own alt text, or alt="" when decorative. */
+  images?: ReactNode[];
 }) {
   return (
     <section
@@ -206,6 +210,13 @@ export function Hero({
         <p className="m-hero-description">{description}</p>
         <ActionLinks actions={actions} />
       </div>
+      {images.length > 0 && (
+        <div className="m-hero-tiles">
+          {images.map((image, index) => (
+            <div key={index}>{image}</div>
+          ))}
+        </div>
+      )}
       {children && <div className="m-hero-preview">{children}</div>}
     </section>
   );
@@ -291,6 +302,7 @@ export function FeatureSection({
   reverse = false,
   tone = "default",
   framed = true,
+  offset = false,
   headingLevel = 2,
 }: {
   id?: string;
@@ -305,6 +317,8 @@ export function FeatureSection({
   tone?: SectionTone;
   /** Wrap the preview in the sunken frame. Disable when the child brings its own frame. */
   framed?: boolean;
+  /** Let a wide screenshot run past the section's end edge and crop there (wide screens only). */
+  offset?: boolean;
   headingLevel?: HeadingLevel;
 }) {
   const [eyebrowSlot, headingSlot] = titledIntroSlots({
@@ -317,6 +331,7 @@ export function FeatureSection({
       id={id}
       className={cx("m-feature-section", className)}
       data-reverse={reverse || undefined}
+      data-offset={offset || undefined}
       data-tone={sectionTone(tone)}
       data-m-component="FeatureSection"
     >
@@ -517,6 +532,15 @@ export interface PricingPlan {
   availability?: "available" | "coming-soon" | "unavailable";
   availabilityLabel?: string;
 }
+/** A full-width tier band under the pricing plans. */
+export interface PricingExtra {
+  name: string;
+  description: string;
+  /** Optional price, e.g. "$9" or "Custom". */
+  price?: string;
+  unit?: string;
+  action: LinkAction;
+}
 export function Pricing({
   id,
   className,
@@ -528,6 +552,7 @@ export function Pricing({
   layout = "cards",
   featuresLabel = "What’s included",
   headingLevel = 2,
+  extra,
 }: {
   id?: string;
   className?: string;
@@ -543,6 +568,8 @@ export function Pricing({
   featuresLabel?: string;
   /** The section title's level; plan names sit one level below. */
   headingLevel?: HeadingLevel;
+  /** A full-width tier band under the plans, such as an enterprise or discount row. */
+  extra?: PricingExtra;
 }) {
   const [annualChoice, setAnnual] = useState(true);
   const showToggle =
@@ -577,6 +604,7 @@ export function Pricing({
       <div
         className="m-pricing-grid"
         data-layout={layout === "detailed" ? "detailed" : undefined}
+        data-columns={layout === "cards" && plans.length === 4 ? 4 : undefined}
       >
         {plans.map((plan) => {
           const availability = plan.availability ?? "available";
@@ -642,6 +670,21 @@ export function Pricing({
             </article>
           );
         })}
+        {extra && (
+          <article className="m-pricing-extra">
+            <div>
+              <PlanHeading>{extra.name}</PlanHeading>
+              <p>{extra.description}</p>
+            </div>
+            {extra.price && (
+              <div className="m-price">
+                <strong>{extra.price}</strong>
+                {extra.unit && <span>{extra.unit}</span>}
+              </div>
+            )}
+            <ActionLink {...extra.action} variant="secondary" />
+          </article>
+        )}
       </div>
     </section>
   );
@@ -919,6 +962,8 @@ export function ContentSection({
   mediaPosition = "end",
   tone = "default",
   headingLevel = 2,
+  stats = [],
+  testimonial,
   children,
 }: {
   id?: string;
@@ -931,6 +976,15 @@ export function ContentSection({
   mediaPosition?: "start" | "end";
   tone?: SectionTone;
   headingLevel?: HeadingLevel;
+  /** Figures under the copy, shown as a StatGroup named by the title. */
+  stats?: { label: string; value: string; description?: string }[];
+  /** A customer quote under the copy, shown as a Testimonial. */
+  testimonial?: {
+    quote: string;
+    name: string;
+    role?: string;
+    avatar?: ReactNode;
+  };
   children?: ReactNode;
 }) {
   const headingId = useId();
@@ -952,6 +1006,12 @@ export function ContentSection({
           headingLevel,
         })}
         {children && <Prose>{children}</Prose>}
+        {testimonial && (
+          <Testimonial className="m-content-quote" {...testimonial} />
+        )}
+        {stats.length > 0 && (
+          <StatGroup className="m-content-stats" label={title} items={stats} />
+        )}
       </div>
       {media && <figure className="m-content-media">{media}</figure>}
     </section>

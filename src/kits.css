@@ -5583,3 +5583,342 @@
     display: none;
   }
 }
+
+/* Marketing section variants: hero tiles and angled image, phone mock, offset
+   feature screenshot, bento row spans, stat layouts and backgrounds, four-tier
+   and extra-tier pricing, content stats and quote, cover backgrounds. */
+@layer components {
+  /* Hero image tiles: a staggered collage; offsets use transforms so every
+     column keeps even gaps. */
+  .m-hero-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding-bottom: 48px;
+    min-width: 0;
+  }
+  .m-hero-center .m-hero-tiles {
+    max-width: 880px;
+    margin: 56px auto 0;
+  }
+  .m-hero-tiles > div {
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+    box-shadow: inset 0 0 0 1px var(--m-line);
+  }
+  .m-hero-tiles > div:nth-child(3n + 1) {
+    translate: 0 48px;
+  }
+  .m-hero-tiles > div:nth-child(3n) {
+    translate: 0 24px;
+  }
+  .m-hero-tiles :is(img, video, svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Hero angled: the image fills the end half to the edge, cut on a slant. */
+  .m-hero-angled {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 56px;
+    align-items: center;
+    max-width: none;
+    min-height: 560px;
+    padding-inline: max(32px, calc((100% - 1216px) / 2));
+  }
+  .m-hero-angled .m-section-title {
+    font-size: clamp(40px, 5vw, 64px);
+  }
+  .m-hero-angled .m-hero-preview {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 50%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--m-sunken);
+    clip-path: polygon(14% 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .m-hero-angled .m-hero-preview > *,
+  .m-hero-angled .m-hero-preview :is(img, video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Phone mock: a portrait handset frame with a camera pill. */
+  .m-mock-window[data-variant="phone"] {
+    position: relative;
+    width: min(100%, 300px);
+    aspect-ratio: 9 / 19;
+    margin-inline: auto;
+    border: 10px solid var(--m-line-strong);
+    border-radius: 44px;
+    background: var(--m-surface);
+  }
+  .m-mock-window[data-variant="phone"]::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    z-index: 1;
+    width: 32%;
+    height: 22px;
+    border-radius: 999px;
+    background: var(--m-line-strong);
+    translate: -50% 0;
+  }
+  .m-mock-window[data-variant="phone"] .m-mock-body {
+    height: 100%;
+    padding: 44px 16px 16px;
+    overflow: hidden;
+  }
+
+  /* Feature section with an offset screenshot that crops at the section edge. */
+  @media (min-width: 901px) {
+    .m-feature-section[data-offset="true"] {
+      overflow-x: clip;
+    }
+    .m-feature-section[data-offset="true"] .m-feature-preview {
+      width: 150%;
+    }
+    .m-feature-section[data-offset="true"][data-reverse="true"]
+      .m-feature-preview {
+      margin-inline-start: -50%;
+    }
+  }
+  .m-feature-section[data-offset="true"] .m-feature-preview :is(img, video) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Bento tiles that span two rows. */
+  .m-bento > li[data-row-span="2"] {
+    grid-row: span 2;
+  }
+
+  /* Stat layouts. */
+  .m-stat-group[data-layout="timeline"] {
+    overflow-x: clip;
+  }
+  /* Items are column-reversed, so flex-end packs them against the top. */
+  .m-stat-group[data-layout="timeline"] > div {
+    position: relative;
+    justify-content: flex-end;
+    border-top: 0;
+    padding-top: 32px;
+  }
+  .m-stat-group[data-layout="timeline"] > div::before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    inset-inline: 0 -32px;
+    height: 1px;
+    background: var(--m-line-strong);
+  }
+  .m-stat-group[data-layout="timeline"] > div::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--m-primary);
+  }
+  .m-stat-group[data-layout="timeline"] dd:not(.m-stat-description) {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: normal;
+    line-height: 1.4;
+    color: var(--m-primary);
+  }
+  .m-stat-group[data-layout="timeline"] dt {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--m-ink);
+  }
+  .m-stat-group[data-layout="stepped"] {
+    align-items: end;
+    gap: 16px;
+  }
+  .m-stat-group[data-layout="stepped"] > div {
+    min-height: 200px;
+    padding: 24px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+  }
+  .m-stat-group[data-layout="stepped"] > div:nth-child(2) {
+    min-height: 240px;
+  }
+  .m-stat-group[data-layout="stepped"] > div:nth-child(3) {
+    min-height: 280px;
+  }
+  .m-stat-group[data-layout="stepped"] > div:nth-child(n + 4) {
+    min-height: 320px;
+  }
+  /* The value sits at the top of the card; the label and note at the foot. */
+  .m-stat-group[data-layout="stepped"] dd:first-of-type {
+    margin-bottom: auto;
+  }
+
+  /* Full-cover decorative background with a scrim (StatGroup, NotFound). */
+  .m-cover-background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .m-cover-background > * {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .m-cover-background :is(img, video) {
+    object-fit: cover;
+  }
+  .m-cover-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      color-mix(in srgb, var(--m-paper) 80%, transparent),
+      color-mix(in srgb, var(--m-paper) 92%, transparent)
+    );
+  }
+  .m-stat-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 80px max(32px, calc((100% - 1216px) / 2));
+    background: var(--m-paper);
+  }
+  .m-not-found[data-background] {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: none;
+    min-height: min(100svh, 720px);
+    background: var(--m-paper);
+  }
+  .m-not-found[data-background] .m-section-title {
+    max-width: 720px;
+  }
+
+  /* Pricing: four tiers go 4, 2, then 1 across; the extra tier spans the row. */
+  .m-pricing-grid[data-columns="4"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .m-pricing-grid article.m-pricing-extra {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 32px;
+    background: var(--m-sunken);
+  }
+  .m-pricing-extra > div:first-child {
+    flex: 1 1 280px;
+    min-width: 0;
+  }
+  .m-pricing-extra .m-price {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0;
+  }
+  .m-pricing-extra .m-price strong {
+    font-size: 32px;
+  }
+
+  /* ContentSection quote and stats under the copy. */
+  .m-testimonial.m-content-quote {
+    max-width: none;
+    margin: 40px 0 0;
+    padding: 0 0 0 24px;
+    border-inline-start: 2px solid var(--m-line-strong);
+    text-align: start;
+  }
+  .m-content-quote blockquote {
+    margin: 0 0 20px;
+    font-size: 18px;
+    line-height: 1.6;
+    letter-spacing: normal;
+  }
+  .m-testimonial.m-content-quote figcaption {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+  .m-testimonial.m-content-quote figcaption:has(.m-testimonial-avatar) {
+    align-items: center;
+  }
+  .m-content-copy > .m-content-stats {
+    margin-top: 48px;
+  }
+
+  @media (max-width: 1100px) {
+    .m-pricing-grid[data-columns="4"] {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 900px) {
+    .m-hero-angled {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      min-height: 0;
+    }
+    .m-hero-angled .m-hero-preview {
+      position: static;
+      width: auto;
+      aspect-ratio: 16 / 10;
+      border-radius: var(--m-radius-lg);
+      clip-path: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .m-hero-angled {
+      padding-inline: 20px;
+    }
+    .m-hero-tiles {
+      gap: 10px;
+      padding-bottom: 32px;
+    }
+    .m-hero-tiles > div:nth-child(3n + 1) {
+      translate: 0 32px;
+    }
+    .m-hero-tiles > div:nth-child(3n) {
+      translate: 0 16px;
+    }
+    .m-bento > li[data-row-span="2"] {
+      grid-row: auto;
+    }
+    .m-stat-band {
+      padding: 48px 20px;
+    }
+    /* Stacked cards no longer step, so they keep one compact height. */
+    .m-stat-group[data-layout="stepped"] > div:nth-child(n) {
+      min-height: 160px;
+    }
+    .m-not-found[data-background] {
+      padding-inline: 20px;
+    }
+    .m-pricing-grid[data-columns="4"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-pricing-grid article.m-pricing-extra {
+      padding: 24px;
+    }
+  }
+}

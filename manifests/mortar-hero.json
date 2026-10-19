@@ -21,7 +21,8 @@
       "background": "ReactNode",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
-      "layout": "\"center\" | \"split\" (default center)"
+      "layout": "\"center\" | \"split\" | \"angled\" (default center). angled: copy beside an image (children) that fills the end half to the edge on a slant",
+      "images": "ReactNode[] (image tiles shown as a staggered collage beside or below the copy; use instead of children)"
     },
     "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
