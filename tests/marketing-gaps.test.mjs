@@ -45,24 +45,20 @@ test("dark surface tokens for CallToAction and featured pricing", async () => {
   assert.deepEqual(problems, []);
 });
 
-test("CallToAction and featured Pricing cards accept tone surface or inverse", () => {
+test("CallToAction and featured Pricing cards take the section tones; default sets no data-tone", () => {
   const action = { label: "Start", href: "/start" };
   const problems = [];
-  const surface = markup(UI.CallToAction, {
-    title: "Start a project",
-    actions: [action],
-    tone: "surface",
-  });
-  const inverse = markup(UI.CallToAction, {
-    title: "Start a project",
-    actions: [action],
-    tone: "inverse",
-  });
-  if (!surface.includes('data-tone="surface"'))
-    problems.push("CallToAction tone=surface did not set data-tone");
-  if (!inverse.includes('data-tone="inverse"'))
-    problems.push("CallToAction tone=inverse did not set data-tone");
-  for (const tone of ["surface", "inverse"]) {
+  for (const tone of [undefined, "default", "muted", "inverse"]) {
+    const expected =
+      tone && tone !== "default" ? `data-tone="${tone}"` : undefined;
+    const cta = markup(UI.CallToAction, {
+      title: "Start a project",
+      actions: [action],
+      tone,
+    });
+    const root = cta.match(/^<section\b[^>]*>/)?.[0] ?? "";
+    if (expected ? !root.includes(expected) : root.includes("data-tone"))
+      problems.push(`CallToAction tone=${tone} rendered ${root}`);
     const html = pricing({
       tone,
       plans: [plan({ featured: true, id: "team", name: "Team" })],
@@ -71,13 +67,13 @@ test("CallToAction and featured Pricing cards accept tone surface or inverse", (
       html
         .match(/<article\b[^>]*>/g)
         ?.find((item) => item.includes('data-featured="true"')) ?? "";
-    if (!tag.includes(`data-tone="${tone}"`))
-      problems.push(`featured Pricing card tone=${tone} did not set data-tone`);
+    if (expected ? !tag.includes(expected) : tag.includes("data-tone"))
+      problems.push(`featured Pricing card tone=${tone} rendered ${tag}`);
   }
   assert.deepEqual(problems, []);
 });
 
-test("Pricing availability hides the purchase link and exposes a default or custom status", () => {
+test("Pricing availability hides the purchase link and shows a default or custom status", () => {
   const problems = [];
   const available = pricing({
     plans: [plan({ availability: "available" })],
@@ -104,11 +100,14 @@ test("Pricing availability hides the purchase link and exposes a default or cust
       problems.push(`${availability}: purchase link still rendered`);
     if (!html.includes(`data-availability="${availability}"`))
       problems.push(`${availability}: missing data-availability`);
+    // Static text: a status role here would be a live region that never changes.
+    if (html.includes('role="status"'))
+      problems.push(`${availability}: static text has role=status`);
     const status = html.match(
-      /<([a-z0-9]+)[^>]*\brole="status"[^>]*>([\s\S]*?)<\/\1>/,
+      /<p class="m-pricing-availability">([\s\S]*?)<\/p>/,
     );
-    if (!status || status[2] !== label)
-      problems.push(`${availability}: "${label}" is not an accessible status`);
+    if (!status || status[1] !== label)
+      problems.push(`${availability}: "${label}" is not shown`);
   }
   assert.deepEqual(problems, []);
 });
@@ -147,6 +146,38 @@ test("Pricing billing toggle is explicit or requires an annual price on every pl
   if (!allAnnual.includes("Billing interval"))
     problems.push("plans that all have an annual price hid the toggle");
   assert.deepEqual(problems, []);
+});
+
+test("Pricing shows annual prices only while the billing toggle is visible", () => {
+  // Regression: annual was the default even when the toggle was hidden, so
+  // plans with an annual price showed it beside monthly-only plans.
+  const mixed = pricing({
+    plans: [
+      plan({ id: "basic", unit: "/month" }),
+      plan({
+        id: "team",
+        name: "Team",
+        monthly: "£24",
+        annual: "£200",
+        unit: "/month",
+        annualUnit: "/year",
+      }),
+    ],
+  });
+  assert.doesNotMatch(mixed, /Billing interval/);
+  assert.match(mixed, /£24/);
+  assert.doesNotMatch(mixed, /£200|\/year/);
+  const suppressed = pricing({
+    billingToggle: false,
+    plans: [plan({ annual: "£160", annualUnit: "/year", unit: "/month" })],
+  });
+  assert.match(suppressed, /£19/);
+  assert.doesNotMatch(suppressed, /£160|\/year/);
+  const toggled = pricing({
+    plans: [plan({ annual: "£160", annualUnit: "/year" })],
+  });
+  assert.match(toggled, /aria-pressed="true">Annual/);
+  assert.match(toggled, /£160/);
 });
 
 test("Pricing unit rendering does not fabricate /month", () => {
@@ -216,8 +247,8 @@ test("duplicate href actions and links render all labels", () => {
       description: "Example product",
       columns: [
         {
-          title: "Product",
-          links: [link("Pricing", "/pricing"), link("Plans", "/pricing")],
+          label: "Product",
+          items: [link("Pricing", "/pricing"), link("Plans", "/pricing")],
         },
       ],
       legal: [link("Terms", "/legal"), link("Privacy", "/legal")],
@@ -243,24 +274,24 @@ test("duplicate href actions and links render all labels", () => {
   assert.deepEqual(problems, []);
 });
 
-test("Footer headingLevel sets the column title level and defaults to h2", () => {
+test("Footer itemHeadingLevel sets the column title level and defaults to h2", () => {
   const base = {
     brand: "Northwind",
     description: "Example product",
     columns: [
-      { title: "Product", links: [{ label: "Pricing", href: "/pricing" }] },
+      { label: "Product", items: [{ label: "Pricing", href: "/pricing" }] },
     ],
     copyright: "2026 Northwind",
   };
   const problems = [];
   const defaults = markup(UI.Footer, base);
-  if (!defaults.includes("<h2>Product</h2>"))
+  if (!defaults.includes('<nav aria-label="Product"><h2>Product</h2>'))
     problems.push("default column title is not h2");
-  const demoted = markup(UI.Footer, { ...base, headingLevel: 3 });
+  const demoted = markup(UI.Footer, { ...base, itemHeadingLevel: 3 });
   if (!demoted.includes("<h3>Product</h3>"))
-    problems.push("headingLevel 3 did not render h3");
+    problems.push("itemHeadingLevel 3 did not render h3");
   if (demoted.includes("<h2>Product</h2>"))
-    problems.push("headingLevel 3 still rendered h2");
+    problems.push("itemHeadingLevel 3 still rendered h2");
   assert.deepEqual(problems, []);
 });
 
@@ -270,7 +301,7 @@ test("Footer note renders plain text that is not a link", () => {
     description: "Example product",
     note: "Weekdays 9 to 5",
     columns: [
-      { title: "Product", links: [{ label: "Pricing", href: "/pricing" }] },
+      { label: "Product", items: [{ label: "Pricing", href: "/pricing" }] },
     ],
     copyright: "2026 Northwind",
   });
@@ -330,7 +361,7 @@ test("marketing component roots expose data-m-component", async () => {
       markup(UI.Footer, {
         brand: "Northwind",
         description: "Example product",
-        columns: [{ title: "Product", links: [action] }],
+        columns: [{ label: "Product", items: [action] }],
         copyright: "2026 Northwind",
       }),
     BentoGrid: () =>

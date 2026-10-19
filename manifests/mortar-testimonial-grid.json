@@ -13,7 +13,10 @@
   "contract": {
     "props": {
       "title": "string",
-      "items": "{ quote; name; role?; avatar? }[]"
+      "items": "{ quote; name; role?; avatar? }[]",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
     "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

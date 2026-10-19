@@ -14,7 +14,10 @@
     "props": {
       "title": "string",
       "description": "string",
-      "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]"
+      "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
     "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

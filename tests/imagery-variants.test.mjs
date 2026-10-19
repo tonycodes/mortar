@@ -22,11 +22,14 @@ test("CallToAction keeps its markup and adds a split layout with media", () => {
   };
   assert.match(
     html(CallToAction, props),
-    /^<section class="m-cta" data-m-component="CallToAction"><h2>/,
+    /^<section class="m-cta" data-m-component="CallToAction"><h2 class="m-section-title">/,
   );
   const split = html(CallToAction, { ...props, media });
   assert.match(split, /data-layout="split"/);
-  assert.match(split, /<div class="m-cta-copy"><h2>Start today<\/h2>/);
+  assert.match(
+    split,
+    /<div class="m-cta-copy"><h2 class="m-section-title">Start today<\/h2>/,
+  );
   assert.match(
     split,
     /<div class="m-cta-media"><img src="\/shot.png" alt="Dashboard screenshot"/,

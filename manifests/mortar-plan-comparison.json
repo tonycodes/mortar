@@ -16,7 +16,10 @@
       "description": "string",
       "plans": "string[]",
       "featuredPlan": "string",
-      "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]"
+      "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
     "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

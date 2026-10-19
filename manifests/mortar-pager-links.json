@@ -13,7 +13,10 @@
   "contract": {
     "props": {
       "previous": "LinkAction",
-      "next": "LinkAction"
+      "next": "LinkAction",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "label": "string (navigation landmark name; default \"Previous and next page\")"
     },
     "usage": "Import { PagerLinks } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

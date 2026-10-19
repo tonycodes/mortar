@@ -16,8 +16,11 @@
       "description": "string",
       "onSubmit": "(email: string) => void",
       "submitLabel": "string",
-      "status": "idle | submitting | success | error",
-      "message": "string"
+      "status": "\"idle\" | \"submitting\" | \"success\" | \"error\" (success announces message, or a default, in a persistent status region)",
+      "message": "string",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
     "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

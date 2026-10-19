@@ -16,7 +16,7 @@
       "homeHref": "string",
       "version": "ReactNode",
       "sections": "(LinkAction & { current?: boolean })[]",
-      "navigation": "{ title: string; items: NavigationItem[] }[]",
+      "navigation": "ItemGroup<NavigationItem>[] ({ label; items }; items show icon and count, children become disclosures)",
       "toc": "{ id; label; current? }[]",
       "tocLabel": "string",
       "tocFooter": "ReactNode",
@@ -25,7 +25,8 @@
       "children": "ReactNode",
       "layout": "article | wide",
       "navigationLabel": "string",
-      "logo": "ReactNode"
+      "logo": "ReactNode",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { DocsShell } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

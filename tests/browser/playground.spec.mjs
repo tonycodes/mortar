@@ -59,9 +59,7 @@ for (const width of [320, 768, 1280]) {
     await accessibility(page);
     if (width < 900) {
       await page.getByLabel("Find a component").fill("");
-      await page
-        .getByRole("button", { name: "Open navigation", exact: true })
-        .click();
+      await page.getByRole("button", { name: "Menu", exact: true }).click();
       await page
         .getByRole("dialog")
         .getByRole("link", { name: "ActionLink", exact: true })

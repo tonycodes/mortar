@@ -16,16 +16,16 @@ import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, Prose, type SectionTone } from "./layout.js";
 import { SegmentedControl } from "./inspection.js";
 import { ChevronDown } from "./icons.js";
-import { childLevel, headingTag } from "./heading.js";
+import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import {
   ActionLinks,
-  SectionIntro,
   TermList,
+  TitledIntro,
   cx,
-  introSlots,
+  titledIntroSlots,
+  sectionTone,
+  useDomId,
 } from "./internal.js";
-
-export type MarketingTone = "surface" | "inverse";
 
 export type FlyoutItem = Pick<
   LinkItem,
@@ -110,6 +110,8 @@ export function MarketingHeader({
   id?: string;
 }) {
   const [open, setOpen] = useState(false);
+  // Generated so two headers on one page keep distinct, valid references.
+  const navId = useDomId("m-marketing-nav");
   return (
     <header
       id={id}
@@ -124,12 +126,12 @@ export function MarketingHeader({
         variant="ghost"
         className="m-menu-trigger"
         aria-expanded={open}
-        aria-controls="m-marketing-nav"
+        aria-controls={navId}
         onClick={() => setOpen(!open)}
       >
         Menu
       </Button>
-      <nav id="m-marketing-nav" aria-label="Primary" data-open={open}>
+      <nav id={navId} aria-label="Primary" data-open={open || undefined}>
         {links.map((link, index) =>
           "items" in link ? (
             <Flyout
@@ -158,28 +160,34 @@ export function MarketingHeader({
   );
 }
 export function Hero({
+  id,
+  className,
   eyebrow,
   title,
   description,
   actions = [],
   children,
-  align = "center",
+  layout = "center",
   headingLevel = 1,
   background,
 }: {
+  id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description: string;
   actions?: LinkAction[];
   children?: ReactNode;
-  align?: "center" | "split";
-  headingLevel?: 1 | 2;
+  /** center: copy above the preview. split: copy beside the preview. */
+  layout?: "center" | "split";
+  headingLevel?: HeadingLevel;
   /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
   background?: ReactNode;
 }) {
   return (
     <section
-      className={`m-hero m-hero-${align}`}
+      id={id}
+      className={cx("m-hero", `m-hero-${layout}`, className)}
       data-m-component="Hero"
       data-background={background ? true : undefined}
       data-tone={background ? "inverse" : undefined}
@@ -190,7 +198,7 @@ export function Hero({
         </div>
       )}
       <div>
-        <SectionIntro
+        <TitledIntro
           eyebrow={eyebrow}
           title={title}
           headingLevel={headingLevel}
@@ -204,6 +212,7 @@ export function Hero({
 }
 export function FeatureGrid({
   id,
+  className,
   eyebrow,
   title,
   description,
@@ -211,8 +220,10 @@ export function FeatureGrid({
   marker = "auto",
   columns,
   tone = "default",
+  headingLevel = 2,
 }: {
   id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -222,7 +233,10 @@ export function FeatureGrid({
   /** Defaults to a balanced count for the number of items. */
   columns?: 2 | 3 | 4;
   tone?: SectionTone;
+  /** The section title's level; item titles sit one level below. */
+  headingLevel?: HeadingLevel;
 }) {
+  const ItemHeading = headingTag(childLevel(headingLevel));
   const cols =
     columns ??
     (items.length === 2 || items.length === 4
@@ -233,11 +247,11 @@ export function FeatureGrid({
   return (
     <section
       id={id}
-      className="m-marketing-section"
-      data-tone={tone}
+      className={cx("m-marketing-section", className)}
+      data-tone={sectionTone(tone)}
       data-m-component="FeatureGrid"
     >
-      {...introSlots({ eyebrow, title, description })}
+      {...titledIntroSlots({ eyebrow, title, description, headingLevel })}
       <div className="m-feature-grid" data-columns={cols}>
         {items.map((item, i) => {
           const content =
@@ -257,7 +271,7 @@ export function FeatureGrid({
                   {content}
                 </span>
               )}
-              <h3>{item.title}</h3>
+              <ItemHeading>{item.title}</ItemHeading>
               <p>{item.description}</p>
             </article>
           );
@@ -268,6 +282,7 @@ export function FeatureGrid({
 }
 export function FeatureSection({
   id,
+  className,
   eyebrow,
   title,
   description,
@@ -276,8 +291,10 @@ export function FeatureSection({
   reverse = false,
   tone = "default",
   framed = true,
+  headingLevel = 2,
 }: {
   id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description: string;
@@ -288,14 +305,19 @@ export function FeatureSection({
   tone?: SectionTone;
   /** Wrap the preview in the sunken frame. Disable when the child brings its own frame. */
   framed?: boolean;
+  headingLevel?: HeadingLevel;
 }) {
-  const [eyebrowSlot, headingSlot] = introSlots({ eyebrow, title });
+  const [eyebrowSlot, headingSlot] = titledIntroSlots({
+    eyebrow,
+    title,
+    headingLevel,
+  });
   return (
     <section
       id={id}
-      className="m-feature-section"
-      data-reverse={reverse}
-      data-tone={tone}
+      className={cx("m-feature-section", className)}
+      data-reverse={reverse || undefined}
+      data-tone={sectionTone(tone)}
       data-m-component="FeatureSection"
     >
       <div>
@@ -304,7 +326,7 @@ export function FeatureSection({
         <p>{description}</p>
         {details && <div className="m-feature-details">{details}</div>}
       </div>
-      <div className="m-feature-preview" data-framed={framed}>
+      <div className="m-feature-preview" data-framed={framed || undefined}>
         {children}
       </div>
     </section>
@@ -313,6 +335,7 @@ export function FeatureSection({
 /** Numbered, connected sequence for marketing "how it works" sections. */
 export function ProcessSteps({
   id,
+  className,
   eyebrow,
   title,
   description,
@@ -321,22 +344,23 @@ export function ProcessSteps({
   headingLevel = 2,
 }: {
   id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description?: string;
   items: { title: string; description: string }[];
   tone?: SectionTone;
-  headingLevel?: 2 | 3 | 4;
+  headingLevel?: HeadingLevel;
 }) {
-  const ItemHeading = headingTag(childLevel(headingLevel, 4));
+  const ItemHeading = headingTag(childLevel(headingLevel));
   return (
     <section
       id={id}
-      className="m-marketing-section"
-      data-tone={tone}
+      className={cx("m-marketing-section", className)}
+      data-tone={sectionTone(tone)}
       data-m-component="ProcessSteps"
     >
-      {...introSlots({ eyebrow, title, description, headingLevel })}
+      {...titledIntroSlots({ eyebrow, title, description, headingLevel })}
       <ol
         className="m-process-steps"
         style={{ "--m-steps": items.length } as CSSProperties}
@@ -355,12 +379,16 @@ export function ProcessSteps({
   );
 }
 export function Testimonial({
+  id,
+  className,
   quote,
   name,
   role,
   logo,
   avatar,
 }: {
+  id?: string;
+  className?: string;
   quote: string;
   name: string;
   role?: string;
@@ -376,7 +404,11 @@ export function Testimonial({
     </>
   );
   return (
-    <figure className="m-testimonial" data-m-component="Testimonial">
+    <figure
+      id={id}
+      className={cx("m-testimonial", className)}
+      data-m-component="Testimonial"
+    >
       {logo && <div className="m-testimonial-logo">{logo}</div>}
       <blockquote>{quote}</blockquote>
       <figcaption>
@@ -395,13 +427,18 @@ export function Testimonial({
   );
 }
 export function LogoCloud({
+  id,
+  className,
   label,
   items,
   layout = "inline",
   title,
   description,
   actions = [],
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   label: string;
   items: { name: string; image?: string }[];
   /** inline: a centred row. grid: logos in bordered tiles. split: copy beside a logo grid. */
@@ -412,7 +449,10 @@ export function LogoCloud({
   description?: string;
   /** Split layout links, e.g. a case-studies link. */
   actions?: LinkAction[];
+  /** Level of the split layout's title. */
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
   const list = (
     <ul>
       {items.map((item) => (
@@ -429,13 +469,18 @@ export function LogoCloud({
   if (layout === "split") {
     return (
       <section
-        className="m-logo-cloud"
+        id={id}
+        className={cx("m-logo-cloud", className)}
         aria-label={label}
         data-m-component="LogoCloud"
         data-layout="split"
       >
         <div className="m-logo-cloud-copy">
-          {title ? <h2>{title}</h2> : <p>{label}</p>}
+          {title ? (
+            <Heading className="m-section-title">{title}</Heading>
+          ) : (
+            <p>{label}</p>
+          )}
           {description && (
             <p className="m-section-description">{description}</p>
           )}
@@ -447,7 +492,8 @@ export function LogoCloud({
   }
   return (
     <section
-      className="m-logo-cloud"
+      id={id}
+      className={cx("m-logo-cloud", className)}
       aria-label={label}
       data-m-component="LogoCloud"
       data-layout={layout === "grid" ? "grid" : undefined}
@@ -472,35 +518,51 @@ export interface PricingPlan {
   availabilityLabel?: string;
 }
 export function Pricing({
+  id,
+  className,
   title,
   description,
   plans,
-  tone,
+  tone = "default",
   billingToggle,
   layout = "cards",
   featuresLabel = "What’s included",
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   plans: PricingPlan[];
-  /** Applied only to featured cards. Omitted plans keep the page surface. */
-  tone?: MarketingTone;
+  /** Applied only to featured cards. Other plans keep the page surface. */
+  tone?: SectionTone;
   billingToggle?: boolean;
   /** cards: side-by-side tiers. detailed: one full-width row per plan, features beside a price panel (single-price pages). */
   layout?: "cards" | "detailed";
   /** Heading above the feature list in the detailed layout. */
   featuresLabel?: string;
+  /** The section title's level; plan names sit one level below. */
+  headingLevel?: HeadingLevel;
 }) {
-  const [annual, setAnnual] = useState(true);
+  const [annualChoice, setAnnual] = useState(true);
   const showToggle =
     billingToggle ??
     (plans.length > 0 && plans.every((plan) => Boolean(plan.annual)));
+  // Annual prices show only while the toggle that switches them is visible,
+  // so the page never mixes units the visitor cannot change.
+  const annual = showToggle && annualChoice;
+  const PlanHeading = headingTag(childLevel(headingLevel));
   return (
     <section
-      className="m-marketing-section m-pricing"
+      id={id}
+      className={cx("m-marketing-section m-pricing", className)}
       data-m-component="Pricing"
     >
-      <SectionIntro title={title} description={description} />
+      <TitledIntro
+        title={title}
+        description={description}
+        headingLevel={headingLevel}
+      />
       {showToggle && (
         <SegmentedControl
           label="Billing interval"
@@ -534,8 +596,9 @@ export function Pricing({
               ))}
             </ul>
           );
+          // Static text, not a live region: nothing changes after render.
           const purchase = blocked ? (
-            <p role="status">
+            <p className="m-pricing-availability">
               {plan.availabilityLabel ??
                 (availability === "coming-soon"
                   ? "Coming soon"
@@ -551,13 +614,13 @@ export function Pricing({
             <article
               key={plan.id}
               data-featured={plan.featured || undefined}
-              data-tone={plan.featured && tone ? tone : undefined}
+              data-tone={plan.featured ? sectionTone(tone) : undefined}
               data-availability={blocked ? availability : undefined}
             >
               {layout === "detailed" ? (
                 <>
                   <div className="m-pricing-detail">
-                    <h3>{plan.name}</h3>
+                    <PlanHeading>{plan.name}</PlanHeading>
                     <p>{plan.description}</p>
                     <p className="m-pricing-features-label">{featuresLabel}</p>
                     {features}
@@ -569,7 +632,7 @@ export function Pricing({
                 </>
               ) : (
                 <>
-                  <h3>{plan.name}</h3>
+                  <PlanHeading>{plan.name}</PlanHeading>
                   <p>{plan.description}</p>
                   {price}
                   {features}
@@ -584,26 +647,38 @@ export function Pricing({
   );
 }
 export function FAQ({
+  id,
+  className,
   title,
   description,
   items,
   layout = "split",
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: ReactNode;
   items: { question: string; answer: ReactNode }[];
-  /** split: heading beside an accordion. centered: heading above a narrow accordion. grid: every answer visible in columns. */
-  layout?: "split" | "centered" | "grid";
+  /** split: heading beside an accordion. center: heading above a narrow accordion. grid: every answer visible in columns. */
+  layout?: "split" | "center" | "grid";
+  headingLevel?: HeadingLevel;
 }) {
+  const Heading = headingTag(headingLevel);
   const head = (
     <div>
-      <h2>{title}</h2>
+      <Heading className="m-section-title">{title}</Heading>
       {description && <div>{description}</div>}
     </div>
   );
   if (layout === "grid") {
     return (
-      <section className="m-faq" data-m-component="FAQ" data-layout="grid">
+      <section
+        id={id}
+        className={cx("m-faq", className)}
+        data-m-component="FAQ"
+        data-layout="grid"
+      >
         {head}
         <TermList
           className="m-faq-grid"
@@ -617,9 +692,10 @@ export function FAQ({
   }
   return (
     <section
-      className="m-faq"
+      id={id}
+      className={cx("m-faq", className)}
       data-m-component="FAQ"
-      data-layout={layout === "centered" ? "centered" : undefined}
+      data-layout={layout === "center" ? "center" : undefined}
     >
       {head}
       <div>
@@ -637,34 +713,43 @@ export function FAQ({
   );
 }
 export function CallToAction({
+  id,
+  className,
   title,
   description,
   actions,
-  tone,
+  tone = "default",
   media,
+  headingLevel = 2,
 }: {
+  id?: string;
+  className?: string;
   title: string;
   description?: string;
   actions: LinkAction[];
-  tone?: MarketingTone;
+  /** default: the page surface. muted: the sunken band. inverse: the inverse token remap. */
+  tone?: SectionTone;
   /** Image or screenshot beside the copy (promo layout). */
   media?: ReactNode;
+  headingLevel?: HeadingLevel;
 }) {
   const copy = (
     <>
-      <SectionIntro
+      <TitledIntro
         title={title}
         description={description}
         descriptionClassName={null}
+        headingLevel={headingLevel}
       />
       <ActionLinks actions={actions} />
     </>
   );
   return (
     <section
-      className="m-cta"
+      id={id}
+      className={cx("m-cta", className)}
       data-m-component="CallToAction"
-      data-tone={tone}
+      data-tone={sectionTone(tone)}
       data-layout={media ? "split" : undefined}
     >
       {media ? (
@@ -679,6 +764,8 @@ export function CallToAction({
   );
 }
 export function Footer({
+  id,
+  className,
   brand,
   logo,
   description,
@@ -686,23 +773,31 @@ export function Footer({
   columns,
   copyright,
   legal = [],
-  headingLevel = 2,
+  itemHeadingLevel = 2,
   social = [],
 }: {
+  id?: string;
+  className?: string;
   brand: string;
   logo?: ReactNode;
   description: string;
   note?: ReactNode;
-  columns: { title: string; links: LinkAction[] }[];
+  /** Link columns; each label is the column's visible heading and its navigation name. */
+  columns: ItemGroup<LinkAction>[];
   copyright: string;
   legal?: LinkAction[];
-  headingLevel?: 2 | 3 | 4;
+  /** Level of the column headings. */
+  itemHeadingLevel?: HeadingLevel;
   /** Social profiles, usually icon-only; each label names its link. */
   social?: IconLink[];
 }) {
-  const Heading = headingTag(headingLevel);
+  const Heading = headingTag(itemHeadingLevel);
   return (
-    <footer className="m-footer" data-m-component="Footer">
+    <footer
+      id={id}
+      className={cx("m-footer", className)}
+      data-m-component="Footer"
+    >
       <div className="m-footer-grid">
         <div>
           <strong className="m-brand">
@@ -716,9 +811,9 @@ export function Footer({
           )}
         </div>
         {columns.map((column) => (
-          <nav key={column.title} aria-label={column.title}>
-            <Heading>{column.title}</Heading>
-            {column.links.map((link, index) => (
+          <nav key={column.label} aria-label={column.label}>
+            <Heading>{column.label}</Heading>
+            {column.items.map((link, index) => (
               <KitLink
                 href={link.href}
                 key={`${link.label}:${link.href}:${index}`}
@@ -748,6 +843,8 @@ export function Footer({
 
 /** Intro band for inner pages (about, pricing, careers), with optional links and stats. */
 export function HeaderSection({
+  id,
+  className,
   eyebrow,
   title,
   description,
@@ -757,6 +854,8 @@ export function HeaderSection({
   align = "start",
   headingLevel = 1,
 }: {
+  id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -764,18 +863,25 @@ export function HeaderSection({
   stats?: { label: string; value: string }[];
   tone?: SectionTone;
   align?: "start" | "center";
-  headingLevel?: 1 | 2;
+  headingLevel?: HeadingLevel;
 }) {
-  const id = useId();
+  const headingId = useId();
   return (
     <section
-      className="m-marketing-section m-header-section"
-      data-tone={tone}
-      data-align={align}
-      aria-labelledby={id}
+      id={id}
+      className={cx("m-marketing-section m-header-section", className)}
+      data-tone={sectionTone(tone)}
+      data-align={align === "start" ? undefined : align}
+      aria-labelledby={headingId}
       data-m-component="HeaderSection"
     >
-      {...introSlots({ eyebrow, title, description, id, headingLevel })}
+      {...titledIntroSlots({
+        eyebrow,
+        title,
+        description,
+        id: headingId,
+        headingLevel,
+      })}
       {links.length > 0 && (
         <div className="m-header-links">
           {links.map((link, index) => (
@@ -804,14 +910,19 @@ export function HeaderSection({
 
 /** Long-form copy with optional media beside it, e.g. an about-page story. */
 export function ContentSection({
+  id,
+  className,
   eyebrow,
   title,
   description,
   media,
   mediaPosition = "end",
   tone = "default",
+  headingLevel = 2,
   children,
 }: {
+  id?: string;
+  className?: string;
   eyebrow?: string;
   title: string;
   description?: string;
@@ -819,19 +930,27 @@ export function ContentSection({
   media?: ReactNode;
   mediaPosition?: "start" | "end";
   tone?: SectionTone;
+  headingLevel?: HeadingLevel;
   children?: ReactNode;
 }) {
-  const id = useId();
+  const headingId = useId();
   return (
     <section
-      className="m-marketing-section m-content-section"
-      data-tone={tone}
+      id={id}
+      className={cx("m-marketing-section m-content-section", className)}
+      data-tone={sectionTone(tone)}
       data-media={media ? mediaPosition : undefined}
-      aria-labelledby={id}
+      aria-labelledby={headingId}
       data-m-component="ContentSection"
     >
       <div className="m-content-copy">
-        {...introSlots({ eyebrow, title, description, id })}
+        {...titledIntroSlots({
+          eyebrow,
+          title,
+          description,
+          id: headingId,
+          headingLevel,
+        })}
         {children && <Prose>{children}</Prose>}
       </div>
       {media && <figure className="m-content-media">{media}</figure>}

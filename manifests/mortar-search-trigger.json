@@ -13,7 +13,8 @@
   "contract": {
     "props": {
       "onOpen": "() => void",
-      "label": "string"
+      "label": "string",
+      "className": "string (layout only: margins or grid placement)"
     },
     "usage": "Import { SearchTrigger } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

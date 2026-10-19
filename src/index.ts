@@ -77,12 +77,7 @@ export {
   HeaderSection,
   ContentSection,
 } from "./marketing.js";
-export type {
-  PricingPlan,
-  MarketingTone,
-  HeaderLink,
-  FlyoutItem,
-} from "./marketing.js";
+export type { PricingPlan, HeaderLink, FlyoutItem } from "./marketing.js";
 export { SegmentedControl, CodeBlock, PreviewFrame } from "./inspection.js";
 export {
   Avatar,

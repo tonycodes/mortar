@@ -13,7 +13,9 @@
   "contract": {
     "props": {
       "items": "{ title; id?; description?; content? }[]",
-      "headingLevel": "2 | 3 | 4"
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3); each step's title"
     },
     "usage": "Import { Steps } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

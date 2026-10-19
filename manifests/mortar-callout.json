@@ -12,9 +12,11 @@
   "kitId": "docs",
   "contract": {
     "props": {
-      "type": "note | tip | warning | breaking",
-      "title": "string",
-      "children": "ReactNode"
+      "title": "string (visible lead-in that names the note; defaults to the tone's word)",
+      "children": "ReactNode",
+      "id": "string (the root element's id, e.g. an in-page link target)",
+      "className": "string (layout only: margins or grid placement)",
+      "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (default neutral; the default title is Note, Note, Tip, Warning or Caution)"
     },
     "usage": "Import { Callout } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
