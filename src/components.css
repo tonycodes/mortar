@@ -395,31 +395,22 @@
     cursor: not-allowed;
   }
   /* Tone: each status value sets --m-tone once; components read it. */
-  :where(.m-tone-neutral, .m-badge, .m-notice) {
+  :where(.m-badge, .m-notice) {
     --m-tone: var(--m-secondary);
   }
-  :where([data-tone="success"], .m-tone-success) {
+  :where([data-tone="success"]) {
     --m-tone: var(--m-success);
   }
-  :where([data-tone="warning"], .m-tone-warning) {
+  :where([data-tone="warning"]) {
     --m-tone: var(--m-warning);
   }
-  :where([data-tone="danger"], .m-tone-danger, .m-error) {
+  :where([data-tone="danger"], .m-error) {
     --m-tone: var(--m-danger);
   }
-  :where([data-tone="info"], .m-tone-info) {
+  :where([data-tone="info"]) {
     --m-tone: var(--m-info);
   }
-  :is(
-    .m-error,
-    .m-badge,
-    .m-notice,
-    .m-tone-neutral,
-    .m-tone-success,
-    .m-tone-warning,
-    .m-tone-danger,
-    .m-tone-info
-  ),
+  :is(.m-error, .m-badge, .m-notice),
   .m-field .m-error {
     color: var(--m-tone);
   }

@@ -43,10 +43,6 @@ export interface ProductCard {
   action?: ReactNode;
 }
 
-/** EmptyState takes levels 2–4; deeper outlines use its deepest level. */
-const emptyLevel = (level: HeadingLevel) =>
-  Math.min(Math.max(level, 2), 4) as 2 | 3 | 4;
-
 export interface ProductListProps {
   /** Accessible name of the list. */
   label: string;
@@ -381,9 +377,9 @@ export function ShoppingCart({
       >
         <EmptyState
           title={empty.title}
-          description={empty.description ?? ""}
+          description={empty.description}
           action={empty.action}
-          headingLevel={emptyLevel(headingLevel)}
+          headingLevel={headingLevel}
         />
       </div>
     );
@@ -826,9 +822,9 @@ export function OrderHistory({
       <div id={id} className={cx("m-order-history", className)}>
         <EmptyState
           title={empty.title}
-          description={empty.description ?? ""}
+          description={empty.description}
           action={empty.action}
-          headingLevel={emptyLevel(headingLevel)}
+          headingLevel={headingLevel}
         />
       </div>
     );

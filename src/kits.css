@@ -800,10 +800,10 @@
     padding: 20px 12px 32px;
     border-right: 1px solid var(--m-line);
   }
-  :is(.m-docs-nav, .m-mobile-sidebar) nav section + section {
+  :is(.m-docs-nav, .m-mobile-sidebar) nav [role="group"] + [role="group"] {
     margin-top: 20px;
   }
-  :is(.m-docs-nav, .m-mobile-sidebar) nav h2 {
+  :is(.m-docs-nav, .m-mobile-sidebar) nav .m-nav-group-title {
     padding: 0 10px 6px;
     font-size: 12px;
     font-weight: 600;
@@ -5517,9 +5517,6 @@
   .m-pricing-grid article[data-featured="true"][data-tone="muted"] {
     background: var(--m-sunken);
   }
-  .m-avatar-decorative {
-    display: inline-flex;
-  }
   .m-newsletter form {
     flex-wrap: wrap;
   }
@@ -5552,15 +5549,6 @@
 
 /* Application family: hooks that do not depend on heading levels or text. */
 @layer components {
-  /* Section's title keeps the section-title look at any headingLevel. */
-  .m-section > .m-section-title {
-    font-size: clamp(30px, 3.5vw, 48px);
-    font-weight: 600;
-    letter-spacing: -0.035em;
-    line-height: 1.1;
-    text-wrap: balance;
-    max-width: 800px;
-  }
   /* A header with only an action keeps the action at the end. */
   .m-stacked-action {
     display: flex;

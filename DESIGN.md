@@ -18,7 +18,7 @@ The machine-readable contract is design-principles.json. Both the local contribu
 
 Every component follows these rules. New props must fit them, and the code review checks them.
 
-- **Headings.** `headingLevel` sets the component's outermost heading (`2`–`6`, using the shared `HeadingLevel` type). Nested headings derive from it (`level + 1`). `itemHeadingLevel` is added only where items need their own level. No component hard-codes a heading that sits inside a page section. `h1` belongs to the page, so only PageHeading and NotFound default to it.
+- **Headings.** `headingLevel` sets the component's outermost heading (`1`–`6`, using the shared `HeadingLevel` type). Nested headings derive from it (`level + 1`). `itemHeadingLevel` is added only where items need their own level. No component hard-codes a heading that sits inside a page section. `h1` belongs to the page, so only components that open a page default to it: PageHeading, NotFound, Hero, HeaderSection and ProductOverview. Use a lower level when one of them sits below another page heading.
 - **Layout, variant and align.**
   - `layout` chooses the structural arrangement, for example `"split" | "grid" | "center"`.
   - `variant` chooses the visual treatment, for example `"underline" | "pills"` or `"plain" | "cards"`.

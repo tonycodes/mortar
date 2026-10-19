@@ -606,7 +606,6 @@ export function Tabs({
               icon={item.icon}
               label={item.label}
               count={item.count}
-              countWhen="defined"
             />
           </button>
         ))}

@@ -205,3 +205,4 @@ export type {
 } from "./ecommerce.js";
 export { CommentComposer } from "./composer.js";
 export type { LinkItem, ItemGroup } from "./navigation.js";
+export type { HeadingLevel } from "./heading.js";

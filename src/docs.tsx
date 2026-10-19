@@ -9,7 +9,7 @@ import type { ItemGroup, LinkItem } from "./navigation.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import {
   MobileNavDialog,
-  NavTreeLinks,
+  NavGroups,
   TermList,
   cx,
   rovingIndex,
@@ -57,12 +57,7 @@ export function DocsShell({
   const contentId = useId();
   const tree = (
     <nav aria-label={navigationLabel}>
-      {navigation.map((group) => (
-        <section key={group.label}>
-          <h2>{group.label}</h2>
-          <NavTreeLinks items={group.items} onNavigate={() => setOpen(false)} />
-        </section>
-      ))}
+      <NavGroups groups={navigation} onNavigate={() => setOpen(false)} />
     </nav>
   );
   return (

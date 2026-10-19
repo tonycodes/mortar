@@ -269,11 +269,13 @@ test("TestimonialGrid and TeamGrid hide avatars that repeat a visible name", () 
     title: "Team",
     members: [{ name: "Ana Ruiz", role: "Design" }],
   });
-  for (const markup of [grid, team])
+  for (const markup of [grid, team]) {
     assert.match(
       markup,
-      /<span class="m-avatar-decorative" aria-hidden="true"><span class="m-avatar[^"]*"[^>]*role="img" aria-label="Ana Ruiz">/,
+      /<span class="m-avatar[^"]*"[^>]* aria-hidden="true">/,
     );
+    assert.doesNotMatch(markup, /role="img" aria-label="Ana Ruiz"/);
+  }
 });
 
 test("Newsletter announces success in a persistent status region", () => {
@@ -393,14 +395,19 @@ test("DocsShell groups use label and render item icon, count and children", () =
     ],
     children: h("h1", null, "Page"),
   });
-  assert.match(markup, /<h2>Guides<\/h2>/);
+  // Group labels are not headings, so the page h1 stays first in the outline.
+  assert.match(
+    markup,
+    /<div role="group" aria-labelledby="([^"]+)"><p id="\1" class="m-nav-group-title">Guides<\/p>/,
+  );
+  assert.doesNotMatch(markup, /<h2>Guides<\/h2>/);
   assert.match(
     markup,
     /<a href="\/deploy"><span class="m-nav-icon" aria-hidden="true"><svg data-icon="rocket"><\/svg><\/span>Deploy<span class="m-nav-count">0<\/span><\/a>/,
   );
   assert.match(
     markup,
-    /<details class="m-nav-group" open=""><summary>Domains<\/summary><div class="m-nav-children"><a href="\/dns" aria-current="page">DNS<\/a><\/div><\/details>/,
+    /<details class="m-nav-group" open=""><summary>Domains<\/summary><div class="m-nav-children"><a href="\/domains">Domains<\/a><a href="\/dns" aria-current="page">DNS<\/a><\/div><\/details>/,
   );
   // The visible "Menu" is the accessible name (WCAG label in name).
   const menu = markup.match(/<button[^>]*m-menu-trigger[^>]*>/)?.[0] ?? "";

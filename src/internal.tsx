@@ -8,8 +8,11 @@ import {
   useId,
   type HTMLAttributes,
   type ReactNode,
+  cloneElement,
+  isValidElement,
 } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { KitLink, type ItemGroup } from "./navigation.js";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 
@@ -116,9 +119,7 @@ export function TermList({
 
 /**
  * Icon, label and count inside a navigation link or tab. `prefix` picks the
- * class family (`m-nav-*` or `m-tab-*`). Navigation links show a count when it
- * is truthy and tabs whenever it is defined (`countWhen`); the API phase
- * settles on one rule. Without `countWhen` there is no count slot at all.
+ * class family (`m-nav-*` or `m-tab-*`). A count shows whenever it is defined.
  */
 export function LinkContent({
   prefix,
@@ -126,7 +127,6 @@ export function LinkContent({
   icon,
   count,
   marker = false,
-  countWhen,
 }: {
   prefix: "nav" | "tab";
   label: ReactNode;
@@ -134,16 +134,14 @@ export function LinkContent({
   count?: number | string;
   /** Show the dot marker when there is no icon (sidebar links). */
   marker?: boolean;
-  countWhen?: "truthy" | "defined";
 }) {
   const glyph = (
     <span className={`m-${prefix}-icon`} aria-hidden="true">
       {icon}
     </span>
   );
-  const shown = countWhen === "defined" ? count !== undefined : count;
-  // createElement keeps the child count of the markup this replaced, so useId
-  // values inside a consumer's icon stay put.
+  // createElement keeps a fixed child count, so useId values inside a
+  // consumer's icon stay put.
   return createElement(
     Fragment,
     null,
@@ -157,9 +155,7 @@ export function LinkContent({
       icon && glyph
     ),
     label,
-    ...(countWhen
-      ? [shown && <span className={`m-${prefix}-count`}>{count}</span>]
-      : []),
+    count !== undefined && <span className={`m-${prefix}-count`}>{count}</span>,
   );
 }
 
@@ -283,20 +279,9 @@ export function MobileNavDialog({
   );
 }
 
-// Marketing and docs helpers, appended; the helpers above are unchanged.
-import { cloneElement, isValidElement } from "react";
-import { KitLink } from "./navigation.js";
-
-/**
- * `introSlots` with the shared `m-section-title` class on the heading, so a
- * section title keeps its style at any `headingLevel`.
- */
+/** `introSlots` with the shared `m-section-title` class on the heading. */
 export function titledIntroSlots(props: IntroProps): ReactNode[] {
-  const slots = introSlots(props);
-  const heading = slots[1];
-  if (isValidElement<{ className?: string }>(heading))
-    slots[1] = cloneElement(heading, { className: "m-section-title" });
-  return slots;
+  return classedIntroSlots(props, "m-section-title");
 }
 /** `data-tone` for a section surface tone; the default tone sets no attribute. */
 export function sectionTone(tone?: "default" | "muted" | "inverse") {
@@ -319,7 +304,8 @@ export interface NavTreeItem {
 }
 /**
  * Navigation links with icon and count. An item with children becomes a
- * disclosure, open when a child is current. A count shows whenever defined.
+ * disclosure, open when it or a child is current; its own page is the first
+ * link inside.
  */
 export function NavTreeLinks({
   items,
@@ -331,14 +317,35 @@ export function NavTreeLinks({
   marker?: boolean;
   onNavigate?: () => void;
 }) {
+  const link = (item: NavTreeItem, key: string) => (
+    <KitLink
+      key={key}
+      href={item.href}
+      aria-current={item.current ? "page" : undefined}
+      onClick={onNavigate}
+    >
+      <LinkContent
+        prefix="nav"
+        marker={marker}
+        icon={item.icon}
+        label={item.label}
+        count={item.count}
+      />
+    </KitLink>
+  );
   return (
     <>
-      {items.map((item, index) =>
-        item.children?.length ? (
+      {items.map((item, index) => {
+        const key = `${item.label}:${item.href}:${index}`;
+        return item.children?.length ? (
           <details
-            key={`${item.label}:${item.href}:${index}`}
+            key={key}
             className="m-nav-group"
-            open={item.children.some((child) => child.current) || undefined}
+            open={
+              item.current ||
+              item.children.some((child) => child.current) ||
+              undefined
+            }
           >
             <summary>
               <LinkContent
@@ -346,11 +353,10 @@ export function NavTreeLinks({
                 marker={marker}
                 icon={item.icon}
                 label={item.label}
-                count={item.count}
-                countWhen="defined"
               />
             </summary>
             <div className="m-nav-children">
+              {item.href && link({ ...item, icon: undefined }, "parent")}
               <NavTreeLinks
                 items={item.children}
                 marker={marker}
@@ -359,23 +365,44 @@ export function NavTreeLinks({
             </div>
           </details>
         ) : (
-          <KitLink
-            key={`${item.label}:${item.href}:${index}`}
-            href={item.href}
-            aria-current={item.current ? "page" : undefined}
-            onClick={onNavigate}
-          >
-            <LinkContent
-              prefix="nav"
-              marker={marker}
-              icon={item.icon}
-              label={item.label}
-              count={item.count}
-              countWhen="defined"
-            />
-          </KitLink>
-        ),
-      )}
+          link(item, key)
+        );
+      })}
+    </>
+  );
+}
+/**
+ * Labelled groups of navigation links. Group labels are not headings, so the
+ * page's own h1 stays first in the heading outline.
+ */
+export function NavGroups({
+  groups,
+  marker,
+  onNavigate,
+}: {
+  groups: ItemGroup<NavTreeItem>[];
+  marker?: boolean;
+  onNavigate?: () => void;
+}) {
+  const groupId = useDomId("m-nav-group-");
+  return (
+    <>
+      {groups.map((group, index) => (
+        <div
+          key={group.label}
+          role="group"
+          aria-labelledby={`${groupId}-${index}`}
+        >
+          <p id={`${groupId}-${index}`} className="m-nav-group-title">
+            {group.label}
+          </p>
+          <NavTreeLinks
+            items={group.items}
+            marker={marker}
+            onNavigate={onNavigate}
+          />
+        </div>
+      ))}
     </>
   );
 }
@@ -469,12 +496,9 @@ export function ThemeScope({ children }: { children: ReactNode }) {
   );
 }
 
-// Application helpers, appended after the marketing and docs ones.
-
 /**
- * introSlots with a component-specific class on the heading (titledIntroSlots
- * always uses m-section-title), so a title keeps its
- * styles at any `headingLevel` instead of only as an h2.
+ * introSlots with a class on the heading, so a title keeps its styles at any
+ * `headingLevel` instead of only as an h2.
  */
 export function classedIntroSlots(
   props: IntroProps,
@@ -490,8 +514,6 @@ export function classedIntroSlots(
   ];
 }
 
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 /**
  * Call before a consumer callback that removes `element` (e.g. a chip's
  * remove button). Once the removal has rendered, if focus fell to the body,
@@ -520,9 +542,9 @@ export function focusAfterRemoval(element: HTMLElement) {
         ...siblings.slice(0, index).reverse(),
       ];
       for (const candidate of candidates) {
-        const target = candidate.matches(FOCUSABLE)
+        const target = candidate.matches(TABBABLE)
           ? candidate
-          : candidate.querySelector<HTMLElement>(FOCUSABLE);
+          : candidate.querySelector<HTMLElement>(TABBABLE);
         if (target) return target.focus();
       }
     }

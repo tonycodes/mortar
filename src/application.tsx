@@ -13,6 +13,8 @@ import { ArrowDown, ArrowUp, Check, SortArrows } from "./icons.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 import {
   LinkContent,
+  NavGroups,
+  NavTreeLinks,
   MobileNavDialog,
   TermList,
   cx,
@@ -60,54 +62,6 @@ function SidebarContent({
   label = "Primary",
   onNavigate,
 }: Omit<SidebarProps, "className"> & { onNavigate?: () => void }) {
-  const groupId = useDomId("m-nav-group-");
-  const link = (item: NavigationItem, key: string) => (
-    <KitLink
-      key={key}
-      href={item.href}
-      aria-current={item.current ? "page" : undefined}
-      onClick={onNavigate}
-    >
-      <LinkContent
-        prefix="nav"
-        marker
-        icon={item.icon}
-        label={item.label}
-        count={item.count}
-        countWhen="defined"
-      />
-    </KitLink>
-  );
-  const links = (items: NavigationItem[]): ReactNode[] =>
-    items.map((item, index) => {
-      const key = `${item.label}:${item.href}:${index}`;
-      return item.children?.length ? (
-        <details
-          key={key}
-          className="m-nav-group"
-          open={
-            item.current ||
-            item.children.some((child) => child.current) ||
-            undefined
-          }
-        >
-          <summary>
-            <LinkContent
-              prefix="nav"
-              marker
-              icon={item.icon}
-              label={item.label}
-            />
-          </summary>
-          <div className="m-nav-children">
-            {item.href && link({ ...item, icon: undefined }, "parent")}
-            {links(item.children)}
-          </div>
-        </details>
-      ) : (
-        link(item, key)
-      );
-    });
   return (
     <>
       {brand && (
@@ -123,19 +77,8 @@ function SidebarContent({
         </KitLink>
       )}
       <nav aria-label={label}>
-        {links(navigation)}
-        {sections.map((group, index) => (
-          <div
-            key={group.label}
-            role="group"
-            aria-labelledby={`${groupId}-${index}`}
-          >
-            <p id={`${groupId}-${index}`} className="m-nav-group-title">
-              {group.label}
-            </p>
-            {links(group.items)}
-          </div>
-        ))}
+        <NavTreeLinks items={navigation} marker onNavigate={onNavigate} />
+        <NavGroups groups={sections} marker onNavigate={onNavigate} />
       </nav>
       {footer && <div className="m-user">{footer}</div>}
     </>
@@ -329,7 +272,6 @@ export function Navbar({
               icon={item.icon}
               label={item.label}
               count={item.count}
-              countWhen="defined"
             />
           </KitLink>
         ))}
@@ -412,7 +354,6 @@ export function TabNav({
                 icon={item.icon}
                 label={item.label}
                 count={item.count}
-                countWhen="defined"
               />
             </KitLink>
           </li>
@@ -984,11 +925,9 @@ export function DataTable<T extends { id: string }>({
       ) : !rows.length ? (
         <EmptyState
           title={empty.title}
-          // EmptyState's description and level types are widened by the
-          // primitives family; until then an omitted description renders empty.
-          description={empty.description as string}
+          description={empty.description}
           action={empty.action}
-          headingLevel={headingLevel as 2 | 3 | 4}
+          headingLevel={headingLevel}
         />
       ) : (
         <div

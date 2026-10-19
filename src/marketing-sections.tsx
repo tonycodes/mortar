@@ -96,18 +96,6 @@ export function StatGroup({
   );
 }
 
-/**
- * A person's avatar beside their visible name: hidden from assistive
- * technology, which would otherwise announce the name twice.
- */
-function DecorativeAvatar(props: Parameters<typeof Avatar>[0]) {
-  return (
-    <span className="m-avatar-decorative" aria-hidden="true">
-      <Avatar {...props} />
-    </span>
-  );
-}
-
 export function TestimonialGrid({
   id,
   className,
@@ -135,7 +123,7 @@ export function TestimonialGrid({
           <figure key={item.name}>
             <blockquote>{item.quote}</blockquote>
             <figcaption>
-              <DecorativeAvatar name={item.name} src={item.avatar} size="sm" />
+              <Avatar decorative name={item.name} src={item.avatar} size="sm" />
               <span>
                 <strong>{item.name}</strong>
                 {item.role && <span>{item.role}</span>}
@@ -352,7 +340,12 @@ export function TeamGrid({
           <li key={member.name}>
             <div className="m-team-portrait">
               {member.image || (
-                <DecorativeAvatar name={member.name} size="lg" shape="square" />
+                <Avatar
+                  decorative
+                  name={member.name}
+                  size="lg"
+                  shape="square"
+                />
               )}
             </div>
             <strong>{member.name}</strong>
