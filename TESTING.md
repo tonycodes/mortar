@@ -12,6 +12,8 @@ npm run test:visual
 
 `npm run check` never rewrites the catalogue: drift fails M007 (a source or preview fingerprint changed) or M008 (the catalogue no longer matches the manifests). Review the change that caused it, then run `npm run catalog`. It regenerates catalog.json and prints which components' fingerprints and contracts changed, so you can confirm the list matches what you meant to change. Formatting source after regeneration requires regenerating again. Never regenerate first: that accepts drift without looking at it.
 
+Each browser command builds the playground before serving it. CI sets `MORTAR_PLAYGROUND_PREBUILT=1` so both suites serve the `playground-dist` that `npm run check` already built; set it locally to skip the rebuild when that build is current.
+
 `npm test` builds `dist` and runs the node tests. They import the built package, so a single file run with `node --test` refuses a `dist` older than `src` (tests/support/render.mjs).
 
 ## Manifests and the catalogue
