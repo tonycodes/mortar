@@ -5583,3 +5583,301 @@
     display: none;
   }
 }
+
+/* Commerce and application variants: calendar agenda, order tracker, cart
+   layout with summary and related products, extended summary hints, review
+   avatars, product image overlay, striped description lists and two-column
+   stacked list rows. */
+@layer components {
+  .m-calendar[data-agenda] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+  }
+  .m-calendar-main,
+  .m-calendar-agenda {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .m-calendar-agenda {
+    padding-top: 20px;
+    border-top: 1px solid var(--m-line);
+  }
+  @container m-calendar (min-width: 640px) {
+    .m-calendar-main,
+    .m-calendar-agenda {
+      flex-basis: 0;
+    }
+    .m-calendar-agenda {
+      padding-top: 0;
+      border-top: 0;
+    }
+  }
+  .m-calendar-agenda-title {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-calendar-agenda-list {
+    display: grid;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .m-calendar-agenda-list > li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    border-radius: var(--m-radius-lg);
+  }
+  .m-calendar-agenda-list > li:hover {
+    background: var(--m-sunken);
+  }
+  .m-calendar-agenda-text {
+    display: grid;
+    flex: 1;
+    gap: 2px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--m-ink);
+    font: inherit;
+    font-size: var(--m-font-size);
+    text-align: start;
+  }
+  .m-calendar-agenda-text strong {
+    font-weight: 600;
+  }
+  .m-calendar-agenda-text .m-calendar-event-time {
+    font-size: 13px;
+  }
+  button.m-calendar-agenda-text {
+    cursor: pointer;
+  }
+  .m-calendar-agenda > .m-calendar-none {
+    margin: 0;
+    color: var(--m-muted);
+    font-size: var(--m-font-size);
+  }
+
+  /* ProgressSteps bar: one track filled through the current step. */
+  .m-progress-steps[data-variant="bar"] ol {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+  }
+  .m-progress-steps[data-variant="bar"] li {
+    --m-bar-fill: var(--m-line);
+  }
+  .m-progress-steps[data-variant="bar"] li > * {
+    position: relative;
+    display: block;
+    padding-top: 20px;
+    text-align: center;
+  }
+  .m-progress-steps[data-variant="bar"] li > *::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 8px;
+    background: var(--m-bar-fill);
+  }
+  .m-progress-steps[data-variant="bar"] li:first-child > * {
+    text-align: start;
+  }
+  .m-progress-steps[data-variant="bar"] li:first-child > *::before {
+    border-radius: var(--m-radius-full) 0 0 var(--m-radius-full);
+  }
+  .m-progress-steps[data-variant="bar"] li:last-child > * {
+    text-align: end;
+  }
+  .m-progress-steps[data-variant="bar"] li:last-child > *::before {
+    border-radius: 0 var(--m-radius-full) var(--m-radius-full) 0;
+  }
+  .m-progress-steps[data-variant="bar"] li[data-status="complete"] {
+    --m-bar-fill: var(--m-primary);
+  }
+  /* The current step is half filled; the last one completes the track. */
+  .m-progress-steps[data-variant="bar"] li[data-status="current"] {
+    --m-bar-fill: linear-gradient(
+      to right,
+      var(--m-primary) 50%,
+      var(--m-line) 50%
+    );
+  }
+  .m-progress-steps[data-variant="bar"] li[data-status="current"]:last-child {
+    --m-bar-fill: var(--m-primary);
+  }
+  @media (forced-colors: active) {
+    .m-progress-steps[data-variant="bar"] li > *::before {
+      border: 1px solid CanvasText;
+    }
+    .m-progress-steps[data-variant="bar"]
+      li:is([data-status="complete"], [data-status="current"])
+      > *::before {
+      forced-color-adjust: none;
+      background: Highlight;
+    }
+  }
+  .m-progress-steps[data-variant="bar"] .m-progress-step-text {
+    display: block;
+  }
+  .m-progress-steps[data-variant="bar"] .m-progress-step-name {
+    color: var(--m-muted);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .m-progress-steps[data-variant="bar"]
+    :is([data-status="complete"], [data-status="current"])
+    .m-progress-step-name {
+    color: var(--m-ink);
+  }
+  .m-progress-steps[data-variant="bar"]
+    [data-status="current"]
+    .m-progress-step-name {
+    font-weight: 600;
+  }
+  .m-order-progress {
+    padding: 16px 20px 4px;
+  }
+
+  /* ShoppingCart with a summary column and related products. */
+  .m-cart-layout {
+    container: m-cart-layout / inline-size;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 40px 48px;
+  }
+  .m-cart-layout > * {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  @container m-cart-layout (min-width: 800px) {
+    .m-cart-layout > :is(.m-cart, .m-cart-empty) {
+      flex: 7 1 0;
+    }
+    .m-cart-layout > .m-cart-summary {
+      flex: 5 1 0;
+    }
+  }
+  .m-cart-related {
+    display: grid;
+    gap: 20px;
+    margin-top: 24px;
+  }
+  .m-cart-related-title {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .m-order-hint {
+    display: block;
+    margin-top: 2px;
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-order-hint a {
+    color: var(--m-link);
+  }
+
+  /* ProductReviews with reviewer avatars. */
+  .m-reviews[data-avatars] .m-review header {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 12px;
+    align-items: center;
+  }
+  .m-reviews[data-avatars] .m-review header > * {
+    grid-column: 2;
+  }
+  .m-reviews[data-avatars] .m-review header > .m-review-avatar {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    align-self: start;
+  }
+
+  /* ProductList overlay: name and price on a panel over the image. */
+  .m-product-list[data-variant="overlay"] .m-product-image {
+    display: grid;
+    margin-bottom: 0;
+  }
+  .m-product-list[data-variant="overlay"] .m-product-image > img {
+    grid-area: 1 / 1;
+  }
+  .m-product-overlay {
+    display: flex;
+    grid-area: 1 / 1;
+    align-self: end;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 12px;
+    flex-wrap: wrap;
+    margin: 10px;
+    padding: 10px 12px;
+    border-radius: var(--m-radius);
+    background: color-mix(in srgb, var(--m-surface) 90%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .m-product-overlay > .m-product-info {
+    flex: 1 1 auto;
+  }
+
+  /* DescriptionList striped: shaded alternate rows instead of dividers. */
+  .m-description-list[data-variant="striped"] dl {
+    border-top: 0;
+  }
+  .m-description-list[data-variant="striped"] dl > div {
+    padding-inline: 16px;
+    border-bottom: 0;
+    border-radius: var(--m-radius);
+  }
+  .m-description-list[data-variant="striped"] dl > div:nth-child(odd) {
+    background: var(--m-sunken);
+  }
+
+  /* StackedList second column and link chevrons. */
+  .m-stacked-list:has(.m-stacked-meta) {
+    container: m-stacked-list / inline-size;
+  }
+  .m-stacked-list li > :is(a, div):first-child:has(> .m-stacked-meta) {
+    flex-wrap: wrap;
+  }
+  .m-stacked-list
+    li
+    > :is(a, div):has(> :is(.m-stacked-meta, .m-stacked-chevron))
+    > .m-stacked-text {
+    flex: 1 1 0;
+  }
+  .m-stacked-meta {
+    display: grid;
+    flex-shrink: 0;
+    gap: 2px;
+    max-width: 50%;
+    color: var(--m-ink);
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: end;
+  }
+  .m-stacked-meta > :not(:first-child) {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-stacked-chevron {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--m-muted);
+    --m-icon-size: 18px;
+  }
+  @container m-stacked-list (max-width: 480px) {
+    .m-stacked-meta {
+      order: 3;
+      flex-basis: 100%;
+      max-width: none;
+      text-align: start;
+    }
+  }
+}

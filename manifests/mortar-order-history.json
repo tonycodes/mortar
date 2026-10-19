@@ -2,7 +2,7 @@
   "id": "mortar-order-history",
   "logicalId": "order-history",
   "name": "OrderHistory",
-  "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions; empty state when there are none.",
+  "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions and an optional delivery tracker (ProgressSteps bar: placed, processing, shipped, delivered); empty state when there are none.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
   "export": "OrderHistory",
@@ -12,7 +12,7 @@
   "kitId": "ecommerce",
   "contract": {
     "props": {
-      "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
+      "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; progress?: ProgressStep[] (delivery stages shown as a tracker under the status); items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; each order's heading and the empty state's title)",
       "empty": "{ title: string; description?: string; action?: ReactNode } (default \"No orders yet\")",
       "id": "string",
@@ -21,7 +21,7 @@
     "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": ["mortar-empty-state"]
+    "dependencies": ["mortar-empty-state", "mortar-progress-steps"]
   },
   "preview": {
     "source": "previews/OrderHistoryPreview.tsx"

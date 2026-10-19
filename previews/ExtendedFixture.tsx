@@ -509,6 +509,38 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
+          <UI.StackedList
+            title="People"
+            chevrons
+            items={[
+              {
+                id: "leslie",
+                title: "Leslie Alexander",
+                description: "leslie.alexander@example.com",
+                leading: <UI.Avatar name="Leslie Alexander" decorative />,
+                meta: (
+                  <>
+                    <span>Co-founder / CEO</span>
+                    <span>Last seen 3h ago</span>
+                  </>
+                ),
+                href: "#leslie",
+              },
+              {
+                id: "michael",
+                title: "Michael Foster",
+                description: "michael.foster@example.com",
+                leading: <UI.Avatar name="Michael Foster" decorative />,
+                meta: (
+                  <>
+                    <span>Co-founder / CTO</span>
+                    <span>Online</span>
+                  </>
+                ),
+                href: "#michael",
+              },
+            ]}
+          />
         </UI.Stack>
       );
       break;

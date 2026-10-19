@@ -88,9 +88,47 @@ const schedule: UI.CalendarEvent[] = [
   },
 ];
 
+/** Meetings with attendees for the month view's agenda. */
+const people = (name: string) => <UI.Avatar name={name} size="sm" decorative />;
+const agendaMeetings: UI.CalendarEvent[] = [
+  {
+    id: "a1",
+    date: "2026-10-21",
+    title: "Leslie Alexander",
+    start: "13:00",
+    end: "14:30",
+    media: people("Leslie Alexander"),
+  },
+  {
+    id: "a2",
+    date: "2026-10-21",
+    title: "Michael Foster",
+    start: "09:00",
+    end: "10:00",
+    media: people("Michael Foster"),
+  },
+  {
+    id: "a3",
+    date: "2026-10-22",
+    title: "Dries Vincent",
+    start: "17:00",
+    end: "18:30",
+    media: people("Dries Vincent"),
+  },
+  {
+    id: "a4",
+    date: "2026-10-28",
+    title: "Lindsay Walton",
+    start: "11:00",
+    end: "12:00",
+    media: people("Lindsay Walton"),
+  },
+];
+
 export function StructureCase({ name }: { name: string }) {
   const [dismissed, setDismissed] = useState(false);
   const [day, setDay] = useState("2026-10-20");
+  const [meetingDay, setMeetingDay] = useState("2026-10-21");
   const [view, setView] = useState<UI.CalendarView>("week");
   const [opened, setOpened] = useState("none");
   const [comments, setComments] = useState<string[]>([]);
@@ -199,6 +237,17 @@ export function StructureCase({ name }: { name: string }) {
               { id: "shipping", name: "Shipping", status: "current" },
               { id: "payment", name: "Payment", status: "upcoming" },
               { id: "review", name: "Review", status: "upcoming" },
+            ]}
+          />
+          <UI.ProgressSteps
+            label="Order WU88191322 progress"
+            variant="bar"
+            navigation={false}
+            steps={[
+              { id: "placed", name: "Order placed", status: "complete" },
+              { id: "processing", name: "Processing", status: "complete" },
+              { id: "shipped", name: "Shipped", status: "current" },
+              { id: "delivered", name: "Delivered", status: "upcoming" },
             ]}
           />
         </UI.Stack>
@@ -389,6 +438,18 @@ export function StructureCase({ name }: { name: string }) {
             />
             <output aria-label="Opened event">{opened}</output>
           </div>
+          <UI.Calendar
+            agenda
+            today="2026-10-21"
+            selected={meetingDay}
+            onSelect={setMeetingDay}
+            events={agendaMeetings}
+            onEventSelect={(id) =>
+              setOpened(
+                agendaMeetings.find((event) => event.id === id)?.title ?? id,
+              )
+            }
+          />
         </UI.Stack>
       );
       break;

@@ -67,6 +67,76 @@ export const products: UI.ProductCard[] = [
   },
 ];
 
+/** Suggestions under a bag; names differ from the bag's lines. */
+const relatedProducts: UI.ProductCard[] = [
+  {
+    id: "market-bag",
+    name: "Market bag",
+    href: "#market-bag",
+    price: "£24",
+    meta: "Olive",
+    image: { src: tote("7d8a5a"), alt: "Olive canvas market bag" },
+  },
+  {
+    id: "espresso-cup",
+    name: "Espresso cup",
+    href: "#espresso-cup",
+    price: "£12",
+    meta: "Chalk",
+    image: { src: mug("e7e2d6"), alt: "Chalk white espresso cup" },
+  },
+  {
+    id: "linen-shirt",
+    name: "Linen shirt",
+    href: "#linen-shirt",
+    price: "£54",
+    meta: "Sand",
+    image: { src: shirt("c9b28f"), alt: "Sand linen shirt" },
+  },
+  {
+    id: "travel-mug",
+    name: "Travel mug",
+    href: "#travel-mug",
+    price: "£22",
+    meta: "Ink",
+    image: { src: mug("2f3b52"), alt: "Ink blue travel mug" },
+  },
+];
+
+const extendedCart: UI.CartItem[] = [
+  {
+    id: "tee",
+    name: "Organic tee",
+    href: "#tee",
+    price: "£28",
+    quantity: 1,
+    meta: "Charcoal · Medium",
+    stock: "In stock",
+    image: products[2].image,
+  },
+];
+
+const extendedSummary = (
+  <UI.OrderSummary
+    title="Your order"
+    lines={[
+      { label: "Subtotal", value: "£28.00" },
+      {
+        label: "Shipping estimate",
+        value: "£4.95",
+        hint: <a href="#shipping">How shipping is worked out</a>,
+      },
+      {
+        label: "Tax estimate",
+        value: "£4.67",
+        hint: "VAT at 20%, confirmed at checkout",
+      },
+    ]}
+    total={{ label: "Order total", value: "£32.95" }}
+    action={<UI.Button>Checkout</UI.Button>}
+  />
+);
+
 /** Category per product id, for templates that filter the list. */
 export const productCategory: Record<string, string> = {
   tote: "bags",
@@ -205,6 +275,7 @@ export function EcommerceCase({ name }: { name: string }) {
   });
   const [added, setAdded] = useState(0);
   const [items, setItems] = useState(cartItems);
+  const [extended, setExtended] = useState(extendedCart);
   const [quick, setQuick] = useState(false);
   const [filters, setFilters] = useState<Record<string, string[]>>({
     colour: ["black"],
@@ -267,6 +338,12 @@ export function EcommerceCase({ name }: { name: string }) {
                 ),
               },
             ]}
+          />
+          <UI.ProductList
+            label="Kitchen and travel"
+            variant="overlay"
+            columns={3}
+            products={relatedProducts.slice(0, 3)}
           />
         </UI.Stack>
       );
@@ -355,22 +432,45 @@ export function EcommerceCase({ name }: { name: string }) {
           <output aria-label="Bag count">
             {items.reduce((n, item) => n + item.quantity, 0)}
           </output>
+          <UI.Divider />
+          <UI.ShoppingCart
+            label="Items in your saved bag"
+            items={extended}
+            onQuantityChange={(id, quantity) =>
+              setExtended((current) =>
+                current.map((item) =>
+                  item.id === id ? { ...item, quantity } : item,
+                ),
+              )
+            }
+            onRemove={(id) =>
+              setExtended((current) => current.filter((item) => item.id !== id))
+            }
+            summary={extendedSummary}
+            related={{
+              title: "You may also like",
+              products: relatedProducts,
+            }}
+          />
         </>
       );
       break;
     case "OrderSummary":
       example = (
-        <div className="max-w-sm">
-          <UI.OrderSummary
-            lines={[
-              { label: "Subtotal", value: "£68.00" },
-              { label: "Shipping", value: "£4.95" },
-              { label: "VAT included", value: "£11.33" },
-            ]}
-            total={{ label: "Order total", value: "£72.95" }}
-            action={<UI.Button>Checkout</UI.Button>}
-          />
-        </div>
+        <UI.Stack gap="xl">
+          <div className="max-w-sm">
+            <UI.OrderSummary
+              lines={[
+                { label: "Subtotal", value: "£68.00" },
+                { label: "Shipping", value: "£4.95" },
+                { label: "VAT included", value: "£11.33" },
+              ]}
+              total={{ label: "Order total", value: "£72.95" }}
+              action={<UI.Button>Checkout</UI.Button>}
+            />
+          </div>
+          <div className="max-w-sm">{extendedSummary}</div>
+        </UI.Stack>
       );
       break;
     case "ProductQuickView":
@@ -426,19 +526,53 @@ export function EcommerceCase({ name }: { name: string }) {
       break;
     case "ProductReviews":
       example = (
-        <UI.ProductReviews
-          average={4.4}
-          count={112}
-          distribution={[
-            { stars: 5, count: 70 },
-            { stars: 4, count: 30 },
-            { stars: 3, count: 8 },
-            { stars: 2, count: 3 },
-            { stars: 1, count: 1 },
-          ]}
-          reviews={reviews}
-          action={<UI.Button variant="secondary">Write a review</UI.Button>}
-        />
+        <UI.Stack gap="xl">
+          <UI.ProductReviews
+            average={4.4}
+            count={112}
+            distribution={[
+              { stars: 5, count: 70 },
+              { stars: 4, count: 30 },
+              { stars: 3, count: 8 },
+              { stars: 2, count: 3 },
+              { stars: 1, count: 1 },
+            ]}
+            reviews={reviews}
+            action={<UI.Button variant="secondary">Write a review</UI.Button>}
+          />
+          <UI.ProductReviews
+            title="Mug reviews"
+            avatars
+            average={4.7}
+            count={38}
+            distribution={[
+              { stars: 5, count: 29 },
+              { stars: 4, count: 7 },
+              { stars: 3, count: 2 },
+              { stars: 2, count: 0 },
+              { stars: 1, count: 0 },
+            ]}
+            reviews={[
+              {
+                id: "m1",
+                author: "Lindsay Walton",
+                rating: 5,
+                date: "4 October 2026",
+                title: "My morning favourite",
+                body: "The glaze is lovely and it keeps coffee warm for ages.",
+              },
+              {
+                id: "m2",
+                author: "Courtney Henry",
+                rating: 4,
+                date: "21 September 2026",
+                title: "Heavier than expected",
+                body: "Beautiful mug, though it is quite weighty when full.",
+              },
+            ]}
+            action={<UI.Button variant="secondary">Review the mug</UI.Button>}
+          />
+        </UI.Stack>
       );
       break;
     case "OrderHistory":
@@ -475,6 +609,25 @@ export function EcommerceCase({ name }: { name: string }) {
                     </>
                   ),
                 })),
+              },
+            ]}
+          />
+          <UI.OrderHistory
+            headingLevel={3}
+            orders={[
+              {
+                ...orders[1],
+                id: "o4",
+                number: "WU88191322",
+                date: "16 October 2026",
+                status: "Shipped on 17 October 2026",
+                href: "#order-4",
+                progress: [
+                  { id: "placed", name: "Order placed", status: "complete" },
+                  { id: "processing", name: "Processing", status: "complete" },
+                  { id: "shipped", name: "Shipped", status: "current" },
+                  { id: "delivered", name: "Delivered", status: "upcoming" },
+                ],
               },
             ]}
           />
