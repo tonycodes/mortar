@@ -2,6 +2,7 @@ import { StateFixture } from "./StateFixture.js";
 import { useState, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 import { icons } from "./CompositionFixture.js";
+import { art, scenes } from "./MarketingArt.js";
 
 /** Fixtures for components added in the v2 kits PR. Kept apart from Fixture.tsx to keep the diff reviewable. */
 export function ExtendedCase({ name }: { name: string }) {
@@ -407,33 +408,71 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "ContentSection":
       example = (
-        <UI.ContentSection
-          eyebrow="Our story"
-          title="Why Mortar exists"
-          description="Every product we worked on rebuilt the same buttons, forms and page shells."
-          media={
-            <UI.MockWindow label="Northwind dashboard">
-              <UI.MetricGroup
-                label="This week"
-                items={[
-                  { label: "Deploys", value: "48" },
-                  { label: "Incidents", value: "1" },
-                ]}
-              />
-            </UI.MockWindow>
-          }
-        >
-          <p>
-            Each rebuild drifted: different focus rings, different dark modes,
-            different accessibility bugs. Fixing one product never fixed the
-            others.
-          </p>
-          <p>
-            Mortar puts those decisions in one place. Components ship with typed
-            contracts, both themes and executable accessibility checks, so a fix
-            lands everywhere at once.
-          </p>
-        </UI.ContentSection>
+        <>
+          <UI.ContentSection
+            eyebrow="Our story"
+            title="Why Mortar exists"
+            description="Every product we worked on rebuilt the same buttons, forms and page shells."
+            media={
+              <UI.MockWindow label="Northwind dashboard">
+                <UI.MetricGroup
+                  label="This week"
+                  items={[
+                    { label: "Deploys", value: "48" },
+                    { label: "Incidents", value: "1" },
+                  ]}
+                />
+              </UI.MockWindow>
+            }
+          >
+            <p>
+              Each rebuild drifted: different focus rings, different dark modes,
+              different accessibility bugs. Fixing one product never fixed the
+              others.
+            </p>
+            <p>
+              Mortar puts those decisions in one place. Components ship with
+              typed contracts, both themes and executable accessibility checks,
+              so a fix lands everywhere at once.
+            </p>
+          </UI.ContentSection>
+          <UI.ContentSection
+            eyebrow="Our mission"
+            title="On a mission to make shipping boring"
+            description="We want every release to feel like a non-event."
+            media={<img alt="" src={scenes[3]} />}
+            mediaPosition="start"
+            stats={[
+              { label: "Founded", value: "2021" },
+              { label: "Employees", value: "37" },
+              { label: "Countries", value: "12" },
+              { label: "Raised", value: "$25M" },
+            ]}
+          >
+            <p>
+              Releases used to take a war room. Now a typed contract and a
+              shared test suite catch the regressions before anyone has to.
+            </p>
+          </UI.ContentSection>
+          <UI.ContentSection
+            eyebrow="Case study"
+            title="How Wheelhouse halved its support queue"
+            description="One inbox for chats, bookings and follow-ups."
+            tone="muted"
+            testimonial={{
+              quote:
+                "We answered twice as many customers in the first month, without hiring.",
+              name: "Lindsay Walton",
+              role: "Owner, Wheelhouse Bikes",
+              avatar: <UI.Avatar name="Lindsay Walton" decorative />,
+            }}
+          >
+            <p>
+              Wheelhouse moved three channels into one shared queue and set up
+              saved replies for the questions they hear every day.
+            </p>
+          </UI.ContentSection>
+        </>
       );
       break;
     case "StackedList":
@@ -514,35 +553,65 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "BentoGrid":
       example = (
-        <UI.BentoGrid
-          title="Layout"
-          items={[
-            {
-              title: "Wide",
-              description: "Spans two columns.",
-              span: 2,
-              visual: (
-                <div
-                  style={{
-                    background: "var(--m-line)",
-                    minHeight: 72,
-                    borderRadius: 8,
-                  }}
-                />
-              ),
-            },
-            {
-              title: "Focus",
-              description: "An inverse tile.",
-              tone: "inverse",
-            },
-          ]}
-        />
+        <>
+          <UI.BentoGrid
+            title="Layout"
+            items={[
+              {
+                title: "Wide",
+                description: "Spans two columns.",
+                span: 2,
+                visual: (
+                  <div
+                    style={{
+                      background: "var(--m-line)",
+                      minHeight: 72,
+                      borderRadius: 8,
+                    }}
+                  />
+                ),
+              },
+              {
+                title: "Focus",
+                description: "An inverse tile.",
+                tone: "inverse",
+              },
+            ]}
+          />
+          <UI.BentoGrid
+            eyebrow="Platform"
+            title="Everything you need to ship"
+            description="Three columns, with tall tiles at both ends."
+            tone="inverse"
+            items={[
+              {
+                title: "Mobile friendly",
+                description: "Every screen adapts from phone to desktop.",
+                rowSpan: 2,
+                visual: <img alt="" src={scenes[1]} style={art} />,
+              },
+              {
+                title: "Performance",
+                description: "Pages render on the server and stream in.",
+              },
+              {
+                title: "Powerful APIs",
+                description: "Typed clients for every endpoint.",
+                rowSpan: 2,
+                visual: <img alt="" src={scenes[2]} style={art} />,
+              },
+              {
+                title: "Security",
+                description: "Single sign-on and audit logs on every plan.",
+              },
+            ]}
+          />
+        </>
       );
       break;
     case "StatGroup":
       example = (
-        <>
+        <UI.Stack gap="xl">
           <UI.StatGroup
             label="Platform numbers"
             items={[
@@ -570,7 +639,64 @@ export function ExtendedCase({ name }: { name: string }) {
               },
             ]}
           />
-        </>
+          <UI.StatGroup
+            label="Company numbers"
+            background={<img alt="" src={scenes[0]} />}
+            items={[
+              { value: "8,000+", label: "Creators on the platform" },
+              { value: "3%", label: "Flat platform fee" },
+              { value: "99.9%", label: "Uptime guarantee" },
+              { value: "$70M", label: "Paid out to creators" },
+            ]}
+          />
+          <UI.StatGroup
+            label="Company milestones"
+            layout="timeline"
+            items={[
+              {
+                value: "Aug 2021",
+                label: "Founded company",
+                description: "Two engineers and a shared design system.",
+              },
+              {
+                value: "Dec 2021",
+                label: "Secured funding",
+                description: "A seed round to grow the team.",
+              },
+              {
+                value: "Feb 2022",
+                label: "Released beta",
+                description: "Forty teams joined in the first month.",
+              },
+              {
+                value: "Dec 2022",
+                label: "Global launch",
+                description: "Available in every region.",
+              },
+            ]}
+          />
+          <UI.StatGroup
+            label="Growth"
+            layout="stepped"
+            items={[
+              {
+                value: "250k",
+                label: "Users on the platform",
+                description: "Across 40 countries.",
+              },
+              {
+                value: "$8.9B",
+                label: "Processed every quarter",
+                description: "With no downtime last year.",
+              },
+              {
+                value: "401k",
+                label: "Projects created",
+                description: "Most in their first week.",
+              },
+            ]}
+          />
+        </UI.Stack>
       );
       break;
     case "TestimonialGrid":
@@ -676,23 +802,32 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "NotFound":
       example = (
-        <UI.NotFound
-          title="This page isn't deployed."
-          description="Check the URL or head back home."
-          actions={[{ label: "Go home", href: "/" }, action]}
-          illustration={
-            <svg
-              viewBox="0 0 120 80"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-            >
-              <path d="M20 60h80M30 60V30l30-18 30 18v30M50 60V42h20v18" />
-              <path d="M88 14l14 14M102 14L88 28" />
-            </svg>
-          }
-        />
+        <>
+          <UI.NotFound
+            title="This page isn't deployed."
+            description="Check the URL or head back home."
+            actions={[{ label: "Go home", href: "/" }, action]}
+            illustration={
+              <svg
+                viewBox="0 0 120 80"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+              >
+                <path d="M20 60h80M30 60V30l30-18 30 18v30M50 60V42h20v18" />
+                <path d="M88 14l14 14M102 14L88 28" />
+              </svg>
+            }
+          />
+          <UI.NotFound
+            headingLevel={2}
+            title="This trail doesn't go anywhere."
+            description="The page you're looking for has moved or never existed."
+            actions={[{ label: "Back to home", href: "/" }]}
+            background={<img alt="" src={scenes[1]} />}
+          />
+        </>
       );
       break;
     case "DocsShell":

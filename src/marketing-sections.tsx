@@ -19,6 +19,7 @@ export function BentoGrid({
   title,
   description,
   items,
+  tone = "default",
   headingLevel = 2,
 }: {
   id?: string;
@@ -30,10 +31,15 @@ export function BentoGrid({
     title: string;
     description: string;
     visual?: ReactNode;
+    /** Columns the tile spans. */
     span?: 1 | 2;
+    /** Rows the tile spans, e.g. tall tiles at both ends of a three-column grid. */
+    rowSpan?: 1 | 2;
     /** The tile's surface; inverse remaps it to the inverse tokens. */
     tone?: SectionTone;
   }[];
+  /** The section's band; inverse gives a dark section whose tiles follow the remapped tokens. */
+  tone?: SectionTone;
   /** The section title's level; tile titles sit one level below. */
   headingLevel?: HeadingLevel;
 }) {
@@ -42,6 +48,7 @@ export function BentoGrid({
     <section
       id={id}
       className={cx("m-marketing-section", className)}
+      data-tone={sectionTone(tone)}
       data-m-component="BentoGrid"
     >
       <TitledIntro
@@ -52,7 +59,11 @@ export function BentoGrid({
       />
       <ul className="m-bento">
         {items.map((item, index) => (
-          <li key={`${item.title}:${index}`} data-span={item.span || 1}>
+          <li
+            key={`${item.title}:${index}`}
+            data-span={item.span || 1}
+            data-row-span={item.rowSpan === 2 ? 2 : undefined}
+          >
             <article data-tone={sectionTone(item.tone)}>
               {item.visual && (
                 <div className="m-bento-visual">{item.visual}</div>
@@ -72,19 +83,26 @@ export function StatGroup({
   className,
   label,
   items,
+  layout = "grid",
+  background,
 }: {
   id?: string;
   className?: string;
   label: string;
   /** description: optional supporting sentence under the value. */
   items: { value: string; label: string; description?: string }[];
+  /** grid: ruled columns. timeline: a dotted line through the items, for dated milestones (value is the date). stepped: cards that rise in height from first to last. */
+  layout?: "grid" | "timeline" | "stepped";
+  /** Decorative full-cover image behind the stats. The group switches to the inverse tone with a scrim so text keeps its contrast. */
+  background?: ReactNode;
 }) {
-  return (
+  const list = (
     <TermList
-      id={id}
-      className={cx("m-stat-group", className)}
+      id={background ? undefined : id}
+      className={cx("m-stat-group", !background && className)}
       aria-label={label}
-      data-m-component="StatGroup"
+      data-layout={layout === "grid" ? undefined : layout}
+      data-m-component={background ? undefined : "StatGroup"}
       items={items.map((item) => ({
         term: item.label,
         details: item.value,
@@ -93,6 +111,21 @@ export function StatGroup({
         ),
       }))}
     />
+  );
+  if (!background) return list;
+  return (
+    <div
+      id={id}
+      className={cx("m-stat-band", className)}
+      data-m-component="StatGroup"
+      data-background="true"
+      data-tone="inverse"
+    >
+      <div className="m-cover-background" aria-hidden="true">
+        {background}
+      </div>
+      {list}
+    </div>
   );
 }
 
@@ -475,6 +508,7 @@ export function NotFound({
   description,
   actions,
   illustration,
+  background,
   headingLevel = 1,
 }: {
   id?: string;
@@ -485,6 +519,8 @@ export function NotFound({
   actions: LinkAction[];
   /** Decorative artwork above the code. */
   illustration?: ReactNode;
+  /** Decorative full-cover image behind the message. The section switches to the inverse tone with a scrim so text keeps its contrast. */
+  background?: ReactNode;
   headingLevel?: HeadingLevel;
 }) {
   const Heading = headingTag(headingLevel);
@@ -493,7 +529,14 @@ export function NotFound({
       id={id}
       className={cx("m-not-found", className)}
       data-m-component="NotFound"
+      data-background={background ? true : undefined}
+      data-tone={background ? "inverse" : undefined}
     >
+      {background && (
+        <div className="m-cover-background" aria-hidden="true">
+          {background}
+        </div>
+      )}
       {illustration && (
         <div className="m-not-found-art" aria-hidden="true">
           {illustration}

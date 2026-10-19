@@ -16,7 +16,8 @@ export function MockWindow({
   label: string;
   /** Optional URL or file name shown in the title bar. */
   address?: string;
-  variant?: "browser" | "app" | "plain";
+  /** browser: title bar with dots. app: title bar without dots. plain: no chrome. phone: a portrait handset frame. */
+  variant?: "browser" | "app" | "plain" | "phone";
   children: ReactNode;
 }) {
   return (
@@ -27,7 +28,7 @@ export function MockWindow({
       aria-label={label}
       data-m-component="MockWindow"
     >
-      {variant !== "plain" && (
+      {variant !== "plain" && variant !== "phone" && (
         <div className="m-mock-bar" aria-hidden="true">
           <span className="m-mock-dots">
             <i />
