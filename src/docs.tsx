@@ -1,11 +1,13 @@
 import { KitLink } from "./navigation.js";
 import { useEffect, useId, useState, type ReactNode } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { Button, type LinkAction } from "./primitives.js";
 import type { NavigationItem } from "./application.js";
 import { CommandPalette, type CommandItem } from "./workspace.js";
 import { Kbd } from "./display.js";
 import { BrandMark } from "./layout.js";
+import type { ItemGroup, LinkItem } from "./navigation.js";
+import { headingTag } from "./heading.js";
+import { MobileNavDialog, TermList, rovingIndex } from "./internal.js";
 
 export interface DocsShellProps {
   brand: string;
@@ -16,7 +18,7 @@ export interface DocsShellProps {
   navigationLabel?: string;
   homeHref?: string;
   version?: ReactNode;
-  sections?: (LinkAction & { current?: boolean })[];
+  sections?: Pick<LinkItem, "label" | "href" | "current">[];
   navigation: { title: string; items: NavigationItem[] }[];
   toc?: { id: string; label: string; current?: boolean }[];
   tocLabel?: string;
@@ -123,18 +125,9 @@ export function DocsShell({
           </aside>
         )}
       </div>
-      <Dialog open={open} onClose={() => setOpen(false)} className="m-dialog">
-        <div className="m-backdrop" aria-hidden="true" />
-        <DialogPanel className="m-mobile-sidebar">
-          <div className="m-dialog-heading">
-            <DialogTitle>{brand}</DialogTitle>
-            <Button variant="ghost" onClick={() => setOpen(false)}>
-              Close navigation
-            </Button>
-          </div>
-          {tree}
-        </DialogPanel>
-      </Dialog>
+      <MobileNavDialog open={open} onClose={() => setOpen(false)} title={brand}>
+        {tree}
+      </MobileNavDialog>
     </div>
   );
 }
@@ -174,7 +167,7 @@ export function SearchDialog(props: {
   onClose: () => void;
   query: string;
   onQueryChange: (value: string) => void;
-  groups: { label: string; items: CommandItem[] }[];
+  groups: ItemGroup<CommandItem>[];
   attribution?: ReactNode;
 }) {
   return (
@@ -211,7 +204,7 @@ export function Steps({
   }[];
   headingLevel?: 2 | 3 | 4;
 }) {
-  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
+  const Heading = headingTag(headingLevel);
   return (
     <ol className="m-steps">
       {items.map((item, i) => (
@@ -305,10 +298,6 @@ export function FileTree({
   );
 }
 
-export function Prose({ children }: { children: ReactNode }) {
-  return <div className="m-prose">{children}</div>;
-}
-
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -365,15 +354,15 @@ export function CodeTabs({
                 tabIndex={t.id === current.id ? 0 : -1}
                 onClick={() => setActive(t.id)}
                 onKeyDown={(e) => {
-                  const i = tabs.findIndex((x) => x.id === current.id);
-                  const n =
-                    e.key === "ArrowRight"
-                      ? i + 1
-                      : e.key === "ArrowLeft"
-                        ? i - 1
-                        : null;
-                  if (n === null) return;
-                  const next = tabs[(n + tabs.length) % tabs.length]!;
+                  // Arrows only, without preventDefault: Tabs also handles
+                  // Home/End; the API phase aligns the two.
+                  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+                  const n = rovingIndex(
+                    e.key,
+                    tabs.findIndex((x) => x.id === current.id),
+                    tabs.length,
+                  )!;
+                  const next = tabs[n]!;
                   setActive(next.id);
                   document.getElementById(`${base}-${next.id}`)?.focus();
                 }}
@@ -489,20 +478,22 @@ export function ApiEndpoint({
         <h2 id={id}>{title}</h2>
         {description && <div className="m-api-description">{description}</div>}
         <h3>{paramsLabel}</h3>
-        <dl className="m-param-list">
-          {params.map((p) => (
-            <div key={p.name}>
-              <dt>
+        <TermList
+          className="m-param-list"
+          items={params.map((p) => ({
+            key: p.name,
+            term: (
+              <>
                 <code>{p.name}</code>
                 <span>{p.type}</span>
                 <span data-required={p.required || undefined}>
                   {p.required ? "Required" : "Optional"}
                 </span>
-              </dt>
-              <dd>{p.description}</dd>
-            </div>
-          ))}
-        </dl>
+              </>
+            ),
+            details: p.description,
+          }))}
+        />
       </div>
       {examples && <div className="m-api-examples">{examples}</div>}
     </section>

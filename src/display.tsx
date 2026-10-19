@@ -1,5 +1,8 @@
 import type { ReactNode } from "react";
 import { KitLink } from "./navigation.js";
+import { Check, Paperclip, Person } from "./icons.js";
+import { headingTag } from "./heading.js";
+import { SectionIntro, TermList } from "./internal.js";
 
 function initials(name: string) {
   return name
@@ -39,14 +42,7 @@ export function Avatar({
       {src ? (
         <img src={src} alt="" />
       ) : placeholder === "icon" ? (
-        <svg
-          className="m-avatar-placeholder"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0 1 12.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" />
-        </svg>
+        <Person className="m-avatar-placeholder" />
       ) : (
         <span aria-hidden="true">{initials(name)}</span>
       )}
@@ -201,16 +197,7 @@ export function CheckList({
     >
       {items.map((item, i) => (
         <li key={i}>
-          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-            <path
-              d="M3.5 8.5 6.5 11.5 12.5 4.5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Check variant="list" />
           <span>{item}</span>
         </li>
       ))}
@@ -232,26 +219,28 @@ export function DescriptionList({
   items: { term: string; details: ReactNode; action?: ReactNode }[];
   layout?: "columns" | "stacked";
 }) {
-  const Heading = `h${headingLevel}` as const;
   return (
     <div className="m-description-list" data-layout={layout}>
       {title && (
         <div className="m-description-heading">
-          <Heading>{title}</Heading>
-          {description && <p>{description}</p>}
+          <SectionIntro
+            title={title}
+            description={description}
+            headingLevel={headingLevel}
+            descriptionClassName={null}
+          />
         </div>
       )}
-      <dl>
-        {items.map((item) => (
-          <div key={item.term} data-action={item.action ? true : undefined}>
-            <dt>{item.term}</dt>
-            <dd>{item.details}</dd>
-            {item.action && (
-              <dd className="m-description-action">{item.action}</dd>
-            )}
-          </div>
-        ))}
-      </dl>
+      <TermList
+        items={items.map((item) => ({
+          term: item.term,
+          details: item.details,
+          attributes: { "data-action": item.action ? true : undefined },
+          after: item.action && (
+            <dd className="m-description-action">{item.action}</dd>
+          ),
+        }))}
+      />
     </div>
   );
 }
@@ -287,7 +276,7 @@ export function GridList({
   /** `split` gives each action an equal cell divided by shared borders, e.g. Email | Call. */
   actionsLayout?: "inline" | "split";
 }) {
-  const Heading = `h${headingLevel}` as const;
+  const Heading = headingTag(headingLevel);
   return (
     <ul
       className="m-grid-list"
@@ -319,14 +308,7 @@ export function GridList({
             </div>
           </div>
           {item.details && item.details.length > 0 && (
-            <dl className="m-grid-list-details">
-              {item.details.map((detail) => (
-                <div key={detail.term}>
-                  <dt>{detail.term}</dt>
-                  <dd>{detail.details}</dd>
-                </div>
-              ))}
-            </dl>
+            <TermList className="m-grid-list-details" items={item.details} />
           )}
           {item.actions && (
             <div className="m-grid-list-actions">{item.actions}</div>
@@ -347,17 +329,6 @@ export interface Attachment {
   actionLabel?: string;
   icon?: ReactNode;
 }
-const paperclip = (
-  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-    <path
-      d="M7 10.5l5-5a2.5 2.5 0 0 1 3.5 3.5l-6.5 6.5a4 4 0 0 1-5.7-5.7l6.2-6.2"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
 /** Files attached to a record, each with a size and a named download link. */
 export function AttachmentList({
   files,
@@ -371,7 +342,7 @@ export function AttachmentList({
       {files.map((file) => (
         <li key={file.id}>
           <span className="m-attachment-icon" aria-hidden="true">
-            {file.icon ?? paperclip}
+            {file.icon ?? <Paperclip />}
           </span>
           <span className="m-attachment-text">
             <span className="m-attachment-name">{file.name}</span>

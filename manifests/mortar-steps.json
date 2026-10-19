@@ -5,29 +5,16 @@
   "description": "Mortar documentation steps, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Steps",
   "source": "src/docs.tsx",
-  "capabilities": ["theme", "docs"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "docs",
-  "provenance": {
-    "kitId": "docs",
-    "exampleId": "mortar-docs-reference",
-    "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
-  },
   "contract": {
     "props": {
       "items": "{ title; id?; description?; content? }[]",
       "headingLevel": "2 | 3 | 4"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Steps } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -40,9 +27,5 @@
     "profile": "display",
     "target": ".m-steps",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "6244e1aa9dc83f6b7698a1db716401a37d52ac6d974d3305eda459b425691e9d"
   }
 }

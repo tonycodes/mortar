@@ -5,16 +5,11 @@
   "description": "Mortar page container with shared widths and gutters, replacing max-w/mx-auto/px utilities.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Container",
   "source": "src/layout.tsx",
-  "capabilities": ["theme", "foundation"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference"
-  },
   "contract": {
     "props": {
       "as": "ElementType",
@@ -22,13 +17,6 @@
       "padded": "boolean",
       "children": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Container } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -41,9 +29,5 @@
     "profile": "composite",
     "target": ".m-container",
     "states": []
-  },
-  "integrity": {
-    "source": "5c37ce5a131cee173306ca2e724610a00a9a72e7c80dfe3672ea68ba97c63131",
-    "preview": "6a7ae8a7dd63a9c252a87187b10e70803c1644f2758eed7eec8f618472e6604b"
   }
 }

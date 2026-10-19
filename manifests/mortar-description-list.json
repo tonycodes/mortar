@@ -5,16 +5,11 @@
   "description": "Mortar description list: label/value pairs for detail screens, in columns when wide and stacked when narrow, with optional row actions.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "DescriptionList",
   "source": "src/display.tsx",
-  "capabilities": ["theme", "application", "responsive"],
+  "capabilities": ["responsive"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "title": "string",
@@ -23,13 +18,6 @@
       "items": "{ term: string; details: ReactNode; action?: ReactNode }[]",
       "layout": "\"columns\" | \"stacked\""
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { DescriptionList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -42,9 +30,5 @@
     "profile": "display",
     "target": ".m-description-list",
     "states": ["long"]
-  },
-  "integrity": {
-    "source": "a5899e9581dc2924760f94f692cdf008e03d9366818a6520a18fdce6a13e36b0",
-    "preview": "a3b276218d488860622ec199db9ef2b13f13de37c598aa370113a083d7d76e9d"
   }
 }

@@ -5,35 +5,22 @@
   "description": "Mortar foundation theme provider, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ThemeProvider",
   "source": "src/foundation.tsx",
-  "capabilities": ["theme", "foundation"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference",
-    "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
-  },
   "contract": {
     "props": {
       "children": "ReactNode",
       "initialAppearance": "light | dark | system",
       "brand": "neutral | green",
       "density": "compact | comfortable | spacious",
-      "appearance": "Optional controlled light | dark | system",
+      "appearance": "\"light\" | \"dark\" | \"system\" (optional; controlled together with onAppearanceChange)",
       "onAppearanceChange": "(appearance: Appearance) => void",
       "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation.",
       "scope": "\"document\" | \"container\""
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { ThemeProvider } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -47,9 +34,5 @@
     "target": ".m-segmented",
     "states": ["scope-container"],
     "probe": "appearance"
-  },
-  "integrity": {
-    "source": "570f3a8aed00037781506d8d6767efd0a7d42e68c9286753ced70b25199ab72d",
-    "preview": "3d10af21e1fe5994d728cb606b81e875dd7fa4baf7c71b6b943b5d1596104b46"
   }
 }

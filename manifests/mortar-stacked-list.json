@@ -5,17 +5,11 @@
   "description": "Mortar application stacked list, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "StackedList",
   "source": "src/workspace.tsx",
-  "capabilities": ["theme", "application"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference",
-    "sourceDigest": "59cc40c87590db0193cfd5e1ef60d47f5783df1f8713e81d51bfca082bb1fa93"
-  },
   "contract": {
     "props": {
       "label": "string",
@@ -24,13 +18,6 @@
       "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? })",
       "groups": "{ label: string; items: StackedListItem[] }[]"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -43,9 +30,5 @@
     "profile": "composite",
     "target": ".m-stacked-list",
     "states": []
-  },
-  "integrity": {
-    "source": "9b9b2c3606dfaac2258b62f607fd2b2e9293a803b620228153403e94ab7dc572",
-    "preview": "eca996b7e84171cd48af0f5285c8ec6c0ffa7125e1a7b6da384d91ba3ded647d"
   }
 }

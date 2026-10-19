@@ -5,29 +5,16 @@
   "description": "Mortar marketing stat group, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "StatGroup",
   "source": "src/marketing-sections.tsx",
-  "capabilities": ["theme", "marketing"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "marketing",
-  "provenance": {
-    "kitId": "marketing",
-    "exampleId": "mortar-marketing-reference",
-    "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
-  },
   "contract": {
     "props": {
       "label": "string",
       "items": "{ value: string; label: string; description?: string }[]"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { StatGroup } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -40,9 +27,5 @@
     "profile": "composite",
     "target": ".m-stat-group",
     "states": []
-  },
-  "integrity": {
-    "source": "9ba2f1ba84a31ab8cb6520ee9bada8c7546dda523828b73899b4d519d7110964",
-    "preview": "37483c4a98b4f599c0467a07da8dcc564c6c7c19d4b06dadd8c53ec60a4231ab"
   }
 }

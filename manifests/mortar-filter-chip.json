@@ -5,17 +5,11 @@
   "description": "Mortar foundation filter chip, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "FilterChip",
   "source": "src/display.tsx",
-  "capabilities": ["theme", "foundation", "keyboard"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference",
-    "sourceDigest": "b1a5f811bc9b143fa86569a677b066883edd9f2dd26912f02f46232365dbd756"
-  },
   "contract": {
     "props": {
       "label": "ReactNode",
@@ -23,13 +17,6 @@
       "onClick": "() => void",
       "onRemove": "() => void"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { FilterChip } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -43,9 +30,5 @@
     "target": ".m-chip",
     "states": [],
     "probe": "chip"
-  },
-  "integrity": {
-    "source": "a5899e9581dc2924760f94f692cdf008e03d9366818a6520a18fdce6a13e36b0",
-    "preview": "60475297d24afb17651e809284fc4dd79209a4a07062dfcc9c27629a4e53c417"
   }
 }

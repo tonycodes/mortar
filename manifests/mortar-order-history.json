@@ -5,16 +5,11 @@
   "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions; empty state when there are none.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "OrderHistory",
   "source": "src/ecommerce.tsx",
-  "capabilities": ["theme", "ecommerce", "responsive"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "ecommerce",
-  "provenance": {
-    "kitId": "ecommerce",
-    "exampleId": "mortar-ecommerce-reference"
-  },
   "contract": {
     "props": {
       "orders": "Order[] ({ id; number; date; total; status; href; actions?: ReactNode; items: { id; name; image; quantity; price; href?; actions?: ReactNode }[] })",
@@ -22,17 +17,10 @@
       "emptyTitle": "string",
       "emptyDescription": "string"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-empty-state"]
   },
   "preview": {
     "source": "previews/OrderHistoryPreview.tsx"
@@ -41,9 +29,5 @@
     "profile": "composite",
     "target": ".m-order-history",
     "states": ["empty"]
-  },
-  "integrity": {
-    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
-    "preview": "b182fa18011402cf11e3b87c911ed3a8ee0f01f30d94d78b4e51cd9b8e878bd5"
   }
 }

@@ -5,17 +5,11 @@
   "description": "Mortar foundation segmented control, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "SegmentedControl",
   "source": "src/inspection.tsx",
-  "capabilities": ["theme", "foundation", "action", "keyboard"],
+  "capabilities": ["action"],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference",
-    "sourceDigest": "f132052b4ac52f3909ac437073c076b9f615849effea14dabf7d30759d714c2d"
-  },
   "contract": {
     "props": {
       "label": "string",
@@ -23,13 +17,6 @@
       "options": "{ value: string; label: string }[]",
       "onChange": "(value: string) => void"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { SegmentedControl } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -43,9 +30,5 @@
     "target": ".m-segmented",
     "states": [],
     "probe": "segmented"
-  },
-  "integrity": {
-    "source": "e89fe470d77b853da4ed2023954663122c132b4d56c4feab7f84c96a430434a3",
-    "preview": "0fa88f1d6fd1536e8f37b4169871225ff979e8250a1b39b0ce904a4954f4280c"
   }
 }

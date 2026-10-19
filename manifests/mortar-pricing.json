@@ -5,17 +5,11 @@
   "description": "Mortar marketing pricing, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Pricing",
   "source": "src/marketing.tsx",
-  "capabilities": ["theme", "marketing"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "marketing",
-  "provenance": {
-    "kitId": "marketing",
-    "exampleId": "mortar-marketing-reference",
-    "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
-  },
   "contract": {
     "props": {
       "title": "string",
@@ -26,17 +20,10 @@
       "layout": "\"cards\" | \"detailed\"",
       "featuresLabel": "string"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
-    "dependencies": ["mortar-action-link"]
+    "dependencies": ["mortar-action-link", "mortar-segmented-control"]
   },
   "preview": {
     "source": "previews/PricingPreview.tsx"
@@ -46,9 +33,5 @@
     "target": ".m-pricing",
     "states": ["surface", "inverse", "coming-soon"],
     "probe": "pricing"
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "1bdc4e014a21feff99a9aa22e071316698992a6f1c3f488c6632c210059d39bb"
   }
 }

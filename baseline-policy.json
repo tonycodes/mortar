@@ -1,15 +1,16 @@
 {
   "schemaVersion": 1,
-  "version": "1.2.0",
+  "version": "1.3.0",
   "rules": {
     "M001": "Exports require unique manifests and preview fixtures",
     "M002": "Source and preview paths stay inside the repository",
     "M003": "Dependencies reference known component IDs",
     "M004": "Shared components cannot depend on hosted services",
-    "M005": "Component implementations use semantic colour tokens",
-    "M006": "Every component has an executable test profile and supported probe",
-    "M007": "Source and preview import-closure fingerprints must match",
+    "M005": "Component implementations use semantic colour tokens; only src/tokens.css defines colours",
+    "M006": "Every component has an executable test profile, supported probe and closed-vocabulary capabilities",
+    "M007": "Source and preview import-closure fingerprints must match; generated fields stay out of manifests",
     "M008": "Committed catalogue matches the manifests",
-    "M009": "Accent tokens are declared for every brand and appearance"
+    "M009": "Accent tokens are declared for every brand and appearance",
+    "M010": "Manifest dependencies match the catalogue components the source renders"
   }
 }

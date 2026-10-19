@@ -1,18 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import * as UI from "../dist/index.js";
+import { h, html as markup, UI } from "./support/render.mjs";
+import { selectorBody, declaration, readSource } from "./support/css.mjs";
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const read = (path) => readFile(resolve(root, path), "utf8");
-
-function markup(Component, props) {
-  return renderToStaticMarkup(React.createElement(Component, props));
-}
 function plan(extra = {}) {
   return {
     id: "basic",
@@ -31,28 +21,10 @@ function pricing(props) {
     ...props,
   });
 }
-function ruleBodies(css, selector) {
-  const bodies = [];
-  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-    const selectors = match[1]
-      .replace(/\/\*[\s\S]*?\*\//g, "")
-      .split(",")
-      .map((item) => item.trim());
-    if (selectors.includes(selector)) bodies.push(match[2]);
-  }
-  return bodies.join("\n");
-}
-function declaration(body, property) {
-  const match = body.match(
-    new RegExp(`(?:^|[;{}])\\s*${property}\\s*:\\s*([^;]+)`, "i"),
-  );
-  return match ? match[1].trim() : "";
-}
-
 test("dark surface tokens for CallToAction and featured pricing", async () => {
-  const css = await read("src/components.css");
-  const cta = ruleBodies(css, ".m-cta");
-  const featured = ruleBodies(
+  const css = await readSource("src/components.css");
+  const cta = selectorBody(css, ".m-cta");
+  const featured = selectorBody(
     css,
     '.m-pricing-grid article[data-featured="true"]',
   );
@@ -105,22 +77,25 @@ test("CallToAction and featured Pricing cards accept tone surface or inverse", (
   assert.deepEqual(problems, []);
 });
 
-test("Pricing availability hides the purchase link and exposes a status", () => {
+test("Pricing availability hides the purchase link and exposes a default or custom status", () => {
   const problems = [];
   const available = pricing({
     plans: [plan({ availability: "available" })],
   });
   if (!available.includes('href="/choose"'))
     problems.push("available plan has no purchase link");
-  for (const [availability, label] of [
+  // A custom availabilityLabel replaces the default status text.
+  for (const [availability, label, availabilityLabel] of [
     ["coming-soon", "Coming soon"],
-    ["unavailable", "Not available"],
+    ["unavailable", "Unavailable"],
+    ["coming-soon", "Opening in spring", "Opening in spring"],
+    ["unavailable", "Not available", "Not available"],
   ]) {
     const html = pricing({
       plans: [
         plan({
           availability,
-          availabilityLabel: label,
+          availabilityLabel,
           action: { label: "Buy", href: "/buy" },
         }),
       ],
@@ -132,8 +107,8 @@ test("Pricing availability hides the purchase link and exposes a status", () => 
     const status = html.match(
       /<([a-z0-9]+)[^>]*\brole="status"[^>]*>([\s\S]*?)<\/\1>/,
     );
-    if (!status || !status[2].includes(label))
-      problems.push(`${availability}: label is not an accessible status`);
+    if (!status || status[2] !== label)
+      problems.push(`${availability}: "${label}" is not an accessible status`);
   }
   assert.deepEqual(problems, []);
 });
@@ -208,7 +183,7 @@ test("MarketingHeader forwards a logo slot, className and id", () => {
     brand: "Northwind",
     className: "site-header",
     id: "site-header",
-    logo: React.createElement("img", { alt: "", src: "/mark.svg" }),
+    logo: h("img", { alt: "", src: "/mark.svg" }),
     links: [{ label: "Pricing", href: "/pricing" }],
   });
   const problems = [];
@@ -265,41 +240,6 @@ test("duplicate href actions and links render all labels", () => {
     if (!html.includes(`>${label}<`))
       problems.push(`missing rendered label ${label}`);
   }
-  assert.deepEqual(problems, []);
-});
-
-/* browser-launcher guard */
-test("marketing-gaps node suite does not launch a browser", async () => {
-  const source = await read("tests/marketing-gaps.test.mjs");
-  const marker = "/* browser-launcher guard */";
-  const at = source.indexOf(marker);
-  const resume = at === -1 ? -1 : source.indexOf("\ntest(", at + marker.length);
-  const scanned =
-    at === -1
-      ? source
-      : source.slice(0, at) + (resume === -1 ? "" : source.slice(resume));
-  const launch = ["chromium", ".launch"].join("");
-  const specifier = ["@", "playwright", "/test"].join("");
-  const dynamicImport = ["import(", JSON.stringify(specifier), ")"].join("");
-  const staticFrom = ["from ", JSON.stringify(specifier)].join("");
-  assert.deepEqual(
-    [launch, dynamicImport, staticFrom].filter((needle) =>
-      scanned.includes(needle),
-    ),
-    [],
-  );
-});
-
-test("catalog tokens list --m-accent and --m-on-accent", async () => {
-  const catalog = JSON.parse(await read("catalog.json"));
-  const names = (Array.isArray(catalog.tokens) ? catalog.tokens : []).map(
-    (token) => (typeof token === "string" ? token : token.name),
-  );
-  const problems = [];
-  if (!names.includes("--m-accent"))
-    problems.push("catalog.json tokens missing --m-accent");
-  if (!names.includes("--m-on-accent"))
-    problems.push("catalog.json tokens missing --m-on-accent");
   assert.deepEqual(problems, []);
 });
 
@@ -456,7 +396,7 @@ test("marketing component roots expose data-m-component", async () => {
     MockWindow: () =>
       markup(UI.MockWindow, { label: "Example window", children: "Body" }),
   };
-  const catalog = JSON.parse(await read("catalog.json"));
+  const catalog = JSON.parse(await readSource("catalog.json"));
   const expected = catalog.components
     .filter((component) => component.kitId === "marketing")
     .map((component) => component.export)

@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 import { mount, accessibility, overflow } from "../support/preview.mjs";
 import { implementations } from "../support/probes.mjs";
+import { states } from "../support/states.mjs";
 import { obligations } from "../../scripts/test-contract.mjs";
 const { components } = JSON.parse(
   await readFile(new URL("../../catalog.json", import.meta.url), "utf8"),
@@ -38,11 +39,24 @@ for (const component of components) {
   }
   for (const state of component.testing.states) {
     test(`${component.export} state:${state}`, async ({ page }, info) => {
+      // A declared state without a registered assertion would pass vacuously.
+      const assertState = states[state];
+      expect(assertState, `register an assertion for state ${state}`).toEqual(
+        expect.any(Function),
+      );
       const errors = [];
       page.on("pageerror", (e) => errors.push(e.message));
+      page.on("console", (message) => {
+        if (message.type() === "error") errors.push(message.text());
+      });
       await page.setViewportSize({ width: 390, height: 900 });
       await page.goto(
-        "/?" + new URLSearchParams({ component: component.export, state }),
+        "/?" +
+          new URLSearchParams({
+            component: component.export,
+            theme: "light",
+            state,
+          }),
       );
       const fixture = page.locator(
         `[data-mortar-preview="${component.export}"] [data-state="${state}"]`,
@@ -52,50 +66,7 @@ for (const component of components) {
         component.export === "ConfirmDialog"
           ? page.getByRole("dialog")
           : fixture;
-      if (
-        state === "disabled" ||
-        (state === "loading" &&
-          ["Button", "ConfirmDialog", "SignInPanel"].includes(component.export))
-      ) {
-        const controls = scope.locator("button,input,textarea,select");
-        const target =
-          component.export === "ConfirmDialog"
-            ? scope.getByRole("button", { name: "Confirm", exact: true })
-            : controls.first();
-        await expect(target).toBeDisabled();
-        const bounds = await target.boundingBox();
-        expect(bounds).not.toBeNull();
-        await page.mouse.click(
-          bounds.x + bounds.width / 2,
-          bounds.y + bounds.height / 2,
-        );
-        await expect(fixture.getByLabel("Callback count")).toHaveText("0");
-        if (component.export === "SignInPanel") {
-          await expect(scope.locator("form")).toHaveAttribute(
-            "aria-busy",
-            "true",
-          );
-          await expect(
-            scope.getByRole("button", { name: "Email me a sign-in link" }),
-          ).toBeDisabled();
-        }
-      } else if (state === "success") {
-        await expect(
-          scope.locator(".m-sign-in").getByRole("status"),
-        ).toHaveText("Check your inbox");
-      } else if (state === "error") {
-        await expect(scope.getByText("Check this value")).toBeVisible();
-        if (component.export !== "DataTable")
-          await expect(
-            scope.locator("input,textarea,select,button[aria-invalid]"),
-          ).toHaveAttribute("aria-invalid", "true");
-      } else if (state === "empty")
-        await expect(scope.getByText("No records")).toBeVisible();
-      else if (state === "loading")
-        await expect(
-          scope.locator(".m-table-state[role=status]"),
-        ).toBeVisible();
-      if (state === "long") await overflow(page);
+      await assertState({ page, component, fixture, scope });
       await accessibility(
         page,
         component.export === "ConfirmDialog"

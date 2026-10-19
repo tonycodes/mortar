@@ -1,10 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Calendar } from "../dist/index.js";
-const h = React.createElement;
-const html = (props) => renderToStaticMarkup(h(Calendar, props));
+import { html, Calendar } from "./support/render.mjs";
 const base = {
   view: "year",
   today: "2026-10-21",
@@ -14,7 +10,7 @@ const base = {
 };
 
 test("year view shows twelve labelled months with one tab stop", () => {
-  const markup = html(base);
+  const markup = html(Calendar, base);
   assert.match(markup, /data-view="year"/);
   assert.match(markup, /<h2 id="[^"]+" aria-live="polite">2026<\/h2>/);
   const months = [
@@ -46,13 +42,13 @@ test("year view shows twelve labelled months with one tab stop", () => {
 });
 
 test("year view headers name each weekday and the switcher offers Year", () => {
-  const markup = html({ ...base, onViewChange() {} });
+  const markup = html(Calendar, { ...base, onViewChange() {} });
   assert.match(markup, /<th scope="col" abbr="Monday">M<\/th>/);
   assert.match(markup, /aria-pressed="true">Year<\/button>/);
 });
 
 test("the switcher offers Year in every view and the month view is unchanged", () => {
-  const month = html({ ...base, view: "month", onViewChange() {} });
+  const month = html(Calendar, { ...base, view: "month", onViewChange() {} });
   assert.match(month, /<table role="grid"/);
   assert.match(month, />Year<\/button>/);
 });

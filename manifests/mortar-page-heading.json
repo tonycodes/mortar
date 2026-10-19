@@ -5,17 +5,11 @@
   "description": "Mortar application page heading, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "PageHeading",
   "source": "src/application.tsx",
-  "capabilities": ["theme", "application"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference",
-    "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
-  },
   "contract": {
     "props": {
       "title": "string",
@@ -27,17 +21,10 @@
       "meta": "{ label: string; icon?: ReactNode }[]",
       "avatar": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { PageHeading } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-breadcrumbs"]
   },
   "preview": {
     "source": "previews/PageHeadingPreview.tsx"
@@ -46,9 +33,5 @@
     "profile": "composite",
     "target": ".m-page-heading",
     "states": []
-  },
-  "integrity": {
-    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
-    "preview": "f2389f11826f0a2921b73c6ffe03114a23bacea9892377835ab578c54d23c97c"
   }
 }

@@ -3,14 +3,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import * as UI from "../dist/index.js";
+import { h, html as markup, UI } from "./support/render.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFile(resolve(root, path), "utf8");
-const markup = (Component, props) =>
-  renderToStaticMarkup(React.createElement(Component, props));
 const action = { label: "Choose", href: "/choose" };
 
 // Default markup captured from the build before these variants were added.
@@ -22,7 +18,7 @@ test("Hero default markup is unchanged", () => {
       description: "Desc",
       actions: [action, { label: "More", href: "/more" }],
       align: "split",
-      children: React.createElement("p", null, "Shot"),
+      children: h("p", null, "Shot"),
     }),
     '<section class="m-hero m-hero-split" data-m-component="Hero"><div><p class="m-eyebrow">New</p><h1>Build</h1><p class="m-hero-description">Desc</p><div class="m-actions"><a class="m-button m-button-primary" href="/choose">Choose</a><a class="m-button m-button-secondary" href="/more">More</a></div></div><div class="m-hero-preview"><p>Shot</p></div></section>',
   );
@@ -32,7 +28,7 @@ test("Hero background is decorative and switches to the inverse tone", () => {
   const html = markup(UI.Hero, {
     title: "Build",
     description: "Desc",
-    background: React.createElement("img", { src: "/bg.jpg", alt: "" }),
+    background: h("img", { src: "/bg.jpg", alt: "" }),
   });
   assert.match(
     html,
@@ -215,5 +211,11 @@ test("variant styles use semantic tokens and the hero joins the inverse remap", 
   ])
     assert.ok(block.includes(selector), `missing ${selector}`);
   assert.doesNotMatch(block, /#[0-9a-fA-F]{3,8}\b|rgb\(|hsl\(/);
-  assert.match(css, /\.m-banner,\s*\.m-hero\s*\)\[data-tone="inverse"\]/);
+  // The hero sets data-tone="inverse"; the generic inverse hook in tokens.css remaps it.
+  const tokens = await read("src/tokens.css");
+  const hook = tokens.slice(tokens.indexOf('[data-tone="inverse"] {'));
+  assert.match(
+    hook,
+    /^\[data-tone="inverse"\] \{[^}]*--m-paper: var\(--m-inv-paper\)/,
+  );
 });

@@ -1,9 +1,9 @@
-# Contributing to Mortar
+# Agent instructions
 
-Mortar is a public MIT kit. You can develop, preview and check it without any governance-service account.
+[CONTRIBUTING.md](CONTRIBUTING.md) is the contribution workflow. This page lists only what a coding agent must not miss.
 
-Read DESIGN.md before composing UI and TESTING.md before changing components or test contracts. Implement reusable components in src, previews in previews, and typed component contracts in manifests. Shells and chrome are shared components, not copies in consumer apps. Product data and actions belong in props and slots.
-
-Run npm ci, npm run catalog, npm run check, npm run test:browser and npm run test:visual. npm run check:json returns baseline rule IDs, files, lines and corrective messages. npm run dev opens the local playground. Update manifests when changing exports. Include a regression test for a bug fix. Never mark yourself approved, publish a release, or change protected CI rules to make a contribution pass.
-
-Open a PR with rationale, screenshots and actual check results. Maintainer review and protected final-commit CI precede releases. Baseline checks are not proof of visual quality; inspect desktop/mobile, light/dark, keyboard and focus states. Shared design changes require central fixes, not local overrides.
+- Read [DESIGN.md](DESIGN.md) before composing UI. It holds the design principles and the API conventions that every new prop must follow. Read [TESTING.md](TESTING.md) before changing a component or its test contract.
+- Fix shared problems centrally in `src`, with the fixture in `previews` and the contract in `manifests`. Do not copy components or override their styles in a consumer.
+- Run `npm run check` first. If it reports M007 or M008, review what changed in your diff, then run `npm run catalog`. It prints which components' fingerprints and contracts changed. Never run `npm run catalog` just to make a failing check pass.
+- Run `npm run test:browser` and `npm run test:visual` before opening a PR, and report the actual results.
+- Never approve, merge, publish or bump the version on your own initiative, and never weaken a protected check, policy or workflow to make a change pass.

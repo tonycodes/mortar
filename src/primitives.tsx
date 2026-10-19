@@ -10,7 +10,6 @@ import {
   type ReactNode,
 } from "react";
 import {
-  Dialog as HeadlessDialog,
   DialogPanel,
   DialogTitle,
   Menu,
@@ -21,6 +20,16 @@ import {
   MenuHeading,
   MenuSeparator,
 } from "@headlessui/react";
+import { ChevronDown, Close } from "./icons.js";
+import { headingTag } from "./heading.js";
+import {
+  DialogFrame,
+  FieldMessage,
+  LinkContent,
+  Swatch,
+  rovingIndex,
+  useField,
+} from "./internal.js";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "ghost" | "danger";
   loading?: boolean;
@@ -183,9 +192,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   },
   ref,
 ) {
-  const generated = useId(),
-    fieldId = id || generated,
-    messageId = fieldId + "-message";
+  const { fieldId, messageId, describedBy } = useField({
+    id,
+    hint,
+    error,
+    describedBy: props["aria-describedby"],
+  });
   return (
     <div className="m-field">
       <label htmlFor={fieldId}>{label}</label>
@@ -207,11 +219,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           id={fieldId}
           className={className}
           aria-invalid={!!error || props["aria-invalid"]}
-          aria-describedby={
-            [props["aria-describedby"], (error || hint) && messageId]
-              .filter(Boolean)
-              .join(" ") || undefined
-          }
+          aria-describedby={describedBy}
         />
         {trailingIcon && (
           <span className="m-input-icon" aria-hidden="true">
@@ -221,11 +229,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         {suffix && <span>{suffix}</span>}
         {action && <div className="m-input-action">{action}</div>}
       </div>
-      {(error || hint) && (
-        <p id={messageId} className={error ? "m-error" : ""}>
-          {error || hint}
-        </p>
-      )}
+      <FieldMessage id={messageId} hint={hint} error={error} />
     </div>
   );
 });
@@ -238,9 +242,13 @@ export function Select({
   ...props
 }: SelectHTMLAttributes<HTMLSelectElement> &
   FieldDescription & { options: { value: string; label: string }[] }) {
-  const generated = useId(),
-    fieldId = id || generated,
-    listbox = !!props.multiple || (props.size || 0) > 1;
+  const { fieldId, messageId, describedBy } = useField({
+    id,
+    hint,
+    error,
+    describedBy: props["aria-describedby"],
+  });
+  const listbox = !!props.multiple || (props.size || 0) > 1;
   return (
     <div className="m-field">
       <label htmlFor={fieldId}>{label}</label>
@@ -249,11 +257,7 @@ export function Select({
           {...props}
           id={fieldId}
           aria-invalid={!!error || props["aria-invalid"]}
-          aria-describedby={
-            [props["aria-describedby"], (hint || error) && fieldId + "-message"]
-              .filter(Boolean)
-              .join(" ") || undefined
-          }
+          aria-describedby={describedBy}
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>
@@ -261,28 +265,9 @@ export function Select({
             </option>
           ))}
         </select>
-        {!listbox && (
-          <svg
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="m6 8 4 4 4-4"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
+        {!listbox && <ChevronDown />}
       </div>
-      {(hint || error) && (
-        <p id={fieldId + "-message"} className={error ? "m-error" : ""}>
-          {error || hint}
-        </p>
-      )}
+      <FieldMessage id={messageId} hint={hint} error={error} />
     </div>
   );
 }
@@ -318,8 +303,12 @@ export function TextArea({
   error,
   ...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement> & FieldDescription) {
-  const generated = useId(),
-    fieldId = id || generated;
+  const { fieldId, messageId, describedBy } = useField({
+    id,
+    hint,
+    error,
+    describedBy: props["aria-describedby"],
+  });
   return (
     <div className="m-field">
       <label htmlFor={fieldId}>{label}</label>
@@ -327,17 +316,9 @@ export function TextArea({
         {...props}
         id={fieldId}
         aria-invalid={!!error || props["aria-invalid"]}
-        aria-describedby={
-          [props["aria-describedby"], (hint || error) && fieldId + "-message"]
-            .filter(Boolean)
-            .join(" ") || undefined
-        }
+        aria-describedby={describedBy}
       />
-      {(hint || error) && (
-        <p id={fieldId + "-message"} className={error ? "m-error" : ""}>
-          {error || hint}
-        </p>
-      )}
+      <FieldMessage id={messageId} hint={hint} error={error} />
     </div>
   );
 }
@@ -464,14 +445,7 @@ export function RadioGroup({
             onChange={() => onChange(o.value)}
           />
           {layout === "swatches" ? (
-            <>
-              <span
-                className="m-swatch"
-                aria-hidden="true"
-                style={{ background: o.swatch }}
-              />
-              <span className="m-sr-only">{o.label}</span>
-            </>
+            <Swatch color={o.swatch} label={o.label} />
           ) : (
             <span>
               <strong>{o.label}</strong>
@@ -517,14 +491,12 @@ export function Tabs({
         data-variant={variant === "underline" ? undefined : variant}
         data-full-width={fullWidth || undefined}
         onKeyDown={(e) => {
-          const i = items.findIndex((item) => item.id === value);
-          let next = i;
-          if (e.key === "ArrowRight") next = (i + 1) % items.length;
-          else if (e.key === "ArrowLeft")
-            next = (i - 1 + items.length) % items.length;
-          else if (e.key === "Home") next = 0;
-          else if (e.key === "End") next = items.length - 1;
-          else return;
+          const next = rovingIndex(
+            e.key,
+            items.findIndex((item) => item.id === value),
+            items.length,
+          );
+          if (next === null) return;
           e.preventDefault();
           onChange(items[next].id);
           document.getElementById(`${base}-${items[next].id}-tab`)?.focus();
@@ -541,15 +513,13 @@ export function Tabs({
             tabIndex={item.id === value ? 0 : -1}
             onClick={() => onChange(item.id)}
           >
-            {item.icon && (
-              <span className="m-tab-icon" aria-hidden="true">
-                {item.icon}
-              </span>
-            )}
-            {item.label}
-            {item.count !== undefined && (
-              <span className="m-tab-count">{item.count}</span>
-            )}
+            <LinkContent
+              prefix="tab"
+              icon={item.icon}
+              label={item.label}
+              count={item.count}
+              countWhen="defined"
+            />
           </button>
         ))}
       </div>
@@ -585,8 +555,7 @@ export function Modal({
   size?: "md" | "lg";
 }) {
   return (
-    <HeadlessDialog open={open} onClose={onClose} className="m-dialog">
-      <div className="m-backdrop" aria-hidden="true" />
+    <DialogFrame open={open} onClose={onClose}>
       <div className="m-dialog-position">
         <DialogPanel className="m-dialog-panel" data-size={size}>
           <div className="m-dialog-heading">
@@ -599,7 +568,7 @@ export function Modal({
           {actions && <div className="m-actions">{actions}</div>}
         </DialogPanel>
       </div>
-    </HeadlessDialog>
+    </DialogFrame>
   );
 }
 export interface DropdownItem {
@@ -750,19 +719,7 @@ export function Notice({
           aria-label={dismissLabel ?? `Dismiss ${title}`}
           onClick={onDismiss}
         >
-          <svg
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <path
-              d="m5 5 10 10M15 5 5 15"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-            />
-          </svg>
+          <Close />
         </button>
       )}
     </div>
@@ -792,7 +749,7 @@ export function EmptyState({
   /** Extra content after the action, e.g. starting points or recommendations. */
   children?: ReactNode;
 }) {
-  const Heading = `h${headingLevel}` as "h2" | "h3" | "h4";
+  const Heading = headingTag(headingLevel);
   return (
     <div
       className="m-empty"

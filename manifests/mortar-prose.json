@@ -5,28 +5,15 @@
   "description": "Mortar documentation prose, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Prose",
-  "source": "src/docs.tsx",
-  "capabilities": ["theme", "docs"],
+  "source": "src/layout.tsx",
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "docs",
-  "provenance": {
-    "kitId": "docs",
-    "exampleId": "mortar-docs-reference",
-    "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
-  },
   "contract": {
     "props": {
       "children": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Prose } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -39,9 +26,5 @@
     "profile": "display",
     "target": ".m-prose",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "7f3188408fd0f564147ae8e72bc29fcbbff2c982c3e74eae32ee94e979a3a6c1"
   }
 }

@@ -1,4 +1,6 @@
-// Run by a protected release job after maintainer review and exact-commit CI.
+// Run by the credential-free prepare job of .github/workflows/release.yml on the
+// exact main commit whose checks passed. It builds, packs and records provenance;
+// the separate publish job (the only one with the registry token) publishes it.
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
@@ -18,6 +20,8 @@ const commit = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: ROOT,
   encoding: "utf8",
 }).trim();
+// Pack exactly what this commit builds, never a stale dist.
+execFileSync("npm", ["run", "build"], { cwd: ROOT, stdio: "inherit" });
 const pkg = JSON.parse(await readFile(resolve(ROOT, "package.json"), "utf8"));
 const out = resolve(ROOT, "release", pkg.version);
 await mkdir(resolve(ROOT, "release"), { recursive: true });

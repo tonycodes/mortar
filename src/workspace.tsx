@@ -1,4 +1,4 @@
-import { KitLink } from "./navigation.js";
+import { KitLink, type ItemGroup } from "./navigation.js";
 import { Fragment, useId, type ReactNode } from "react";
 import {
   Combobox,
@@ -6,12 +6,12 @@ import {
   ComboboxOption,
   ComboboxOptions,
   Description,
-  Dialog,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
 import { Button } from "./primitives.js";
 import { Kbd } from "./display.js";
+import { DialogFrame } from "./internal.js";
 
 export function SlideOver({
   open,
@@ -32,8 +32,7 @@ export function SlideOver({
   size?: "md" | "lg" | "xl";
 }) {
   return (
-    <Dialog open={open} onClose={onClose} className="m-dialog">
-      <div className="m-backdrop" aria-hidden="true" />
+    <DialogFrame open={open} onClose={onClose}>
       <DialogPanel
         className="m-slide-over"
         data-size={size === "md" ? undefined : size}
@@ -50,7 +49,7 @@ export function SlideOver({
         <div className="m-slide-over-body">{children}</div>
         {actions && <footer className="m-actions">{actions}</footer>}
       </DialogPanel>
-    </Dialog>
+    </DialogFrame>
   );
 }
 
@@ -101,7 +100,7 @@ export function CommandPalette({
   onClose: () => void;
   query: string;
   onQueryChange: (value: string) => void;
-  groups: { label: string; items: CommandItem[] }[];
+  groups: ItemGroup<CommandItem>[];
   label?: string;
   placeholder?: string;
   emptyMessage?: string;
@@ -109,8 +108,7 @@ export function CommandPalette({
 }) {
   const total = groups.reduce((n, g) => n + g.items.length, 0);
   return (
-    <Dialog open={open} onClose={onClose} className="m-dialog">
-      <div className="m-backdrop" aria-hidden="true" />
+    <DialogFrame open={open} onClose={onClose}>
       <div className="m-dialog-position m-palette-position">
         <DialogPanel className="m-palette">
           <DialogTitle className="m-sr-only">{label}</DialogTitle>
@@ -190,7 +188,7 @@ export function CommandPalette({
           {footer && <div className="m-palette-footer">{footer}</div>}
         </DialogPanel>
       </div>
-    </Dialog>
+    </DialogFrame>
   );
 }
 
@@ -214,7 +212,7 @@ export function StackedList({
   action?: ReactNode;
   items?: StackedListItem[];
   /** Sections with sticky headings, e.g. a directory grouped by letter. */
-  groups?: { label: string; items: StackedListItem[] }[];
+  groups?: ItemGroup<StackedListItem>[];
 }) {
   const base = useId();
   const row = (item: StackedListItem) => {

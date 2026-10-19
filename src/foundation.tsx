@@ -1,4 +1,5 @@
 import { NavigationContext, type Navigate } from "./navigation.js";
+import { SegmentedControl } from "./inspection.js";
 import {
   createContext,
   useContext,
@@ -86,25 +87,13 @@ export function ThemeProvider({
     if (scope !== "document") return;
     const element = document.documentElement;
     const previous = element.getAttribute("data-mortar-appearance");
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const update = () =>
-      element.setAttribute(
-        "data-mortar-appearance",
-        appearance === "system"
-          ? media.matches
-            ? "dark"
-            : "light"
-          : appearance,
-      );
-    update();
-    media.addEventListener("change", update);
+    element.setAttribute("data-mortar-appearance", resolvedAppearance);
     return () => {
-      media.removeEventListener("change", update);
       previous === null
         ? element.removeAttribute("data-mortar-appearance")
         : element.setAttribute("data-mortar-appearance", previous);
     };
-  }, [appearance, scope]);
+  }, [resolvedAppearance, scope]);
   const theme = (
     <NavigationContext.Provider value={navigate}>
       <ThemeContext.Provider
@@ -148,17 +137,14 @@ export function AppearanceControl({
     else context!.setAppearance(next);
   };
   return (
-    <div className="m-segmented" role="group" aria-label="Appearance">
-      {(["light", "dark", "system"] as const).map((option) => (
-        <button
-          key={option}
-          type="button"
-          aria-pressed={appearance === option}
-          onClick={() => select(option)}
-        >
-          {option[0].toUpperCase() + option.slice(1)}
-        </button>
-      ))}
-    </div>
+    <SegmentedControl
+      label="Appearance"
+      value={appearance!}
+      options={(["light", "dark", "system"] as const).map((option) => ({
+        value: option,
+        label: option[0].toUpperCase() + option.slice(1),
+      }))}
+      onChange={(next) => select(next as Appearance)}
+    />
   );
 }

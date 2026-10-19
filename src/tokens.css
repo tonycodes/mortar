@@ -38,7 +38,20 @@
   --m-radius-sm: 4px;
   --m-radius: 8px;
   --m-radius-lg: 12px;
+  --m-radius-full: 999px;
   --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
+  --m-scrim: rgb(0 0 0 / 0.5);
+  --m-swatch-ring: rgb(0 0 0 / 0.12);
+  --m-icon: 16px;
+  --m-focus-offset: 3px;
+  /* Minimum hit size: 0 for fine pointers, 44px for coarse pointers (below). */
+  --m-touch-target: 0px;
+  /* Stacking scale: sticky chrome < dialogs < popovers < toasts < skip link. */
+  --m-z-sticky: 30;
+  --m-z-overlay: 100;
+  --m-z-popover: 110;
+  --m-z-toast: 130;
+  --m-z-skip: 140;
   /* Inverse bands (section tone="inverse") flip appearance locally. */
   --m-inv-line-strong: #727278;
   --m-inv-primary-active: #c7c7cc;
@@ -51,6 +64,7 @@
   --m-inv-color-scheme: dark;
   --m-inv-paper: #000000;
   --m-inv-surface: #1c1c1e;
+  --m-inv-sunken: #1c1c1e;
   --m-inv-line: #3a3a3c;
   --m-inv-ink: #f5f5f7;
   --m-inv-secondary: #c7c7cc;
@@ -93,6 +107,7 @@
   --m-code-bg: #0e0e10;
   --m-code-line: rgb(255 255 255 / 0.1);
   --m-float: none;
+  --m-swatch-ring: rgb(255 255 255 / 0.24);
   --m-inv-line-strong: #8e8e93;
   --m-inv-primary-active: #3a3a3c;
   --m-inv-selected: #f2f2f4;
@@ -104,6 +119,7 @@
   --m-inv-color-scheme: light;
   --m-inv-paper: #f5f5f7;
   --m-inv-surface: #ffffff;
+  --m-inv-sunken: #ffffff;
   --m-inv-line: #d1d1d6;
   --m-inv-ink: #000000;
   --m-inv-secondary: #3a3a3c;
@@ -126,8 +142,6 @@
   --m-focus: #047857;
   --m-link: #047857;
   --m-selected: #e6f5ed;
-}
-[data-mortar-brand="green"] {
   --m-inv-primary-active: #34d399;
   --m-inv-selected: #062d23;
   --m-inv-primary: #6ee7b7;
@@ -169,5 +183,34 @@
 @media (pointer: coarse) {
   [data-mortar] {
     --m-control: 44px;
+    --m-touch-target: 44px;
   }
+}
+/* Inverse tone: any Mortar section root with data-tone="inverse" (sections, CTA,
+   banner, hero, featured pricing plan, bento item) flips appearance locally. */
+[data-tone="inverse"] {
+  color-scheme: var(--m-inv-color-scheme);
+  --m-line-strong: var(--m-inv-line-strong);
+  --m-primary-active: var(--m-inv-primary-active);
+  --m-selected: var(--m-inv-selected);
+  --m-success: var(--m-inv-success);
+  --m-warning: var(--m-inv-warning);
+  --m-info: var(--m-inv-info);
+  --m-danger: var(--m-inv-danger);
+  --m-on-feedback: var(--m-inv-on-feedback);
+  --m-paper: var(--m-inv-paper);
+  --m-surface: var(--m-inv-surface);
+  --m-sunken: var(--m-inv-sunken);
+  --m-line: var(--m-inv-line);
+  --m-ink: var(--m-inv-ink);
+  --m-secondary: var(--m-inv-secondary);
+  --m-muted: var(--m-inv-muted);
+  --m-primary: var(--m-inv-primary);
+  --m-primary-hover: var(--m-inv-primary-hover);
+  --m-on-primary: var(--m-inv-on-primary);
+  --m-accent: var(--m-inv-accent);
+  --m-on-accent: var(--m-inv-on-accent);
+  --m-focus: var(--m-inv-focus);
+  --m-link: var(--m-inv-link);
+  --m-band: var(--m-inv-paper);
 }

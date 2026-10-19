@@ -1,7 +1,7 @@
 name: Mortar contribution checks
 on:
   push:
-    branches: [main, "codex/**"]
+    branches: [main]
   pull_request:
     branches: [main]
 permissions:
@@ -26,9 +26,14 @@ jobs:
       - name: Test deployment receiver safety
         run: python3 -m unittest discover -s ops/tests
       - run: npx playwright install --with-deps chromium
+      # Both suites serve the playground-dist that npm run check built.
       - run: npm run test:browser
+        env:
+          MORTAR_PLAYGROUND_PREBUILT: "1"
       - name: Compare curated visual baselines
         run: npm run test:visual
+        env:
+          MORTAR_PLAYGROUND_PREBUILT: "1"
       - name: Build production playground
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |

@@ -5,16 +5,11 @@
   "description": "Mortar plain semantic table for documents and summaries without row actions.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Table",
   "source": "src/application.tsx",
-  "capabilities": ["theme", "application"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "caption": "string",
@@ -25,13 +20,6 @@
       "rowHeaders": "boolean",
       "striped": "boolean"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Table } from @tony-ui/mortar. Pass groups to render each labelled group as its own tbody under a full-width header row (th scope=rowgroup); ungrouped rows render first. Use DataTable instead when rows need selection, sorting, links or loading states.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -44,9 +32,5 @@
     "profile": "composite",
     "target": ".m-table",
     "states": []
-  },
-  "integrity": {
-    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
-    "preview": "d7d041c1c8db91d66818f079c596015d6ec5749baac605ebe11c6d96ee481e4d"
   }
 }

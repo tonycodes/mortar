@@ -26,21 +26,44 @@ export function ChoiceCase({ name }: { name: string }) {
   const [plain, setPlain] = useState<string | null>(null);
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
-  const Control = name === "Listbox" ? UI.Listbox : UI.Combobox;
   let example: ReactNode;
   switch (name) {
     case "Listbox":
-    case "Combobox":
       example = (
         <UI.Stack gap="lg">
-          <Control
+          <UI.Listbox
             label="Assigned to"
             options={people}
             value={value}
             onChange={setValue}
             hint="Only people on this project are listed."
           />
-          <Control
+          <UI.Listbox
+            label="Region"
+            placeholder="Choose a region"
+            options={[
+              { value: "eu", label: "Europe (London)" },
+              { value: "us", label: "United States (Virginia)" },
+              { value: "ap", label: "Asia Pacific (Sydney)" },
+            ]}
+            value={plain}
+            onChange={setPlain}
+          />
+          <output aria-label="Selected value">{value ?? "none"}</output>
+        </UI.Stack>
+      );
+      break;
+    case "Combobox":
+      example = (
+        <UI.Stack gap="lg">
+          <UI.Combobox
+            label="Assigned to"
+            options={people}
+            value={value}
+            onChange={setValue}
+            hint="Only people on this project are listed."
+          />
+          <UI.Combobox
             label="Region"
             placeholder="Choose a region"
             options={[

@@ -5,16 +5,11 @@
   "description": "Mortar order summary: cost lines, a distinguished total and a checkout action.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "OrderSummary",
   "source": "src/ecommerce.tsx",
-  "capabilities": ["theme", "ecommerce"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "ecommerce",
-  "provenance": {
-    "kitId": "ecommerce",
-    "exampleId": "mortar-ecommerce-reference"
-  },
   "contract": {
     "props": {
       "title": "string",
@@ -24,13 +19,6 @@
       "headingLevel": "2 | 3",
       "children": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { OrderSummary } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -43,9 +31,5 @@
     "profile": "display",
     "target": ".m-order-summary",
     "states": []
-  },
-  "integrity": {
-    "source": "4675b466a42f4db14ebfa87e28d14eb2488659c75e1401194a9b5d0cad7ee49f",
-    "preview": "2682e0b20f4396e5801f3b9af5409cc6e95fd239d743880c10b1a0188907f957"
   }
 }

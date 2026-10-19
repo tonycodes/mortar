@@ -1,38 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { spawn } from "node:child_process";
-import { createServer } from "node:net";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { contrast } from "../support/preview.mjs";
+import { useFixtureServer } from "../support/fixture-server.mjs";
 
-const repo = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const fixtureRoot = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "fixtures/contrast",
-);
-const viteBin = resolve(repo, "node_modules/vite/bin/vite.js");
-
-test.describe.configure({ timeout: 120_000 });
-
-function contrast(a, b) {
-  const channels = (value) => {
-    const parts = String(value).match(/[\d.]+/g);
-    if (!parts || parts.length < 3) return null;
-    return parts.slice(0, 3).map(Number);
-  };
-  const luminance = (rgb) =>
-    rgb
-      .map((n) => {
-        const v = n / 255;
-        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-      })
-      .reduce((sum, n, i) => sum + n * [0.2126, 0.7152, 0.0722][i], 0);
-  const left = channels(a);
-  const right = channels(b);
-  if (!left || !right) return 0;
-  const x = luminance(left);
-  const y = luminance(right);
-  return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
-}
+const base = useFixtureServer(test, "contrast");
 
 async function buttonContrast(locator) {
   const colors = await locator.evaluate((el) => {
@@ -58,65 +28,10 @@ async function buttonContrast(locator) {
   return { ...colors, ratio: contrast(colors.color, colors.background) };
 }
 
-let child;
-let base = "";
-
-function freePort() {
-  return new Promise((resolvePort, reject) => {
-    const probe = createServer();
-    probe.once("error", reject);
-    probe.listen(0, "127.0.0.1", () => {
-      const { port } = probe.address();
-      probe.close((error) => (error ? reject(error) : resolvePort(port)));
-    });
-  });
-}
-
-test.beforeAll(async () => {
-  const port = await freePort();
-  child = spawn(
-    process.execPath,
-    [viteBin, "--host", "127.0.0.1", "--port", String(port), "--strictPort"],
-    { cwd: fixtureRoot, stdio: ["ignore", "pipe", "pipe"] },
-  );
-  base = await new Promise((resolvePort, reject) => {
-    let output = "";
-    let settled = false;
-    const timer = setTimeout(() => {
-      if (settled) return;
-      settled = true;
-      reject(new Error(`contrast fixture did not start\n${output}`));
-    }, 60_000);
-    const finish = (error, url) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      if (error) reject(error);
-      else resolvePort(url);
-    };
-    const onData = (chunk) => {
-      output += chunk.toString();
-      // Playwright workers set FORCE_COLOR, so Vite wraps "Local:" in ANSI codes.
-      const plain = output.replace(/\x1b\[[0-9;]*m/g, "");
-      const match = plain.match(/Local:\s+http:\/\/127\.0\.0\.1:(\d+)/);
-      if (match) finish(null, `http://127.0.0.1:${match[1]}`);
-    };
-    child.stdout.on("data", onData);
-    child.stderr.on("data", onData);
-    child.on("exit", (code) => {
-      finish(new Error(`contrast fixture exited ${code}\n${output}`));
-    });
-  });
-});
-
-test.afterAll(async () => {
-  child?.kill("SIGTERM");
-});
-
 async function openFixture(page, { theme, brand, tone }) {
   const params = new URLSearchParams({ theme, brand });
   if (tone) params.set("tone", tone);
-  await page.goto(`${base}/?${params}`);
+  await page.goto(`${base()}/?${params}`);
   await expect(page.locator("html")).toHaveAttribute(
     "data-mortar-appearance",
     theme,

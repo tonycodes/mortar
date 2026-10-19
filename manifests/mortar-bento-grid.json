@@ -5,17 +5,11 @@
   "description": "Mortar marketing bento grid, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "BentoGrid",
   "source": "src/marketing-sections.tsx",
-  "capabilities": ["theme", "marketing"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "marketing",
-  "provenance": {
-    "kitId": "marketing",
-    "exampleId": "mortar-marketing-reference",
-    "sourceDigest": "3e3d2fef34ed5dd9751ddf026229122bf8f709f3b8795e70e56f6800a0fd96ec"
-  },
   "contract": {
     "props": {
       "eyebrow": "string",
@@ -24,13 +18,6 @@
       "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; inverse?: boolean }[]",
       "headingLevel": "2 | 3 | 4"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { BentoGrid } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -43,9 +30,5 @@
     "profile": "composite",
     "target": ".m-bento",
     "states": []
-  },
-  "integrity": {
-    "source": "9ba2f1ba84a31ab8cb6520ee9bada8c7546dda523828b73899b4d519d7110964",
-    "preview": "eaff1047f748f240c2a4b0a4c3f46eb97681c3c5595d534a0426f07912b21b92"
   }
 }

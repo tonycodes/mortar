@@ -5,34 +5,21 @@
   "description": "Mortar foundation toast, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Toast",
   "source": "src/feedback.tsx",
-  "capabilities": ["theme", "foundation"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference",
-    "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
-  },
   "contract": {
     "props": {
       "title": "string",
       "description": "string",
-      "tone": "Tone",
+      "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (Tone; default \"neutral\")",
       "action": "{ label: string; onClick: () => void }",
       "onDismiss": "() => void",
       "leading": "ReactNode",
       "secondaryAction": "{ label: string; onClick: () => void }"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Toast } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -46,9 +33,5 @@
     "target": ".m-toast",
     "states": [],
     "probe": "toast"
-  },
-  "integrity": {
-    "source": "41a2586daf5cd116d707ebb0ab9f89744b62b614ffc44819a036f2415669a5ff",
-    "preview": "ed74ab5225a2e310182dd4ae6ccb9721c3b38270ff0ec1dc77e44af7944ac2b1"
   }
 }

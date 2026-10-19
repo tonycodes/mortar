@@ -5,17 +5,11 @@
   "description": "Mortar application slide over, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "SlideOver",
   "source": "src/workspace.tsx",
-  "capabilities": ["theme", "application", "keyboard"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference",
-    "sourceDigest": "59cc40c87590db0193cfd5e1ef60d47f5783df1f8713e81d51bfca082bb1fa93"
-  },
   "contract": {
     "props": {
       "open": "boolean",
@@ -26,13 +20,6 @@
       "actions": "ReactNode",
       "size": "md | lg | xl"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { SlideOver } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -46,9 +33,5 @@
     "target": ".m-button",
     "states": [],
     "probe": "dialog"
-  },
-  "integrity": {
-    "source": "9b9b2c3606dfaac2258b62f607fd2b2e9293a803b620228153403e94ab7dc572",
-    "preview": "90c0f37f68d8d761130f2a360e299bed3782ea13addac248e55096565dab95fa"
   }
 }

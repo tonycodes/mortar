@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import { SegmentedControl } from "./inspection.js";
+import { ChevronLeft, ChevronRight } from "./icons.js";
 
 export interface CalendarEvent {
   id: string;
@@ -45,6 +46,12 @@ function addMonths(date: string, months: number) {
   );
 }
 const monthOf = (date: string) => date.slice(0, 7);
+/** Column of a date in a week starting on `weekStartsOn` (0 = Sunday). */
+const weekdayIndex = (date: string, weekStartsOn: number) =>
+  (new Date(toTime(date)).getUTCDay() - weekStartsOn + 7) % 7;
+/** A day button's name: the full date, plus how many events it has. */
+const dayLabel = (name: string, count: number) =>
+  count ? `${name}, ${count} ${count === 1 ? "event" : "events"}` : name;
 const toMinutes = (time: string) => {
   const [h, m] = time.split(":").map(Number);
   return h * 60 + (m || 0);
@@ -188,8 +195,7 @@ export function Calendar({
   }, [events]);
 
   const first = `${month}-01`;
-  const offset = (new Date(toTime(first)).getUTCDay() - weekStartsOn + 7) % 7;
-  const start = addDays(first, -offset);
+  const start = addDays(first, -weekdayIndex(first, weekStartsOn));
   const weeks = Array.from({ length: 6 }, (_, w) =>
     Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)),
   );
@@ -220,7 +226,7 @@ export function Calendar({
       ?.focus();
   });
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>, date: string) {
-    const weekday = (new Date(toTime(date)).getUTCDay() - weekStartsOn + 7) % 7;
+    const weekday = weekdayIndex(date, weekStartsOn);
     const next = {
       ArrowLeft: () => addDays(date, -1),
       ArrowRight: () => addDays(date, 1),
@@ -259,13 +265,11 @@ export function Calendar({
       showAnchor(addMonths(anchor, 12 * by));
       setFocused(addMonths(yearFocus, 12 * by));
     };
-    const label = (date: string) => {
-      const count = byDay.get(date)?.length ?? 0;
-      const name = formats.day.format(new Date(toTime(date)));
-      return count
-        ? `${name}, ${count} ${count === 1 ? "event" : "events"}`
-        : name;
-    };
+    const label = (date: string) =>
+      dayLabel(
+        formats.day.format(new Date(toTime(date))),
+        byDay.get(date)?.length ?? 0,
+      );
     return (
       <div className="m-calendar" data-view="year">
         <div className="m-calendar-header">
@@ -293,8 +297,7 @@ export function Calendar({
           {Array.from({ length: 12 }, (_, i) => {
             const mm = String(i + 1).padStart(2, "0");
             const firstDay = `${year}-${mm}-01`;
-            const lead =
-              (new Date(toTime(firstDay)).getUTCDay() - weekStartsOn + 7) % 7;
+            const lead = weekdayIndex(firstDay, weekStartsOn);
             const cells = Array.from({ length: 42 }, (_, n) =>
               addDays(firstDay, n - lead),
             );
@@ -377,10 +380,7 @@ export function Calendar({
       <TimeGrid
         view={view}
         anchor={anchor}
-        onAnchorChange={(date) => {
-          setAnchor(date);
-          onDateChange?.(date);
-        }}
+        onAnchorChange={showAnchor}
         events={byDay}
         today={today}
         selected={selected}
@@ -403,42 +403,16 @@ export function Calendar({
         </h2>
         {switcher}
         <div className="m-calendar-nav">
-          <button
-            type="button"
-            aria-label="Previous month"
+          <NavButton
+            label="Previous month"
+            direction="back"
             onClick={() => step(-1)}
-          >
-            <svg
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="m12 5-5 5 5 5"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-          <button type="button" aria-label="Next month" onClick={() => step(1)}>
-            <svg
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="m8 5 5 5-5 5"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+          />
+          <NavButton
+            label="Next month"
+            direction="forward"
+            onClick={() => step(1)}
+          />
         </div>
       </div>
       <table
@@ -480,11 +454,7 @@ export function Calendar({
                       aria-describedby={
                         listed ? `${headingId}-${date}` : undefined
                       }
-                      aria-label={
-                        count
-                          ? `${name}, ${count} ${count === 1 ? "event" : "events"}`
-                          : name
-                      }
+                      aria-label={dayLabel(name, count)}
                       onClick={() => {
                         setFocused(date);
                         if (monthOf(date) !== month) showMonth(monthOf(date));
@@ -540,15 +510,7 @@ function NavButton({
 }) {
   return (
     <button type="button" aria-label={label} onClick={onClick}>
-      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
-        <path
-          d={direction === "back" ? "m12 5-5 5 5 5" : "m8 5 5 5-5 5"}
-          stroke="currentColor"
-          strokeWidth="1.75"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      {direction === "back" ? <ChevronLeft /> : <ChevronRight />}
     </button>
   );
 }
@@ -585,7 +547,7 @@ function TimeGrid({
   dayStartHour: number;
   dayEndHour: number;
 }) {
-  const offset = (new Date(toTime(anchor)).getUTCDay() - weekStartsOn + 7) % 7;
+  const offset = weekdayIndex(anchor, weekStartsOn);
   const days =
     view === "week"
       ? Array.from({ length: 7 }, (_, i) => addDays(anchor, i - offset))

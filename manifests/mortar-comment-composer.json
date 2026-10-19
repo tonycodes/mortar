@@ -5,16 +5,11 @@
   "description": "Mortar comment composer: a labelled textarea in a box with an optional avatar, toolbar, Write/Preview tabs and character count; Ctrl/⌘+Enter submits and empty comments cannot be sent.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "CommentComposer",
   "source": "src/composer.tsx",
-  "capabilities": ["theme", "application", "form", "keyboard"],
+  "capabilities": ["form"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "onSubmit": "(value: string) => void",
@@ -33,17 +28,10 @@
       "error": "string",
       "rows": "number"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { CommentComposer } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-button", "mortar-tabs"]
   },
   "preview": {
     "source": "previews/CommentComposerPreview.tsx"
@@ -53,9 +41,5 @@
     "target": ".m-composer",
     "probe": "composer",
     "states": ["error"]
-  },
-  "integrity": {
-    "source": "b32871f2a67a0d8c8b4ac00caecf9e19f8dd9470dcb5de382bcc4477ba26fd58",
-    "preview": "e1f3d0d58fe86026774e62fdd7102ceb6ef95457cecb6eaf18087025564f2634"
   }
 }

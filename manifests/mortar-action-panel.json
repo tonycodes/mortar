@@ -5,16 +5,11 @@
   "description": "Mortar action panel: a titled card with an explanation and one decisive action, with a danger tone for destructive settings.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ActionPanel",
   "source": "src/application.tsx",
-  "capabilities": ["theme", "application", "action"],
+  "capabilities": ["action"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "title": "string",
@@ -24,13 +19,6 @@
       "tone": "\"default\" | \"danger\"",
       "headingLevel": "2 | 3"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { ActionPanel } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -43,9 +31,5 @@
     "profile": "display",
     "target": ".m-action-panel",
     "states": []
-  },
-  "integrity": {
-    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
-    "preview": "1e6729d162a2ac17fcceb82602a5ffa0d4a141a4fa3dfd413131af8eeabdb4d3"
   }
 }

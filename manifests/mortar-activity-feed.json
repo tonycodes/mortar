@@ -5,29 +5,16 @@
   "description": "Mortar application activity feed, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "ActivityFeed",
   "source": "src/application.tsx",
-  "capabilities": ["theme", "application", "status"],
+  "capabilities": ["status"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference",
-    "sourceDigest": "9c3a1c251ac5dcf28a566a4a6ee4ae6724296996e47b7eb3ccacad1517668ef3"
-  },
   "contract": {
     "props": {
       "label": "string",
       "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { ActivityFeed } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -40,9 +27,5 @@
     "profile": "composite",
     "target": ".m-activity",
     "states": []
-  },
-  "integrity": {
-    "source": "984327ffc1b49197298cad7b99080281f3d8b6d042181b1da2a8709286998d73",
-    "preview": "4dcebd58ccc3a768e255ef874e79c8fcf4df2634045772b97327cf1f5f78c5a9"
   }
 }

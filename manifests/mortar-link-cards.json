@@ -5,28 +5,15 @@
   "description": "Mortar documentation link cards, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "LinkCards",
   "source": "src/docs.tsx",
-  "capabilities": ["theme", "docs"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "docs",
-  "provenance": {
-    "kitId": "docs",
-    "exampleId": "mortar-docs-reference",
-    "sourceDigest": "21815ba555ccc953af98217e48bca375c3e6cf4578cc6cc857597a72ec4306f6"
-  },
   "contract": {
     "props": {
       "items": "{ href; title; description? }[]"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { LinkCards } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
@@ -39,9 +26,5 @@
     "profile": "composite",
     "target": ".m-link-cards",
     "states": []
-  },
-  "integrity": {
-    "source": "94071088d2abf2d5f60bbbf3ee54becb3772ab5fc56f469e23f59451b563ce54",
-    "preview": "3ae4904218887d2cde7c9e54381fb2790f07bd7215d4cf84a17d916a5fafa2e5"
   }
 }

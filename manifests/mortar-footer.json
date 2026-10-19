@@ -5,17 +5,11 @@
   "description": "Mortar marketing footer, using central semantic tokens.",
   "stack": "react-tailwind",
   "package": "@tony-ui/mortar",
-  "version": "0.5.0",
   "export": "Footer",
   "source": "src/marketing.tsx",
-  "capabilities": ["theme", "marketing"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "marketing",
-  "provenance": {
-    "kitId": "marketing",
-    "exampleId": "mortar-marketing-reference",
-    "sourceDigest": "4ec7866f2bbb06475a555bfde970c052111c84efde4ce0f38134e7fb400733d2"
-  },
   "contract": {
     "props": {
       "brand": "string",
@@ -28,13 +22,6 @@
       "note": "ReactNode",
       "social": "{ label: string; href: string; icon?: ReactNode }[]"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
@@ -47,9 +34,5 @@
     "profile": "composite",
     "target": ".m-footer",
     "states": ["heading-3"]
-  },
-  "integrity": {
-    "source": "aad8272f37109346703bfe4ecc1a35bc68af38295022d2050c9bd281d3de54ff",
-    "preview": "14e97518773e731fb99e3c51d6b0a5ddb837910ca440b4dc501e05e244863a47"
   }
 }
