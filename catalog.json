@@ -130,8 +130,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "5320cd852a51a3fbc4da0b4b64f4a43020007704f99e4c0e0ab3afdd81b84a2f"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "c194c655814e98e42e8d68f8d9d1a4cc0d1be212dc700c8f031dfb7b4973acab"
       }
     },
     {
@@ -158,7 +158,9 @@
           "action": "ReactNode",
           "children": "ReactNode",
           "tone": "\"default\" | \"danger\"",
-          "headingLevel": "2 | 3"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "action": {
@@ -169,14 +171,22 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "title": {
             "type": "string",
@@ -202,8 +212,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "8ad2e04831131aec6e819683724de626a58257097cfda6788961d2d26d34230a"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "ef1d9b6f3b065feba132b32c73b23d5e168eddc428522a6af2e6d53f0b41f8b4"
       }
     },
     {
@@ -226,9 +236,14 @@
       "contract": {
         "props": {
           "label": "string",
-          "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]"
+          "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "{ id: string; title: string; description?: string | undefined; time: string; tone?: Tone | undefined; actor?: ReactNode; body?: ReactNode; }[]",
             "required": true
@@ -252,8 +267,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "c5df288f38411bc3fb4d9fa14f1cf0fd858bb502294b7215176a47aebe930fc1"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "687c029eeb7645f93945895df32e86951aaccf903e7addf5f26977f2df4d61cc"
       }
     },
     {
@@ -328,8 +343,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "02701e26e9f20ae1051be59b37272b2857a9f1376353a270148c996266c63092"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "51f0cd6cd7235016cd9ee7a705ea4921437582f62e589710c879b6011312519a"
       }
     },
     {
@@ -354,14 +369,16 @@
           "brand": "string",
           "workspace": "string",
           "navigation": "NavigationItem[]",
-          "secondaryNavigation": "{ label: string; items: NavigationItem[] }[]",
-          "user": "ReactNode",
           "header": "ReactNode",
           "actions": "ReactNode",
           "children": "ReactNode",
           "logo": "ReactNode",
           "aside": "ReactNode",
-          "asideLabel": "string"
+          "asideLabel": "string",
+          "homeHref": "string",
+          "sections": "{ label: string; items: NavigationItem[] }[] (labelled link groups, as on Sidebar)",
+          "footer": "ReactNode (account menu pinned to the bottom of the sidebar)",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -385,8 +402,20 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "footer": {
+            "type": "ReactNode",
+            "required": false
+          },
           "header": {
             "type": "ReactNode",
+            "required": false
+          },
+          "homeHref": {
+            "type": "string",
             "required": false
           },
           "logo": {
@@ -397,14 +426,10 @@
             "type": "NavigationItem[]",
             "required": true
           },
-          "secondaryNavigation": {
+          "sections": {
             "type": "ItemGroup<NavigationItem>[]",
             "required": false,
             "default": "[]"
-          },
-          "user": {
-            "type": "ReactNode",
-            "required": false
           },
           "workspace": {
             "type": "string",
@@ -426,8 +451,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "1f0dfcc3b2ed90987a5e247b95c77bda3a51f4766e1b6c944952dac2f40f1201"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "bad4c9eb8ff5987995ec158377528964bf7c7facaea8f7729f69f8a8693ea276"
       }
     },
     {
@@ -477,8 +502,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "2c7515cef0ab89b698343a361529ad16126f1f970dc6de96f4cbd423fc32928f",
-        "preview": "922b09bdba41015b4c4350773fe1968129e9ff615a6586a013075e5bbd54944e"
+        "source": "eca12768471b8e0548d4c76d90b7d5fcd0250f719180c4028a2608f84f82294c",
+        "preview": "b4b522ed2f00dd1946d9ccf21a925e6c87a7632258bdd4cd13b5e40f2a8e5304"
       }
     },
     {
@@ -501,9 +526,14 @@
       "contract": {
         "props": {
           "files": "Attachment[] ({ id: string; name: string; href: string; size?: string; actionLabel?: string; icon?: ReactNode })",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "files": {
             "type": "Attachment[]",
             "required": true
@@ -528,8 +558,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "daca2e8fc7a639a89cc52328e584c29b4351185d8a261844551061edb3726f38"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "289da782e9953a0a929a7f3c8a80d1e51b799948fde1e657c0a1b13716fe7992"
       }
     },
     {
@@ -553,9 +583,14 @@
         "props": {
           "label": "string",
           "people": "{ name: string; src?: string }[]",
-          "max": "number"
+          "max": "number",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": true
@@ -584,8 +619,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "db3289789eefaaad379fc4239e953dd39e8eef0391b8c8e60ba63f78626dc1c8"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "c49ec7fa2bee8a73865db58b0d8dcfb65e3cc96812feb6374ed0cc3a29d7ef80"
       }
     },
     {
@@ -613,9 +648,20 @@
           "shape": "circle | square",
           "status": "online | offline",
           "statusPosition": "bottom | top",
-          "placeholder": "initials | icon"
+          "placeholder": "initials | icon",
+          "decorative": "boolean (hide from assistive technology when the name is visible beside it)",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "decorative": {
+            "type": "boolean",
+            "required": false,
+            "default": "false"
+          },
           "name": {
             "type": "string",
             "required": true
@@ -663,8 +709,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "ad3d8f64f25b5ff54235ee36c5f847dc7324315d84a05fa7f6a78a8da530155d"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "54ac83ddd4544fe287f227d320471d471479f222ab308413ee59e6c0787facce"
       }
     },
     {
@@ -714,8 +760,8 @@
         "states": []
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "1da6344e1363513f340d886ec92c83b14101575112a5b202128b17a8aa45e900"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "c959a3fbfde1a3dd8a60d044e3250fc7ed4f022b64b5eec3bfff5aff2c51976b"
       }
     },
     {
@@ -788,8 +834,8 @@
         "states": []
       },
       "integrity": {
-        "source": "04af1b0781b339e8654a2ce252558ae6c0448fde2fc3975e042e41e0aed20367",
-        "preview": "577eb0bdbd12db95bc1bdb6499c9c1e0032d2bdc52fdc08a42555dc5bd07bc00"
+        "source": "3b38b55afefe1ee29df3aa86d8df65c1b1830a1d6a64c8c1b6c89cc2c7ee5578",
+        "preview": "c17cd4fa81159b8621e3b413db52522c411f876a4830338dd2fc95abaa4182e0"
       }
     },
     {
@@ -832,7 +878,7 @@
             "default": "2"
           },
           "items": {
-            "type": "{ title: string; description: string; visual?: ReactNode; span?: 2 | 1 | undefined; inverse?: boolean | undefined; }[]",
+            "type": "{ title: string; description: string; visual?: ReactNode; span?: 1 | 2 | undefined; inverse?: boolean | undefined; }[]",
             "required": true
           },
           "title": {
@@ -854,8 +900,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "80b7f82a1b5216ff5212624f9822956423bfac5be82d6de643ea07da25904e0f"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "9f79d14724e245f90bb938ab0b086490f38e79a6e25478c2802fddfefb593e11"
       }
     },
     {
@@ -879,9 +925,14 @@
         "props": {
           "items": "{ label: string; href?: string }[]",
           "label": "string",
-          "separator": "\"slash\" | \"chevron\""
+          "separator": "\"slash\" | \"chevron\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "BreadcrumbItem[]",
             "required": true
@@ -911,8 +962,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "fbdc461d9289549650c47a52205ce029a8107974765bc33f48e176aa85782ab5"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "ce67f634dcf2631465913bd13114198ddcef7fa93da800b2884556b7f09a211e"
       }
     },
     {
@@ -962,8 +1013,8 @@
         "states": []
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "8df7cffcd855ad495d8dce7d3fd00baf54c2b2cf87c67b299124cba6567956e0"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "e64a19ab1f05b17228878a10e3c18beee930053daa882b82b071e7767ad09459"
       }
     },
     {
@@ -1043,8 +1094,8 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "0f03c918b261b4358dbf18aeb71c49eea6b7d83868a45c0378dc9ffe522025d6"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "0e69c94398ebd5c55f6228bf81acae626af8701015ea830e82aaabfda9a4d75c"
       }
     },
     {
@@ -1172,8 +1223,8 @@
         "states": []
       },
       "integrity": {
-        "source": "c5fe8b1d5a1429963028f053da2de97c00204c55e2c377c1429dd767d43a1e89",
-        "preview": "d9032664d2a4accb7f93e8f18647d88e1c06662bdb32833815fa273d749b3044"
+        "source": "3094240ff1b34896605c8eda559e735e08717c4ec032898c01ab97aa4a590366",
+        "preview": "cc8877421e1ea2de16714cb53d35f3ee1f10edee3a2a3afef1436922a0a7f576"
       }
     },
     {
@@ -1237,8 +1288,8 @@
         "states": ["surface", "inverse"]
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "bb8716be1208565ef8c88b2dfa8e7c6816e9b358e921ed8df3e965c3249e7ecd"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "282f9974f538a30a48162f67eb8ac213a957c5bd7a784c4b0e6861b03922fe0b"
       }
     },
     {
@@ -1293,8 +1344,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "8a857cb678ff980bae149f730d5569edfc1e427944353bfbcc5ad0e1c2c5cb81"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "8abc767acd3a245a20e7815a5be12444694947ece20a916a368350f3c619088d"
       }
     },
     {
@@ -1319,12 +1370,14 @@
           "as": "\"div\" | \"section\" | \"article\"",
           "title": "string",
           "description": "string",
-          "headingLevel": "2 | 3 | 4",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "actions": "ReactNode",
           "footer": "ReactNode",
           "padding": "\"default\" | \"compact\" | \"none\"",
-          "tone": "\"default\" | \"sunken\"",
-          "children": "ReactNode"
+          "tone": "\"default\" | \"muted\"",
+          "children": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -1340,6 +1393,10 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -1349,9 +1406,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "padding": {
             "type": "\"compact\" | \"default\" | \"none\"",
@@ -1363,7 +1424,7 @@
             "required": false
           },
           "tone": {
-            "type": "\"default\" | \"sunken\"",
+            "type": "\"default\" | \"muted\"",
             "required": false,
             "default": "\"default\""
           }
@@ -1382,8 +1443,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "f0a895b671f3c28d1065bcc097331355c487077e426f8e004c67125be8407d61"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "f11bd10f20ca7fdeb32986af95222cd886e8ac9ec2f103d77a151944704d82ed"
       }
     },
     {
@@ -1461,8 +1522,8 @@
         "states": []
       },
       "integrity": {
-        "source": "827164ee04e179e193c8d8af1b4d4929cb696b1608c34dd9d299714222e74640",
-        "preview": "b4c6ae63a1aec712b78cd13271e0323ed7e17432f41061495a08e0306638d4d7"
+        "source": "83efd5abffb1397235853ed8204b258fa27da4dba748354f0a3fc68045241ccc",
+        "preview": "e302f2e15a5d6d05516e340f96c90d43d471a84613a67aa281d8b80d031541da"
       }
     },
     {
@@ -1487,9 +1548,14 @@
           "items": "ReactNode[]",
           "label": "string",
           "columns": "1 | 2",
-          "size": "\"sm\" | \"md\""
+          "size": "\"sm\" | \"md\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
             "type": "1 | 2",
             "required": false,
@@ -1523,8 +1589,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "fdc7799d25213b83f9590a999cfc8d25f72ecda2eb4e72bc2a915a9f20f6ce24"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "7a867d67ff9d330bd6d562a5f2a9f80161234e074fd3bec604c62091f33619c6"
       }
     },
     {
@@ -1582,8 +1648,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "4baaa98f539f94f97187b91688ffb149882b0dee2d44038a7814bebdab8329c4"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "40ac83027f6d7776c533acfeea41976389f43bdb269514144fb7583077dccbca"
       }
     },
     {
@@ -1633,8 +1699,8 @@
         "states": []
       },
       "integrity": {
-        "source": "70eb2cedc0ffa59a8438e1399a03ce749ed14387508725e6fa91f4892afafa84",
-        "preview": "bb0707609447f45966d701acaccac489bae4e5c5f6d4332ef6c8c376c5728dec"
+        "source": "eb90a179eaba7f8b7c969d8ae17ddea20b0dfe5bd817dc45933a11fa36929f2b",
+        "preview": "65fb41f948d5c97e55319aa2f58b7528bd16b97e34a7cb7bc2c7d54c2d2be277"
       }
     },
     {
@@ -1706,8 +1772,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "9bf616c8c506bc13a6e7cd0c7ee5ee731ea4b16c49418a87071c4cd5beb403f9"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "557651642cf27f24000069cd8b11c3823fa7d321cdc7852d7610ef63c4b4e782"
       }
     },
     {
@@ -1794,8 +1860,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "e11f934fd826379037e5d6a20f2fde54fb876e8f26f35bbbbf6a8b8f67b966bb",
-        "preview": "e674daf5bd26a0a9f72bdc45afba9fb86955627c75034a8d95e7555860c577fb"
+        "source": "75e24720c1b78750e59443a0aaaa6eff42bb1f9d39398d6c99422486f22ff74f",
+        "preview": "e2ba7f89f3b3305915e3af304cc113208ed2cc82b2358ecf3775be14a8280177"
       }
     },
     {
@@ -1824,12 +1890,17 @@
           "groups": "{ label: string; items: CommandItem[] }[] (CommandItem: { id; label; description?; meta?; shortcut?; match?; icon?; onSelect })",
           "label": "string",
           "placeholder": "string",
-          "emptyMessage": "string",
-          "footer": "ReactNode"
+          "footer": "ReactNode",
+          "empty": "{ title: string; description?: string } (announced when no group has items; default \"No results for “query”.\")",
+          "className": "string"
         },
         "propTypes": {
-          "emptyMessage": {
+          "className": {
             "type": "string",
+            "required": false
+          },
+          "empty": {
+            "type": "{ title: string; description?: string | undefined; }",
             "required": false
           },
           "footer": {
@@ -1882,8 +1953,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "6bb59a2b3ed49f94d3ca7f818668c6ff735851496dad36d1b3991d1c0b4a40e1",
-        "preview": "7915e888cd15797ecdf38041716f86c7293ffb431523a972ae558e4a07492f20"
+        "source": "975df510c9a97c9f46368dd291a1b592606626227a7ca297a75495bb892d3c79",
+        "preview": "358c838878d8f719e20c41c3b7aa8eb5161fbfa8bae0f28dcc00ea5a5a6cb932"
       }
     },
     {
@@ -2004,8 +2075,8 @@
         "states": ["error"]
       },
       "integrity": {
-        "source": "9ee314547a2cf9623c59d588132037a9a4afe5bff32e03fda6bee08b0bdbff19",
-        "preview": "e3838c23d11b868db503f91e293416b9d881cf91c9119b16b70399b2d47c7d99"
+        "source": "eca0dce850424c6e1037c91464f7dcdb50327c17a30521e6765448b12660e8d9",
+        "preview": "a250b981b785312e7fe886087ba8070e3239ef96b834ca511defb583c73678ae"
       }
     },
     {
@@ -2098,8 +2169,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "04af1b0781b339e8654a2ce252558ae6c0448fde2fc3975e042e41e0aed20367",
-        "preview": "d7af9fdc7e8ab2d46b7c53b1e920dd19586675df019e2ec1feea71fac31a9b7b"
+        "source": "3b38b55afefe1ee29df3aa86d8df65c1b1830a1d6a64c8c1b6c89cc2c7ee5578",
+        "preview": "b48629b295920e5ba0ff76a6439f0e0edeb926a1a759ad95d06fc8029859f35f"
       }
     },
     {
@@ -2159,8 +2230,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "2a30523b3754e4c2cfbd55c8e935494ee37cc2ee255daccc1a9103a06b71206d"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "85733e5ecd89b20ce368b81c487c10aeb9802fd56892043bc7f7f33cb7493008"
       }
     },
     {
@@ -2185,7 +2256,8 @@
           "as": "ElementType",
           "size": "\"sm\" | \"md\" | \"lg\" | \"xl\"",
           "padded": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "as": {
@@ -2196,6 +2268,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "padded": {
             "type": "boolean",
@@ -2222,8 +2298,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "754481a51792914ae64df7b9399063a6a50ea8a1360c4ba0b4fea1e10aa472a3"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "156987da97fe397a306dbbc102c7db423d33148fc2b9f5bcbe0e76d34209e14c"
       }
     },
     {
@@ -2299,8 +2375,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "1514d6612a9318fb43f95e6cda5e86f23cbe5dfec0dab5b2d48f90b141368a17"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "770638b7855d354d56e3f4aba7a476415983fdf083076567df4bc1a37c7ae390"
       }
     },
     {
@@ -2329,17 +2405,15 @@
       "contract": {
         "props": {
           "caption": "string",
-          "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: left | right; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
+          "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: start | end; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
           "rows": "T[] where T extends { id: string }",
           "rowLabel": "(row: T) => string",
-          "selectedIds": "string[]",
+          "selectedIds": "string[] (may include rows on other pages; select all adds or removes only this page's rows)",
           "onSelectionChange": "(ids: string[]) => void",
           "toolbar": "ReactNode",
           "bulkActions": "ReactNode",
           "loading": "boolean",
           "error": "string",
-          "emptyTitle": "string",
-          "emptyDescription": "string",
           "rowHref": "(row: T) => string | undefined",
           "defaultSort": "{ key: string; direction: ascending | descending }",
           "sort": "{ key: string; direction: ascending | descending } | null",
@@ -2348,7 +2422,11 @@
           "maxHeight": "string",
           "density": "default | compact",
           "striped": "boolean",
-          "footer": "ReactNode"
+          "footer": "ReactNode",
+          "empty": "{ title: string; description?: string; action?: ReactNode } (default \"No records\")",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (empty state heading; default 3)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "bulkActions": {
@@ -2358,6 +2436,10 @@
           "caption": {
             "type": "string",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "columns": {
             "type": "DataTableColumn<T>[]",
@@ -2372,15 +2454,10 @@
             "required": false,
             "default": "\"default\""
           },
-          "emptyDescription": {
-            "type": "string",
+          "empty": {
+            "type": "{ title: string; description?: string | undefined; action?: ReactNode; }",
             "required": false,
-            "default": "\"Records will appear here when they are available.\""
-          },
-          "emptyTitle": {
-            "type": "string",
-            "required": false,
-            "default": "\"No records\""
+            "default": "{\n    title: \"No records\",\n    description: \"Records will appear here when they are available.\",\n  }"
           },
           "error": {
             "type": "string",
@@ -2392,6 +2469,15 @@
           },
           "groupBy": {
             "type": "(row: T) => string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "3"
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "loading": {
@@ -2456,8 +2542,8 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "4a0385e1a62b0b5251285da60a6663994511d8609522a09c82b2264808078540"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "d55824a39c9658fe233c7f1b99aa5daddfafc04696f05bbcbdf46de9cc878bac"
       }
     },
     {
@@ -2481,19 +2567,29 @@
         "props": {
           "title": "string",
           "description": "string",
-          "headingLevel": "2 | 3 | 4",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "items": "{ term: string; details: ReactNode; action?: ReactNode }[]",
-          "layout": "\"columns\" | \"stacked\""
+          "layout": "\"columns\" | \"stacked\"",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "items": {
             "type": "{ term: string; details: ReactNode; action?: ReactNode; }[]",
@@ -2523,8 +2619,8 @@
         "states": ["long"]
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "be63074948a26353b17b4f651fa662e86707e95942ff0d6522b56c1d7665dced"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "a648f7d1510dedc99442ce2b6788e14c52ebb0fd5b7d58244c85e8a0f940b169"
       }
     },
     {
@@ -2548,9 +2644,14 @@
         "props": {
           "label": "string",
           "soft": "boolean",
-          "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\""
+          "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false
@@ -2580,8 +2681,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "96cddecdc4d06399f134e8c088e0d954dcdee17b0f86db95ce46f6de6611c166"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "923e98e23c154b02ae6b9d967e342c45ccb31cb542c9dbe3e9a00a0e1fba5055"
       }
     },
     {
@@ -2697,8 +2798,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "05acb75b87e53d24fb951ef562db91a017b58b707e58189e4591fa1738dc465b"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "ba60a31b64de0609359f79a2c1d28d40843cfd274df0b41551aa9b4cc49fa291"
       }
     },
     {
@@ -2776,8 +2877,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "9ad44a47cc1d69b36b744011a4b667e11c9931263fc9fb4adba6b861a4cea60c"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "a2840ce738df4b1829f0fbfadfd5ace816c5c96085b26d593174077aa084e807"
       }
     },
     {
@@ -2858,8 +2959,8 @@
         "states": []
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "39e5643bdec9aabf57dca07c4f68990eaea57fdaa1eff45acd16be664efc456c"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "e52fda4aab63af77460a44c95807e76f61659c7cb6fa539eb56e013529e107c5"
       }
     },
     {
@@ -2920,8 +3021,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "406a8b40a7c096210c1a9ba8840aa8f527bcfbec7b89bc34ae2ac8643c1636f3"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "a33542dce9295ca777577a115a2e0c448fd6b2c219de74b58039facdffde4680"
       }
     },
     {
@@ -3002,8 +3103,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "3f62f4c465a5c0fb3f1134479f45eef8a97259e1520021276ed3a6cbcaf8fabe"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "b2bf9aa8fc0c498c14f2dbd73a5d8de7c8a01549c90415b2b6025a73b7f10d98"
       }
     },
     {
@@ -3090,8 +3191,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "b87c9f9d0a54961d6e1e1bc0808ef2bae569150aac8d65fe508bdb446e645650"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "c651aaec1f6dfba96ab143ac95ee07af107fba319933719c048ae780e22dfe22"
       }
     },
     {
@@ -3150,8 +3251,8 @@
         "states": ["disabled"]
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "d7188b59de133c36bd208cecc801b2ad7553ee756d2f6772e581427b533c4ae7"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "f3b97fef5fcdbe2105ea443894ae433a0cb69136b7721e1b09f9cab61e62a942"
       }
     },
     {
@@ -3200,8 +3301,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "08df1c301aab61f3af61362628d1a9103e8656b1c60bfc9a0632af51a94e1d2b"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "d3098faf93f2f837bbfc49fa21a78da9e494720947c119587102903a501d9cfa"
       }
     },
     {
@@ -3226,9 +3327,14 @@
           "label": "ReactNode",
           "selected": "boolean",
           "onClick": "() => void",
-          "onRemove": "() => void"
+          "onRemove": "() => void",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "ReactNode",
             "required": true
@@ -3262,8 +3368,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "5d32ffbbc5c5b6b99acc6a3db6758b753d35050b280aec87f05fffeddebd30a3"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "ac24c7ff00ec880ce6e5296c1ec0c1769702bf921d8224f4af5ac6e20b15ba5e"
       }
     },
     {
@@ -3350,8 +3456,8 @@
         "states": ["heading-3"]
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "0b638fcbeef71a448f7166c0b3a7a504c6704dd6d8a43c8c94698cdcecd41238"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "3d096cd488be1df3302390153e7e0a5b01b007c4296cc25adf572073a36ed9ea"
       }
     },
     {
@@ -3376,8 +3482,9 @@
           "label": "string",
           "items": "GridListItem[] ({ id: string; title: string; description?: string; href?: string; media?: ReactNode; cover?: { src: string; alt: string }; meta?: ReactNode; details?: { term: string; details: ReactNode }[]; actions?: ReactNode })",
           "columns": "2 | 3 | 4",
-          "headingLevel": "2 | 3 | 4",
-          "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)"
+          "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)",
+          "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (each card title; default 3)",
+          "className": "string"
         },
         "propTypes": {
           "actionsLayout": {
@@ -3385,13 +3492,17 @@
             "required": false,
             "default": "\"inline\""
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
             "type": "2 | 3 | 4",
             "required": false,
             "default": "3"
           },
-          "headingLevel": {
-            "type": "2 | 3 | 4",
+          "itemHeadingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "3"
           },
@@ -3418,8 +3529,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "44993baf670e3489b49b6a9d71ae52eca2e105582e40ca020a99a93ece142553"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "c4a093f8409c7da8a5c7f69d516f275d565f31ac404e8034e4ed1843cadf525e"
       }
     },
     {
@@ -3503,8 +3614,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "92a1f980b7c2aa0d59162b0ec78c28474939c3407f49fb8fb94ebfc210806b3f"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "a2c7daf3cf9af45d0370a2f74bae7f3c16e4fea733aedfbb839330a078dbb73e"
       }
     },
     {
@@ -3586,8 +3697,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "cda5a895a18c58181353e6efeb479f054c526eec00881f93d7540979569d4435"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "5962de6383a9728514e9b19aedb8385e438cbf888304c8a1b8941f99971edc0b"
       }
     },
     {
@@ -3677,8 +3788,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "ad6c9d9586b501aca73eb5fc5f13f31a6540d7ae73768641d8cb3be8cf1217c2"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "c050c35dca009d6d6e1a4c9491a931ea932633ea0a742cea3b30327b63d765bc"
       }
     },
     {
@@ -3700,9 +3811,14 @@
       },
       "contract": {
         "props": {
-          "keys": "string[]"
+          "keys": "string[]",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "keys": {
             "type": "string[]",
             "required": true
@@ -3722,8 +3838,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "5d17fe00d868037b6605baee10831eb27da9e2cbaae2d1b9cc1fdbeac4e3e9cd"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "6d35248883827815f7752d982f4b9ceac42f588b909b92185efb10bfc57b2c2a"
       }
     },
     {
@@ -3767,8 +3883,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "ec595d4291f2cb4b82f4305a55e7826381bfd080b6d47812e0a8ea3e59cc3785"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "f8d02c7af585b398563c83d2a8030c800dc2cb3de2edb3d175c62e9c66c0d321"
       }
     },
     {
@@ -3850,8 +3966,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "e11f934fd826379037e5d6a20f2fde54fb876e8f26f35bbbbf6a8b8f67b966bb",
-        "preview": "fd9e4b9ce0756d644266aefd61f85c0d47ca1eea2e11cbcc71531ba29f468079"
+        "source": "75e24720c1b78750e59443a0aaaa6eff42bb1f9d39398d6c99422486f22ff74f",
+        "preview": "73cb34858bb883bee034c5761279f1071a52b9747aa2f2dd58d27a3778e7ea0e"
       }
     },
     {
@@ -3922,8 +4038,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "85606e275c089e4903ecda37dba66a6aa830696b897eb83dea8a20f950cbb6a8"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "03c63bbc0633ea02a5b7c62c50cec8d36f3e785e55038fa22d59a6cfb7955918"
       }
     },
     {
@@ -4004,8 +4120,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "f98caf6667420de1e805153f765e1184e8ef8a9e25cec4d0392e2ff094acab0f"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "63849098dce9bd1f3aad94e33b360337d7a6b0624c26d1860e83d942d38ebf25"
       }
     },
     {
@@ -4031,7 +4147,8 @@
           "title": "string",
           "align": "\"start\" | \"center\"",
           "reverse": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "align": {
@@ -4041,6 +4158,10 @@
           },
           "children": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "media": {
@@ -4071,8 +4192,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "b43a6cf063077556a83ff8b9b1c3dd8374393e026b8b9d0876d29dde71c0da84"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "740794723bb1112b6fef1844134fec9b559b3009a535be18ea47ae3eef4af943"
       }
     },
     {
@@ -4096,9 +4217,14 @@
         "props": {
           "label": "string",
           "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\")",
-          "variant": "\"shared\" | \"cards\" (default \"shared\")"
+          "variant": "\"shared\" | \"cards\" (default \"shared\")",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "{ label: string; value: string; change?: string | undefined; tone?: Tone | undefined; icon?: ReactNode; trend?: \"up\" | \"down\" | undefined; previous?: string | undefined; }[]",
             "required": true
@@ -4127,8 +4253,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "bea027fabbc8020770b2ac59d9d828bae45fdfbe49726b2aa6a7c40c323a15e1"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "1e5fe2d873b378d3aa9750c3f104f702e6c80e3f95a12d63293b4358a375b60f"
       }
     },
     {
@@ -4188,8 +4314,8 @@
         "states": []
       },
       "integrity": {
-        "source": "827164ee04e179e193c8d8af1b4d4929cb696b1608c34dd9d299714222e74640",
-        "preview": "8f46c9184a0671c85ae3cca9004b8130da43f04497a0b3097e08b8e7db958479"
+        "source": "83efd5abffb1397235853ed8204b258fa27da4dba748354f0a3fc68045241ccc",
+        "preview": "4540a3b52ffcb8191bea216a8cb0a06566dd296020932533a7c3d96bb8168f89"
       }
     },
     {
@@ -4260,8 +4386,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "946325fc398cad254a4062219045450e4fc10ab18f0aa01730e2db2dd10f7815"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "55165602e07e3ea40b1104a984d19595bbe6fdd6b1d9fffb352f88f0f6def859"
       }
     },
     {
@@ -4292,9 +4418,10 @@
           "brand": "string",
           "logo": "ReactNode",
           "homeHref": "string",
-          "items": "NavigationItem[] ({ label: string; href: string; current?: boolean; count?: string; icon?: ReactNode })",
+          "items": "LinkItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode }; no sub-menus)",
           "actions": "ReactNode",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -4305,13 +4432,17 @@
             "type": "string",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "homeHref": {
             "type": "string",
             "required": false,
             "default": "\"/\""
           },
           "items": {
-            "type": "NavigationItem[]",
+            "type": "LinkItem[]",
             "required": true
           },
           "label": {
@@ -4339,8 +4470,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "d9550cb9d7aec7cecef54dbe36b0699262b11fb3c98611cc84af71b6c57ba3eb"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "b5ed15dd034d491568a1547ff12f8e506f12d045e8d5cbc6c20c2a98d174499f"
       }
     },
     {
@@ -4412,8 +4543,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "4edfb9d2bf48fc14543fcef94d671a4e9c3ca5df0d91cdc8a6efff1d74226be2"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "a7401f16c0a1c5e2899eeb48a5d5329ae3ece9e3c7771f78b06d4c737c1e583a"
       }
     },
     {
@@ -4478,8 +4609,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "fbfd057744be6c26a9578417a48db3ce5d71cdfacc5451539fb5a46c50b8d9a0"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "7a024552219b95e0e4dd9f6a2551f5d4ee9ed365edd011c26666a7b488da18bd"
       }
     },
     {
@@ -4556,8 +4687,8 @@
         "probe": "notice"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "83bf6d29aed669354c8f09c1a4b3b9d85fa1f615873184599e8c6f5c8e160456"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "c6ef39f9040afce7ccd730bccecf98e26a764483545c787290f90496c016c9f5"
       }
     },
     {
@@ -4619,8 +4750,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "b3b45190d4465407be3e33cdd4090467036c3d41e79ab587b053a79586427555"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "742664648929fb3256113196b2e2409a4e0c2d37a0f2b74508b2d8e119332622"
       }
     },
     {
@@ -4691,8 +4822,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "ad79af3123df495fef798d78d0a2c09c397035c55e578f07ac94b81c8a08ec39"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "c3c37ea5d008ab8727ca8648a1bc7776a63560318ba40ec42029a6c7362a6622"
       }
     },
     {
@@ -4753,8 +4884,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "01bc34141bad7645107234d1b32b81feaadc47d56b78e6f788fd00a5974b4286"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "f42de2d165c0466f46f01b1de733374f89c1393bfa1c89710476a5d96732c68c"
       }
     },
     {
@@ -4781,9 +4912,11 @@
           "eyebrow": "string",
           "actions": "ReactNode",
           "breadcrumbs": "{ label: string; href?: string }[]",
-          "headingLevel": "1 | 2",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
           "meta": "{ label: string; icon?: ReactNode }[]",
-          "avatar": "ReactNode"
+          "avatar": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -4798,6 +4931,10 @@
             "type": "BreadcrumbItem[]",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -4807,9 +4944,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "1 | 2",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "meta": {
             "type": "{ label: string; icon?: ReactNode; }[]",
@@ -4835,8 +4976,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "d4f788ab7f6ad2437de252608a181a156b099249ae8ed0511014f9517115f3d8"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "6b52d6cd92609e4eb8188e07ee81a1d006c1f38a8077cbadb11b24c13facc260"
       }
     },
     {
@@ -4885,8 +5026,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "830ec2cde129f9a168d1302d468a853552338bcfaa6b22c81b634aa62374445f"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "4c5cb06a093bfcf1fd8e90b00a387ad57e07fa9c2231507c93d5ebc2ac4eb6f5"
       }
     },
     {
@@ -4913,9 +5054,14 @@
           "onChange": "(page: number) => void",
           "numbered": "boolean",
           "summary": "{ from: number; to: number; total: number; noun?: string }",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false,
@@ -4958,8 +5104,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "3e8808d5dee6f83a88d35a150f4e4d893c5ec24f7d99133bad5a50ddd21300e9"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "3fca5ec38b8fc610ffbc99083341dc6ba1a4f59fd2077a38575d9bc8c22d25aa"
       }
     },
     {
@@ -5023,8 +5169,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "18713f683eec9edad58762b6ee24cf315a4ac6ea01694bbef7eeab2d6a7dcded"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "7abb630a21bb306d4aa339f34a8698276dac7ed80f5e2d156f25887f9965e384"
       }
     },
     {
@@ -5083,8 +5229,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "d541597ae16bc54461b9b8aa6ead3a664672d137304b15657a807b87d65a8c2b"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "fcd8b3ae9a37ec073561b2a28c08a3c4a2805e2806756b658d76bed952824251"
       }
     },
     {
@@ -5133,8 +5279,8 @@
         "states": []
       },
       "integrity": {
-        "source": "70eb2cedc0ffa59a8438e1399a03ce749ed14387508725e6fa91f4892afafa84",
-        "preview": "ae92d0d0178d6e0335ed8538241cbb501cc6839b9c2cb1d4312e57962156eb91"
+        "source": "eb90a179eaba7f8b7c969d8ae17ddea20b0dfe5bd817dc45933a11fa36929f2b",
+        "preview": "a00cdd566754956bb23634b3888e671a35072e4b48139fcea52012193264a53c"
       }
     },
     {
@@ -5211,8 +5357,8 @@
         "probe": "pricing"
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "69e84efeebe139c55e8fc30ce025bd1892bf1dc6e7f7bcd94aa10179aa8ff558"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "63637183532f2416db20fd2b3a6af1a59d259b2320e99c2dcaafa2561e65b67f"
       }
     },
     {
@@ -5288,8 +5434,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "1f2f7482978ce622fb5e10aee33bd5558afc5217ac96ca36ffd3934a3afaa488"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "ea36a145a185f61a26a9bfdb7c52adc289f47449ad22833adc5fe7a4ce7fe5e7"
       }
     },
     {
@@ -5350,8 +5496,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "8ea041de233f23accd1eb6ece90248dfbab36673908d00e4941b62ea2f6d09f7"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "17594ef47732acd0239420b59329ab8584f6aff130efb16646445f83e92d2644"
       }
     },
     {
@@ -5418,8 +5564,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "390190b2c7164ddca50c4aa070cb9b040583a64a960a6a43bba29eb3b820c59a"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "c04c383ef83809e0846f6a23987710e6ed4321c40657e4c2b654417a7b773dc4"
       }
     },
     {
@@ -5542,8 +5688,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "3d5752cb4880968aff1bdeafa24e01b5d4a378f013d8dd68dde5082f6ab19ae4"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "d646158878cd3a74d0f743442193d8b63c7666addbeba7b3b293b4738f5d7103"
       }
     },
     {
@@ -5673,8 +5819,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "5dfdd31c9b5577e9e8e5a3e4f9e8e9d19d800a32359f62543e334c8ae062c26d"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "5ad4548b8c644665b32f52041be536e84e0917809a5d247d4b605c5ee5c5ab23"
       }
     },
     {
@@ -5744,8 +5890,8 @@
         "states": []
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "407839aa3b0e945b08d40bf4142e81e40a4f05bfa6749359b41e5f4cd81b24b7"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "46c7ddc47d4d888930d66cc516b93e359828d1ded3244cb53f2c9d1cf675bea2"
       }
     },
     {
@@ -5771,9 +5917,14 @@
           "value": "number",
           "max": "number",
           "valueLabel": "string",
-          "tone": "primary | warning | danger"
+          "tone": "neutral | info | success | warning | danger (Tone; omit for the accent colour)",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": true
@@ -5784,9 +5935,8 @@
             "default": "100"
           },
           "tone": {
-            "type": "\"danger\" | \"primary\" | \"warning\"",
-            "required": false,
-            "default": "\"primary\""
+            "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+            "required": false
           },
           "value": {
             "type": "number",
@@ -5811,8 +5961,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5deb34db1522fbae468dd68ad2b4f5dda09e740bee749c732a9583ca3f93a760",
-        "preview": "0da1aeaf4f1a30bc59ea50d0921a1bb29414e0c4c523bd735f45e4fb49e45715"
+        "source": "108e5f4a6baeb4c1b070b5f90c957f64955eebbe7cee155f8ab7b1d97202e281",
+        "preview": "6aaa3feddd0a419331667f97cbd4d90d4f2cbb767b78b98f00924b0a446a55cf"
       }
     },
     {
@@ -5836,9 +5986,14 @@
         "props": {
           "steps": "ProgressStep[] ({ id: string; name: string; description?: string; href?: string; status: \"complete\" | \"current\" | \"upcoming\" })",
           "label": "string",
-          "variant": "\"simple\" | \"circles\" | \"bullets\""
+          "variant": "\"simple\" | \"circles\" | \"bullets\"",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false,
@@ -5868,8 +6023,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "5d624eff7a74f13d8872447f46ab862eef6c9ff6e90279e27809a5e8c9152313"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "534bdd4ec108a33eadc324dc6a89c83e82ef0e96f5e60cd0390196b1cbbc8854"
       }
     },
     {
@@ -5891,12 +6046,17 @@
       },
       "contract": {
         "props": {
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           }
         },
         "usage": "Import { Prose } from @tony-ui/mortar. Compose with the public typed props.",
@@ -5913,8 +6073,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "b969abb67f9f11f7ce61a04418152202c9b885d539b4982569640217e78d9f1b"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "d67d807a44cba89b3c64c973d6bee9ea048b7d671f1bc4280e08a775fe4be615"
       }
     },
     {
@@ -5991,8 +6151,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "7974802c89ddb9e6b1a2e2f5176ed228e2ee87c56d49f77db11cc2082d7ae76c"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "24c5385be04fd95a2653466ee19c564cabbade57d793fa3396b87179c75ad051"
       }
     },
     {
@@ -6051,8 +6211,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "41d57175838e50e37d7e1bb2f0a59677906c5cac2166db8b74fcc3ad89f187c2"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "cded877341e060f67be1d0e7af878e31195a70fc874fbd3fb8314380230fb500"
       }
     },
     {
@@ -6131,8 +6291,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "04af1b0781b339e8654a2ce252558ae6c0448fde2fc3975e042e41e0aed20367",
-        "preview": "8da6c536744495a8628360fa5ae2bc4f58cca797a2b6d13ebff337697fb1bb43"
+        "source": "3b38b55afefe1ee29df3aa86d8df65c1b1830a1d6a64c8c1b6c89cc2c7ee5578",
+        "preview": "17b31f0a571fae6f4ebb7523c5459b9d97977d87ee2af08e74d1d67a7b5ab6c1"
       }
     },
     {
@@ -6202,8 +6362,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "7e8ca56a5dee33ebd63e3e398e6fac9226f8cfae7965d0b5b5d15c6a6df278a2"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "57cf5a881b80d22b3c3dcb6841f6effb785807ef03285ffe1161856426a5bfc8"
       }
     },
     {
@@ -6254,8 +6414,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "1be22e3ebb6905caa7ea613d217a9793bdf84679d7cd87402836b89b76551b03"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "e9c403d319188476895f7bc8fb4464e3b3589da509c3a0bab0deb14b8b4a17e7"
       }
     },
     {
@@ -6280,13 +6440,19 @@
           "title": "string",
           "description": "string",
           "actions": "ReactNode",
-          "headingLevel": "2 | 3 | 4",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
           "divider": "boolean",
-          "tabs": "ReactNode"
+          "tabs": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -6299,9 +6465,13 @@
             "default": "true"
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "tabs": {
             "type": "ReactNode",
@@ -6326,8 +6496,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "d8c583eeb6ce17251121ef241af9bb159ea0f89d4354fb0b4ae4d6fde25799c0"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "aed495c662863b86d1b866f6dc6c1206200290d3ca413c9eb2e6704b39eeaa5c"
       }
     },
     {
@@ -6355,7 +6525,9 @@
           "description": "string",
           "tone": "\"default\" | \"muted\" | \"inverse\"",
           "align": "\"start\" | \"center\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "className": "string"
         },
         "propTypes": {
           "align": {
@@ -6367,6 +6539,10 @@
             "type": "ReactNode",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -6374,6 +6550,11 @@
           "eyebrow": {
             "type": "string",
             "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
           },
           "id": {
             "type": "string",
@@ -6403,8 +6584,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "641878231e0257b6db15d2416ceb0d32667d975107e1d3d5c34cf884ebbdd1a3"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "7a307772919121ff11f2df669265f3187591ed2c0dd2c2e85b28ce354c0d02cb"
       }
     },
     {
@@ -6464,8 +6645,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "70eb2cedc0ffa59a8438e1399a03ce749ed14387508725e6fa91f4892afafa84",
-        "preview": "e90de0a252850a791f93e46dcb161d531c7e7c9a4a37ca99cf11d997721343e4"
+        "source": "eb90a179eaba7f8b7c969d8ae17ddea20b0dfe5bd817dc45933a11fa36929f2b",
+        "preview": "a4c5e83e35ebe7d7f13c851df73f96070f1836eba132b5a6a0023c19c5f4224c"
       }
     },
     {
@@ -6534,8 +6715,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "af8a4dfdda86d5879ea3f0b389336a27df7b9b9631108c7d64ac34712fa84f73"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "2ca2416bf6357c14625a44e2f6bf99d9f207046be5e91f1fc1a65a8408e5114a"
       }
     },
     {
@@ -6559,14 +6740,30 @@
         "props": {
           "title": "string",
           "description": "string",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -6589,8 +6786,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "bf789a1bf0a763032531626f37db35eb43295695bd6d2b83721a959adcf19064"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "73a9b8d20edbeb4f0dece1d6134cdfb85eb4e374732d952bcc3eec0b900aae30"
       }
     },
     {
@@ -6674,8 +6871,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "2e89a67a9b06a210bbc56988aa62c44f446c5137d31a609c4fd5c88bbed78c67",
-        "preview": "adf5d3f6f7dcb3d201526fb04e315c9fc0e0ca14e21a40cd6462df5904a9c75b"
+        "source": "a990b2ddfbe09cbb915467ddccbe49f6fed30fc8fb3b80325d6e5967b79d1245",
+        "preview": "134cd5ef01eb139b637f789174c4ba02789a7b77ea5730eb5b3e9566ec7339b1"
       }
     },
     {
@@ -6701,13 +6898,18 @@
           "logo": "ReactNode",
           "workspace": "string",
           "homeHref": "string",
-          "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] })",
+          "navigation": "NavigationItem[] ({ label; href; current?; count?; icon?; children?: NavigationItem[] }; a parent with children is a disclosure whose own href is its first link)",
           "sections": "{ label: string; items: NavigationItem[] }[]",
           "footer": "ReactNode",
-          "label": "string"
+          "label": "string",
+          "className": "string"
         },
         "propTypes": {
           "brand": {
+            "type": "string",
+            "required": false
+          },
+          "className": {
             "type": "string",
             "required": false
           },
@@ -6755,8 +6957,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "b5a04d0112a4faa97436396a93b28d9dfa65812e6b40448b64c1cb32e0c2c998"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "0a9739456ccc7eb04f05e44e8c2aa5b040c29b51242f0abed751f424576c64ce"
       }
     },
     {
@@ -6785,12 +6987,18 @@
           "email": "{ onSubmit: (email: string) => void; label?; placeholder?; submitLabel?; status?: \"idle\" | \"submitting\" | \"success\" | \"error\"; message? }",
           "footer": "ReactNode",
           "dividerLabel": "string",
-          "headingLevel": "1 | 2",
-          "aside": "ReactNode"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+          "aside": "ReactNode",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "aside": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -6811,9 +7019,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "1 | 2",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "logo": {
             "type": "ReactNode",
@@ -6844,8 +7056,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "cdb2373efd7b6ec0965e3170535b13e7909d60d9077d16d95c9df9528eb210f3"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "813ca05e91edb9abb5b0f6303b211f71b92b13716f59492730c3edc4b1fbe7f9"
       }
     },
     {
@@ -6873,7 +7085,8 @@
           "description": "string",
           "children": "ReactNode",
           "actions": "ReactNode",
-          "size": "md | lg | xl"
+          "size": "md | lg | xl",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -6883,6 +7096,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "description": {
             "type": "string",
@@ -6921,8 +7138,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "6bb59a2b3ed49f94d3ca7f818668c6ff735851496dad36d1b3991d1c0b4a40e1",
-        "preview": "3447ec54ba4733f2dd690f5dbb7340548b71eeb31d9ba4b5965c60e1b8ee5b37"
+        "source": "975df510c9a97c9f46368dd291a1b592606626227a7ca297a75495bb892d3c79",
+        "preview": "4693c20e41e118d95f955df3a918b0283ecda1fd1e57614e1033acc4a92a2990"
       }
     },
     {
@@ -6950,7 +7167,8 @@
           "align": "\"start\" | \"center\" | \"end\" | \"stretch\"",
           "justify": "\"start\" | \"center\" | \"end\" | \"between\"",
           "wrap": "boolean",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "align": {
@@ -6965,6 +7183,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "direction": {
             "type": "\"column\" | \"row\"",
@@ -7000,8 +7222,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "00c61978ad296903647d049db7bdd47a27a550ec804b25c4b4eee78bbc9486fc"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "daae1d33135d658124c6864e04dd2683a93d6b66df37995641d4b536875067ba"
       }
     },
     {
@@ -7023,23 +7245,36 @@
       },
       "contract": {
         "props": {
-          "label": "string",
-          "heading": "ReactNode",
+          "label": "string (accessible name; defaults to the title)",
           "action": "ReactNode",
-          "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? })",
-          "groups": "{ label: string; items: StackedListItem[] }[]"
+          "items": "StackedListItem[] ({ id; title; description?; leading?; trailing?; href? }; rendered before groups)",
+          "groups": "{ label: string; items: StackedListItem[] }[]",
+          "title": "ReactNode",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (title level, default 2; group headings sit one level below the title, or at this level without one)",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "action": {
             "type": "ReactNode",
             "required": false
           },
-          "groups": {
-            "type": "ItemGroup<StackedListItem>[]",
+          "className": {
+            "type": "string",
             "required": false
           },
-          "heading": {
-            "type": "ReactNode",
+          "groups": {
+            "type": "ItemGroup<StackedListItem>[]",
+            "required": false,
+            "default": "[]"
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "items": {
@@ -7049,7 +7284,11 @@
           },
           "label": {
             "type": "string",
-            "required": true
+            "required": false
+          },
+          "title": {
+            "type": "ReactNode",
+            "required": false
           }
         },
         "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
@@ -7066,8 +7305,8 @@
         "states": []
       },
       "integrity": {
-        "source": "6bb59a2b3ed49f94d3ca7f818668c6ff735851496dad36d1b3991d1c0b4a40e1",
-        "preview": "190063f8c12295583292f562220da0ad199d4cc3081000f6cfda00a3c76e4ed9"
+        "source": "975df510c9a97c9f46368dd291a1b592606626227a7ca297a75495bb892d3c79",
+        "preview": "4d23f11ea79e7c8b51b0afb3cc1cbb101991b564046e5c523a373a4ce00c1ae9"
       }
     },
     {
@@ -7098,11 +7337,12 @@
           "brand": "string",
           "logo": "ReactNode",
           "homeHref": "string",
-          "navigation": "NavigationItem[]",
+          "navigation": "LinkItem[]",
           "actions": "ReactNode",
           "header": "ReactNode",
           "width": "\"md\" | \"lg\" | \"xl\" | \"full\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "actions": {
@@ -7117,6 +7357,10 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "header": {
             "type": "ReactNode",
             "required": false
@@ -7130,7 +7374,7 @@
             "required": false
           },
           "navigation": {
-            "type": "NavigationItem[]",
+            "type": "LinkItem[]",
             "required": true
           },
           "width": {
@@ -7154,8 +7398,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "ef232c3f164020e20d2d69ef75ff261d1e1d524cba6b0add1ed1e0ad1ebfad01"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "a612fb4d91ed116d57b015e114d9fd46b8c7b504c1962e718cfb2ad91607d412"
       }
     },
     {
@@ -7204,8 +7448,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "9128185ee9e81e2513e8b0b5bb93e49b54a6e42c028a1874b50ea29cfe45b81c"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "cd9627bc81888147d06f6ad9f0dbfe6db61715d994561b51331675752f952798"
       }
     },
     {
@@ -7255,8 +7499,8 @@
         "states": []
       },
       "integrity": {
-        "source": "8d596c1d6af3cd75aeed81908d24061299e308e98823a54c5e1432fd4fb6c4e2",
-        "preview": "b656d218b575593f04fce4fbce3c477ce9e4ca8d48a218775b7296aafeb55c17"
+        "source": "8307c81d2175297061055d77717ca775668e13480c4229366d3245962344d043",
+        "preview": "9e55e3c058e4ab85e640b000a2661321055ad3931654cd55f0979417a32f0f28"
       }
     },
     {
@@ -7314,8 +7558,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "6f554ba3fed42c1704f4f390e25052b82ab6c72135c505fc5fdc62affd8a8792"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "69c712b549fe69fd87abb13f1bb76deb1f141bc418ea62fe242f461689fc502b"
       }
     },
     {
@@ -7340,9 +7584,14 @@
           "label": "string",
           "items": "TabNavItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode })",
           "variant": "\"underline\" | \"pills\"",
-          "fullWidth": "boolean"
+          "fullWidth": "boolean",
+          "className": "string"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "fullWidth": {
             "type": "boolean",
             "required": false,
@@ -7376,8 +7625,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "5bd1cf78e05711ba29957737486d0a6737f4a5f702cec9b4605087164170b129"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "4f30fa443e952478acbbd41afbf94d9947a6f68b740bbb6dae363a3375c2b1db"
       }
     },
     {
@@ -7401,11 +7650,13 @@
         "props": {
           "caption": "string",
           "captionVisible": "boolean",
-          "columns": "{ key: string; label: string; align?: left | right }[]",
+          "columns": "{ key: string; label: string; align?: start | end }[]",
           "rows": "Record<string, ReactNode>[] (optional, default [])",
           "groups": "{ label: string; rows: Record<string, ReactNode>[] }[]",
           "rowHeaders": "boolean",
-          "striped": "boolean"
+          "striped": "boolean",
+          "id": "string",
+          "className": "string"
         },
         "propTypes": {
           "caption": {
@@ -7417,12 +7668,20 @@
             "required": false,
             "default": "false"
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
-            "type": "{ key: string; label: string; align?: \"left\" | \"right\" | undefined; }[]",
+            "type": "{ key: string; label: string; align?: \"start\" | \"end\" | undefined; }[]",
             "required": true
           },
           "groups": {
             "type": "{ label: string; rows: Record<string, ReactNode>[]; }[]",
+            "required": false
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "rowHeaders": {
@@ -7455,8 +7714,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d6fa6e178d182285da61ad5802f5eafd6dc020212b07103bf99048fe2ecf05f9",
-        "preview": "09f77b9b9eb55ef3974b567ffb7edbb3cfa4ac323e5c9360f60e354897a71610"
+        "source": "1c50f5dcb995bfcd5fa4fe8d8527a50b32367ec427695ed493311a1e9c9c185b",
+        "preview": "5a22db25093ca6c931ae7881a1ea48a376299d5091670a37ed10249ff2b1f134"
       }
     },
     {
@@ -7528,8 +7787,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "ebd92e860145defb738be5f345b17aca7e8de0235afcdad95c678eba4fea068a"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "e6d32a06d284c67e888ceb95c3726c30a5f5b0e16c4f58b7e9f4fc2a02efefdb"
       }
     },
     {
@@ -7583,8 +7842,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "6841984ac9f2b378741db821d52972c913d0287fafa18660999bbf99c701d58d"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "e490b51bb95feab46be61b4ffacc7259606b3888db609ed60c825841d302883d"
       }
     },
     {
@@ -7633,8 +7892,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4c82b100dd40c1231f7d8ec1885349d831c9cf79d16db8998e1bbe74fe343193",
-        "preview": "8b99cdac1028783e7d6e76de89c5873f386aea14114cd7509c2624549dbe2ac1"
+        "source": "2184d9ba6dbf2df9a8a0793fc3059306c91bd36cd4bc73e0c5de857175fa097d",
+        "preview": "470c0bf60fc3bf3b4d08af1afe2b77178861a15b1157acff90d1fc817e12c8ae"
       }
     },
     {
@@ -7698,8 +7957,8 @@
         "states": []
       },
       "integrity": {
-        "source": "b5d76a4f330c092d0acfa078de544085d9baf4b580768fce64ab58626a528c79",
-        "preview": "fa407f4cb1cbe3b21aa4aa023adbf0e06c5f06eb30623c8c3ae85cdacf66fa4c"
+        "source": "893484ead519e495a6b6285c72f81a53ea56adc9c0f83750f904415ce07d5489",
+        "preview": "eb172503ff8fb016c5bb4f271c40106e1dcf97ff70987dbd4249e258dcdba44a"
       }
     },
     {
@@ -7763,8 +8022,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "788ba6a2a9b38a285a70cef84f84416fa2076caf0eb030efcc04ab39fc401c47",
-        "preview": "f356335bfde36ffce941118c30f087ba6b882e400377d2be0f04aa25c82968cb"
+        "source": "46bb5f7f91f91f03f8f2df20dc000f73117369c0958e71ab88a7cb18489b14cf",
+        "preview": "42a2b4d299098243cc6bf67cdd085aa4437b45a6f827b9d39d5499af2722450d"
       }
     },
     {
@@ -7787,10 +8046,11 @@
       "contract": {
         "props": {
           "as": "ElementType",
-          "tone": "\"default\" | \"secondary\" | \"muted\"",
+          "color": "\"default\" | \"secondary\" | \"muted\" (data-color; tone is reserved for status and surfaces)",
           "size": "\"sm\" | \"md\" | \"lg\"",
           "weight": "\"regular\" | \"medium\" | \"semibold\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "className": "string"
         },
         "propTypes": {
           "as": {
@@ -7802,15 +8062,19 @@
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "color": {
+            "type": "\"default\" | \"muted\" | \"secondary\"",
+            "required": false,
+            "default": "\"default\""
+          },
           "size": {
             "type": "\"lg\" | \"md\" | \"sm\"",
             "required": false,
             "default": "\"md\""
-          },
-          "tone": {
-            "type": "\"default\" | \"muted\" | \"secondary\"",
-            "required": false,
-            "default": "\"default\""
           },
           "weight": {
             "type": "\"medium\" | \"regular\" | \"semibold\"",
@@ -7832,8 +8096,8 @@
         "states": []
       },
       "integrity": {
-        "source": "430a693c8affb91b8ddf3e8ebd1cab2a699d85f2e9b1f3c3a32a32d3869bbee6",
-        "preview": "deb20c1a76c1760a77bbf4c045ce0829ed3855b02f2f9f4631db7747b1736e34"
+        "source": "7c9c139eb433a21fdeac66132ad4665cb3ef1ba794d1690452d368a8914cd473",
+        "preview": "d0056e8c251c5a181fb742b3f286ae1beb6ead86d4f9b40324cdcc2161ef7728"
       }
     },
     {
@@ -7917,8 +8181,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "2c7515cef0ab89b698343a361529ad16126f1f970dc6de96f4cbd423fc32928f",
-        "preview": "32592c0b857051dd16fd0bbc3b0f52c50f03200f15cfb93780eb631ebe860523"
+        "source": "eca12768471b8e0548d4c76d90b7d5fcd0250f719180c4028a2608f84f82294c",
+        "preview": "89c8405ca3adaa7d8e8a2568b7fce204106360337efc3aa31fe7dc1a36917c95"
       }
     },
     {
@@ -7994,8 +8258,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "04af1b0781b339e8654a2ce252558ae6c0448fde2fc3975e042e41e0aed20367",
-        "preview": "4fcf35eb8003a1799f15ef52bb91599bc7b53f2889c186af25c1ae53382ecf24"
+        "source": "3b38b55afefe1ee29df3aa86d8df65c1b1830a1d6a64c8c1b6c89cc2c7ee5578",
+        "preview": "9b4bd80609633243c1fde52a4447fe0d569c5a5dc972e592d4a880da633eab5e"
       }
     },
     {
@@ -8051,8 +8315,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "04af1b0781b339e8654a2ce252558ae6c0448fde2fc3975e042e41e0aed20367",
-        "preview": "6f58215915dbb1db994de3ca1f621b7ad5736123c88cf0924edaaedd19b3530b"
+        "source": "3b38b55afefe1ee29df3aa86d8df65c1b1830a1d6a64c8c1b6c89cc2c7ee5578",
+        "preview": "5601e8b4f07c71187ab23deca8608a8c2dd8f4a081c4eb95f5aaf5befb13267d"
       }
     }
   ]
