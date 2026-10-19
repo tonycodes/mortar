@@ -212,7 +212,7 @@
     .m-flyout-panel,
     .m-order,
     .m-calendar-timegrid,
-    .m-product-list[data-variant="card"] > li,
+    .m-product-list[data-variant="cards"] > li,
     .m-mock-window
   ) {
     border: 1px solid var(--m-line);
@@ -1591,7 +1591,7 @@
         .m-pagination-pages [aria-current],
         .m-chip[data-selected],
         .m-calendar td[aria-selected="true"] > button,
-        .m-calendar-column h3[aria-current="date"] strong,
+        .m-calendar-column-heading[aria-current="date"] strong,
         .m-data-table tr[data-selected] > *,
         .m-progress-steps [data-status="current"] .m-progress-step-marker
       ),

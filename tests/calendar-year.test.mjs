@@ -12,10 +12,13 @@ const base = {
 test("year view shows twelve labelled months with one tab stop", () => {
   const markup = html(Calendar, base);
   assert.match(markup, /data-view="year"/);
-  assert.match(markup, /<h2 id="[^"]+" aria-live="polite">2026<\/h2>/);
+  assert.match(
+    markup,
+    /<h2 id="[^"]+" class="m-calendar-title" aria-live="polite">2026<\/h2>/,
+  );
   const months = [
     ...markup.matchAll(
-      /<section class="m-calendar-month" aria-labelledby="([^"]+)"><h3 id="\1">([^<]+)<\/h3>/g,
+      /<section class="m-calendar-month" aria-labelledby="([^"]+)"><h3 id="\1" class="m-calendar-month-title">([^<]+)<\/h3>/g,
     ),
   ].map((m) => m[2]);
   assert.deepEqual(months.slice(0, 2), ["January", "February"]);

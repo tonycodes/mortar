@@ -24,11 +24,12 @@
       "options": "ProductOption[] ({ id: string; label: string; values: { value: string; label: string; swatch?: string; disabled?: boolean }[] })",
       "selected": "Record<string, string>",
       "onSelect": "(option: string, value: string) => void",
-      "onAdd": "() => void",
+      "onAdd": "() => void (called when the add form is submitted)",
       "addLabel": "string",
-      "adding": "boolean",
+      "loading": "boolean (busy add button; submitting is ignored while true)",
       "details": "string[]",
-      "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)"
+      "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)",
+      "className": "string (class on the dialog's content wrapper)"
     },
     "usage": "Import { ProductQuickView } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

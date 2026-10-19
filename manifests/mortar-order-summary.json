@@ -16,8 +16,10 @@
       "lines": "{ label: string; value: string }[]",
       "total": "{ label: string; value: string }",
       "action": "ReactNode",
-      "headingLevel": "2 | 3",
-      "children": "ReactNode"
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+      "children": "ReactNode",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { OrderSummary } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -364,6 +364,9 @@ export function StructureCase({ name }: { name: string }) {
               events={meetings}
             />
             <output aria-label="Selected date">{day}</output>
+            <UI.Button variant="ghost" onClick={() => setDay("2026-12-03")}>
+              Select 3 December
+            </UI.Button>
           </div>
           <UI.Calendar
             today="2026-10-17"

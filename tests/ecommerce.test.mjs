@@ -29,7 +29,10 @@ test("ProductList names each card by its product link and shows the price", () =
     markup,
     /<ul class="m-product-list" aria-label="New arrivals" data-columns="4">/,
   );
-  assert.match(markup, /<h3><a href="#tote">Canvas tote<\/a><\/h3>/);
+  assert.match(
+    markup,
+    /<h3 class="m-product-name"><a href="#tote">Canvas tote<\/a><\/h3>/,
+  );
   assert.match(markup, /<p class="m-product-price">£32<\/p>/);
   assert.match(
     markup,
@@ -58,7 +61,7 @@ test("ProductOverview groups options as radio fieldsets and labels the gallery",
     onSelect() {},
     onAdd() {},
   });
-  assert.match(markup, /<h1>Canvas tote<\/h1>/);
+  assert.match(markup, /<h1 class="m-product-name">Canvas tote<\/h1>/);
   assert.match(markup, /<p class="m-product-price">£32<\/p>/);
   assert.match(markup, /aria-label="Rated 4.5 out of 5 from 112 reviews"/);
   assert.match(markup, /<fieldset[^>]*><legend>Size<\/legend>/);
@@ -79,9 +82,20 @@ test("ProductOverview groups options as radio fieldsets and labels the gallery",
     markup,
     /<button type="button" aria-pressed="true" aria-label="Show image 1 of 2: Natural canvas tote bag">/,
   );
+  // The add button submits the form, so Enter in the form adds too.
   assert.match(
     markup,
-    /<button type="button" class="m-button m-button-primary[^"]*">Add to bag<\/button>/,
+    /<form class="m-product-form">.*<button type="submit" class="m-button m-button-primary[^"]*">Add to bag<\/button><\/form>/,
+  );
+  const busy = html(ProductOverview, {
+    name: "Canvas tote",
+    price: "£32",
+    images: [image],
+    loading: true,
+  });
+  assert.match(
+    busy,
+    /<button type="submit"[^>]*disabled=""[^>]*aria-busy="true"/,
   );
 });
 
@@ -130,7 +144,10 @@ test("OrderSummary lists lines and a distinguished total", () => {
     markup,
     /<section class="m-order-summary" aria-labelledby="[^"]+"/,
   );
-  assert.match(markup, /<h2 id="[^"]+">Order summary<\/h2>/);
+  assert.match(
+    markup,
+    /<h2 id="[^"]+" class="m-order-summary-title">Order summary<\/h2>/,
+  );
   assert.match(markup, /<dt>Shipping<\/dt><dd>£4.95<\/dd>/);
   assert.match(
     markup,

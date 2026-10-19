@@ -17,7 +17,10 @@
       "count": "number",
       "distribution": "{ stars: number; count: number }[]",
       "reviews": "Review[] ({ id: string; author: string; rating: number; date: string; title: string; body: ReactNode })",
-      "action": "ReactNode"
+      "action": "ReactNode",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2; review titles are one level below)",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

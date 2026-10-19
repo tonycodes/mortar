@@ -143,7 +143,7 @@ export type { DocsShellProps, FileNode } from "./docs.js";
 export { Listbox, Combobox } from "./choice.js";
 export type { ChoiceOption } from "./choice.js";
 export { Calendar } from "./calendar.js";
-export type { CalendarEvent, CalendarView } from "./calendar.js";
+export type { CalendarEvent, CalendarView, CalendarProps } from "./calendar.js";
 export {
   ProductList,
   ProductOverview,
@@ -162,6 +162,9 @@ export type {
   FilterFacet,
   Review,
   Order,
+  ProductListProps,
+  ProductOverviewProps,
+  ShoppingCartProps,
 } from "./ecommerce.js";
 export { CommentComposer } from "./composer.js";
 export type { LinkItem, ItemGroup } from "./navigation.js";

@@ -510,12 +510,17 @@ export function CartPageTemplate() {
               onRemove={(id) =>
                 setItems((current) => current.filter((item) => item.id !== id))
               }
-              emptyAction={
-                <UI.ActionLink
-                  label="Continue shopping"
-                  href="?recipe=product-page"
-                />
-              }
+              headingLevel={2}
+              empty={{
+                title: "Your bag is empty",
+                description: "Items you add will appear here.",
+                action: (
+                  <UI.ActionLink
+                    label="Continue shopping"
+                    href="?recipe=product-page"
+                  />
+                ),
+              }}
             />
             <UI.OrderSummary
               lines={[
@@ -553,6 +558,7 @@ export function CategoryPageTemplate() {
             title="Shop all"
             description="Everyday goods in natural materials."
           />
+          <UI.SectionHeading title="Shop by category" divider={false} />
           <UI.GridList
             label="Shop by category"
             columns={3}
@@ -584,16 +590,20 @@ export function CategoryPageTemplate() {
             <UI.ProductFilters
               facets={facets}
               selected={selected}
-              onChange={(facet, values) =>
-                setSelected((current) => ({ ...current, [facet]: values }))
-              }
+              onChange={setSelected}
             />
             {shown.length ? (
-              <UI.ProductList label="Products" products={shown} columns={3} />
+              <UI.ProductList
+                label="Products"
+                products={shown}
+                columns={3}
+                itemHeadingLevel={2}
+              />
             ) : (
               <UI.EmptyState
                 title="No matching products"
                 description="Try removing a filter."
+                headingLevel={2}
               />
             )}
           </div>
