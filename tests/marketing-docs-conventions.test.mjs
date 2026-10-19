@@ -97,7 +97,7 @@ test("section titles carry m-section-title so any level keeps the style", async 
       name,
     );
   }
-  const css = await readSource("src/components.css");
+  const css = await readSource("src/marketing.css");
   assert.match(css, /> :is\(h2, :where\(\.m-section-title\)\) \{/);
   assert.notEqual(selectorBody(css, ".m-hero .m-section-title"), "");
 });

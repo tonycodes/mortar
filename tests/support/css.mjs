@@ -26,14 +26,33 @@ export function customProperties(body) {
   );
 }
 
+/** Every src stylesheet in cascade order, as styles.css imports them. */
+export async function styleFiles() {
+  const entry = await readSource("styles.css");
+  return [...entry.matchAll(/@import "\.\/(src\/[\w-]+\.css)";/g)].map(
+    (m) => m[1],
+  );
+}
+
+const HEADING = /\/\* == (.+?) ==/g;
+
 /**
- * The `@layer components { … }` block of `css` that contains `selector`, so a
- * test checks its own block wherever later contributions append theirs.
+ * The text of the named component section of a family stylesheet: from its
+ * `/* == Name == *\/` heading to the next heading, or "" when absent. Each
+ * component keeps all its rules in one section, so a test can check that a
+ * selector lives with its component.
  */
-export function layerBlockWith(css, selector) {
-  const at = css.indexOf(selector);
+export function section(css, name) {
+  const headings = [...css.matchAll(HEADING)];
+  const at = headings.findIndex((m) => m[1] === name);
   if (at < 0) return "";
-  const start = css.lastIndexOf("@layer components {", at);
-  const end = css.indexOf("@layer components {", at);
-  return css.slice(start, end === -1 ? undefined : end);
+  const end = headings[at + 1]?.index;
+  return css.slice(headings[at].index, end);
+}
+
+/** The names of the sections of `css` that contain `selector`. */
+export function sectionsWith(css, selector) {
+  return [...css.matchAll(HEADING)]
+    .map((m) => m[1])
+    .filter((name) => section(css, name).includes(selector));
 }

@@ -1,0 +1,1763 @@
+/* Foundation: document scope, shared patterns, tone and controls.
+   Every rule sits in @layer components, so equal-specificity rules resolve by source
+   order. styles.css loads tokens, foundation, overlays, application, data, calendar,
+   marketing, docs and ecommerce in that order; inside a file each component keeps
+   one section, ordered base, then variants and states, then media and container
+   queries, except where that would change which equal-specificity rule wins. */
+@layer components {
+  /* == Document scope == */
+  /* Document scope paints the page. Container scope paints the wrapper. */
+  [data-mortar]:not(:root) {
+    background: var(--m-paper);
+    color: var(--m-ink);
+  }
+  [data-mortar] body {
+    margin: 0;
+    background: var(--m-paper);
+    color: var(--m-ink);
+    font-family: var(--m-font);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  [data-mortar] :where(button, input, select, textarea) {
+    font: inherit;
+    color: inherit;
+  }
+  [data-mortar]
+    :where(
+      button,
+      a,
+      input,
+      select,
+      textarea,
+      summary,
+      [tabindex]
+    ):focus-visible {
+    outline: 2px solid var(--m-focus);
+    outline-offset: var(--m-focus-offset);
+  }
+  /* Zero-specificity host so any component class can set a link's colour. */
+  :where([data-mortar]) a {
+    color: var(--m-link);
+  }
+  [data-mortar] :where(h1, h2, h3, p, figure, dl) {
+    margin: 0;
+  }
+  .m-required {
+    margin-inline-start: 2px;
+    color: var(--m-danger);
+  }
+  /* Carries a container-scoped theme into portalled overlays without a box. */
+  .m-theme-scope {
+    display: contents;
+  }
+
+  /* == Shared patterns == */
+  /* Shared patterns. Zero specificity, so every component rule can override them. */
+  /* List resets for every component list. */
+  :where(
+    .m-breadcrumbs ol,
+    .m-activity,
+    .m-logo-cloud ul,
+    .m-pricing-grid ul,
+    .m-avatar-group,
+    .m-toaster ol,
+    .m-stacked-list ul,
+    .m-bento,
+    .m-post-list,
+    .m-team-grid,
+    .m-steps,
+    .m-file-tree ul,
+    .m-link-cards,
+    .m-process-steps,
+    .m-check-list,
+    .m-chat-log,
+    .m-chat-suggestions,
+    .m-choice-options,
+    .m-grid-list,
+    .m-calendar-events,
+    .m-flyout-panel ul,
+    .m-product-list,
+    .m-cart,
+    .m-order-items,
+    .m-calendar-allday,
+    .m-calendar-slots,
+    .m-icon-links,
+    .m-heading-meta,
+    .m-attachments,
+    .m-progress-steps ol,
+    .m-tab-nav ul,
+    .m-product-swatches
+  ) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Icons: a host sets --m-icon-size (default --m-icon); every svg inside it follows.
+     Hosts reset the size so a nested host never inherits a larger parent size. */
+  :where(
+    .m-select-control,
+    .m-button-group-icon,
+    .m-choice-control,
+    .m-combobox-toggle,
+    .m-choice-leading,
+    .m-nav-icon,
+    .m-banner > button,
+    .m-input-group > .m-input-icon,
+    .m-calendar-nav,
+    .m-flyout-trigger,
+    .m-flyout-icon,
+    .m-rating,
+    .m-stars,
+    .m-button-icon,
+    .m-menu-icon,
+    .m-notice-dismiss,
+    .m-empty-icon,
+    .m-tab-icon,
+    .m-icon-links,
+    .m-metric-icon,
+    .m-heading-meta,
+    .m-palette-icon,
+    .m-attachment-icon,
+    .m-progress-steps[data-variant="circles"] .m-progress-step-marker,
+    .m-feature-icon[data-marker="icon"],
+    .m-check-list,
+    .m-sort-button,
+    .m-grid-list[data-actions="split"] .m-grid-list-actions,
+    .m-metrics span[data-trend]
+  ) {
+    --m-icon-size: var(--m-icon);
+  }
+  :where(
+      .m-select-control,
+      .m-button-group-icon,
+      .m-choice-control,
+      .m-combobox-toggle,
+      .m-choice-leading,
+      .m-nav-icon,
+      .m-banner > button,
+      .m-input-group > .m-input-icon,
+      .m-calendar-nav,
+      .m-flyout-trigger,
+      .m-flyout-icon,
+      .m-rating,
+      .m-stars,
+      .m-button-icon,
+      .m-menu-icon,
+      .m-notice-dismiss,
+      .m-empty-icon,
+      .m-tab-icon,
+      .m-icon-links,
+      .m-metric-icon,
+      .m-heading-meta,
+      .m-palette-icon,
+      .m-attachment-icon,
+      .m-progress-steps[data-variant="circles"] .m-progress-step-marker,
+      .m-feature-icon[data-marker="icon"],
+      .m-check-list,
+      .m-sort-button,
+      .m-grid-list[data-actions="split"] .m-grid-list-actions,
+      .m-metrics span[data-trend]
+    )
+    svg {
+    width: var(--m-icon-size);
+    height: var(--m-icon-size);
+  }
+  /* Borderless buttons: one reset; each component adds size, colour and type. */
+  :where(
+    .m-chip button,
+    .m-code-bar [role="tab"],
+    .m-code-copy,
+    .m-sort-button,
+    .m-combobox-toggle,
+    .m-banner > button,
+    .m-calendar-nav button,
+    .m-calendar td > button,
+    .m-flyout-trigger,
+    .m-cart-remove,
+    .m-filter-clear,
+    .m-menu :is(button, a),
+    .m-notice-dismiss,
+    .m-pagination-pages button
+  ) {
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  /* Ghost icon buttons (dismiss, previous/next, toggles): one size and hover. */
+  :where(
+    .m-banner > button,
+    .m-calendar-nav button,
+    .m-notice-dismiss,
+    .m-combobox-toggle
+  ) {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: var(--m-icon-button, 32px);
+    height: var(--m-icon-button, 32px);
+    min-width: var(--m-touch-target);
+    min-height: var(--m-touch-target);
+    border-radius: var(--m-radius-sm);
+  }
+  /* Class specificity: the host reset gives buttons color: inherit. */
+  .m-banner > button,
+  .m-calendar-nav button {
+    color: var(--m-secondary);
+  }
+  :where(
+    .m-banner > button,
+    .m-calendar-nav button,
+    .m-notice-dismiss,
+    .m-combobox-toggle
+  ):hover {
+    background: var(--m-sunken);
+  }
+  /* Card surface: bordered, large radius, surface background. */
+  :where(
+    .m-dialog-panel,
+    .m-metrics,
+    .m-data-table,
+    .m-toast,
+    .m-palette,
+    .m-stacked-list,
+    .m-card,
+    .m-action-panel,
+    .m-grid-list > li,
+    .m-flyout-panel,
+    .m-order,
+    .m-calendar-timegrid,
+    .m-product-list[data-variant="cards"] > li,
+    .m-mock-window
+  ) {
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
+  /* Titles keep their style at any heading level; h4–h6 lose the UA margins. */
+  :where(
+    .m-section-title,
+    .m-post-title,
+    .m-release-version,
+    .m-release-type,
+    .m-api-title,
+    .m-api-params-title
+  ) {
+    margin: 0;
+  }
+
+  /* == Tabs and TabNav == */
+  /* Tabs, styled once for Tabs ([role=tab] buttons) and TabNav (links between pages).
+     A tab is selected by aria-selected (Tabs) or aria-current (TabNav). */
+  .m-tabs {
+    --m-tab-gap: 24px;
+    --m-tab-pad-x: 0px;
+  }
+  .m-tab-nav {
+    --m-tab-gap: 20px;
+    --m-tab-pad-x: 4px;
+    min-width: 0;
+  }
+  :is(.m-tabs, .m-tab-nav ul) {
+    display: flex;
+    gap: var(--m-tab-gap);
+    border-bottom: 1px solid var(--m-line);
+    overflow-x: auto;
+  }
+  :is(.m-tabs [role="tab"], .m-tab-nav a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--m-touch-target);
+    padding: 12px var(--m-tab-pad-x);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--m-muted);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .m-tab-icon {
+    display: inline-flex;
+  }
+  /* Count pills: tab counts and the active-filter count share one shape. */
+  :is(.m-tab-count, .m-filter-active) {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: var(--m-radius-full);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-tab-count {
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+  }
+  :is(.m-tabs [role="tab"], .m-tab-nav a):hover:not(
+      [aria-selected="true"],
+      [aria-current="page"]
+    ) {
+    color: var(--m-ink);
+    border-bottom-color: var(--m-line);
+  }
+  .m-tab-nav a:focus-visible {
+    outline-offset: -2px;
+  }
+  :is(.m-tabs [aria-selected="true"], .m-tab-nav a[aria-current="page"]) {
+    color: var(--m-link);
+    border-bottom-color: var(--m-link);
+  }
+  :is(.m-tabs[data-variant="pills"], .m-tab-nav[data-variant="pills"] ul) {
+    gap: 4px;
+    border-bottom: 0;
+  }
+  :is(
+    .m-tabs[data-variant="pills"] [role="tab"],
+    .m-tab-nav[data-variant="pills"] a
+  ) {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: var(--m-radius);
+  }
+  :is(
+    .m-tabs[data-variant="pills"] [aria-selected="true"],
+    .m-tab-nav[data-variant="pills"] a[aria-current="page"]
+  ) {
+    background: var(--m-selected);
+  }
+  :is(
+    .m-tabs[data-full-width]:not([data-variant]),
+    .m-tab-nav[data-full-width]:not([data-variant]) ul
+  ) {
+    gap: 0;
+  }
+  .m-tab-nav[data-full-width] li {
+    display: flex;
+    flex: 1;
+  }
+  :is(.m-tabs[data-full-width] [role="tab"], .m-tab-nav[data-full-width] a) {
+    flex: 1;
+    justify-content: center;
+  }
+  :is(.m-tabs [aria-selected="true"], .m-tab-nav a[aria-current="page"])
+    .m-tab-count,
+  .m-filter-active {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+  }
+  :where(.m-tabs) ~ [role="tabpanel"]:not([hidden]) {
+    padding-top: 24px;
+  }
+
+  /* == Forced colours: selected and current states ==
+   Kept after Tabs and before Button and the other controls: equal-specificity rules
+     on both sides depend on this position. */
+  /* Forced colours drop backgrounds and shadows, so selected and current states
+     use system highlight colours (and today's date an outline) instead. */
+  @media (forced-colors: active) {
+    :where([data-mortar], [class^="m-"], [class*=" m-"])
+      :is(
+        button[aria-pressed="true"],
+        [role="tab"][aria-selected="true"],
+        [role="option"][aria-selected="true"],
+        .m-pagination-pages [aria-current],
+        .m-chip[data-selected],
+        .m-calendar td[aria-selected="true"] > button,
+        .m-calendar-column-heading[aria-current="date"] strong,
+        .m-data-table tr[data-selected] > *,
+        .m-progress-steps [data-status="current"] .m-progress-step-marker
+      ),
+    :where([data-mortar], [class^="m-"], [class*=" m-"])
+      :is(nav, [role="navigation"])
+      a[aria-current]:not([aria-current="false"]) {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+      border-color: Highlight;
+    }
+  }
+
+  /* == Button and ActionLink == */
+  .m-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: var(--m-control);
+    padding: 4px var(--m-pad);
+    border: 1px solid transparent;
+    border-radius: var(--m-radius);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    line-height: 1.35;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .m-button-primary {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
+    border-color: var(--m-primary);
+  }
+  .m-button-secondary {
+    background: var(--m-surface);
+    color: var(--m-ink);
+    border-color: var(--m-line-strong);
+  }
+  .m-button-ghost {
+    background: transparent;
+    color: var(--m-secondary);
+  }
+  .m-button-danger {
+    background: transparent;
+    color: var(--m-danger);
+    border-color: var(--m-danger);
+  }
+  .m-spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: m-spin 0.8s linear infinite;
+  }
+  .m-button-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-button-primary:hover {
+    background: var(--m-primary-hover);
+  }
+  .m-button-primary:active {
+    background: var(--m-primary-active);
+  }
+  .m-button-secondary:hover,
+  .m-button-ghost:hover {
+    background: var(--m-sunken);
+  }
+  .m-button-danger:hover {
+    background: var(--m-sunken);
+  }
+  .m-button:active:not(:disabled, [aria-disabled="true"]) {
+    transform: translateY(1px);
+  }
+  .m-button:is(:disabled, [aria-disabled="true"]) {
+    background: var(--m-sunken);
+    color: var(--m-muted);
+    border: 1px dashed var(--m-line-strong);
+    cursor: not-allowed;
+  }
+  .m-button-danger[data-solid]:not(:disabled, [aria-disabled="true"]) {
+    background: var(--m-danger);
+    color: var(--m-on-feedback);
+  }
+  /* Sizes and icon-only buttons carry :is(button, a) (a .m-button is always one) so they outrank equal-specificity context rules that load later: Toast, InputGroup action, ProductOverview form and OrderSummary action. */
+  :is(button, a).m-button[data-size="sm"] {
+    min-height: 30px;
+    padding: 2px 10px;
+    font-size: 13px;
+  }
+  :is(button, a).m-button[data-size="lg"] {
+    min-height: 44px;
+    padding: 6px 20px;
+    font-size: 15px;
+  }
+  :is(button, a).m-button[data-icon-only] {
+    min-width: var(--m-control);
+    padding-inline: 0;
+  }
+  .m-button[data-icon-only][data-size="sm"] {
+    min-width: 30px;
+  }
+  .m-button[data-icon-only][data-size="lg"] {
+    min-width: 44px;
+  }
+
+  /* == Fields: Input, TextArea and Select == */
+  .m-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+  .m-field > label,
+  .m-radio-group > legend {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .m-field p {
+    font-size: 12px;
+    color: var(--m-muted);
+  }
+  .m-input-group {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    overflow: hidden;
+  }
+  .m-input-group input {
+    min-width: 0;
+    width: 100%;
+    min-height: var(--m-control);
+    padding: 4px var(--m-pad);
+    border: 0;
+    background: transparent;
+    font-size: var(--m-font-size);
+    outline: none;
+  }
+  .m-input-group > span {
+    display: flex;
+    align-items: center;
+    background: var(--m-sunken);
+    padding: 0 10px;
+    color: var(--m-muted);
+    font: 12px var(--m-mono);
+  }
+  .m-field select {
+    min-height: var(--m-control);
+  }
+  .m-field select,
+  .m-field textarea {
+    padding: 6px var(--m-pad);
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    font-size: var(--m-font-size);
+  }
+  .m-select-control {
+    position: relative;
+    display: grid;
+    min-width: 0;
+  }
+  .m-select-control select {
+    appearance: none;
+    width: 100%;
+    min-width: 0;
+    line-height: 1.4;
+  }
+  .m-select-control svg {
+    position: absolute;
+    inset-inline-end: var(--m-pad);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--m-secondary);
+    pointer-events: none;
+  }
+  @media (forced-colors: active) {
+    .m-select-control select {
+      appearance: auto;
+    }
+    .m-select-control svg {
+      display: none;
+    }
+  }
+  .m-field textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+  .m-input-group > .m-input-icon:first-child {
+    padding-inline-start: var(--m-pad);
+  }
+  .m-input-group > input + .m-input-icon {
+    padding-inline-end: var(--m-pad);
+  }
+  .m-input-action {
+    display: flex;
+    flex-shrink: 0;
+    border-inline-start: 1px solid var(--m-line-strong);
+  }
+  .m-input-group:focus-within {
+    outline: 2px solid var(--m-focus);
+    outline-offset: 2px;
+  }
+  .m-input-group input:focus-visible {
+    outline: none;
+  }
+  .m-input-group[data-invalid],
+  .m-field [aria-invalid="true"] {
+    border-color: var(--m-danger);
+  }
+  .m-input-action > :is(button, a, .m-button) {
+    min-height: 100%;
+    border: 0;
+    border-radius: 0;
+  }
+  .m-select-control:not([data-listbox]) select {
+    height: var(--m-control);
+    padding-block: 0;
+    padding-inline-end: calc(var(--m-pad) + 24px);
+    cursor: pointer;
+  }
+  .m-select-control select:hover:not(:disabled):not([aria-invalid="true"]) {
+    border-color: var(--m-secondary);
+  }
+  .m-select-control:has(select:disabled) svg {
+    color: var(--m-muted);
+  }
+  .m-field :disabled {
+    color: var(--m-muted);
+    background: var(--m-sunken);
+    cursor: not-allowed;
+  }
+  .m-input-group > .m-input-icon {
+    padding: 0;
+    background: transparent;
+    color: var(--m-muted);
+    font: inherit;
+  }
+  .m-field[data-disabled] .m-choice-control {
+    color: var(--m-muted);
+    background: var(--m-sunken);
+    cursor: not-allowed;
+  }
+  .m-field[data-disabled] .m-choice-control :is(input, button) {
+    cursor: not-allowed;
+  }
+  .m-input-group[data-leading] > .m-input-icon + input {
+    padding-inline-start: 8px;
+  }
+  .m-input-group[data-trailing] > input:has(+ .m-input-icon) {
+    padding-inline-end: 8px;
+  }
+  .m-input-action > :is(button, a, .m-button):focus-visible {
+    outline-offset: -2px;
+  }
+  @media (max-width: 560px) {
+    .m-input-group input,
+    .m-field select,
+    .m-field textarea {
+      font-size: 16px;
+    }
+  }
+
+  /* == Badge == */
+  /* Tone: each status value sets --m-tone once; components read it. */
+  :where(.m-badge, .m-notice) {
+    --m-tone: var(--m-secondary);
+  }
+  .m-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-full);
+  }
+  .m-badge::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* == Tone == */
+  :where([data-tone="success"]) {
+    --m-tone: var(--m-success);
+  }
+  :where([data-tone="warning"]) {
+    --m-tone: var(--m-warning);
+  }
+  :where([data-tone="danger"], .m-error) {
+    --m-tone: var(--m-danger);
+  }
+  :where([data-tone="info"]) {
+    --m-tone: var(--m-info);
+  }
+  :is(.m-error, .m-badge, .m-notice),
+  .m-field .m-error {
+    color: var(--m-tone);
+  }
+  /* The inverse token remap lives in tokens.css; text follows the remapped ink. */
+  :where([data-tone="inverse"]) {
+    color: var(--m-ink);
+  }
+
+  /* == ButtonGroup == */
+  .m-button-group {
+    display: inline-flex;
+    max-width: 100%;
+    border-radius: var(--m-radius);
+  }
+  .m-button-group > :is(button, a) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: var(--m-control);
+    min-width: var(--m-control);
+    margin-left: -1px;
+    padding: 4px 12px;
+    border: 1px solid var(--m-line-strong);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .m-button-group > :first-child {
+    margin-left: 0;
+    border-start-start-radius: var(--m-radius);
+    border-end-start-radius: var(--m-radius);
+  }
+  .m-button-group > :last-child {
+    border-start-end-radius: var(--m-radius);
+    border-end-end-radius: var(--m-radius);
+  }
+  .m-button-group-icon {
+    display: inline-flex;
+  }
+  .m-button-group > :is(button, a):hover:not(:disabled) {
+    background: var(--m-sunken);
+  }
+  .m-button-group > :is(button, a):focus-visible {
+    position: relative;
+    z-index: 1;
+    outline-offset: 2px;
+  }
+  .m-button-group > button:disabled {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+
+  /* == Fieldset == */
+  .m-fieldset {
+    /* Block layout: a rendered legend is not a flex item, so gap would not apply to it. */
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .m-fieldset > legend {
+    margin-bottom: 16px;
+    padding: 0;
+    color: var(--m-ink);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-fieldset > legend:has(+ p) {
+    margin-bottom: 4px;
+  }
+  .m-fieldset > p {
+    margin: 0 0 16px;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-fieldset-fields {
+    display: grid;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  /* == Choices: Checkbox, RadioGroup and Switch == */
+  .m-choice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: var(--m-control);
+    font-size: var(--m-font-size);
+    cursor: pointer;
+  }
+  [data-mortar] input:is([type="checkbox"], [type="radio"]) {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--m-primary);
+    cursor: pointer;
+  }
+  [data-mortar] input.m-switch {
+    appearance: none;
+    width: 34px;
+    height: 20px;
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius-full);
+    background: var(--m-sunken);
+    position: relative;
+  }
+  .m-switch::after {
+    content: "";
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    top: 2px;
+    left: 2px;
+    border-radius: 50%;
+    background: var(--m-muted);
+    transition: transform 0.15s;
+  }
+  .m-radio-group {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .m-radio-group legend {
+    margin-bottom: 10px;
+  }
+  .m-radio-card {
+    display: flex;
+    align-items: start;
+    gap: 12px;
+    border: 1px solid var(--m-line);
+    padding: 16px;
+    border-radius: var(--m-radius);
+    cursor: pointer;
+  }
+  .m-radio-card strong,
+  .m-radio-card span > span {
+    display: block;
+    font-size: 13px;
+  }
+  .m-radio-card span > span {
+    color: var(--m-muted);
+    margin-top: 4px;
+  }
+  .m-choice-described {
+    align-items: flex-start;
+    cursor: default;
+  }
+  .m-choice-described > input {
+    margin-top: 2px;
+  }
+  [data-mortar] input.m-switch:checked {
+    background: var(--m-primary);
+    border-color: var(--m-primary);
+  }
+  .m-switch:checked::after {
+    transform: translateX(14px);
+    background: var(--m-on-primary);
+  }
+  .m-radio-card:has(:checked) {
+    background: var(--m-selected);
+    border-color: var(--m-primary);
+  }
+  .m-radio-card:has(:disabled) {
+    background: var(--m-sunken);
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-radio-card:has(:disabled) :is(strong, input) {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-radio-group[data-layout="grid"] {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  }
+  .m-radio-group[data-layout="swatches"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .m-radio-group[data-layout="swatches"] legend {
+    width: 100%;
+  }
+  .m-radio-group[data-layout="swatches"] .m-radio-card {
+    position: relative;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+  }
+  .m-radio-group[data-layout="swatches"] .m-radio-card:has(:checked) {
+    background: none;
+  }
+  .m-radio-group[data-layout="swatches"] input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+  }
+  .m-radio-group[data-layout="swatches"] .m-swatch {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--m-swatch-ring);
+  }
+  .m-radio-group[data-layout="swatches"] input:checked + .m-swatch {
+    outline: 2px solid var(--m-ink);
+    outline-offset: 2px;
+  }
+  .m-radio-group[data-layout="swatches"] input:focus-visible + .m-swatch {
+    outline: 2px solid var(--m-focus);
+    outline-offset: 4px;
+  }
+  .m-radio-group[data-layout="swatches"] input:disabled + .m-swatch {
+    opacity: 0.35;
+  }
+
+  /* == Listbox and Combobox == */
+  .m-choice-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--m-control);
+    padding: 4px var(--m-pad);
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    text-align: start;
+  }
+  button.m-choice-control {
+    padding-inline-end: calc(var(--m-pad) + 24px);
+    cursor: pointer;
+  }
+  .m-choice-control > svg,
+  .m-combobox-toggle svg {
+    color: var(--m-secondary);
+  }
+  button.m-choice-control > svg {
+    position: absolute;
+    inset-inline-end: var(--m-pad);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .m-choice-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .m-choice-value > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .m-placeholder {
+    color: var(--m-muted);
+  }
+  .m-combobox {
+    position: relative;
+    min-width: 0;
+  }
+  .m-combobox > input.m-choice-control {
+    padding-inline-end: calc(var(--m-pad) + 28px);
+  }
+  .m-combobox > .m-choice-leading {
+    position: absolute;
+    inset-inline-start: var(--m-pad);
+    top: 50%;
+    z-index: 1;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .m-combobox input::placeholder {
+    color: var(--m-muted);
+  }
+  .m-combobox-toggle {
+    position: absolute;
+    inset-inline-end: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    --m-icon-button: 28px;
+  }
+  .m-choice-leading {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-choice-options {
+    z-index: var(--m-z-popover);
+    width: var(--button-width);
+    min-width: 200px;
+    max-height: 280px;
+    padding: 6px;
+    overflow-y: auto;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+    --anchor-gap: 6px;
+    outline: none;
+  }
+  .m-combobox-options {
+    width: var(--input-width);
+  }
+  .m-choice-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--m-radius-sm);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    cursor: pointer;
+    min-height: var(--m-touch-target);
+  }
+  .m-choice-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .m-choice-text small {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-choice-check {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    visibility: hidden;
+  }
+  .m-choice-text label {
+    color: var(--m-ink);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .m-choice-text p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-choice-control:hover:not(
+      :disabled,
+      [data-disabled],
+      [aria-invalid="true"],
+      [data-invalid]
+    ) {
+    border-color: var(--m-secondary);
+  }
+  .m-choice-control:is([aria-invalid="true"], [data-invalid]) {
+    border-color: var(--m-danger);
+  }
+  .m-combobox[data-leading] > input.m-choice-control {
+    padding-inline-start: calc(var(--m-pad) + 30px);
+  }
+  .m-choice-options:focus-visible {
+    /* Focus stays visible on the active option via aria-activedescendant. */
+    outline: none;
+  }
+  .m-choice-option[data-focus] {
+    background: var(--m-selected);
+  }
+  .m-choice-option[data-disabled] {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+  .m-choice-option[data-selected] {
+    font-weight: 600;
+  }
+  .m-choice-option[data-selected] .m-choice-check {
+    visibility: visible;
+  }
+
+  /* == SegmentedControl == */
+  .m-segmented {
+    display: inline-flex;
+    width: fit-content;
+    background: var(--m-sunken);
+    padding: 3px;
+    gap: 2px;
+    border-radius: var(--m-radius);
+  }
+  .m-segmented button {
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--m-muted);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 5px 10px;
+    cursor: pointer;
+    min-height: max(28px, var(--m-touch-target));
+  }
+  .m-segmented [aria-pressed="true"] {
+    background: var(--m-surface);
+    color: var(--m-ink);
+    border-color: var(--m-line);
+  }
+
+  /* == FilterChip == */
+  .m-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: max(calc(var(--m-control) - 8px), var(--m-touch-target));
+    padding: 0 10px;
+    border: 1px dashed var(--m-line-strong);
+    border-radius: var(--m-radius-full);
+    background: transparent;
+    color: var(--m-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .m-chip button {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 10px;
+  }
+  .m-chip[data-selected] {
+    border: 1px solid transparent;
+    background: var(--m-selected);
+    color: var(--m-ink);
+    padding-right: 4px;
+  }
+  .m-chip button:hover {
+    background: var(--m-surface);
+  }
+
+  /* == Kbd == */
+  .m-kbd-group {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .m-kbd {
+    font: 500 11px var(--m-mono);
+    padding: 1px 6px;
+    border: 1px solid var(--m-line-strong);
+    border-bottom-width: 2px;
+    border-radius: var(--m-radius-sm);
+    color: var(--m-ink);
+    background: var(--m-surface);
+  }
+
+  /* == Avatar and AvatarGroup == */
+  /* Display */
+  .m-avatar {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--m-sunken);
+    color: var(--m-ink);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .m-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+  }
+  .m-avatar-sm {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+  }
+  .m-avatar-lg {
+    width: 52px;
+    height: 52px;
+    font-size: 18px;
+  }
+  .m-avatar-status {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--m-surface);
+    background: var(--m-line-strong);
+  }
+  .m-avatar-group {
+    display: flex;
+  }
+  .m-avatar-group li + li {
+    margin-left: -8px;
+  }
+  .m-avatar-group .m-avatar {
+    border: 2px solid var(--m-surface);
+  }
+  .m-avatar-more {
+    font: 500 10px var(--m-mono);
+    color: var(--m-secondary);
+  }
+  .m-avatar-xs {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+  }
+  .m-avatar-xl {
+    width: 72px;
+    height: 72px;
+    font-size: 24px;
+  }
+  .m-avatar:has(> .m-avatar-placeholder) {
+    color: var(--m-muted);
+  }
+  .m-avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+  .m-avatar[data-shape="square"] {
+    border-radius: var(--m-radius);
+  }
+  .m-avatar-status[data-status="online"] {
+    background: var(--m-success);
+  }
+  .m-avatar-status[data-position="top"] {
+    top: -1px;
+    bottom: auto;
+  }
+
+  /* == ProgressBar == */
+  .m-progress {
+    display: grid;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .m-progress-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .m-progress-label span:first-child {
+    font-weight: 600;
+  }
+  .m-progress-label span + span {
+    font-family: var(--m-mono);
+    color: var(--m-muted);
+  }
+  .m-progress-track {
+    height: 6px;
+    border-radius: 6px;
+    background: var(--m-sunken);
+    overflow: hidden;
+  }
+  .m-progress-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--m-primary);
+  }
+  .m-progress[data-tone="neutral"] {
+    --m-tone: var(--m-secondary);
+  }
+  .m-progress[data-tone] .m-progress-track span {
+    background: var(--m-tone);
+  }
+
+  /* == CheckList == */
+  /* Check list. */
+  .m-check-list {
+    display: grid;
+    gap: 12px 24px;
+    --m-icon-size: 18px;
+  }
+  .m-check-list li {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    font-size: 15px;
+    color: var(--m-ink);
+  }
+  .m-check-list svg {
+    margin-top: 2px;
+    padding: 2px;
+    border-radius: 50%;
+    background: var(--m-selected);
+    color: var(--m-primary);
+  }
+  .m-check-list[data-columns="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .m-check-list[data-size="sm"] li {
+    font-size: 13px;
+  }
+
+  /* == Notice == */
+  .m-notice {
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    padding: 16px;
+    font-size: var(--m-font-size);
+  }
+  .m-notice > div {
+    margin-top: 6px;
+  }
+  .m-notice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    font-weight: 600;
+  }
+  .m-notice-actions a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .m-notice-dismiss {
+    position: absolute;
+    top: 10px;
+    inset-inline-end: 10px;
+    color: inherit;
+    --m-icon-button: 28px;
+  }
+  .m-notice[data-dismissible] {
+    position: relative;
+    padding-inline-end: 48px;
+  }
+
+  /* == EmptyState == */
+  .m-empty {
+    text-align: center;
+    padding: 64px 24px;
+  }
+  .m-empty h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .m-empty p {
+    color: var(--m-muted);
+    margin: 10px 0 20px;
+  }
+  .m-empty-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    --m-icon-size: 24px;
+  }
+  .m-empty > :is(h2, h4, h5, h6) {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .m-empty-extra {
+    max-width: 32rem;
+    margin: 32px auto 0;
+    text-align: start;
+  }
+  .m-empty-extra .m-empty-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    --m-icon-size: 20px;
+  }
+  .m-empty[data-dashed] {
+    padding: 48px 24px;
+    border: 2px dashed var(--m-line-strong);
+    border-radius: var(--m-radius-lg);
+  }
+  .m-empty[data-align="start"] {
+    text-align: start;
+    padding-inline: 0;
+  }
+  .m-empty[data-align="start"][data-dashed] {
+    padding-inline: 24px;
+  }
+  .m-empty[data-align="start"] .m-empty-extra {
+    max-width: none;
+  }
+
+  /* == Dropdown == */
+  .m-menu {
+    z-index: var(--m-z-popover);
+    min-width: 200px;
+    border: 1px solid var(--m-line);
+    padding: 6px;
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+    --anchor-gap: 6px;
+  }
+  .m-menu :is(button, a) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+    text-align: left;
+    text-decoration: none;
+  }
+  .m-menu .m-error {
+    color: var(--m-danger);
+  }
+  .m-menu-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    color: var(--m-muted);
+  }
+  .m-menu-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .m-menu-text small {
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-menu-heading {
+    padding: 8px 10px 4px;
+    color: var(--m-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .m-menu-separator {
+    height: 1px;
+    margin: 6px -6px;
+    background: var(--m-line);
+  }
+  .m-menu-header {
+    margin: -6px -6px 6px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--m-line);
+    color: var(--m-secondary);
+    font-size: 13px;
+  }
+  .m-menu:focus-visible {
+    /* The active item shows focus; the panel itself needs no ring. */
+    outline: none;
+  }
+  .m-menu :is(button, a)[data-focus] {
+    background: var(--m-selected);
+  }
+  .m-menu :is(button, a)[data-disabled] {
+    color: var(--m-muted);
+    cursor: not-allowed;
+  }
+
+  /* == Layout: Stack, Container, Text and Divider == */
+  .m-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .m-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .m-layout-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .m-container {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    min-width: 0;
+  }
+  .m-text {
+    margin: 0;
+    color: var(--m-ink);
+    font-size: 15px;
+    text-wrap: pretty;
+  }
+  .m-divider {
+    width: 100%;
+    margin: 24px 0;
+    border: 0;
+    border-top: 1px solid var(--m-line-strong);
+  }
+  div.m-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  div.m-divider::before,
+  div.m-divider::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--m-line-strong);
+  }
+  .m-layout-stack[data-direction="row"] {
+    flex-direction: row;
+    align-items: center;
+  }
+  .m-layout-stack[data-wrap] {
+    flex-wrap: wrap;
+  }
+  .m-layout-stack[data-gap="none"] {
+    gap: 0;
+  }
+  .m-layout-stack[data-gap="xs"] {
+    gap: 4px;
+  }
+  .m-layout-stack[data-gap="sm"] {
+    gap: 8px;
+  }
+  .m-layout-stack[data-gap="lg"] {
+    gap: 24px;
+  }
+  .m-layout-stack[data-gap="xl"] {
+    gap: 40px;
+  }
+  .m-layout-stack[data-align="start"] {
+    align-items: flex-start;
+  }
+  .m-layout-stack[data-align="center"] {
+    align-items: center;
+  }
+  .m-layout-stack[data-align="end"] {
+    align-items: flex-end;
+  }
+  .m-layout-stack[data-align="stretch"] {
+    align-items: stretch;
+  }
+  .m-layout-stack[data-justify="center"] {
+    justify-content: center;
+  }
+  .m-layout-stack[data-justify="end"] {
+    justify-content: flex-end;
+  }
+  .m-layout-stack[data-justify="between"] {
+    justify-content: space-between;
+  }
+  .m-container[data-size="sm"] {
+    max-width: 480px;
+  }
+  .m-container[data-size="md"] {
+    max-width: 768px;
+  }
+  .m-container[data-size="xl"] {
+    max-width: 1440px;
+  }
+  .m-container[data-padded="true"] {
+    padding: 48px 32px;
+  }
+  .m-text[data-color="secondary"] {
+    color: var(--m-secondary);
+  }
+  .m-text[data-color="muted"] {
+    color: var(--m-muted);
+  }
+  .m-text[data-size="sm"] {
+    font-size: 13px;
+  }
+  .m-text[data-size="lg"] {
+    font-size: 17px;
+  }
+  .m-text[data-weight="medium"] {
+    font-weight: 500;
+  }
+  .m-text[data-weight="semibold"] {
+    font-weight: 600;
+  }
+  .m-divider[data-soft] {
+    border-top-color: var(--m-line);
+  }
+  div.m-divider[data-soft]::before,
+  div.m-divider[data-soft]::after {
+    border-top-color: var(--m-line);
+  }
+  .m-divider[data-spacing="none"] {
+    margin: 0;
+  }
+  .m-divider[data-spacing="sm"] {
+    margin: 12px 0;
+  }
+  .m-divider[data-spacing="lg"] {
+    margin: 40px 0;
+  }
+  @media (max-width: 560px) {
+    .m-container[data-padded="true"] {
+      padding: 32px 20px;
+    }
+  }
+
+  /* == Card == */
+  .m-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    color: var(--m-ink);
+    overflow: hidden;
+    --m-card-pad: 20px;
+  }
+  .m-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--m-line);
+  }
+  .m-card-header:last-child {
+    border-bottom: 0;
+  }
+  .m-card-heading {
+    min-width: 0;
+  }
+  .m-card-heading .m-card-title {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-card-heading p {
+    margin: 2px 0 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .m-card-body {
+    flex: 1;
+    min-width: 0;
+    padding: var(--m-card-pad);
+  }
+  .m-card-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--m-line);
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+    font-size: 13px;
+  }
+  .m-card-body > .m-description-list dl {
+    border-top: 0;
+  }
+  .m-card-body > .m-description-list dl > div:first-child {
+    padding-top: 0;
+  }
+  .m-card-body > .m-description-list dl > div:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  .m-card[data-padding="compact"] {
+    --m-card-pad: 14px;
+  }
+  .m-card[data-padding="none"] {
+    --m-card-pad: 0;
+  }
+  .m-card[data-tone="muted"] {
+    background: var(--m-sunken);
+  }
+
+  /* == MediaObject == */
+  .m-media-object {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+  }
+  .m-media-object-media {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+  .m-media-object-media img {
+    display: block;
+    max-width: 96px;
+    height: auto;
+    border-radius: var(--m-radius);
+  }
+  .m-media-object-body {
+    flex: 1;
+    min-width: 0;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+  }
+  .m-media-object-title {
+    margin: 0 0 2px;
+    color: var(--m-ink);
+    font-weight: 600;
+  }
+  .m-media-object[data-align="center"] {
+    align-items: center;
+  }
+  .m-media-object[data-reverse] {
+    flex-direction: row-reverse;
+  }
+  .m-media-object[data-reverse] > .m-media-object-body {
+    text-align: end;
+  }
+
+  /* == BrandMark == */
+  /* Brand logo slot. */
+  .m-logo {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .m-logo :is(img, svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* == Visually hidden text and skip link == */
+  .m-sr-only,
+  .m-skip {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .m-skip:focus {
+    width: auto;
+    height: auto;
+    padding: 12px;
+    top: 8px;
+    left: 8px;
+    clip-path: none;
+    z-index: var(--m-z-skip);
+    background: var(--m-surface);
+  }
+
+  /* == Accessibility: reduced motion and forced colours == */
+  /* One reduced-motion rule covers every Mortar element, its content and pseudo-elements. */
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-mortar], [class^="m-"], [class*=" m-"]),
+    :where([data-mortar], [class^="m-"], [class*=" m-"]) *,
+    :where([data-mortar], [class^="m-"], [class*=" m-"]) ::before,
+    :where([data-mortar], [class^="m-"], [class*=" m-"]) ::after,
+    :where([class^="m-"], [class*=" m-"])::before,
+    :where([class^="m-"], [class*=" m-"])::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+  @media (forced-colors: active) {
+    :where([data-mortar], [class^="m-"], [class*=" m-"])
+      :is(.m-calendar [aria-current="date"], .m-radio-card:has(:checked)) {
+      outline: 2px solid CanvasText;
+      outline-offset: -2px;
+    }
+  }
+}
+@keyframes m-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

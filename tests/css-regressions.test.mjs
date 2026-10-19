@@ -2,9 +2,16 @@
 // later edit cannot quietly undo them.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { declaration, readSource, selectorBody } from "./support/css.mjs";
+import {
+  declaration,
+  readSource,
+  section,
+  selectorBody,
+  styleFiles,
+} from "./support/css.mjs";
 
-const files = ["src/tokens.css", "src/components.css", "src/kits.css"];
+// Every stylesheet styles.css imports (tokens first, then the component families).
+const files = await styleFiles();
 const sources = Object.fromEntries(
   await Promise.all(files.map(async (f) => [f, await readSource(f)])),
 );
@@ -30,7 +37,7 @@ test("no colour or layout declaration uses !important", () => {
 });
 
 test("tab panel padding applies only to panels after a Mortar tab list", () => {
-  const css = sources["src/components.css"];
+  const css = section(sources["src/foundation.css"], "Tabs and TabNav");
   const body = selectorBody(
     css,
     ':where(.m-tabs) ~ [role="tabpanel"]:not([hidden])',
@@ -48,7 +55,7 @@ test("tab panel padding applies only to panels after a Mortar tab list", () => {
 });
 
 test("table stripes have zero specificity so hover and selection win", () => {
-  const css = stripComments(sources["src/kits.css"]);
+  const css = stripComments(Object.values(sources).join("\n"));
   const stripes = rules(css).filter(({ selector }) =>
     selector.includes("[data-striped]"),
   );
@@ -62,7 +69,10 @@ test("table stripes have zero specificity so hover and selection win", () => {
 });
 
 test("forced-colors mode keeps selected and current states visible", () => {
-  const css = sources["src/components.css"];
+  const css = section(
+    sources["src/foundation.css"],
+    "Forced colours: selected and current states",
+  );
   const start = css.indexOf("@media (forced-colors: active) {\n    :where(");
   assert.ok(start >= 0, "a shared forced-colors block exists");
   const block = css.slice(start, css.indexOf("\n  }\n", start));
@@ -83,7 +93,9 @@ test("a light container inside a dark document gets the light tokens", () => {
 });
 
 test("busy (aria-disabled) buttons look like disabled ones", () => {
-  const rule = rules(sources["src/components.css"]).find(
+  const rule = rules(
+    section(sources["src/foundation.css"], "Button and ActionLink"),
+  ).find(
     ({ selector }) =>
       selector === '.m-button:is(:disabled, [aria-disabled="true"])',
   );

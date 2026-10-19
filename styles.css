@@ -1,6 +1,14 @@
 @import "./src/tokens.css";
-@import "./src/components.css";
-@import "./src/kits.css";
+/* Component styles, one section per component, grouped by family. The order of
+   these imports is part of the cascade: keep it. */
+@import "./src/foundation.css";
+@import "./src/overlays.css";
+@import "./src/application.css";
+@import "./src/data.css";
+@import "./src/calendar.css";
+@import "./src/marketing.css";
+@import "./src/docs.css";
+@import "./src/ecommerce.css";
 @custom-variant mortar-dark (&:where([data-mortar-appearance='dark'], [data-mortar-appearance='dark'] *));
 @theme inline {
   --color-paper: var(--m-paper);
