@@ -13,10 +13,11 @@
   "contract": {
     "props": {
       "as": "ElementType",
-      "tone": "\"default\" | \"secondary\" | \"muted\"",
+      "color": "\"default\" | \"secondary\" | \"muted\" (data-color; tone is reserved for status and surfaces)",
       "size": "\"sm\" | \"md\" | \"lg\"",
       "weight": "\"regular\" | \"medium\" | \"semibold\"",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "className": "string"
     },
     "usage": "Import { Text } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

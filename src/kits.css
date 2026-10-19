@@ -103,9 +103,10 @@
     background: var(--m-primary);
   }
 
-  .m-progress:is([data-tone="warning"], [data-tone="danger"])
-    .m-progress-track
-    span {
+  .m-progress[data-tone="neutral"] {
+    --m-tone: var(--m-secondary);
+  }
+  .m-progress[data-tone] .m-progress-track span {
     background: var(--m-tone);
   }
   .m-chip {
@@ -411,7 +412,7 @@
     padding: 14px 18px;
     border-bottom: 1px solid var(--m-line);
   }
-  .m-stacked-list > :where(header) > h2 {
+  .m-stacked-list > :where(header) > .m-stacked-title {
     font-size: 15px;
     font-weight: 600;
   }
@@ -1528,10 +1529,10 @@
     font-size: 15px;
     text-wrap: pretty;
   }
-  .m-text[data-tone="secondary"] {
+  .m-text[data-color="secondary"] {
     color: var(--m-secondary);
   }
-  .m-text[data-tone="muted"] {
+  .m-text[data-color="muted"] {
     color: var(--m-muted);
   }
   .m-text[data-size="sm"] {
@@ -1549,7 +1550,8 @@
   .m-section[data-align="center"] {
     text-align: center;
   }
-  .m-section[data-align="center"] :is(h2, .m-section-description) {
+  .m-section[data-align="center"]
+    :is(.m-section-title, .m-section-description) {
     margin-inline: auto;
   }
   .m-section-body {
@@ -1879,7 +1881,7 @@
   .m-sign-in form {
     text-align: left;
   }
-  .m-sign-in :is(h1, h2) {
+  .m-sign-in .m-sign-in-title {
     font-size: 26px;
     font-weight: 600;
     letter-spacing: -0.03em;
@@ -1984,7 +1986,7 @@
     text-align: inherit;
     --m-icon-size: 12px;
   }
-  [data-align="right"] > .m-sort-button {
+  [data-align="end"] > .m-sort-button {
     justify-content: flex-end;
   }
   .m-sort-button:hover {
@@ -2196,7 +2198,7 @@
   .m-card[data-padding="none"] {
     --m-card-pad: 0;
   }
-  .m-card[data-tone="sunken"] {
+  .m-card[data-tone="muted"] {
     background: var(--m-sunken);
   }
   .m-card-header {
@@ -2214,7 +2216,7 @@
   .m-card-heading {
     min-width: 0;
   }
-  .m-card-heading :is(h2, h3, h4) {
+  .m-card-heading .m-card-title {
     margin: 0;
     font-size: 15px;
     font-weight: 600;
@@ -2248,7 +2250,7 @@
   .m-description-heading {
     padding-bottom: 14px;
   }
-  .m-description-heading :is(h2, h3, h4) {
+  .m-description-heading .m-description-title {
     margin: 0;
     font-size: 15px;
     font-weight: 600;
@@ -2304,26 +2306,23 @@
   }
   @container m-description-list (min-width: 560px) {
     /* Rows share one set of tracks so details align whether or not a row has an action. */
-    .m-description-list[data-layout="columns"] dl {
+    .m-description-list:not([data-layout]) dl {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
     }
-    .m-description-list[data-layout="columns"] dl > div {
+    .m-description-list:not([data-layout]) dl > div {
       grid-column: 1 / -1;
       grid-template-columns: subgrid;
       align-items: baseline;
     }
-    .m-description-list[data-layout="columns"] dl > div > :is(dt, dd) {
+    .m-description-list:not([data-layout]) dl > div > :is(dt, dd) {
       grid-row: 1;
       grid-column: 2;
     }
-    .m-description-list[data-layout="columns"] dl > div > dt {
+    .m-description-list:not([data-layout]) dl > div > dt {
       grid-column: 1;
     }
-    .m-description-list[data-layout="columns"]
-      dl
-      > div
-      > .m-description-action {
+    .m-description-list:not([data-layout]) dl > div > .m-description-action {
       grid-column: 3;
       align-self: baseline;
     }
@@ -2697,7 +2696,7 @@
     flex: 1 1 320px;
     min-width: 0;
   }
-  .m-action-panel-text :is(h2, h3) {
+  .m-action-panel-text .m-action-panel-title {
     margin: 0;
     font-size: 15px;
     font-weight: 600;
@@ -2707,7 +2706,7 @@
     color: var(--m-secondary);
     font-size: var(--m-font-size);
   }
-  .m-action-panel-text > :not(:is(h2, h3, p)) {
+  .m-action-panel-text > :not(.m-action-panel-title, p) {
     margin-top: 12px;
   }
   .m-action-panel-action {
@@ -2827,18 +2826,18 @@
   .m-grid-list-text {
     min-width: 0;
   }
-  .m-grid-list-text :is(h2, h3, h4) {
+  .m-grid-list-title {
     margin: 0;
     font-size: var(--m-font-size);
     font-weight: 600;
     overflow-wrap: anywhere;
   }
-  .m-grid-list-text :is(h2, h3, h4) a {
+  .m-grid-list-title a {
     color: inherit;
     text-decoration: none;
   }
   /* The title link covers the card; actions sit above it so they stay clickable. */
-  .m-grid-list-text :is(h2, h3, h4) a::after {
+  .m-grid-list-title a::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -2864,12 +2863,12 @@
     border-top: 1px solid var(--m-line);
   }
   @media (max-width: 900px) {
-    .m-grid-list[data-columns] {
+    .m-grid-list:is([data-columns], :not([data-columns])) {
       --m-grid-columns: 2;
     }
   }
   @media (max-width: 560px) {
-    .m-grid-list[data-columns] {
+    .m-grid-list:is([data-columns], :not([data-columns])) {
       --m-grid-columns: 1;
     }
   }
@@ -2924,7 +2923,7 @@
   .m-section-heading-text {
     min-width: 0;
   }
-  .m-section-heading-text :is(h2, h3, h4) {
+  .m-section-heading-text .m-section-heading-title {
     margin: 0;
     font-size: 17px;
     font-weight: 600;
@@ -4913,29 +4912,29 @@
   .m-progress-steps [data-status="current"] .m-progress-step-number {
     color: var(--m-link);
   }
-  .m-progress-steps[data-variant="simple"] {
+  .m-progress-steps:not([data-variant]) {
     container: m-progress-steps / inline-size;
   }
-  .m-progress-steps[data-variant="simple"] ol {
+  .m-progress-steps:not([data-variant]) ol {
     display: grid;
     gap: 16px;
   }
-  .m-progress-steps[data-variant="simple"] li > * {
+  .m-progress-steps:not([data-variant]) li > * {
     display: block;
     padding-left: 16px;
     border-left: 4px solid var(--m-line);
   }
-  .m-progress-steps[data-variant="simple"] [data-status="complete"] > *,
-  .m-progress-steps[data-variant="simple"] [data-status="current"] > * {
+  .m-progress-steps:not([data-variant]) [data-status="complete"] > *,
+  .m-progress-steps:not([data-variant]) [data-status="current"] > * {
     border-color: var(--m-primary);
   }
   @container m-progress-steps (min-width: 560px) {
-    .m-progress-steps[data-variant="simple"] ol {
+    .m-progress-steps:not([data-variant]) ol {
       grid-auto-columns: minmax(0, 1fr);
       grid-auto-flow: column;
       gap: 32px;
     }
-    .m-progress-steps[data-variant="simple"] li > * {
+    .m-progress-steps:not([data-variant]) li > * {
       padding: 16px 0 0;
       border-top: 4px solid var(--m-line);
       border-left: 0;
@@ -5487,5 +5486,51 @@
     border: 1px solid var(--m-line);
     border-radius: var(--m-radius-lg);
     background: var(--m-surface);
+  }
+}
+
+/* Application family: hooks that do not depend on heading levels or text. */
+@layer components {
+  /* Section's title keeps the section-title look at any headingLevel. */
+  .m-section > .m-section-title {
+    font-size: clamp(30px, 3.5vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    text-wrap: balance;
+    max-width: 800px;
+  }
+  /* A header with only an action keeps the action at the end. */
+  .m-stacked-action {
+    display: flex;
+    gap: 8px;
+    margin-inline-start: auto;
+  }
+  /* Metric changes and activity dots read the status tone from data-tone;
+     without one they use the secondary colour. */
+  :is(.m-metric-change, .m-activity-dot):not([data-tone]) {
+    --m-tone: var(--m-secondary);
+  }
+  .m-metric-change,
+  .m-activity-dot {
+    color: var(--m-tone);
+  }
+  /* Pagination's end buttons stay focusable while unavailable. */
+  .m-pagination .m-button[aria-disabled="true"] {
+    background: var(--m-sunken);
+    color: var(--m-muted);
+    border: 1px dashed var(--m-line-strong);
+    cursor: not-allowed;
+  }
+  /* Links and controls in a card's media, meta and details sit above the
+     stretched title link, so they stay clickable. */
+  :is(.m-grid-list-media, .m-grid-list-meta, .m-grid-list-details)
+    :is(a, button, input, select, textarea, summary, [tabindex]) {
+    position: relative;
+    z-index: 1;
+  }
+  /* With no results the empty listbox takes no space above the message. */
+  .m-palette-results:empty {
+    display: none;
   }
 }

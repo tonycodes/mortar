@@ -14,7 +14,8 @@
     "props": {
       "label": "string",
       "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\")",
-      "variant": "\"shared\" | \"cards\" (default \"shared\")"
+      "variant": "\"shared\" | \"cards\" (default \"shared\")",
+      "className": "string"
     },
     "usage": "Import { MetricGroup } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

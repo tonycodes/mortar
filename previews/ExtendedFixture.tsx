@@ -8,6 +8,7 @@ export function ExtendedCase({ name }: { name: string }) {
   const [open, setOpen] = useState(false),
     [query, setQuery] = useState("cache"),
     [selected, setSelected] = useState(false),
+    [filters, setFilters] = useState(["Branch: main", "Owner: Ana"]),
     [dirty, setDirty] = useState(true),
     [helpful, setHelpful] = useState<"yes" | "no" | null>(null),
     [toasts, setToasts] = useState<UI.ToastItem[]>([
@@ -84,12 +85,20 @@ export function ExtendedCase({ name }: { name: string }) {
       break;
     case "ProgressBar":
       example = (
-        <UI.ProgressBar
-          label="Build minutes"
-          value={4120}
-          max={6000}
-          valueLabel="4,120 / 6,000"
-        />
+        <UI.Stack gap="lg">
+          <UI.ProgressBar
+            label="Build minutes"
+            value={4120}
+            max={6000}
+            valueLabel="4,120 / 6,000"
+          />
+          <UI.ProgressBar
+            label="Storage"
+            value={92}
+            valueLabel="92%"
+            tone="warning"
+          />
+        </UI.Stack>
       );
       break;
     case "FilterChip":
@@ -100,10 +109,15 @@ export function ExtendedCase({ name }: { name: string }) {
             selected={selected}
             onClick={() => setSelected(!selected)}
           />
-          <UI.FilterChip
-            label="Branch: main"
-            onRemove={() => setSelected(false)}
-          />
+          {filters.map((filter) => (
+            <UI.FilterChip
+              key={filter}
+              label={filter}
+              onRemove={() =>
+                setFilters((current) => current.filter((f) => f !== filter))
+              }
+            />
+          ))}
         </div>
       );
       break;
@@ -246,8 +260,13 @@ export function ExtendedCase({ name }: { name: string }) {
                 title: "Ana Kovač",
                 description: "Engineering lead",
                 href: "#ana",
-                media: <UI.Avatar name="Ana Kovač" />,
-                meta: <UI.Badge tone="success">Admin</UI.Badge>,
+                media: <UI.Avatar name="Ana Kovač" decorative />,
+                meta: (
+                  <>
+                    <UI.Badge tone="success">Admin</UI.Badge>
+                    <a href="#team-platform">Platform team</a>
+                  </>
+                ),
                 actions: (
                   <UI.ActionLink
                     label="Email Ana"
@@ -261,14 +280,14 @@ export function ExtendedCase({ name }: { name: string }) {
                 title: "Tom Cook",
                 description: "Product designer",
                 href: "#tom",
-                media: <UI.Avatar name="Tom Cook" />,
+                media: <UI.Avatar name="Tom Cook" decorative />,
               },
               {
                 id: "lindsay",
                 title: "Lindsay Walton",
                 description: "Support",
                 href: "#lindsay",
-                media: <UI.Avatar name="Lindsay Walton" />,
+                media: <UI.Avatar name="Lindsay Walton" decorative />,
               },
             ]}
           />
@@ -301,7 +320,7 @@ export function ExtendedCase({ name }: { name: string }) {
               id: person.id,
               title: person.name,
               description: person.role,
-              media: <UI.Avatar name={person.name} />,
+              media: <UI.Avatar name={person.name} decorative />,
               actions: (
                 <>
                   <a href={`#email-${person.id}`}>
@@ -324,7 +343,7 @@ export function ExtendedCase({ name }: { name: string }) {
                 id: "tuple",
                 title: "Tuple",
                 href: "#client-tuple",
-                media: <UI.Avatar name="Tuple" shape="square" />,
+                media: <UI.Avatar name="Tuple" shape="square" decorative />,
                 details: [
                   { term: "Last invoice", details: "14 October 2026" },
                   {
@@ -341,7 +360,7 @@ export function ExtendedCase({ name }: { name: string }) {
                 id: "savvycal",
                 title: "SavvyCal",
                 href: "#client-savvycal",
-                media: <UI.Avatar name="SavvyCal" shape="square" />,
+                media: <UI.Avatar name="SavvyCal" shape="square" decorative />,
                 details: [
                   { term: "Last invoice", details: "2 October 2026" },
                   {
@@ -421,16 +440,27 @@ export function ExtendedCase({ name }: { name: string }) {
       example = (
         <UI.Stack gap="xl">
           <UI.StackedList
-            label="Members"
-            heading="Members"
+            title="Members"
             action={<a href="#manage">Manage</a>}
             items={[
               {
                 id: "1",
                 title: "Ana Kovač",
                 description: "ana@example.com",
-                leading: <UI.Avatar name="Ana Kovač" />,
+                leading: <UI.Avatar name="Ana Kovač" decorative />,
                 trailing: <UI.Badge>Owner</UI.Badge>,
+              },
+            ]}
+          />
+          <UI.StackedList
+            label="Recent files"
+            action={<a href="#files">View all files</a>}
+            items={[
+              {
+                id: "brief",
+                title: "Launch brief.pdf",
+                description: "Updated 2 hours ago",
+                href: "#brief",
               },
             ]}
           />
@@ -444,13 +474,17 @@ export function ExtendedCase({ name }: { name: string }) {
                     id: "ana",
                     title: "Ana Kovač",
                     description: "Engineering",
-                    leading: <UI.Avatar name="Ana Kovač" size="sm" />,
+                    leading: (
+                      <UI.Avatar name="Ana Kovač" size="sm" decorative />
+                    ),
                   },
                   {
                     id: "arlene",
                     title: "Arlene Mccoy",
                     description: "Design",
-                    leading: <UI.Avatar name="Arlene Mccoy" size="sm" />,
+                    leading: (
+                      <UI.Avatar name="Arlene Mccoy" size="sm" decorative />
+                    ),
                   },
                 ],
               },
@@ -461,13 +495,15 @@ export function ExtendedCase({ name }: { name: string }) {
                     id: "tom",
                     title: "Tom Cook",
                     description: "Design",
-                    leading: <UI.Avatar name="Tom Cook" size="sm" />,
+                    leading: <UI.Avatar name="Tom Cook" size="sm" decorative />,
                   },
                   {
                     id: "tanya",
                     title: "Tanya Fox",
                     description: "Marketing",
-                    leading: <UI.Avatar name="Tanya Fox" size="sm" />,
+                    leading: (
+                      <UI.Avatar name="Tanya Fox" size="sm" decorative />
+                    ),
                   },
                 ],
               },

@@ -38,7 +38,7 @@ export function LayoutCase({ name }: { name: string }) {
           <UI.Divider />
           <UI.Text>Notification preferences</UI.Text>
           <UI.Divider soft spacing="sm" />
-          <UI.Text tone="secondary">
+          <UI.Text color="secondary">
             A soft divider separates related rows.
           </UI.Text>
           <UI.Divider label="Or continue with" />
@@ -61,9 +61,9 @@ export function LayoutCase({ name }: { name: string }) {
               period.
             </UI.Text>
           </UI.Card>
-          <UI.Card tone="sunken" padding="compact">
-            <UI.Text tone="secondary">
-              A sunken, compact card works as a well for secondary content.
+          <UI.Card tone="muted" padding="compact">
+            <UI.Text color="secondary">
+              A muted, compact card works as a well for secondary content.
             </UI.Text>
           </UI.Card>
         </UI.Stack>

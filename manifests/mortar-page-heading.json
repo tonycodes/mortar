@@ -17,9 +17,11 @@
       "eyebrow": "string",
       "actions": "ReactNode",
       "breadcrumbs": "{ label: string; href?: string }[]",
-      "headingLevel": "1 | 2",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
       "meta": "{ label: string; icon?: ReactNode }[]",
-      "avatar": "ReactNode"
+      "avatar": "ReactNode",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { PageHeading } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

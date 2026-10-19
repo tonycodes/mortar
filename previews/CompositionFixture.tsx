@@ -67,7 +67,7 @@ export function CompositionCase({ name }: { name: string }) {
           </UI.Stack>
           <UI.Stack gap="xs">
             <UI.Text weight="semibold">Compact group</UI.Text>
-            <UI.Text tone="muted">Related lines sit close together.</UI.Text>
+            <UI.Text color="muted">Related lines sit close together.</UI.Text>
           </UI.Stack>
         </UI.Stack>
       );
@@ -75,7 +75,7 @@ export function CompositionCase({ name }: { name: string }) {
     case "Container":
       example = (
         <UI.Container size="md">
-          <UI.Text tone="secondary">
+          <UI.Text color="secondary">
             A medium container keeps reading width comfortable on wide screens.
           </UI.Text>
         </UI.Container>
@@ -88,8 +88,8 @@ export function CompositionCase({ name }: { name: string }) {
             Large semibold
           </UI.Text>
           <UI.Text>Default body copy.</UI.Text>
-          <UI.Text tone="secondary">Secondary supporting copy.</UI.Text>
-          <UI.Text tone="muted" size="sm">
+          <UI.Text color="secondary">Secondary supporting copy.</UI.Text>
+          <UI.Text color="muted" size="sm">
             Muted small print.
           </UI.Text>
         </UI.Stack>
@@ -139,7 +139,7 @@ export function CompositionCase({ name }: { name: string }) {
         <UI.MockWindow label="Calendar settings" address="app.example.com">
           <UI.Stack gap="sm">
             <UI.Text weight="semibold">Working hours</UI.Text>
-            <UI.Text tone="muted">Monday – Friday · 09:00 – 17:00</UI.Text>
+            <UI.Text color="muted">Monday – Friday · 09:00 – 17:00</UI.Text>
           </UI.Stack>
         </UI.MockWindow>
       );
@@ -180,7 +180,7 @@ export function CompositionCase({ name }: { name: string }) {
               <UI.Text size="lg" weight="medium">
                 “We answered twice as many customers in the first month.”
               </UI.Text>
-              <UI.Text tone="muted" size="sm">
+              <UI.Text color="muted" size="sm">
                 Lindsay Walton, Wheelhouse Bikes
               </UI.Text>
             </UI.Stack>

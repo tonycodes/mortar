@@ -19,8 +19,9 @@
       "groups": "{ label: string; items: CommandItem[] }[] (CommandItem: { id; label; description?; meta?; shortcut?; match?; icon?; onSelect })",
       "label": "string",
       "placeholder": "string",
-      "emptyMessage": "string",
-      "footer": "ReactNode"
+      "footer": "ReactNode",
+      "empty": "{ title: string; description?: string } (announced when no group has items; default \"No results for “query”.\")",
+      "className": "string"
     },
     "usage": "Import { CommandPalette } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

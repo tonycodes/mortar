@@ -13,7 +13,8 @@
   "contract": {
     "props": {
       "files": "Attachment[] ({ id: string; name: string; href: string; size?: string; actionLabel?: string; icon?: ReactNode })",
-      "label": "string"
+      "label": "string",
+      "className": "string"
     },
     "usage": "Import { AttachmentList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

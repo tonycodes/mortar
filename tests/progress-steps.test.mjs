@@ -11,7 +11,7 @@ test("ProgressSteps marks the current step and announces completed ones", () => 
   const markup = html(ProgressSteps, { label: "Job application", steps });
   assert.match(
     markup,
-    /^<nav class="m-progress-steps" aria-label="Job application" data-variant="simple"><ol>/,
+    /^<nav class="m-progress-steps" aria-label="Job application"><ol>/,
   );
   assert.match(
     markup,

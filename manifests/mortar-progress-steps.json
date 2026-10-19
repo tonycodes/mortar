@@ -14,7 +14,8 @@
     "props": {
       "steps": "ProgressStep[] ({ id: string; name: string; description?: string; href?: string; status: \"complete\" | \"current\" | \"upcoming\" })",
       "label": "string",
-      "variant": "\"simple\" | \"circles\" | \"bullets\""
+      "variant": "\"simple\" | \"circles\" | \"bullets\"",
+      "className": "string"
     },
     "usage": "Import { ProgressSteps } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -19,8 +19,13 @@ test("Mortar shell supplies page landmarks and labelled navigation", () => {
     "Content",
   );
   assert.match(markup, /aria-current="page"/);
-  assert.match(markup, /<main id="m-content"/);
-  assert.match(markup, /Skip to content/);
+  // The main landmark's id is generated, and the skip link targets it.
+  const target = markup.match(/<main id="(m-content-[^"]+)"/)?.[1];
+  assert.ok(target);
+  assert.match(
+    markup,
+    new RegExp(`<a class="m-skip" href="#${target}">Skip to content</a>`),
+  );
 });
 test("Mortar fields keep unique labels and external error descriptions", () => {
   const markup = html(

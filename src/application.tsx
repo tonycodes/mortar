@@ -10,18 +10,22 @@ import {
 import { Button, EmptyState, Input, Notice, type Tone } from "./primitives.js";
 import { BrandMark } from "./layout.js";
 import { ArrowDown, ArrowUp, Check, SortArrows } from "./icons.js";
-import { headingTag } from "./heading.js";
+import { headingTag, type HeadingLevel } from "./heading.js";
 import {
   LinkContent,
   MobileNavDialog,
-  SectionIntro,
   TermList,
-  introSlots,
+  cx,
+  classedIntroSlots,
   useDomId,
 } from "./internal.js";
-/** A navigation link; `icon` replaces the default marker in the sidebar. */
+/**
+ * A navigation link; `icon` replaces the default marker in the sidebar. With
+ * `children` the item becomes a disclosure: its own `href` is the first link
+ * inside it, and it opens when it or a child is current.
+ */
 export interface NavigationItem extends LinkItem {
-  /** Sub-pages; the item becomes a disclosure, open when a child is current. */
+  /** Sub-pages; the item becomes a disclosure, open when it or a child is current. */
   children?: NavigationItem[];
 }
 export interface AppShellProps {
@@ -29,9 +33,13 @@ export interface AppShellProps {
   /** Logo node shown in place of the placeholder brand mark. */
   logo?: ReactNode;
   workspace?: string;
-  user?: ReactNode;
+  /** Destination for the brand link; defaults to the first navigation item. */
+  homeHref?: string;
+  /** Account menu or other content pinned to the bottom of the sidebar. */
+  footer?: ReactNode;
   navigation: NavigationItem[];
-  secondaryNavigation?: ItemGroup<NavigationItem>[];
+  /** Labelled groups of links under the main navigation. */
+  sections?: ItemGroup<NavigationItem>[];
   header?: ReactNode;
   actions?: ReactNode;
   /** Secondary column beside the main content (multi-column layout). */
@@ -39,6 +47,7 @@ export interface AppShellProps {
   /** Accessible name for the secondary column. */
   asideLabel?: string;
   children: ReactNode;
+  className?: string;
 }
 function SidebarContent({
   brand,
@@ -50,14 +59,37 @@ function SidebarContent({
   footer,
   label = "Primary",
   onNavigate,
-}: SidebarProps & { onNavigate?: () => void }) {
+}: Omit<SidebarProps, "className"> & { onNavigate?: () => void }) {
+  const groupId = useDomId("m-nav-group-");
+  const link = (item: NavigationItem, key: string) => (
+    <KitLink
+      key={key}
+      href={item.href}
+      aria-current={item.current ? "page" : undefined}
+      onClick={onNavigate}
+    >
+      <LinkContent
+        prefix="nav"
+        marker
+        icon={item.icon}
+        label={item.label}
+        count={item.count}
+        countWhen="defined"
+      />
+    </KitLink>
+  );
   const links = (items: NavigationItem[]): ReactNode[] =>
-    items.map((item, index) =>
-      item.children?.length ? (
+    items.map((item, index) => {
+      const key = `${item.label}:${item.href}:${index}`;
+      return item.children?.length ? (
         <details
-          key={`${item.label}:${item.href}:${index}`}
+          key={key}
           className="m-nav-group"
-          open={item.children.some((child) => child.current) || undefined}
+          open={
+            item.current ||
+            item.children.some((child) => child.current) ||
+            undefined
+          }
         >
           <summary>
             <LinkContent
@@ -67,26 +99,15 @@ function SidebarContent({
               label={item.label}
             />
           </summary>
-          <div className="m-nav-children">{links(item.children)}</div>
+          <div className="m-nav-children">
+            {item.href && link({ ...item, icon: undefined }, "parent")}
+            {links(item.children)}
+          </div>
         </details>
       ) : (
-        <KitLink
-          key={`${item.label}:${item.href}:${index}`}
-          href={item.href}
-          aria-current={item.current ? "page" : undefined}
-          onClick={onNavigate}
-        >
-          <LinkContent
-            prefix="nav"
-            marker
-            icon={item.icon}
-            label={item.label}
-            count={item.count}
-            countWhen="truthy"
-          />
-        </KitLink>
-      ),
-    );
+        link(item, key)
+      );
+    });
   return (
     <>
       {brand && (
@@ -103,11 +124,17 @@ function SidebarContent({
       )}
       <nav aria-label={label}>
         {links(navigation)}
-        {sections.map((group) => (
-          <section key={group.label}>
-            <h2>{group.label}</h2>
+        {sections.map((group, index) => (
+          <div
+            key={group.label}
+            role="group"
+            aria-labelledby={`${groupId}-${index}`}
+          >
+            <p id={`${groupId}-${index}`} className="m-nav-group-title">
+              {group.label}
+            </p>
             {links(group.items)}
-          </section>
+          </div>
         ))}
       </nav>
       {footer && <div className="m-user">{footer}</div>}
@@ -121,15 +148,18 @@ export interface SidebarProps {
   /** Destination for the brand link; defaults to the first navigation item. */
   homeHref?: string;
   navigation: NavigationItem[];
+  /** Labelled groups of links under the main navigation. */
   sections?: ItemGroup<NavigationItem>[];
   /** Account menu or other content pinned to the bottom. */
   footer?: ReactNode;
+  /** Accessible name of the navigation landmark. */
   label?: string;
+  className?: string;
 }
 /** Vertical application navigation; AppShell composes the same content. */
-export function Sidebar(props: SidebarProps) {
+export function Sidebar({ className, ...props }: SidebarProps) {
   return (
-    <div className="m-sidebar-panel">
+    <div className={cx("m-sidebar-panel", className)}>
       <SidebarContent {...props} />
     </div>
   );
@@ -138,27 +168,36 @@ export function AppShell({
   brand,
   logo,
   workspace,
-  user,
+  homeHref,
+  footer,
   navigation,
-  secondaryNavigation = [],
+  sections = [],
   header,
   actions,
   aside,
   asideLabel = "Details",
   children,
+  className,
 }: AppShellProps) {
   const [open, setOpen] = useState(false);
+  const contentId = useDomId("m-content-");
   const sidebar = {
     brand,
     logo,
     workspace,
+    homeHref,
     navigation,
-    sections: secondaryNavigation,
-    footer: user,
+    sections,
+    footer,
   };
+  const main = (
+    <main id={contentId} tabIndex={-1}>
+      {children}
+    </main>
+  );
   return (
-    <div className="m-app-shell">
-      <KitLink className="m-skip" href="#m-content">
+    <div className={cx("m-app-shell", className)}>
+      <KitLink className="m-skip" href={`#${contentId}`}>
         Skip to content
       </KitLink>
       <aside className="m-sidebar">
@@ -169,8 +208,9 @@ export function AppShell({
           <Button
             variant="ghost"
             className="m-menu-trigger"
+            aria-haspopup="dialog"
+            aria-expanded={open}
             onClick={() => setOpen(true)}
-            aria-label="Open navigation"
           >
             Menu
           </Button>
@@ -179,17 +219,13 @@ export function AppShell({
         </header>
         {aside ? (
           <div className="m-app-columns">
-            <main id="m-content" tabIndex={-1}>
-              {children}
-            </main>
+            {main}
             <aside className="m-app-aside" aria-label={asideLabel}>
               {aside}
             </aside>
           </div>
         ) : (
-          <main id="m-content" tabIndex={-1}>
-            {children}
-          </main>
+          main
         )}
       </div>
       <MobileNavDialog open={open} onClose={() => setOpen(false)} title={brand}>
@@ -197,6 +233,18 @@ export function AppShell({
       </MobileNavDialog>
     </div>
   );
+}
+export interface StackedShellProps {
+  brand: string;
+  logo?: ReactNode;
+  homeHref?: string;
+  navigation: LinkItem[];
+  actions?: ReactNode;
+  /** Page heading shown above the content, e.g. a PageHeading. */
+  header?: ReactNode;
+  width?: "md" | "lg" | "xl" | "full";
+  children: ReactNode;
+  className?: string;
 }
 /** Top navigation with a centred page column: Tailwind's stacked application layout. */
 export function StackedShell({
@@ -208,20 +256,11 @@ export function StackedShell({
   header,
   width = "lg",
   children,
-}: {
-  brand: string;
-  logo?: ReactNode;
-  homeHref?: string;
-  navigation: NavigationItem[];
-  actions?: ReactNode;
-  /** Page heading shown above the content, e.g. a PageHeading. */
-  header?: ReactNode;
-  width?: "md" | "lg" | "xl" | "full";
-  children: ReactNode;
-}) {
+  className,
+}: StackedShellProps) {
   const contentId = useDomId("m-stacked-");
   return (
-    <div className="m-stacked-shell">
+    <div className={cx("m-stacked-shell", className)}>
       <KitLink className="m-skip" href={`#${contentId}`}>
         Skip to content
       </KitLink>
@@ -239,6 +278,17 @@ export function StackedShell({
     </div>
   );
 }
+export interface NavbarProps {
+  brand: string;
+  logo?: ReactNode;
+  homeHref?: string;
+  /** Top-level links; the navbar has no sub-menus. */
+  items: LinkItem[];
+  actions?: ReactNode;
+  /** Accessible name of the navigation landmark. */
+  label?: string;
+  className?: string;
+}
 /** Horizontal application navigation that collapses into a menu on narrow screens. */
 export function Navbar({
   brand,
@@ -247,18 +297,12 @@ export function Navbar({
   items,
   actions,
   label = "Primary",
-}: {
-  brand: string;
-  logo?: ReactNode;
-  homeHref?: string;
-  items: NavigationItem[];
-  actions?: ReactNode;
-  label?: string;
-}) {
+  className,
+}: NavbarProps) {
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
-    <header className="m-navbar">
+    <header className={cx("m-navbar", className)}>
       <KitLink className="m-brand" href={homeHref}>
         <BrandMark logo={logo} />
         {brand}
@@ -272,7 +316,7 @@ export function Navbar({
       >
         Menu
       </Button>
-      <nav id={id} aria-label={label} data-open={open}>
+      <nav id={id} aria-label={label} data-open={open || undefined}>
         {items.map((item, index) => (
           <KitLink
             key={`${item.label}:${item.href}:${index}`}
@@ -285,7 +329,7 @@ export function Navbar({
               icon={item.icon}
               label={item.label}
               count={item.count}
-              countWhen="truthy"
+              countWhen="defined"
             />
           </KitLink>
         ))}
@@ -298,21 +342,24 @@ export interface BreadcrumbItem {
   label: string;
   href?: string;
 }
+export interface BreadcrumbsProps {
+  items: BreadcrumbItem[];
+  label?: string;
+  separator?: "slash" | "chevron";
+  className?: string;
+}
 /** Trail to the current page; the item without an href is the current page. */
 export function Breadcrumbs({
   items,
   label = "Breadcrumb",
   separator = "slash",
-}: {
-  items: BreadcrumbItem[];
-  label?: string;
-  separator?: "slash" | "chevron";
-}) {
+  className,
+}: BreadcrumbsProps) {
   return (
     <nav
-      className="m-breadcrumbs"
+      className={cx("m-breadcrumbs", className)}
       aria-label={label}
-      data-separator={separator}
+      data-separator={separator === "slash" ? undefined : separator}
     >
       <ol>
         {items.map((b, i) => (
@@ -329,23 +376,26 @@ export function Breadcrumbs({
   );
 }
 export type TabNavItem = LinkItem;
-/** Tabs that link between pages, e.g. settings sections. Uses links, not ARIA tabs. */
-export function TabNav({
-  label,
-  items,
-  variant = "underline",
-  fullWidth = false,
-}: {
+export interface TabNavProps {
   label: string;
   items: TabNavItem[];
   /** Underlined tabs (default) or filled pills. */
   variant?: "underline" | "pills";
   /** Stretch the tabs to share the full width. */
   fullWidth?: boolean;
-}) {
+  className?: string;
+}
+/** Tabs that link between pages, e.g. settings sections. Uses links, not ARIA tabs. */
+export function TabNav({
+  label,
+  items,
+  variant = "underline",
+  fullWidth = false,
+  className,
+}: TabNavProps) {
   return (
     <nav
-      className="m-tab-nav"
+      className={cx("m-tab-nav", className)}
       aria-label={label}
       data-variant={variant === "underline" ? undefined : variant}
       data-full-width={fullWidth || undefined}
@@ -379,20 +429,27 @@ export interface ProgressStep {
   href?: string;
   status: "complete" | "current" | "upcoming";
 }
+export interface ProgressStepsProps {
+  steps: ProgressStep[];
+  label?: string;
+  /** simple: bars with step numbers; circles: vertical with descriptions; bullets: "Step 2 of 4" with dots. */
+  variant?: "simple" | "circles" | "bullets";
+  className?: string;
+}
 /** Where someone is in a multi-step flow. The current step is marked aria-current="step". */
 export function ProgressSteps({
   steps,
   label = "Progress",
   variant = "simple",
-}: {
-  steps: ProgressStep[];
-  label?: string;
-  /** simple: bars with step numbers; circles: vertical with descriptions; bullets: "Step 2 of 4" with dots. */
-  variant?: "simple" | "circles" | "bullets";
-}) {
+  className,
+}: ProgressStepsProps) {
   const current = steps.findIndex((step) => step.status === "current");
   return (
-    <nav className="m-progress-steps" aria-label={label} data-variant={variant}>
+    <nav
+      className={cx("m-progress-steps", className)}
+      aria-label={label}
+      data-variant={variant === "simple" ? undefined : variant}
+    >
       {variant === "bullets" && current >= 0 && (
         <p>
           Step {current + 1} of {steps.length}
@@ -449,6 +506,17 @@ export function ProgressSteps({
     </nav>
   );
 }
+export interface ActionPanelProps {
+  title: string;
+  description?: string;
+  action?: ReactNode;
+  children?: ReactNode;
+  /** `danger` marks a destructive action, e.g. deleting an account. */
+  tone?: "default" | "danger";
+  headingLevel?: HeadingLevel;
+  id?: string;
+  className?: string;
+}
 /** Card with a title, explanation and one decisive action, e.g. deleting an account. */
 export function ActionPanel({
   title,
@@ -457,24 +525,27 @@ export function ActionPanel({
   children,
   tone = "default",
   headingLevel = 2,
-}: {
-  title: string;
-  description?: string;
-  action?: ReactNode;
-  children?: ReactNode;
-  tone?: "default" | "danger";
-  headingLevel?: 2 | 3;
-}) {
-  const id = useId();
-  const [, headingSlot, descriptionSlot] = introSlots({
-    title,
-    description,
-    id,
-    headingLevel,
-    descriptionClassName: null,
-  });
+  id,
+  className,
+}: ActionPanelProps) {
+  const headingId = useId();
+  const [, headingSlot, descriptionSlot] = classedIntroSlots(
+    {
+      title,
+      description,
+      id: headingId,
+      headingLevel,
+      descriptionClassName: null,
+    },
+    "m-action-panel-title",
+  );
   return (
-    <section className="m-action-panel" aria-labelledby={id} data-tone={tone}>
+    <section
+      id={id}
+      className={cx("m-action-panel", className)}
+      aria-labelledby={headingId}
+      data-tone={tone === "default" ? undefined : tone}
+    >
       <div className="m-action-panel-text">
         {headingSlot}
         {descriptionSlot}
@@ -483,6 +554,21 @@ export function ActionPanel({
       {action && <div className="m-action-panel-action">{action}</div>}
     </section>
   );
+}
+export interface PageHeadingProps {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  actions?: ReactNode;
+  breadcrumbs?: BreadcrumbItem[];
+  /** The page's h1 by default; use 2 when the page already has one. */
+  headingLevel?: HeadingLevel;
+  /** Facts under the title, e.g. "Full-time", "Remote", "Closes 9 January". */
+  meta?: { label: string; icon?: ReactNode }[];
+  /** Avatar or logo beside the title (decorative). */
+  avatar?: ReactNode;
+  id?: string;
+  className?: string;
 }
 export function PageHeading({
   title,
@@ -493,27 +579,21 @@ export function PageHeading({
   headingLevel = 1,
   meta = [],
   avatar,
-}: {
-  title: string;
-  description?: string;
-  eyebrow?: string;
-  actions?: ReactNode;
-  breadcrumbs?: BreadcrumbItem[];
-  headingLevel?: 1 | 2;
-  /** Facts under the title, e.g. "Full-time", "Remote", "Closes 9 January". */
-  meta?: { label: string; icon?: ReactNode }[];
-  /** Avatar or logo beside the title (decorative). */
-  avatar?: ReactNode;
-}) {
+  id,
+  className,
+}: PageHeadingProps) {
   const text = (
     <div>
-      {...introSlots({
-        eyebrow,
-        title,
-        description,
-        headingLevel,
-        descriptionClassName: null,
-      })}
+      {...classedIntroSlots(
+        {
+          eyebrow,
+          title,
+          description,
+          headingLevel,
+          descriptionClassName: null,
+        },
+        "m-page-title",
+      )}
       {meta.length > 0 && (
         <ul className="m-heading-meta">
           {meta.map((item, index) => (
@@ -527,7 +607,7 @@ export function PageHeading({
     </div>
   );
   return (
-    <header className="m-page-heading">
+    <header id={id} className={cx("m-page-heading", className)}>
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
       <div className="m-heading-row">
         {avatar ? (
@@ -545,11 +625,7 @@ export function PageHeading({
     </header>
   );
 }
-export function MetricGroup({
-  label,
-  items,
-  variant = "shared",
-}: {
+export interface MetricGroupProps {
   label: string;
   items: {
     label: string;
@@ -565,10 +641,17 @@ export function MetricGroup({
   }[];
   /** `shared` joins metrics with shared borders; `cards` separates them into individual cards. */
   variant?: "shared" | "cards";
-}) {
+  className?: string;
+}
+export function MetricGroup({
+  label,
+  items,
+  variant = "shared",
+  className,
+}: MetricGroupProps) {
   return (
     <TermList
-      className="m-metrics"
+      className={cx("m-metrics", className)}
       aria-label={label}
       data-variant={variant === "cards" ? "cards" : undefined}
       items={items.map((item) => ({
@@ -591,7 +674,10 @@ export function MetricGroup({
             )}
             {item.change && (
               <span
-                className={`m-tone-${item.tone || "neutral"}`}
+                className="m-metric-change"
+                data-tone={
+                  item.tone && item.tone !== "neutral" ? item.tone : undefined
+                }
                 data-trend={item.trend}
               >
                 {item.trend && (
@@ -620,7 +706,8 @@ export interface DataTableColumn<T> {
   key: string;
   label: string;
   render: (row: T) => ReactNode;
-  align?: "left" | "right";
+  /** `end` aligns numbers and amounts to the trailing edge. */
+  align?: "start" | "end";
   /** Enable header sorting. Supply sortValue unless row[key] is a string, number or Date. */
   sortable?: boolean;
   sortValue?: (row: T) => string | number | Date | null | undefined;
@@ -633,6 +720,7 @@ export interface DataTableProps<T extends { id: string }> {
   caption: string;
   columns: DataTableColumn<T>[];
   rows: T[];
+  /** Selected row ids, which may include rows on other pages. */
   selectedIds?: string[];
   onSelectionChange?: (ids: string[]) => void;
   rowLabel: (row: T) => string;
@@ -653,10 +741,14 @@ export interface DataTableProps<T extends { id: string }> {
   bulkActions?: ReactNode;
   /** Rendered under the rows inside the table card, e.g. Pagination. */
   footer?: ReactNode;
-  emptyTitle?: string;
-  emptyDescription?: string;
+  /** Shown when there are no rows. */
+  empty?: { title: string; description?: string; action?: ReactNode };
+  /** Level of the empty state's heading. */
+  headingLevel?: HeadingLevel;
   loading?: boolean;
   error?: string;
+  id?: string;
+  className?: string;
 }
 const collator = new Intl.Collator(undefined, {
   numeric: true,
@@ -729,6 +821,8 @@ function TableGroupRow({ label, span }: { label: string; span: number }) {
     </tr>
   );
 }
+const columnAlign = (align?: "start" | "end") =>
+  align === "end" ? "end" : undefined;
 export function DataTable<T extends { id: string }>({
   caption,
   columns,
@@ -747,10 +841,15 @@ export function DataTable<T extends { id: string }>({
   toolbar,
   bulkActions,
   footer,
-  emptyTitle = "No records",
-  emptyDescription = "Records will appear here when they are available.",
+  empty = {
+    title: "No records",
+    description: "Records will appear here when they are available.",
+  },
+  headingLevel = 3,
   loading,
   error,
+  id,
+  className,
 }: DataTableProps<T>) {
   const [localSort, setLocalSort] = useState<TableSort | null>(
     defaultSort || null,
@@ -772,7 +871,20 @@ export function DataTable<T extends { id: string }>({
     if (controlledSort === undefined) setLocalSort(next);
     onSortChange?.(next);
   };
-  const selected = rows.filter((row) => selectedIds.includes(row.id));
+  const pageIds = rows.map((row) => row.id);
+  const selectedHere = pageIds.filter((rowId) => selectedIds.includes(rowId));
+  const allHere = rows.length > 0 && selectedHere.length === rows.length;
+  // Select all adds or removes this page's rows and keeps selections made on
+  // other pages.
+  const toggleAll = () =>
+    onSelectionChange?.(
+      allHere
+        ? selectedIds.filter((rowId) => !pageIds.includes(rowId))
+        : [
+            ...selectedIds,
+            ...pageIds.filter((rowId) => !selectedIds.includes(rowId)),
+          ],
+    );
   const span = columns.length + (onSelectionChange ? 1 : 0);
   const renderRow = (row: T) => {
     const href = rowHref?.(row);
@@ -791,7 +903,7 @@ export function DataTable<T extends { id: string }>({
               onChange={() =>
                 onSelectionChange(
                   selectedIds.includes(row.id)
-                    ? selectedIds.filter((id) => id !== row.id)
+                    ? selectedIds.filter((rowId) => rowId !== row.id)
                     : [...selectedIds, row.id],
                 )
               }
@@ -808,7 +920,7 @@ export function DataTable<T extends { id: string }>({
             <th
               scope="row"
               key={col.key}
-              data-align={col.align}
+              data-align={columnAlign(col.align)}
               data-truncate={col.truncate || undefined}
             >
               {href ? (
@@ -822,7 +934,7 @@ export function DataTable<T extends { id: string }>({
           ) : (
             <td
               key={col.key}
-              data-align={col.align}
+              data-align={columnAlign(col.align)}
               data-truncate={col.truncate || undefined}
             >
               {content}
@@ -834,16 +946,17 @@ export function DataTable<T extends { id: string }>({
   };
   return (
     <section
-      className="m-data-table"
+      id={id}
+      className={cx("m-data-table", className)}
       aria-label={caption}
-      data-density={density}
+      data-density={density === "default" ? undefined : density}
       data-striped={striped || undefined}
     >
-      {(toolbar || selected.length > 0) && (
+      {(toolbar || selectedIds.length > 0) && (
         <div className="m-table-toolbar">
-          {selected.length > 0 ? (
+          {selectedIds.length > 0 ? (
             <>
-              <strong>{selected.length} selected</strong>
+              <strong>{selectedIds.length} selected</strong>
               <div className="m-actions">
                 {bulkActions}
                 <Button variant="ghost" onClick={() => onSelectionChange?.([])}>
@@ -856,16 +969,27 @@ export function DataTable<T extends { id: string }>({
           )}
         </div>
       )}
-      {loading ? (
-        <p className="m-table-state" role="status">
-          Loading records…
-        </p>
-      ) : error ? (
+      {/* Mounted before loading starts so screen readers announce the change. */}
+      <p
+        className={loading ? "m-table-state" : "m-sr-only"}
+        role="status"
+        data-loading={loading || undefined}
+      >
+        {loading ? "Loading records…" : ""}
+      </p>
+      {loading ? null : error ? (
         <Notice title="Unable to load records" tone="danger" announce>
           {error}
         </Notice>
       ) : !rows.length ? (
-        <EmptyState title={emptyTitle} description={emptyDescription} />
+        <EmptyState
+          title={empty.title}
+          // EmptyState's description and level types are widened by the
+          // primitives family; until then an omitted description renders empty.
+          description={empty.description as string}
+          action={empty.action}
+          headingLevel={headingLevel as 2 | 3 | 4}
+        />
       ) : (
         <div
           className="m-table-scroll"
@@ -893,17 +1017,9 @@ export function DataTable<T extends { id: string }>({
                 {onSelectionChange && (
                   <th scope="col">
                     <SelectAll
-                      checked={selected.length === rows.length}
-                      partial={
-                        selected.length > 0 && selected.length < rows.length
-                      }
-                      onChange={() =>
-                        onSelectionChange(
-                          selected.length === rows.length
-                            ? []
-                            : rows.map((r) => r.id),
-                        )
-                      }
+                      checked={allHere}
+                      partial={selectedHere.length > 0 && !allHere}
+                      onChange={toggleAll}
                     />
                   </th>
                 )}
@@ -914,7 +1030,7 @@ export function DataTable<T extends { id: string }>({
                     <th
                       key={col.key}
                       scope="col"
-                      data-align={col.align}
+                      data-align={columnAlign(col.align)}
                       aria-sort={col.sortable ? direction || "none" : undefined}
                     >
                       {col.sortable ? (
@@ -951,6 +1067,20 @@ export function DataTable<T extends { id: string }>({
     </section>
   );
 }
+export interface TableProps {
+  caption: string;
+  captionVisible?: boolean;
+  /** `align: "end"` aligns numbers and amounts to the trailing edge. */
+  columns: { key: string; label: string; align?: "start" | "end" }[];
+  rows?: Record<string, ReactNode>[];
+  /** Labelled row groups, each its own tbody under a full-width header row. Ungrouped rows render first. */
+  groups?: { label: string; rows: Record<string, ReactNode>[] }[];
+  /** Treat the first column as row headers. */
+  rowHeaders?: boolean;
+  striped?: boolean;
+  id?: string;
+  className?: string;
+}
 /** Plain semantic table for documents, settings summaries and comparisons without row actions. */
 export function Table({
   caption,
@@ -960,26 +1090,18 @@ export function Table({
   groups,
   rowHeaders = true,
   striped = false,
-}: {
-  caption: string;
-  captionVisible?: boolean;
-  columns: { key: string; label: string; align?: "left" | "right" }[];
-  rows?: Record<string, ReactNode>[];
-  /** Labelled row groups, each its own tbody under a full-width header row. Ungrouped rows render first. */
-  groups?: { label: string; rows: Record<string, ReactNode>[] }[];
-  /** Treat the first column as row headers. */
-  rowHeaders?: boolean;
-  striped?: boolean;
-}) {
+  id,
+  className,
+}: TableProps) {
   const renderRow = (row: Record<string, ReactNode>, i: number) => (
     <tr key={i}>
       {columns.map((col, index) =>
         index === 0 && rowHeaders ? (
-          <th key={col.key} scope="row" data-align={col.align}>
+          <th key={col.key} scope="row" data-align={columnAlign(col.align)}>
             {row[col.key]}
           </th>
         ) : (
-          <td key={col.key} data-align={col.align}>
+          <td key={col.key} data-align={columnAlign(col.align)}>
             {row[col.key]}
           </td>
         ),
@@ -988,7 +1110,8 @@ export function Table({
   );
   return (
     <div
-      className="m-table"
+      id={id}
+      className={cx("m-table", className)}
       role="region"
       aria-label={caption}
       tabIndex={0}
@@ -1001,7 +1124,7 @@ export function Table({
         <thead>
           <tr>
             {columns.map((col) => (
-              <th key={col.key} scope="col" data-align={col.align}>
+              <th key={col.key} scope="col" data-align={columnAlign(col.align)}>
                 {col.label}
               </th>
             ))}
@@ -1031,14 +1154,7 @@ function pageWindow(page: number, count: number) {
   });
   return out;
 }
-export function Pagination({
-  page,
-  pageCount,
-  onChange,
-  numbered = false,
-  summary,
-  label = "Pagination",
-}: {
+export interface PaginationProps {
   page: number;
   pageCount: number;
   onChange: (page: number) => void;
@@ -1048,10 +1164,25 @@ export function Pagination({
   summary?: { from: number; to: number; total: number; noun?: string };
   /** Accessible name; give each pagination on a page a distinct one. */
   label?: string;
-}) {
+  className?: string;
+}
+export function Pagination({
+  page,
+  pageCount,
+  onChange,
+  numbered = false,
+  summary,
+  label = "Pagination",
+  className,
+}: PaginationProps) {
   const count = Math.max(1, pageCount);
+  const atStart = page <= 1;
+  const atEnd = page >= count;
+  // Previous and Next use aria-disabled rather than disabled at the ends, so
+  // the button someone just pressed keeps focus instead of dropping it to the
+  // page body.
   return (
-    <nav className="m-pagination" aria-label={label}>
+    <nav className={cx("m-pagination", className)} aria-label={label}>
       {summary ? (
         <p aria-live="polite">
           Showing <strong>{summary.from}</strong> to{" "}
@@ -1066,8 +1197,8 @@ export function Pagination({
       <div className="m-actions">
         <Button
           variant="secondary"
-          disabled={page <= 1}
-          onClick={() => onChange(page - 1)}
+          aria-disabled={atStart || undefined}
+          onClick={() => !atStart && onChange(page - 1)}
         >
           Previous
         </Button>
@@ -1098,8 +1229,8 @@ export function Pagination({
         )}
         <Button
           variant="secondary"
-          disabled={page >= pageCount}
-          onClick={() => onChange(page + 1)}
+          aria-disabled={atEnd || undefined}
+          onClick={() => !atEnd && onChange(page + 1)}
         >
           Next
         </Button>
@@ -1107,34 +1238,46 @@ export function Pagination({
     </nav>
   );
 }
+export interface SettingsSectionProps {
+  title: string;
+  description?: string;
+  children: ReactNode;
+  headingLevel?: HeadingLevel;
+  id?: string;
+  className?: string;
+}
 export function SettingsSection({
   title,
   description,
   children,
-}: {
-  title: string;
-  description?: string;
-  children: ReactNode;
-}) {
-  const id = useId();
+  headingLevel = 2,
+  id,
+  className,
+}: SettingsSectionProps) {
+  const headingId = useId();
   return (
-    <section className="m-settings-section" aria-labelledby={id}>
+    <section
+      id={id}
+      className={cx("m-settings-section", className)}
+      aria-labelledby={headingId}
+    >
       <div>
-        <SectionIntro
-          title={title}
-          description={description}
-          id={id}
-          descriptionClassName={null}
-        />
+        {...classedIntroSlots(
+          {
+            title,
+            description,
+            id: headingId,
+            headingLevel,
+            descriptionClassName: null,
+          },
+          "m-settings-title",
+        )}
       </div>
       <div className="m-stack">{children}</div>
     </section>
   );
 }
-export function ActivityFeed({
-  label,
-  items,
-}: {
+export interface ActivityFeedProps {
   label: string;
   items: {
     id: string;
@@ -1147,9 +1290,11 @@ export function ActivityFeed({
     /** Comment text, shown as a quote under the title. */
     body?: ReactNode;
   }[];
-}) {
+  className?: string;
+}
+export function ActivityFeed({ label, items, className }: ActivityFeedProps) {
   return (
-    <ol className="m-activity" aria-label={label}>
+    <ol className={cx("m-activity", className)} aria-label={label}>
       {items.map((item) => (
         <li key={item.id}>
           {item.actor ? (
@@ -1157,7 +1302,10 @@ export function ActivityFeed({
           ) : (
             <span
               aria-hidden="true"
-              className={`m-activity-dot m-tone-${item.tone || "neutral"}`}
+              className="m-activity-dot"
+              data-tone={
+                item.tone && item.tone !== "neutral" ? item.tone : undefined
+              }
             />
           )}
           <div>
@@ -1180,24 +1328,10 @@ export interface SignInProvider {
   icon?: ReactNode;
   onSelect: () => void;
 }
-/**
- * Brand-consistent sign-in surface. Mortar renders the form; the consumer's auth
- * SDK supplies provider redirects and the email-link request through callbacks.
- */
-export function SignInPanel({
-  title,
-  description,
-  logo,
-  providers = [],
-  email,
-  footer,
-  dividerLabel = "or",
-  headingLevel = 1,
-  aside,
-}: {
+export interface SignInPanelProps {
   title: string;
-  /** Use 2 when the panel sits inside a page that already has an h1. */
-  headingLevel?: 1 | 2;
+  /** The page's h1 by default; use 2 when the panel sits inside a page that already has one. */
+  headingLevel?: HeadingLevel;
   /** Image or quote beside the form on wide screens (split-screen layout). */
   aside?: ReactNode;
   description?: string;
@@ -1213,7 +1347,26 @@ export function SignInPanel({
   };
   footer?: ReactNode;
   dividerLabel?: string;
-}) {
+  id?: string;
+  className?: string;
+}
+/**
+ * Brand-consistent sign-in surface. Mortar renders the form; the consumer's auth
+ * SDK supplies provider redirects and the email-link request through callbacks.
+ */
+export function SignInPanel({
+  title,
+  description,
+  logo,
+  providers = [],
+  email,
+  footer,
+  dividerLabel = "or",
+  headingLevel = 1,
+  aside,
+  id,
+  className,
+}: SignInPanelProps) {
   const [value, setValue] = useState("");
   const headingId = useId();
   const Heading = headingTag(headingLevel);
@@ -1221,11 +1374,18 @@ export function SignInPanel({
     e.preventDefault();
     if (email?.status !== "submitting") email?.onSubmit(value);
   };
+  const success = email?.status === "success";
   const panel = (
-    <section className="m-sign-in" aria-labelledby={headingId}>
+    <section
+      id={aside ? undefined : id}
+      className={cx("m-sign-in", !aside && className)}
+      aria-labelledby={headingId}
+    >
       <header>
         {logo && <BrandMark logo={logo} />}
-        <Heading id={headingId}>{title}</Heading>
+        <Heading id={headingId} className="m-sign-in-title">
+          {title}
+        </Heading>
         {description && <p>{description}</p>}
       </header>
       {providers.length > 0 && (
@@ -1264,11 +1424,12 @@ export function SignInPanel({
             error={email.status === "error" ? email.message : undefined}
             disabled={email.status === "submitting"}
           />
-          {email.status === "success" && (
-            <p role="status">
-              {email.message || "Check your inbox for a sign-in link."}
-            </p>
-          )}
+          {/* Always mounted, so the confirmation is announced when it appears. */}
+          <p role="status" className={success ? undefined : "m-sr-only"}>
+            {success
+              ? email.message || "Check your inbox for a sign-in link."
+              : ""}
+          </p>
           <Button type="submit" loading={email.status === "submitting"}>
             {email.submitLabel || "Email me a sign-in link"}
           </Button>
@@ -1278,7 +1439,7 @@ export function SignInPanel({
     </section>
   );
   return aside ? (
-    <div className="m-sign-in-split">
+    <div id={id} className={cx("m-sign-in-split", className)}>
       {panel}
       <div className="m-sign-in-aside">{aside}</div>
     </div>

@@ -14,7 +14,10 @@
     "props": {
       "title": "string",
       "description": "string",
-      "children": "ReactNode"
+      "children": "ReactNode",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+      "id": "string",
+      "className": "string"
     },
     "usage": "Import { SettingsSection } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

@@ -278,3 +278,160 @@ export function MobileNavDialog({
     </DialogFrame>
   );
 }
+
+// Marketing and docs helpers, appended; the helpers above are unchanged.
+import { cloneElement, isValidElement } from "react";
+import { KitLink } from "./navigation.js";
+
+/**
+ * `introSlots` with the shared `m-section-title` class on the heading, so a
+ * section title keeps its style at any `headingLevel`.
+ */
+export function titledIntroSlots(props: IntroProps): ReactNode[] {
+  const slots = introSlots(props);
+  const heading = slots[1];
+  if (isValidElement<{ className?: string }>(heading))
+    slots[1] = cloneElement(heading, { className: "m-section-title" });
+  return slots;
+}
+/** `data-tone` for a section surface tone; the default tone sets no attribute. */
+export function sectionTone(tone?: "default" | "muted" | "inverse") {
+  return tone && tone !== "default" ? tone : undefined;
+}
+
+/** `SectionIntro` with the `m-section-title` heading class. */
+export function TitledIntro(props: IntroProps) {
+  return <>{...titledIntroSlots(props)}</>;
+}
+
+/** A navigation link with optional sub-pages (NavigationItem's shape). */
+export interface NavTreeItem {
+  label: string;
+  href: string;
+  current?: boolean;
+  icon?: ReactNode;
+  count?: number | string;
+  children?: NavTreeItem[];
+}
+/**
+ * Navigation links with icon and count. An item with children becomes a
+ * disclosure, open when a child is current. A count shows whenever defined.
+ */
+export function NavTreeLinks({
+  items,
+  marker = false,
+  onNavigate,
+}: {
+  items: NavTreeItem[];
+  /** Show the dot marker when an item has no icon (sidebar links). */
+  marker?: boolean;
+  onNavigate?: () => void;
+}) {
+  return (
+    <>
+      {items.map((item, index) =>
+        item.children?.length ? (
+          <details
+            key={`${item.label}:${item.href}:${index}`}
+            className="m-nav-group"
+            open={item.children.some((child) => child.current) || undefined}
+          >
+            <summary>
+              <LinkContent
+                prefix="nav"
+                marker={marker}
+                icon={item.icon}
+                label={item.label}
+                count={item.count}
+                countWhen="defined"
+              />
+            </summary>
+            <div className="m-nav-children">
+              <NavTreeLinks
+                items={item.children}
+                marker={marker}
+                onNavigate={onNavigate}
+              />
+            </div>
+          </details>
+        ) : (
+          <KitLink
+            key={`${item.label}:${item.href}:${index}`}
+            href={item.href}
+            aria-current={item.current ? "page" : undefined}
+            onClick={onNavigate}
+          >
+            <LinkContent
+              prefix="nav"
+              marker={marker}
+              icon={item.icon}
+              label={item.label}
+              count={item.count}
+              countWhen="defined"
+            />
+          </KitLink>
+        ),
+      )}
+    </>
+  );
+}
+
+// Application helpers, appended after the marketing and docs ones.
+
+/**
+ * introSlots with a component-specific class on the heading (titledIntroSlots
+ * always uses m-section-title), so a title keeps its
+ * styles at any `headingLevel` instead of only as an h2.
+ */
+export function classedIntroSlots(
+  props: IntroProps,
+  titleClassName: string,
+): ReactNode[] {
+  const [eyebrow, heading, description] = introSlots(props);
+  return [
+    eyebrow,
+    isValidElement<{ className?: string }>(heading)
+      ? cloneElement(heading, { className: titleClassName })
+      : heading,
+    description,
+  ];
+}
+
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+/**
+ * Call before a consumer callback that removes `element` (e.g. a chip's
+ * remove button). Once the removal has rendered, if focus fell to the body,
+ * it moves to the nearest focusable element that took the removed one's place,
+ * or the one before it, searching up through the ancestors that remain.
+ */
+export function focusAfterRemoval(element: HTMLElement) {
+  const trail: [HTMLElement, number][] = [];
+  for (let node: HTMLElement | null = element; node?.parentElement;) {
+    const parent: HTMLElement = node.parentElement;
+    trail.push([parent, [...parent.children].indexOf(node)]);
+    node = parent;
+  }
+  setTimeout(() => {
+    const active = element.ownerDocument.activeElement;
+    if (
+      element.isConnected ||
+      (active && active !== element.ownerDocument.body)
+    )
+      return;
+    for (const [parent, index] of trail) {
+      if (!parent.isConnected) continue;
+      const siblings = [...parent.children] as HTMLElement[];
+      const candidates = [
+        ...siblings.slice(index),
+        ...siblings.slice(0, index).reverse(),
+      ];
+      for (const candidate of candidates) {
+        const target = candidate.matches(FOCUSABLE)
+          ? candidate
+          : candidate.querySelector<HTMLElement>(FOCUSABLE);
+        if (target) return target.focus();
+      }
+    }
+  });
+}

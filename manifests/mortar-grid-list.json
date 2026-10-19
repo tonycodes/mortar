@@ -15,8 +15,9 @@
       "label": "string",
       "items": "GridListItem[] ({ id: string; title: string; description?: string; href?: string; media?: ReactNode; cover?: { src: string; alt: string }; meta?: ReactNode; details?: { term: string; details: ReactNode }[]; actions?: ReactNode })",
       "columns": "2 | 3 | 4",
-      "headingLevel": "2 | 3 | 4",
-      "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)"
+      "actionsLayout": "\"inline\" | \"split\" (default \"inline\"; split gives each action child an equal cell divided by shared borders)",
+      "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (each card title; default 3)",
+      "className": "string"
     },
     "usage": "Import { GridList } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

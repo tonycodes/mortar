@@ -238,7 +238,7 @@ test("component code view shows the example source and is shareable", async ({
   await expect(code).toContainText(
     'import { Button, Card, Stack, Text } from "@tony-ui/mortar";',
   );
-  await expect(code).toContainText('<Card tone="sunken" padding="compact">');
+  await expect(code).toContainText('<Card tone="muted" padding="compact">');
   await expect(code).not.toContainText("UI.");
   await page.reload();
   await expect(code).toContainText("<Card");
@@ -258,7 +258,7 @@ for (const width of [390, 1280])
     await expect(
       aside.getByRole("grid", { name: "October 2026" }),
     ).toBeVisible();
-    const main = await page.locator("#m-content").boundingBox();
+    const main = await page.getByRole("main").boundingBox();
     const side = await aside.boundingBox();
     // Side by side on wide screens, stacked below the main column on narrow ones.
     if (width >= 1280) expect(side.x).toBeGreaterThan(main.x + main.width - 1);

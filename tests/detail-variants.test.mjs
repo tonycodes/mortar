@@ -6,7 +6,7 @@ const icon = h("svg", { viewBox: "0 0 20 20" });
 test("PageHeading keeps its markup and adds meta and an avatar", () => {
   assert.equal(
     html(PageHeading, { title: "Workspace overview" }),
-    '<header class="m-page-heading"><div class="m-heading-row"><div><h1>Workspace overview</h1></div></div></header>',
+    '<header class="m-page-heading"><div class="m-heading-row"><div><h1 class="m-page-title">Workspace overview</h1></div></div></header>',
   );
   const rich = html(PageHeading, {
     title: "Back End Developer",
