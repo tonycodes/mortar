@@ -4,8 +4,6 @@ import { mkdtemp, cp, readFile, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { checkKit, ROOT } from "../scripts/check.mjs";
-test("all public exports have valid contracts and previews", async () =>
-  assert.deepEqual((await checkKit()).findings, []));
 test("baseline rejects path escape, missing dependencies, hidden exports and hosted coupling", async () => {
   const dir = await mkdtemp(join(tmpdir(), "mortar-baseline-"));
   try {

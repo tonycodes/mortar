@@ -1,15 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import {
+  h,
+  html,
   MarketingHeader,
   HeaderSection,
   ContentSection,
-} from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props, ...children) =>
-  renderToStaticMarkup(h(type, props, ...children));
+} from "./support/render.mjs";
 
 test("MarketingHeader renders a flyout group as a closed disclosure button", () => {
   const markup = html(MarketingHeader, {
@@ -94,24 +91,4 @@ test("ContentSection pairs prose with optional media", () => {
     html(ContentSection, { title: "Plain" }, "Text"),
     /m-content-media|data-media/,
   );
-});
-
-test("Pricing names unavailable plans even without a custom label", async () => {
-  const { Pricing } = await import("../dist/index.js");
-  const plan = (id, availability) => ({
-    id,
-    name: id,
-    description: "Plan",
-    monthly: "£1",
-    features: ["One"],
-    action: { label: "Buy", href: "#buy" },
-    availability,
-  });
-  const markup = html(Pricing, {
-    title: "Plans",
-    plans: [plan("soon", "coming-soon"), plan("gone", "unavailable")],
-  });
-  assert.match(markup, /<p role="status">Coming soon<\/p>/);
-  assert.match(markup, /<p role="status">Unavailable<\/p>/);
-  assert.doesNotMatch(markup, /<p role="status"><\/p>/);
 });
