@@ -4,6 +4,8 @@ Accepted regression references for `npm run test:visual`. A PR that changes them
 
 The first Linux images were rendered on Ubuntu 24.04 by [candidate run 38596920983](https://github.com/tonycodes/mortar/actions/runs/38596920983), and macOS images locally. Both use the same committed production playground and default neutral brand.
 
+The nine components and two templates added later (Button, Tabs, TabNav, DataTable, Calendar, Pricing, Hero, ProductOverview, ShoppingCart, `saas-landing`, `cart-page`) were rendered for Linux by [candidate run 39311215642](https://github.com/tonycodes/mortar/actions/runs/39311215642).
+
 ## linux
 
 ### AppShell-dark-1280
