@@ -41,13 +41,6 @@ const FIXED_CLASS = new RegExp(
 // A raw colour literal in shared CSS. Only src/tokens.css defines colours.
 const RAW_COLOUR =
   /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch)\(/;
-// TEMPORARY: raw colours being replaced with tokens in the parallel CSS
-// refactor. Each entry is a file and the exact literal on the offending line;
-// delete the entry when that literal is gone (M005 then guards it).
-const RAW_COLOUR_ALLOWLIST = [
-  ["src/components.css", "rgb(0 0 0 / 0.5)"], // TEMPORARY: modal backdrop
-  ["src/kits.css", "rgb(0 0 0 / 0.12)"], // TEMPORARY: image inset outlines (2 lines)
-];
 // Hosted-service coupling that is never legitimate in the public kit.
 const HOSTED = /UI_TOKEN|@tony-ui\/control|ui\.tony\.codes|packages\/control/;
 // Network APIs, matched as identifiers in code rather than words in prose.
@@ -199,12 +192,7 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
           await readFile(resolve(root, file), "utf8"),
         ).split("\n");
         lines.forEach((line, i) => {
-          if (
-            RAW_COLOUR.test(line) &&
-            !RAW_COLOUR_ALLOWLIST.some(
-              ([f, literal]) => f === file && line.includes(literal),
-            )
-          )
+          if (RAW_COLOUR.test(line))
             add(
               "M005",
               file,
