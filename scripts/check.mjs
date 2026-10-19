@@ -10,8 +10,59 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import ts from "typescript";
 import { format } from "prettier";
-import { contractErrors } from "./test-contract.mjs";
+import {
+  capabilityErrors,
+  catalogCapabilities,
+  contractErrors,
+} from "./test-contract.mjs";
+import { componentApi } from "./api.mjs";
+/** Every declaration block whose selector list contains `selector`, joined. */
+export function selectorBody(css, selector) {
+  const bodies = [];
+  for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = match[1]
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .split(",")
+      .map((item) => item.trim());
+    if (selectors.includes(selector)) bodies.push(match[2]);
+  }
+  return bodies.join("\n");
+}
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Every Tailwind palette name. Components use semantic tokens instead.
+const PALETTE =
+  "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
+const UTILITY =
+  "bg|text|border|ring|outline|fill|stroke|from|via|to|divide|decoration|shadow|accent|caret|placeholder";
+const FIXED_CLASS = new RegExp(
+  `(?<![\\w-])(?:${UTILITY})-(?:(?:${PALETTE})-\\d{2,3}\\b|(?:white|black)\\b|\\[#[0-9a-fA-F]+\\])|(?:color|backgroundColor|borderColor):\\s*["']#[0-9a-fA-F]+`,
+);
+// A raw colour literal in shared CSS. Only src/tokens.css defines colours.
+const RAW_COLOUR =
+  /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch)\(/;
+// TEMPORARY: raw colours being replaced with tokens in the parallel CSS
+// refactor. Each entry is a file and the exact literal on the offending line;
+// delete the entry when that literal is gone (M005 then guards it).
+const RAW_COLOUR_ALLOWLIST = [
+  ["src/components.css", "rgb(0 0 0 / 0.5)"], // TEMPORARY: modal backdrop
+  ["src/kits.css", "rgb(0 0 0 / 0.12)"], // TEMPORARY: image inset outlines (2 lines)
+];
+// Hosted-service coupling that is never legitimate in the public kit.
+const HOSTED = /UI_TOKEN|@tony-ui\/control|ui\.tony\.codes|packages\/control/;
+// Network APIs, matched as identifiers in code rather than words in prose.
+const NETWORK = new Set([
+  "fetch",
+  "XMLHttpRequest",
+  "WebSocket",
+  "EventSource",
+  "sendBeacon",
+]);
+
+/** Comments blanked out, keeping line numbers. */
+const withoutCssComments = (css) =>
+  css.replace(/\/\*[\s\S]*?\*\//g, (c) => c.replace(/[^\n]/g, " "));
+
 export async function checkKit(root = ROOT, { refresh = false } = {}) {
   root = await realpath(root);
   const findings = [];
@@ -80,7 +131,6 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
         if (!e.isTypeOnly) actualExports.add(e.name.text);
   const ids = new Set();
   const names = new Set();
-  const base = await realpath(root);
   for (const c of manifests) {
     if (
       !c.id ||
@@ -93,7 +143,7 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
         `manifests/${c.id}.json`,
         "Use a unique component ID and an existing named export.",
       );
-    for (const message of contractErrors(c))
+    for (const message of [...contractErrors(c), ...capabilityErrors(c)])
       add("M006", `manifests/${c.id}.json`, message);
     ids.add(c.id);
     names.add(c.export);
@@ -107,7 +157,7 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
           !file.startsWith(prefix) ||
           file.includes("..") ||
           !(await lstat(resolve(root, file))).isFile() ||
-          !(await realpath(resolve(root, file))).startsWith(base + "/")
+          !(await realpath(resolve(root, file))).startsWith(root + "/")
         )
           throw Error();
       } catch {
@@ -143,26 +193,67 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
         await inspect(file);
         continue;
       }
+      if (file.endsWith(".css") && directory === "src") {
+        if (file === "src/tokens.css") continue;
+        const lines = withoutCssComments(
+          await readFile(resolve(root, file), "utf8"),
+        ).split("\n");
+        lines.forEach((line, i) => {
+          if (
+            RAW_COLOUR.test(line) &&
+            !RAW_COLOUR_ALLOWLIST.some(
+              ([f, literal]) => f === file && line.includes(literal),
+            )
+          )
+            add(
+              "M005",
+              file,
+              "Define colours as tokens in src/tokens.css and reference them with var(--m-…).",
+              i + 1,
+            );
+        });
+        continue;
+      }
       if (!/\.tsx?$/.test(file)) continue;
       const source = await readFile(resolve(root, file), "utf8");
       const lines = source.split("\n");
+      const network = new Set();
+      const tree = ts.createSourceFile(
+        file,
+        source,
+        ts.ScriptTarget.Latest,
+        true,
+      );
+      const visit = (node) => {
+        if (ts.isIdentifier(node) && NETWORK.has(node.text)) {
+          const parent = node.parent;
+          // `fetch(…)`, `new WebSocket(…)`, `navigator.sendBeacon(…)`, or an
+          // import of one; not a property or type that merely shares the name.
+          const declaresName =
+            (ts.isPropertyAssignment(parent) ||
+              ts.isPropertySignature(parent) ||
+              ts.isMethodDeclaration(parent) ||
+              ts.isBindingElement(parent) ||
+              ts.isVariableDeclaration(parent) ||
+              ts.isParameter(parent)) &&
+            parent.name === node;
+          if (!declaresName && !ts.isJsxAttribute(parent))
+            network.add(
+              tree.getLineAndCharacterOfPosition(node.getStart()).line,
+            );
+        }
+        ts.forEachChild(node, visit);
+      };
+      visit(tree);
       for (let i = 0; i < lines.length; i++) {
-        if (
-          /\b(?:fetch|XMLHttpRequest)\b|UI_TOKEN|@tony-ui\/control|ui\.tony\.codes|packages\/control/.test(
-            lines[i],
-          )
-        )
+        if (network.has(i) || HOSTED.test(lines[i]))
           add(
             "M004",
             file,
             "Shared UI must not depend on hosted governance, credentials or network requests.",
             i + 1,
           );
-        if (
-          /(?:bg|text|border|ring)-(?:indigo|blue|green|red|amber|violet|slate|gray)-\d{2,3}\b|(?:bg|text|border|ring)-\[#[0-9a-fA-F]+\]|(?:color|backgroundColor|borderColor):\s*["']#[0-9a-fA-F]+/.test(
-            lines[i],
-          )
-        )
+        if (FIXED_CLASS.test(lines[i]))
           add(
             "M005",
             file,
@@ -183,7 +274,7 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       if (files.has(file)) return;
       const full = resolve(root, file);
       if (
-        !(await realpath(full)).startsWith(base + "/") ||
+        !(await realpath(full)).startsWith(root + "/") ||
         !(await lstat(full)).isFile()
       )
         throw Error("Unsafe dependency");
@@ -201,21 +292,20 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
           if (!spec || !ts.isStringLiteral(spec) || !spec.text.startsWith("."))
             continue;
           const path = resolve(dirname(full), spec.text);
+          // "./x.js" (NodeNext source) or extensionless "./x" (previews).
           for (const candidate of [
             path,
             path.replace(/\.js$/, ".tsx"),
             path.replace(/\.js$/, ".ts"),
             `${path}.tsx`,
             `${path}.ts`,
-            resolve(path, "index.tsx"),
-            resolve(path, "index.ts"),
           ]) {
             try {
               if (!(await lstat(candidate)).isFile()) continue;
             } catch {
               continue;
             }
-            await visit(candidate.slice(base.length + 1));
+            await visit(candidate.slice(root.length + 1));
             break;
           }
         }
@@ -239,11 +329,11 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       )
       .digest("hex");
   }
-  // Manifests hold the hand-written contract only. The package version and the
-  // fingerprints are generated into the catalogue, so a shared change never
-  // rewrites every manifest.
-  for (const c of manifests)
-    for (const field of ["version", "integrity"])
+  // Manifests hold the hand-written contract only. The package version,
+  // fingerprints, provenance, derived capabilities and prop types are generated
+  // into the catalogue, so a shared change never rewrites every manifest.
+  for (const c of manifests) {
+    for (const field of ["version", "integrity", "provenance"])
       if (field in c) {
         if (refresh) delete c[field];
         else
@@ -253,6 +343,19 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
             `"${field}" is generated into catalog.json; remove it from the manifest.`,
           );
       }
+    for (const field of ["states", "propTypes"])
+      if (c.contract && field in c.contract) {
+        if (refresh) delete c.contract[field];
+        else
+          add(
+            "M007",
+            `manifests/${c.id}.json`,
+            field === "states"
+              ? '"contract.states" was removed; declare tested scenarios in testing.states.'
+              : '"contract.propTypes" is generated into catalog.json; remove it from the manifest.',
+          );
+      }
+  }
   const fingerprints = new Map();
   if (!findings.some((f) => f.rule === "M002")) {
     for (const c of manifests) {
@@ -270,23 +373,30 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       }
     }
   }
+  // Prop types and composed components come from the TypeScript checker.
+  let api = new Map();
+  if (!findings.some((f) => ["M001", "M002"].includes(f.rule))) {
+    api = componentApi(root, manifests);
+    for (const c of manifests) {
+      const derived = api.get(c.id)?.dependencies;
+      if (!derived) continue;
+      const declared = c.contract?.dependencies || [];
+      const missing = derived.filter((id) => !declared.includes(id));
+      const extra = declared.filter((id) => !derived.includes(id));
+      if (missing.length || extra.length)
+        add(
+          "M010",
+          `manifests/${c.id}.json`,
+          `contract.dependencies must list exactly the catalogue components ${c.export} renders.${missing.length ? ` Add ${missing.join(", ")}.` : ""}${extra.length ? ` Remove ${extra.join(", ")}.` : ""}`,
+        );
+    }
+  }
   const tokensCss = await readFile(resolve(root, "src/tokens.css"), "utf8");
   const tokens = [
     ...new Set(
       [...tokensCss.matchAll(/(--m-[a-z0-9-]+)\s*:/g)].map((match) => match[1]),
     ),
   ].sort();
-  const selectorBody = (selector) => {
-    const bodies = [];
-    for (const match of tokensCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const selectors = match[1]
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .split(",")
-        .map((item) => item.trim());
-      if (selectors.includes(selector)) bodies.push(match[2]);
-    }
-    return bodies.join("\n");
-  };
   const declares = (body, name) =>
     new RegExp(`(?:^|[\\s;{])${name}\\s*:`).test(body);
   for (const selector of [
@@ -295,7 +405,7 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
     '[data-mortar-brand="green"]',
     '[data-mortar-brand="green"][data-mortar-appearance="dark"]',
   ]) {
-    const body = selectorBody(selector);
+    const body = selectorBody(tokensCss, selector);
     const at = tokensCss.indexOf(selector);
     const line = at < 0 ? 1 : tokensCss.slice(0, at).split("\n").length;
     for (const name of ["--m-accent", "--m-on-accent"])
@@ -307,15 +417,63 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
           line,
         );
   }
-  const components = manifests.map((c) => {
-    const entry = {};
-    for (const [key, value] of Object.entries(c)) {
-      entry[key] = value;
-      if (key === "package") entry.version = pkg.version;
-    }
-    entry.integrity = fingerprints.get(c.id);
-    return entry;
-  });
+  const components = manifests.map((c) => catalogEntry(c));
+  function catalogEntry(c) {
+    const {
+      id,
+      logicalId,
+      name,
+      description,
+      stack,
+      package: packageName,
+      export: exportName,
+      source,
+      capabilities,
+      owner,
+      kitId,
+      contract = {},
+      preview,
+      testing,
+      ...rest
+    } = c;
+    const {
+      props,
+      usage,
+      avoid,
+      accessibility,
+      dependencies,
+      ...contractRest
+    } = contract;
+    const propTypes = api.get(id)?.props;
+    return {
+      id,
+      logicalId,
+      name,
+      description,
+      stack,
+      package: packageName,
+      version: pkg.version,
+      export: exportName,
+      source,
+      capabilities: catalogCapabilities(c),
+      owner,
+      kitId,
+      provenance: { kitId, exampleId: `mortar-${kitId}-reference` },
+      contract: {
+        props,
+        ...(propTypes ? { propTypes } : {}),
+        usage,
+        avoid,
+        accessibility,
+        dependencies,
+        ...contractRest,
+      },
+      preview,
+      testing,
+      ...rest,
+      integrity: fingerprints.get(id),
+    };
+  }
   const catalog = {
     schemaVersion: 1,
     package: pkg.name,
@@ -324,6 +482,14 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
     tokens,
     components,
   };
+  let stored;
+  try {
+    stored = JSON.parse(await readFile(resolve(root, "catalog.json"), "utf8"));
+  } catch {
+    if (!refresh) add("M008", "catalog.json", "Missing or invalid catalogue.");
+  }
+  const changes = compareCatalogs(stored, catalog);
+  let written = false;
   if (refresh && findings.length === 0) {
     for (const c of manifests)
       await writeFile(
@@ -334,42 +500,25 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       resolve(root, "catalog.json"),
       await format(JSON.stringify(catalog, null, 2), { parser: "json" }),
     );
-  } else if (!refresh) {
-    let stored;
-    try {
-      stored = JSON.parse(
-        await readFile(resolve(root, "catalog.json"), "utf8"),
+    written = true;
+  } else if (!refresh && stored) {
+    for (const id of changes.fingerprints)
+      add(
+        "M007",
+        `manifests/${id}.json`,
+        "Source or preview fingerprint is stale. Review the change, then run npm run catalog.",
       );
-    } catch {
-      add("M008", "catalog.json", "Missing or invalid catalogue.");
-    }
-    if (stored) {
-      const previous = new Map(
-        (stored.components || []).map((c) => [c.id, c.integrity]),
+    if (changes.catalogue) {
+      const list = changes.contracts;
+      const named =
+        list.length > 8
+          ? `${list.slice(0, 8).join(", ")} and ${list.length - 8} more`
+          : list.join(", ");
+      add(
+        "M008",
+        "catalog.json",
+        `Catalogue does not match manifests${named ? ` (${named})` : ""}. Review the change, then run npm run catalog.`,
       );
-      for (const c of components)
-        if (
-          c.integrity &&
-          JSON.stringify(previous.get(c.id)) !== JSON.stringify(c.integrity)
-        )
-          add(
-            "M007",
-            `manifests/${c.id}.json`,
-            "Source or preview fingerprint is stale. Run npm run catalog and review the changed content.",
-          );
-      const withoutIntegrity = (value) =>
-        JSON.stringify({
-          ...value,
-          components: (value.components || []).map(
-            ({ integrity, ...rest }) => rest,
-          ),
-        });
-      if (withoutIntegrity(stored) !== withoutIntegrity(catalog))
-        add(
-          "M008",
-          "catalog.json",
-          "Catalogue does not match manifests. Run npm run catalog.",
-        );
     }
   }
   return {
@@ -377,20 +526,96 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
     policyVersion: policy.version,
     findings,
     catalog,
+    changes,
+    written,
   };
 }
+
+/**
+ * What differs between the committed catalogue and a regenerated one:
+ * components whose fingerprints changed, components whose generated entry
+ * otherwise changed (contract, props, testing…), and whether anything at all
+ * (including tokens or the version) changed.
+ */
+export function compareCatalogs(stored, catalog) {
+  const before = new Map((stored?.components || []).map((c) => [c.id, c]));
+  const after = new Map(catalog.components.map((c) => [c.id, c]));
+  const fingerprints = [];
+  const contracts = [];
+  for (const [id, c] of after) {
+    const old = before.get(id);
+    if (!old) {
+      contracts.push(`${id} (new)`);
+      continue;
+    }
+    const { integrity, ...rest } = c;
+    const { integrity: oldIntegrity, ...oldRest } = old;
+    if (integrity && JSON.stringify(integrity) !== JSON.stringify(oldIntegrity))
+      fingerprints.push(id);
+    if (JSON.stringify(rest) !== JSON.stringify(oldRest)) contracts.push(id);
+  }
+  for (const id of before.keys())
+    if (!after.has(id)) contracts.push(`${id} (removed)`);
+  const withoutIntegrity = (value) =>
+    JSON.stringify({
+      ...value,
+      components: (value?.components || []).map(
+        ({ integrity, ...rest }) => rest,
+      ),
+    });
+  return {
+    fingerprints,
+    contracts,
+    catalogue:
+      !stored ||
+      contracts.length > 0 ||
+      withoutIntegrity(stored) !== withoutIntegrity(catalog),
+  };
+}
+
 if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(resolve(process.argv[1])).href
 ) {
-  const report = await checkKit(ROOT, {
-    refresh: process.argv.includes("--write-catalog"),
-  });
-  const { catalog, ...result } = report;
-  console.log(
-    process.argv.includes("--format")
-      ? JSON.stringify(result, null, 2)
-      : `${report.passed ? "PASS" : "FAIL"}: ${catalog.components.length} components; baseline ${report.policyVersion}\n${report.findings.map((f) => `${f.file}:${f.line} ${f.rule} ${f.message}`).join("\n")}`,
-  );
+  const args = process.argv.slice(2);
+  const at = args.indexOf("--format");
+  const formatName = at >= 0 ? args[at + 1] : "text";
+  if (!["text", "json"].includes(formatName)) {
+    console.error(`Unknown --format ${formatName}; use text or json.`);
+    process.exit(2);
+  }
+  const refresh = args.includes("--write-catalog");
+  const report = await checkKit(ROOT, { refresh });
+  const { catalog, written, ...result } = report;
+  if (formatName === "json") console.log(JSON.stringify(result, null, 2));
+  else {
+    const lines = [
+      `${report.passed ? "PASS" : "FAIL"}: ${catalog.components.length} components; baseline ${report.policyVersion}`,
+      ...report.findings.map(
+        (f) => `${f.file}:${f.line} ${f.rule} ${f.message}`,
+      ),
+    ];
+    if (refresh) {
+      const { fingerprints, contracts, catalogue } = report.changes;
+      if (!written)
+        lines.push(
+          "catalog.json was not written: fix the findings above first.",
+        );
+      else if (!catalogue && !fingerprints.length)
+        lines.push("catalog.json is already up to date.");
+      else {
+        lines.push(
+          "catalog.json written. Review these changes before committing:",
+        );
+        if (fingerprints.length)
+          lines.push(`  fingerprints: ${fingerprints.join(", ")}`);
+        if (contracts.length)
+          lines.push(`  contracts: ${contracts.join(", ")}`);
+        if (catalogue && !contracts.length)
+          lines.push("  catalogue-wide fields (version, policy or tokens)");
+      }
+    }
+    console.log(lines.join("\n"));
+  }
   process.exitCode = report.passed ? 0 : 1;
 }

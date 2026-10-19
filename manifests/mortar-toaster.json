@@ -7,27 +7,15 @@
   "package": "@tony-ui/mortar",
   "export": "Toaster",
   "source": "src/feedback.tsx",
-  "capabilities": ["theme", "foundation"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference",
-    "sourceDigest": "55be14798cbed617fca174f480ad41a4b7a7a493f76c81e46ea4c56fdddd2449"
-  },
   "contract": {
     "props": {
       "items": "ToastItem[]",
       "onDismiss": "(id: string) => void",
       "label": "string"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Toaster } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",

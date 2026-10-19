@@ -1,15 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import {
+  h,
+  html,
   ProductList,
   ProductOverview,
   ShoppingCart,
   OrderSummary,
-} from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props) => renderToStaticMarkup(h(type, props));
+} from "./support/render.mjs";
 const image = { src: "/tote.png", alt: "Natural canvas tote bag" };
 
 test("ProductList names each card by its product link and shows the price", () => {

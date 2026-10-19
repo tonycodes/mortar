@@ -1,10 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Toast, ActivityFeed, StackedList } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props) => renderToStaticMarkup(h(type, props));
+import {
+  h,
+  html,
+  Toast,
+  ActivityFeed,
+  StackedList,
+} from "./support/render.mjs";
 const avatar = h("span", { "data-avatar": "" });
 
 test("Toast shows a leading avatar in place of the tone icon", () => {

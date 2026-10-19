@@ -1,17 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import {
+  html,
   Checkbox,
   Switch,
   RadioGroup,
   Sidebar,
   AppShell,
   Avatar,
-} from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props) => renderToStaticMarkup(h(type, props));
+} from "./support/render.mjs";
 
 test("Checkbox and Switch keep their markup and add a described option", () => {
   assert.equal(

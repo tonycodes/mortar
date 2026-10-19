@@ -7,13 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "TabNav",
   "source": "src/application.tsx",
-  "capabilities": ["theme", "application", "navigation"],
+  "capabilities": ["navigation"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "label": "string",
@@ -21,13 +17,6 @@
       "variant": "\"underline\" | \"pills\"",
       "fullWidth": "boolean"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { TabNav } from @tony-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",

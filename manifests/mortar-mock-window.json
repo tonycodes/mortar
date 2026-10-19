@@ -7,13 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "MockWindow",
   "source": "src/showcase.tsx",
-  "capabilities": ["theme", "marketing"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "marketing",
-  "provenance": {
-    "kitId": "marketing",
-    "exampleId": "mortar-marketing-reference"
-  },
   "contract": {
     "props": {
       "label": "string",
@@ -21,13 +17,6 @@
       "variant": "\"browser\" | \"app\" | \"plain\"",
       "children": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",

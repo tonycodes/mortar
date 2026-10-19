@@ -1,10 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Testimonial, TeamGrid, Footer } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props) => renderToStaticMarkup(h(type, props));
+import { h, html, Testimonial, TeamGrid, Footer } from "./support/render.mjs";
 const icon = h("svg", { viewBox: "0 0 24 24" });
 
 test("Testimonial keeps its markup and adds a logo and avatar", () => {

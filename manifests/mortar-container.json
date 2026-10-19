@@ -7,13 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "Container",
   "source": "src/layout.tsx",
-  "capabilities": ["theme", "foundation"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
-  "provenance": {
-    "kitId": "foundation",
-    "exampleId": "mortar-foundation-reference"
-  },
   "contract": {
     "props": {
       "as": "ElementType",
@@ -21,13 +17,6 @@
       "padded": "boolean",
       "children": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { Container } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",

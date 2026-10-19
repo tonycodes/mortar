@@ -7,19 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "StackedShell",
   "source": "src/application.tsx",
-  "capabilities": [
-    "theme",
-    "application",
-    "navigation",
-    "responsive",
-    "keyboard"
-  ],
+  "capabilities": ["navigation"],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference"
-  },
   "contract": {
     "props": {
       "brand": "string",
@@ -31,17 +21,10 @@
       "width": "\"md\" | \"lg\" | \"xl\" | \"full\"",
       "children": "ReactNode"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { StackedShell } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-navbar"]
   },
   "preview": {
     "source": "previews/StackedShellPreview.tsx"

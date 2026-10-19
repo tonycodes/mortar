@@ -7,14 +7,9 @@
   "package": "@tony-ui/mortar",
   "export": "SlideOver",
   "source": "src/workspace.tsx",
-  "capabilities": ["theme", "application", "keyboard"],
+  "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "application",
-  "provenance": {
-    "kitId": "application",
-    "exampleId": "mortar-application-reference",
-    "sourceDigest": "59cc40c87590db0193cfd5e1ef60d47f5783df1f8713e81d51bfca082bb1fa93"
-  },
   "contract": {
     "props": {
       "open": "boolean",
@@ -25,13 +20,6 @@
       "actions": "ReactNode",
       "size": "md | lg | xl"
     },
-    "states": [
-      "Light",
-      "Dark",
-      "Neutral brand",
-      "Green brand",
-      "Keyboard and focus"
-    ],
     "usage": "Import { SlideOver } from @tony-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",

@@ -1,8 +1,8 @@
 # Visual baseline proposals
 
-Initial snapshots for maintainer review in this PR. These images become regression references only when the PR is accepted. Required CI compares images and never updates them.
+Accepted regression references for `npm run test:visual`. A PR that changes them proposes new references, which apply only once the maintainer accepts that PR. Required CI compares images and never updates them; see [TESTING.md](../../TESTING.md#visual-baselines).
 
-Linux images were rendered on Ubuntu 24.04 by [candidate run 38596920983](https://github.com/tonycodes/mortar/actions/runs/38596920983). macOS images were captured locally. Both use the same committed production playground and default neutral brand.
+The first Linux images were rendered on Ubuntu 24.04 by [candidate run 38596920983](https://github.com/tonycodes/mortar/actions/runs/38596920983), and macOS images locally. Both use the same committed production playground and default neutral brand.
 
 ## linux
 

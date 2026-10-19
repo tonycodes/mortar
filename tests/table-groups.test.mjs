@@ -1,10 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { DataTable, Table } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props) => renderToStaticMarkup(h(type, props));
+import { html, DataTable, Table } from "./support/render.mjs";
 const columns = [
   { key: "name", label: "Name" },
   { key: "role", label: "Role" },

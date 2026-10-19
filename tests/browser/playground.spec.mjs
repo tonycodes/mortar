@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
 import { readFileSync } from "node:fs";
+import ts from "typescript";
+import { accessibility } from "../support/preview.mjs";
 for (const width of [320, 768, 1280]) {
   test(`playground browsing and settings at ${width}`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -55,13 +56,7 @@ for (const width of [320, 768, 1280]) {
           document.documentElement.clientWidth,
       ),
     ).toBeLessThanOrEqual(1);
-    expect(
-      (
-        await new AxeBuilder({ page })
-          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
-          .analyze()
-      ).violations,
-    ).toEqual([]);
+    await accessibility(page);
     if (width < 900) {
       await page.getByLabel("Find a component").fill("");
       await page
@@ -159,12 +154,6 @@ const { kits } = JSON.parse(
 const formControls = kits
   .find((k) => k.id === "foundation")
   .categories.find((c) => c.id === "forms").components.length;
-const axe = async (page) =>
-  (
-    await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
-      .analyze()
-  ).violations.map((v) => ({ id: v.id, nodes: v.nodes.map((n) => n.target) }));
 const pageOverflow = (page) =>
   page.evaluate(
     () =>
@@ -197,7 +186,7 @@ for (const width of [390, 1280])
       0,
     );
     await expect(thumb.locator("button").first()).not.toBeFocused();
-    expect(await axe(page)).toEqual([]);
+    await accessibility(page);
     expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
 
     await page.getByRole("link", { name: "Form controls" }).click();
@@ -212,7 +201,7 @@ for (const width of [390, 1280])
       .getByRole("button", { name: "Code" })
       .click();
     await expect(page.getByText("ComboboxExample.tsx")).toBeVisible();
-    expect(await axe(page)).toEqual([]);
+    await accessibility(page);
     expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
 
     await page
@@ -255,7 +244,7 @@ test("component code view shows the example source and is shareable", async ({
   await expect(code).toContainText("<Card");
   await page.goBack();
   await expect(page.locator('[data-mortar-preview="Card"]')).toBeVisible();
-  expect(await axe(page)).toEqual([]);
+  await accessibility(page);
 });
 
 for (const width of [390, 1280])
@@ -274,7 +263,7 @@ for (const width of [390, 1280])
     // Side by side on wide screens, stacked below the main column on narrow ones.
     if (width >= 1280) expect(side.x).toBeGreaterThan(main.x + main.width - 1);
     else expect(side.y).toBeGreaterThan(main.y + main.height - 1);
-    expect(await axe(page)).toEqual([]);
+    await accessibility(page);
     expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
   });
 
@@ -314,18 +303,34 @@ test("full-bleed section bands stay inside the preview frame", async ({
     expect(Math.abs(sample[i] - paper[i])).toBeLessThanOrEqual(2);
 });
 
-const templateIds = [
-  "saas-landing",
-  "pricing",
-  "about",
-  "project-workspace",
-  "settings",
-  "product-page",
-  "cart-page",
-  "category-page",
-  "checkout-page",
-  "order-history",
-];
+// The overview lists `templates` from playground/templates.tsx in order; read
+// their ids from its source so a new template is tested without editing this file.
+const templateIds = (() => {
+  const file = new URL("../../playground/templates.tsx", import.meta.url);
+  const tree = ts.createSourceFile(
+    file.pathname,
+    readFileSync(file, "utf8"),
+    ts.ScriptTarget.Latest,
+    true,
+  );
+  for (const statement of tree.statements)
+    if (ts.isVariableStatement(statement))
+      for (const d of statement.declarationList.declarations)
+        if (
+          d.name.getText() === "templates" &&
+          d.initializer &&
+          ts.isArrayLiteralExpression(d.initializer)
+        )
+          return d.initializer.elements.map((element) => {
+            const id = element.properties.find(
+              (p) => p.name?.getText() === "id",
+            );
+            if (!id || !ts.isStringLiteral(id.initializer))
+              throw Error("Every page template needs a literal string id.");
+            return id.initializer.text;
+          });
+  throw Error("playground/templates.tsx no longer exports a templates array.");
+})();
 for (const id of templateIds)
   for (const width of [390, 1280])
     test(`page template ${id} at ${width}`, async ({ page }) => {
@@ -338,7 +343,7 @@ for (const id of templateIds)
       await page.goto(`/?recipe=${id}&theme=${width < 900 ? "dark" : "light"}`);
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
       await expect(page.getByRole("main")).toHaveCount(1);
-      expect(await axe(page)).toEqual([]);
+      await accessibility(page);
       expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
       expect(errors).toEqual([]);
     });

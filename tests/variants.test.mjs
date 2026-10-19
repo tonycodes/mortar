@@ -1,11 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Button, Notice, EmptyState, Tabs, Pagination } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props, ...children) =>
-  renderToStaticMarkup(h(type, props, ...children));
+import {
+  h,
+  html,
+  Button,
+  Notice,
+  EmptyState,
+  Tabs,
+  Pagination,
+} from "./support/render.mjs";
 const icon = h("svg", { viewBox: "0 0 20 20" });
 
 test("Button keeps its default markup and adds sizes and icons", () => {

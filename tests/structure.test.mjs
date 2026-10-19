@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import {
+  h,
+  html,
   Breadcrumbs,
   PageHeading,
   Sidebar,
@@ -12,10 +12,7 @@ import {
   Input,
   ActionPanel,
   Banner,
-} from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props, ...children) =>
-  renderToStaticMarkup(h(type, props, ...children));
+} from "./support/render.mjs";
 
 test("Breadcrumbs mark the current page and PageHeading reuses them", () => {
   const items = [

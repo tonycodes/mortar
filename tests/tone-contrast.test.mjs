@@ -1,53 +1,57 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { contrast } from "./support/color.mjs";
+import { selectorBody, customProperties, readSource } from "./support/css.mjs";
 
-const css = readFileSync(new URL("../src/tokens.css", import.meta.url), "utf8");
-const block = (selector) => {
-  const start = css.indexOf(`${selector} {`);
-  assert.ok(start >= 0, `missing ${selector}`);
-  const body = css.slice(start, css.indexOf("\n}", start));
-  return Object.fromEntries(
-    [...body.matchAll(/--(m-[a-z-]+):\s*(#[0-9a-f]{6})/gi)].map((m) => [
-      m[1],
-      m[2],
-    ]),
-  );
+const css = await readSource("src/tokens.css");
+const layer = (selector) => {
+  const body = selectorBody(css, selector);
+  assert.notEqual(body, "", `missing ${selector}`);
+  return customProperties(body);
 };
-const light = block(":root");
-const dark = { ...light, ...block('[data-mortar-appearance="dark"]') };
-const luminance = (hex) => {
-  const [r, g, b] = [1, 3, 5]
-    .map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
-    .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
-  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+// Later rules of equal specificity win, so green overrides dark appearance and
+// green dark (two attributes) overrides both.
+const root = layer(":root");
+const dark = layer('[data-mortar-appearance="dark"]');
+const green = layer('[data-mortar-brand="green"]');
+const greenDark = layer(
+  '[data-mortar-brand="green"][data-mortar-appearance="dark"]',
+);
+const themes = {
+  "neutral light": { ...root },
+  "neutral dark": { ...root, ...dark },
+  "green light": { ...root, ...green },
+  "green dark": { ...root, ...dark, ...green, ...greenDark },
 };
-const contrast = (a, b) => {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
-};
+
 const tones = ["success", "warning", "danger", "info"];
+const pairs = [
+  // [foreground, background, minimum]
+  ...tones.flatMap((tone) => [
+    ...["paper", "surface", "sunken"].map((bg) => [tone, bg, 4.5]),
+    ...["inv-paper", "inv-surface"].map((bg) => [`inv-${tone}`, bg, 4.5]),
+  ]),
+  ["on-primary", "primary", 4.5],
+  ["on-accent", "accent", 4.5],
+  ["link", "paper", 4.5],
+  ["link", "surface", 4.5],
+  ["focus", "paper", 3],
+  ["inv-on-primary", "inv-primary", 4.5],
+  ["inv-on-accent", "inv-accent", 4.5],
+  ["inv-link", "inv-paper", 4.5],
+  ["inv-link", "inv-surface", 4.5],
+  ["inv-focus", "inv-paper", 3],
+];
 
-for (const [mode, tokens] of [
-  ["light", light],
-  ["dark", dark],
-])
-  test(`status tones meet 4.5:1 on every ${mode} background, including inverse bands`, () => {
+for (const [theme, tokens] of Object.entries(themes))
+  test(`status, brand and inverse tokens meet contrast minimums in ${theme}`, () => {
     const failures = [];
-    for (const tone of tones) {
-      for (const bg of ["paper", "surface", "sunken"]) {
-        const fg = tokens[`m-${tone}`];
-        assert.ok(fg, `--m-${tone} is defined in ${mode}`);
-        const ratio = contrast(fg, tokens[`m-${bg}`]);
-        if (ratio < 4.5) failures.push(`${tone} on ${bg}: ${ratio.toFixed(2)}`);
-      }
-      for (const bg of ["inv-paper", "inv-surface"]) {
-        const fg = tokens[`m-inv-${tone}`];
-        assert.ok(fg, `--m-inv-${tone} is defined in ${mode}`);
-        const ratio = contrast(fg, tokens[`m-${bg}`]);
-        if (ratio < 4.5)
-          failures.push(`inverse ${tone} on ${bg}: ${ratio.toFixed(2)}`);
-      }
+    for (const [fg, bg, minimum] of pairs) {
+      assert.ok(tokens[`m-${fg}`], `--m-${fg} is defined in ${theme}`);
+      assert.ok(tokens[`m-${bg}`], `--m-${bg} is defined in ${theme}`);
+      const ratio = contrast(tokens[`m-${fg}`], tokens[`m-${bg}`]);
+      if (ratio < minimum)
+        failures.push(`${fg} on ${bg}: ${ratio.toFixed(2)} < ${minimum}`);
     }
     assert.deepEqual(failures, []);
   });

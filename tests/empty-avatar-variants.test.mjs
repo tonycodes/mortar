@@ -1,11 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
-import { Avatar, EmptyState } from "../dist/index.js";
-const h = React.createElement;
-const html = (type, props, ...children) =>
-  renderToStaticMarkup(h(type, props, ...children));
+import { h, html, Avatar, EmptyState } from "./support/render.mjs";
 
 test("EmptyState default markup is unchanged", () => {
   assert.equal(
