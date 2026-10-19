@@ -37,6 +37,188 @@
   [data-mortar] :where(h1, h2, h3, p, figure, dl) {
     margin: 0;
   }
+
+  /* Shared patterns. Zero specificity, so every component rule can override them. */
+  /* List resets for every component list. */
+  :where(
+    .m-breadcrumbs ol,
+    .m-activity,
+    .m-logo-cloud ul,
+    .m-pricing-grid ul,
+    .m-avatar-group,
+    .m-toaster ol,
+    .m-stacked-list ul,
+    .m-bento,
+    .m-post-list,
+    .m-team-grid,
+    .m-steps,
+    .m-file-tree ul,
+    .m-link-cards,
+    .m-process-steps,
+    .m-check-list,
+    .m-chat-log,
+    .m-chat-suggestions,
+    .m-choice-options,
+    .m-grid-list,
+    .m-calendar-events,
+    .m-flyout-panel ul,
+    .m-product-list,
+    .m-cart,
+    .m-order-items,
+    .m-calendar-allday,
+    .m-calendar-slots,
+    .m-icon-links,
+    .m-heading-meta,
+    .m-attachments,
+    .m-progress-steps ol,
+    .m-tab-nav ul,
+    .m-product-swatches
+  ) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Icons: a host sets --m-icon-size (default --m-icon); every svg inside it follows.
+     Hosts reset the size so a nested host never inherits a larger parent size. */
+  :where(
+    .m-select-control,
+    .m-button-group-icon,
+    .m-choice-control,
+    .m-combobox-toggle,
+    .m-choice-leading,
+    .m-nav-icon,
+    .m-banner > button,
+    .m-input-group > .m-input-icon,
+    .m-calendar-nav,
+    .m-flyout-trigger,
+    .m-flyout-icon,
+    .m-rating,
+    .m-stars,
+    .m-button-icon,
+    .m-menu-icon,
+    .m-notice-dismiss,
+    .m-empty-icon,
+    .m-tab-icon,
+    .m-icon-links,
+    .m-metric-icon,
+    .m-heading-meta,
+    .m-palette-icon,
+    .m-attachment-icon,
+    .m-progress-steps[data-variant="circles"] .m-progress-step-marker,
+    .m-feature-icon[data-marker="icon"],
+    .m-check-list,
+    .m-sort-button,
+    .m-grid-list[data-actions="split"] .m-grid-list-actions,
+    .m-metrics span[data-trend]
+  ) {
+    --m-icon-size: var(--m-icon);
+  }
+  :where(
+      .m-select-control,
+      .m-button-group-icon,
+      .m-choice-control,
+      .m-combobox-toggle,
+      .m-choice-leading,
+      .m-nav-icon,
+      .m-banner > button,
+      .m-input-group > .m-input-icon,
+      .m-calendar-nav,
+      .m-flyout-trigger,
+      .m-flyout-icon,
+      .m-rating,
+      .m-stars,
+      .m-button-icon,
+      .m-menu-icon,
+      .m-notice-dismiss,
+      .m-empty-icon,
+      .m-tab-icon,
+      .m-icon-links,
+      .m-metric-icon,
+      .m-heading-meta,
+      .m-palette-icon,
+      .m-attachment-icon,
+      .m-progress-steps[data-variant="circles"] .m-progress-step-marker,
+      .m-feature-icon[data-marker="icon"],
+      .m-check-list,
+      .m-sort-button,
+      .m-grid-list[data-actions="split"] .m-grid-list-actions,
+      .m-metrics span[data-trend]
+    )
+    svg {
+    width: var(--m-icon-size);
+    height: var(--m-icon-size);
+  }
+  /* Borderless buttons: one reset; each component adds size, colour and type. */
+  :where(
+    .m-chip button,
+    .m-code-bar [role="tab"],
+    .m-code-copy,
+    .m-sort-button,
+    .m-combobox-toggle,
+    .m-banner > button,
+    .m-calendar-nav button,
+    .m-calendar td > button,
+    .m-flyout-trigger,
+    .m-cart-remove,
+    .m-filter-clear,
+    .m-menu :is(button, a),
+    .m-notice-dismiss,
+    .m-pagination-pages button
+  ) {
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  /* Ghost icon buttons (dismiss, previous/next, toggles): one size and hover. */
+  :where(
+    .m-banner > button,
+    .m-calendar-nav button,
+    .m-notice-dismiss,
+    .m-combobox-toggle
+  ) {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: var(--m-icon-button, 32px);
+    height: var(--m-icon-button, 32px);
+    min-width: var(--m-touch-target);
+    min-height: var(--m-touch-target);
+    border-radius: var(--m-radius-sm);
+  }
+  /* Class specificity: the host reset gives buttons color: inherit. */
+  .m-banner > button,
+  .m-calendar-nav button {
+    color: var(--m-secondary);
+  }
+  :where(
+    .m-banner > button,
+    .m-calendar-nav button,
+    .m-notice-dismiss,
+    .m-combobox-toggle
+  ):hover {
+    background: var(--m-sunken);
+  }
+  /* Card surface: bordered, large radius, surface background. */
+  :where(
+    .m-dialog-panel,
+    .m-metrics,
+    .m-data-table,
+    .m-toast,
+    .m-palette,
+    .m-stacked-list,
+    .m-card,
+    .m-action-panel,
+    .m-grid-list > li,
+    .m-flyout-panel,
+    .m-order,
+    .m-calendar-timegrid,
+    .m-product-list[data-variant="card"] > li,
+    .m-mock-window
+  ) {
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+  }
   .m-button {
     display: inline-flex;
     align-items: center;
@@ -188,8 +370,6 @@
     position: absolute;
     inset-inline-end: var(--m-pad);
     top: 50%;
-    width: 16px;
-    height: 16px;
     transform: translateY(-50%);
     color: var(--m-secondary);
     pointer-events: none;
@@ -214,22 +394,32 @@
     background: var(--m-sunken);
     cursor: not-allowed;
   }
-  .m-error,
-  .m-field .m-error,
-  .m-tone-danger {
-    color: var(--m-danger);
+  /* Tone: each status value sets --m-tone once; components read it. */
+  :where(.m-tone-neutral) {
+    --m-tone: var(--m-secondary);
   }
-  .m-tone-neutral {
-    color: var(--m-secondary);
+  :where([data-tone="success"], .m-tone-success) {
+    --m-tone: var(--m-success);
   }
-  .m-tone-success {
-    color: var(--m-success);
+  :where([data-tone="warning"], .m-tone-warning) {
+    --m-tone: var(--m-warning);
   }
-  .m-tone-warning {
-    color: var(--m-warning);
+  :where([data-tone="danger"], .m-tone-danger, .m-error) {
+    --m-tone: var(--m-danger);
   }
-  .m-tone-info {
-    color: var(--m-info);
+  :where([data-tone="info"], .m-tone-info) {
+    --m-tone: var(--m-info);
+  }
+  :is(
+    .m-error,
+    .m-tone-neutral,
+    .m-tone-success,
+    .m-tone-warning,
+    .m-tone-danger,
+    .m-tone-info
+  ),
+  .m-field .m-error {
+    color: var(--m-tone);
   }
   .m-choice {
     display: flex;
@@ -340,33 +530,115 @@
     border-radius: 6px;
     padding: 5px 10px;
     cursor: pointer;
-    min-height: 28px;
+    min-height: max(28px, var(--m-touch-target));
   }
   .m-segmented [aria-pressed="true"] {
     background: var(--m-surface);
     color: var(--m-ink);
     border-color: var(--m-line);
   }
+  /* Tabs, styled once for Tabs ([role=tab] buttons) and TabNav (links between pages).
+     A tab is selected by aria-selected (Tabs) or aria-current (TabNav). */
   .m-tabs {
+    --m-tab-gap: 24px;
+    --m-tab-pad-x: 0px;
+  }
+  .m-tab-nav {
+    --m-tab-gap: 20px;
+    --m-tab-pad-x: 4px;
+    min-width: 0;
+  }
+  :is(.m-tabs, .m-tab-nav ul) {
     display: flex;
-    gap: 24px;
+    gap: var(--m-tab-gap);
     border-bottom: 1px solid var(--m-line);
     overflow-x: auto;
   }
-  .m-tabs button {
+  :is(.m-tabs [role="tab"], .m-tab-nav a) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--m-touch-target);
+    padding: 12px var(--m-tab-pad-x);
     border: 0;
     border-bottom: 2px solid transparent;
     background: none;
     color: var(--m-muted);
     font-size: var(--m-font-size);
     font-weight: 600;
-    padding: 12px 0;
+    text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
   }
-  .m-tabs [aria-selected="true"] {
+  :is(.m-tabs [role="tab"], .m-tab-nav a):hover:not(
+      [aria-selected="true"],
+      [aria-current="page"]
+    ) {
+    color: var(--m-ink);
+    border-bottom-color: var(--m-line);
+  }
+  .m-tab-nav a:focus-visible {
+    outline-offset: -2px;
+  }
+  :is(.m-tabs [aria-selected="true"], .m-tab-nav a[aria-current="page"]) {
     color: var(--m-link);
     border-bottom-color: var(--m-link);
+  }
+  :is(.m-tabs[data-variant="pills"], .m-tab-nav[data-variant="pills"] ul) {
+    gap: 4px;
+    border-bottom: 0;
+  }
+  :is(
+    .m-tabs[data-variant="pills"] [role="tab"],
+    .m-tab-nav[data-variant="pills"] a
+  ) {
+    padding: 8px 12px;
+    border: 0;
+    border-radius: var(--m-radius);
+  }
+  :is(
+    .m-tabs[data-variant="pills"] [aria-selected="true"],
+    .m-tab-nav[data-variant="pills"] a[aria-current="page"]
+  ) {
+    background: var(--m-selected);
+  }
+  :is(
+    .m-tabs[data-full-width]:not([data-variant]),
+    .m-tab-nav[data-full-width]:not([data-variant]) ul
+  ) {
+    gap: 0;
+  }
+  .m-tab-nav[data-full-width] li {
+    display: flex;
+    flex: 1;
+  }
+  :is(.m-tabs[data-full-width] [role="tab"], .m-tab-nav[data-full-width] a) {
+    flex: 1;
+    justify-content: center;
+  }
+  .m-tab-icon {
+    display: inline-flex;
+  }
+  /* Count pills: tab counts and the active-filter count share one shape. */
+  :is(.m-tab-count, .m-filter-active) {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: var(--m-radius-full);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-tab-count {
+    background: var(--m-sunken);
+    color: var(--m-secondary);
+  }
+  :is(.m-tabs [aria-selected="true"], .m-tab-nav a[aria-current="page"])
+    .m-tab-count,
+  .m-filter-active {
+    background: var(--m-primary);
+    color: var(--m-on-primary);
   }
   :where(.m-tabs) ~ [role="tabpanel"]:not([hidden]) {
     padding-top: 24px;
@@ -416,9 +688,6 @@
     flex-shrink: 0;
     width: 100%;
     max-width: 520px;
-    border: 1px solid var(--m-line);
-    border-radius: var(--m-radius-lg);
-    background: var(--m-surface);
     padding: 24px;
     box-shadow: var(--m-float);
   }
@@ -630,9 +899,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
     font-size: 13px;
     color: var(--m-muted);
   }
@@ -654,9 +920,6 @@
   .m-metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    border: 1px solid var(--m-line);
-    border-radius: var(--m-radius-lg);
-    background: var(--m-surface);
     overflow: hidden;
   }
   .m-metrics > div {
@@ -684,9 +947,6 @@
     font: 12px var(--m-mono);
   }
   .m-data-table {
-    border: 1px solid var(--m-line);
-    border-radius: var(--m-radius-lg);
-    background: var(--m-surface);
     overflow: hidden;
     min-width: 0;
   }
@@ -703,30 +963,104 @@
   .m-table-scroll {
     overflow-x: auto;
   }
-  .m-data-table table {
+  /* One table base for DataTable, Table, PlanComparison and prose tables. Each sets
+     its cell padding; DataTable and Table follow density through --m-row-pad. */
+  .m-data-table {
+    --m-cell-pad-y: var(--m-row-pad);
+    --m-cell-pad-x: var(--m-row-pad);
+  }
+  .m-data-table[data-density="compact"] {
+    --m-cell-pad-y: 6px;
+    --m-cell-pad-x: 10px;
+  }
+  .m-table {
+    --m-cell-pad-y: calc(var(--m-row-pad) - 4px);
+    --m-cell-pad-x: var(--m-row-pad);
+  }
+  .m-comparison {
+    --m-cell-pad-y: 14px;
+    --m-cell-pad-x: 16px;
+  }
+  .m-prose {
+    --m-cell-pad-y: 10px;
+    --m-cell-pad-x: 14px;
+  }
+  :is(.m-data-table, .m-table, .m-comparison) table,
+  .m-prose
+    table:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
     border-collapse: collapse;
-    width: 100%;
-    font-size: var(--m-font-size);
+    font-size: 14px;
     text-align: left;
   }
-  .m-data-table :is(th, td) {
-    padding: var(--m-row-pad);
+  :is(.m-data-table, .m-table, .m-comparison) table {
+    width: 100%;
+  }
+  .m-data-table table {
+    font-size: var(--m-font-size);
+  }
+  :is(.m-data-table, .m-table, .m-comparison) :is(th, td),
+  .m-prose
+    :is(th, td):where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    padding: var(--m-cell-pad-y) var(--m-cell-pad-x);
     border-bottom: 1px solid var(--m-line);
+  }
+  .m-data-table :is(th, td) {
     white-space: nowrap;
   }
-  .m-data-table thead th {
+  .m-table :is(th, td),
+  .m-prose
+    :is(th, td):where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    vertical-align: top;
+  }
+  :is(.m-data-table, .m-table) thead th,
+  .m-prose
+    thead
+    th:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
     color: var(--m-muted);
     font-size: 12px;
     font-weight: 600;
+  }
+  .m-data-table thead th {
     background: var(--m-paper);
   }
-  .m-data-table tbody th {
+  .m-table thead th,
+  .m-prose
+    thead
+    th:where(
+      :not(
+        :is([class^="m-"], [class*=" m-"]),
+        .m-prose :is([class^="m-"], [class*=" m-"]) *
+      )
+    ) {
+    white-space: nowrap;
+  }
+  :is(.m-data-table, .m-table) tbody th {
     font-weight: 600;
   }
   .m-data-table tr:last-child :is(th, td) {
     border-bottom: 0;
   }
-  .m-data-table [data-align="right"] {
+  :is(.m-data-table, .m-table) [data-align="right"] {
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
@@ -766,11 +1100,7 @@
     font-size: 13px;
     color: var(--m-muted);
   }
-  .m-activity {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
+
   .m-activity li {
     display: flex;
     align-items: start;
@@ -976,9 +1306,7 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 48px;
-    list-style: none;
     padding: 24px 0;
-    margin: 0;
     font-size: 22px;
     font-weight: 600;
   }
@@ -1034,8 +1362,6 @@
     font-size: 13px;
   }
   .m-pricing-grid ul {
-    list-style: none;
-    padding: 0;
     margin: 0 0 28px;
     flex: 1;
   }
@@ -1207,7 +1533,7 @@
       grid-column: 1/-1;
     }
   }
-  @media (max-width: 540px) {
+  @media (max-width: 560px) {
     .m-input-group input,
     .m-field select,
     .m-field textarea {
@@ -1281,12 +1607,6 @@
       :is(.m-calendar [aria-current="date"], .m-radio-card:has(:checked)) {
       outline: 2px solid CanvasText;
       outline-offset: -2px;
-    }
-  }
-  @media (pointer: coarse) {
-    .m-segmented button,
-    .m-tabs button {
-      min-height: 44px;
     }
   }
 }

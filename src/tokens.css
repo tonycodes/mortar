@@ -44,6 +44,8 @@
   --m-swatch-ring: rgb(0 0 0 / 0.12);
   --m-icon: 16px;
   --m-focus-offset: 3px;
+  /* Minimum hit size: 0 for fine pointers, 44px for coarse pointers (below). */
+  --m-touch-target: 0px;
   /* Stacking scale: sticky chrome < dialogs < popovers < toasts < skip link. */
   --m-z-sticky: 30;
   --m-z-overlay: 100;
@@ -181,6 +183,7 @@
 @media (pointer: coarse) {
   [data-mortar] {
     --m-control: 44px;
+    --m-touch-target: 44px;
   }
 }
 /* Inverse tone: any Mortar section root with data-tone="inverse" (sections, CTA,
