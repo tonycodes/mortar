@@ -14,7 +14,7 @@
     "props": {
       "title": "string",
       "description": "string",
-      "posts": "{ href; title; excerpt; date; dateLabel; category?; image? }[]",
+      "posts": "{ href; title; excerpt; date; dateLabel; category?; image?; featured?: boolean }[] (a featured post spans the row with its image beside a larger title; it stacks on narrow screens)",
       "action": "LinkAction",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",

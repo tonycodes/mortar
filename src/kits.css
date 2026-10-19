@@ -6223,3 +6223,433 @@
     }
   }
 }
+
+/* Marketing chrome variants: centred header, full-screen menu panel, flyout
+   columns and full width, centred and newsletter footers, floating and bottom
+   banners, newsletter panel, contact media and offices, team layouts,
+   featured posts and testimonials. */
+@layer components {
+  /* Header: links at the start, the brand centred, actions at the end. */
+  .m-marketing-header[data-layout="center"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  .m-marketing-header[data-layout="center"] > nav {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .m-marketing-header[data-layout="center"] > .m-brand {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .m-marketing-header[data-layout="center"] > .m-actions {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: end;
+    margin-left: 0;
+  }
+
+  /* Full-screen menu panel for narrow screens. */
+  .m-marketing-panel {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 20px 24px;
+    overflow-y: auto;
+    background: var(--m-paper);
+    color: var(--m-ink);
+  }
+  .m-marketing-panel .m-dialog-heading {
+    margin: 0;
+  }
+  .m-marketing-panel .m-dialog-heading .m-brand {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .m-marketing-panel-nav {
+    display: flex;
+    flex-direction: column;
+    padding-block: 8px;
+    border-block: 1px solid var(--m-line);
+  }
+  .m-marketing-panel-nav > a,
+  .m-marketing-panel-nav summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: max(44px, var(--m-touch-target));
+    padding: 8px 4px;
+    border-radius: var(--m-radius);
+    color: var(--m-ink);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    list-style: none;
+  }
+  .m-marketing-panel-nav summary::-webkit-details-marker {
+    display: none;
+  }
+  .m-marketing-panel-nav summary svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 120ms;
+  }
+  .m-marketing-panel-nav details[open] > summary svg {
+    transform: rotate(180deg);
+  }
+  .m-marketing-panel-nav details > a {
+    display: flex;
+    align-items: center;
+    min-height: max(40px, var(--m-touch-target));
+    padding: 6px 4px 6px 16px;
+    border-radius: var(--m-radius);
+    color: var(--m-secondary);
+    text-decoration: none;
+  }
+  .m-marketing-panel-nav :is(a, summary):hover {
+    background: var(--m-sunken);
+  }
+  .m-marketing-panel > .m-actions > .m-button {
+    flex: 1;
+  }
+
+  /* Flyout: two columns, or a panel as wide as the viewport allows. The
+     anchor keeps it inside the viewport padding. */
+  .m-flyout-panel[data-layout="columns"] {
+    width: min(640px, calc(100vw - 32px));
+  }
+  .m-flyout-panel[data-layout="columns"] ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .m-flyout-panel[data-layout="full"] {
+    width: min(1248px, calc(100vw - 32px));
+  }
+  .m-flyout-panel[data-layout="full"] ul {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 8px;
+    padding: 16px;
+  }
+
+  /* Footer: centred brand, link row and social links. */
+  .m-footer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+  .m-footer-center .m-brand {
+    font-size: 15px;
+  }
+  .m-footer-center > p {
+    max-width: 480px;
+    margin: 0;
+    color: var(--m-muted);
+    font-size: 14px;
+  }
+  .m-footer-center > nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 28px;
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  .m-footer-center > nav a {
+    color: var(--m-muted);
+    text-decoration: none;
+  }
+  .m-footer-center > nav a:hover {
+    color: var(--m-ink);
+  }
+  .m-footer-center > .m-icon-links {
+    justify-content: center;
+    margin: 0;
+  }
+  .m-footer[data-layout="center"] .m-footer-bottom {
+    justify-content: center;
+    text-align: center;
+    margin-top: 40px;
+  }
+  /* A newsletter in the footer drops its section padding and rule. */
+  .m-footer-newsletter {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-footer-newsletter .m-newsletter {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-top: 0;
+  }
+  .m-footer-newsletter .m-newsletter .m-section-title {
+    font-size: 15px;
+    letter-spacing: 0;
+  }
+  .m-footer-newsletter + .m-footer-bottom {
+    margin-top: 32px;
+  }
+
+  /* Banner: an inset floating panel, and a bar fixed to the viewport bottom. */
+  .m-banner[data-variant="floating"] {
+    width: calc(100% - 32px);
+    max-width: 960px;
+    margin: 16px auto;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    box-shadow: var(--m-float);
+  }
+  .m-banner[data-placement="bottom"] {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: var(--m-z-sticky);
+    margin: 0;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--m-line);
+    border-bottom: 0;
+  }
+  .m-banner[data-placement="bottom"][data-variant="floating"] {
+    inset-inline: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    width: auto;
+    margin-inline: auto;
+    padding-bottom: 8px;
+    border: 1px solid var(--m-line);
+  }
+
+  /* Newsletter: centred copy above the form, and a sunken panel. */
+  .m-newsletter[data-layout="center"] {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+  .m-newsletter[data-layout="center"] > div {
+    max-width: 560px;
+  }
+  .m-newsletter[data-layout="center"] form {
+    width: 100%;
+    max-width: 480px;
+    text-align: start;
+  }
+  .m-newsletter[data-variant="panel"] {
+    width: calc(100% - 64px);
+    max-width: 1216px;
+    margin: 32px auto;
+    padding: 48px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+  }
+
+  /* Contact: an image beside the copy and form, and office locations. */
+  .m-contact[data-media="true"] {
+    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .m-contact-media {
+    min-height: 320px;
+    border-radius: var(--m-radius-lg);
+    background: var(--m-sunken);
+    overflow: hidden;
+  }
+  .m-contact-media > :is(img, svg, video, picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .m-contact-body {
+    display: grid;
+    gap: 32px;
+    align-content: start;
+  }
+  .m-contact-body dl {
+    margin-top: 24px;
+  }
+  .m-contact-offices {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 32px 24px;
+    margin: 0;
+    padding: 40px 0 0;
+    border-top: 1px solid var(--m-line);
+    list-style: none;
+  }
+  /* Without a form, the offices sit beside the intro. */
+  .m-contact:not([data-media]):not(:has(.m-contact-form)) > .m-contact-offices {
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-self: start;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .m-contact-offices :is(h3, h4, h5, h6) {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .m-contact-offices address {
+    color: var(--m-secondary);
+    font-size: 14px;
+    font-style: normal;
+    line-height: 1.6;
+  }
+
+  /* Team: tall portraits, and portraits beside the details. */
+  .m-team-grid[data-layout="large"] {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 48px 32px;
+  }
+  .m-team-grid[data-layout="large"] .m-team-portrait {
+    aspect-ratio: 4 / 5;
+  }
+  .m-team-grid[data-layout="large"] strong {
+    font-size: 17px;
+  }
+  .m-team-grid[data-layout="list"] {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+    gap: 40px 32px;
+  }
+  .m-team-grid[data-layout="list"] > li {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    grid-template-rows: repeat(4, auto) 1fr;
+    gap: 2px 24px;
+    align-items: start;
+  }
+  .m-team-grid[data-layout="list"] > li > .m-team-portrait {
+    grid-row: 1 / -1;
+    margin: 0;
+  }
+  .m-team-grid[data-layout="list"] > li > :not(.m-team-portrait) {
+    grid-column: 2;
+  }
+
+  /* Posts: a featured post spans the row with its image beside the text. */
+  .m-post-list > li[data-featured="true"] {
+    grid-column: 1 / -1;
+  }
+  .m-post-list > li[data-featured="true"] > article:has(> .m-post-image) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-rows: 1fr repeat(3, auto) 1fr;
+    column-gap: 48px;
+  }
+  .m-post-list > li[data-featured="true"] .m-post-image {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    margin: 0;
+  }
+  .m-post-list > li[data-featured="true"] > article > :not(.m-post-image) {
+    grid-column: 2;
+  }
+  .m-post-list > li[data-featured="true"] .m-post-meta {
+    grid-row: 2;
+  }
+  .m-post-list > li[data-featured="true"] .m-post-title {
+    grid-row: 3;
+    font-size: clamp(22px, 2.6vw, 32px);
+    letter-spacing: -0.025em;
+  }
+  .m-post-list > li[data-featured="true"] article > p:last-child {
+    grid-row: 4;
+    font-size: 16px;
+  }
+
+  /* Testimonials: an equal-height grid, and a larger featured quote. */
+  .m-testimonial-grid[data-layout="grid"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    grid-auto-flow: dense;
+    gap: 16px;
+    columns: auto;
+  }
+  .m-testimonial-grid[data-layout="grid"] figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+  }
+  .m-testimonial-grid figure[data-featured="true"] {
+    column-span: all;
+    background: var(--m-sunken);
+  }
+  .m-testimonial-grid figure[data-featured="true"] blockquote {
+    font-size: clamp(18px, 2vw, 22px);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 900px) {
+    /* Menu, brand and actions keep one row; the brand takes the spare width. */
+    .m-marketing-header[data-layout="center"] {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+    .m-marketing-header[data-layout="center"] > .m-brand {
+      justify-self: center;
+    }
+    .m-marketing-header[data-layout="center"] > .m-actions .m-button {
+      white-space: nowrap;
+    }
+    .m-marketing-header[data-layout="center"] > .m-menu-trigger {
+      grid-column: 1;
+      grid-row: 1;
+      justify-self: start;
+      margin-left: 0;
+    }
+    .m-marketing-header[data-layout="center"] > nav {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+    .m-contact[data-media="true"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-contact-media {
+      min-height: 0;
+      aspect-ratio: 16 / 9;
+    }
+    .m-contact:not([data-media]):not(:has(.m-contact-form))
+      > .m-contact-offices {
+      grid-column: 1;
+      grid-row: auto;
+    }
+    .m-post-list > li[data-featured="true"] > article:has(> .m-post-image) {
+      display: block;
+    }
+    .m-post-list > li[data-featured="true"] .m-post-image {
+      margin-bottom: 18px;
+    }
+  }
+  @media (min-width: 901px) {
+    .m-testimonial-grid[data-layout="grid"] figure[data-featured="true"] {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+  }
+  @media (max-width: 560px) {
+    .m-flyout-panel[data-layout="columns"] ul {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-contact-offices,
+    .m-contact:not([data-media]):not(:has(.m-contact-form))
+      > .m-contact-offices {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .m-newsletter[data-variant="panel"] {
+      width: calc(100% - 32px);
+      padding: 32px 20px;
+    }
+    .m-team-grid[data-layout="list"] > li {
+      grid-template-columns: 88px minmax(0, 1fr);
+      column-gap: 16px;
+    }
+  }
+}

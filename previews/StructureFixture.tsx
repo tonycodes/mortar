@@ -127,6 +127,7 @@ const agendaMeetings: UI.CalendarEvent[] = [
 
 export function StructureCase({ name }: { name: string }) {
   const [dismissed, setDismissed] = useState(false);
+  const [notice, setNotice] = useState(true);
   const [day, setDay] = useState("2026-10-20");
   const [meetingDay, setMeetingDay] = useState("2026-10-21");
   const [view, setView] = useState<UI.CalendarView>("week");
@@ -396,6 +397,40 @@ export function StructureCase({ name }: { name: string }) {
           <UI.Banner label="Maintenance notice" tone="default">
             Scheduled maintenance on Sunday from 02:00 to 03:00 UTC.
           </UI.Banner>
+          <UI.Banner
+            label="Event notice"
+            variant="floating"
+            action={{ label: "Register", href: "#register" }}
+          >
+            Join the spring product webinar on 4 November.
+          </UI.Banner>
+          {/* Layout containment keeps the fixed banner inside this example frame. */}
+          <div
+            className="m-stack"
+            style={{ contain: "layout", minHeight: 160 }}
+          >
+            <p>
+              Page content stays reachable: the bottom banner can always be
+              dismissed.
+            </p>
+            {notice ? (
+              <UI.Banner
+                label="Cookie notice"
+                placement="bottom"
+                variant="floating"
+                tone="default"
+                dismissLabel="Dismiss cookie notice"
+                onDismiss={() => setNotice(false)}
+                action={{ label: "Cookie settings", href: "#cookies" }}
+              >
+                We use essential cookies only.
+              </UI.Banner>
+            ) : (
+              <UI.Button variant="secondary" onClick={() => setNotice(true)}>
+                Show cookie notice
+              </UI.Button>
+            )}
+          </div>
           <output aria-label="Banner state">
             {dismissed ? "dismissed" : "shown"}
           </output>
