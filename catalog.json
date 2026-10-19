@@ -130,8 +130,8 @@
         "probe": "link"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "3c63c963460e8b081c05f39d959200c8dede598c69e7fae84cb88d2080a42e4d"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "3ad98f5d5e0fbbdbfee2818b92f741ea6d5990e68ba0317dd70d8279d693af99"
       }
     },
     {
@@ -202,8 +202,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "e927db8918e5c2358be31593490d0ad3c391893a85fd2be235bc2c6d8c43fba2"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "3e7429bba9adc3c700c869bb19063a180e31ef37d98d369979de7657220d5c48"
       }
     },
     {
@@ -252,8 +252,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "eaf81fe390d32e1f4da4494729a39981f2e1b9061430b7edb8dfd1041f0dc772"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "fccd4ef685663e46a4acec7e608912b186b2118e8eba692472fdd9ac2127a33d"
       }
     },
     {
@@ -281,15 +281,31 @@
           "description": "ReactNode",
           "paramsLabel": "string",
           "params": "{ name; type; required?; description }[]",
-          "examples": "ReactNode"
+          "examples": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); the parameters heading sits one level below"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "ReactNode",
             "required": false
           },
           "examples": {
             "type": "ReactNode",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "method": {
@@ -328,8 +344,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "bcf9ae9f140a7b9233712dbdffa760f2877179948112ee15c6a27d008c516df2"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "cbf9f506c4c2587e74165ab86f62d5f85a0ddd09e4386c5b4e46250745c47671"
       }
     },
     {
@@ -426,8 +442,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "f7f54c2f55411ad1c69e8a0bfb08afdbe4966d16a51312230d5544f4b5fa1941"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "dea17ba1b9643cbbd7d7d8786c5dd11ea61b6168f1bf0e55e70aecec9886a5e9"
       }
     },
     {
@@ -477,8 +493,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "c5e264d8fb144590c96b9c050da792a7e11cd6ee555a92087ea7a58c1256a561",
-        "preview": "8cf59f0859f96ec7af969a531a4d754e6e1aac0d9f1696362d08cdd13febdb6d"
+        "source": "0f41c4d9ab7c3185eebe91d14b249dd08b1967835ac65d30f7572071515b49c2",
+        "preview": "0a0ed4874402ed77e52e8fcec893d79c3818c3ee4a94bfae5371db98d916d3da"
       }
     },
     {
@@ -528,8 +544,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "ba7715f2d01d9a83ac136ff589c2953167e66e08fefc7c12d154eaa386bac7f4"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "16b1300389e04ac7175086c070a9d7fa4597126e710da79b76bc3957ca47e985"
       }
     },
     {
@@ -584,8 +600,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "25b4a59f8b8b8ad1f3d354850f861c9a805ddd60a80e9d0ff5c0c9a9b8b0b19f"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "8afa545519a3a53d185a5bdee4e45ffee4b769401c8107a3ac5bac1ca43cd40f"
       }
     },
     {
@@ -663,8 +679,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "6f07007da56a265e8c35440f72ae9e37d195e7d3a2e3b1cee43ea7092c8d77d5"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "ea64d24d44e34de7692f63d8ca42d58a387fc62658905aa4373cc194753be05e"
       }
     },
     {
@@ -714,8 +730,8 @@
         "states": []
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "377203f0d6339f704a164549383892b7f100cab72816eb2fac27886a5f03c6cc"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "5d893d1c63d74ec3c3e1e41f604a981ac15002557e28c0bdd94a15cdb64335ca"
       }
     },
     {
@@ -788,8 +804,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d279d4fb0159203cdad7ba907a47c2495957963dbfd238dbf082214bb7cd0c8e",
-        "preview": "46ef8e58811c293772247f13f60e7ab1324ca5d717a321346dd072e9726bf573"
+        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
+        "preview": "1e3bed8787252117e89384dd2e7813b8f166ecf39825bf1b08e1d47957a49eb7"
       }
     },
     {
@@ -814,10 +830,16 @@
           "eyebrow": "string",
           "title": "string",
           "description": "string",
-          "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; inverse?: boolean }[]",
-          "headingLevel": "2 | 3 | 4"
+          "items": "{ title; description; visual?: ReactNode; span?: 1 | 2; tone?: \"default\" | \"muted\" | \"inverse\" }[]",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); tile titles sit one level below",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -827,12 +849,16 @@
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
           },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "items": {
-            "type": "{ title: string; description: string; visual?: ReactNode; span?: 2 | 1 | undefined; inverse?: boolean | undefined; }[]",
+            "type": "{ title: string; description: string; visual?: ReactNode; span?: 2 | 1 | undefined; tone?: SectionTone | undefined; }[]",
             "required": true
           },
           "title": {
@@ -854,8 +880,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "7901db29050ee2896cfce3a81fa50df10672ad09ea8a88d3678333485317ca07"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "216f8d2dcd22489e8ea47dcffd2c0e09fb34346d84926aa09693d763e22d1973"
       }
     },
     {
@@ -911,8 +937,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "9ff801cf2a1fe90932b2f94690b4d1c2dcd5edcbfba3c419f927982c6fa0f47f"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "ee84bc43d0e10bae6050e7290745f20edc47529820b07d301d169d7631347ff7"
       }
     },
     {
@@ -962,8 +988,8 @@
         "states": []
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "5403dca2630b0e65712dc757a3d92e67dea8854f3c12a3dfe71453eb6a83379d"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "d94eeb817b90f31d66518813499625c3c090d48adcad718d32920b8d2aa80c97"
       }
     },
     {
@@ -1043,8 +1069,8 @@
         "probe": "button"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "4fe8715f3e924b6f74345b248d64e3953a6b9fc8c5b36a67dfec267b6bc27df9"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "b8fd7b33a255efc8c4017fe688da4119834f9ddaf01ae765ff92ac91f5974211"
       }
     },
     {
@@ -1193,8 +1219,8 @@
         "states": []
       },
       "integrity": {
-        "source": "61de9348ce1f0f2b51a108b9eef32dce1f1ed9c70c752746bf6771e529c7f363",
-        "preview": "d20c39dba9f8f1c01aa366c17a5125f880ef78728ccea04977f1f955202f41a1"
+        "source": "fc72c2df70a7993a490f46f7546ebc3038dd1b9490e692e4c41f7555815afbae",
+        "preview": "03ff7e4db99216002abb6b22a58858e6afbbaa20ea0eb9f70b9d497148f08908"
       }
     },
     {
@@ -1219,15 +1245,31 @@
           "title": "string",
           "description": "string",
           "actions": "LinkAction[]",
-          "tone": "\"surface\" | \"inverse\"",
-          "media": "ReactNode"
+          "tone": "\"default\" | \"muted\" | \"inverse\" (default: the page surface; muted: the sunken band; inverse: the inverse token remap)",
+          "media": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
           "actions": {
             "type": "LinkAction[]",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -1240,8 +1282,9 @@
             "required": true
           },
           "tone": {
-            "type": "\"inverse\" | \"surface\"",
-            "required": false
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
           }
         },
         "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
@@ -1258,8 +1301,8 @@
         "states": ["surface", "inverse"]
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "2a96560dd7bd45fffe6736f7eb730fed345bf2477b53a0e55ac0459e7019a8f1"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "b015f79f63172c6983659cc769760865e8086a56b690980d78bf8743e32e1dd1"
       }
     },
     {
@@ -1281,28 +1324,38 @@
       },
       "contract": {
         "props": {
-          "type": "note | tip | warning | breaking",
-          "title": "string",
-          "children": "ReactNode"
+          "title": "string (visible lead-in that names the note; defaults to the tone's word)",
+          "children": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (default neutral; the default title is Note, Note, Tip, Warning or Caution)"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "title": {
             "type": "string",
             "required": false
           },
-          "type": {
-            "type": "\"breaking\" | \"note\" | \"tip\" | \"warning\"",
+          "tone": {
+            "type": "\"danger\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
             "required": false,
-            "default": "\"note\""
+            "default": "\"neutral\""
           }
         },
         "usage": "Import { Callout } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Renders a div with role=\"note\" named by its visible title.",
         "dependencies": []
       },
       "preview": {
@@ -1314,8 +1367,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "de2dbbc345715547134e7d6cbad2c744fc5fe53893e91025dac1623d38172365"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "00ab8c2938b6bda9ba3d7a04438150209fa7d2b7873fc628ac7b7b257d3cd1e3"
       }
     },
     {
@@ -1403,8 +1456,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "4d31bbbf3e6bb0fc5f922cd7de49c053005b9cca2fda7c4634ef69e129d3c4bb"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "1fc7d11bb63c5754d0b9216bfa082826d73f586f93f86676fba07b23b406e12e"
       }
     },
     {
@@ -1432,13 +1485,23 @@
           "typing": "boolean",
           "suggestions": "string[]",
           "placeholder": "string",
-          "assistantName": "string"
+          "assistantName": "string",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
           "assistantName": {
             "type": "string",
             "required": false,
             "default": "\"Assistant\""
+          },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "messages": {
             "type": "ChatMessage[]",
@@ -1482,8 +1545,8 @@
         "states": []
       },
       "integrity": {
-        "source": "963b0c587e92a76eee2f298b444e13c4dd20147062e7e1214fca51b5f652d6a6",
-        "preview": "ea690053a87f181ddb6d09db527ad0f347dfd1ae292fd8683422390ad16d88e0"
+        "source": "4c13138ba7584bf348a22446fb5e93fffaeeee48accc98dc8c0cf1eefb3980e2",
+        "preview": "3adca032a2a915de2ab3e796599352d022311f5fcba59c5e18abdb203a6d9199"
       }
     },
     {
@@ -1544,8 +1607,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "bcfdfc1c01765d8ab595f0a37966156002fcfb5a00eeb7bea2487f047d05b31b"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "e5f473f77fa1230efd6b15876d9961d63ab966b958d5a2d9603f8c34d4a61a2b"
       }
     },
     {
@@ -1603,8 +1666,8 @@
         "probe": "checkbox"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "a68d76ec53f6a3908b0c7794c37b7e9edbb75016313283fef84b3c5c8d45ab50"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "d5e8caeb48c29b5e914b64c3379132f023e2166c02bea43a5cc3af2c34729966"
       }
     },
     {
@@ -1654,8 +1717,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5a035e6d9324cdbd619dd68a66eb8c106b564a1effb197e2074431b853d0fbeb",
-        "preview": "8441f06bb317391f36fa70aac05081f470bcb6cdcac99bf5115f95ef267ce336"
+        "source": "fcdcea889192bd25251de1fd6c70f4db8032aeea2b9a4c15ac35bae63732b646",
+        "preview": "ed979be5da3e83c2c3818ab42802f55b888ec6e881ba31dde7d2dc2f2501efce"
       }
     },
     {
@@ -1682,9 +1745,15 @@
           "language": "string",
           "lineNumbers": "boolean",
           "highlightLines": "number[]",
-          "prompt": "string"
+          "prompt": "string",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "filename": {
             "type": "string",
             "required": false
@@ -1693,6 +1762,10 @@
             "type": "number[]",
             "required": false,
             "default": "[]"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "language": {
             "type": "string",
@@ -1714,7 +1787,7 @@
         },
         "usage": "Import { CodeTabs } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Tabs follow the tabs pattern: arrows, Home and End move and select; each tab controls the code panel. A failed copy says so.",
         "dependencies": []
       },
       "preview": {
@@ -1727,8 +1800,8 @@
         "probe": "code-tabs"
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "1307ac62f5473e070311648823e9fb2574fb4f70a92e700b4e40eba57dad0cdb"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "d4fda97853a0e2cfd568a28321817e2d708969f7ba1deb91e63885e6cccf40e2"
       }
     },
     {
@@ -1815,8 +1888,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "54491083827db003ccb111d1f64f7b66cfb35444dbb9c84edb2c51a92e0b4cb0",
-        "preview": "354598080cb74718cc5dbd23b4816200faf12dfb65751959c41e61313e9c621c"
+        "source": "eb571e8ffb5248f2d25dda14dce7fbdd7df6b1d4822f30b2f24fababc031a784",
+        "preview": "0098719df222dcd3cc2d5a2d44a0e6f629bbf26aeb1e64837aeb4d3ca69fc016"
       }
     },
     {
@@ -1903,8 +1976,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "29e6a428d42e9bfc2ed770ebbde3fe724f0944b7de4db566f31fa56f0a7f364d",
-        "preview": "55748f9cb2d5f64cb72121a00b6627372f6de3d69e90e4734e9c1aa5b94ed9ff"
+        "source": "42f47ccef61616096638c0e1b1de72d31d3a796bbe256b61fd1d3e904dd4f4a4",
+        "preview": "5f6e3e195652746e46a8ded2be40076f364491973e7213235edcc2d31060a89e"
       }
     },
     {
@@ -2025,8 +2098,8 @@
         "states": ["error"]
       },
       "integrity": {
-        "source": "d55a9e6439a8336f098d3076bc86658fa6a580217970130db6e050d3ac289d92",
-        "preview": "0dbf412dfefda46093bedfcf313793e19af698b3fbf356b0db1a62da89e772d5"
+        "source": "685f909d7484cdea8116a59d77dea9841528d7527a7d780d299db3ef7bb0297e",
+        "preview": "1cce680d782699a7cddbc3a1e607f8a05709ec3f1650f00a5d3464c812d4cf55"
       }
     },
     {
@@ -2119,8 +2192,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "d279d4fb0159203cdad7ba907a47c2495957963dbfd238dbf082214bb7cd0c8e",
-        "preview": "4820f17e18e460161e6fbe44dc3fa65966dc02cc5ed386effb5f188115be6f03"
+        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
+        "preview": "a247dba7bca1cd51df5e2be84746f22ed33fba2e2d5f1e2e5f9ef288e00d835d"
       }
     },
     {
@@ -2145,12 +2218,19 @@
           "title": "string",
           "description": "string",
           "details": "{ label: string; value: ReactNode }[]",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "description": {
             "type": "string",
@@ -2160,6 +2240,15 @@
             "type": "{ label: string; value: ReactNode; }[]",
             "required": false,
             "default": "[]"
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "title": {
             "type": "string",
@@ -2180,8 +2269,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "ecebdfa167cdf8f59bc763b701397c731cb6fd25e8eeb5e887a9436636d68cfd"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "f614dc443cd3b028be5c30d1c5f5d3e5e63a589d6a985a0822151d8517674fb3"
       }
     },
     {
@@ -2243,8 +2332,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "d00c0eb97829a2b7ab5b6cc0dfd1deb5a838f70fbf938d3c5f9bb0f4b6b17c79"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "b713499e760b44bc966f7e58ccebe5f28d600e07ab9208d3f9ece882a5cedc98"
       }
     },
     {
@@ -2272,11 +2361,18 @@
           "media": "ReactNode",
           "mediaPosition": "\"start\" | \"end\"",
           "tone": "\"default\" | \"muted\" | \"inverse\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -2284,6 +2380,15 @@
             "required": false
           },
           "eyebrow": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -2320,8 +2425,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "1069e2a46af9adbc583bbf98f8333b11089300ed9174b9987a81af07372f607e"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "6bd67eaaf58f29b581c192ee960550d843e87758be49e83a8ec48da045ee7b14"
       }
     },
     {
@@ -2477,8 +2582,8 @@
         "probe": "table-sort"
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "62bbe8163597fc56523cefafd912615354b7ccfaf98ae69e7afefce702ff8095"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "528b496090a7e9a5c23a20cdbde169eec3f8f950b5b5be1095c686b031e21743"
       }
     },
     {
@@ -2544,8 +2649,8 @@
         "states": ["long"]
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "a4cf264480435e7e1ae6fbaee0484b037dd5421867e0058b5b79d6729d4f49b7"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "a71ee4342ea9ea7923bcee827584a4361e8d39e19ffbd10656bc25ef451a0329"
       }
     },
     {
@@ -2601,8 +2706,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "c9f8f43d3c75da2039555904c96a6b5f74342efd514f1c8a226aaccfe7f42141"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "cc55ca43a183971fa82d1467317a87c9432d22237a6b29dc013c7af76b34a116"
       }
     },
     {
@@ -2628,7 +2733,7 @@
           "homeHref": "string",
           "version": "ReactNode",
           "sections": "(LinkAction & { current?: boolean })[]",
-          "navigation": "{ title: string; items: NavigationItem[] }[]",
+          "navigation": "ItemGroup<NavigationItem>[] ({ label; items }; items show icon and count, children become disclosures)",
           "toc": "{ id; label; current? }[]",
           "tocLabel": "string",
           "tocFooter": "ReactNode",
@@ -2637,7 +2742,8 @@
           "children": "ReactNode",
           "layout": "article | wide",
           "navigationLabel": "string",
-          "logo": "ReactNode"
+          "logo": "ReactNode",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
           "actions": {
@@ -2651,6 +2757,10 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "homeHref": {
             "type": "string",
@@ -2667,7 +2777,7 @@
             "required": false
           },
           "navigation": {
-            "type": "{ title: string; items: NavigationItem[]; }[]",
+            "type": "ItemGroup<NavigationItem>[]",
             "required": true
           },
           "navigationLabel": {
@@ -2705,7 +2815,7 @@
         },
         "usage": "Import { DocsShell } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Menu button keeps its visible name and declares aria-haspopup=\"dialog\".",
         "dependencies": ["mortar-button"]
       },
       "preview": {
@@ -2718,8 +2828,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "213e0703d3c8d06e6fbd56b6e58f2128fb7304c925812293783a1059a659b67f"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "91f2f9b29d10a1c831996fe4243be46df6371c81c9dbbd92a4d53a62d87d5caf"
       }
     },
     {
@@ -2797,8 +2907,8 @@
         "probe": "menu"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "eb8a3a2c3192ac24fc1e9ee54225d85abe7626f2d2751da7576b7ca3dccb94cd"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "f071b0db6a62aa0f1db1c34107dad898ddf30159a4b3d581f7027a67f3a71d6d"
       }
     },
     {
@@ -2879,8 +2989,8 @@
         "states": []
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "e0e19f185537c1b7321f35164ee42827128b0c58d1a11fa75fd051c844aa0096"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "630ddfff4a6198ee137ff36e9fdbbf1520af247aa80cb83667fc6b46db618f4f"
       }
     },
     {
@@ -2905,11 +3015,27 @@
           "title": "string",
           "description": "ReactNode",
           "items": "{ question: string; answer: ReactNode }[]",
-          "layout": "\"split\" | \"centered\" | \"grid\""
+          "layout": "\"split\" | \"center\" | \"grid\"",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "ReactNode",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "items": {
@@ -2917,7 +3043,7 @@
             "required": true
           },
           "layout": {
-            "type": "\"centered\" | \"grid\" | \"split\"",
+            "type": "\"center\" | \"grid\" | \"split\"",
             "required": false,
             "default": "\"split\""
           },
@@ -2941,8 +3067,8 @@
         "probe": "faq"
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "9bae73d167ce8326c338e8b75c760989c4d968c21125e8d2ff5b5f73e452e344"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "ffe9d42ba87094b12dba591db3eb9d9a501ded28391f5043e0fdb99136955db1"
       }
     },
     {
@@ -2971,9 +3097,15 @@
           "id": "string",
           "marker": "\"auto\" | \"icon\" | \"number\" | \"none\"",
           "columns": "2 | 3 | 4",
-          "tone": "\"default\" | \"muted\" | \"inverse\""
+          "tone": "\"default\" | \"muted\" | \"inverse\"",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); item titles sit one level below"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
             "type": "2 | 3 | 4",
             "required": false
@@ -2985,6 +3117,11 @@
           "eyebrow": {
             "type": "string",
             "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
           },
           "id": {
             "type": "string",
@@ -3023,8 +3160,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "0588274b3e00083a2bfad76b9828fd4db62de547347edddae0a8531931862fcb"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "49120266048be8965584bd7dbd1c93744a9fb8036f7753451757339cf8ce0839"
       }
     },
     {
@@ -3054,12 +3191,18 @@
           "eyebrow": "string",
           "details": "ReactNode",
           "tone": "\"default\" | \"muted\" | \"inverse\"",
-          "framed": "boolean"
+          "framed": "boolean",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "description": {
             "type": "string",
@@ -3077,6 +3220,11 @@
             "type": "boolean",
             "required": false,
             "default": "true"
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
           },
           "id": {
             "type": "string",
@@ -3111,8 +3259,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "226e52894e0f50edccd020870a8ce2d75e47dd1201fcf6ccccc868819a6df7ee"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "6850c6cd293fb7f10b088988315683002d28fca1638e1df794629c01db638954"
       }
     },
     {
@@ -3171,8 +3319,8 @@
         "states": ["disabled"]
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "1b2c3de093b50a356cfb376238c40dc0995140fcc9b2ab40d893f89afd3fbbb6"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "86e890fe48954676fe9dbf502046a7f017cc031f424bde77ce90dee2b430f822"
       }
     },
     {
@@ -3195,9 +3343,19 @@
       "contract": {
         "props": {
           "label": "string",
-          "items": "FileNode[]"
+          "items": "FileNode[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "FileNode[]",
             "required": true
@@ -3221,8 +3379,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "d68a4b6213a089ff770b42b9c27e923ec2a306037169fa2004229a7ca34dcfb5"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "b09a6e5d5369040077ff2ad10968509cc47a2c9387b969d6efa28c957e2113f4"
       }
     },
     {
@@ -3283,8 +3441,8 @@
         "probe": "chip"
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "a63f30e802980247376de894b89a0dc1e2a007963232e0c95007a4b09e39ec34"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "da184287732a3c4b3f77f535727da7f43d8b8d175901885e786ad834d9f80e0e"
       }
     },
     {
@@ -3308,21 +3466,27 @@
         "props": {
           "brand": "string",
           "description": "string",
-          "columns": "{ title: string; links: LinkAction[] }[]",
+          "columns": "ItemGroup<LinkAction>[] ({ label; items }; the label is the column heading and its navigation name)",
           "copyright": "string",
           "legal": "LinkAction[]",
           "logo": "ReactNode",
-          "headingLevel": "2 | 3 | 4",
           "note": "ReactNode",
-          "social": "{ label: string; href: string; icon?: ReactNode }[]"
+          "social": "{ label: string; href: string; icon?: ReactNode }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); the column headings"
         },
         "propTypes": {
           "brand": {
             "type": "string",
             "required": true
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "columns": {
-            "type": "{ title: string; links: LinkAction[]; }[]",
+            "type": "ItemGroup<LinkAction>[]",
             "required": true
           },
           "copyright": {
@@ -3333,8 +3497,12 @@
             "type": "string",
             "required": true
           },
-          "headingLevel": {
-            "type": "2 | 3 | 4",
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "itemHeadingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
           },
@@ -3371,8 +3539,8 @@
         "states": ["heading-3"]
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "7b54ca64f3101beceb80cc473d295933311d7fb91bff5acb6d0d9ba47fe2e430"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "fedb2a444da0cca3c18e38e5a620bb5919273899a28da597c788824d1d8cbe52"
       }
     },
     {
@@ -3439,8 +3607,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "731bccbac6e6d62c3486455eb617401a30ce1af081a3becd4d2dcf39a825d45e"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "b2e2f66a64dc7e8988ac651420328d138ebf67d503e639e1c4552d8831694a28"
       }
     },
     {
@@ -3469,13 +3637,19 @@
           "stats": "{ label: string; value: string }[]",
           "tone": "\"default\" | \"muted\" | \"inverse\"",
           "align": "\"start\" | \"center\"",
-          "headingLevel": "1 | 2"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
           "align": {
             "type": "\"center\" | \"start\"",
             "required": false,
             "default": "\"start\""
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "description": {
             "type": "string",
@@ -3486,9 +3660,13 @@
             "required": false
           },
           "headingLevel": {
-            "type": "1 | 2",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "links": {
             "type": "LinkAction[]",
@@ -3524,8 +3702,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "842d6bdee1e925a4930202113c00e0d1b69c869c1c0c4472aa3bd9eec40d5aae"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "b3567af594b567ab47baf3a48bfbcb4b39268de93c98fd740a654e8b8c5084d2"
       }
     },
     {
@@ -3552,9 +3730,11 @@
           "description": "string",
           "actions": "LinkAction[]",
           "children": "ReactNode",
-          "align": "center | split",
-          "headingLevel": "1 | 2",
-          "background": "ReactNode"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+          "background": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "layout": "\"center\" | \"split\" (default center)"
         },
         "propTypes": {
           "actions": {
@@ -3562,17 +3742,16 @@
             "required": false,
             "default": "[]"
           },
-          "align": {
-            "type": "\"center\" | \"split\"",
-            "required": false,
-            "default": "\"center\""
-          },
           "background": {
             "type": "ReactNode",
             "required": false
           },
           "children": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -3584,9 +3763,18 @@
             "required": false
           },
           "headingLevel": {
-            "type": "1 | 2",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "layout": {
+            "type": "\"center\" | \"split\"",
+            "required": false,
+            "default": "\"center\""
           },
           "title": {
             "type": "string",
@@ -3607,8 +3795,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "84a145137f8fb246111e726e381f9718aee3f3d077e2333e2c218adced50282d"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "1d989ca8582759a9a890f10a06a1bc122dc175c6654d4c707b0fd49be6718df6"
       }
     },
     {
@@ -3698,8 +3886,8 @@
         "probe": "input"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "a14032c67df0bc72bf6831ce3927ecc86e44ed0229d30b63b82fee677351c2f8"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "1e22030543703cac0f08972457f4554a97a92b136404536a610abada0206c4fc"
       }
     },
     {
@@ -3743,8 +3931,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "813a5dcaa9ae8831986ef61eec240dc8288639b4cb144dea1ac00cea7a71691f"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "34567ebd519119d1b0471ccd1dceedf2f442c739571b93e84fdf5e25d4f75495"
       }
     },
     {
@@ -3766,11 +3954,21 @@
       },
       "contract": {
         "props": {
-          "items": "{ href; title; description? }[]"
+          "items": "{ label: string; href: string; description?: string }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "items": {
-            "type": "{ href: string; title: string; description?: string | undefined; }[]",
+            "type": "Pick<LinkItem, \"label\" | \"href\" | \"description\">[]",
             "required": true
           }
         },
@@ -3788,8 +3986,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "f28a35a0e3eceed0befd858788ae9320b994ea0a2f273fda57421a0070eec87e"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "ae8d933a884f2c1cd2ffef070a54eddf4ff6597cbf37c9e34a8e922094456de9"
       }
     },
     {
@@ -3871,8 +4069,8 @@
         "states": ["disabled", "error", "long"]
       },
       "integrity": {
-        "source": "54491083827db003ccb111d1f64f7b66cfb35444dbb9c84edb2c51a92e0b4cb0",
-        "preview": "d91ad17ce55ff440c8dc631e3f654cb6a50e694d9e7d8c817aa3757bb96b6e16"
+        "source": "eb571e8ffb5248f2d25dda14dce7fbdd7df6b1d4822f30b2f24fababc031a784",
+        "preview": "3e4d6debc8fec489dec285621dcf6af8a8ad0c3e51639b86958f604c80ae274b"
       }
     },
     {
@@ -3899,7 +4097,10 @@
           "layout": "\"inline\" | \"grid\" | \"split\"",
           "title": "string",
           "description": "string",
-          "actions": "LinkAction[]"
+          "actions": "LinkAction[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); the split layout's title"
         },
         "propTypes": {
           "actions": {
@@ -3907,7 +4108,20 @@
             "required": false,
             "default": "[]"
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -3943,8 +4157,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "54adf025f15be0178cdd165fcd8f47c356c055043e5a05cbdc3412d29dc1b596"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "c745b9da68e1ce047e51404218a0c27c31884916d242f2e3fdb6162346d0dc4f"
       }
     },
     {
@@ -4012,7 +4226,7 @@
         },
         "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. The menu button controls a navigation element with a generated id.",
         "dependencies": ["mortar-action-link", "mortar-button"]
       },
       "preview": {
@@ -4025,8 +4239,8 @@
         "probe": "navigation"
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "6d8d0700b3e99173bd9e4f5cbbca2095b3551732e730fea412b1f885c6b2eb15"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "3612ef2b00b9fe53d0ca8ed360be6c07db78c4c1d09ed2aedcbd0bf7e6895eb1"
       }
     },
     {
@@ -4092,8 +4306,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "800ec54cda0419cf0140a4511e91aacb38a6e98d2d4fab283139345d3e95c226"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "b5f1dfa855781f0379307414788802bba4dad021f6445028d0fa5e6b15980ea7"
       }
     },
     {
@@ -4148,8 +4362,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "f5d7cc0425f9a11e694cea4582e5f17e991614bd554b5b421a21f93a14d635d7"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "0c5f4807074533f86286d1f097fde0c68bbdceb47789968385bca22cd55df57e"
       }
     },
     {
@@ -4174,7 +4388,9 @@
           "label": "string",
           "address": "string",
           "variant": "\"browser\" | \"app\" | \"plain\"",
-          "children": "ReactNode"
+          "children": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
           "address": {
@@ -4184,6 +4400,14 @@
           "children": {
             "type": "ReactNode",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "label": {
             "type": "string",
@@ -4209,8 +4433,8 @@
         "states": []
       },
       "integrity": {
-        "source": "963b0c587e92a76eee2f298b444e13c4dd20147062e7e1214fca51b5f652d6a6",
-        "preview": "a7b544587879bdbe8766f98cfbeab00785131722c53b9ce47bd6dfb530f5209f"
+        "source": "4c13138ba7584bf348a22446fb5e93fffaeeee48accc98dc8c0cf1eefb3980e2",
+        "preview": "276d68ef67d24917b08b0ce2003aaa75baccf3fcd8053793405f502af009824f"
       }
     },
     {
@@ -4281,8 +4505,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "b3cdcabf2c9d3d7602d6353b9e87be291412229cf86fc8ba7fef89f8dc908774"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "bc6c17ad57c0f9b472a85b63bfed24ad36de428aff81751f771f8c13f5ec8f40"
       }
     },
     {
@@ -4360,8 +4584,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "90561e8b89f9b64eae0214137144ebaa7b4ce4b889b216700fcad1f7404e106f"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "314a485d7d4bf7e6616250a53c888bcf692a5e22d37b7ce24c19c03adc7c2860"
       }
     },
     {
@@ -4387,11 +4611,27 @@
           "description": "string",
           "onSubmit": "(email: string) => void",
           "submitLabel": "string",
-          "status": "idle | submitting | success | error",
-          "message": "string"
+          "status": "\"idle\" | \"submitting\" | \"success\" | \"error\" (success announces message, or a default, in a persistent status region)",
+          "message": "string",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -4420,7 +4660,7 @@
         },
         "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. A persistent role=\"status\" region announces the success message; errors stay on the field.",
         "dependencies": ["mortar-button", "mortar-input"]
       },
       "preview": {
@@ -4433,8 +4673,8 @@
         "probe": "newsletter"
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "bce2fa67918005b208b54899687f8a704c7862febe0bd94cd79fd8a4a3a4cd7e"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "a9a69a672059b59a2fd8979c96e9d7e21dc5e73a8eb3d23a15105aba03e0f8dd"
       }
     },
     {
@@ -4460,12 +4700,19 @@
           "title": "string",
           "description": "string",
           "actions": "LinkAction[]",
-          "illustration": "ReactNode"
+          "illustration": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)"
         },
         "propTypes": {
           "actions": {
             "type": "LinkAction[]",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "code": {
             "type": "string",
@@ -4475,6 +4722,15 @@
           "description": {
             "type": "string",
             "required": true
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "1"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "illustration": {
             "type": "ReactNode",
@@ -4499,8 +4755,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "5fbf07fa498538df7fdea9dee9f46c1caff6b76796880095aadb8b10eb472a3c"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "ddc74781bce99263ce0caf4caf61875abf34e4d83dd28a7fcb6ee3216ec95c95"
       }
     },
     {
@@ -4577,8 +4833,8 @@
         "probe": "notice"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "a6e221dc27c8b515635422e1cb3c0ebbba308588831e888c1a8dd2b2bda52852"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "599d691dcaa1fced988d3a339e55083401131b5cb80aece8c968970fecaa4e1c"
       }
     },
     {
@@ -4644,8 +4900,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "d44c3de25f78e84d0b504b2097cc677f80d873e4e48687f934ce69fa96898b72"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "931be66cf4e5637c7b4a860c5bacadfaf5e59572dcc5dcae66d1e2dff1bd47e7"
       }
     },
     {
@@ -4726,8 +4982,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "5304e9dbf36b3d1eab6dd738750185bdecfc3dd125c644e6e8e851d9f4b20e20"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "0d3b467bef0a08d33cac59f0cde2b3c70e3e6d1c932a40f5f5bf0edd05cec85f"
       }
     },
     {
@@ -4752,9 +5008,19 @@
           "question": "string",
           "value": "yes | no | null",
           "onChange": "(value: yes | no) => void",
-          "updated": "ReactNode"
+          "updated": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "onChange": {
             "type": "(value: \"yes\" | \"no\") => void",
             "required": true
@@ -4788,8 +5054,8 @@
         "probe": "feedback"
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "d30919b24fb71802ad5c9c172215b4a873ee3fabc18935b29cebee80e685ec4d"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "692bc031f0a5246d766dc52537b644a5168dd3f99ed91e29b3895436aa477b70"
       }
     },
     {
@@ -4870,8 +5136,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "b6b499fdefa38dbd3e7b510e7213de3c50d29db6a3ecdc555e20868338c98a97"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "91272e77f62c64641e891fa444d7819ff6379e2b4ee2bc6a0148e7ff7d254f10"
       }
     },
     {
@@ -4894,9 +5160,25 @@
       "contract": {
         "props": {
           "previous": "LinkAction",
-          "next": "LinkAction"
+          "next": "LinkAction",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "label": "string (navigation landmark name; default \"Previous and next page\")"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "label": {
+            "type": "string",
+            "required": false,
+            "default": "\"Previous and next page\""
+          },
           "next": {
             "type": "LinkAction",
             "required": false
@@ -4908,7 +5190,7 @@
         },
         "usage": "Import { PagerLinks } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Name the landmark with label so it stays distinct from Pagination. Arrows are hidden from assistive technology.",
         "dependencies": []
       },
       "preview": {
@@ -4920,8 +5202,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "a295a2d40b5dd1a7d1781f438986cb5eaa5c24d4a9d863f4d3495737dc69c54f"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "02e4385ebb9c007111c2e635f60ce6c1b39755c6e31aa65b991c58cc42338d28"
       }
     },
     {
@@ -4993,8 +5275,8 @@
         "probe": "pagination"
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "c812932b30041829ec2a8276e83b4d9851b6a25b1a2de6d105ba8db00db38654"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "472e7d7fd6c737eb5c26c94c01e742026f5126138afb4666f7cf837a9c5d2554"
       }
     },
     {
@@ -5020,9 +5302,16 @@
           "description": "string",
           "plans": "string[]",
           "featuredPlan": "string",
-          "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]"
+          "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -5035,6 +5324,15 @@
             "type": "{ label: string; rows: { feature: string; values: (string | boolean)[]; }[]; }[]",
             "required": true
           },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "plans": {
             "type": "string[]",
             "required": true
@@ -5046,7 +5344,7 @@
         },
         "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Included and not-included cells hide their glyph and carry screen-reader text.",
         "dependencies": []
       },
       "preview": {
@@ -5058,8 +5356,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "bed3be0d56e7fb5f60c49804e2d9519360d755ebc8f0e8a7048eccf387d1c746"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "f568b0c0b3d96ebe06b523efc9c2c1cb69ed7d36148d3aad951cb12af0d243fd"
       }
     },
     {
@@ -5084,15 +5382,36 @@
           "title": "string",
           "description": "string",
           "posts": "{ href; title; excerpt; date; dateLabel; category?; image? }[]",
-          "action": "LinkAction"
+          "action": "LinkAction",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
+          "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default: one below headingLevel)"
         },
         "propTypes": {
           "action": {
             "type": "LinkAction",
             "required": false
           },
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "itemHeadingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false
           },
           "posts": {
@@ -5118,8 +5437,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "36b9abde3cebfe5e3fc50213e96114032a5ac30f602123dd20967bf93a6db8f4"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "208d51a846e6486bdf4e7337ccc2c2d1a7d4f3e58c03b357d7c32c3e05ac15a6"
       }
     },
     {
@@ -5168,8 +5487,8 @@
         "states": []
       },
       "integrity": {
-        "source": "5a035e6d9324cdbd619dd68a66eb8c106b564a1effb197e2074431b853d0fbeb",
-        "preview": "5f84fc3b6dd298b19c2a348b9a53a0042b0b99f2275883e97178e0e51e0e861a"
+        "source": "fcdcea889192bd25251de1fd6c70f4db8032aeea2b9a4c15ac35bae63732b646",
+        "preview": "315fddc7d76ed032339e6dda3a559e4af0d7bc8300cbeb5dec437f769b9651c7"
       }
     },
     {
@@ -5194,14 +5513,21 @@
           "title": "string",
           "description": "string",
           "plans": "{ id: string; name: string; description: string; monthly: string; annual?: string; unit?: string; annualUnit?: string; features: string[]; action: LinkAction; featured?: boolean; availability?: \"available\" | \"coming-soon\" | \"unavailable\"; availabilityLabel?: string }[]",
-          "tone": "\"surface\" | \"inverse\"",
+          "tone": "\"default\" | \"muted\" | \"inverse\" (applied to featured cards only)",
           "billingToggle": "boolean",
           "layout": "\"cards\" | \"detailed\"",
-          "featuresLabel": "string"
+          "featuresLabel": "string",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); plan names sit one level below"
         },
         "propTypes": {
           "billingToggle": {
             "type": "boolean",
+            "required": false
+          },
+          "className": {
+            "type": "string",
             "required": false
           },
           "description": {
@@ -5212,6 +5538,15 @@
             "type": "string",
             "required": false,
             "default": "\"What’s included\""
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "layout": {
             "type": "\"cards\" | \"detailed\"",
@@ -5227,13 +5562,14 @@
             "required": true
           },
           "tone": {
-            "type": "\"inverse\" | \"surface\"",
-            "required": false
+            "type": "\"default\" | \"inverse\" | \"muted\"",
+            "required": false,
+            "default": "\"default\""
           }
         },
         "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Annual prices show only while the billing toggle is visible. Unavailable plans show static status text and no purchase link.",
         "dependencies": ["mortar-action-link", "mortar-segmented-control"]
       },
       "preview": {
@@ -5246,8 +5582,8 @@
         "probe": "pricing"
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "0459e09871ca6d1d54c51a87914e1b2c664c9f884e58816ab871650f66ba7068"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "b689ab104584d14c746ad7e6415182cadff2aa326a4d264ce9462cabc21ee6d7"
       }
     },
     {
@@ -5275,9 +5611,14 @@
           "description": "string",
           "items": "{ title: string; description: string }[]",
           "tone": "\"default\" | \"muted\" | \"inverse\"",
-          "headingLevel": "2 | 3 | 4"
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); step titles sit one level below",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
             "type": "string",
             "required": false
@@ -5287,7 +5628,7 @@
             "required": false
           },
           "headingLevel": {
-            "type": "2 | 3 | 4",
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "2"
           },
@@ -5323,8 +5664,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "9a6225be45a5e62516899cd85605cf6746df664592de22ec0516612464f16086"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "670e9cb2f13e9bfcb7fcbddc53f9bbb96aafb89ea722fd8e318a0880ae70ccdb"
       }
     },
     {
@@ -5395,8 +5736,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "a0c52c3bc4fe951fad7002d33f67c08f7556ecacb37f0e3d297dbc11ac7edc0e"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "9ca747020219a73fa1d8d1d6b3064ce5f4cab60dd0bfa4ee1f45a41ceea1531f"
       }
     },
     {
@@ -5473,8 +5814,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "48286eb734e00025caee407085b1f17d574db4c69f61b20acc4f0cac1cc3d377"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "fac94d6f6f70c6765ad37aedef027f4467b5c4cb56fcf42aebdd0ce44c670980"
       }
     },
     {
@@ -5607,8 +5948,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "a6a06c7c466968a205d04a19bb7813eb7c8e2da455769aba107733a0f2c9e014"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "29cd93555453576ebe4d2864f1b7b96f3221aa454e3e38f9ac549f038aaa51fd"
       }
     },
     {
@@ -5743,8 +6084,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "6450b5f664d5baf24e8f52f1f6de2927a3813a4abb0abc313d3bcb3f9f8d5bc2"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "d7d263cae7b3cfdcde89623a4303f938d93771d9129710e63c16198b88b0ea96"
       }
     },
     {
@@ -5830,8 +6171,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "a2544bb99c666188c744b43314813b909c43eb7ca05ec33e97162ed94f8bb822"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "ef8a6f41112887754dfc7d769ad9b3e9c65c23c02d26c7155a0b8154096e7b52"
       }
     },
     {
@@ -5897,8 +6238,8 @@
         "states": []
       },
       "integrity": {
-        "source": "edf7c493c7a866224e2427e667a05d78dec63dac105e05e592cb3fc79fd4b8f8",
-        "preview": "fc2197732eac12b77a3f114ca9e39a8ddd5ff32c6b80c3f950e95ccda7ee1f2c"
+        "source": "400dc8571f94b09f21debd506edabcc47d3b11ee82ea4758f9e548d69a41c0d2",
+        "preview": "360c724be4b1820e17df5b0f975b355084e836f55643148d16276b708a2ee6a4"
       }
     },
     {
@@ -5954,8 +6295,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "6eb7136d5dc64e1511a4175c412662c38d525ea21ee3f62422657c98cdb3d2e3"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "78ff4fcd6f7c1ae4402d5e3ddb12fada1ace7f2179de806a75c578903e03d627"
       }
     },
     {
@@ -5999,8 +6340,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "737cdbd142fac6984bae8d67b8edcd133758b0c0e4b680efc2776c8d98bb0ef9"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "7d09cfac1a44218b02a4e715a5c19fa9c5c1b8172deedec2824a9c6acb197e92"
       }
     },
     {
@@ -6077,8 +6418,8 @@
         "probe": "radio"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "db1e2831586edb42eb6eee63f60ee95d51be77dcbd2b207392c2803749b20cad"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "3961c9318c77d931dcf3123f12f725d3c37319aab8b6411c819a66786ca7dead"
       }
     },
     {
@@ -6103,12 +6444,19 @@
           "version": "string",
           "date": "string",
           "dateLabel": "string",
-          "changes": "{ type: added | changed | fixed | deprecated | removed; items: ReactNode[] }[]"
+          "changes": "{ type: added | changed | fixed | deprecated | removed; items: ReactNode[] }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3); change groups sit one level below"
         },
         "propTypes": {
           "changes": {
             "type": "{ type: \"added\" | \"changed\" | \"fixed\" | \"deprecated\" | \"removed\"; items: ReactNode[]; }[]",
             "required": true
+          },
+          "className": {
+            "type": "string",
+            "required": false
           },
           "date": {
             "type": "string",
@@ -6117,6 +6465,15 @@
           "dateLabel": {
             "type": "string",
             "required": true
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "3"
+          },
+          "id": {
+            "type": "string",
+            "required": false
           },
           "version": {
             "type": "string",
@@ -6137,8 +6494,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "d6df6606c39feecdc8e8bd92fc4659a57ab3493ccabee37be460d8dc2f7f30f3"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "100d97cd0a62467053b92c8d756915e4360f6d369bf26b49738ea6b0c51a0979"
       }
     },
     {
@@ -6217,8 +6574,8 @@
         "probe": "save"
       },
       "integrity": {
-        "source": "d279d4fb0159203cdad7ba907a47c2495957963dbfd238dbf082214bb7cd0c8e",
-        "preview": "e29822cc618529c674dbaa01172dcd0cb4aa0eda6e5ed5be132ae340806216df"
+        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
+        "preview": "734c6f1ec77fd8629a4f6c4092f6713d2122c794da4755feb05121caa28a88c3"
       }
     },
     {
@@ -6288,8 +6645,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "455fd80271e18135eeaee64828c88b7ebe745fab828c58fcd7230fa8b647c872"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "1729f72e938a221e473493e36920cf1aca40274eb5a88136930ca1d57c89075b"
       }
     },
     {
@@ -6312,9 +6669,14 @@
       "contract": {
         "props": {
           "onOpen": "() => void",
-          "label": "string"
+          "label": "string",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "label": {
             "type": "string",
             "required": false,
@@ -6327,7 +6689,7 @@
         },
         "usage": "Import { SearchTrigger } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Cmd/Ctrl+K shortcut is ignored inside text fields and dialogs and when another trigger handled it; the hint shows the platform modifier.",
         "dependencies": ["mortar-kbd"]
       },
       "preview": {
@@ -6340,8 +6702,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "b49b9ff3e12214e33e20afc8eacfd22e6cfbc217eb56729d84da62cd13e82471"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "365ab912ac4c45b2b3436411b4ae1b5377136af1cf2bcefd15250883bd6a0dd9"
       }
     },
     {
@@ -6412,8 +6774,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "3b9cf5d3173f17ddddbe88bb98de5cf2f1bb36b2f540ace82fa094cb59ce5270"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "96f612ea7e36c8080f9cc1ace48bbd83413372199338b064763779847c5d59e9"
       }
     },
     {
@@ -6489,8 +6851,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "a5a4a801d3e034c82a428fcb00e1565269e110a6a8b4b80305e9e8f69444e5cb"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "1ecafc65049397cfef36dfd4f7cbcb75a892c5c0a0af5e7be2a7038403f6d2e0"
       }
     },
     {
@@ -6550,8 +6912,8 @@
         "probe": "segmented"
       },
       "integrity": {
-        "source": "5a035e6d9324cdbd619dd68a66eb8c106b564a1effb197e2074431b853d0fbeb",
-        "preview": "f4d9bdf6c57f7c5777a9a7fc4a2518f27305a8eba7b54f27da8f6b8d57b79aed"
+        "source": "fcdcea889192bd25251de1fd6c70f4db8032aeea2b9a4c15ac35bae63732b646",
+        "preview": "dcac5f34f08d4438f2717e1ce6923a4ed883a8a95f619b102d54800d2f2e920c"
       }
     },
     {
@@ -6620,8 +6982,8 @@
         "probe": "select"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "d4c8ccf42d6d9f92f94fde2efd96a57cf9a127a45b5cab60cfa0f502ec808ef2"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "daae9feb017ba723719fd9b21248688c31541823ab6665647ca239324d2a5fc4"
       }
     },
     {
@@ -6675,8 +7037,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "e5810e0386b588f9bf276c72b54f675985095adc056732e8a34f95980df4d785"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "8377a9628f7c764c66dd5318e373fb6eac16cf5cc5cecb181788d49640ecf9bd"
       }
     },
     {
@@ -6765,8 +7127,8 @@
         "states": ["empty"]
       },
       "integrity": {
-        "source": "d71179a85d318deaf53874087eefd3908a7fc68f7f50cfb7165023bc55f028a4",
-        "preview": "214a8b78d115e29f7f45b5dea5062945360dde3a7a64543c80f37eb39c5f3a0f"
+        "source": "30030ca605fee7132536b4451f75494fb23629139a61493bb362bdeeff2f29ae",
+        "preview": "f59961836553bf799229329e5246c6ddb6deb78d5338b2e58c7895c8dbf2def6"
       }
     },
     {
@@ -6846,8 +7208,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "68f20cbd4caab51da7b8faa89819269f61619d89031ad8bd3f840631637475ef"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "e97a98dc96cdd9b4c543c56ea873ee3c22135ce26e13de807e538f63123ad4fb"
       }
     },
     {
@@ -6935,8 +7297,8 @@
         "probe": "sign-in"
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "1a3cab0dac4be419eddc89162e89c247f66fe6f9c2e826775bf6421e6e8745cd"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "2db17906d10740c3e9bfa1767c589d4be6b2e1bffcedbc42bb47b8b6d48a0463"
       }
     },
     {
@@ -7012,8 +7374,8 @@
         "probe": "dialog"
       },
       "integrity": {
-        "source": "29e6a428d42e9bfc2ed770ebbde3fe724f0944b7de4db566f31fa56f0a7f364d",
-        "preview": "a43b3bf0b66d690daa00c974755fb772ab308ab3ca8c82a1b527090576d65e96"
+        "source": "42f47ccef61616096638c0e1b1de72d31d3a796bbe256b61fd1d3e904dd4f4a4",
+        "preview": "4b2d9433ae02dafafa4dabbd8f7e8eb55098132831d693d1a1d1e8efad537029"
       }
     },
     {
@@ -7091,8 +7453,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "e7fe9481f1410e9951e46cd5ad7ae02c744f27ffa7402ff92f9bfa1b28f4ffac"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "248bd97287b64c703fb1ab16f92a0af2ffad872c145388e93821961dab3a8a07"
       }
     },
     {
@@ -7157,8 +7519,8 @@
         "states": []
       },
       "integrity": {
-        "source": "29e6a428d42e9bfc2ed770ebbde3fe724f0944b7de4db566f31fa56f0a7f364d",
-        "preview": "ebf19c610b63c6ff2af356608e87b04b3bfb58b42991181b7f37f1c1be84998e"
+        "source": "42f47ccef61616096638c0e1b1de72d31d3a796bbe256b61fd1d3e904dd4f4a4",
+        "preview": "3a45c9930160a2168866688c8452f927511add9964dc49341d3e7f9ca4229363"
       }
     },
     {
@@ -7245,8 +7607,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "c09ab98c12a711ae1a9dde0fa02992284973bc5610fd97ce241e71f87066c06f"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "d0eb4d65a12c5a5ea3e86dee85a98e18b2114ce9e79541a5b7fb89c40fd8b170"
       }
     },
     {
@@ -7269,9 +7631,19 @@
       "contract": {
         "props": {
           "label": "string",
-          "items": "{ value: string; label: string; description?: string }[]"
+          "items": "{ value: string; label: string; description?: string }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "{ value: string; label: string; description?: string | undefined; }[]",
             "required": true
@@ -7295,8 +7667,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "6e7d164ec0180ee957b4b708d455ecda1eabc16558a305025981ec852d726e3d"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "9a028e96f6156134daf9862e4f67916120d29e41fd5702391651fb132be3f428"
       }
     },
     {
@@ -7319,11 +7691,21 @@
       "contract": {
         "props": {
           "items": "{ title; id?; description?; content? }[]",
-          "headingLevel": "2 | 3 | 4"
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3); each step's title"
         },
         "propTypes": {
-          "headingLevel": {
-            "type": "2 | 3 | 4",
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
+          "itemHeadingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
             "required": false,
             "default": "3"
           },
@@ -7346,8 +7728,8 @@
         "states": []
       },
       "integrity": {
-        "source": "d06a041fbb922d2aabfbee7caca9c7525a6af22ea65ddbb8eb575b7888f652e0",
-        "preview": "298b82a50ea5167510826a3ff231b04ce85487d3a4959e8148001ac5e78f5e76"
+        "source": "ea44f4ff373a814a4112e8f18772f2e7653522feab443a4a1e967190be9b8596",
+        "preview": "46a46d24d4d168a9cd1081763f48b784aa11e85b979b615389fbb0115fcf24c6"
       }
     },
     {
@@ -7405,8 +7787,8 @@
         "probe": "switch"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "eeaae1a4cf60b42e5e9afaa505b6c01df5883a2f23db94d8f5ab74aea0689842"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "97e2f4224012cf54b53139a3489e58eb3501624a2b4e47421686fbb449eb39e1"
       }
     },
     {
@@ -7467,8 +7849,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "37aa90d0c0f3a990d77bdb8f8d3c30f88956f4609e72557696276e9d2bd09695"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "7707934f92cd5c523b2eb814e0c9fdad817387db00062ace760e0e9c6ffe5522"
       }
     },
     {
@@ -7546,8 +7928,8 @@
         "states": []
       },
       "integrity": {
-        "source": "fc160e0ead868fe1ff80a38aaafa2b25f7c688e6f8f7c9d2d73f7a35a8208c2e",
-        "preview": "fc504245f753974e596e9af2034da4afacbb93a641d212210201b16a1ef105b4"
+        "source": "eee1943432f11508fd87ee6650b2e00ceca614a3f2c886a8760edca15f53d489",
+        "preview": "d383a84f5ce7992c34483bbed5b773b89eb6500eb1332f7811bc7764becdaf33"
       }
     },
     {
@@ -7619,8 +8001,8 @@
         "probe": "tabs"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "3d236e5d690d228cf0b01352724ae520c053bdf9026ee4913e9378ac7e6308e7"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "b9d80a87b7047c81f3698787549020d1cae28e16a19f0ff53a38f3469ed33f43"
       }
     },
     {
@@ -7644,10 +8026,26 @@
         "props": {
           "title": "string",
           "description": "string",
-          "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]"
+          "members": "{ name; role; image?: ReactNode; bio?: string; links?: { label; href; icon? }[] }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
           "description": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
             "type": "string",
             "required": false
           },
@@ -7662,7 +8060,7 @@
         },
         "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Placeholder avatars are hidden because the name is visible.",
         "dependencies": ["mortar-avatar"]
       },
       "preview": {
@@ -7674,8 +8072,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "0003033027ef6a511d3c5859ce927ecdde2f38f32060278461a60b304b69181e"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "668927e7dd04010428b473caccdbffd7196c698a053dcfd0e52345b6393b3b44"
       }
     },
     {
@@ -7698,9 +8096,25 @@
       "contract": {
         "props": {
           "title": "string",
-          "items": "{ quote; name; role?; avatar? }[]"
+          "items": "{ quote; name; role?; avatar? }[]",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)",
+          "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
         },
         "propTypes": {
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "headingLevel": {
+            "type": "1 | 2 | 3 | 4 | 5 | 6",
+            "required": false,
+            "default": "2"
+          },
+          "id": {
+            "type": "string",
+            "required": false
+          },
           "items": {
             "type": "{ quote: string; name: string; role?: string | undefined; avatar?: string | undefined; }[]",
             "required": true
@@ -7712,7 +8126,7 @@
         },
         "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
-        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+        "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Avatars are hidden because the name is visible.",
         "dependencies": ["mortar-avatar"]
       },
       "preview": {
@@ -7724,8 +8138,8 @@
         "states": []
       },
       "integrity": {
-        "source": "1b70abd651608fa1a0c728b6257e43b1b42d6eade4cb0a7403f4bc4edbcf9ce8",
-        "preview": "8727f3f4f42aa8ab2bc7bf8866c1dcfe3b0f3d61077eaa89d74c62fdf6245353"
+        "source": "fb79d40907a6f542e68c701ef5baf0d6913c96a2227e578303f1ce2442a5bbc8",
+        "preview": "7abdbe98a17b9e62732eab4ecee2b29258e21b7619079acd05eacbe1bd22c4d2"
       }
     },
     {
@@ -7751,11 +8165,21 @@
           "name": "string",
           "role": "string",
           "logo": "ReactNode",
-          "avatar": "ReactNode"
+          "avatar": "ReactNode",
+          "id": "string (the root element's id, e.g. an in-page link target)",
+          "className": "string (layout only: margins or grid placement)"
         },
         "propTypes": {
           "avatar": {
             "type": "ReactNode",
+            "required": false
+          },
+          "className": {
+            "type": "string",
+            "required": false
+          },
+          "id": {
+            "type": "string",
             "required": false
           },
           "logo": {
@@ -7789,8 +8213,8 @@
         "states": []
       },
       "integrity": {
-        "source": "f94a463ca5447ae3abf36fd2109baeb310a6db0c736d56d622135aeb38a9c057",
-        "preview": "13010c83c43fd1ea80626dcd2400b3f3af3a50d03d62ef25ab6367be17b905ae"
+        "source": "5bc8bf201de11a5586ba51b7e75b33ac724529d1bf7248c33e839c79b2d2acf3",
+        "preview": "aa424610f13b26b070dfb7a682cedb4755611cb74d4f42f640f1634b5cce80d5"
       }
     },
     {
@@ -7854,8 +8278,8 @@
         "probe": "textarea"
       },
       "integrity": {
-        "source": "80104ac4b7c50b8fbb9a4c90703f89dceb6c6340aa9786dfd871c18b0b6c03fa",
-        "preview": "c050d968429d12ab9dadd974a4daa8629d456366e667584474415a193832b831"
+        "source": "b1c9ba02f018284a2c664f744a9d8eb3244724a4f8dce9db115433c724e29c2e",
+        "preview": "8994fbe18fa2fee054375b3c31827da73ddd4cb52a4586e171efb4af3e85229e"
       }
     },
     {
@@ -7923,8 +8347,8 @@
         "states": []
       },
       "integrity": {
-        "source": "4034e751deb67750a4ae3f5acb0d89e6499960e5077c8652b4bc31e780e74d91",
-        "preview": "ff8d86b2020ed114b7cefe68d2b7919ea00f6140a58c6d052e2060d8d6317329"
+        "source": "b1835184d7bb5c00baf719557b2c8339486468931ae402a5431a61da65c38ce9",
+        "preview": "4dc310584f867e2f8fc2a94c914fe0e9e05b19f3266a0eb0f31e2ab09cca61e8"
       }
     },
     {
@@ -8008,8 +8432,8 @@
         "probe": "appearance"
       },
       "integrity": {
-        "source": "c5e264d8fb144590c96b9c050da792a7e11cd6ee555a92087ea7a58c1256a561",
-        "preview": "1536b7b10a13bba2515bc749607a4c0b1a50d6e8b84bf7561fb460df5fba6162"
+        "source": "0f41c4d9ab7c3185eebe91d14b249dd08b1967835ac65d30f7572071515b49c2",
+        "preview": "90ff4de9704781b49800bb2540009172cc0356ae981b437420401fbcd5dcdcd0"
       }
     },
     {
@@ -8085,8 +8509,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "d279d4fb0159203cdad7ba907a47c2495957963dbfd238dbf082214bb7cd0c8e",
-        "preview": "68b8359c55b496ab8505db640c0d6e53ccffdbd6b43e727eb9b0835aa6a47902"
+        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
+        "preview": "fb7f24b9b33e45fbc90a7a7266f9cf3ec28cf4da3ac570c2140c8a34f49e288f"
       }
     },
     {
@@ -8142,8 +8566,8 @@
         "probe": "toast"
       },
       "integrity": {
-        "source": "d279d4fb0159203cdad7ba907a47c2495957963dbfd238dbf082214bb7cd0c8e",
-        "preview": "f6c898b655b9df9cab72b85ec9857f6f8d5dc8ff31bd8ee1d24aff4bed1c0d3b"
+        "source": "d66a08293916742229c80bb2698dd8931569e44a2362e8b41df4b568ce6a859c",
+        "preview": "d762d111cd6be10997d776cf7ab6c352e4e0654a0a3f50f32a7ab8f3de6a3a54"
       }
     }
   ]
