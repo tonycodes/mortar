@@ -28,6 +28,9 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "prepack": "npm run build",
+    "pretest": "npm run build",
+    "test": "node --test tests/*.test.mjs",
     "dev": "vite --host 127.0.0.1",
     "catalog": "node scripts/check.mjs --write-catalog",
     "check": "npm run format:check && npm run build && node scripts/check.mjs && node --test tests/*.test.mjs && npm run build:playground",
