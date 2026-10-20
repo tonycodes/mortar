@@ -732,15 +732,22 @@ export function BrandBuilder() {
       <section className="pg-brand-section" aria-labelledby="brand-define">
         <h2 id="brand-define">Define the brand</h2>
         <div className="pg-brand-start">
-          <SegmentedControl
-            label="Start from a preset"
-            value={preset}
-            options={PRESETS.map(({ id, label }) => ({ value: id, label }))}
-            onChange={(id) => {
-              const next = PRESETS.find((p) => p.id === id);
-              if (next) setValues(clone(next.values));
-            }}
-          />
+          <div className="pg-brand-preset">
+            {/* Visible label to match the brand name field; the control
+                already carries the same accessible name. */}
+            <span className="pg-brand-preset-label" aria-hidden="true">
+              Start from a preset
+            </span>
+            <SegmentedControl
+              label="Start from a preset"
+              value={preset}
+              options={PRESETS.map(({ id, label }) => ({ value: id, label }))}
+              onChange={(id) => {
+                const next = PRESETS.find((p) => p.id === id);
+                if (next) setValues(clone(next.values));
+              }}
+            />
+          </div>
           <Input
             label="Brand name"
             value={name}

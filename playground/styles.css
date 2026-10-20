@@ -244,11 +244,31 @@
   max-width: 70ch;
   color: var(--m-secondary);
 }
+/* Labels share a top line and the controls share the next, like a form row. */
 .pg-brand-start {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 16px 24px;
+}
+.pg-brand-preset {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* Same height as the bordered input beside it, at every density: the input
+   is var(--m-control) plus a 1px border each side; the switcher is its
+   buttons plus 3px padding each side. */
+.pg-brand-preset .m-segmented {
+  box-sizing: border-box;
+  height: calc(var(--m-control) + 2px);
+}
+.pg-brand-preset .m-segmented button {
+  min-height: calc(var(--m-control) - 4px);
+}
+.pg-brand-preset-label {
+  font-size: 13px;
+  font-weight: var(--m-weight-semibold);
 }
 .pg-brand-start > .m-field {
   flex: 1 1 220px;
