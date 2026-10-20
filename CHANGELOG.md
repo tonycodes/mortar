@@ -2,10 +2,14 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
-## Unreleased
+## 0.8.0 (2026-10-20)
 
 - **Component marker:** the root element of every exported component now carries `data-m-component="<ExportName>"`, not only the marketing sections. It is a hook for tests and consumers, not for styles. Dialogs mark their dialog root. No other markup changes.
 - **Prose:** prose styles now stop at nested component roots (`[data-m-component]`) instead of at any element with an `m-` class, so a utility class such as `m-4` inside prose no longer opts that element out.
+
+### Internal
+
+- **Playground:** page templates load on demand, and React and Headless UI get their own chunks, so the main chunk drops from 821 kB to 320 kB. The published package is unchanged.
 
 ## 0.7.0 (2026-10-19)
 
