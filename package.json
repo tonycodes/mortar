@@ -22,7 +22,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./styles.css": "./styles.css"
+    "./styles.css": "./styles.css",
+    "./brand": {
+      "types": "./dist/brand.d.ts",
+      "import": "./dist/brand.js"
+    }
   },
   "sideEffects": [
     "**/*.css"

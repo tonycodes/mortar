@@ -2,6 +2,28 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
+## Unreleased
+
+Theming. See [Theming](https://github.com/tonycodes/mortar/blob/main/docs/theming.md).
+
+### Added
+
+- **Brand contract:** a brand declares only `--m-brand-l-*` and `--m-brand-d-*`. Light, dark and inverse sections resolve from it. Hover, active, selected, accent, focus and link derive from `primary` when omitted, so a complete brand can be four values.
+- **Runtime brands:** `ThemeProvider` accepts `brandTokens` and any brand name. The brand renders as a hoisted, server-rendered stylesheet that overlays share, and its values are validated so tenant data cannot inject CSS. `@tony-ui/mortar/brand` exports `brandToCss`, `brandToStyle` and `registerBrand`.
+- **Scale tokens:** `--m-weight-*`, `--m-tracking-*`, `--m-leading-*`, `--m-space-*`, `--m-radius-xs` and `--m-radius-xl`.
+- **Tailwind:** `info`, `secondary`, `selected` and `link` colours, `rounded-m*`, `shadow-float`, `tracking-display|heading|caps`, and font weights that follow the tokens.
+
+### Changed
+
+- **No dark flash:** before `data-mortar-appearance` is set (server rendering, or no JavaScript), Mortar follows the operating system's colour scheme. Set `data-mortar-appearance="light"` on `<html>` to keep the old always-light start.
+- **Green in dark mode:** primary buttons use mint `#6ee7b7` with dark text, as green's inverse sections already did, instead of dark green `#047857`. Each brand now has one dark-side primary, and mint has 3:1 or more contrast against the black page where dark green had 2.7:1. Everything else in neutral and green is unchanged.
+- **Baseline policy 1.4.0:** M009 now requires brands to declare only the brand contract and each appearance to resolve the accent pair and its inverse.
+
+### Fixed
+
+- **Branded element in a dark page:** a `data-mortar-brand` element inside a dark page without its own `data-mortar-appearance` now resolves dark. Before, it got light-mode accent, focus and link colours.
+- **Density in nested containers:** a container nested in a compact or spacious one keeps that density unless it sets its own. `density="comfortable"` now sets the comfortable sizes explicitly, instead of relying on the light appearance to reset them.
+
 ## 0.8.0 (2026-10-20)
 
 - **Component marker:** the root element of every exported component now carries `data-m-component="<ExportName>"`, not only the marketing sections. It is a hook for tests and consumers, not for styles. Dialogs mark their dialog root. No other markup changes.

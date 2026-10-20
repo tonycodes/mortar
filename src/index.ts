@@ -1,4 +1,5 @@
 export { ThemeProvider, AppearanceControl } from "./foundation.js";
+export type { BrandDefinition, BrandAppearanceTokens } from "./brand.js";
 export type {
   ThemeProviderProps,
   Appearance,

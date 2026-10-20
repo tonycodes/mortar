@@ -6,6 +6,7 @@ import {
   componentRoot,
 } from "./internal.js";
 import { Portal } from "@headlessui/react";
+import { brandToCss, type BrandDefinition } from "./brand.js";
 import {
   createContext,
   useContext,
@@ -17,7 +18,11 @@ import {
 } from "react";
 
 export type Appearance = "light" | "dark" | "system";
-export type Brand = "neutral" | "green";
+/**
+ * A built-in brand, or the name of one declared in CSS
+ * (`[data-mortar-brand="name"]`) or through ThemeProvider's `brandTokens`.
+ */
+export type Brand = "neutral" | "green" | (string & {});
 export type Density = "compact" | "comfortable" | "spacious";
 type Theme = {
   appearance: Appearance;
@@ -34,6 +39,13 @@ export interface ThemeProviderProps {
   /** Connect the application router once for every kit link. A nested provider without it keeps the outer router. */
   navigate?: Navigate;
   brand?: Brand;
+  /**
+   * Defines `brand` at runtime from data instead of CSS, e.g. a tenant's
+   * colours. Rendered as a stylesheet that React hoists into the document
+   * head (and server-renders), so overlays opened inside the provider share it.
+   * Omitted values derive from `primary`.
+   */
+  brandTokens?: BrandDefinition;
   density?: Density;
   /**
    * document writes the root element. container paints a wrapper and leaves
@@ -45,6 +57,13 @@ export interface ThemeProviderProps {
   className?: string;
 }
 const DARK = "(prefers-color-scheme: dark)";
+/** A short, stable content hash for the brand stylesheet's href. */
+function hash(text: string) {
+  let value = 5381;
+  for (let i = 0; i < text.length; i++)
+    value = ((value << 5) + value + text.charCodeAt(i)) | 0;
+  return (value >>> 0).toString(36);
+}
 function subscribeToScheme(update: () => void) {
   const media = window.matchMedia(DARK);
   media.addEventListener("change", update);
@@ -90,6 +109,7 @@ export function ThemeProvider({
   onAppearanceChange,
   navigate,
   brand = "neutral",
+  brandTokens,
   density = "comfortable",
   scope = "document",
   className,
@@ -144,8 +164,19 @@ export function ThemeProvider({
         : element.setAttribute("data-mortar-appearance", previous);
     };
   }, [resolvedAppearance, scope]);
+  const brandCss = brandTokens ? brandToCss(brand, brandTokens) : undefined;
   const theme = (
     <NavigationContext.Provider value={navigate ?? outerNavigate}>
+      {brandCss && (
+        // React 19 hoists and deduplicates this by href, including when
+        // server-rendered; the href changes with the content.
+        <style
+          href={`mortar-brand-${brand}-${hash(brandCss)}`}
+          precedence="mortar"
+        >
+          {brandCss}
+        </style>
+      )}
       <ThemeContext.Provider
         value={{ appearance, setAppearance, brand, density }}
       >

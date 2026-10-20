@@ -25,6 +25,27 @@
   --color-success: var(--m-success);
   --color-warning: var(--m-warning);
   --color-danger: var(--m-danger);
+  --color-info: var(--m-info);
+  --color-secondary: var(--m-secondary);
+  --color-selected: var(--m-selected);
+  --color-link: var(--m-link);
   --font-sans: var(--m-font);
   --font-mono: var(--m-mono);
+  /* Weights equal Tailwind's defaults, so these follow a retheme without
+     changing anything until one happens. */
+  --font-weight-medium: var(--m-weight-medium);
+  --font-weight-semibold: var(--m-weight-semibold);
+  --font-weight-bold: var(--m-weight-bold);
+  /* Mortar's radii under their own names (rounded-m, rounded-m-lg, …), so
+     Tailwind's rounded-sm/md/lg keep their usual sizes. */
+  --radius-m-xs: var(--m-radius-xs);
+  --radius-m-sm: var(--m-radius-sm);
+  --radius-m: var(--m-radius);
+  --radius-m-lg: var(--m-radius-lg);
+  --radius-m-xl: var(--m-radius-xl);
+  --radius-m-full: var(--m-radius-full);
+  --shadow-float: var(--m-float);
+  --tracking-display: var(--m-tracking-display);
+  --tracking-heading: var(--m-tracking-heading);
+  --tracking-caps: var(--m-tracking-caps);
 }

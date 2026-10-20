@@ -216,3 +216,60 @@ test("a container provider hydrates server markup without a mismatch", async ({
   await expect(wrapper).toHaveAttribute("data-mortar-appearance", "dark");
   expect(errors).toEqual([]);
 });
+
+// A runtime brand (ThemeProvider brandTokens) reaches the provider's own
+// content, inverse bands and the overlays it portals out of its wrapper.
+const BLUE = "rgb(29, 78, 216)";
+const LIGHT_BLUE = "rgb(147, 197, 253)";
+test("a runtime brand reaches a container's content and its overlays", async ({
+  page,
+}) => {
+  await open(page, "brand-container");
+  const wrapper = page.locator("[data-mortar-brand='acme']").first();
+  await expect(wrapper).toHaveAttribute("data-mortar-appearance", "dark");
+  expect(await tokenColor(page, "--m-primary", wrapper)).toBe(LIGHT_BLUE);
+  expect(
+    await background(
+      page.getByRole("button", { name: "Primary", exact: true }),
+    ),
+  ).toBe(LIGHT_BLUE);
+  // One stylesheet for the brand, hoisted into the head.
+  await expect(
+    page.locator("head style[data-href^='mortar-brand-acme-']"),
+  ).toHaveCount(1);
+
+  const trigger = page.getByRole("button", { name: "Actions" });
+  await trigger.focus();
+  await page.keyboard.press("ArrowDown");
+  const menu = page.getByRole("menu");
+  await expect(menu).toBeVisible();
+  expect(await tokenColor(page, "--m-primary", menu)).toBe(LIGHT_BLUE);
+  await page.keyboard.press("Escape");
+
+  await page.getByRole("button", { name: "Open dialog" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  // The theme scope sits inside Headless UI's root, around the panel.
+  expect(
+    await tokenColor(page, "--m-primary", dialog.locator(".m-dialog-panel")),
+  ).toBe(LIGHT_BLUE);
+});
+
+test("a runtime brand themes the document and flips in inverse bands", async ({
+  page,
+}) => {
+  await open(page, "brand-document");
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-mortar-brand",
+    "acme",
+  );
+  expect(
+    await background(
+      page.getByRole("button", { name: "Primary", exact: true }),
+    ),
+  ).toBe(BLUE);
+  // Inverse bands use the brand's dark values.
+  expect(
+    await background(page.getByRole("button", { name: "Inverse primary" })),
+  ).toBe(LIGHT_BLUE);
+});
