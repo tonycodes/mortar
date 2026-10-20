@@ -1,5 +1,5 @@
 import { KitLink } from "../src/navigation.js";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ThemeProvider,
@@ -297,7 +297,15 @@ function PlaygroundApp() {
       }
     >
       {Template ? (
-        <Template />
+        <Suspense
+          fallback={
+            <p role="status" className="m-sr-only">
+              Loading page…
+            </p>
+          }
+        >
+          <Template />
+        </Suspense>
       ) : (
         <Playground params={params} navigate={navigate} />
       )}
