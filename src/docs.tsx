@@ -8,10 +8,12 @@ import { BrandMark } from "./layout.js";
 import type { ItemGroup, LinkItem } from "./navigation.js";
 import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import {
+  AsComponentRoot,
   MobileNavDialog,
   NavGroups,
   TermList,
   cx,
+  componentRoot,
   rovingIndex,
 } from "./internal.js";
 
@@ -62,6 +64,7 @@ export function DocsShell({
   );
   return (
     <div
+      {...componentRoot("DocsShell")}
       className={cx("m-docs-shell", className)}
       data-layout={layout === "article" ? undefined : layout}
     >
@@ -180,6 +183,7 @@ export function SearchTrigger({
   return (
     <button
       type="button"
+      {...componentRoot("SearchTrigger")}
       className={cx("m-search-trigger", className)}
       onClick={onOpen}
       aria-keyshortcuts="Meta+K Control+K"
@@ -199,24 +203,26 @@ export function SearchDialog(props: {
   attribution?: ReactNode;
 }) {
   return (
-    <CommandPalette
-      {...props}
-      label="Search documentation"
-      placeholder="Search docs"
-      footer={
-        <>
-          <span>
-            <Kbd keys={["↑", "↓"]} /> navigate
-          </span>
-          <span>
-            <Kbd keys={["↵"]} /> open
-          </span>
-          {props.attribution && (
-            <span className="m-palette-attribution">{props.attribution}</span>
-          )}
-        </>
-      }
-    />
+    <AsComponentRoot name="SearchDialog" of="CommandPalette">
+      <CommandPalette
+        {...props}
+        label="Search documentation"
+        placeholder="Search docs"
+        footer={
+          <>
+            <span>
+              <Kbd keys={["↑", "↓"]} /> navigate
+            </span>
+            <span>
+              <Kbd keys={["↵"]} /> open
+            </span>
+            {props.attribution && (
+              <span className="m-palette-attribution">{props.attribution}</span>
+            )}
+          </>
+        }
+      />
+    </AsComponentRoot>
   );
 }
 
@@ -239,7 +245,11 @@ export function Steps({
 }) {
   const Heading = headingTag(itemHeadingLevel);
   return (
-    <ol id={id} className={cx("m-steps", className)}>
+    <ol
+      id={id}
+      {...componentRoot("Steps")}
+      className={cx("m-steps", className)}
+    >
       {items.map((item, i) => (
         <li key={`${item.title}:${i}`}>
           <span className="m-step-number" aria-hidden="true">
@@ -285,6 +295,7 @@ export function Callout({
   return (
     <div
       id={id}
+      {...componentRoot("Callout")}
       className={cx("m-callout", className)}
       role="note"
       aria-labelledby={labelId}
@@ -339,7 +350,12 @@ export function FileTree({
   items: FileNode[];
 }) {
   return (
-    <figure id={id} className={cx("m-file-tree", className)} aria-label={label}>
+    <figure
+      id={id}
+      {...componentRoot("FileTree")}
+      className={cx("m-file-tree", className)}
+      aria-label={label}
+    >
       <FileBranch nodes={items} />
     </figure>
   );
@@ -408,7 +424,11 @@ export function CodeTabs({
   const tabId = (tab: { id: string }) => `${base}-tab-${tab.id}`;
   const panelId = `${base}-panel`;
   return (
-    <figure id={id} className={cx("m-code-tabs", className)}>
+    <figure
+      id={id}
+      {...componentRoot("CodeTabs")}
+      className={cx("m-code-tabs", className)}
+    >
       <div className="m-code-bar">
         {tabs.length > 1 ? (
           <div role="tablist" aria-label={filename || "Code examples"}>
@@ -501,7 +521,11 @@ export function Release({
   const Heading = headingTag(headingLevel);
   const GroupHeading = headingTag(childLevel(headingLevel));
   return (
-    <article id={id} className={cx("m-release", className)}>
+    <article
+      id={id}
+      {...componentRoot("Release")}
+      className={cx("m-release", className)}
+    >
       <header>
         <Heading className="m-release-version">{version}</Heading>
         <time dateTime={date}>{dateLabel}</time>
@@ -560,6 +584,7 @@ export function ApiEndpoint({
   return (
     <section
       id={id}
+      {...componentRoot("ApiEndpoint")}
       className={cx("m-api-endpoint", className)}
       aria-labelledby={headingId}
     >
@@ -613,7 +638,11 @@ export function PageFeedback({
   updated?: ReactNode;
 }) {
   return (
-    <div id={id} className={cx("m-page-feedback", className)}>
+    <div
+      id={id}
+      {...componentRoot("PageFeedback")}
+      className={cx("m-page-feedback", className)}
+    >
       <div role="group" aria-label={question}>
         <span>{question}</span>
         {(["yes", "no"] as const).map((v) => (
@@ -647,7 +676,12 @@ export function PagerLinks({
   label?: string;
 }) {
   return (
-    <nav id={id} className={cx("m-pager", className)} aria-label={label}>
+    <nav
+      id={id}
+      {...componentRoot("PagerLinks")}
+      className={cx("m-pager", className)}
+      aria-label={label}
+    >
       {previous ? (
         <KitLink href={previous.href} rel="prev">
           <small>Previous</small>
@@ -682,7 +716,11 @@ export function LinkCards({
   items: Pick<LinkItem, "label" | "href" | "description">[];
 }) {
   return (
-    <ul id={id} className={cx("m-link-cards", className)}>
+    <ul
+      id={id}
+      {...componentRoot("LinkCards")}
+      className={cx("m-link-cards", className)}
+    >
       {items.map((item, index) => (
         <li key={`${item.label}:${item.href}:${index}`}>
           <KitLink href={item.href}>

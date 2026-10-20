@@ -648,76 +648,41 @@
     color: var(--m-secondary);
     max-width: 68ch;
   }
-  /* Prose styles stop at nested Mortar components (any element with an m- class). */
+  /* Prose styles stop at nested Mortar components: every component root carries
+     data-m-component, so a utility class such as m-4 does not opt out. */
   .m-prose
-    :is(h2, h3):where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    :is(h2, h3):where(:not([data-m-component], .m-prose [data-m-component] *)) {
     color: var(--m-ink);
     letter-spacing: -0.02em;
     margin: 1.6em 0 0.5em;
   }
-  .m-prose
-    h2:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+  .m-prose h2:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     font-size: 24px;
     font-weight: 700;
   }
-  .m-prose
-    h3:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+  .m-prose h3:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     font-size: 17px;
     font-weight: 600;
   }
   .m-prose
     :is(p, ul, ol):where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
+      :not([data-m-component], .m-prose [data-m-component] *)
     ) {
     margin: 0.75em 0;
   }
   .m-prose
-    li:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    )
+    li:where(:not([data-m-component], .m-prose [data-m-component] *))
     + li {
     margin-top: 4px;
   }
-  .m-prose
-    a:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+  .m-prose a:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     text-decoration: underline;
     text-underline-offset: 3px;
     text-decoration-color: var(--m-line-strong);
   }
   .m-prose
     :not(pre)
-    > code:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    > code:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     font: 500 0.875em var(--m-mono);
     padding: 1px 5px;
     border: 1px solid var(--m-line);
@@ -726,21 +691,11 @@
     color: var(--m-ink);
   }
   .m-prose
-    strong:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    strong:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     color: var(--m-ink);
   }
   .m-prose
-    table:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    table:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     display: block;
     margin: 20px 0;
     width: fit-content;

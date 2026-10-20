@@ -9,6 +9,7 @@ import {
   TermList,
   TitledIntro,
   cx,
+  componentRoot,
   sectionTone,
 } from "./internal.js";
 
@@ -49,7 +50,7 @@ export function BentoGrid({
       id={id}
       className={cx("m-marketing-section", className)}
       data-tone={sectionTone(tone)}
-      data-m-component="BentoGrid"
+      {...componentRoot("BentoGrid")}
     >
       <TitledIntro
         eyebrow={eyebrow}
@@ -102,7 +103,7 @@ export function StatGroup({
       className={cx("m-stat-group", !background && className)}
       aria-label={label}
       data-layout={layout === "grid" ? undefined : layout}
-      data-m-component={background ? undefined : "StatGroup"}
+      {...componentRoot("StatGroup", !background)}
       items={items.map((item) => ({
         term: item.label,
         details: item.value,
@@ -117,7 +118,7 @@ export function StatGroup({
     <div
       id={id}
       className={cx("m-stat-band", className)}
-      data-m-component="StatGroup"
+      {...componentRoot("StatGroup")}
       data-background="true"
       data-tone="inverse"
     >
@@ -158,7 +159,7 @@ export function TestimonialGrid({
       id={id}
       className={cx("m-marketing-section", className)}
       aria-label={title ? undefined : "Testimonials"}
-      data-m-component="TestimonialGrid"
+      {...componentRoot("TestimonialGrid")}
     >
       {title && <Heading className="m-section-title">{title}</Heading>}
       <div
@@ -213,7 +214,7 @@ export function PlanComparison({
       id={id}
       className={cx("m-marketing-section", className)}
       aria-labelledby={headingId}
-      data-m-component="PlanComparison"
+      {...componentRoot("PlanComparison")}
     >
       <TitledIntro
         id={headingId}
@@ -320,7 +321,7 @@ export function PostList({
     <section
       id={id}
       className={cx("m-marketing-section", className)}
-      data-m-component="PostList"
+      {...componentRoot("PostList")}
     >
       <div className="m-section-heading-row">
         <div>
@@ -385,7 +386,7 @@ export function TeamGrid({
     <section
       id={id}
       className={cx("m-marketing-section", className)}
-      data-m-component="TeamGrid"
+      {...componentRoot("TeamGrid")}
     >
       <TitledIntro
         title={title}
@@ -465,7 +466,7 @@ export function ContactSection({
     <section
       id={id}
       className={cx("m-contact", className)}
-      data-m-component="ContactSection"
+      {...componentRoot("ContactSection")}
       data-media={media ? "true" : undefined}
     >
       {media ? (
@@ -534,7 +535,7 @@ export function Newsletter({
     <section
       id={id}
       className={cx("m-newsletter", className)}
-      data-m-component="Newsletter"
+      {...componentRoot("Newsletter")}
       data-layout={layout === "split" ? undefined : layout}
       data-variant={variant === "plain" ? undefined : variant}
     >
@@ -597,7 +598,7 @@ export function NotFound({
     <section
       id={id}
       className={cx("m-not-found", className)}
-      data-m-component="NotFound"
+      {...componentRoot("NotFound")}
       data-background={background ? true : undefined}
       data-tone={background ? "inverse" : undefined}
     >

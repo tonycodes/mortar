@@ -6,7 +6,7 @@ const icon = h("svg", { viewBox: "0 0 20 20" });
 test("PageHeading keeps its markup and adds meta and an avatar", () => {
   assert.equal(
     html(PageHeading, { title: "Workspace overview" }),
-    '<header class="m-page-heading"><div class="m-heading-row"><div><h1 class="m-page-title">Workspace overview</h1></div></div></header>',
+    '<header data-m-component="PageHeading" class="m-page-heading"><div class="m-heading-row"><div><h1 class="m-page-title">Workspace overview</h1></div></div></header>',
   );
   const rich = html(PageHeading, {
     title: "Back End Developer",
@@ -35,7 +35,10 @@ test("AttachmentList names each download by its file", () => {
       { id: "cl", name: "coverletter.pdf", href: "#cl", actionLabel: "View" },
     ],
   });
-  assert.match(markup, /^<ul class="m-attachments" aria-label="Attachments">/);
+  assert.match(
+    markup,
+    /^<ul data-m-component="AttachmentList" class="m-attachments" aria-label="Attachments">/,
+  );
   assert.match(
     markup,
     /<span class="m-attachment-name">resume_back_end_developer.pdf<\/span><span class="m-attachment-size">2.4 MB<\/span>/,

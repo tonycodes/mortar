@@ -272,7 +272,7 @@ test("TestimonialGrid and TeamGrid hide avatars that repeat a visible name", () 
   for (const markup of [grid, team]) {
     assert.match(
       markup,
-      /<span class="m-avatar[^"]*"[^>]* aria-hidden="true">/,
+      /<span data-m-component="Avatar" class="m-avatar[^"]*"[^>]* aria-hidden="true">/,
     );
     assert.doesNotMatch(markup, /role="img" aria-label="Ana Ruiz"/);
   }
@@ -312,7 +312,9 @@ test("Callout is a named note with a status tone instead of type", () => {
   assert.ok(id, plain);
   assert.match(
     opening(plain),
-    new RegExp(`^<div class="m-callout" role="note" aria-labelledby="${id}">`),
+    new RegExp(
+      `^<div data-m-component="Callout" class="m-callout" role="note" aria-labelledby="${id}">`,
+    ),
   );
   const danger = html(UI.Callout, {
     tone: "danger",
@@ -333,7 +335,7 @@ test("PagerLinks has its own landmark name, hidden arrows and data-next=true", (
   assert.doesNotMatch(markup, /aria-label="Pagination"/);
   assert.match(
     markup,
-    /<nav class="m-pager" aria-label="Previous and next page">/,
+    /<nav data-m-component="PagerLinks" class="m-pager" aria-label="Previous and next page">/,
   );
   assert.match(markup, /<span aria-hidden="true">← <\/span>Install/);
   assert.match(markup, /Deploy<span aria-hidden="true"> →<\/span>/);

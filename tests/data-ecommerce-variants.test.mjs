@@ -27,7 +27,7 @@ test("ProductList default markup is unchanged by the card, swatch and action opt
   });
   assert.equal(
     markup,
-    '<ul class="m-product-list" aria-label="New" data-columns="4"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div class="m-product-info"><h3 class="m-product-name"><a href="#a">Tote</a></h3><p class="m-product-meta">Natural</p></div><p class="m-product-price">£1</p></li></ul>',
+    '<ul data-m-component="ProductList" class="m-product-list" aria-label="New" data-columns="4"><li><div class="m-product-image"><img src="/a.png" alt="A" loading="lazy"/></div><div class="m-product-info"><h3 class="m-product-name"><a href="#a">Tote</a></h3><p class="m-product-meta">Natural</p></div><p class="m-product-price">£1</p></li></ul>',
   );
 });
 
@@ -134,7 +134,10 @@ test("GridList renders details as a description list and opts into split actions
     { id: "a", title: "Tuple", actions: h("a", { href: "#e" }, "Email") },
   ];
   const plain = html(GridList, { label: "Clients", items });
-  assert.match(plain, /<ul class="m-grid-list" aria-label="Clients">/);
+  assert.match(
+    plain,
+    /<ul data-m-component="GridList" class="m-grid-list" aria-label="Clients">/,
+  );
   assert.doesNotMatch(plain, /data-actions|m-grid-list-details/);
   const rich = html(GridList, {
     label: "Clients",
@@ -165,7 +168,7 @@ test("MetricGroup announces trends and shows previous values; defaults unchanged
   });
   assert.equal(
     plain,
-    '<dl class="m-metrics" aria-label="Summary"><div><dt>Requests</dt><dd><strong>1.4M</strong><span class="m-metric-change" data-tone="success">+12%</span></dd></div></dl>',
+    '<dl data-m-component="MetricGroup" class="m-metrics" aria-label="Summary"><div><dt>Requests</dt><dd><strong>1.4M</strong><span class="m-metric-change" data-tone="success">+12%</span></dd></div></dl>',
   );
   const trend = html(MetricGroup, {
     label: "Summary",
@@ -190,7 +193,7 @@ test("MetricGroup announces trends and shows previous values; defaults unchanged
   });
   assert.match(
     trend,
-    /<dl class="m-metrics" aria-label="Summary" data-variant="cards">/,
+    /<dl data-m-component="MetricGroup" class="m-metrics" aria-label="Summary" data-variant="cards">/,
   );
   assert.match(trend, /<span class="m-metric-previous">from 70,946<\/span>/);
   assert.match(

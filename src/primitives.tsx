@@ -32,6 +32,8 @@ import {
   RequiredMark,
   Swatch,
   cx,
+  componentRoot,
+  useComponentName,
   focusAway,
   rovingIndex,
   useField,
@@ -75,6 +77,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     );
     return (
       <button
+        {...componentRoot("Button")}
         {...props}
         ref={ref}
         type={type}
@@ -114,6 +117,7 @@ export function ActionLink({
 }: LinkAction & { variant?: ButtonProps["variant"]; className?: string }) {
   return (
     <KitLink
+      {...componentRoot("ActionLink")}
       className={cx("m-button", `m-button-${variant}`, className)}
       href={href}
     >
@@ -143,6 +147,7 @@ export function ButtonGroup({
 }) {
   return (
     <div
+      {...componentRoot("ButtonGroup")}
       className={cx("m-button-group", className)}
       role="group"
       aria-label={label}
@@ -190,6 +195,7 @@ export function Badge({
 }) {
   return (
     <span
+      {...componentRoot("Badge")}
       className={cx("m-badge", className)}
       data-tone={tone === "neutral" ? undefined : tone}
     >
@@ -256,7 +262,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     describedBy: props["aria-describedby"],
   });
   return (
-    <div className={cx("m-field", className)}>
+    <div {...componentRoot("Input")} className={cx("m-field", className)}>
       <FieldLabel htmlFor={fieldId} label={label} required={props.required} />
       <div
         className="m-input-group"
@@ -307,7 +313,7 @@ export function Select({
   });
   const listbox = !!props.multiple || (props.size || 0) > 1;
   return (
-    <div className={cx("m-field", className)}>
+    <div {...componentRoot("Select")} className={cx("m-field", className)}>
       <FieldLabel htmlFor={fieldId} label={label} required={props.required} />
       <div className="m-select-control" data-listbox={listbox || undefined}>
         <select
@@ -345,6 +351,7 @@ export function Fieldset({
   const id = useId();
   return (
     <fieldset
+      {...componentRoot("Fieldset")}
       className={cx("m-fieldset", className)}
       disabled={disabled}
       aria-describedby={description ? id : undefined}
@@ -370,7 +377,7 @@ export function TextArea({
     describedBy: props["aria-describedby"],
   });
   return (
-    <div className={cx("m-field", className)}>
+    <div {...componentRoot("TextArea")} className={cx("m-field", className)}>
       <FieldLabel htmlFor={fieldId} label={label} required={props.required} />
       <textarea
         {...props}
@@ -384,12 +391,14 @@ export function TextArea({
 }
 /** Label beside a control with a description line linked by aria-describedby. */
 function DescribedChoice({
+  component,
   input,
   id,
   label,
   description,
   className,
 }: {
+  component: string;
   input: (attrs: { id: string; "aria-describedby": string }) => ReactNode;
   id?: string;
   label: ReactNode;
@@ -400,7 +409,10 @@ function DescribedChoice({
   const fieldId = id || generated;
   const descriptionId = `${fieldId}-description`;
   return (
-    <div className={cx("m-choice", "m-choice-described", className)}>
+    <div
+      {...componentRoot(component)}
+      className={cx("m-choice", "m-choice-described", className)}
+    >
       {input({ id: fieldId, "aria-describedby": descriptionId })}
       <div className="m-choice-text">
         <label htmlFor={fieldId}>{label}</label>
@@ -422,6 +434,7 @@ export function Checkbox({
   if (description)
     return (
       <DescribedChoice
+        component="Checkbox"
         id={props.id}
         label={label}
         description={description}
@@ -430,7 +443,7 @@ export function Checkbox({
       />
     );
   return (
-    <label className={cx("m-choice", className)}>
+    <label {...componentRoot("Checkbox")} className={cx("m-choice", className)}>
       <input {...props} type="checkbox" />
       {label}
     </label>
@@ -449,6 +462,7 @@ export function Switch({
   if (description)
     return (
       <DescribedChoice
+        component="Switch"
         id={props.id}
         label={label}
         description={description}
@@ -465,7 +479,7 @@ export function Switch({
       />
     );
   return (
-    <label className={cx("m-choice", className)}>
+    <label {...componentRoot("Switch")} className={cx("m-choice", className)}>
       <input {...props} type="checkbox" role="switch" className="m-switch" />
       {label}
     </label>
@@ -498,6 +512,7 @@ export function RadioGroup({
 }) {
   return (
     <fieldset
+      {...componentRoot("RadioGroup")}
       className={cx("m-radio-group", className)}
       data-layout={layout === "list" ? undefined : layout}
     >
@@ -566,7 +581,7 @@ export function Tabs({
     ? value
     : items[0]?.id;
   return (
-    <div className={className}>
+    <div {...componentRoot("Tabs")} className={className}>
       <div
         className="m-tabs"
         role="tablist"
@@ -644,8 +659,9 @@ export function Modal({
   /** On the dialog panel. */
   className?: string;
 }) {
+  const component = useComponentName("Modal");
   return (
-    <DialogFrame open={open} onClose={onClose}>
+    <DialogFrame open={open} onClose={onClose} component={component}>
       <div className="m-dialog-position">
         <DialogPanel
           className={cx("m-dialog-panel", className)}
@@ -744,6 +760,7 @@ export function Dropdown({
   return (
     <Menu>
       <MenuButton
+        {...componentRoot("Dropdown")}
         className={cx("m-button", `m-button-${variant}`, className)}
         aria-label={iconOnly && icon ? label : undefined}
         data-icon-only={iconOnly && icon ? true : undefined}
@@ -825,6 +842,7 @@ export function Notice({
     <div
       ref={root}
       id={id}
+      {...componentRoot("Notice")}
       className={cx("m-notice", className)}
       data-tone={tone === "neutral" ? undefined : tone}
       role={announce ? (tone === "danger" ? "alert" : "status") : undefined}
@@ -882,6 +900,7 @@ export function EmptyState({
   return (
     <div
       id={id}
+      {...componentRoot("EmptyState")}
       className={cx("m-empty", className)}
       data-dashed={dashed || undefined}
       data-align={align === "start" ? "start" : undefined}

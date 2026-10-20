@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cx } from "./internal.js";
+import { componentRoot, cx } from "./internal.js";
 
 /** Framed product screenshot or illustration for heroes and feature sections. */
 export function MockWindow({
@@ -26,7 +26,7 @@ export function MockWindow({
       className={cx("m-mock-window", className)}
       data-variant={variant === "browser" ? undefined : variant}
       aria-label={label}
-      data-m-component="MockWindow"
+      {...componentRoot("MockWindow")}
     >
       {variant !== "plain" && variant !== "phone" && (
         <div className="m-mock-bar" aria-hidden="true">
@@ -75,7 +75,7 @@ export function ChatPreview({
       id={id}
       className={cx("m-chat-preview", className)}
       aria-label={`${title} conversation`}
-      data-m-component="ChatPreview"
+      {...componentRoot("ChatPreview")}
     >
       <header>
         <span className="m-chat-avatar" aria-hidden="true" />

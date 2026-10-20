@@ -296,7 +296,9 @@ export function Overview({ kitId }: { kitId: string | null }) {
               <li key={id} className="pg-category-card">
                 <div className="pg-thumb" inert aria-hidden="true">
                   <div className="pg-thumb-scale pg-thumb-page">
-                    <Component />
+                    <Suspense fallback={null}>
+                      <Component />
+                    </Suspense>
                   </div>
                 </div>
                 <h3>

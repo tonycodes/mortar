@@ -9,7 +9,7 @@ test("EmptyState default markup is unchanged", () => {
       description: "Create one.",
       action: h("button", null, "New"),
     }),
-    '<div class="m-empty"><h3>No projects</h3><p>Create one.</p><button>New</button></div>',
+    '<div data-m-component="EmptyState" class="m-empty"><h3>No projects</h3><p>Create one.</p><button>New</button></div>',
   );
 });
 
@@ -27,7 +27,7 @@ test("EmptyState dashed, start alignment, heading level and children", () => {
   );
   assert.equal(
     markup,
-    '<div class="m-empty" data-dashed="true" data-align="start"><h2>Projects</h2><p>Pick a template.</p><div class="m-empty-extra"><ul><li>List</li></ul></div></div>',
+    '<div data-m-component="EmptyState" class="m-empty" data-dashed="true" data-align="start"><h2>Projects</h2><p>Pick a template.</p><div class="m-empty-extra"><ul><li>List</li></ul></div></div>',
   );
   assert.match(
     html(EmptyState, { title: "T", description: "D", headingLevel: 4 }),
@@ -42,7 +42,7 @@ test("EmptyState dashed, start alignment, heading level and children", () => {
 test("Avatar default markup is unchanged", () => {
   assert.equal(
     html(Avatar, { name: "Ana Kovač", status: "online" }),
-    '<span class="m-avatar m-avatar-md" role="img" aria-label="Ana Kovač, online"><span aria-hidden="true">AK</span><span class="m-avatar-status" data-status="online" aria-hidden="true"></span></span>',
+    '<span data-m-component="Avatar" class="m-avatar m-avatar-md" role="img" aria-label="Ana Kovač, online"><span aria-hidden="true">AK</span><span class="m-avatar-status" data-status="online" aria-hidden="true"></span></span>',
   );
 });
 

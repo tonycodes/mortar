@@ -4,7 +4,7 @@
 
 2. **page-pattern-reuse** — Reuse complete page patterns: navigation, headings, filters, list/detail workspaces, states and action placement. Reusing controls alone is insufficient.
 
-3. **project-agnostic-chrome** — Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic. The marketing header logo is a slot. Marketing roots expose `data-m-component` for tests and consumers. It is not a styling hook.
+3. **project-agnostic-chrome** — Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic. The marketing header logo is a slot. Every component root exposes `data-m-component` with the component's name for tests and consumers. It is not a styling hook.
 
 4. **central-fixes** — Contribute missing patterns centrally. Do not duplicate source, create repeated local wrappers or apply consumer CSS overrides.
 
@@ -41,5 +41,6 @@ Every component follows these rules. New props must fit them, and the code revie
   - A visible heading prop is `title`, and an accessible name prop is `label`.
 - **Identity.** Every section-level component accepts `id` so in-page links can target it. Generated ids come from `useId`; ids are never hard-coded.
 - **className.** Every component accepts `className` on its root element, merged with the kit's classes. It is for layout such as margins or grid placement. Colour and type come from tokens and props, never consumer overrides (principle 4).
+- **Component marker.** The root element of every exported component carries `data-m-component="<ExportName>"`, set through `componentRoot()` in `src/internal.tsx`. The root is the outermost element the component renders. A dialog marks its dialog root, which is portalled to the document body and exists only while open. A component that renders sibling elements marks the first one it always renders (SaveBar's status message). When one component renders another as its root, the root carries the outer name (SearchDialog, not CommandPalette). ThemeProvider marks its wrapper only with `scope="container"`; with the default document scope it renders no element of its own. Nested components keep their own markers. The marker is for tests and consumers to find components, never for consumer styles. Its one selector in the kit is internal: Prose styles stop at a nested component root, so a utility class such as `m-4` inside prose keeps its prose styles.
 - **Data attributes.** A boolean attribute appears only when true (`data-x="true"`). An enum attribute is omitted for the default value. Styles select on these attributes, never on text or `aria-label`.
 - **Icons and decoration.** Shared icons come from `src/icons.tsx` and are `aria-hidden`. Decorative glyphs such as arrows are hidden from assistive technology, and their meaning is carried by text.

@@ -27,7 +27,7 @@ test("ProductList names each card by its product link and shows the price", () =
   });
   assert.match(
     markup,
-    /<ul class="m-product-list" aria-label="New arrivals" data-columns="4">/,
+    /<ul data-m-component="ProductList" class="m-product-list" aria-label="New arrivals" data-columns="4">/,
   );
   assert.match(
     markup,
@@ -85,7 +85,7 @@ test("ProductOverview groups options as radio fieldsets and labels the gallery",
   // The add button submits the form, so Enter in the form adds too.
   assert.match(
     markup,
-    /<form class="m-product-form">.*<button type="submit" class="m-button m-button-primary[^"]*">Add to bag<\/button><\/form>/,
+    /<form class="m-product-form">.*<button data-m-component="Button" type="submit" class="m-button m-button-primary[^"]*">Add to bag<\/button><\/form>/,
   );
   const busy = html(ProductOverview, {
     name: "Canvas tote",
@@ -96,7 +96,7 @@ test("ProductOverview groups options as radio fieldsets and labels the gallery",
   assert.match(
     busy,
     // Loading keeps the button focusable: aria-disabled, not native disabled.
-    /<button type="submit" aria-disabled="true" aria-busy="true"/,
+    /<button data-m-component="Button" type="submit" aria-disabled="true" aria-busy="true"/,
   );
 });
 
@@ -116,7 +116,10 @@ test("ShoppingCart labels per-line controls with the product name and handles em
     onQuantityChange() {},
     onRemove() {},
   });
-  assert.match(markup, /<ul class="m-cart" aria-label="Items in your bag">/);
+  assert.match(
+    markup,
+    /<ul data-m-component="ShoppingCart" class="m-cart" aria-label="Items in your bag">/,
+  );
   assert.match(markup, /<label[^>]*>Quantity, Canvas tote<\/label>/);
   assert.match(markup, /<option value="2" selected="">2<\/option>/);
   assert.match(
@@ -143,7 +146,7 @@ test("OrderSummary lists lines and a distinguished total", () => {
   });
   assert.match(
     markup,
-    /<section class="m-order-summary" aria-labelledby="[^"]+"/,
+    /<section data-m-component="OrderSummary" class="m-order-summary" aria-labelledby="[^"]+"/,
   );
   assert.match(
     markup,

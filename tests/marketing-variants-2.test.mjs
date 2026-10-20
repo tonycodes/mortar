@@ -21,7 +21,7 @@ test("Hero default markup is unchanged", () => {
       layout: "split",
       children: h("p", null, "Shot"),
     }),
-    '<section class="m-hero m-hero-split" data-m-component="Hero"><div><p class="m-eyebrow">New</p><h1 class="m-section-title">Build</h1><p class="m-hero-description">Desc</p><div class="m-actions"><a class="m-button m-button-primary" href="/choose">Choose</a><a class="m-button m-button-secondary" href="/more">More</a></div></div><div class="m-hero-preview"><p>Shot</p></div></section>',
+    '<section class="m-hero m-hero-split" data-m-component="Hero"><div><p class="m-eyebrow">New</p><h1 class="m-section-title">Build</h1><p class="m-hero-description">Desc</p><div class="m-actions"><a data-m-component="ActionLink" class="m-button m-button-primary" href="/choose">Choose</a><a data-m-component="ActionLink" class="m-button m-button-secondary" href="/more">More</a></div></div><div class="m-hero-preview"><p>Shot</p></div></section>',
   );
 });
 
@@ -107,7 +107,7 @@ test("Pricing default markup is unchanged", () => {
       plans: pricingPlans,
       tone: "inverse",
     }),
-    '<section class="m-marketing-section m-pricing" data-m-component="Pricing"><h2 class="m-section-title">Plans</h2><p class="m-section-description">Prices</p><div class="m-segmented" role="group" aria-label="Billing interval"><button type="button" aria-pressed="true">Annual</button><button type="button" aria-pressed="false">Monthly</button></div><div class="m-pricing-grid"><article><h3>Basic</h3><p>Personal</p><div class="m-price"><strong>$0</strong><span>/year</span></div><ul><li>One</li></ul><a class="m-button m-button-secondary" href="/choose">Choose</a></article><article data-featured="true" data-tone="inverse" data-availability="coming-soon"><h3>Team</h3><p>Teams</p><div class="m-price"><strong>$16</strong><span>/year</span></div><ul><li>Two</li></ul><p class="m-pricing-availability">Coming soon</p></article></div></section>',
+    '<section class="m-marketing-section m-pricing" data-m-component="Pricing"><h2 class="m-section-title">Plans</h2><p class="m-section-description">Prices</p><div data-m-component="SegmentedControl" class="m-segmented" role="group" aria-label="Billing interval"><button type="button" aria-pressed="true">Annual</button><button type="button" aria-pressed="false">Monthly</button></div><div class="m-pricing-grid"><article><h3>Basic</h3><p>Personal</p><div class="m-price"><strong>$0</strong><span>/year</span></div><ul><li>One</li></ul><a data-m-component="ActionLink" class="m-button m-button-secondary" href="/choose">Choose</a></article><article data-featured="true" data-tone="inverse" data-availability="coming-soon"><h3>Team</h3><p>Teams</p><div class="m-price"><strong>$16</strong><span>/year</span></div><ul><li>Two</li></ul><p class="m-pricing-availability">Coming soon</p></article></div></section>',
   );
 });
 
@@ -132,7 +132,7 @@ test("Pricing detailed layout puts features beside a price panel", () => {
   assert.doesNotMatch(html, /Billing interval/);
   assert.match(
     html,
-    /<article><div class="m-pricing-detail"><h3>Lifetime<\/h3><p>Pay once<\/p><p class="m-pricing-features-label">Included<\/p><ul><li>Forum<\/li><li>Resources<\/li><\/ul><\/div><div class="m-pricing-offer"><div class="m-price"><strong>\$349<\/strong><span>One-time payment<\/span><\/div><a class="m-button m-button-primary" href="\/buy">Get access<\/a><\/div><\/article>/,
+    /<article><div class="m-pricing-detail"><h3>Lifetime<\/h3><p>Pay once<\/p><p class="m-pricing-features-label">Included<\/p><ul><li>Forum<\/li><li>Resources<\/li><\/ul><\/div><div class="m-pricing-offer"><div class="m-price"><strong>\$349<\/strong><span>One-time payment<\/span><\/div><a data-m-component="ActionLink" class="m-button m-button-primary" href="\/buy">Get access<\/a><\/div><\/article>/,
   );
   // Unavailable plans still show their status, never a purchase link. The
   // text is static, so it is not a live region.
@@ -188,7 +188,7 @@ test("LogoCloud default markup is unchanged; grid and split layouts", () => {
   });
   assert.match(
     split,
-    /aria-label="Companies" data-m-component="LogoCloud" data-layout="split"><div class="m-logo-cloud-copy"><h2 class="m-section-title">Trusted by teams<\/h2><p class="m-section-description">Big and small\.<\/p><div class="m-actions"><a class="m-button m-button-primary" href="\/cases">Case studies<\/a><\/div><\/div><ul>/,
+    /aria-label="Companies" data-m-component="LogoCloud" data-layout="split"><div class="m-logo-cloud-copy"><h2 class="m-section-title">Trusted by teams<\/h2><p class="m-section-description">Big and small\.<\/p><div class="m-actions"><a data-m-component="ActionLink" class="m-button m-button-primary" href="\/cases">Case studies<\/a><\/div><\/div><ul>/,
   );
   // Without a title the split layout falls back to the visible label.
   assert.match(

@@ -50,11 +50,14 @@ test("NotFound shows an illustration only when given one", () => {
 
 test("SignInPanel keeps its markup and adds a split screen with an aside", () => {
   const props = { title: "Sign in", headingLevel: 2 };
-  assert.match(html(SignInPanel, props), /^<section class="m-sign-in"/);
+  assert.match(
+    html(SignInPanel, props),
+    /^<section data-m-component="SignInPanel" class="m-sign-in"/,
+  );
   const split = html(SignInPanel, { ...props, aside: media });
   assert.match(
     split,
-    /^<div class="m-sign-in-split"><section class="m-sign-in"/,
+    /^<div data-m-component="SignInPanel" class="m-sign-in-split"><section class="m-sign-in"/,
   );
   assert.match(split, /<div class="m-sign-in-aside"><img src="\/shot.png"/);
 });

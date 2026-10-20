@@ -10,7 +10,7 @@ const root = (...args) => markup(...args).replace(/^(<link[^>]*\/>)+/, "");
 
 // Default markup captured from the build before these variants were added.
 const before = {
-  hero: '<section class="m-hero m-hero-center" data-m-component="Hero"><div><h1 class="m-section-title">T</h1><p class="m-hero-description">D</p><div class="m-actions"><a class="m-button m-button-primary" href="/go">Go</a></div></div></section>',
+  hero: '<section class="m-hero m-hero-center" data-m-component="Hero"><div><h1 class="m-section-title">T</h1><p class="m-hero-description">D</p><div class="m-actions"><a data-m-component="ActionLink" class="m-button m-button-primary" href="/go">Go</a></div></div></section>',
   heroSplit:
     '<section class="m-hero m-hero-split" data-m-component="Hero"><div><h1 class="m-section-title">T</h1><p class="m-hero-description">D</p><div class="m-actions"></div></div><div class="m-hero-preview"><p>x</p></div></section>',
   feature:
@@ -19,11 +19,11 @@ const before = {
     '<section class="m-marketing-section" data-m-component="BentoGrid"><h2 class="m-section-title">T</h2><ul class="m-bento"><li data-span="2"><article><h3>A</h3><p>a</p></article></li><li data-span="1"><article data-tone="inverse"><h3>B</h3><p>b</p></article></li></ul></section>',
   stat: '<dl class="m-stat-group" aria-label="L" data-m-component="StatGroup"><div><dt>One</dt><dd>1</dd><dd class="m-stat-description">d</dd></div><div><dt>Two</dt><dd>2</dd></div></dl>',
   pricing:
-    '<section class="m-marketing-section m-pricing" data-m-component="Pricing"><h2 class="m-section-title">P</h2><div class="m-pricing-grid"><article><h3>N1</h3><p>d</p><div class="m-price"><strong>$1</strong></div><ul><li>f</li></ul><a class="m-button m-button-secondary" href="/go">Go</a></article><article data-featured="true"><h3>N2</h3><p>d</p><div class="m-price"><strong>$2</strong></div><ul><li>f</li></ul><a class="m-button m-button-secondary" href="/go">Go</a></article><article><h3>N3</h3><p>d</p><div class="m-price"><strong>$3</strong></div><ul><li>f</li></ul><a class="m-button m-button-secondary" href="/go">Go</a></article></div></section>',
+    '<section class="m-marketing-section m-pricing" data-m-component="Pricing"><h2 class="m-section-title">P</h2><div class="m-pricing-grid"><article><h3>N1</h3><p>d</p><div class="m-price"><strong>$1</strong></div><ul><li>f</li></ul><a data-m-component="ActionLink" class="m-button m-button-secondary" href="/go">Go</a></article><article data-featured="true"><h3>N2</h3><p>d</p><div class="m-price"><strong>$2</strong></div><ul><li>f</li></ul><a data-m-component="ActionLink" class="m-button m-button-secondary" href="/go">Go</a></article><article><h3>N3</h3><p>d</p><div class="m-price"><strong>$3</strong></div><ul><li>f</li></ul><a data-m-component="ActionLink" class="m-button m-button-secondary" href="/go">Go</a></article></div></section>',
   content:
-    '<link rel="preload" as="image" href="/x.png"/><section class="m-marketing-section m-content-section" data-media="end" aria-labelledby="_R_0_" data-m-component="ContentSection"><div class="m-content-copy"><h2 id="_R_0_" class="m-section-title">T</h2><p class="m-section-description">D</p><div class="m-prose"><p>x</p></div></div><figure class="m-content-media"><img alt="" src="/x.png"/></figure></section>',
+    '<link rel="preload" as="image" href="/x.png"/><section class="m-marketing-section m-content-section" data-media="end" aria-labelledby="_R_0_" data-m-component="ContentSection"><div class="m-content-copy"><h2 id="_R_0_" class="m-section-title">T</h2><p class="m-section-description">D</p><div data-m-component="Prose" class="m-prose"><p>x</p></div></div><figure class="m-content-media"><img alt="" src="/x.png"/></figure></section>',
   notFound:
-    '<section class="m-not-found" data-m-component="NotFound"><p class="m-eyebrow">404</p><h1 class="m-section-title">T</h1><p>D</p><div class="m-actions"><a class="m-button m-button-primary" href="/go">Go</a></div></section>',
+    '<section class="m-not-found" data-m-component="NotFound"><p class="m-eyebrow">404</p><h1 class="m-section-title">T</h1><p>D</p><div class="m-actions"><a data-m-component="ActionLink" class="m-button m-button-primary" href="/go">Go</a></div></section>',
   mock: '<figure class="m-mock-window" aria-label="M" data-m-component="MockWindow"><div class="m-mock-bar" aria-hidden="true"><span class="m-mock-dots"><i></i><i></i><i></i></span></div><div class="m-mock-body"><p>x</p></div></figure>',
 };
 const plans = (count) =>
@@ -199,7 +199,7 @@ test("Pricing adapts to four tiers and renders an extra tier band", () => {
   });
   assert.match(
     extra,
-    /<article class="m-pricing-extra"><div><h4>Enterprise<\/h4><p>Custom terms<\/p><\/div><div class="m-price"><strong>Custom<\/strong><span>billed yearly<\/span><\/div><a class="m-button m-button-secondary" href="\/sales">Contact sales<\/a><\/article><\/div><\/section>$/,
+    /<article class="m-pricing-extra"><div><h4>Enterprise<\/h4><p>Custom terms<\/p><\/div><div class="m-price"><strong>Custom<\/strong><span>billed yearly<\/span><\/div><a data-m-component="ActionLink" class="m-button m-button-secondary" href="\/sales">Contact sales<\/a><\/article><\/div><\/section>$/,
   );
   const bare = markup(UI.Pricing, {
     title: "P",
@@ -221,7 +221,7 @@ test("ContentSection shows stats and a testimonial under the copy", () => {
   );
   assert.match(
     html,
-    /<div class="m-prose"><p>Body<\/p><\/div><figure class="m-testimonial m-content-quote" data-m-component="Testimonial"><blockquote>Great.<\/blockquote><figcaption><strong>Ana<\/strong><span>CEO<\/span><\/figcaption><\/figure><dl class="m-stat-group m-content-stats" aria-label="Mission" data-m-component="StatGroup"><div><dt>Founded<\/dt><dd>2021<\/dd><\/div><\/dl><\/div><\/section>$/,
+    /<div data-m-component="Prose" class="m-prose"><p>Body<\/p><\/div><figure class="m-testimonial m-content-quote" data-m-component="Testimonial"><blockquote>Great.<\/blockquote><figcaption><strong>Ana<\/strong><span>CEO<\/span><\/figcaption><\/figure><dl class="m-stat-group m-content-stats" aria-label="Mission" data-m-component="StatGroup"><div><dt>Founded<\/dt><dd>2021<\/dd><\/div><\/dl><\/div><\/section>$/,
   );
 });
 

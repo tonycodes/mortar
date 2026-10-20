@@ -4,7 +4,10 @@ import { h, html, CommentComposer } from "./support/render.mjs";
 
 test("CommentComposer labels its textarea and disables submit while empty", () => {
   const markup = html(CommentComposer, { onSubmit() {} });
-  assert.match(markup, /^<form class="m-composer"/);
+  assert.match(
+    markup,
+    /^<form data-m-component="CommentComposer" class="m-composer"/,
+  );
   const id = markup.match(
     /<label class="m-sr-only" for="([^"]+)">Add your comment<\/label>/,
   )?.[1];
@@ -13,7 +16,7 @@ test("CommentComposer labels its textarea and disables submit while empty", () =
   assert.match(markup, /aria-keyshortcuts="Control\+Enter Meta\+Enter"/);
   assert.match(
     markup,
-    /<button type="submit"[^>]*disabled=""[^>]*>Comment<\/button>/,
+    /<button data-m-component="Button" type="submit"[^>]*disabled=""[^>]*>Comment<\/button>/,
   );
 });
 
@@ -48,7 +51,7 @@ test("CommentComposer shows an avatar, toolbar, counter, hint and error", () => 
   );
   assert.match(
     markup,
-    /<button type="submit"(?![^>]*disabled)[^>]*>Comment<\/button>/,
+    /<button data-m-component="Button" type="submit"(?![^>]*disabled)[^>]*>Comment<\/button>/,
   );
 });
 

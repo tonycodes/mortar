@@ -33,12 +33,7 @@
   }
   :is(.m-data-table, .m-table, .m-comparison) table,
   .m-prose
-    table:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    table:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     border-collapse: collapse;
     font-size: 14px;
     text-align: left;
@@ -51,12 +46,7 @@
   }
   :is(.m-data-table, .m-table, .m-comparison) :is(th, td),
   .m-prose
-    :is(th, td):where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    :is(th, td):where(:not([data-m-component], .m-prose [data-m-component] *)) {
     padding: var(--m-cell-pad-y) var(--m-cell-pad-x);
     border-bottom: 1px solid var(--m-line);
   }
@@ -65,23 +55,13 @@
   }
   .m-table :is(th, td),
   .m-prose
-    :is(th, td):where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    :is(th, td):where(:not([data-m-component], .m-prose [data-m-component] *)) {
     vertical-align: top;
   }
   :is(.m-data-table, .m-table) thead th,
   .m-prose
     thead
-    th:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    th:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     color: var(--m-muted);
     font-size: 12px;
     font-weight: 600;
@@ -92,12 +72,7 @@
   .m-table thead th,
   .m-prose
     thead
-    th:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    th:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     white-space: nowrap;
   }
   :is(.m-data-table, .m-table) tbody th {
@@ -156,12 +131,7 @@
   }
   .m-table,
   .m-prose
-    table:where(
-      :not(
-        :is([class^="m-"], [class*=" m-"]),
-        .m-prose :is([class^="m-"], [class*=" m-"]) *
-      )
-    ) {
+    table:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     min-width: 0;
     overflow-x: auto;
     border: 1px solid var(--m-line);
@@ -178,12 +148,7 @@
     .m-prose
       tbody
       tr:last-child
-      :is(th, td):where(
-        :not(
-          :is([class^="m-"], [class*=" m-"]),
-          .m-prose :is([class^="m-"], [class*=" m-"]) *
-        )
-      )
+      :is(th, td):where(:not([data-m-component], .m-prose [data-m-component] *))
   ) {
     border-bottom: 0;
   }

@@ -1,5 +1,5 @@
 import { KitLink } from "./navigation.js";
-import { cx } from "./internal.js";
+import { componentRoot, cx, useComponentName } from "./internal.js";
 export function SegmentedControl({
   label,
   value,
@@ -13,8 +13,10 @@ export function SegmentedControl({
   onChange: (value: string) => void;
   className?: string;
 }) {
+  const name = useComponentName("SegmentedControl");
   return (
     <div
+      {...componentRoot(name)}
       className={cx("m-segmented", className)}
       role="group"
       aria-label={label}
@@ -44,7 +46,10 @@ export function CodeBlock({
   className?: string;
 }) {
   return (
-    <figure className={cx("m-code-block", className)}>
+    <figure
+      {...componentRoot("CodeBlock")}
+      className={cx("m-code-block", className)}
+    >
       <figcaption>{label}</figcaption>
       {/* Focusable so keyboard users can scroll long samples. */}
       <pre tabIndex={0}>
@@ -68,6 +73,7 @@ export function PreviewFrame({
   return (
     <section
       id={id}
+      {...componentRoot("PreviewFrame")}
       className={cx("m-preview-frame", className)}
       aria-label={label}
     >

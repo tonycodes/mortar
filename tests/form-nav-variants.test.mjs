@@ -13,7 +13,7 @@ import {
 test("Checkbox and Switch keep their markup and add a described option", () => {
   assert.equal(
     html(Checkbox, { label: "Remember me" }),
-    '<label class="m-choice"><input type="checkbox"/>Remember me</label>',
+    '<label data-m-component="Checkbox" class="m-choice"><input type="checkbox"/>Remember me</label>',
   );
   for (const Control of [Checkbox, Switch]) {
     const markup = html(Control, {
@@ -46,7 +46,7 @@ test("RadioGroup keeps its list markup and adds grid and swatch layouts", () => 
   };
   assert.match(
     html(RadioGroup, props),
-    /^<fieldset class="m-radio-group"><legend>Plan<\/legend>/,
+    /^<fieldset data-m-component="RadioGroup" class="m-radio-group"><legend>Plan<\/legend>/,
   );
   assert.match(
     html(RadioGroup, { ...props, layout: "grid" }),

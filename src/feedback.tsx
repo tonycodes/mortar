@@ -3,7 +3,7 @@ import { DialogPanel, DialogTitle, Description } from "@headlessui/react";
 import { Button, Input, type LinkAction, type Tone } from "./primitives.js";
 import { KitLink } from "./navigation.js";
 import { Check, Close } from "./icons.js";
-import { DialogFrame, cx, focusAway } from "./internal.js";
+import { DialogFrame, componentRoot, cx, focusAway } from "./internal.js";
 
 export interface ToastAction {
   label: string;
@@ -48,6 +48,7 @@ export function Toast({
   return (
     <div
       ref={root}
+      {...componentRoot("Toast")}
       className={cx("m-toast", className)}
       data-tone={tone === "neutral" ? undefined : tone}
     >
@@ -140,6 +141,7 @@ export function Toaster({
     <section
       ref={region}
       id={id}
+      {...componentRoot("Toaster")}
       className={cx("m-toaster", className)}
       aria-label={label}
       tabIndex={-1}
@@ -213,7 +215,7 @@ export function ConfirmDialog({
   const ready = !confirmationText || typed === confirmationText;
   const danger = tone === "danger";
   return (
-    <DialogFrame open={open} onClose={onClose}>
+    <DialogFrame open={open} onClose={onClose} component="ConfirmDialog">
       <div className="m-dialog-position">
         <DialogPanel className={cx("m-dialog-panel", "m-confirm", className)}>
           <form
@@ -283,7 +285,12 @@ export function SaveBar({
   return (
     <>
       {/* Always rendered, so the message is announced when the bar opens. */}
-      <span id={messageId} role="status" className="m-sr-only">
+      <span
+        {...componentRoot("SaveBar")}
+        id={messageId}
+        role="status"
+        className="m-sr-only"
+      >
         {open ? message : ""}
       </span>
       {open && (
@@ -357,7 +364,7 @@ export function Banner({
       data-tone={tone === "default" ? undefined : tone}
       data-variant={variant === "bar" ? undefined : variant}
       data-placement={fixed ? "bottom" : undefined}
-      data-m-component="Banner"
+      {...componentRoot("Banner")}
     >
       <p>
         {children}

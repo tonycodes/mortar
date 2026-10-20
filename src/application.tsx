@@ -18,6 +18,7 @@ import {
   MobileNavDialog,
   TermList,
   cx,
+  componentRoot,
   classedIntroSlots,
   useDomId,
 } from "./internal.js";
@@ -102,7 +103,10 @@ export interface SidebarProps {
 /** Vertical application navigation; AppShell composes the same content. */
 export function Sidebar({ className, ...props }: SidebarProps) {
   return (
-    <div className={cx("m-sidebar-panel", className)}>
+    <div
+      {...componentRoot("Sidebar")}
+      className={cx("m-sidebar-panel", className)}
+    >
       <SidebarContent {...props} />
     </div>
   );
@@ -139,7 +143,10 @@ export function AppShell({
     </main>
   );
   return (
-    <div className={cx("m-app-shell", className)}>
+    <div
+      {...componentRoot("AppShell")}
+      className={cx("m-app-shell", className)}
+    >
       <KitLink className="m-skip" href={`#${contentId}`}>
         Skip to content
       </KitLink>
@@ -203,7 +210,10 @@ export function StackedShell({
 }: StackedShellProps) {
   const contentId = useDomId("m-stacked-");
   return (
-    <div className={cx("m-stacked-shell", className)}>
+    <div
+      {...componentRoot("StackedShell")}
+      className={cx("m-stacked-shell", className)}
+    >
       <KitLink className="m-skip" href={`#${contentId}`}>
         Skip to content
       </KitLink>
@@ -245,7 +255,7 @@ export function Navbar({
   const [open, setOpen] = useState(false);
   const id = useId();
   return (
-    <header className={cx("m-navbar", className)}>
+    <header {...componentRoot("Navbar")} className={cx("m-navbar", className)}>
       <KitLink className="m-brand" href={homeHref}>
         <BrandMark logo={logo} />
         {brand}
@@ -299,6 +309,7 @@ export function Breadcrumbs({
 }: BreadcrumbsProps) {
   return (
     <nav
+      {...componentRoot("Breadcrumbs")}
       className={cx("m-breadcrumbs", className)}
       aria-label={label}
       data-separator={separator === "slash" ? undefined : separator}
@@ -337,6 +348,7 @@ export function TabNav({
 }: TabNavProps) {
   return (
     <nav
+      {...componentRoot("TabNav")}
       className={cx("m-tab-nav", className)}
       aria-label={label}
       data-variant={variant === "underline" ? undefined : variant}
@@ -399,6 +411,7 @@ export function ProgressSteps({
   const Root = navigation ? "nav" : "div";
   return (
     <Root
+      {...componentRoot("ProgressSteps")}
       className={cx("m-progress-steps", className)}
       role={navigation ? undefined : "group"}
       aria-label={label}
@@ -496,6 +509,7 @@ export function ActionPanel({
   return (
     <section
       id={id}
+      {...componentRoot("ActionPanel")}
       className={cx("m-action-panel", className)}
       aria-labelledby={headingId}
       data-tone={tone === "default" ? undefined : tone}
@@ -561,7 +575,11 @@ export function PageHeading({
     </div>
   );
   return (
-    <header id={id} className={cx("m-page-heading", className)}>
+    <header
+      id={id}
+      {...componentRoot("PageHeading")}
+      className={cx("m-page-heading", className)}
+    >
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
       <div className="m-heading-row">
         {avatar ? (
@@ -605,6 +623,7 @@ export function MetricGroup({
 }: MetricGroupProps) {
   return (
     <TermList
+      {...componentRoot("MetricGroup")}
       className={cx("m-metrics", className)}
       aria-label={label}
       data-variant={variant === "cards" ? "cards" : undefined}
@@ -901,6 +920,7 @@ export function DataTable<T extends { id: string }>({
   return (
     <section
       id={id}
+      {...componentRoot("DataTable")}
       className={cx("m-data-table", className)}
       aria-label={caption}
       data-density={density === "default" ? undefined : density}
@@ -1063,6 +1083,7 @@ export function Table({
   return (
     <div
       id={id}
+      {...componentRoot("Table")}
       className={cx("m-table", className)}
       role="region"
       aria-label={caption}
@@ -1134,7 +1155,11 @@ export function Pagination({
   // the button someone just pressed keeps focus instead of dropping it to the
   // page body.
   return (
-    <nav className={cx("m-pagination", className)} aria-label={label}>
+    <nav
+      {...componentRoot("Pagination")}
+      className={cx("m-pagination", className)}
+      aria-label={label}
+    >
       {summary ? (
         <p aria-live="polite">
           Showing <strong>{summary.from}</strong> to{" "}
@@ -1210,6 +1235,7 @@ export function SettingsSection({
   return (
     <section
       id={id}
+      {...componentRoot("SettingsSection")}
       className={cx("m-settings-section", className)}
       aria-labelledby={headingId}
     >
@@ -1246,7 +1272,11 @@ export interface ActivityFeedProps {
 }
 export function ActivityFeed({ label, items, className }: ActivityFeedProps) {
   return (
-    <ol className={cx("m-activity", className)} aria-label={label}>
+    <ol
+      {...componentRoot("ActivityFeed")}
+      className={cx("m-activity", className)}
+      aria-label={label}
+    >
       {items.map((item) => (
         <li key={item.id}>
           {item.actor ? (
@@ -1330,6 +1360,7 @@ export function SignInPanel({
   const panel = (
     <section
       id={aside ? undefined : id}
+      {...componentRoot("SignInPanel", !aside)}
       className={cx("m-sign-in", !aside && className)}
       aria-labelledby={headingId}
     >
@@ -1391,7 +1422,11 @@ export function SignInPanel({
     </section>
   );
   return aside ? (
-    <div id={id} className={cx("m-sign-in-split", className)}>
+    <div
+      id={id}
+      {...componentRoot("SignInPanel")}
+      className={cx("m-sign-in-split", className)}
+    >
       {panel}
       <div className="m-sign-in-aside">{aside}</div>
     </div>
