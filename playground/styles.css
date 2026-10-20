@@ -219,3 +219,187 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* Brand builder (?page=brand): playground layout only; the samples are kit components. */
+.pg-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-width: 0;
+}
+.pg-brand-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  padding-top: 32px;
+  border-top: 1px solid var(--m-line);
+}
+.pg-brand-section > h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.pg-brand-section > p {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--m-secondary);
+}
+.pg-brand-start {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px 24px;
+}
+.pg-brand-start > .m-field {
+  flex: 1 1 220px;
+  max-width: 360px;
+}
+.pg-brand-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+  min-width: 0;
+}
+.pg-brand-pair > * {
+  min-width: 0;
+}
+.pg-brand-advanced > summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.pg-brand-advanced[open] > summary {
+  margin-bottom: 16px;
+}
+.pg-color-picker {
+  flex: none;
+  width: 44px !important;
+  min-width: 44px;
+  padding: 4px !important;
+  cursor: pointer;
+}
+/* A container-scoped ThemeProvider paints its own appearance. */
+.pg-brand-sample {
+  min-width: 0;
+  overflow: clip;
+  border: 1px solid var(--m-line);
+  border-radius: var(--m-radius-lg);
+  background: var(--m-paper);
+  color: var(--m-ink);
+}
+.pg-brand-sample-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+  padding: 20px;
+}
+.pg-brand-sample-body > h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.pg-brand-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.pg-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 8px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+.pg-swatches li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  gap: 0 8px;
+  align-items: center;
+}
+.pg-swatches code {
+  grid-column: 2;
+  color: var(--m-secondary);
+  font: 12px var(--m-mono);
+}
+.pg-swatch {
+  grid-row: span 2;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--m-line-strong);
+  border-radius: var(--m-radius-sm);
+}
+.pg-focus-sample {
+  padding: 4px 10px;
+  border-radius: var(--m-radius-sm);
+  outline: 2px solid var(--m-focus);
+  outline-offset: 2px;
+  font-size: 13px;
+}
+/* The inverse band paints edge to edge of the sample, not the viewport. */
+.pg-brand-inverse {
+  margin: 0 -20px -20px;
+  overflow: clip;
+}
+.pg-brand-inverse .m-marketing-section {
+  padding: 32px 20px;
+}
+.pg-brand-inverse .m-section-body {
+  margin-top: 20px;
+}
+.pg-brand-inverse-link {
+  margin-top: 16px;
+}
+.pg-brand-output {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.pg-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.pg-pair-chip {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 24px;
+  border: 1px solid var(--m-line);
+  border-radius: var(--m-radius-sm);
+  font-weight: 600;
+  font-size: 13px;
+}
+.pg-pair code {
+  font: 12px var(--m-mono);
+}
+@media (max-width: 640px) {
+  .pg-pair {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.pg-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.pg-result svg {
+  width: 14px;
+  height: 14px;
+}
+.pg-brand-inverse :is(h2, h3, h4, .m-section-title) {
+  font-size: 22px;
+}
+.pg-ratio {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+}
+.pg-ratio small {
+  color: var(--m-muted);
+  font-size: 12px;
+}

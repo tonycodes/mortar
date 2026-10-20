@@ -276,7 +276,7 @@
     background: none;
     color: var(--m-muted);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     text-decoration: none;
     white-space: nowrap;
     cursor: pointer;
@@ -394,7 +394,7 @@
     border: 1px solid transparent;
     border-radius: var(--m-radius);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     line-height: 1.35;
     text-decoration: none;
     cursor: pointer;
@@ -488,7 +488,7 @@
   .m-field > label,
   .m-radio-group > legend {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-field p {
     font-size: 12px;
@@ -648,7 +648,7 @@
     padding: 2px 8px;
     gap: 6px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     border: 1px solid var(--m-line);
     border-radius: var(--m-radius-full);
   }
@@ -701,7 +701,7 @@
     background: var(--m-surface);
     color: var(--m-ink);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     text-decoration: none;
     cursor: pointer;
   }
@@ -744,7 +744,7 @@
     padding: 0;
     color: var(--m-ink);
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-fieldset > legend:has(+ p) {
     margin-bottom: 4px;
@@ -1019,7 +1019,7 @@
   }
   .m-choice-text label {
     color: var(--m-ink);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     cursor: pointer;
   }
   .m-choice-text p {
@@ -1053,7 +1053,7 @@
     cursor: not-allowed;
   }
   .m-choice-option[data-selected] {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-choice-option[data-selected] .m-choice-check {
     visibility: visible;
@@ -1073,7 +1073,7 @@
     background: transparent;
     color: var(--m-muted);
     font-size: 12px;
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     border-radius: 6px;
     padding: 5px 10px;
     cursor: pointer;
@@ -1097,7 +1097,7 @@
     background: transparent;
     color: var(--m-secondary);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     cursor: pointer;
   }
   .m-chip button {
@@ -1125,7 +1125,7 @@
     gap: 4px;
   }
   .m-kbd {
-    font: 500 11px var(--m-mono);
+    font: var(--m-weight-medium) 11px var(--m-mono);
     padding: 1px 6px;
     border: 1px solid var(--m-line-strong);
     border-bottom-width: 2px;
@@ -1147,7 +1147,7 @@
     background: var(--m-sunken);
     color: var(--m-ink);
     font-size: 12px;
-    font-weight: 700;
+    font-weight: var(--m-weight-bold);
   }
   .m-avatar img {
     width: 100%;
@@ -1185,7 +1185,7 @@
     border: 2px solid var(--m-surface);
   }
   .m-avatar-more {
-    font: 500 10px var(--m-mono);
+    font: var(--m-weight-medium) 10px var(--m-mono);
     color: var(--m-secondary);
   }
   .m-avatar-xs {
@@ -1230,7 +1230,7 @@
     gap: 12px;
   }
   .m-progress-label span:first-child {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-progress-label span + span {
     font-family: var(--m-mono);
@@ -1298,7 +1298,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px 16px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-notice-actions a {
     color: inherit;
@@ -1324,7 +1324,7 @@
   }
   .m-empty h3 {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-empty p {
     color: var(--m-muted);
@@ -1343,7 +1343,7 @@
   }
   .m-empty > :is(h2, h4, h5, h6) {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-empty-extra {
     max-width: 32rem;
@@ -1390,7 +1390,7 @@
     gap: 10px;
     width: 100%;
     padding: 8px 10px;
-    border-radius: 4px;
+    border-radius: var(--m-radius-sm);
     color: var(--m-ink);
     font-size: var(--m-font-size);
     text-align: left;
@@ -1417,8 +1417,8 @@
     padding: 8px 10px 4px;
     color: var(--m-muted);
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: var(--m-weight-semibold);
+    letter-spacing: var(--m-tracking-caps);
     text-transform: uppercase;
   }
   .m-menu-separator {
@@ -1563,10 +1563,10 @@
     font-size: 17px;
   }
   .m-text[data-weight="medium"] {
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   .m-text[data-weight="semibold"] {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-divider[data-soft] {
     border-top-color: var(--m-line);
@@ -1617,7 +1617,7 @@
   .m-card-heading .m-card-title {
     margin: 0;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-card-heading p {
     margin: 2px 0 0;
@@ -1687,7 +1687,7 @@
   .m-media-object-title {
     margin: 0 0 2px;
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-media-object[data-align="center"] {
     align-items: center;

@@ -67,3 +67,56 @@ for (const name of ["Button", "Input", "Tabs", "AppShell"])
       expect(errors).toEqual([]);
     });
   }
+
+// Component styles read the scale tokens: overriding one on a container
+// restyles the components inside it.
+test("scale token overrides restyle components", async ({ page }) => {
+  const read = (selector, prop) =>
+    page
+      .locator(selector)
+      .first()
+      .evaluate(
+        (el, prop) => getComputedStyle(el).getPropertyValue(prop),
+        prop,
+      );
+  const override = `[data-mortar-preview] {
+    --m-weight-semibold: 800;
+    --m-radius-lg: 20px;
+    --m-tracking-display: -0.05em;
+  }`;
+
+  await page.goto("/?component=Button&theme=light");
+  const button = '[data-mortar-preview="Button"] .m-button';
+  expect(await read(button, "font-weight")).toBe("600");
+  await page.addStyleTag({ content: override });
+  expect(await read(button, "font-weight")).toBe("800");
+
+  await page.goto("/?component=Card&theme=light");
+  const card = '[data-mortar-preview="Card"] .m-card';
+  expect(await read(card, "border-top-left-radius")).toBe("12px");
+  await page.addStyleTag({ content: override });
+  expect(await read(card, "border-top-left-radius")).toBe("20px");
+
+  // Pricing values were literals before the scale tokens drove them.
+  await page.goto("/?component=Pricing&theme=light");
+  const pricing = '[data-mortar-preview="Pricing"] .m-pricing-grid';
+  const plan = `${pricing} article`;
+  const heading = `${pricing} :is(h2, h3, h4, h5, h6)`;
+  const price = `${pricing} .m-price strong`;
+  expect(await read(plan, "border-top-left-radius")).toBe("12px");
+  expect(await read(heading, "font-weight")).toBe("600");
+  expect(await read(price, "font-weight")).toBe("600");
+  const size = parseFloat(await read(price, "font-size"));
+  expect(parseFloat(await read(price, "letter-spacing"))).toBeCloseTo(
+    -0.04 * size,
+    1,
+  );
+  await page.addStyleTag({ content: override });
+  expect(await read(plan, "border-top-left-radius")).toBe("20px");
+  expect(await read(heading, "font-weight")).toBe("800");
+  expect(await read(price, "font-weight")).toBe("800");
+  expect(parseFloat(await read(price, "letter-spacing"))).toBeCloseTo(
+    -0.05 * size,
+    1,
+  );
+});

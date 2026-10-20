@@ -54,13 +54,14 @@ test("registerBrand is a no-op without a document", () => {
   dispose();
 });
 
-test("ThemeProvider renders a runtime brand as a hoistable stylesheet", () => {
+test("ThemeProvider renders a runtime brand as a stylesheet beside its content", () => {
   const markup = html(
     ThemeProvider,
     { brand: "acme", brandTokens: acme, scope: "container" },
     h("p", null, "Hi"),
   );
-  assert.match(markup, /<style[^>]*data-href="mortar-brand-acme-[a-z0-9]+"/);
+  // An ordinary, server-rendered element that React updates and removes.
+  assert.match(markup, /<style data-mortar-brand-style="acme">/);
   assert.match(markup, /--m-brand-l-primary: #1d4ed8;/);
   assert.match(markup, /data-mortar-brand="acme"/);
   // Without brandTokens nothing extra renders.

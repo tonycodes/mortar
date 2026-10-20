@@ -2,6 +2,20 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
+## Unreleased
+
+### Added
+
+- **Playground brand builder** (`?page=brand`, [open it](https://mortar.tony.codes/playground/?page=brand)): edit a brand's light and dark values, including the optional tokens, and see them live in light, dark and inverse previews with overlays. It reports WCAG contrast for on-primary, hover, active, accent, link and focus as the browser resolves them, exports the CSS rule and the `brandTokens` object, and keeps the brand in the URL so it can be shared. Playground only; the package is unchanged.
+
+### Changed
+
+- **Scale tokens drive component styles:** component font weights now read `--m-weight-*`, and corner radii, letter spacing and line heights that equal a scale value read `--m-radius-*`, `--m-tracking-*` and `--m-leading-*`. At the default token values nothing renders differently. Overriding a token on `:root` or a container now restyles the components inside it. Padding, gaps and margins do not read `--m-space-*` yet. See [Scales](https://github.com/tonycodes/mortar/blob/main/docs/theming.md#scales).
+
+### Fixed
+
+- **Runtime brands that change:** ThemeProvider renders `brandTokens` as an ordinary `<style>` beside its content instead of a hoisted stylesheet. React 19 never removes hoisted styles, so switching back to an earlier set of tokens could show the wrong brand. The stylesheet now updates in place and is removed on unmount. It is still server-rendered.
+
 ## 0.9.0 (2026-10-20)
 
 Theming. See [Theming](https://github.com/tonycodes/mortar/blob/main/docs/theming.md).

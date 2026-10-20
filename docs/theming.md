@@ -69,7 +69,7 @@ tenant.theme = {
 };
 ```
 
-ThemeProvider renders the brand as a `<style>` element. React 19 hoists it into the document head and includes it in server-rendered HTML, so there is no unstyled flash, and overlays opened inside the provider share it. Brand names may contain only letters, digits and hyphens. Values must be colour syntax: hex, named colours, `rgb()`, `oklch()`, `color-mix()` or `var()`. Anything else, including `;`, `{` or comments, throws, so tenant data cannot inject CSS.
+ThemeProvider renders the brand as a `<style>` element beside its content. It is included in server-rendered HTML, so there is no unstyled flash; it updates when the tokens change and is removed with the provider. Overlays opened inside the provider share it, because the rule matches the brand attribute they carry. Brand names may contain only letters, digits and hyphens. Values must be colour syntax: hex, named colours, `rgb()`, `oklch()`, `color-mix()` or `var()`. Anything else, including `;`, `{` or comments, throws, so tenant data cannot inject CSS.
 
 Outside ThemeProvider, `@tony-ui/mortar/brand` has the same building blocks:
 
@@ -82,6 +82,10 @@ brandToStyle(theme); // inline custom properties for one element
 ```
 
 Inline custom properties apply only to that element's subtree. Menus and dialogs portal outside it, so prefer `brandTokens` or `registerBrand` for anything with overlays.
+
+### With the brand builder
+
+The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens; empty fields show the value they derive. Light and dark previews, each with an inverse band and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent and for links, 3:1 for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
 
 ## Appearance before JavaScript runs
 
@@ -97,7 +101,13 @@ Override these on `:root` or on any container to retheme shape and rhythm:
 - **Sizing and density:** `--m-control`, `--m-pad`, `--m-font-size`, `--m-row-pad`, `--m-icon`. `data-mortar-density="compact" | "spacious"` adjusts these.
 - **Stacking:** `--m-z-sticky|overlay|popover|toast|skip`.
 
-Component styles do not all read the type and space scales yet. Repointing them, for example `font-weight: 600` to `var(--m-weight-semibold)`, is a follow-up, verified against the visual baselines.
+What follows the scales, and what does not:
+
+- **Weight:** every component font weight reads `--m-weight-*`.
+- **Radius:** every component corner that is 2, 4, 8, 12, 16 or 999px reads the matching `--m-radius-*` token. Circles (`50%`) and a few in-between sizes (5, 6, 7, 10 and 44px, and `0.5rem` in CodeBlock and PreviewFrame) stay fixed.
+- **Tracking:** display titles and big numbers read `--m-tracking-display`, headings `--m-tracking-heading`, uppercase labels `--m-tracking-caps`, and text that resets to normal reads `--m-tracking-body`. Titles tuned to other values, such as the hero's `-0.045em` or section titles' `-0.035em`, stay fixed.
+- **Leading:** display titles read `--m-leading-display`, testimonial quotes `--m-leading-heading`, and long-form text `--m-leading-body`. Other line heights stay fixed, including compact table and calendar text at 1.3, which does not follow `--m-leading-heading`.
+- **Space:** component padding, gaps and margins do not read `--m-space-*` yet. Use the space scale in your own layouts.
 
 ## Tailwind utilities
 

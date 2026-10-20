@@ -44,7 +44,7 @@
     background: var(--m-surface);
     color: var(--m-ink);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-product-info {
     min-width: 0;
@@ -52,7 +52,7 @@
   .m-product-info > .m-product-name {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   .m-product-info a {
     color: var(--m-ink);
@@ -72,7 +72,7 @@
   .m-product-price {
     margin: 0;
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
   .m-product-summary {
@@ -222,12 +222,12 @@
   .m-product-details > .m-product-name {
     margin: 0;
     font-size: clamp(24px, 3vw, 32px);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: var(--m-weight-semibold);
+    letter-spacing: var(--m-tracking-heading);
   }
   .m-product-details > .m-product-price {
     font-size: 22px;
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   .m-rating {
     display: flex;
@@ -267,7 +267,7 @@
     margin-bottom: 10px;
     padding: 0;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-product-option > div {
     display: flex;
@@ -295,7 +295,7 @@
     border-radius: var(--m-radius);
     background: var(--m-surface);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-product-highlights {
     display: grid;
@@ -385,7 +385,7 @@
   .m-cart-item-title {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-cart-info a {
     color: var(--m-ink);
@@ -414,7 +414,7 @@
     padding: 4px 0;
     color: var(--m-link);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   /* ShoppingCart with a summary column and related products. */
   .m-cart-layout {
@@ -436,7 +436,7 @@
   .m-cart-related-title {
     margin: 0;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-cart-info a:hover {
     text-decoration: underline;
@@ -475,7 +475,7 @@
   .m-order-summary-title {
     margin: 0;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-order-summary dl {
     margin: 0;
@@ -494,7 +494,7 @@
   .m-order-summary dd {
     margin: 0;
     color: var(--m-ink);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     font-variant-numeric: tabular-nums;
   }
   .m-order-summary .m-order-total {
@@ -503,7 +503,7 @@
   }
   .m-order-summary .m-order-total :is(dt, dd) {
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-order-action > :is(.m-button, button, a) {
     width: 100%;
@@ -539,7 +539,7 @@
     padding: 4px 6px;
     color: var(--m-link);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-filters details {
     border-bottom: 1px solid var(--m-line);
@@ -551,7 +551,7 @@
     padding: 14px 0;
     color: var(--m-ink);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     cursor: pointer;
     list-style: none;
   }
@@ -562,7 +562,7 @@
     content: "+";
     margin-left: auto;
     color: var(--m-muted);
-    font-weight: 400;
+    font-weight: var(--m-weight-regular);
   }
   .m-filters fieldset {
     display: grid;
@@ -594,8 +594,8 @@
   .m-reviews-title {
     margin: 0;
     font-size: 22px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: var(--m-weight-semibold);
+    letter-spacing: var(--m-tracking-heading);
   }
   .m-stars {
     display: inline-flex;
@@ -670,7 +670,7 @@
   .m-review-title {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-review-meta {
     margin: 0;
@@ -724,7 +724,7 @@
   .m-order-title {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-order-header dl {
     display: flex;
@@ -739,20 +739,20 @@
   .m-order-header dd {
     margin: 0;
     color: var(--m-ink);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   .m-order-header > a {
     margin-left: auto;
     color: var(--m-link);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-order-status {
     margin: 0;
     padding: 12px 20px 0;
     color: var(--m-success);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-order-items {
     padding: 0 20px;
@@ -774,7 +774,7 @@
   .m-order-item-name {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-order-item-name a {
     color: var(--m-ink);

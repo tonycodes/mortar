@@ -233,9 +233,9 @@ test("a runtime brand reaches a container's content and its overlays", async ({
       page.getByRole("button", { name: "Primary", exact: true }),
     ),
   ).toBe(LIGHT_BLUE);
-  // One stylesheet for the brand, hoisted into the head.
+  // One stylesheet for the brand, rendered with the provider.
   await expect(
-    page.locator("head style[data-href^='mortar-brand-acme-']"),
+    page.locator("style[data-mortar-brand-style='acme']"),
   ).toHaveCount(1);
 
   const trigger = page.getByRole("button", { name: "Actions" });
