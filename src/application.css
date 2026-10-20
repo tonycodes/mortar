@@ -64,13 +64,13 @@
     border-radius: var(--m-radius);
     text-decoration: none;
     font-size: var(--m-font-size);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     color: var(--m-secondary);
   }
   .m-nav-marker {
     width: 6px;
     height: 6px;
-    border-radius: 2px;
+    border-radius: var(--m-radius-xs);
     background: var(--m-line-strong);
   }
   .m-nav-count {
@@ -84,7 +84,7 @@
     margin: 24px 10px 6px;
     text-transform: uppercase;
     font-size: 11px;
-    letter-spacing: 0.04em;
+    letter-spacing: var(--m-tracking-caps);
     color: var(--m-muted);
   }
   .m-user {
@@ -163,7 +163,7 @@
     border-radius: var(--m-radius);
     color: var(--m-secondary);
     font-size: var(--m-font-size);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     cursor: pointer;
     list-style: none;
   }
@@ -196,7 +196,7 @@
     a[aria-current="page"] {
     background: var(--m-surface);
     color: var(--m-link);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   [aria-current="page"] .m-nav-marker {
     background: currentColor;
@@ -280,7 +280,7 @@
     align-items: center;
     gap: 10px;
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     text-decoration: none;
   }
   .m-navbar > nav {
@@ -297,7 +297,7 @@
     padding: 0 10px;
     color: var(--m-secondary);
     font-size: var(--m-font-size);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     text-decoration: none;
     box-shadow: inset 0 -2px 0 transparent;
   }
@@ -313,7 +313,7 @@
   }
   .m-navbar > nav a[aria-current="page"] {
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     box-shadow: inset 0 -2px 0 var(--m-primary);
   }
   @media (max-width: 900px) {
@@ -385,7 +385,7 @@
     font-size: 28px;
     letter-spacing: -0.025em;
     line-height: 1.2;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-page-heading p {
     margin-top: 6px;
@@ -446,7 +446,7 @@
   .m-section-heading-text .m-section-heading-title {
     margin: 0;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-section-heading-text p {
     margin: 4px 0 0;
@@ -482,14 +482,14 @@
   }
   .m-metrics dt {
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     color: var(--m-muted);
   }
   .m-metrics dd {
     margin: 10px 0 0;
     font-size: 26px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: var(--m-weight-semibold);
+    letter-spacing: var(--m-tracking-heading);
     font-variant-numeric: tabular-nums;
   }
   .m-metrics span {
@@ -575,7 +575,7 @@
   }
   .m-pagination strong {
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-pagination-pages {
     display: flex;
@@ -589,7 +589,7 @@
     border-radius: var(--m-radius);
     color: var(--m-secondary);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     font-variant-numeric: tabular-nums;
   }
   .m-pagination-gap {
@@ -626,7 +626,7 @@
   }
   .m-settings-section > :where(div:first-child) > .m-settings-title {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-settings-section > :where(div:first-child) > p {
     margin-top: 6px;
@@ -692,12 +692,12 @@
   .m-progress-step-name {
     color: var(--m-ink);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-progress-step-number {
     color: var(--m-muted);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-progress-step-description {
     color: var(--m-muted);
@@ -793,7 +793,7 @@
   .m-progress-steps[data-variant="bullets"] p {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-progress-steps[data-variant="bullets"] ol {
     display: flex;
@@ -887,7 +887,7 @@
   .m-progress-steps[data-variant="bar"] .m-progress-step-name {
     color: var(--m-muted);
     font-size: 13px;
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   .m-progress-steps[data-variant="bar"]
     :is([data-status="complete"], [data-status="current"])
@@ -897,7 +897,7 @@
   .m-progress-steps[data-variant="bar"]
     [data-status="current"]
     .m-progress-step-name {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   @container m-progress-steps (min-width: 560px) {
     .m-progress-steps:not([data-variant]) ol {
@@ -928,7 +928,7 @@
   .m-action-panel-text .m-action-panel-title {
     margin: 0;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-action-panel-text > p {
     margin: 4px 0 0;
@@ -972,7 +972,7 @@
   }
   .m-sign-in .m-sign-in-title {
     font-size: 26px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     letter-spacing: -0.03em;
   }
   .m-sign-in > header p,
@@ -1078,7 +1078,7 @@
   }
   .m-composer-label {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-composer-main > p {
     margin: 0;
@@ -1177,7 +1177,7 @@
     border-radius: 0.5rem;
     background: var(--m-sunken);
     font-size: 0.875rem;
-    line-height: 1.6;
+    line-height: var(--m-leading-body);
   }
   .m-preview-frame {
     display: grid;

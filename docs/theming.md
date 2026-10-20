@@ -101,7 +101,13 @@ Override these on `:root` or on any container to retheme shape and rhythm:
 - **Sizing and density:** `--m-control`, `--m-pad`, `--m-font-size`, `--m-row-pad`, `--m-icon`. `data-mortar-density="compact" | "spacious"` adjusts these.
 - **Stacking:** `--m-z-sticky|overlay|popover|toast|skip`.
 
-Component styles do not all read the type and space scales yet. Repointing them, for example `font-weight: 600` to `var(--m-weight-semibold)`, is a follow-up, verified against the visual baselines.
+What follows the scales, and what does not:
+
+- **Weight:** every component font weight reads `--m-weight-*`.
+- **Radius:** every component corner that is 2, 4, 8, 12, 16 or 999px reads the matching `--m-radius-*` token. Circles (`50%`) and a few in-between sizes (5, 6, 7, 10 and 44px, and `0.5rem` in CodeBlock and PreviewFrame) stay fixed.
+- **Tracking:** display titles and big numbers read `--m-tracking-display`, headings `--m-tracking-heading`, uppercase labels `--m-tracking-caps`, and text that resets to normal reads `--m-tracking-body`. Titles tuned to other values, such as the hero's `-0.045em` or section titles' `-0.035em`, stay fixed.
+- **Leading:** display titles read `--m-leading-display`, testimonial quotes `--m-leading-heading`, and long-form text `--m-leading-body`. Other line heights stay fixed, including compact table and calendar text at 1.3, which does not follow `--m-leading-heading`.
+- **Space:** component padding, gaps and margins do not read `--m-space-*` yet. Use the space scale in your own layouts.
 
 ## Tailwind utilities
 

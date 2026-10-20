@@ -24,7 +24,7 @@
   .m-calendar-title {
     margin: 0;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar-nav {
     display: flex;
@@ -40,7 +40,7 @@
     padding: 4px 0 8px;
     color: var(--m-muted);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     text-align: center;
   }
   .m-calendar td {
@@ -131,7 +131,7 @@
     border-bottom: 1px solid var(--m-line);
     text-align: center;
     font-size: 12px;
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   .m-calendar-column-label {
     display: inline-flex;
@@ -148,7 +148,7 @@
     border-radius: 50%;
     color: var(--m-ink);
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar-allday {
     grid-row: 2;
@@ -214,7 +214,7 @@
     color: var(--m-ink);
     font: inherit;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     line-height: 1.3;
     text-align: start;
   }
@@ -223,7 +223,7 @@
   }
   .m-calendar-event-time {
     color: var(--m-muted);
-    font-weight: 400;
+    font-weight: var(--m-weight-regular);
     font-variant-numeric: tabular-nums;
   }
   .m-calendar-year {
@@ -238,7 +238,7 @@
     margin: 0 0 8px;
     color: var(--m-ink);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar-main,
   .m-calendar-agenda {
@@ -252,7 +252,7 @@
   .m-calendar-agenda-title {
     margin: 0 0 12px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar-agenda-list {
     display: grid;
@@ -283,7 +283,7 @@
     text-align: start;
   }
   .m-calendar-agenda-text strong {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar-agenda-text .m-calendar-event-time {
     font-size: 13px;
@@ -303,13 +303,13 @@
     color: var(--m-muted);
   }
   .m-calendar td > button[aria-current="date"] {
-    font-weight: 700;
+    font-weight: var(--m-weight-bold);
     box-shadow: inset 0 0 0 1px var(--m-line-strong);
   }
   .m-calendar td[aria-selected="true"] > button {
     background: var(--m-primary);
     color: var(--m-on-primary);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar[data-variant="full"] table {
     border: 1px solid var(--m-line);
@@ -362,7 +362,7 @@
   .m-calendar[data-view="year"] td > button[aria-pressed="true"] {
     background: var(--m-primary);
     color: var(--m-on-primary);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-calendar[data-view="year"] .m-calendar-dot {
     bottom: 3px;
