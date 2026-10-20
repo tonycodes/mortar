@@ -2,6 +2,22 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
+## Unreleased
+
+### Added
+
+- **Sign-in and registration building blocks** (Application UI › Sign-in and registration). See [Sign-in and registration flows](https://github.com/tonycodes/mortar/blob/main/docs/auth-flows.md).
+  - `AuthLayout`: the page shell for auth screens. It renders the page's `main` and `h1` (`headingLevel`, default 1), with `logo`, `description`, `footer` and `layout="center" | "cards" | "split"`. With `split`, the `aside` sits beside the form; on narrow screens a text aside follows the form and a lone image or video is hidden.
+  - `PasswordInput`: a password field with a show/hide toggle (`aria-pressed`, keeps focus), `purpose="current" | "new"` for `current-password`/`new-password` autocomplete, an optional `requirements` checklist (each item met or not met, announced only when the whole set changes) and a `strength` meter.
+  - `CodeInput`: a one-time code field. It is one `autocomplete="one-time-code"` input drawn as `length` cells (default 6), so typing, Backspace, paste and autofill behave as in a text field. Digits only, or `alphanumeric`. `onChange(value)` gets the cleaned code; the optional `onComplete(code)` fires when it is full.
+  - `ProviderButtons`: one secondary button per sign-in provider, as a `list` or a `grid`, optionally a named group.
+- **Page templates** for sign in (card and split screen), sign up, forgot password, check your email, reset password, verify email and two-factor, with validation, error summaries, loading and success states, and resend cooldowns.
+
+### Changed
+
+- **SignInPanel** renders its providers with `ProviderButtons` and its divider with `Divider`. Its props are unchanged. The markup differs in three places: the providers wrapper is `div.m-provider-buttons` (was `div.m-sign-in-providers`); a provider icon is Button's `span.m-button-icon` (was `span.m-sign-in-icon`); the divider is `<div class="m-divider" role="separator" aria-label="or">` (was `<p class="m-sign-in-divider">`); it looks the same.
+- The playground's "Forms and settings" category no longer lists SignInPanel; it is in the new "Sign-in and registration" category.
+
 ## 0.10.0 (2026-10-20)
 
 ### Added
