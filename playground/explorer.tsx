@@ -32,22 +32,36 @@ export const ordered = kits.flatMap((kit) =>
   ),
 );
 
+/** URL keys the brand builder (`?page=brand`) owns; other pages drop them. */
+export const isBrandParam = (key: string) =>
+  key === "name" || /^[ld]-[a-z-]+$/.test(key);
+/** Keys that choose what the page shows; choosing one clears the others. */
+const PLACES = [
+  "component",
+  "category",
+  "kit",
+  "state",
+  "recipe",
+  "view",
+  "page",
+];
+function clearPlaces(next: URLSearchParams, keep?: string) {
+  for (const k of PLACES) if (k !== keep) next.delete(k);
+  for (const k of [...next.keys()]) if (isBrandParam(k)) next.delete(k);
+}
 export function url(key: string, value: string) {
   const next = new URLSearchParams(location.search);
+  if (["component", "category", "kit", "recipe", "page"].includes(key))
+    clearPlaces(next, key);
   next.set(key, value);
   if (key === "state" && value === "default") next.delete("state");
   if (key === "view" && value === "preview") next.delete("view");
-  if (["component", "category", "kit", "recipe"].includes(key)) {
-    for (const k of ["component", "category", "kit", "state", "recipe", "view"])
-      if (k !== key) next.delete(k);
-  }
   return `?${next}`;
 }
 /** Overview link that keeps appearance, brand and density. */
 export function homeHref() {
   const next = new URLSearchParams(location.search);
-  for (const k of ["component", "category", "kit", "state", "recipe", "view"])
-    next.delete(k);
+  clearPlaces(next);
   return `?${next}`;
 }
 export const categoryHref = (kit: Kit, category: Category) =>

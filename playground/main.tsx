@@ -1,5 +1,5 @@
 import { KitLink } from "../src/navigation.js";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ThemeProvider,
@@ -28,6 +28,9 @@ import {
   url,
 } from "./explorer.js";
 import "./styles.css";
+const BrandBuilder = lazy(() =>
+  import("./brand-builder.js").then((m) => ({ default: m.BrandBuilder })),
+);
 function Playground({
   params,
   navigate,
@@ -36,6 +39,7 @@ function Playground({
   navigate: (href: string) => void | false;
 }) {
   const component = params.get("component");
+  const tool = params.get("page") === "brand" ? "brand" : null;
   const category = findCategory(params.get("category"));
   const kitId = kits.some((k) => k.id === params.get("kit"))
     ? params.get("kit")
@@ -57,7 +61,12 @@ function Playground({
         {
           label: "All components",
           href: homeHref(),
-          current: !component && !category && !kitId,
+          current: !component && !category && !kitId && !tool,
+        },
+        {
+          label: "Brand builder",
+          href: url("page", "brand"),
+          current: tool === "brand",
         },
       ],
     },
@@ -92,7 +101,19 @@ function Playground({
       : undefined;
   };
   let content;
-  if (component) {
+  if (tool === "brand") {
+    content = (
+      <Suspense
+        fallback={
+          <p role="status" aria-label="Loading brand builder">
+            Loading brand builder…
+          </p>
+        }
+      >
+        <BrandBuilder />
+      </Suspense>
+    );
+  } else if (component) {
     content = (
       <>
         <PageHeading

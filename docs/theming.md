@@ -83,6 +83,10 @@ brandToStyle(theme); // inline custom properties for one element
 
 Inline custom properties apply only to that element's subtree. Menus and dialogs portal outside it, so prefer `brandTokens` or `registerBrand` for anything with overlays.
 
+### With the brand builder
+
+The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens; empty fields show the value they derive. Light and dark previews, each with an inverse band and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent and for links, 3:1 for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
+
 ## Appearance before JavaScript runs
 
 Until ThemeProvider sets `data-mortar-appearance` (during server rendering, or with JavaScript off), Mortar follows the operating system's colour scheme, so dark-mode users don't see a light flash. To always start light, render `data-mortar-appearance="light"` on `<html>`.
