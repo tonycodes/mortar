@@ -206,3 +206,32 @@ export function SortArrows({
     </Icon>
   );
 }
+
+const EYE =
+  "M1.75 10S4.75 4.25 10 4.25 18.25 10 18.25 10 15.25 15.75 10 15.75 1.75 10 1.75 10zM10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z";
+/** Open eye: shown while a password is hidden. */
+export function Eye() {
+  return (
+    <Icon>
+      <Stroke d={EYE} width="1.5" />
+    </Icon>
+  );
+}
+
+/** Struck-through eye: shown while a password is visible. */
+export function EyeOff() {
+  return (
+    <Icon>
+      <Stroke d={EYE + "M3 3l14 14"} width="1.5" />
+    </Icon>
+  );
+}
+
+/** Hollow circle: a requirement that is not met yet. */
+export function Circle() {
+  return (
+    <Icon>
+      <Stroke d="M10 15a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" width="1.5" />
+    </Icon>
+  );
+}

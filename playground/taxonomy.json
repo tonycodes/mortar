@@ -132,13 +132,24 @@
         {
           "id": "forms",
           "title": "Forms and settings",
-          "thumbnail": "SignInPanel",
+          "thumbnail": "SettingsSection",
           "components": [
             "SettingsSection",
             "SaveBar",
-            "SignInPanel",
             "ActionPanel",
             "CommentComposer"
+          ]
+        },
+        {
+          "id": "auth",
+          "title": "Sign-in and registration",
+          "thumbnail": "SignInPanel",
+          "components": [
+            "AuthLayout",
+            "SignInPanel",
+            "ProviderButtons",
+            "PasswordInput",
+            "CodeInput"
           ]
         },
         {

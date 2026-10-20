@@ -957,12 +957,13 @@
     flex-direction: column;
     gap: 20px;
   }
-  .m-sign-in > header {
+  /* The panel header is shared with AuthLayout. */
+  :is(.m-sign-in > header, .m-auth-header) {
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
-  .m-sign-in > header .m-logo {
+  :is(.m-sign-in > header, .m-auth-header) .m-logo {
     width: 36px;
     height: 36px;
     margin-bottom: 10px;
@@ -970,23 +971,22 @@
   .m-sign-in form {
     text-align: left;
   }
-  .m-sign-in .m-sign-in-title {
+  :is(.m-sign-in, .m-auth-panel) :is(.m-sign-in-title, .m-auth-title) {
     font-size: 26px;
     font-weight: var(--m-weight-semibold);
     letter-spacing: -0.03em;
   }
-  .m-sign-in > header p,
-  .m-sign-in > footer {
+  :is(.m-sign-in > header, .m-auth-header) p,
+  :is(.m-sign-in > footer, .m-auth-footer) {
     color: var(--m-muted);
   }
-  .m-sign-in > header p {
+  :is(.m-sign-in > header, .m-auth-header) p {
     font-size: 14px;
   }
   .m-sign-in > footer {
     font-size: 13px;
     text-align: center;
   }
-  .m-sign-in-providers,
   .m-sign-in form {
     display: flex;
     flex-direction: column;
@@ -996,30 +996,11 @@
     width: 100%;
     justify-content: center;
   }
-  .m-sign-in-icon {
-    display: inline-grid;
-    width: 16px;
-    height: 16px;
-  }
-  .m-sign-in-icon svg {
-    width: 100%;
-    height: 100%;
-  }
-  .m-sign-in-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    color: var(--m-muted);
+  /* SignInPanel keeps its small upper-case "or". */
+  .m-sign-in > .m-divider {
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-  }
-  .m-sign-in-divider::before,
-  .m-sign-in-divider::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--m-line);
   }
   .m-sign-in-split {
     display: grid;
@@ -1056,6 +1037,314 @@
     /* The form comes first; the artwork is decorative on small screens. */
     .m-sign-in-aside {
       display: none;
+    }
+  }
+
+  /* == ProviderButtons == */
+  .m-provider-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .m-provider-buttons[data-layout="grid"] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  }
+  .m-provider-buttons > .m-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* == AuthLayout == */
+  .m-auth {
+    display: grid;
+    min-height: 100vh;
+    background: var(--m-paper);
+  }
+  .m-auth-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+    padding: 48px 24px;
+  }
+  .m-auth-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    max-width: 400px;
+  }
+  .m-auth:not([data-layout="split"]) .m-auth-header {
+    align-items: center;
+    text-align: center;
+  }
+  .m-auth-body {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+  /* A form placed directly in the layout stacks its fields. */
+  .m-auth-body > form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .m-auth-body > form > .m-button {
+    width: 100%;
+    justify-content: center;
+  }
+  .m-auth-footer {
+    font-size: 14px;
+    text-align: center;
+  }
+  .m-auth[data-layout="split"] .m-auth-footer {
+    text-align: start;
+  }
+  /* Links in running text are underlined, so they never rely on colour alone. */
+  :is(.m-auth-header, .m-auth-body, .m-auth-footer) a:not(.m-button) {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .m-auth[data-layout="cards"] {
+    background: var(--m-sunken);
+  }
+  .m-auth[data-layout="cards"] .m-auth-panel {
+    max-width: 440px;
+  }
+  .m-auth[data-layout="cards"] .m-auth-body {
+    padding: 40px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-lg);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+  }
+  .m-auth[data-layout="split"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .m-auth-aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    min-width: 0;
+    padding: 64px;
+    overflow: hidden;
+    background: var(--m-sunken);
+  }
+  /* Media fills the panel edge to edge; text gets breathing room. */
+  .m-auth-aside:has(> :is(img, video):only-child) {
+    padding: 0;
+  }
+  .m-auth-aside > :is(img, video):only-child {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 900px) {
+    .m-auth[data-layout="split"] {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 1fr auto;
+    }
+    /* The form comes first; a quote follows it and a lone image is decorative. */
+    .m-auth-aside {
+      padding: 32px 24px;
+      border-top: 1px solid var(--m-line);
+    }
+    .m-auth-aside:has(> :is(img, video):only-child) {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .m-auth-main {
+      justify-content: flex-start;
+      padding: 32px 16px;
+    }
+    .m-auth[data-layout="cards"] .m-auth-body {
+      padding: 24px 20px;
+    }
+  }
+
+  /* == PasswordInput == */
+  .m-password-toggle {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    min-width: var(--m-control);
+    padding: 0 10px;
+    border: 0;
+    background: transparent;
+    color: var(--m-muted);
+    cursor: pointer;
+  }
+  .m-password-toggle svg {
+    width: var(--m-icon);
+    height: var(--m-icon);
+  }
+  .m-password-toggle:hover:not(:disabled) {
+    color: var(--m-ink);
+  }
+  .m-password-toggle:focus-visible {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -4px;
+    border-radius: var(--m-radius-sm);
+  }
+  .m-password-toggle:disabled {
+    cursor: not-allowed;
+  }
+  .m-password-requirements {
+    display: grid;
+    gap: 4px;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 12px;
+    color: var(--m-muted);
+  }
+  .m-password-requirements li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .m-password-requirements svg {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+  }
+  .m-password-requirements li[data-met] {
+    color: var(--m-ink);
+  }
+  .m-password-requirements li[data-met] svg {
+    color: var(--m-success);
+  }
+  .m-password-strength {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--m-muted);
+  }
+  .m-password-meter {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+  .m-password-meter > span {
+    height: 4px;
+    border-radius: var(--m-radius-full);
+    background: var(--m-line);
+  }
+  .m-password-strength {
+    --m-tone: var(--m-danger);
+  }
+  .m-password-strength[data-value="2"] {
+    --m-tone: var(--m-warning);
+  }
+  .m-password-strength:is([data-value="3"], [data-value="4"]) {
+    --m-tone: var(--m-success);
+  }
+  .m-password-meter > span[data-on] {
+    background: var(--m-tone);
+  }
+  @media (forced-colors: active) {
+    .m-password-meter > span {
+      border: 1px solid CanvasText;
+    }
+    .m-password-meter > span[data-on] {
+      background: CanvasText;
+    }
+  }
+
+  /* == CodeInput == */
+  .m-code-control {
+    --m-code-cell: 48px;
+    position: relative;
+    width: max-content;
+    max-width: 100%;
+  }
+  .m-code-control input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: transparent;
+    caret-color: transparent;
+    font-size: 16px;
+    outline: none;
+    cursor: text;
+  }
+  /* The active cell shows focus instead. */
+  .m-code-control input:focus-visible {
+    outline: none;
+  }
+  .m-code-control input::selection {
+    background: transparent;
+  }
+  .m-code-cells {
+    display: grid;
+    grid-template-columns: repeat(
+      var(--m-code-length),
+      minmax(0, var(--m-code-cell))
+    );
+    gap: 8px;
+  }
+  .m-code-cell {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 5 / 6;
+    min-width: 0;
+    border: 1px solid var(--m-line-strong);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    font: var(--m-weight-semibold) 22px var(--m-mono);
+  }
+  .m-code-cell[data-active] {
+    outline: 2px solid var(--m-focus);
+    outline-offset: 1px;
+  }
+  /* A caret in the empty active cell. */
+  .m-code-cell[data-active]:not([data-filled])::after {
+    content: "";
+    width: 1px;
+    height: 40%;
+    background: var(--m-ink);
+    animation: m-code-caret 1s steps(1) infinite;
+  }
+  @keyframes m-code-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .m-code-cell[data-active]:not([data-filled])::after {
+      animation: none;
+    }
+  }
+  .m-code-control[data-invalid] .m-code-cell {
+    border-color: var(--m-danger);
+  }
+  .m-code-input[data-disabled] .m-code-cell {
+    background: var(--m-sunken);
+    color: var(--m-muted);
+  }
+  .m-code-input[data-disabled] input {
+    background: transparent;
+    color: transparent;
+    cursor: not-allowed;
+  }
+  /* The input stays invisible over the cells in forced colours too. */
+  @media (forced-colors: active) {
+    .m-code-control input {
+      forced-color-adjust: none;
     }
   }
 

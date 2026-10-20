@@ -1,0 +1,39 @@
+{
+  "id": "mortar-auth-layout",
+  "logicalId": "auth-layout",
+  "name": "AuthLayout",
+  "description": "Mortar auth page shell for sign-in, sign-up, password reset, verification and two-factor screens: logo, h1, description, the form and a footer link, centred, on a card or split beside an image or testimonial.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "export": "AuthLayout",
+  "source": "src/auth.tsx",
+  "capabilities": ["form"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "contract": {
+    "props": {
+      "title": "string",
+      "description": "ReactNode",
+      "logo": "ReactNode",
+      "layout": "\"center\" | \"cards\" | \"split\" (default \"center\")",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
+      "children": "ReactNode (the form)",
+      "footer": "ReactNode",
+      "aside": "ReactNode (shown with layout=\"split\")",
+      "id": "string",
+      "className": "string"
+    },
+    "usage": "Import { AuthLayout } from @tony-ui/mortar. Use it as the whole page for each auth step, outside AppShell and MarketingHeader. It renders the page's main landmark and h1. Put a <form> directly in children (fields stack, direct Button children fill the width), with ProviderButtons and a labelled Divider where providers apply, and the switch link (\"Don't have an account? Sign up\") in footer. Fields: Input type=\"email\" autoComplete=\"email\" (or autoComplete=\"username\"), PasswordInput, CodeInput, Input autoComplete=\"name\". For a section inside another page, use SignInPanel. See docs/auth-flows.md for every step.",
+    "avoid": "Do not nest it in another shell or page main, add a second h1, or hide password rules and errors.",
+    "accessibility": "main is named by the heading. On narrow screens the split layout puts text asides after the form and hides a lone image or video.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/AuthLayoutPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-auth",
+    "states": []
+  }
+}

@@ -339,6 +339,114 @@ export const implementations = {
     await expect(panel.getByLabel("Email address")).toBeVisible();
     await expect(panel.getByRole("status")).toHaveText("");
   },
+  async providers({ page, root }) {
+    const group = root.getByRole("group", { name: "Sign in with" });
+    const google = group.getByRole("button", { name: "Continue with Google" });
+    await group.getByRole("button", { name: "Continue with GitHub" }).focus();
+    await page.keyboard.press("Tab");
+    await expect(google).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(root.getByLabel("Chosen provider")).toHaveText("google");
+    await root.getByRole("button", { name: "SSO", exact: true }).click();
+    await expect(root.getByLabel("Chosen provider")).toHaveText("sso");
+  },
+  async password({ page, root }) {
+    const field = root.getByLabel("Password", { exact: true });
+    const toggle = root
+      .locator(".m-password")
+      .first()
+      .getByRole("button", { name: "Show password" });
+    await expect(field).toHaveAttribute("type", "password");
+    await expect(field).toHaveAttribute("autocomplete", "current-password");
+    await expect(toggle).toHaveAttribute("aria-pressed", "false");
+    await field.fill("hunter2");
+    // A pointer press shows the password and leaves focus in the field.
+    await toggle.click();
+    await expect(field).toHaveAttribute("type", "text");
+    await expect(toggle).toHaveAttribute("aria-pressed", "true");
+    await expect(field).toBeFocused();
+    await page.keyboard.type("!");
+    await expect(field).toHaveValue("hunter2!");
+    // From the keyboard, the toggle keeps its own focus.
+    await page.keyboard.press("Tab");
+    await expect(toggle).toBeFocused();
+    await page.keyboard.press("Space");
+    await expect(field).toHaveAttribute("type", "password");
+    await expect(toggle).toHaveAttribute("aria-pressed", "false");
+    await expect(toggle).toBeFocused();
+    // New password: requirements are listed up front and update as you type.
+    const created = root.getByLabel("New password");
+    await expect(created).toHaveAttribute("autocomplete", "new-password");
+    const rules = root.getByRole("list", { name: "Password requirements" });
+    await expect(rules.getByRole("listitem")).toHaveText([
+      "At least 12 characters, not met",
+      "Upper and lower case letters, not met",
+      "A number or symbol, not met",
+    ]);
+    const status = root.locator(".m-password").nth(1).getByRole("status");
+    await expect(status).toHaveText("");
+    await created.fill("Abc");
+    await expect(rules.getByRole("listitem").nth(1)).toHaveText(
+      "Upper and lower case letters, met",
+    );
+    // Partial progress is not announced.
+    await expect(status).toHaveText("");
+    await created.pressSequentially("defghij9k");
+    await expect(rules.getByRole("listitem")).toHaveText([
+      "At least 12 characters, met",
+      "Upper and lower case letters, met",
+      "A number or symbol, met",
+    ]);
+    await expect(status).toHaveText("All password requirements met.");
+    await expect(
+      root.getByRole("meter", { name: "Password strength" }),
+    ).toHaveAttribute("aria-valuetext", "Strong");
+    await created.press("Backspace");
+    await created.press("Backspace");
+    await expect(status).toHaveText(
+      "Password no longer meets every requirement.",
+    );
+    // Paste is never blocked.
+    await created.fill("");
+    await created.focus();
+    await page.keyboard.insertText("Pasted-Password-1");
+    await expect(created).toHaveValue("Pasted-Password-1");
+  },
+  async code({ page, root }) {
+    const field = root.getByLabel("Verification code");
+    const cells = root.locator(".m-code-input").first().locator(".m-code-cell");
+    await expect(field).toHaveAttribute("autocomplete", "one-time-code");
+    await expect(field).toHaveAttribute("inputmode", "numeric");
+    await expect(field).toHaveAccessibleDescription(
+      "Enter the 6-digit code we sent to ana@example.com.",
+    );
+    await expect(cells).toHaveCount(6);
+    await field.focus();
+    // Digits only: letters are dropped as you type.
+    await page.keyboard.type("1a2b3");
+    await expect(field).toHaveValue("123");
+    await expect(cells.nth(2)).toHaveText("3");
+    await expect(cells.nth(3)).toHaveAttribute("data-active", "true");
+    await page.keyboard.press("Backspace");
+    await expect(field).toHaveValue("12");
+    await expect(cells.nth(2)).toHaveText("");
+    await expect(root.getByLabel("Completed code")).toHaveText("none");
+    // Pasting a formatted code fills every cell and completes once.
+    await page.keyboard.press("ControlOrMeta+A");
+    await page.keyboard.insertText("987 654");
+    await expect(field).toHaveValue("987654");
+    await expect(cells).toHaveText(["9", "8", "7", "6", "5", "4"]);
+    await expect(root.getByLabel("Completed code")).toHaveText("987654");
+    // Extra characters beyond the length are ignored.
+    await page.keyboard.type("3");
+    await expect(field).toHaveValue("987654");
+    // Recovery codes accept letters and are upper-cased.
+    const recovery = root.getByLabel("Recovery code");
+    await expect(recovery).toHaveAttribute("inputmode", "text");
+    await recovery.focus();
+    await page.keyboard.insertText("ab12-cd34");
+    await expect(recovery).toHaveValue("AB12CD34");
+  },
   async "sign-in"({ page, root }) {
     const provider = root.getByRole("button", { name: "Continue with GitHub" });
     await provider.focus();

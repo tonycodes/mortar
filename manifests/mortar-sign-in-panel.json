@@ -24,10 +24,15 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { SignInPanel } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { SignInPanel } from @tony-ui/mortar. Use it for a passwordless sign-in (providers plus an emailed link) as a section, for example inside a landing page with headingLevel={2}. It renders ProviderButtons and a labelled Divider. For a dedicated sign-in page, or any flow with passwords or codes, compose AuthLayout with ProviderButtons, PasswordInput and CodeInput instead (docs/auth-flows.md).",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": ["mortar-button", "mortar-input"]
+    "dependencies": [
+      "mortar-button",
+      "mortar-divider",
+      "mortar-input",
+      "mortar-provider-buttons"
+    ]
   },
   "preview": {
     "source": "previews/SignInPanelPreview.tsx"
