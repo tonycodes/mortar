@@ -230,7 +230,7 @@ switch (scenario) {
     // Hydrate the markup a server renders (it has no window, so a system
     // appearance is light there; tests/controls-api.test.mjs checks that).
     root.innerHTML =
-      '<div data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light"><p>Hydrated</p></div>';
+      '<div data-m-component="ThemeProvider" data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light"><p>Hydrated</p></div>';
     hydrateRoot(
       root,
       <ThemeProvider scope="container" initialAppearance="system">
