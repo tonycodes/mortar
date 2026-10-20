@@ -64,7 +64,7 @@
     th:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     color: var(--m-muted);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-data-table thead th {
     background: var(--m-paper);
@@ -76,7 +76,7 @@
     white-space: nowrap;
   }
   :is(.m-data-table, .m-table) tbody th {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-data-table tr:last-child :is(th, td) {
     border-bottom: 0;
@@ -141,7 +141,7 @@
   .m-table caption:not(.m-sr-only) {
     padding: 12px 14px 0;
     text-align: left;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   :is(
     .m-table tbody tr:last-child :is(th, td),
@@ -159,7 +159,7 @@
     background: var(--m-sunken);
     color: var(--m-ink);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     text-align: left;
   }
   /* The column header row already draws the line above the first group. */
@@ -279,7 +279,7 @@
   }
   .m-stacked-list > :where(header) > .m-stacked-title {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-stacked-list li {
     display: flex;
@@ -330,7 +330,7 @@
     background: var(--m-sunken);
     color: var(--m-secondary);
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-stacked-list > .m-stacked-group:not(:last-child) li:last-child {
     border-bottom: 1px solid var(--m-line);
@@ -428,7 +428,7 @@
   .m-grid-list-title {
     margin: 0;
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     overflow-wrap: anywhere;
   }
   .m-grid-list-title a {
@@ -479,7 +479,7 @@
   .m-grid-list-details dd {
     margin: 0;
     color: var(--m-ink);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     text-align: right;
     min-width: 0;
     overflow-wrap: anywhere;
@@ -528,7 +528,7 @@
     box-shadow: none;
     color: var(--m-ink);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     text-decoration: none;
   }
   .m-grid-list[data-actions="split"] .m-grid-list-actions > * + * {
@@ -567,7 +567,7 @@
   .m-description-heading .m-description-title {
     margin: 0;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-description-heading p {
     margin: 2px 0 0;
@@ -588,7 +588,7 @@
   .m-description-list dt {
     color: var(--m-ink);
     font-size: var(--m-font-size);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-description-list dd {
     margin: 0;
@@ -685,6 +685,6 @@
   .m-attachments a {
     flex-shrink: 0;
     color: var(--m-link);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
 }

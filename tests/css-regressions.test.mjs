@@ -120,3 +120,23 @@ test("Prose styles stop at nested component roots, not at m- class names", () =>
   for (const { selector } of prose)
     assert.doesNotMatch(selector, /\[class[\^*]=/, selector);
 });
+
+test("component styles read the weight and radius scales, not literals", () => {
+  // A retheme of --m-weight-* or --m-radius-* reaches every component only if
+  // no component hard-codes a value the scale already names.
+  const components = files.filter((f) => f !== "src/tokens.css");
+  assert.ok(components.length >= 8, "expected the component family files");
+  const found = [];
+  for (const file of components) {
+    const css = stripComments(sources[file]);
+    for (const m of css.matchAll(
+      /font-weight\s*:\s*(400|500|600|700)\b|\bfont\s*:\s*(400|500|600|700)\s/g,
+    ))
+      found.push(`${file}: ${m[0]}`);
+    for (const m of css.matchAll(/border-radius\s*:\s*([^;]+);/g))
+      for (const part of m[1].trim().split(/\s+/))
+        if (/^(2|4|8|12|16|999)px$/.test(part))
+          found.push(`${file}: border-radius ${m[1].trim()}`);
+  }
+  assert.deepEqual(found, []);
+});

@@ -27,7 +27,7 @@
     margin-left: auto;
   }
   .m-docs-version {
-    font: 500 12px var(--m-mono);
+    font: var(--m-weight-medium) 12px var(--m-mono);
   }
   .m-docs-sections {
     display: flex;
@@ -59,7 +59,7 @@
   :is(.m-docs-nav, .m-mobile-sidebar) nav .m-nav-group-title {
     padding: 0 10px 6px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   :is(.m-docs-nav, .m-mobile-sidebar) nav a {
     display: block;
@@ -84,7 +84,7 @@
   .m-docs-toc h2 {
     margin-bottom: 10px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-docs-toc nav {
     display: flex;
@@ -121,11 +121,11 @@
     padding: 5px 10px;
     border-radius: 6px;
     color: var(--m-muted);
-    font-weight: 400;
+    font-weight: var(--m-weight-regular);
   }
   .m-docs-sections a[aria-current="page"] {
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   :is(.m-docs-nav, .m-mobile-sidebar) nav a:hover {
     color: var(--m-ink);
@@ -133,7 +133,7 @@
   :is(.m-docs-nav, .m-mobile-sidebar) nav a[aria-current="page"] {
     background: var(--m-sunken);
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-docs-shell[data-layout="wide"] > .m-docs-header {
     position: static;
@@ -149,7 +149,7 @@
   .m-docs-toc nav a[aria-current] {
     border-left-color: var(--m-ink);
     color: var(--m-ink);
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
   }
   @media (max-width: 900px) {
     .m-docs-shell[data-layout="wide"] > .m-docs-body {
@@ -250,7 +250,7 @@
     margin: 0;
     padding-top: 2px;
     font-size: 17px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     letter-spacing: -0.01em;
   }
   .m-step-description {
@@ -272,7 +272,7 @@
     height: var(--m-marker-size);
     border: var(--m-marker-border, 1px) solid var(--m-line-strong);
     border-radius: 50%;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
 
   /* == Callout == */
@@ -332,7 +332,7 @@
   }
   [data-folder] > .m-file-row {
     color: var(--m-ink);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   [data-highlighted] > .m-file-row {
     background: var(--m-selected);
@@ -356,7 +356,7 @@
     min-height: 38px;
     padding: 0 6px 0 8px;
     border-bottom: 1px solid var(--m-code-line);
-    font: 500 12px var(--m-mono);
+    font: var(--m-weight-medium) 12px var(--m-mono);
     color: var(--m-code-dim);
   }
   .m-code-bar figcaption {
@@ -427,7 +427,7 @@
     border-bottom: 1px solid var(--m-line);
   }
   .m-release .m-release-version {
-    font: 600 14px var(--m-mono);
+    font: var(--m-weight-semibold) 14px var(--m-mono);
   }
   .m-release time {
     font-size: 13px;
@@ -440,7 +440,7 @@
   .m-release .m-release-type {
     margin: 0 0 4px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     color: var(--m-muted);
   }
   .m-release ul {
@@ -470,14 +470,14 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font: 500 13px var(--m-mono);
+    font: var(--m-weight-medium) 13px var(--m-mono);
   }
   .m-api-text .m-api-title {
     margin-top: 16px;
     font-size: 32px;
-    font-weight: 700;
+    font-weight: var(--m-weight-bold);
     letter-spacing: -0.03em;
-    line-height: 1.1;
+    line-height: var(--m-leading-display);
   }
   .m-api-description {
     margin-top: 10px;
@@ -489,7 +489,7 @@
     padding-bottom: 10px;
     border-bottom: 1px solid var(--m-line);
     font-size: 13px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-param-list > div {
     padding: 14px 0;
@@ -504,12 +504,12 @@
     color: var(--m-muted);
   }
   .m-param-list dt code {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     font-size: 13px;
     color: var(--m-ink);
   }
   .m-param-list dt span:last-child {
-    font: 600 12px var(--m-font);
+    font: var(--m-weight-semibold) 12px var(--m-font);
   }
   .m-param-list dd {
     margin: 4px 0 0;
@@ -530,7 +530,7 @@
     border-radius: 5px;
     background: var(--m-primary);
     color: var(--m-on-primary);
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-api-route [data-method="DELETE"] {
     background: var(--m-danger);
@@ -581,7 +581,7 @@
     border-radius: 7px;
     background: transparent;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: var(--m-weight-medium);
     cursor: pointer;
   }
   .m-page-feedback [aria-pressed="true"] {
@@ -620,7 +620,7 @@
   }
   .m-pager a > span,
   .m-link-cards strong {
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   :is(.m-pager, .m-link-cards) a:hover {
     border-color: var(--m-ink);
@@ -653,16 +653,16 @@
   .m-prose
     :is(h2, h3):where(:not([data-m-component], .m-prose [data-m-component] *)) {
     color: var(--m-ink);
-    letter-spacing: -0.02em;
+    letter-spacing: var(--m-tracking-heading);
     margin: 1.6em 0 0.5em;
   }
   .m-prose h2:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     font-size: 24px;
-    font-weight: 700;
+    font-weight: var(--m-weight-bold);
   }
   .m-prose h3:where(:not([data-m-component], .m-prose [data-m-component] *)) {
     font-size: 17px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-prose
     :is(p, ul, ol):where(
@@ -683,7 +683,7 @@
   .m-prose
     :not(pre)
     > code:where(:not([data-m-component], .m-prose [data-m-component] *)) {
-    font: 500 0.875em var(--m-mono);
+    font: var(--m-weight-medium) 0.875em var(--m-mono);
     padding: 1px 5px;
     border: 1px solid var(--m-line);
     border-radius: var(--m-radius-sm);

@@ -42,7 +42,7 @@
   }
   .m-dialog-heading h2 {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-dialog-panel > .m-actions {
     margin-top: 24px;
@@ -65,7 +65,7 @@
   }
   .m-confirm-body > h2 {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
     letter-spacing: -0.01em;
   }
   .m-confirm-body > div:first-of-type {
@@ -107,7 +107,7 @@
   }
   .m-slide-over > :where(header > div) > h2 {
     font-size: 17px;
-    font-weight: 600;
+    font-weight: var(--m-weight-semibold);
   }
   .m-slide-over > :where(header > div) > p {
     font-size: 13px;
@@ -169,8 +169,8 @@
   .m-palette-group {
     padding: 10px 10px 4px;
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: var(--m-weight-semibold);
+    letter-spacing: var(--m-tracking-caps);
     text-transform: uppercase;
     color: var(--m-muted);
   }
@@ -193,7 +193,7 @@
   .m-palette-item mark {
     background: none;
     color: inherit;
-    font-weight: 700;
+    font-weight: var(--m-weight-bold);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -302,7 +302,7 @@
     background: var(--m-ink);
     color: var(--m-paper);
     font-size: 11px;
-    font-weight: 700;
+    font-weight: var(--m-weight-bold);
   }
   .m-toast-leading {
     display: inline-flex;

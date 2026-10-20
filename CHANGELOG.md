@@ -2,6 +2,12 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
+## Unreleased
+
+### Changed
+
+- **Scale tokens drive component styles:** component font weights now read `--m-weight-*`, and corner radii, letter spacing and line heights that equal a scale value read `--m-radius-*`, `--m-tracking-*` and `--m-leading-*`. At the default token values nothing renders differently. Overriding a token on `:root` or a container now restyles the components inside it. Padding, gaps and margins do not read `--m-space-*` yet. See [Scales](https://github.com/tonycodes/mortar/blob/main/docs/theming.md#scales).
+
 ## 0.9.0 (2026-10-20)
 
 Theming. See [Theming](https://github.com/tonycodes/mortar/blob/main/docs/theming.md).
