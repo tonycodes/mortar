@@ -1,6 +1,7 @@
 // CSS helpers for the node suite. selectorBody is the same parser the
 // baseline check (scripts/check.mjs) uses, so tests and M009 agree.
 import { readFile } from "node:fs/promises";
+import { mixOklab } from "./color.mjs";
 export { selectorBody } from "../../scripts/check.mjs";
 
 export const readSource = (path) =>
@@ -55,4 +56,42 @@ export function sectionsWith(css, selector) {
   return [...css.matchAll(HEADING)]
     .map((m) => m[1])
     .filter((name) => section(css, name).includes(selector));
+}
+
+/**
+ * Resolves a customProperties() map whose values use var(--x, fallback) and
+ * color-mix(in oklab, a p%, b), as tokens.css does, into plain values.
+ */
+export function resolveTokens(tokens) {
+  const resolve = (value, depth = 0) => {
+    if (depth > 20) throw Error(`Circular token: ${value}`);
+    let text = value.trim();
+    for (;;) {
+      const use = text.match(
+        /var\(\s*--([a-z0-9-]+)\s*(?:,\s*((?:[^()]|\([^()]*\))*))?\)/i,
+      );
+      if (!use) break;
+      const [whole, name, fallback] = use;
+      const replacement =
+        name in tokens && tokens[name] !== "initial"
+          ? resolve(tokens[name], depth + 1)
+          : fallback === undefined
+            ? ""
+            : resolve(fallback, depth + 1);
+      text = text.replace(whole, replacement);
+    }
+    const mix = text.match(
+      /^color-mix\(\s*in oklab,\s*(.+?)\s+([\d.]+)%,\s*(.+)\)$/i,
+    );
+    if (mix)
+      return mixOklab(
+        resolve(mix[1], depth + 1),
+        resolve(mix[3], depth + 1),
+        Number(mix[2]),
+      );
+    return text.replace(/\s+/g, " ");
+  };
+  return Object.fromEntries(
+    Object.keys(tokens).map((name) => [name, resolve(tokens[name])]),
+  );
 }

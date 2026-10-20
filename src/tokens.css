@@ -1,12 +1,70 @@
-/* Project-agnostic semantic tokens derived from the supplied Mortar v2 designs.
-   Status colours deliberately differ from brand colours. No hosted service dependency.
-   Light values also apply to a light container inside a dark document. */
+/* Mortar tokens, in three layers.
+   1. Brand contract: a brand declares --m-brand-l-* (light) and --m-brand-d-*
+      (dark) and nothing else. Every value is optional.
+   2. Appearance: resolves the contract into the live --m-* tokens and into the
+      --m-inv-* tokens (the opposite appearance, used by inverse bands), so
+      dark mode and inverse sections never need brand-specific CSS. Hover and
+      active mix towards ink, which keeps on-primary contrast at least as high
+      as on the primary itself; selected tints the paper.
+   3. Scales: type, space, radius, sizing, density and stacking.
+   Status colours deliberately differ from brand colours. A light container
+   inside a dark document resolves light. */
+
+/* 1. Brand contract */
+
+/* Every brand starts from an empty contract, so a brand never inherits values
+   from an outer one. Zero specificity: any brand rule wins, in any order. */
+:where([data-mortar-brand]) {
+  --m-brand-l-primary: initial;
+  --m-brand-l-primary-hover: initial;
+  --m-brand-l-primary-active: initial;
+  --m-brand-l-on-primary: initial;
+  --m-brand-l-accent: initial;
+  --m-brand-l-on-accent: initial;
+  --m-brand-l-focus: initial;
+  --m-brand-l-link: initial;
+  --m-brand-l-selected: initial;
+  --m-brand-d-primary: initial;
+  --m-brand-d-primary-hover: initial;
+  --m-brand-d-primary-active: initial;
+  --m-brand-d-on-primary: initial;
+  --m-brand-d-accent: initial;
+  --m-brand-d-on-accent: initial;
+  --m-brand-d-focus: initial;
+  --m-brand-d-link: initial;
+  --m-brand-d-selected: initial;
+}
+/* Neutral: the appearance fallbacks supply its colours; it keeps its tuned
+   interaction states. */
+:root:not([data-mortar-brand]),
+[data-mortar-brand="neutral"] {
+  --m-brand-l-primary-hover: #29292c;
+  --m-brand-l-primary-active: #3a3a3c;
+  --m-brand-l-selected: #f2f2f4;
+  --m-brand-d-primary-hover: #e5e5ea;
+  --m-brand-d-primary-active: #c7c7cc;
+  --m-brand-d-selected: #1c1c1e;
+}
+[data-mortar-brand="green"] {
+  --m-brand-l-primary: #047857;
+  --m-brand-l-primary-hover: #065f46;
+  --m-brand-l-primary-active: #064e3b;
+  --m-brand-l-on-primary: #ffffff;
+  --m-brand-l-selected: #e6f5ed;
+  --m-brand-d-primary: #6ee7b7;
+  --m-brand-d-primary-hover: #a7f3d0;
+  --m-brand-d-primary-active: #34d399;
+  --m-brand-d-on-primary: #022c22;
+  --m-brand-d-focus: #6ee7b7;
+  --m-brand-d-link: #6ee7b7;
+  --m-brand-d-selected: #062d23;
+}
+
+/* 2. Appearance. A branded element without its own appearance resolves in
+   light, or in dark inside a dark-appearance ancestor. */
 :root,
-[data-mortar-appearance="light"] {
-  --m-font:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
-    sans-serif;
-  --m-mono: "SF Mono", ui-monospace, Menlo, monospace;
+[data-mortar-appearance="light"],
+[data-mortar-brand]:not([data-mortar-appearance]) {
   --m-paper: #ffffff;
   --m-surface: #ffffff;
   --m-sunken: #f5f5f7;
@@ -15,15 +73,6 @@
   --m-ink: #000000;
   --m-secondary: #3a3a3c;
   --m-muted: #6e6e73;
-  --m-primary: #000000;
-  --m-primary-hover: #29292c;
-  --m-primary-active: #3a3a3c;
-  --m-on-primary: #ffffff;
-  --m-accent: #000000;
-  --m-on-accent: #ffffff;
-  --m-focus: #000000;
-  --m-link: #000000;
-  --m-selected: #f2f2f4;
   --m-success: #1f7a36;
   --m-warning: #945700;
   --m-danger: #c70014;
@@ -33,17 +82,253 @@
   --m-code-line: rgb(255 255 255 / 0.12);
   --m-code-ink: #f5f5f7;
   --m-code-dim: #8e8e93;
+  --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
+  --m-scrim: rgb(0 0 0 / 0.5);
+  --m-swatch-ring: rgb(0 0 0 / 0.12);
+  --m-primary: var(--m-brand-l-primary, #000000);
+  --m-primary-hover: var(
+    --m-brand-l-primary-hover,
+    color-mix(in oklab, var(--m-primary) 85%, var(--m-ink))
+  );
+  --m-primary-active: var(
+    --m-brand-l-primary-active,
+    color-mix(in oklab, var(--m-primary) 72%, var(--m-ink))
+  );
+  --m-on-primary: var(--m-brand-l-on-primary, #ffffff);
+  --m-accent: var(--m-brand-l-accent, var(--m-primary));
+  --m-on-accent: var(--m-brand-l-on-accent, var(--m-on-primary));
+  --m-focus: var(--m-brand-l-focus, var(--m-primary));
+  --m-link: var(--m-brand-l-link, var(--m-primary));
+  --m-selected: var(
+    --m-brand-l-selected,
+    color-mix(in oklab, var(--m-primary) 8%, var(--m-paper))
+  );
+  --m-inv-color-scheme: dark;
+  --m-inv-paper: #000000;
+  --m-inv-surface: #1c1c1e;
+  --m-inv-sunken: #1c1c1e;
+  --m-inv-line: #3a3a3c;
+  --m-inv-line-strong: #727278;
+  --m-inv-ink: #f5f5f7;
+  --m-inv-secondary: #c7c7cc;
+  --m-inv-muted: #a1a1a6;
+  --m-inv-success: #30d158;
+  --m-inv-warning: #ffd60a;
+  --m-inv-danger: #ff6961;
+  --m-inv-info: #5aa9ff;
+  --m-inv-on-feedback: #000000;
+  --m-inv-primary: var(--m-brand-d-primary, #ffffff);
+  --m-inv-primary-hover: var(
+    --m-brand-d-primary-hover,
+    color-mix(in oklab, var(--m-inv-primary) 85%, var(--m-inv-ink))
+  );
+  --m-inv-primary-active: var(
+    --m-brand-d-primary-active,
+    color-mix(in oklab, var(--m-inv-primary) 72%, var(--m-inv-ink))
+  );
+  --m-inv-on-primary: var(--m-brand-d-on-primary, #000000);
+  --m-inv-accent: var(--m-brand-d-accent, var(--m-inv-primary));
+  --m-inv-on-accent: var(--m-brand-d-on-accent, var(--m-inv-on-primary));
+  --m-inv-focus: var(--m-brand-d-focus, var(--m-inv-primary));
+  --m-inv-link: var(--m-brand-d-link, var(--m-inv-ink));
+  --m-inv-selected: var(
+    --m-brand-d-selected,
+    color-mix(in oklab, var(--m-inv-primary) 10%, var(--m-inv-paper))
+  );
+}
+[data-mortar] {
+  color-scheme: light;
+}
+[data-mortar-appearance="dark"],
+[data-mortar-appearance="dark"]
+  [data-mortar-brand]:not([data-mortar-appearance]) {
+  color-scheme: dark;
+  --m-paper: #000000;
+  --m-surface: #0e0e10;
+  --m-sunken: #1c1c1e;
+  --m-line: #29292c;
+  --m-line-strong: #727278;
+  --m-ink: #f5f5f7;
+  --m-secondary: #c7c7cc;
+  --m-muted: #98989d;
+  --m-success: #30d158;
+  --m-warning: #ffd60a;
+  --m-danger: #ff6961;
+  --m-info: #5aa9ff;
+  --m-on-feedback: #000000;
+  --m-code-bg: #0e0e10;
+  --m-code-line: rgb(255 255 255 / 0.1);
+  --m-float: none;
+  --m-swatch-ring: rgb(255 255 255 / 0.24);
+  --m-primary: var(--m-brand-d-primary, #ffffff);
+  --m-primary-hover: var(
+    --m-brand-d-primary-hover,
+    color-mix(in oklab, var(--m-primary) 85%, var(--m-ink))
+  );
+  --m-primary-active: var(
+    --m-brand-d-primary-active,
+    color-mix(in oklab, var(--m-primary) 72%, var(--m-ink))
+  );
+  --m-on-primary: var(--m-brand-d-on-primary, #000000);
+  --m-accent: var(--m-brand-d-accent, var(--m-primary));
+  --m-on-accent: var(--m-brand-d-on-accent, var(--m-on-primary));
+  --m-focus: var(--m-brand-d-focus, var(--m-primary));
+  --m-link: var(--m-brand-d-link, var(--m-ink));
+  --m-selected: var(
+    --m-brand-d-selected,
+    color-mix(in oklab, var(--m-primary) 10%, var(--m-paper))
+  );
+  --m-inv-color-scheme: light;
+  --m-inv-paper: #f5f5f7;
+  --m-inv-surface: #ffffff;
+  --m-inv-sunken: #ffffff;
+  --m-inv-line: #d1d1d6;
+  --m-inv-line-strong: #8e8e93;
+  --m-inv-ink: #000000;
+  --m-inv-secondary: #3a3a3c;
+  --m-inv-muted: #636366;
+  --m-inv-success: #1f7a36;
+  --m-inv-warning: #945700;
+  --m-inv-danger: #c70014;
+  --m-inv-info: #0060c7;
+  --m-inv-on-feedback: #ffffff;
+  --m-inv-primary: var(--m-brand-l-primary, #000000);
+  --m-inv-primary-hover: var(
+    --m-brand-l-primary-hover,
+    color-mix(in oklab, var(--m-inv-primary) 85%, var(--m-inv-ink))
+  );
+  --m-inv-primary-active: var(
+    --m-brand-l-primary-active,
+    color-mix(in oklab, var(--m-inv-primary) 72%, var(--m-inv-ink))
+  );
+  --m-inv-on-primary: var(--m-brand-l-on-primary, #ffffff);
+  --m-inv-accent: var(--m-brand-l-accent, var(--m-inv-primary));
+  --m-inv-on-accent: var(--m-brand-l-on-accent, var(--m-inv-on-primary));
+  --m-inv-focus: var(--m-brand-l-focus, var(--m-inv-primary));
+  --m-inv-link: var(--m-brand-l-link, var(--m-inv-primary));
+  --m-inv-selected: var(
+    --m-brand-l-selected,
+    color-mix(in oklab, var(--m-inv-primary) 8%, var(--m-inv-paper))
+  );
+}
+/* Before a ThemeProvider writes data-mortar-appearance (server rendering, or
+   no JavaScript), follow the operating system so dark users see no light
+   flash. Set data-mortar-appearance="light" on the root to opt out. Keep this
+   block identical to the dark one above (tests/theming.test.mjs checks). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-mortar-appearance]),
+  :root:not([data-mortar-appearance])
+    [data-mortar-brand]:not([data-mortar-appearance]) {
+    color-scheme: dark;
+    --m-paper: #000000;
+    --m-surface: #0e0e10;
+    --m-sunken: #1c1c1e;
+    --m-line: #29292c;
+    --m-line-strong: #727278;
+    --m-ink: #f5f5f7;
+    --m-secondary: #c7c7cc;
+    --m-muted: #98989d;
+    --m-success: #30d158;
+    --m-warning: #ffd60a;
+    --m-danger: #ff6961;
+    --m-info: #5aa9ff;
+    --m-on-feedback: #000000;
+    --m-code-bg: #0e0e10;
+    --m-code-line: rgb(255 255 255 / 0.1);
+    --m-float: none;
+    --m-swatch-ring: rgb(255 255 255 / 0.24);
+    --m-primary: var(--m-brand-d-primary, #ffffff);
+    --m-primary-hover: var(
+      --m-brand-d-primary-hover,
+      color-mix(in oklab, var(--m-primary) 85%, var(--m-ink))
+    );
+    --m-primary-active: var(
+      --m-brand-d-primary-active,
+      color-mix(in oklab, var(--m-primary) 72%, var(--m-ink))
+    );
+    --m-on-primary: var(--m-brand-d-on-primary, #000000);
+    --m-accent: var(--m-brand-d-accent, var(--m-primary));
+    --m-on-accent: var(--m-brand-d-on-accent, var(--m-on-primary));
+    --m-focus: var(--m-brand-d-focus, var(--m-primary));
+    --m-link: var(--m-brand-d-link, var(--m-ink));
+    --m-selected: var(
+      --m-brand-d-selected,
+      color-mix(in oklab, var(--m-primary) 10%, var(--m-paper))
+    );
+    --m-inv-color-scheme: light;
+    --m-inv-paper: #f5f5f7;
+    --m-inv-surface: #ffffff;
+    --m-inv-sunken: #ffffff;
+    --m-inv-line: #d1d1d6;
+    --m-inv-line-strong: #8e8e93;
+    --m-inv-ink: #000000;
+    --m-inv-secondary: #3a3a3c;
+    --m-inv-muted: #636366;
+    --m-inv-success: #1f7a36;
+    --m-inv-warning: #945700;
+    --m-inv-danger: #c70014;
+    --m-inv-info: #0060c7;
+    --m-inv-on-feedback: #ffffff;
+    --m-inv-primary: var(--m-brand-l-primary, #000000);
+    --m-inv-primary-hover: var(
+      --m-brand-l-primary-hover,
+      color-mix(in oklab, var(--m-inv-primary) 85%, var(--m-inv-ink))
+    );
+    --m-inv-primary-active: var(
+      --m-brand-l-primary-active,
+      color-mix(in oklab, var(--m-inv-primary) 72%, var(--m-inv-ink))
+    );
+    --m-inv-on-primary: var(--m-brand-l-on-primary, #ffffff);
+    --m-inv-accent: var(--m-brand-l-accent, var(--m-inv-primary));
+    --m-inv-on-accent: var(--m-brand-l-on-accent, var(--m-inv-on-primary));
+    --m-inv-focus: var(--m-brand-l-focus, var(--m-inv-primary));
+    --m-inv-link: var(--m-brand-l-link, var(--m-inv-primary));
+    --m-inv-selected: var(
+      --m-brand-l-selected,
+      color-mix(in oklab, var(--m-inv-primary) 8%, var(--m-inv-paper))
+    );
+  }
+  :root:not([data-mortar-appearance]) [data-mortar] {
+    color-scheme: dark;
+  }
+}
+
+/* 3. Scales. Appearance-independent; override on :root or any container to
+   retheme shape and rhythm. Density adjusts the sizing scale below. */
+:root {
+  --m-font:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    sans-serif;
+  --m-mono: "SF Mono", ui-monospace, Menlo, monospace;
+  --m-weight-regular: 400;
+  --m-weight-medium: 500;
+  --m-weight-semibold: 600;
+  --m-weight-bold: 700;
+  --m-tracking-display: -0.04em;
+  --m-tracking-heading: -0.02em;
+  --m-tracking-body: normal;
+  --m-tracking-caps: 0.04em;
+  --m-leading-display: 1.1;
+  --m-leading-heading: 1.3;
+  --m-leading-body: 1.6;
+  --m-space-1: 4px;
+  --m-space-2: 8px;
+  --m-space-3: 12px;
+  --m-space-4: 16px;
+  --m-space-6: 24px;
+  --m-space-8: 32px;
+  --m-space-10: 40px;
+  --m-space-12: 48px;
+  --m-radius-xs: 2px;
+  --m-radius-sm: 4px;
+  --m-radius: 8px;
+  --m-radius-lg: 12px;
+  --m-radius-xl: 16px;
+  --m-radius-full: 999px;
   --m-control: 36px;
   --m-pad: 14px;
   --m-font-size: 14px;
   --m-row-pad: 14px;
-  --m-radius-sm: 4px;
-  --m-radius: 8px;
-  --m-radius-lg: 12px;
-  --m-radius-full: 999px;
-  --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
-  --m-scrim: rgb(0 0 0 / 0.5);
-  --m-swatch-ring: rgb(0 0 0 / 0.12);
   --m-icon: 16px;
   --m-focus-offset: 3px;
   /* Minimum hit size: 0 for fine pointers, 44px for coarse pointers (below). */
@@ -54,121 +339,12 @@
   --m-z-popover: 110;
   --m-z-toast: 130;
   --m-z-skip: 140;
-  /* Inverse bands (section tone="inverse") flip appearance locally. */
-  --m-inv-line-strong: #727278;
-  --m-inv-primary-active: #c7c7cc;
-  --m-inv-selected: #1c1c1e;
-  --m-inv-success: #30d158;
-  --m-inv-warning: #ffd60a;
-  --m-inv-danger: #ff6961;
-  --m-inv-info: #5aa9ff;
-  --m-inv-on-feedback: #000000;
-  --m-inv-color-scheme: dark;
-  --m-inv-paper: #000000;
-  --m-inv-surface: #1c1c1e;
-  --m-inv-sunken: #1c1c1e;
-  --m-inv-line: #3a3a3c;
-  --m-inv-ink: #f5f5f7;
-  --m-inv-secondary: #c7c7cc;
-  --m-inv-muted: #a1a1a6;
-  --m-inv-primary: #ffffff;
-  --m-inv-primary-hover: #e5e5ea;
-  --m-inv-on-primary: #000000;
-  --m-inv-accent: #ffffff;
-  --m-inv-on-accent: #000000;
-  --m-inv-focus: #ffffff;
-  --m-inv-link: #f5f5f7;
 }
-[data-mortar] {
-  color-scheme: light;
-}
-[data-mortar-appearance="dark"] {
-  color-scheme: dark;
-  --m-paper: #000000;
-  --m-surface: #0e0e10;
-  --m-sunken: #1c1c1e;
-  --m-line: #29292c;
-  --m-line-strong: #727278;
-  --m-ink: #f5f5f7;
-  --m-secondary: #c7c7cc;
-  --m-muted: #98989d;
-  --m-primary: #ffffff;
-  --m-primary-hover: #e5e5ea;
-  --m-primary-active: #c7c7cc;
-  --m-on-primary: #000000;
-  --m-accent: #ffffff;
-  --m-on-accent: #000000;
-  --m-focus: #ffffff;
-  --m-link: #f5f5f7;
-  --m-selected: #1c1c1e;
-  --m-success: #30d158;
-  --m-warning: #ffd60a;
-  --m-danger: #ff6961;
-  --m-info: #5aa9ff;
-  --m-on-feedback: #000000;
-  --m-code-bg: #0e0e10;
-  --m-code-line: rgb(255 255 255 / 0.1);
-  --m-float: none;
-  --m-swatch-ring: rgb(255 255 255 / 0.24);
-  --m-inv-line-strong: #8e8e93;
-  --m-inv-primary-active: #3a3a3c;
-  --m-inv-selected: #f2f2f4;
-  --m-inv-success: #1f7a36;
-  --m-inv-warning: #945700;
-  --m-inv-danger: #c70014;
-  --m-inv-info: #0060c7;
-  --m-inv-on-feedback: #ffffff;
-  --m-inv-color-scheme: light;
-  --m-inv-paper: #f5f5f7;
-  --m-inv-surface: #ffffff;
-  --m-inv-sunken: #ffffff;
-  --m-inv-line: #d1d1d6;
-  --m-inv-ink: #000000;
-  --m-inv-secondary: #3a3a3c;
-  --m-inv-muted: #636366;
-  --m-inv-primary: #000000;
-  --m-inv-primary-hover: #29292c;
-  --m-inv-on-primary: #ffffff;
-  --m-inv-accent: #000000;
-  --m-inv-on-accent: #ffffff;
-  --m-inv-focus: #000000;
-  --m-inv-link: #000000;
-}
-[data-mortar-brand="green"] {
-  --m-primary: #047857;
-  --m-primary-hover: #065f46;
-  --m-primary-active: #064e3b;
-  --m-on-primary: #ffffff;
-  --m-accent: #047857;
-  --m-on-accent: #ffffff;
-  --m-focus: #047857;
-  --m-link: #047857;
-  --m-selected: #e6f5ed;
-  --m-inv-primary-active: #34d399;
-  --m-inv-selected: #062d23;
-  --m-inv-primary: #6ee7b7;
-  --m-inv-primary-hover: #a7f3d0;
-  --m-inv-on-primary: #022c22;
-  --m-inv-accent: #6ee7b7;
-  --m-inv-on-accent: #022c22;
-  --m-inv-focus: #6ee7b7;
-  --m-inv-link: #6ee7b7;
-}
-[data-mortar-brand="green"][data-mortar-appearance="dark"] {
-  --m-inv-primary-active: #064e3b;
-  --m-inv-selected: #e6f5ed;
-  --m-inv-primary: #047857;
-  --m-inv-primary-hover: #065f46;
-  --m-inv-on-primary: #ffffff;
-  --m-inv-focus: #047857;
-  --m-inv-link: #047857;
-  --m-focus: #6ee7b7;
-  --m-link: #6ee7b7;
-  --m-selected: #062d23;
-  --m-accent: #6ee7b7;
-  --m-on-accent: #022c22;
-  --m-inv-accent: #047857;
-  --m-inv-on-accent: #ffffff;
+[data-mortar-density="comfortable"] {
+  --m-control: 36px;
+  --m-pad: 14px;
+  --m-font-size: 14px;
+  --m-row-pad: 14px;
 }
 [data-mortar-density="compact"] {
   --m-control: 30px;

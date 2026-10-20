@@ -35,8 +35,9 @@ for (const brand of ["neutral", "green"])
       );
       await page.emulateMedia({ colorScheme: "dark" });
       await expect(html).toHaveAttribute("data-mortar-appearance", "dark");
+      // Each brand has one dark-side primary; green's is mint.
       expect(await token("--m-primary")).toBe(
-        brand === "green" ? "#047857" : "#ffffff",
+        brand === "green" ? "#6ee7b7" : "#ffffff",
       );
       await expect(html).toHaveAttribute("data-mortar-brand", brand);
       const root = page.locator("[data-mortar-preview]");

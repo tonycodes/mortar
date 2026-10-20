@@ -39,7 +39,7 @@ No UI service credential is needed.
 
 ## Changes and upgrades
 
-See [CHANGELOG.md](CHANGELOG.md) for every release. Upgrading from 0.5 or earlier? [Migrating to 0.6](docs/migrating-to-0.6.md) lists every renamed prop.
+See [CHANGELOG.md](CHANGELOG.md) for every release. [Theming](docs/theming.md) explains brands, appearance, density and the token scales. Upgrading from 0.5 or earlier? [Migrating to 0.6](docs/migrating-to-0.6.md) lists every renamed prop.
 
 ## Local install
 

@@ -387,22 +387,42 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
   ].sort();
   const declares = (body, name) =>
     new RegExp(`(?:^|[\\s;{])${name}\\s*:`).test(body);
-  for (const selector of [
-    ":root",
-    '[data-mortar-appearance="dark"]',
-    '[data-mortar-brand="green"]',
-    '[data-mortar-brand="green"][data-mortar-appearance="dark"]',
-  ]) {
+  // Brands declare only the --m-brand-* contract; each appearance resolves the
+  // accent pair for itself and for inverse bands, so every brand gets both.
+  for (const selector of [":root", '[data-mortar-appearance="dark"]']) {
     const body = selectorBody(tokensCss, selector);
     const at = tokensCss.indexOf(selector);
     const line = at < 0 ? 1 : tokensCss.slice(0, at).split("\n").length;
-    for (const name of ["--m-accent", "--m-on-accent"])
+    for (const name of [
+      "--m-accent",
+      "--m-on-accent",
+      "--m-inv-accent",
+      "--m-inv-on-accent",
+    ])
       if (!declares(body, name))
         add(
           "M009",
           "src/tokens.css",
-          `${selector} must declare ${name}.`,
+          `${selector} must resolve ${name}.`,
           line,
+        );
+  }
+  for (const rule of tokensCss
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selectors = rule[1].split(",").map((item) => item.trim());
+    if (
+      !selectors.every((item) => /^\[data-mortar-brand="[^"]+"\]$/.test(item))
+    )
+      continue;
+    for (const [, name] of rule[2].matchAll(/(--[a-z0-9-]+)\s*:/gi))
+      if (!name.startsWith("--m-brand-"))
+        add(
+          "M009",
+          "src/tokens.css",
+          `${selectors.join(", ")} declares ${name}; brands declare only --m-brand-* tokens.`,
+          tokensCss.slice(0, tokensCss.indexOf(rule[0].trim())).split("\n")
+            .length,
         );
   }
   const components = manifests.map((c) => catalogEntry(c));

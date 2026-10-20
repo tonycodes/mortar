@@ -139,6 +139,11 @@ function TabsCase({ value: initial }: { value: string }) {
   );
 }
 
+const acme = {
+  light: { primary: "#1d4ed8", onPrimary: "#ffffff" },
+  dark: { primary: "#93c5fd", onPrimary: "#0b1f4d" },
+};
+
 const routes: string[] = [];
 function NavigationCase() {
   const [, rerender] = useState(0);
@@ -177,6 +182,32 @@ switch (scenario) {
         <div style={{ padding: 16 }}>
           <Overlays />
         </div>
+      </ThemeProvider>
+    );
+    break;
+  case "brand-container":
+    // A runtime brand on a dark container inside a light document.
+    content = (
+      <ThemeProvider
+        scope="container"
+        appearance="dark"
+        brand="acme"
+        brandTokens={acme}
+      >
+        <div style={{ padding: 16 }}>
+          <Button>Primary</Button>
+          <Overlays />
+        </div>
+      </ThemeProvider>
+    );
+    break;
+  case "brand-document":
+    content = (
+      <ThemeProvider appearance="light" brand="acme" brandTokens={acme}>
+        <Button>Primary</Button>
+        <section data-tone="inverse" aria-label="Inverse band">
+          <Button>Inverse primary</Button>
+        </section>
       </ThemeProvider>
     );
     break;

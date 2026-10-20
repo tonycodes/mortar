@@ -14,7 +14,8 @@
     "props": {
       "children": "ReactNode",
       "initialAppearance": "light | dark | system",
-      "brand": "neutral | green",
+      "brand": "Brand: \"neutral\" | \"green\" | the name of a brand declared in CSS or through brandTokens",
+      "brandTokens": "BrandDefinition ({ light?, dark? } of primary, primaryHover, primaryActive, onPrimary, accent, onAccent, focus, link, selected); defines brand at runtime, omitted values derive from primary",
       "density": "compact | comfortable | spacious",
       "appearance": "\"light\" | \"dark\" | \"system\" (optional; controlled together with onAppearanceChange)",
       "onAppearanceChange": "(appearance: Appearance) => void",
