@@ -8,6 +8,10 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 - **Playground brand builder** (`?page=brand`, [open it](https://mortar.tony.codes/playground/?page=brand)): edit a brand's light and dark values, including the optional tokens, and see them live in light, dark and inverse previews with overlays. It reports WCAG contrast for on-primary, hover, active, accent, link and focus as the browser resolves them, exports the CSS rule and the `brandTokens` object, and keeps the brand in the URL so it can be shared. Playground only; the package is unchanged.
 
+### Fixed
+
+- **Runtime brands that change:** ThemeProvider renders `brandTokens` as an ordinary `<style>` beside its content instead of a hoisted stylesheet. React 19 never removes hoisted styles, so switching back to an earlier set of tokens could show the wrong brand. The stylesheet now updates in place and is removed on unmount. It is still server-rendered.
+
 ## 0.9.0 (2026-10-20)
 
 Theming. See [Theming](https://github.com/tonycodes/mortar/blob/main/docs/theming.md).

@@ -314,28 +314,6 @@ function Probes({ scope }: { scope: "page" | "inverse" }) {
   );
 }
 
-/**
- * The brand name the previews use. React keeps every hoisted `<style>` it has
- * rendered, in insertion order, so returning to an earlier set of values would
- * reuse that older (earlier) stylesheet and a later one would still win. A
- * suffix gives a revisited brand a fresh stylesheet that lands last.
- */
-function usePreviewBrand(name: string, tokens: BrandDefinition) {
-  const seen = useRef(new Set<string>());
-  const last = useRef("");
-  return useMemo(() => {
-    for (let n = 0; ; n++) {
-      const candidate = n ? `${name}-r${n}` : name;
-      const css = brandToCss(candidate, tokens);
-      if (css === last.current || !seen.current.has(css)) {
-        seen.current.add(css);
-        last.current = css;
-        return candidate;
-      }
-    }
-  }, [name, JSON.stringify(tokens)]);
-}
-
 const rows = [
   { id: "atlas", name: "Atlas", status: "Live" },
   { id: "beacon", name: "Beacon", status: "Draft" },
@@ -670,7 +648,7 @@ export function BrandBuilder() {
     }
   const nameProblem = nameError(name);
   const brandName = nameProblem ? DEFAULT_NAME : name;
-  const previewBrand = usePreviewBrand(brandName, tokens);
+  const previewBrand = brandName;
   const css = brandToCss(brandName, tokens);
   const json = JSON.stringify(tokens, null, 2);
   const preset =

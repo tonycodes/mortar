@@ -41,8 +41,8 @@ export interface ThemeProviderProps {
   brand?: Brand;
   /**
    * Defines `brand` at runtime from data instead of CSS, e.g. a tenant's
-   * colours. Rendered as a stylesheet that React hoists into the document
-   * head (and server-renders), so overlays opened inside the provider share it.
+   * colours. Rendered as a `<style>` beside the provider's content (and
+   * server-rendered); overlays opened inside the provider share it.
    * Omitted values derive from `primary`.
    */
   brandTokens?: BrandDefinition;
@@ -57,13 +57,6 @@ export interface ThemeProviderProps {
   className?: string;
 }
 const DARK = "(prefers-color-scheme: dark)";
-/** A short, stable content hash for the brand stylesheet's href. */
-function hash(text: string) {
-  let value = 5381;
-  for (let i = 0; i < text.length; i++)
-    value = ((value << 5) + value + text.charCodeAt(i)) | 0;
-  return (value >>> 0).toString(36);
-}
 function subscribeToScheme(update: () => void) {
   const media = window.matchMedia(DARK);
   media.addEventListener("change", update);
@@ -168,14 +161,11 @@ export function ThemeProvider({
   const theme = (
     <NavigationContext.Provider value={navigate ?? outerNavigate}>
       {brandCss && (
-        // React 19 hoists and deduplicates this by href, including when
-        // server-rendered; the href changes with the content.
-        <style
-          href={`mortar-brand-${brand}-${hash(brandCss)}`}
-          precedence="mortar"
-        >
-          {brandCss}
-        </style>
+        // An ordinary element, not a hoisted resource: React updates its
+        // content when the tokens change and removes it on unmount, and it
+        // is server-rendered. The rule keys on the brand attribute, so
+        // portalled overlays match it wherever they render.
+        <style data-mortar-brand-style={brand}>{brandCss}</style>
       )}
       <ThemeContext.Provider
         value={{ appearance, setAppearance, brand, density }}

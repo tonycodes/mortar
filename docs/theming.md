@@ -69,7 +69,7 @@ tenant.theme = {
 };
 ```
 
-ThemeProvider renders the brand as a `<style>` element. React 19 hoists it into the document head and includes it in server-rendered HTML, so there is no unstyled flash, and overlays opened inside the provider share it. Brand names may contain only letters, digits and hyphens. Values must be colour syntax: hex, named colours, `rgb()`, `oklch()`, `color-mix()` or `var()`. Anything else, including `;`, `{` or comments, throws, so tenant data cannot inject CSS.
+ThemeProvider renders the brand as a `<style>` element beside its content. It is included in server-rendered HTML, so there is no unstyled flash; it updates when the tokens change and is removed with the provider. Overlays opened inside the provider share it, because the rule matches the brand attribute they carry. Brand names may contain only letters, digits and hyphens. Values must be colour syntax: hex, named colours, `rgb()`, `oklch()`, `color-mix()` or `var()`. Anything else, including `;`, `{` or comments, throws, so tenant data cannot inject CSS.
 
 Outside ThemeProvider, `@tony-ui/mortar/brand` has the same building blocks:
 
