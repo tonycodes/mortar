@@ -69,8 +69,30 @@ const factories = {
         files: [{ id: "f", name: "a.pdf", href: "/a.pdf" }],
       }),
   ],
+  AuthLayout: [
+    () => html(UI.AuthLayout, { title: "Sign in" }, "Form"),
+    () =>
+      html(UI.AuthLayout, { title: "Sign in", layout: "split", aside: "A" }),
+  ],
   AvatarGroup: [
     () => html(UI.AvatarGroup, { label: "Team", people: [{ name: "Ana" }] }),
+  ],
+  CodeInput: [() => html(UI.CodeInput, { label: "Code" })],
+  PasswordInput: [
+    () => html(UI.PasswordInput, { label: "Password" }),
+    () =>
+      html(UI.PasswordInput, {
+        label: "Password",
+        purpose: "new",
+        requirements: [{ label: "12 characters", met: false }],
+        strength: { value: 1, label: "Weak" },
+      }),
+  ],
+  ProviderButtons: [
+    () =>
+      html(UI.ProviderButtons, {
+        providers: [{ id: "g", label: "GitHub", onSelect: noop }],
+      }),
   ],
   Avatar: [() => html(UI.Avatar, { name: "Ana Ruiz" })],
   Badge: [() => html(UI.Badge, null, "New")],

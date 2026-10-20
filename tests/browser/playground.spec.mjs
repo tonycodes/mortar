@@ -408,3 +408,107 @@ test("category template filters products", async ({ page }) => {
   await page.getByRole("button", { name: "Clear all" }).click();
   await expect(list.getByRole("listitem")).toHaveCount(4);
 });
+
+test("sign-in template focuses an error summary, then signs in", async ({
+  page,
+}) => {
+  await page.goto("/?recipe=sign-in");
+  const email = page.getByRole("textbox", { name: "Email address" });
+  const password = page.locator("#sign-in-password");
+  await expect(email).toHaveAttribute("autocomplete", "username");
+  await expect(password).toHaveAttribute("autocomplete", "current-password");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  const summary = page
+    .getByRole("alert")
+    .filter({ hasText: "There is a problem" });
+  await expect(summary).toBeVisible();
+  await expect(page.locator(":focus")).toContainText("There is a problem");
+  await expect(email).toHaveAttribute("aria-invalid", "true");
+  await summary.getByRole("link", { name: "Enter your password" }).click();
+  await expect(password).toBeFocused();
+  await email.fill("ana@example.com");
+  await password.fill("wrong");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "don’t match" }),
+  ).toBeVisible();
+  await password.fill("correct horse battery");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "Signed in as ana@example.com",
+  );
+});
+
+test("sign-up and reset templates check password rules and the match", async ({
+  page,
+}) => {
+  await page.goto("/?recipe=sign-up");
+  await expect(
+    page.getByRole("textbox", { name: "Full name" }),
+  ).toHaveAttribute("autocomplete", "name");
+  const password = page.locator("#sign-up-password");
+  await expect(password).toHaveAttribute("autocomplete", "new-password");
+  // Every rule is listed before anything is typed.
+  const rules = page.getByRole("list", { name: "Password requirements" });
+  await expect(rules.getByRole("listitem")).toHaveCount(3);
+  await password.fill("short");
+  await page.getByRole("button", { name: "Create account" }).click();
+  const summary = page
+    .getByRole("alert")
+    .filter({ hasText: "There is a problem" });
+  await expect(summary).toContainText(
+    "Choose a password that meets every requirement",
+  );
+  await expect(summary).toContainText(
+    "Agree to the terms to create an account",
+  );
+  await expect(
+    page.getByRole("checkbox", { name: /I agree to the terms/ }),
+  ).toHaveAttribute("aria-invalid", "true");
+
+  await page.goto("/?recipe=reset-password");
+  await page.locator("#reset-password").fill("Correct-horse-1");
+  await page.locator("#reset-confirm").fill("Correct-horse-2");
+  await page.getByRole("button", { name: "Update password" }).click();
+  await expect(page.locator("#reset-confirm")).toHaveAccessibleDescription(
+    "The passwords don’t match",
+  );
+  await page.locator("#reset-confirm").fill("Correct-horse-1");
+  await page.getByRole("button", { name: "Update password" }).click();
+  await expect(page.getByRole("status").first()).toContainText(
+    "Password updated",
+  );
+});
+
+test("code templates: paste, wrong code, resend cooldown and recovery codes", async ({
+  page,
+}) => {
+  await page.goto("/?recipe=verify-email");
+  const code = page.getByRole("textbox", { name: "Verification code" });
+  await expect(code).toHaveAttribute("autocomplete", "one-time-code");
+  await code.focus();
+  await page.keyboard.insertText("000 000");
+  await expect(code).toHaveValue("000000");
+  // Without onComplete, a full code waits for the button.
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await page.getByRole("button", { name: "Verify email" }).click();
+  await expect(code).toHaveAccessibleDescription(/incorrect or has expired/);
+  const resend = page.getByRole("button", { name: /Resend code/ });
+  await resend.click();
+  await expect(page.getByText("We sent a new code.")).toBeVisible();
+  await expect(resend).toHaveAttribute("aria-disabled", "true");
+  await expect(resend).toBeFocused();
+  await expect(resend).toHaveText(/Resend code in \d+s/);
+
+  await page.goto("/?recipe=two-factor");
+  const app = page.getByRole("textbox", { name: "Authentication code" });
+  await app.focus();
+  // The two-factor step opts in to submitting a complete code.
+  await page.keyboard.insertText("123456");
+  await expect(page.getByRole("status").first()).toContainText("Signed in");
+  await page.getByRole("button", { name: "Use a recovery code" }).click();
+  const recovery = page.getByRole("textbox", { name: "Recovery code" });
+  await expect(recovery).toBeFocused();
+  await page.keyboard.insertText("ab12-cd34");
+  await expect(recovery).toHaveValue("AB12CD34");
+});

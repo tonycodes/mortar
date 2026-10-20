@@ -45,6 +45,27 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         </UI.Button>
       );
       break;
+    case "PasswordInput":
+      content = (
+        <UI.PasswordInput
+          label={state === "long" ? label : "Password"}
+          disabled={disabled}
+          error={error}
+          onChange={changed}
+          requirements={[{ label: "At least 12 characters", met: false }]}
+        />
+      );
+      break;
+    case "CodeInput":
+      content = (
+        <UI.CodeInput
+          label={state === "long" ? label : "Verification code"}
+          disabled={disabled}
+          error={error}
+          onChange={changed}
+        />
+      );
+      break;
     case "Input":
       content = (
         <UI.Input

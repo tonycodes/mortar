@@ -203,7 +203,8 @@ export function Badge({
     </span>
   );
 }
-interface FieldDescription {
+/** Label, hint and error shared by the text fields. Internal: not exported from the package entry. */
+export interface FieldDescription {
   label: string;
   hint?: string;
   /** Marks the field invalid; the message is announced when it appears. */
@@ -212,7 +213,7 @@ interface FieldDescription {
   className?: string;
 }
 /** The field label; a required field adds a decorative marker after the text. */
-function FieldLabel({
+export function FieldLabel({
   htmlFor,
   label,
   required,

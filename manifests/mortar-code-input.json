@@ -1,0 +1,45 @@
+{
+  "id": "mortar-code-input",
+  "logicalId": "code-input",
+  "name": "CodeInput",
+  "description": "Mortar one-time code field for email or phone verification and two-factor sign-in: one input with autocomplete=\"one-time-code\", shown as a cell per character, that accepts typing, paste and SMS or password-manager autofill.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "export": "CodeInput",
+  "source": "src/auth.tsx",
+  "capabilities": ["input", "validation"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "contract": {
+    "props": {
+      "label": "string",
+      "length": "number (default 6)",
+      "value": "string",
+      "defaultValue": "string",
+      "onChange": "(value: string) => void",
+      "onComplete": "(code: string) => void",
+      "alphanumeric": "boolean (letters as well as digits, upper-cased; digits only by default)",
+      "hint": "string",
+      "error": "string (announced when it appears)",
+      "id": "string (on the input)",
+      "name": "string",
+      "required": "boolean",
+      "disabled": "boolean",
+      "autoFocus": "boolean",
+      "className": "string (on the root element)"
+    },
+    "usage": "Import { CodeInput } from @tony-ui/mortar. Use it for verification and two-factor codes. It sets inputmode=\"numeric\" (or text when alphanumeric) and autocomplete=\"one-time-code\". onChange receives the cleaned value: pasting \"123 456\" or \"123-456\" gives \"123456\". onComplete fires once the code is full; pass it only when submitting automatically is what you want, otherwise let the person press the submit button. Say where the code was sent in hint, and offer resend and a fallback (recovery code, change email) beside it. See docs/auth-flows.md.",
+    "avoid": "Do not render one input per digit (it breaks screen readers, paste and autofill), block paste, or log or store codes on the client.",
+    "accessibility": "One labelled text input carries the value, hint and error; the cells are aria-hidden decoration with a visible focus outline on the active cell. Typing, Backspace, paste and autofill work as in any text field.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/CodeInputPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-code-input input",
+    "states": ["disabled", "error"],
+    "probe": "code"
+  }
+}

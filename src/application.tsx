@@ -8,7 +8,8 @@ import {
   type ReactNode,
 } from "react";
 import { Button, EmptyState, Input, Notice, type Tone } from "./primitives.js";
-import { BrandMark } from "./layout.js";
+import { BrandMark, Divider } from "./layout.js";
+import { AuthHeader, ProviderButtons, type SignInProvider } from "./auth.js";
 import { ArrowDown, ArrowUp, Check, SortArrows } from "./icons.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 import {
@@ -1304,12 +1305,7 @@ export function ActivityFeed({ label, items, className }: ActivityFeedProps) {
   );
 }
 
-export interface SignInProvider {
-  id: string;
-  label: string;
-  icon?: ReactNode;
-  onSelect: () => void;
-}
+export type { SignInProvider };
 export interface SignInPanelProps {
   title: string;
   /** The page's h1 by default; use 2 when the panel sits inside a page that already has one. */
@@ -1351,7 +1347,6 @@ export function SignInPanel({
 }: SignInPanelProps) {
   const [value, setValue] = useState("");
   const headingId = useId();
-  const Heading = headingTag(headingLevel);
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (email?.status !== "submitting") email?.onSubmit(value);
@@ -1364,35 +1359,17 @@ export function SignInPanel({
       className={cx("m-sign-in", !aside && className)}
       aria-labelledby={headingId}
     >
-      <header>
-        {logo && <BrandMark logo={logo} />}
-        <Heading id={headingId} className="m-sign-in-title">
-          {title}
-        </Heading>
-        {description && <p>{description}</p>}
-      </header>
-      {providers.length > 0 && (
-        <div className="m-sign-in-providers">
-          {providers.map((provider) => (
-            <Button
-              key={provider.id}
-              variant="secondary"
-              onClick={provider.onSelect}
-            >
-              {provider.icon && (
-                <span className="m-sign-in-icon" aria-hidden="true">
-                  {provider.icon}
-                </span>
-              )}
-              {provider.label}
-            </Button>
-          ))}
-        </div>
-      )}
+      <AuthHeader
+        titleClassName="m-sign-in-title"
+        logo={logo}
+        title={title}
+        description={description}
+        headingLevel={headingLevel}
+        headingId={headingId}
+      />
+      {providers.length > 0 && <ProviderButtons providers={providers} />}
       {providers.length > 0 && email && (
-        <p className="m-sign-in-divider">
-          <span>{dividerLabel}</span>
-        </p>
+        <Divider label={dividerLabel} soft spacing="none" />
       )}
       {email && (
         <form onSubmit={submit} aria-busy={email.status === "submitting"}>

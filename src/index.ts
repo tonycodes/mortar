@@ -77,6 +77,20 @@ export type {
   SignInPanelProps,
 } from "./application.js";
 export {
+  AuthLayout,
+  ProviderButtons,
+  PasswordInput,
+  CodeInput,
+} from "./auth.js";
+export type {
+  AuthLayoutProps,
+  ProviderButtonsProps,
+  PasswordInputProps,
+  PasswordRequirement,
+  PasswordStrength,
+  CodeInputProps,
+} from "./auth.js";
+export {
   MarketingHeader,
   Hero,
   FeatureGrid,
