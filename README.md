@@ -36,6 +36,18 @@ npm install @tony-ui/mortar react react-dom tailwindcss
 
 No account, token or registry configuration is needed: the package is public on npmjs.com. Versions 0.11 and earlier were published only to the previous owner-hosted registry; if a project pins one of them, or has an `@tony-ui:registry` line in its `.npmrc`, see the [CHANGELOG](CHANGELOG.md) migration note.
 
+## Agents and MCP
+
+The package includes a free, local MCP server and CLI for coding agents. They read the installed version's catalogue, contracts, examples and guides, work offline and need no account:
+
+```sh
+claude mcp add mortar -- npx -y @tony-ui/mortar mcp
+npx mortar search "sign in"
+npx mortar audit .
+```
+
+Tools: `search_components`, `get_component`, `get_build_packet`, `get_guide`, `list_kits` and `audit_app`. See [Mortar for coding agents](docs/agents.md) for other MCP clients, the workflow and the audit rules, and [skills/mortar/SKILL.md](skills/mortar/SKILL.md) for a ready-made agent skill.
+
 ## Changes and upgrades
 
 See [CHANGELOG.md](CHANGELOG.md) for every release. [Theming](docs/theming.md) explains brands, appearance, density and the token scales. [Sign-in and registration flows](docs/auth-flows.md) maps each auth step to components, autocomplete values and security notes. Upgrading from 0.5 or earlier? [Migrating to 0.6](docs/migrating-to-0.6.md) lists every renamed prop.

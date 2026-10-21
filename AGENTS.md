@@ -2,6 +2,7 @@
 
 [CONTRIBUTING.md](CONTRIBUTING.md) is the contribution workflow. This page lists only what a coding agent must not miss.
 
+- To build an app with Mortar, use the kit's own MCP server and CLI (`npx -y @tony-ui/mortar mcp`, `npx mortar search|component|packet|audit`) and the [agent skill](skills/mortar/SKILL.md). See [Mortar for coding agents](docs/agents.md). They run locally against the installed package; no account or hosted service is involved.
 - Read [DESIGN.md](DESIGN.md) before composing UI. It holds the design principles and the API conventions that every new prop must follow. Read [TESTING.md](TESTING.md) before changing a component or its test contract.
 - Fix shared problems centrally in `src`, with the fixture in `previews` and the contract in `manifests`. Do not copy components or override their styles in a consumer.
 - Run `npm run check` first. If it reports M007 or M008, review what changed in your diff, then run `npm run catalog`. It prints which components' fingerprints and contracts changed. Never run `npm run catalog` just to make a failing check pass.
