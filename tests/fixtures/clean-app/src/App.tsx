@@ -5,8 +5,8 @@ import {
   PageHeading,
   ThemeProvider,
   type SectionTone,
-} from "@tony-ui/mortar";
-import * as M from "@tony-ui/mortar";
+} from "@tonycodes-ui/mortar";
+import * as M from "@tonycodes-ui/mortar";
 
 const tone: SectionTone = "muted";
 

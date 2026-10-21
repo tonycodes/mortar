@@ -4,7 +4,7 @@
   "name": "StatGroup",
   "description": "Mortar marketing stat group, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "StatGroup",
   "source": "src/marketing-sections.tsx",
   "capabilities": [],
@@ -19,7 +19,7 @@
       "layout": "\"grid\" | \"timeline\" | \"stepped\" (default grid). timeline: a dotted line through dated milestones (value is the date). stepped: cards that rise in height",
       "background": "ReactNode (decorative full-cover image; switches to the inverse tone with a scrim)"
     },
-    "usage": "Import { StatGroup } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { StatGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []

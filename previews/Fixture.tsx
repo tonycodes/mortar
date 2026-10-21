@@ -1386,7 +1386,7 @@ export function PreviewCase({ name }: { name: string }) {
       example = (
         <UI.CodeBlock
           label="Usage"
-          code="import { Button } from '@tony-ui/mortar';"
+          code="import { Button } from '@tonycodes-ui/mortar';"
         />
       );
       break;

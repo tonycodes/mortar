@@ -9,7 +9,7 @@ import { searchComponents } from "../cli/search.mjs";
 import { componentDetail, buildPacket } from "../cli/packet.mjs";
 import { auditApp, RULES } from "../cli/audit.mjs";
 
-const HELP = `mortar — local agent tooling for the Mortar UI kit (@tony-ui/mortar)
+const HELP = `mortar — local agent tooling for the Mortar UI kit (@tonycodes-ui/mortar)
 
 Usage:
   mortar mcp                         Run the MCP server on stdio (for coding agents)
@@ -32,7 +32,7 @@ Options:
   -v, --version                      Show the installed Mortar version
 
 Add the MCP server to Claude Code:
-  claude mcp add mortar -- npx -y @tony-ui/mortar mcp
+  claude mcp add mortar -- npx -y @tonycodes-ui/mortar mcp
 
 Everything runs locally against the installed package. No account or network.`;
 

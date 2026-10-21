@@ -4,7 +4,7 @@
   "name": "ButtonGroup",
   "description": "Mortar button group: a joined row of related actions, with icon-only and link items. Use SegmentedControl to choose a single value.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ButtonGroup",
   "source": "src/primitives.tsx",
   "capabilities": ["action"],
@@ -16,7 +16,7 @@
       "items": "{ label: string; onSelect?: () => void; href?: string; icon?: ReactNode; iconOnly?: boolean; disabled?: boolean }[]",
       "className": "string (on the root element)"
     },
-    "usage": "Import { ButtonGroup } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ButtonGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

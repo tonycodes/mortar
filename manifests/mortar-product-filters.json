@@ -4,7 +4,7 @@
   "name": "ProductFilters",
   "description": "Mortar product filters: collapsible checkbox facets with counts and removable chips for active filters, with Clear all. Every change calls onChange once with the complete next selection.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ProductFilters",
   "source": "src/ecommerce.tsx",
   "capabilities": [],
@@ -19,7 +19,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { ProductFilters } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ProductFilters } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-checkbox", "mortar-filter-chip"]

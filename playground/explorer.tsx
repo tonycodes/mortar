@@ -101,7 +101,7 @@ export async function exampleSource(entry: Entry): Promise<string> {
   const { default: examples } = await import("virtual:mortar-examples");
   return (
     examples[entry.export] ??
-    `import { ${entry.export} } from "@tony-ui/mortar";`
+    `import { ${entry.export} } from "@tonycodes-ui/mortar";`
   );
 }
 

@@ -4,7 +4,7 @@
   "name": "CallToAction",
   "description": "Mortar marketing call to action, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "CallToAction",
   "source": "src/marketing.tsx",
   "capabilities": [],
@@ -21,7 +21,7 @@
       "className": "string (layout only: margins or grid placement)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
-    "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { CallToAction } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-action-link"]

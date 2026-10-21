@@ -4,7 +4,7 @@
   "name": "ContentSection",
   "description": "Mortar content section: long-form copy with optional media beside it, e.g. an about-page story.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ContentSection",
   "source": "src/marketing.tsx",
   "capabilities": [],
@@ -25,7 +25,7 @@
       "stats": "{ label: string; value: string; description?: string }[] (figures under the copy, shown as a StatGroup)",
       "testimonial": "{ quote: string; name: string; role?: string; avatar?: ReactNode } (a customer quote under the copy, shown as a Testimonial)"
     },
-    "usage": "Import { ContentSection } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ContentSection } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-prose", "mortar-stat-group", "mortar-testimonial"]

@@ -60,7 +60,7 @@ jobs:
             exit 0
           fi
           # npmjs.com answers anonymous reads; E404 means nothing is published under that name.
-          if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" > "$RUNNER_TEMP/view.txt" 2> "$RUNNER_TEMP/view.err"; then
+          if npm view "@tonycodes-ui/mortar@$VERSION" version --registry "$REGISTRY" > "$RUNNER_TEMP/view.txt" 2> "$RUNNER_TEMP/view.err"; then
             if [ -s "$RUNNER_TEMP/view.txt" ]; then
               echo "$VERSION is already published; nothing to release." >> "$GITHUB_STEP_SUMMARY"
               echo "publish=false" >> "$GITHUB_OUTPUT"
@@ -112,7 +112,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: npm-release
-      url: https://www.npmjs.com/package/@tony-ui/mortar/v/${{ needs.prepare.outputs.version }}
+      url: https://www.npmjs.com/package/@tonycodes-ui/mortar/v/${{ needs.prepare.outputs.version }}
     permissions:
       contents: write
       id-token: write
@@ -125,7 +125,7 @@ jobs:
         with:
           node-version: "22"
           registry-url: https://registry.npmjs.org
-          scope: "@tony-ui"
+          scope: "@tonycodes-ui"
       - name: Install the pinned npm CLI
         run: |
           set -euo pipefail
@@ -140,7 +140,7 @@ jobs:
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           set -euo pipefail
-          TGZ="tony-ui-mortar-$VERSION.tgz"
+          TGZ="tonycodes-ui-mortar-$VERSION.tgz"
           [ "$(jq -r .commit provenance.json)" = "$SHA" ]
           [ "$(jq -r .version provenance.json)" = "$VERSION" ]
           [ "$(jq -r .filename provenance.json)" = "$TGZ" ]
@@ -155,7 +155,7 @@ jobs:
         run: |
           set -euo pipefail
           TAG="v$VERSION"
-          TGZ="tony-ui-mortar-$VERSION.tgz"
+          TGZ="tonycodes-ui-mortar-$VERSION.tgz"
           if TAGGED=$(gh api "repos/$REPO/commits/$TAG" --jq .sha 2>/dev/null); then
             [ "$TAGGED" = "$SHA" ] || { echo "::error::$TAG already points at $TAGGED"; exit 1; }
           else
@@ -185,12 +185,12 @@ jobs:
           set -euo pipefail
           DIST_TAG=latest
           [[ "$VERSION" == *-* ]] && DIST_TAG=next
-          if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" 2>/dev/null | grep -q .; then
+          if npm view "@tonycodes-ui/mortar@$VERSION" version --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" 2>/dev/null | grep -q .; then
             echo "$VERSION was published by an earlier attempt; verifying it."
           else
             # npm exchanges this job's OIDC token for a short-lived publish token.
             # --provenance attests that this workflow run built the package.
-            npm publish "./tony-ui-mortar-$VERSION.tgz" --registry "$REGISTRY" --tag "$DIST_TAG" --provenance --access public
+            npm publish "./tonycodes-ui-mortar-$VERSION.tgz" --registry "$REGISTRY" --tag "$DIST_TAG" --provenance --access public
           fi
       - name: Verify the registry serves the released archive
         working-directory: ${{ runner.temp }}/release
@@ -203,10 +203,10 @@ jobs:
           INTEGRITY=""
           # A new version can take a short while to reach every npmjs.com edge.
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
-            INTEGRITY=$(npm view "@tony-ui/mortar@$VERSION" dist.integrity --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" --prefer-online 2>/dev/null || true)
+            INTEGRITY=$(npm view "@tonycodes-ui/mortar@$VERSION" dist.integrity --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" --prefer-online 2>/dev/null || true)
             [ -n "$INTEGRITY" ] && break
             echo "Waiting for npmjs.com to serve $VERSION (attempt $attempt of 10)."
             sleep 15
           done
           [ "$INTEGRITY" = "$EXPECTED" ] || { echo "::error::Registry integrity '$INTEGRITY' differs from provenance $EXPECTED"; exit 1; }
-          echo "Published [@tony-ui/mortar@$VERSION](https://www.npmjs.com/package/@tony-ui/mortar/v/$VERSION) ([GitHub release](https://github.com/$REPO/releases/tag/v$VERSION)) from the checked main commit." >> "$GITHUB_STEP_SUMMARY"
+          echo "Published [@tonycodes-ui/mortar@$VERSION](https://www.npmjs.com/package/@tonycodes-ui/mortar/v/$VERSION) ([GitHub release](https://github.com/$REPO/releases/tag/v$VERSION)) from the checked main commit." >> "$GITHUB_STEP_SUMMARY"

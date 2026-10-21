@@ -20,12 +20,12 @@ import {
 } from "./migrations.mjs";
 
 export const RULES = {
-  "not-installed": "@tony-ui/mortar is imported but not installed.",
-  "not-declared": "@tony-ui/mortar is imported but not in package.json.",
+  "not-installed": "@tonycodes-ui/mortar is imported but not installed.",
+  "not-declared": "@tonycodes-ui/mortar is imported but not in package.json.",
   "version-mismatch":
     "The installed version does not satisfy the package.json range.",
   "unknown-export":
-    "A named import from @tony-ui/mortar that the installed version does not export.",
+    "A named import from @tonycodes-ui/mortar that the installed version does not export.",
   "deep-import":
     "An import or alias that reaches into the package's src or dist instead of its public entry points.",
   "unknown-prop": "A prop that the component's contract does not declare.",
@@ -38,9 +38,9 @@ export const RULES = {
     "A Mortar-internal .m-* class used on the application's own markup.",
   "raw-colour":
     "A raw colour or Tailwind palette class in a file that renders Mortar components.",
-  "missing-styles": "No import of @tony-ui/mortar/styles.css.",
+  "missing-styles": "No import of @tonycodes-ui/mortar/styles.css.",
   "styles-order":
-    "@tony-ui/mortar/styles.css is imported before Tailwind in the same file.",
+    "@tonycodes-ui/mortar/styles.css is imported before Tailwind in the same file.",
   "missing-theme-provider":
     "Mortar components are rendered but ThemeProvider is never rendered.",
   "local-copy": "A local copy of Mortar source.",
@@ -79,7 +79,7 @@ const CODE = new Set([
 ]);
 const JSX = new Set([".js", ".jsx", ".tsx", ".mjs"]);
 const STYLE = new Set([".css", ".scss", ".sass", ".less", ".pcss", ".postcss"]);
-const PKG = "@tony-ui/mortar";
+const PKG = "@tonycodes-ui/mortar";
 const MAX_FILES = 20000;
 const MAX_BYTES = 1_000_000;
 
@@ -496,10 +496,10 @@ function exportsFromDts(root) {
 }
 
 const IMPORT =
-  /\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(@tony-ui\/mortar(?:\/[^"']*)?)\4/g;
-const SIDE_EFFECT = /\bimport\s*(["'])(@tony-ui\/mortar\/[^"']*)\1/g;
+  /\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(@tonycodes-ui\/mortar(?:\/[^"']*)?)\4/g;
+const SIDE_EFFECT = /\bimport\s*(["'])(@tonycodes-ui\/mortar\/[^"']*)\1/g;
 const DEEP =
-  /@tony-ui\/mortar\/(src|dist)\b|node_modules\/@tony-ui\/mortar\/(src|dist)\b/g;
+  /@tonycodes-ui\/mortar\/(src|dist)\b|node_modules\/@tonycodes-ui\/mortar\/(src|dist)\b/g;
 const PALETTE =
   "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
 const UTILITY =
@@ -602,7 +602,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const css = blankComments(text, { css: true });
       const tw = css.search(/@import\s+["']tailwindcss["']/);
       const mortar = css.search(
-        /@import\s+["']@tony-ui\/mortar\/styles\.css["']/,
+        /@import\s+["']@tonycodes-ui\/mortar\/styles\.css["']/,
       );
       if (tw >= 0) tailwindEntry ??= file;
       if (mortar >= 0) {
@@ -614,7 +614,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             file,
             line(mortar),
             "Mortar's styles are imported before Tailwind.",
-            '@import "tailwindcss"; first, then @import "@tony-ui/mortar/styles.css";',
+            '@import "tailwindcss"; first, then @import "@tonycodes-ui/mortar/styles.css";',
           );
       }
       // Selectors: the text before each `{` that is not an at-rule.

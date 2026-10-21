@@ -4,7 +4,7 @@
   "name": "PreviewFrame",
   "description": "Mortar application preview frame, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "PreviewFrame",
   "source": "src/inspection.tsx",
   "capabilities": [],
@@ -17,7 +17,7 @@
       "id": "string",
       "className": "string (on the root element)"
     },
-    "usage": "Import { PreviewFrame } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { PreviewFrame } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

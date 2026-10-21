@@ -4,7 +4,7 @@
   "name": "Divider",
   "description": "Mortar divider: a horizontal rule between groups, optionally labelled (for example \"Or continue with\").",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Divider",
   "source": "src/layout.tsx",
   "capabilities": [],
@@ -17,7 +17,7 @@
       "spacing": "\"none\" | \"sm\" | \"md\" | \"lg\"",
       "className": "string"
     },
-    "usage": "Import { Divider } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Divider } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

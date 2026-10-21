@@ -4,7 +4,7 @@
   "name": "TabNav",
   "description": "Mortar tab navigation: tabs that link between pages, such as settings sections, as underlined tabs or pills with optional icons and counts; the current page is marked aria-current=\"page\".",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "TabNav",
   "source": "src/application.tsx",
   "capabilities": ["navigation"],
@@ -18,7 +18,7 @@
       "fullWidth": "boolean",
       "className": "string"
     },
-    "usage": "Import { TabNav } from @tony-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
+    "usage": "Import { TabNav } from @tonycodes-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

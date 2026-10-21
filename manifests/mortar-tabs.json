@@ -4,7 +4,7 @@
   "name": "Tabs",
   "description": "Mortar foundation tabs, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Tabs",
   "source": "src/primitives.tsx",
   "capabilities": ["action"],
@@ -20,7 +20,7 @@
       "fullWidth": "boolean",
       "className": "string (on the root element)"
     },
-    "usage": "Import { Tabs } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Tabs } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

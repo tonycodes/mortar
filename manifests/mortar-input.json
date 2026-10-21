@@ -4,7 +4,7 @@
   "name": "Input",
   "description": "Mortar foundation input, using central semantic tokens. Supports text prefix/suffix add-ons, decorative leading/trailing icons and an attached action button.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Input",
   "source": "src/primitives.tsx",
   "capabilities": ["input", "validation"],
@@ -26,7 +26,7 @@
       "className": "string (on the root element)",
       "required": "boolean (native; adds a decorative marker to the label)"
     },
-    "usage": "Import { Input } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Input } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

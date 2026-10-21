@@ -4,7 +4,7 @@
   "name": "StackedList",
   "description": "Mortar application stacked list: rows with optional leading media, a second column of meta at the row end (wrapping under the text when narrow), trailing controls, link rows with optional chevrons, and grouped sections with sticky headings.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "StackedList",
   "source": "src/workspace.tsx",
   "capabilities": [],
@@ -22,7 +22,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { StackedList } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

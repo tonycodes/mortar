@@ -3,9 +3,9 @@
 import { searchComponents, searchTemplates } from "./search.mjs";
 
 export const CSS_SETUP = `@import "tailwindcss";
-@import "@tony-ui/mortar/styles.css";`;
+@import "@tonycodes-ui/mortar/styles.css";`;
 
-export const THEME_SETUP = `import { ThemeProvider } from "@tony-ui/mortar";
+export const THEME_SETUP = `import { ThemeProvider } from "@tonycodes-ui/mortar";
 
 <ThemeProvider brand="neutral" density="comfortable" initialAppearance="system">
   <App />

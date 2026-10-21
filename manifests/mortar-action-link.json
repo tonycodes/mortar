@@ -4,7 +4,7 @@
   "name": "ActionLink",
   "description": "Mortar foundation action link, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ActionLink",
   "source": "src/primitives.tsx",
   "capabilities": ["action"],
@@ -17,7 +17,7 @@
       "variant": "primary | secondary | ghost | danger | accent (the brand's accent fill, its accent gradient when it defines one, with on-accent text)",
       "className": "string (on the root element)"
     },
-    "usage": "Import { ActionLink } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ActionLink } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

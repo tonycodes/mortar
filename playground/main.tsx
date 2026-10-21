@@ -196,7 +196,7 @@ function Playground({
             <div className="m-stack pt-4">
               <CodeBlock
                 label="Import"
-                code={`import { ${entry.export} } from "@tony-ui/mortar";`}
+                code={`import { ${entry.export} } from "@tonycodes-ui/mortar";`}
               />
               <p>{entry.contract.usage}</p>
               <CodeBlock

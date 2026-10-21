@@ -187,7 +187,7 @@ export function exampleCode(
 ) {
   const tree = parse(fixtureFile, fixtureText);
   const found = caseExpression(tree, caseName);
-  if (!found) return `import { ${name} } from "@tony-ui/mortar";`;
+  if (!found) return `import { ${name} } from "@tonycodes-ui/mortar";`;
   let body = render(tree, found.expr, found.scope);
   if (hosted[name] && !body.includes(`<UI.${name}`)) body = hosted[name](body);
   const used = [
@@ -198,7 +198,7 @@ export function exampleCode(
     ),
   ].sort();
   return [
-    `import { ${(used.length ? used : [name]).join(", ")} } from "@tony-ui/mortar";`,
+    `import { ${(used.length ? used : [name]).join(", ")} } from "@tonycodes-ui/mortar";`,
     "",
     body.replace(/\bUI\./g, ""),
   ].join("\n");

@@ -4,7 +4,7 @@
   "name": "Fieldset",
   "description": "Mortar fieldset: groups related fields under a legend and description; disabled disables every control inside.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Fieldset",
   "source": "src/primitives.tsx",
   "capabilities": ["form"],
@@ -18,7 +18,7 @@
       "children": "ReactNode",
       "className": "string (on the root element)"
     },
-    "usage": "Import { Fieldset } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Fieldset } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

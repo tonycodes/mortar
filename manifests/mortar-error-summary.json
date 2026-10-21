@@ -4,7 +4,7 @@
   "name": "ErrorSummary",
   "description": "Mortar foundation error summary: the problems that stopped a form submitting, each linking to its field.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ErrorSummary",
   "source": "src/primitives.tsx",
   "capabilities": ["validation"],
@@ -20,7 +20,7 @@
       "id": "string",
       "className": "string (on the root element)"
     },
-    "usage": "Import { ErrorSummary } from @tony-ui/mortar. Place it above the form, pass the same messages as the fields' `error` props with each field's id as `target`, and pass the count of failed submits as `submitCount`.",
+    "usage": "Import { ErrorSummary } from @tonycodes-ui/mortar. Place it above the form, pass the same messages as the fields' `error` props with each field's id as `target`, and pass the count of failed submits as `submitCount`.",
     "avoid": "Do not autofocus it on page load before any submit, list errors that are not shown on their fields, or copy implementations or override central colours.",
     "accessibility": "role=\"alert\" labelled by its heading, and tabIndex=-1 so it takes focus after a failed submit. Each link moves focus to its field (the checked or first control of a group) and scrolls its label or legend into view without changing the URL.",
     "dependencies": []

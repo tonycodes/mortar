@@ -4,7 +4,7 @@
   "name": "Callout",
   "description": "Mortar documentation callout, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Callout",
   "source": "src/docs.tsx",
   "capabilities": [],
@@ -18,7 +18,7 @@
       "className": "string (layout only: margins or grid placement)",
       "tone": "\"neutral\" | \"info\" | \"success\" | \"warning\" | \"danger\" (default neutral; the default title is Note, Note, Tip, Warning or Caution)"
     },
-    "usage": "Import { Callout } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Callout } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Renders a div with role=\"note\" named by its visible title.",
     "dependencies": []

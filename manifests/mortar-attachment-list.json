@@ -4,7 +4,7 @@
   "name": "AttachmentList",
   "description": "Mortar attachment list: files attached to a record, each with an icon, name, size and a download link named after the file.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "AttachmentList",
   "source": "src/display.tsx",
   "capabilities": [],
@@ -16,7 +16,7 @@
       "label": "string",
       "className": "string"
     },
-    "usage": "Import { AttachmentList } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { AttachmentList } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

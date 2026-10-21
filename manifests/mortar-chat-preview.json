@@ -4,7 +4,7 @@
   "name": "ChatPreview",
   "description": "Mortar static chat conversation for marketing conversational products.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ChatPreview",
   "source": "src/showcase.tsx",
   "capabilities": [],
@@ -22,7 +22,7 @@
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)"
     },
-    "usage": "Import { ChatPreview } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ChatPreview } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
