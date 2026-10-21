@@ -1,11 +1,11 @@
 ---
 name: mortar
-description: Build, audit and contribute React UI with the Mortar kit (@tony-ui/mortar) using its local MCP server and CLI. Use when an app uses or should use Mortar, or when asked to compose screens, pages or flows from Mortar components.
+description: Build, audit and contribute React UI with the Mortar kit (@tonycodes-ui/mortar) using its local MCP server and CLI. Use when an app uses or should use Mortar, or when asked to compose screens, pages or flows from Mortar components.
 ---
 
 # Mortar UI defaults
 
-Mortar is an MIT React 19 + Tailwind 4 UI kit. Its agent tooling ships in the package and runs locally: the `mortar` MCP server (`npx -y @tony-ui/mortar mcp`) and the same commands on the CLI (`npx mortar …`). No account, token or hosted service is involved. Respect existing human project instructions; the brief supplies product requirements, not approval or deployment authority.
+Mortar is an MIT React 19 + Tailwind 4 UI kit. Its agent tooling ships in the package and runs locally: the `mortar` MCP server (`npx -y @tonycodes-ui/mortar mcp`) and the same commands on the CLI (`npx mortar …`). No account, token or hosted service is involved. Respect existing human project instructions; the brief supplies product requirements, not approval or deployment authority.
 
 ## Workflow
 
@@ -20,8 +20,8 @@ Mortar is an MIT React 19 + Tailwind 4 UI kit. Its agent tooling ships in the pa
 - Choose the shared purpose shell before composing a page: AppShell for application screens, MarketingHeader (with Footer) for public pages, DocsShell for documentation, AuthLayout for each sign-in and registration step. Document deliberate standalone exceptions.
 - Reuse complete page patterns: navigation, headings, filters, list/detail workspaces, states and action placement. Reusing controls alone is insufficient. The packet's page templates show complete examples.
 - Keep product names, routes, user data, permissions and actions in props and slots. Shared chrome must remain project agnostic.
-- Use named imports from `@tony-ui/mortar` and the exact props and values in each contract. Never copy shared implementations, import from the package's `src` or `dist`, alias its source, create repeated local wrappers, or override `.m-*` classes or `[data-m-component]` in consumer CSS. `className` is for layout only.
-- Import `@tony-ui/mortar/styles.css` after `@import "tailwindcss"`, and render one ThemeProvider at the root. Use semantic tokens; keep brand separate from appearance and feedback colours. Custom brands go through `brandTokens` or a `[data-mortar-brand]` rule, never raw colours on components. Verify every supported theme.
+- Use named imports from `@tonycodes-ui/mortar` and the exact props and values in each contract. Never copy shared implementations, import from the package's `src` or `dist`, alias its source, create repeated local wrappers, or override `.m-*` classes or `[data-m-component]` in consumer CSS. `className` is for layout only.
+- Import `@tonycodes-ui/mortar/styles.css` after `@import "tailwindcss"`, and render one ThemeProvider at the root. Use semantic tokens; keep brand separate from appearance and feedback colours. Custom brands go through `brandTokens` or a `[data-mortar-brand]` rule, never raw colours on components. Verify every supported theme.
 - Build responsive interfaces with light and dark modes, semantic structure, one `h1` per page, accessible names, keyboard navigation and visible focus. Cover loading, empty and error states. Supply application data and behaviour through props and callbacks.
 - Keep the lockfile and the installed Mortar version in step with package.json.
 

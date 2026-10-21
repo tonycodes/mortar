@@ -22,7 +22,7 @@ export const TOOLS = [
     name: "search_components",
     title: "Search Mortar components",
     description:
-      'Search the installed Mortar UI kit (@tony-ui/mortar, React 19 + Tailwind 4) for components by purpose, e.g. "sign in", "data table with sorting", "pricing". Returns ranked matches with name, kit, category, a one-line description and capabilities. Use it before writing any UI so you reuse the kit instead of building your own; then call get_component or get_build_packet with the names you pick. Works offline against the installed version.',
+      'Search the installed Mortar UI kit (@tonycodes-ui/mortar, React 19 + Tailwind 4) for components by purpose, e.g. "sign in", "data table with sorting", "pricing". Returns ranked matches with name, kit, category, a one-line description and capabilities. Use it before writing any UI so you reuse the kit instead of building your own; then call get_component or get_build_packet with the names you pick. Works offline against the installed version.',
     inputSchema: {
       type: "object",
       properties: {

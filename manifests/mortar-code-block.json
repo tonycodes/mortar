@@ -4,7 +4,7 @@
   "name": "CodeBlock",
   "description": "Mortar application code block, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "CodeBlock",
   "source": "src/inspection.tsx",
   "capabilities": [],
@@ -16,7 +16,7 @@
       "label": "string (visible caption; names the figure)",
       "className": "string (on the root element)"
     },
-    "usage": "Import { CodeBlock } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { CodeBlock } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

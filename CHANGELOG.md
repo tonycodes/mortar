@@ -1,6 +1,6 @@
 # Changelog
 
-Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to [npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar) with npm provenance. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
+Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to [npmjs.com](https://www.npmjs.com/package/@tonycodes-ui/mortar) with npm provenance. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
 ## Unreleased
 
@@ -9,7 +9,7 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 - **Surfaces in the brand contract.** A brand can set `paper`, `surface` and `sunken` for each appearance (`--m-brand-l-paper|surface|sunken`, `--m-brand-d-paper|surface|sunken`), for example a navy dark page. Omitted, they keep today's values, and inverse bands take them from the other appearance. Mortar's text and status colours stay fixed, so check them against tinted surfaces: the brand builder's contrast table now does ([#59](https://github.com/tonycodes/mortar/issues/59)).
 - **Accent gradients.** `accentGradient` per appearance (`--m-brand-{l,d}-accent-gradient`) takes a `linear-`, `radial-` or `conic-gradient()` (or a `repeating-` form) whose stops are colours. It is painted only where a component opts in: Button and ActionLink `variant="accent"`, and `tone="accent"` on CallToAction, Hero and Banner, all with `onAccent` text. Without a gradient these paint the flat accent. The appearance exposes the fill as `--m-accent-fill` (an image, painted over `background-color: var(--m-accent)`) and `--m-inv-accent-fill` for inverse bands. On hover and active the fill takes a white or black wash chosen from the on-accent text (`--m-accent-wash`), so contrast rises instead of falling; browsers without relative colours keep the plain fill. The brand builder checks on-accent text against every stop at rest, hover and active.
 - **Heading font.** Headings and component titles (page, section, hero, card, settings, sign-in, auth, post, calendar and stacked-list titles, and prose headings) read `--m-font-heading`. It is unset by default, so headings keep the font they inherit; nothing changes until you set it. A brand can set `fonts: { body, heading }` (`--m-brand-font`, `--m-brand-font-heading`), which apply wherever the brand does, including a container-scoped ThemeProvider. Tailwind gains a `font-heading` utility, and `font-sans` follows a brand's body font.
-- `isBrandColour`, `isBrandGradient` and `isBrandFont` in `@tony-ui/mortar/brand` check a value before you save it. Fonts accept bare `var(--name)` entries, as framework font loaders such as `next/font` hand out.
+- `isBrandColour`, `isBrandGradient` and `isBrandFont` in `@tonycodes-ui/mortar/brand` check a value before you save it. Fonts accept bare `var(--name)` entries, as framework font loaders such as `next/font` hand out.
 - The brand builder checks strong lines (`--m-line-strong`, control borders) at 3:1 on page, surface and sunken.
 
 ### Fixed
@@ -21,17 +21,17 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 - **`--m-line-strong` in light is `#8b8b90`** (was `#8e8e93`), and `--m-inv-line-strong` in dark with it. The old value was 2.99:1 on the default sunken surface, just under the 3:1 that control borders need.
 
-- **Packages are published to npmjs.com.** Install with a plain `npm install @tony-ui/mortar`; no registry configuration, account or token is needed. Releases are published from GitHub Actions with npm trusted publishing (OIDC, no long-lived token) and `--provenance`, so each version on npmjs.com links to the workflow run and commit that built it.
+- **Packages are published to npmjs.com.** Install with a plain `npm install @tonycodes-ui/mortar`; no registry configuration, account or token is needed. Releases are published from GitHub Actions with npm trusted publishing (OIDC, no long-lived token) and `--provenance`, so each version on npmjs.com links to the workflow run and commit that built it.
 - **The playground moved to GitHub Pages**, at https://mortar.tony.codes/playground/. The site root links the playground, GitHub, npm and the docs. The package `homepage` points there.
 - **Everything is free and in this repository.** The hosted Mortar Cloud preview (agent identities, OAuth MCP connections, hosted audits and planned paid plans) is retired. The kit, docs, playground and agent tooling are MIT licensed here, with no accounts, licence checks, telemetry or hosted service. GitHub maintainer review is the only review gate.
 
 ### Migration
 
-Versions up to 0.11 were published only to the previous owner-hosted registry, `https://git.tony.codes/api/packages/tony/npm/`, which will be retired. New versions are on npmjs.com only. To upgrade, remove the scope override and install from npmjs.com:
+Versions up to 0.11 of the private-registry package `@tony-ui/mortar` were published only to the previous owner-hosted registry, `https://git.tony.codes/api/packages/tony/npm/`, which will be retired. New versions are on npmjs.com only. To upgrade, remove the scope override and install from npmjs.com:
 
 ```sh
 npm config delete @tony-ui:registry --location=project
-npm install @tony-ui/mortar@latest
+npm install @tonycodes-ui/mortar@latest
 ```
 
 A project that must stay on 0.11 or earlier keeps its scope override (`@tony-ui:registry=https://git.tony.codes/api/packages/tony/npm/` in `.npmrc`) while that registry remains available, or installs the archive attached to the version's [GitHub release](https://github.com/tonycodes/mortar/releases).
@@ -41,7 +41,7 @@ A project that must stay on 0.11 or earlier keeps its scope override (`@tony-ui:
 ### Added
 
 - **Open agent tooling in the package: an MCP server and the `mortar` CLI.** They read the installed version's catalogue, contracts, examples and guides, run locally, work offline and need no account. They add no runtime dependencies. See [Mortar for coding agents](https://github.com/tonycodes/mortar/blob/main/docs/agents.md).
-  - `mortar mcp` is a stdio MCP server (`claude mcp add mortar -- npx -y @tony-ui/mortar mcp`) with six tools: `search_components`, `get_component` (props with types and defaults, usage notes, dependencies, marker, tested states and a JSX example), `get_build_packet` (for component names or a free-text brief: the dependency closure, imports, CSS and ThemeProvider setup, design principles, API conventions and matching page templates), `get_guide`, `list_kits` and `audit_app`.
+  - `mortar mcp` is a stdio MCP server (`claude mcp add mortar -- npx -y @tonycodes-ui/mortar mcp`) with six tools: `search_components`, `get_component` (props with types and defaults, usage notes, dependencies, marker, tested states and a JSX example), `get_build_packet` (for component names or a free-text brief: the dependency closure, imports, CSS and ThemeProvider setup, design principles, API conventions and matching page templates), `get_guide`, `list_kits` and `audit_app`.
   - `mortar search`, `component`, `packet`, `audit`, `guide` and `kits` give the same answers on the command line, with `--json`.
   - `mortar audit [path]` is a read-only static audit of an application: version range, imports and props that the installed version does not have (with 0.6 rename suggestions), invalid prop values, CSS overriding `.m-*` classes or `[data-m-component]`, raw colours beside Mortar components, a missing `styles.css` import or ThemeProvider, deep imports and local copies of Mortar source. It exits 1 when it finds errors.
   - An agent skill, `skills/mortar/SKILL.md` (`npx mortar skill`), with the workflow defaults: search, packet, compose, audit, and contribute by pull request.
@@ -96,7 +96,7 @@ Theming. See [Theming](https://github.com/tonycodes/mortar/blob/main/docs/themin
 ### Added
 
 - **Brand contract:** a brand declares only `--m-brand-l-*` and `--m-brand-d-*`. Light, dark and inverse sections resolve from it. Hover, active, selected, accent, focus and link derive from `primary` when omitted, so a complete brand can be four values.
-- **Runtime brands:** `ThemeProvider` accepts `brandTokens` and any brand name. The brand renders as a hoisted, server-rendered stylesheet that overlays share, and its values are validated so tenant data cannot inject CSS. `@tony-ui/mortar/brand` exports `brandToCss`, `brandToStyle` and `registerBrand`.
+- **Runtime brands:** `ThemeProvider` accepts `brandTokens` and any brand name. The brand renders as a hoisted, server-rendered stylesheet that overlays share, and its values are validated so tenant data cannot inject CSS. `@tonycodes-ui/mortar/brand` exports `brandToCss`, `brandToStyle` and `registerBrand`.
 - **Scale tokens:** `--m-weight-*`, `--m-tracking-*`, `--m-leading-*`, `--m-space-*`, `--m-radius-xs` and `--m-radius-xl`.
 - **Tailwind:** `info`, `secondary`, `selected` and `link` colours, `rounded-m*`, `shadow-float`, `tracking-display|heading|caps`, and font weights that follow the tokens.
 
@@ -161,7 +161,7 @@ Additive: no exports removed, no prop types narrowed, and every default renders 
 
 ### Internal
 
-- The stylesheet is split into one file per family (foundation, overlays, application, data, calendar, marketing, docs, ecommerce), with one section per component. Rendering is unchanged. `@tony-ui/mortar/styles.css` is still the only entry point.
+- The stylesheet is split into one file per family (foundation, overlays, application, data, calendar, marketing, docs, ecommerce), with one section per component. Rendering is unchanged. `@tonycodes-ui/mortar/styles.css` is still the only entry point.
 
 ## 0.6.0 (2026-10-19)
 

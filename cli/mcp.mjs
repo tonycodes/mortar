@@ -30,7 +30,7 @@ class RpcError extends Error {
 }
 
 const INSTRUCTIONS =
-  "Mortar is an MIT React 19 + Tailwind 4 UI kit (@tony-ui/mortar). Before writing UI, search_components (or list_kits) to find what to reuse, then get_build_packet for the components or the brief and compose from it: start from the purpose shell (AppShell, MarketingHeader, DocsShell, AuthLayout), use named imports and the exact props in each contract, theme through ThemeProvider and tokens, never copy components or override .m-* classes. Run audit_app on the application when done and fix its findings. Missing shared patterns are contributed to the kit by GitHub pull request (get_guide contributing).";
+  "Mortar is an MIT React 19 + Tailwind 4 UI kit (@tonycodes-ui/mortar). Before writing UI, search_components (or list_kits) to find what to reuse, then get_build_packet for the components or the brief and compose from it: start from the purpose shell (AppShell, MarketingHeader, DocsShell, AuthLayout), use named imports and the exact props in each contract, theme through ThemeProvider and tokens, never copy components or override .m-* classes. Run audit_app on the application when done and fix its findings. Missing shared patterns are contributed to the kit by GitHub pull request (get_guide contributing).";
 
 /**
  * Handle one parsed JSON-RPC message. Returns the response object, or

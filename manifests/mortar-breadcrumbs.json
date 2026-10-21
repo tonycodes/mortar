@@ -4,7 +4,7 @@
   "name": "Breadcrumbs",
   "description": "Mortar breadcrumbs: a trail to the current page with slash or chevron separators. PageHeading composes the same component.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Breadcrumbs",
   "source": "src/application.tsx",
   "capabilities": ["navigation"],
@@ -17,7 +17,7 @@
       "separator": "\"slash\" | \"chevron\"",
       "className": "string"
     },
-    "usage": "Import { Breadcrumbs } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Breadcrumbs } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

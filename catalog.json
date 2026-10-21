@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "version": "0.11.0",
   "policyVersion": "1.4.0",
   "tokens": [
@@ -136,7 +136,7 @@
       "name": "ActionLink",
       "description": "Mortar foundation action link, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ActionLink",
       "source": "src/primitives.tsx",
@@ -173,7 +173,7 @@
             "default": "\"primary\""
           }
         },
-        "usage": "Import { ActionLink } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ActionLink } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -189,7 +189,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "2842cb3f04e234bd8a0729fb3e7e0939e9c487e8cf0f3a6665d271fa5dd67851"
+        "preview": "c67adac630742c1e7e3bf02a3b8c884fe9e87daec8699ae9d6b22707862dd15c"
       }
     },
     {
@@ -198,7 +198,7 @@
       "name": "ActionPanel",
       "description": "Mortar action panel: a titled card with an explanation and one decisive action, with a danger tone for destructive settings.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ActionPanel",
       "source": "src/application.tsx",
@@ -256,7 +256,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { ActionPanel } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ActionPanel } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -280,7 +280,7 @@
       "name": "ActivityFeed",
       "description": "Mortar application activity feed, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ActivityFeed",
       "source": "src/application.tsx",
@@ -311,7 +311,7 @@
             "required": true
           }
         },
-        "usage": "Import { ActivityFeed } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ActivityFeed } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -326,7 +326,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "0b284b0483c5bc6f3ce515a0bbe3cf791fd115f0e4481ba1a17d8a300d82dc44"
+        "preview": "f74b7921d4e253fb55ced338d33fa12347016591e8e9833234aec8b8a85f9741"
       }
     },
     {
@@ -335,7 +335,7 @@
       "name": "ApiEndpoint",
       "description": "Mortar documentation api endpoint, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ApiEndpoint",
       "source": "src/docs.tsx",
@@ -403,7 +403,7 @@
             "required": true
           }
         },
-        "usage": "Import { ApiEndpoint } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ApiEndpoint } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -427,7 +427,7 @@
       "name": "AppShell",
       "description": "Mortar application app shell, using central semantic tokens. An optional aside adds a secondary column (multi-column layout).",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "AppShell",
       "source": "src/application.tsx",
@@ -510,7 +510,7 @@
             "required": false
           }
         },
-        "usage": "Import { AppShell } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { AppShell } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -526,7 +526,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "34e3115d2d58f88ee1330a5c88be53689221d2a0ca880f63251c320180809ee0"
+        "preview": "9f3cb4da9e9727de7d7fbc32464046846bb9faede6a30b6f1d6fab8a181f485a"
       }
     },
     {
@@ -535,7 +535,7 @@
       "name": "AppearanceControl",
       "description": "Mortar foundation appearance control, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "AppearanceControl",
       "source": "src/foundation.tsx",
@@ -566,7 +566,7 @@
             "required": false
           }
         },
-        "usage": "Import { AppearanceControl } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { AppearanceControl } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-segmented-control", "mortar-theme-provider"]
@@ -582,7 +582,7 @@
       },
       "integrity": {
         "source": "fe9cbe822ed1ca34f1f90dd091e8cfb034a0fde92eaee45644144407b5bde5a0",
-        "preview": "357b56a011f36ed86340d9bedaba640c26d227f9b7ff8bebd9c4a5fa95def413"
+        "preview": "b7f1d01cce9683ccd6ae74e6cdfa65271e1f2b30ee9546f89ef913fd8b1c7303"
       }
     },
     {
@@ -591,7 +591,7 @@
       "name": "AttachmentList",
       "description": "Mortar attachment list: files attached to a record, each with an icon, name, size and a download link named after the file.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "AttachmentList",
       "source": "src/display.tsx",
@@ -623,7 +623,7 @@
             "default": "\"Attachments\""
           }
         },
-        "usage": "Import { AttachmentList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { AttachmentList } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -647,7 +647,7 @@
       "name": "AuthLayout",
       "description": "Mortar auth page shell for sign-in, sign-up, password reset, verification and two-factor screens: logo, h1, description, the form and a footer link, centred, on a card or split beside an image or testimonial.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "AuthLayout",
       "source": "src/auth.tsx",
@@ -715,7 +715,7 @@
             "required": true
           }
         },
-        "usage": "Import { AuthLayout } from @tony-ui/mortar. Use it as the whole page for each auth step, outside AppShell and MarketingHeader. It renders the page's main landmark and h1. Put a <form> directly in children (fields stack, direct Button children fill the width), with ProviderButtons and a labelled Divider where providers apply, and the switch link (\"Don't have an account? Sign up\") in footer. Fields: Input type=\"email\" autoComplete=\"email\" (or autoComplete=\"username\"), PasswordInput, CodeInput, Input autoComplete=\"name\". For a section inside another page, use SignInPanel. See docs/auth-flows.md for every step.",
+        "usage": "Import { AuthLayout } from @tonycodes-ui/mortar. Use it as the whole page for each auth step, outside AppShell and MarketingHeader. It renders the page's main landmark and h1. Put a <form> directly in children (fields stack, direct Button children fill the width), with ProviderButtons and a labelled Divider where providers apply, and the switch link (\"Don't have an account? Sign up\") in footer. Fields: Input type=\"email\" autoComplete=\"email\" (or autoComplete=\"username\"), PasswordInput, CodeInput, Input autoComplete=\"name\". For a section inside another page, use SignInPanel. See docs/auth-flows.md for every step.",
         "avoid": "Do not nest it in another shell or page main, add a second h1, or hide password rules and errors.",
         "accessibility": "main is named by the heading. On narrow screens the split layout puts text asides after the form and hides a lone image or video.",
         "dependencies": []
@@ -739,7 +739,7 @@
       "name": "AvatarGroup",
       "description": "Mortar foundation avatar group, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "AvatarGroup",
       "source": "src/display.tsx",
@@ -776,7 +776,7 @@
             "required": true
           }
         },
-        "usage": "Import { AvatarGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { AvatarGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-avatar"]
@@ -800,7 +800,7 @@
       "name": "Avatar",
       "description": "Mortar foundation avatar, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Avatar",
       "source": "src/display.tsx",
@@ -866,7 +866,7 @@
             "default": "\"bottom\""
           }
         },
-        "usage": "Import { Avatar } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Avatar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -890,7 +890,7 @@
       "name": "Badge",
       "description": "Mortar foundation badge, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Badge",
       "source": "src/primitives.tsx",
@@ -922,7 +922,7 @@
             "default": "\"neutral\""
           }
         },
-        "usage": "Import { Badge } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Badge } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -937,7 +937,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "9c957e840a12bdba6ae78056bd9c0611f5cfdaec233cfc9dd441087207eb790d"
+        "preview": "c58d771411e272076f4f9b836dec4d4dda24d1fd9e0b363ec11dd7face7b6c7d"
       }
     },
     {
@@ -946,7 +946,7 @@
       "name": "Banner",
       "description": "Mortar banner: a site-wide announcement bar with an optional link and dismiss button, in the inverse or default tone.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Banner",
       "source": "src/feedback.tsx",
@@ -1017,7 +1017,7 @@
             "default": "\"bar\""
           }
         },
-        "usage": "Import { Banner } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Banner } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The banner is a region named by label. Dismissing it moves focus to the next control. A bottom banner can always be dismissed, so it never covers page content for good.",
         "dependencies": []
@@ -1042,7 +1042,7 @@
       "name": "BentoGrid",
       "description": "Mortar marketing bento grid, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "BentoGrid",
       "source": "src/marketing-sections.tsx",
@@ -1100,7 +1100,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { BentoGrid } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { BentoGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -1124,7 +1124,7 @@
       "name": "Breadcrumbs",
       "description": "Mortar breadcrumbs: a trail to the current page with slash or chevron separators. PageHeading composes the same component.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Breadcrumbs",
       "source": "src/application.tsx",
@@ -1162,7 +1162,7 @@
             "default": "\"slash\""
           }
         },
-        "usage": "Import { Breadcrumbs } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Breadcrumbs } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1186,7 +1186,7 @@
       "name": "ButtonGroup",
       "description": "Mortar button group: a joined row of related actions, with icon-only and link items. Use SegmentedControl to choose a single value.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ButtonGroup",
       "source": "src/primitives.tsx",
@@ -1217,7 +1217,7 @@
             "required": true
           }
         },
-        "usage": "Import { ButtonGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ButtonGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1242,7 +1242,7 @@
       "name": "Button",
       "description": "Mortar foundation button, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Button",
       "source": "src/primitives.tsx",
@@ -1298,7 +1298,7 @@
             "default": "\"primary\""
           }
         },
-        "usage": "Import { Button } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Button } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1314,7 +1314,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "99ad10782b23c625060cdd3a15ee5c6c2bb5ac2dd7b3e3185e146fdd61fd7649"
+        "preview": "6d1e9b07068aec126a668cc8c7ce31f0a1e06e95657de98d4ee420c90ff655f2"
       }
     },
     {
@@ -1323,7 +1323,7 @@
       "name": "Calendar",
       "description": "Mortar calendar: one current date shared by a month grid with keyboard navigation, a twelve-month year view with one roving tab stop, and week and day time grids where timed events sit on an hour scale and collapse to an agenda when narrow. An opt-in month agenda lists the selected day's meetings beside the month (below it when narrow). Dates are YYYY-MM-DD strings handled in UTC.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Calendar",
       "source": "src/calendar.tsx",
@@ -1454,7 +1454,7 @@
             "default": "1"
           }
         },
-        "usage": "Import { Calendar } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Calendar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-segmented-control"]
@@ -1479,7 +1479,7 @@
       "name": "CallToAction",
       "description": "Mortar marketing call to action, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CallToAction",
       "source": "src/marketing.tsx",
@@ -1537,7 +1537,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { CallToAction } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { CallToAction } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
@@ -1552,7 +1552,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "6fb18b70c94353bcfbd5921b5f0eab0bb9c116a299d09a3fc6bbb4903df1e0d9"
+        "preview": "929a082498f6b946d3f877807823a83d1b0f413bd28511ac34d1a10992add37d"
       }
     },
     {
@@ -1561,7 +1561,7 @@
       "name": "Callout",
       "description": "Mortar documentation callout, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Callout",
       "source": "src/docs.tsx",
@@ -1603,7 +1603,7 @@
             "default": "\"neutral\""
           }
         },
-        "usage": "Import { Callout } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Callout } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Renders a div with role=\"note\" named by its visible title.",
         "dependencies": []
@@ -1627,7 +1627,7 @@
       "name": "Card",
       "description": "Mortar card: a bordered surface with optional heading, header actions, footer, compact padding and sunken tone.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Card",
       "source": "src/layout.tsx",
@@ -1702,7 +1702,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { Card } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Card } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1726,7 +1726,7 @@
       "name": "ChatPreview",
       "description": "Mortar static chat conversation for marketing conversational products.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ChatPreview",
       "source": "src/showcase.tsx",
@@ -1791,7 +1791,7 @@
             "default": "false"
           }
         },
-        "usage": "Import { ChatPreview } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ChatPreview } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -1815,7 +1815,7 @@
       "name": "CheckList",
       "description": "Mortar check-marked list for features and plan inclusions.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CheckList",
       "source": "src/display.tsx",
@@ -1858,7 +1858,7 @@
             "default": "\"md\""
           }
         },
-        "usage": "Import { CheckList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { CheckList } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1882,7 +1882,7 @@
       "name": "Checkbox",
       "description": "Mortar foundation checkbox, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Checkbox",
       "source": "src/primitives.tsx",
@@ -1924,7 +1924,7 @@
             "required": true
           }
         },
-        "usage": "Import { Checkbox } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Checkbox } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1940,7 +1940,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "7611844c55ec390285a6ea3a607396eed1cd59308ad821417dcaf2611d11b506"
+        "preview": "ff85eaf697850baa034cf516e3bc8501b266789f2f754b30bc1fe37b5fbaae78"
       }
     },
     {
@@ -1949,7 +1949,7 @@
       "name": "CodeBlock",
       "description": "Mortar application code block, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CodeBlock",
       "source": "src/inspection.tsx",
@@ -1981,7 +1981,7 @@
             "default": "\"Code\""
           }
         },
-        "usage": "Import { CodeBlock } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { CodeBlock } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -1996,7 +1996,7 @@
       },
       "integrity": {
         "source": "8ff19b1cf00665047a58c15ae2a3d2f39f624f96cb15a8f886ddc6057e3ddb3c",
-        "preview": "f910fa3d03676d82adb69b407689a28bc76e1da56d0ffdf1f699d404581f04e8"
+        "preview": "f4196d3cce0947eaa0f1b0c393c2849ec8bb1ec66baf7951f3aff46ca3375c56"
       }
     },
     {
@@ -2005,7 +2005,7 @@
       "name": "CodeInput",
       "description": "Mortar one-time code field for email or phone verification and two-factor sign-in: one input with autocomplete=\"one-time-code\", shown as a cell per character, that accepts typing, paste and SMS or password-manager autofill.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CodeInput",
       "source": "src/auth.tsx",
@@ -2105,7 +2105,7 @@
             "required": false
           }
         },
-        "usage": "Import { CodeInput } from @tony-ui/mortar. Use it for verification and two-factor codes. It sets inputmode=\"numeric\" (or text when alphanumeric) and autocomplete=\"one-time-code\". onChange receives the cleaned value: pasting \"123 456\" or \"123-456\" gives \"123456\". onComplete fires once the code is full; pass it only when submitting automatically is what you want, otherwise let the person press the submit button. Say where the code was sent in hint, and offer resend and a fallback (recovery code, change email) beside it. See docs/auth-flows.md.",
+        "usage": "Import { CodeInput } from @tonycodes-ui/mortar. Use it for verification and two-factor codes. It sets inputmode=\"numeric\" (or text when alphanumeric) and autocomplete=\"one-time-code\". onChange receives the cleaned value: pasting \"123 456\" or \"123-456\" gives \"123456\". onComplete fires once the code is full; pass it only when submitting automatically is what you want, otherwise let the person press the submit button. Say where the code was sent in hint, and offer resend and a fallback (recovery code, change email) beside it. See docs/auth-flows.md.",
         "avoid": "Do not render one input per digit (it breaks screen readers, paste and autofill), block paste, or log or store codes on the client.",
         "accessibility": "One labelled text input carries the value, hint and error; the cells are aria-hidden decoration with a visible focus outline on the active cell. Typing, Backspace, paste and autofill work as in any text field.",
         "dependencies": []
@@ -2130,7 +2130,7 @@
       "name": "CodeTabs",
       "description": "Mortar documentation code tabs, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CodeTabs",
       "source": "src/docs.tsx",
@@ -2188,7 +2188,7 @@
             "required": true
           }
         },
-        "usage": "Import { CodeTabs } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { CodeTabs } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Tabs follow the tabs pattern: arrows, Home and End move and select; each tab controls the code panel. A failed copy says so.",
         "dependencies": []
@@ -2213,7 +2213,7 @@
       "name": "Combobox",
       "description": "Mortar combobox: a searchable single select that filters options by label and announces when nothing matches.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Combobox",
       "source": "src/choice.tsx",
@@ -2286,7 +2286,7 @@
             "required": true
           }
         },
-        "usage": "Import { Combobox } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Combobox } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -2311,7 +2311,7 @@
       "name": "CommandPalette",
       "description": "Mortar application command palette, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CommandPalette",
       "source": "src/workspace.tsx",
@@ -2379,7 +2379,7 @@
             "required": true
           }
         },
-        "usage": "Import { CommandPalette } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { CommandPalette } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-kbd"]
@@ -2404,7 +2404,7 @@
       "name": "CommentComposer",
       "description": "Mortar comment composer: a labelled textarea in a box with an optional avatar, toolbar, Write/Preview tabs and character count; Ctrl/⌘+Enter submits and empty comments cannot be sent.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "CommentComposer",
       "source": "src/composer.tsx",
@@ -2506,7 +2506,7 @@
             "required": false
           }
         },
-        "usage": "Import { CommentComposer } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { CommentComposer } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button", "mortar-tabs"]
@@ -2531,7 +2531,7 @@
       "name": "ConfirmDialog",
       "description": "Mortar application confirm dialog, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ConfirmDialog",
       "source": "src/feedback.tsx",
@@ -2605,7 +2605,7 @@
             "default": "\"danger\""
           }
         },
-        "usage": "Import { ConfirmDialog } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ConfirmDialog } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button", "mortar-input"]
@@ -2630,7 +2630,7 @@
       "name": "ContactSection",
       "description": "Mortar marketing contact section, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ContactSection",
       "source": "src/marketing-sections.tsx",
@@ -2694,7 +2694,7 @@
             "required": true
           }
         },
-        "usage": "Import { ContactSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ContactSection } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -2718,7 +2718,7 @@
       "name": "Container",
       "description": "Mortar page container with shared widths and gutters, replacing max-w/mx-auto/px utilities.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Container",
       "source": "src/layout.tsx",
@@ -2762,7 +2762,7 @@
             "default": "\"lg\""
           }
         },
-        "usage": "Import { Container } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Container } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -2786,7 +2786,7 @@
       "name": "ContentSection",
       "description": "Mortar content section: long-form copy with optional media beside it, e.g. an about-page story.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ContentSection",
       "source": "src/marketing.tsx",
@@ -2866,7 +2866,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { ContentSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ContentSection } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": [
@@ -2894,7 +2894,7 @@
       "name": "DataTable",
       "description": "Mortar application data table, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "DataTable",
       "source": "src/application.tsx",
@@ -3036,7 +3036,7 @@
             "required": false
           }
         },
-        "usage": "Import { DataTable } from @tony-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
+        "usage": "Import { DataTable } from @tonycodes-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"]
@@ -3052,7 +3052,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "be69e9f694eb3951faea80fab2025e11834734ba1b615a765e35d5f3c153bdf0"
+        "preview": "a42be34e3a46addc518ab18a9076fe62db179542eacee7c9b91f82458f4c6c7f"
       }
     },
     {
@@ -3061,7 +3061,7 @@
       "name": "DescriptionList",
       "description": "Mortar description list: label/value pairs for detail screens, in columns when wide and stacked when narrow, with optional row actions and a striped variant. Inside a Card body it drops its outer dividers, so a card with the title shows the list in a card.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "DescriptionList",
       "source": "src/display.tsx",
@@ -3120,7 +3120,7 @@
             "default": "\"plain\""
           }
         },
-        "usage": "Import { DescriptionList } from @tony-ui/mortar. Compose with the public typed props. For a list in a card, put it in a Card and give the Card the title and description, not the list.",
+        "usage": "Import { DescriptionList } from @tonycodes-ui/mortar. Compose with the public typed props. For a list in a card, put it in a Card and give the Card the title and description, not the list.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -3144,7 +3144,7 @@
       "name": "Divider",
       "description": "Mortar divider: a horizontal rule between groups, optionally labelled (for example \"Or continue with\").",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Divider",
       "source": "src/layout.tsx",
@@ -3182,7 +3182,7 @@
             "default": "\"md\""
           }
         },
-        "usage": "Import { Divider } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Divider } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -3206,7 +3206,7 @@
       "name": "DocsShell",
       "description": "Mortar documentation docs shell, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "DocsShell",
       "source": "src/docs.tsx",
@@ -3303,7 +3303,7 @@
             "required": false
           }
         },
-        "usage": "Import { DocsShell } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { DocsShell } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Menu button keeps its visible name and declares aria-haspopup=\"dialog\".",
         "dependencies": ["mortar-button"]
@@ -3328,7 +3328,7 @@
       "name": "Dropdown",
       "description": "Mortar foundation dropdown, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Dropdown",
       "source": "src/primitives.tsx",
@@ -3387,7 +3387,7 @@
             "default": "\"secondary\""
           }
         },
-        "usage": "Import { Dropdown } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Dropdown } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -3403,7 +3403,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "fe41c1a0c69854272ae0370913714c098c8239bd74146eaa956629dfbcdc0b01"
+        "preview": "10c27cc48913c500355e4f1b260ac42bf015c71513474f81905b6951d036b4c5"
       }
     },
     {
@@ -3412,7 +3412,7 @@
       "name": "EmptyState",
       "description": "Mortar foundation empty state, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "EmptyState",
       "source": "src/primitives.tsx",
@@ -3480,7 +3480,7 @@
             "required": true
           }
         },
-        "usage": "Import { EmptyState } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { EmptyState } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -3495,7 +3495,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "32699469b9c1fe3c5f2fb7e357246e5da688818fb20c1afc9326fa45a77a4f59"
+        "preview": "8b6ae485773beecb9becf663ef219de07751f2a9c32e6fc6461bf0ad6cd6d451"
       }
     },
     {
@@ -3504,7 +3504,7 @@
       "name": "ErrorSummary",
       "description": "Mortar foundation error summary: the problems that stopped a form submitting, each linking to its field.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ErrorSummary",
       "source": "src/primitives.tsx",
@@ -3558,7 +3558,7 @@
             "default": "\"There is a problem\""
           }
         },
-        "usage": "Import { ErrorSummary } from @tony-ui/mortar. Place it above the form, pass the same messages as the fields' `error` props with each field's id as `target`, and pass the count of failed submits as `submitCount`.",
+        "usage": "Import { ErrorSummary } from @tonycodes-ui/mortar. Place it above the form, pass the same messages as the fields' `error` props with each field's id as `target`, and pass the count of failed submits as `submitCount`.",
         "avoid": "Do not autofocus it on page load before any submit, list errors that are not shown on their fields, or copy implementations or override central colours.",
         "accessibility": "role=\"alert\" labelled by its heading, and tabIndex=-1 so it takes focus after a failed submit. Each link moves focus to its field (the checked or first control of a group) and scrolls its label or legend into view without changing the URL.",
         "dependencies": []
@@ -3583,7 +3583,7 @@
       "name": "FAQ",
       "description": "Mortar marketing faq, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "FAQ",
       "source": "src/marketing.tsx",
@@ -3636,7 +3636,7 @@
             "required": true
           }
         },
-        "usage": "Import { FAQ } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { FAQ } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -3652,7 +3652,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "59bb75825341e3b5d053582f239cf535be400101c9f04c89f3d0c87987206fa2"
+        "preview": "f21cac9449616a12f1ea025c637a25473c287490173be2876ee799336f596db6"
       }
     },
     {
@@ -3661,7 +3661,7 @@
       "name": "FeatureGrid",
       "description": "Mortar marketing feature grid, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "FeatureGrid",
       "source": "src/marketing.tsx",
@@ -3730,7 +3730,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { FeatureGrid } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { FeatureGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -3745,7 +3745,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "180425500ed6023f901547534056f0e2ee0473da6ae76e48243d8ba7dc9a456a"
+        "preview": "baa3dca599c5877123afba68391fe983daa5fe2915cd11ccc191776d31fda029"
       }
     },
     {
@@ -3754,7 +3754,7 @@
       "name": "FeatureSection",
       "description": "Mortar marketing feature section, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "FeatureSection",
       "source": "src/marketing.tsx",
@@ -3835,7 +3835,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { FeatureSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { FeatureSection } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -3850,7 +3850,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "40b644c43adfc39a7b87854e286cae55091bddae316b01561ae273aa95fe5096"
+        "preview": "a14b150e326695cd027883230bd3aeba30e54d008c89096896198d2640107b8a"
       }
     },
     {
@@ -3859,7 +3859,7 @@
       "name": "Fieldset",
       "description": "Mortar fieldset: groups related fields under a legend and description; disabled disables every control inside.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Fieldset",
       "source": "src/primitives.tsx",
@@ -3900,7 +3900,7 @@
             "required": true
           }
         },
-        "usage": "Import { Fieldset } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Fieldset } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -3924,7 +3924,7 @@
       "name": "FileTree",
       "description": "Mortar documentation file tree, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "FileTree",
       "source": "src/docs.tsx",
@@ -3960,7 +3960,7 @@
             "required": true
           }
         },
-        "usage": "Import { FileTree } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { FileTree } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -3984,7 +3984,7 @@
       "name": "FilterChip",
       "description": "Mortar foundation filter chip, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "FilterChip",
       "source": "src/display.tsx",
@@ -4026,7 +4026,7 @@
             "default": "false"
           }
         },
-        "usage": "Import { FilterChip } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { FilterChip } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4051,7 +4051,7 @@
       "name": "Footer",
       "description": "Mortar marketing footer, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Footer",
       "source": "src/marketing.tsx",
@@ -4136,7 +4136,7 @@
             "default": "[]"
           }
         },
-        "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Footer } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -4151,7 +4151,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "be24caa7559213dbd2fde13dde6215d4465f084615ab81ad68c85e55d54e4891"
+        "preview": "4205a50fa3a8f02379bfba6e4d8f47cccd171736f96c147e2534847559434b1e"
       }
     },
     {
@@ -4160,7 +4160,7 @@
       "name": "GridList",
       "description": "Mortar grid list: a responsive grid of cards for people, projects, clients or files, with avatar or cover media, metadata, term/value details and actions (inline or split into equal cells with shared borders); a linked title makes the whole card clickable.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "GridList",
       "source": "src/display.tsx",
@@ -4209,7 +4209,7 @@
             "required": true
           }
         },
-        "usage": "Import { GridList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { GridList } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4233,7 +4233,7 @@
       "name": "HeaderSection",
       "description": "Mortar header section: an intro band for inner pages with eyebrow, h1 title, description, inline links and stats, in default, muted or inverse tone.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "HeaderSection",
       "source": "src/marketing.tsx",
@@ -4304,7 +4304,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { HeaderSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { HeaderSection } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -4328,7 +4328,7 @@
       "name": "Hero",
       "description": "Mortar marketing hero, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Hero",
       "source": "src/marketing.tsx",
@@ -4409,7 +4409,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Hero } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
@@ -4424,7 +4424,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "f449076497a9fec12c351429b4bca7318ea26e1538fe8990e9a79aa4ef8448f2"
+        "preview": "7b32f441e585007a5922ad6d254623c17a389ab5e0b71b78b6a00f33531555bb"
       }
     },
     {
@@ -4433,7 +4433,7 @@
       "name": "Input",
       "description": "Mortar foundation input, using central semantic tokens. Supports text prefix/suffix add-ons, decorative leading/trailing icons and an attached action button.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Input",
       "source": "src/primitives.tsx",
@@ -4500,7 +4500,7 @@
             "required": false
           }
         },
-        "usage": "Import { Input } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Input } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4516,7 +4516,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "eb99fe0ffaef870fc06e723bfe9be3004df0941c286c69313d452fc5db297e7c"
+        "preview": "4530bdaef54a86768e301c0f52195234e875b881c793e6296b80b3cdb64e399a"
       }
     },
     {
@@ -4525,7 +4525,7 @@
       "name": "Kbd",
       "description": "Mortar foundation kbd, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Kbd",
       "source": "src/display.tsx",
@@ -4551,7 +4551,7 @@
             "required": true
           }
         },
-        "usage": "Import { Kbd } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Kbd } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4575,7 +4575,7 @@
       "name": "LinkCards",
       "description": "Mortar documentation link cards, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "LinkCards",
       "source": "src/docs.tsx",
@@ -4606,7 +4606,7 @@
             "required": true
           }
         },
-        "usage": "Import { LinkCards } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { LinkCards } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4630,7 +4630,7 @@
       "name": "Listbox",
       "description": "Mortar listbox: a styled single select for rich options with avatars, descriptions and disabled items. Use Select for plain native choices.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Listbox",
       "source": "src/choice.tsx",
@@ -4698,7 +4698,7 @@
             "required": true
           }
         },
-        "usage": "Import { Listbox } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Listbox } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4723,7 +4723,7 @@
       "name": "LogoCloud",
       "description": "Mortar marketing logo cloud, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "LogoCloud",
       "source": "src/marketing.tsx",
@@ -4787,7 +4787,7 @@
             "required": false
           }
         },
-        "usage": "Import { LogoCloud } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { LogoCloud } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
@@ -4802,7 +4802,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "465f52e2367b433e593f4db69917c18fb9d526e1432ffff3257b264467317ce2"
+        "preview": "df343124d14ec0230d0c9b59fb98b038767d90f86c172b20c8537902f25ef682"
       }
     },
     {
@@ -4811,7 +4811,7 @@
       "name": "MarketingHeader",
       "description": "Mortar marketing marketing header, using central semantic tokens. Link groups open a flyout panel (Headless UI Popover).",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "MarketingHeader",
       "source": "src/marketing.tsx",
@@ -4880,7 +4880,7 @@
             "default": "\"inline\""
           }
         },
-        "usage": "Import { MarketingHeader } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { MarketingHeader } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. The menu button controls a navigation element with a generated id. With mobileMenu=\"panel\" it has aria-haspopup=\"dialog\" and opens a modal dialog titled with the brand; Escape or Close menu closes it and returns focus to the button.",
         "dependencies": ["mortar-action-link", "mortar-button"]
@@ -4896,7 +4896,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "ff9ac9e66bffba3d29ff04b0ba8cc47ff477e334bea10ef8b8712a7a6c7aac98"
+        "preview": "716c9fe8f54c04c81de83c7b27339df1f4ecf5381238d23c5d5a697e59d10f72"
       }
     },
     {
@@ -4905,7 +4905,7 @@
       "name": "MediaObject",
       "description": "Mortar media object: an image, avatar or icon beside text, aligned to the top or centre and optionally reversed.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "MediaObject",
       "source": "src/layout.tsx",
@@ -4953,7 +4953,7 @@
             "required": false
           }
         },
-        "usage": "Import { MediaObject } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { MediaObject } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -4977,7 +4977,7 @@
       "name": "MetricGroup",
       "description": "Mortar application metric group with optional icons, previous values and trend arrows; shared borders by default or separate cards, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "MetricGroup",
       "source": "src/application.tsx",
@@ -5014,7 +5014,7 @@
             "default": "\"shared\""
           }
         },
-        "usage": "Import { MetricGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { MetricGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -5029,7 +5029,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "b000ee6297875cf81cfe1f654bb6e96238d29d0ca087f799ffbffec93ddef7cd"
+        "preview": "31f52b14abf2ee847baf2ca48065a5db112b113589e0a87257c6999c2ef8ba8a"
       }
     },
     {
@@ -5038,7 +5038,7 @@
       "name": "MockWindow",
       "description": "Mortar framed product mock for hero and feature illustrations.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "MockWindow",
       "source": "src/showcase.tsx",
@@ -5085,7 +5085,7 @@
             "default": "\"browser\""
           }
         },
-        "usage": "Import { MockWindow } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { MockWindow } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -5109,7 +5109,7 @@
       "name": "Modal",
       "description": "Mortar foundation modal, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Modal",
       "source": "src/primitives.tsx",
@@ -5161,7 +5161,7 @@
             "required": true
           }
         },
-        "usage": "Import { Modal } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Modal } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -5177,7 +5177,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "43c748ecfa117288f04671e8a5d1ca19622b213c289d418785bbbf55c2b5bd8f"
+        "preview": "3a42e025effc70bd47e7e9b562d059543567d615bc26412680de4e1656b17d1d"
       }
     },
     {
@@ -5186,7 +5186,7 @@
       "name": "Navbar",
       "description": "Mortar navbar: horizontal application navigation with brand, current-page indicator and actions, collapsing into a disclosure menu on narrow screens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Navbar",
       "source": "src/application.tsx",
@@ -5245,7 +5245,7 @@
             "required": false
           }
         },
-        "usage": "Import { Navbar } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Navbar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -5270,7 +5270,7 @@
       "name": "Newsletter",
       "description": "Mortar marketing newsletter, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Newsletter",
       "source": "src/marketing-sections.tsx",
@@ -5346,7 +5346,7 @@
             "default": "\"plain\""
           }
         },
-        "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Newsletter } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. A persistent role=\"status\" region announces the success message; errors stay on the field.",
         "dependencies": ["mortar-button", "mortar-input"]
@@ -5371,7 +5371,7 @@
       "name": "NotFound",
       "description": "Mortar marketing not found, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "NotFound",
       "source": "src/marketing-sections.tsx",
@@ -5434,7 +5434,7 @@
             "required": true
           }
         },
-        "usage": "Import { NotFound } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { NotFound } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
@@ -5458,7 +5458,7 @@
       "name": "Notice",
       "description": "Mortar foundation notice, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Notice",
       "source": "src/primitives.tsx",
@@ -5521,7 +5521,7 @@
             "default": "\"neutral\""
           }
         },
-        "usage": "Import { Notice } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Notice } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -5537,7 +5537,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "e45eb20747856faca81cbd0ef36b7f8f235f8ac9feeae7ec47dfb0df3b4c5fc8"
+        "preview": "db261e1d6f9ad052f5dc5de12504ea8ccabf4c49ce556e6beed077e19d0babe9"
       }
     },
     {
@@ -5546,7 +5546,7 @@
       "name": "OrderHistory",
       "description": "Mortar order history: past orders with number, date, total, status, line items and a View order link, plus optional order-level and per-item quick actions and an optional delivery tracker (ProgressSteps bar: placed, processing, shipped, delivered); empty state when there are none.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "OrderHistory",
       "source": "src/ecommerce.tsx",
@@ -5589,7 +5589,7 @@
             "required": true
           }
         },
-        "usage": "Import { OrderHistory } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { OrderHistory } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-empty-state", "mortar-progress-steps"]
@@ -5613,7 +5613,7 @@
       "name": "OrderSummary",
       "description": "Mortar order summary: cost lines with optional hints explaining estimates, a distinguished total and a checkout action.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "OrderSummary",
       "source": "src/ecommerce.tsx",
@@ -5671,7 +5671,7 @@
             "required": true
           }
         },
-        "usage": "Import { OrderSummary } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { OrderSummary } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -5695,7 +5695,7 @@
       "name": "PageFeedback",
       "description": "Mortar documentation page feedback, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PageFeedback",
       "source": "src/docs.tsx",
@@ -5742,7 +5742,7 @@
             "required": true
           }
         },
-        "usage": "Import { PageFeedback } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { PageFeedback } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -5767,7 +5767,7 @@
       "name": "PageHeading",
       "description": "Mortar application page heading, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PageHeading",
       "source": "src/application.tsx",
@@ -5835,7 +5835,7 @@
             "required": true
           }
         },
-        "usage": "Import { PageHeading } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { PageHeading } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-breadcrumbs"]
@@ -5850,7 +5850,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "9a93c4a5143f433da7dfc87cb3ede6dd56f4b86e29883bc94945fbe14fec62ba"
+        "preview": "54b6785f6afd6aad5c3823b88ab6b362a52e3cc4e686a0b053059042240e5119"
       }
     },
     {
@@ -5859,7 +5859,7 @@
       "name": "PagerLinks",
       "description": "Mortar documentation pager links, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PagerLinks",
       "source": "src/docs.tsx",
@@ -5901,7 +5901,7 @@
             "required": false
           }
         },
-        "usage": "Import { PagerLinks } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { PagerLinks } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. Name the landmark with label so it stays distinct from Pagination. Arrows are hidden from assistive technology.",
         "dependencies": []
@@ -5925,7 +5925,7 @@
       "name": "Pagination",
       "description": "Mortar application pagination, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Pagination",
       "source": "src/application.tsx",
@@ -5978,7 +5978,7 @@
             "required": false
           }
         },
-        "usage": "Import { Pagination } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Pagination } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -5994,7 +5994,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "fcd77b3544eefda8449cd40289277ac075f0ae9047e899267d5eed924ba4219e"
+        "preview": "905f2f0c385237bc2443c056d8ee9750d7a879d6ffdec02fbc1662d85e527eb9"
       }
     },
     {
@@ -6003,7 +6003,7 @@
       "name": "PasswordInput",
       "description": "Mortar password field for sign-in, sign-up and reset screens: a show/hide toggle that keeps focus, the right autocomplete for current or new passwords, an optional live requirement checklist and a strength meter.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PasswordInput",
       "source": "src/auth.tsx",
@@ -6067,7 +6067,7 @@
             "default": "\"Show password\""
           }
         },
-        "usage": "Import { PasswordInput } from @tony-ui/mortar. Use it for every password field instead of Input type=\"password\". Sign-in: purpose=\"current\" (the default, autocomplete=\"current-password\"). Sign-up and reset: purpose=\"new\" (autocomplete=\"new-password\"), with every rule the server enforces listed in requirements from the start and marked met as the person types; add strength from a real estimator. Pair it with a username or email field that has autocomplete=\"username\" or \"email\" in the same form so password managers save both. For a confirm field, use a second PasswordInput purpose=\"new\" and validate the match on submit. See docs/auth-flows.md.",
+        "usage": "Import { PasswordInput } from @tonycodes-ui/mortar. Use it for every password field instead of Input type=\"password\". Sign-in: purpose=\"current\" (the default, autocomplete=\"current-password\"). Sign-up and reset: purpose=\"new\" (autocomplete=\"new-password\"), with every rule the server enforces listed in requirements from the start and marked met as the person types; add strength from a real estimator. Pair it with a username or email field that has autocomplete=\"username\" or \"email\" in the same form so password managers save both. For a confirm field, use a second PasswordInput purpose=\"new\" and validate the match on submit. See docs/auth-flows.md.",
         "avoid": "Do not block paste, hide password rules until a failed submit, or add your own show/hide button. Do not copy implementations or override central colours.",
         "accessibility": "The toggle is a button named \"Show password\" with aria-pressed, controls the field and keeps focus. Requirements are a named list that describes the field, each item ending in \"met\" or \"not met\"; a polite status announces only when every requirement becomes met (or stops being met), not on each keystroke. The strength meter is role=\"meter\" with the label as its value text.",
         "dependencies": []
@@ -6092,7 +6092,7 @@
       "name": "PlanComparison",
       "description": "Mortar marketing plan comparison, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PlanComparison",
       "source": "src/marketing-sections.tsx",
@@ -6149,7 +6149,7 @@
             "required": true
           }
         },
-        "usage": "Import { PlanComparison } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { PlanComparison } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Included and not-included cells hide their glyph and carry screen-reader text.",
         "dependencies": []
@@ -6173,7 +6173,7 @@
       "name": "PostList",
       "description": "Mortar marketing post list, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PostList",
       "source": "src/marketing-sections.tsx",
@@ -6230,7 +6230,7 @@
             "required": true
           }
         },
-        "usage": "Import { PostList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { PostList } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": ["mortar-action-link"]
@@ -6254,7 +6254,7 @@
       "name": "PreviewFrame",
       "description": "Mortar application preview frame, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "PreviewFrame",
       "source": "src/inspection.tsx",
@@ -6290,7 +6290,7 @@
             "required": true
           }
         },
-        "usage": "Import { PreviewFrame } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { PreviewFrame } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -6305,7 +6305,7 @@
       },
       "integrity": {
         "source": "8ff19b1cf00665047a58c15ae2a3d2f39f624f96cb15a8f886ddc6057e3ddb3c",
-        "preview": "ee403465d3aad8b93fa4f0584dc56293233b9800993324366fcc0258d512733f"
+        "preview": "6d4a5eaf4af64e463fe6f05b1068dc2f2e502c31c14a04bd174d0997431c4a63"
       }
     },
     {
@@ -6314,7 +6314,7 @@
       "name": "Pricing",
       "description": "Mortar marketing pricing, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Pricing",
       "source": "src/marketing.tsx",
@@ -6389,7 +6389,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Pricing } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Annual prices show only while the billing toggle is visible. Unavailable plans show static status text and no purchase link.",
         "dependencies": ["mortar-action-link", "mortar-segmented-control"]
@@ -6405,7 +6405,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "7aab3f5d830129f3d37423fe4248babdded3203e1222a12f17bf9c44a15250d2"
+        "preview": "72ed68229afef2bcf8d5e692183f2a39a5e2595c97aa11537d0e97f4edf1ab34"
       }
     },
     {
@@ -6414,7 +6414,7 @@
       "name": "ProcessSteps",
       "description": "Mortar connected, numbered how-it-works sequence for marketing pages.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProcessSteps",
       "source": "src/marketing.tsx",
@@ -6472,7 +6472,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { ProcessSteps } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProcessSteps } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -6496,7 +6496,7 @@
       "name": "ProductFilters",
       "description": "Mortar product filters: collapsible checkbox facets with counts and removable chips for active filters, with Clear all. Every change calls onChange once with the complete next selection.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProductFilters",
       "source": "src/ecommerce.tsx",
@@ -6543,7 +6543,7 @@
             "required": true
           }
         },
-        "usage": "Import { ProductFilters } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProductFilters } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-checkbox", "mortar-filter-chip"]
@@ -6568,7 +6568,7 @@
       "name": "ProductList",
       "description": "Mortar product list: a responsive grid of product cards with image, name, variant, price and badge; the name link covers the card. Opt-in cards variant with supporting text, colour swatches (consumer-supplied colours, announced by label) and a per-card action, and an overlay variant that sets the name and price on a panel over the image.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProductList",
       "source": "src/ecommerce.tsx",
@@ -6622,7 +6622,7 @@
             "default": "\"plain\""
           }
         },
-        "usage": "Import { ProductList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProductList } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -6646,7 +6646,7 @@
       "name": "ProductOverview",
       "description": "Mortar product overview: gallery with selectable thumbnails (or an opt-in image grid showing every image), price, rating, option pickers (native radios, with colour swatches), add to bag and highlights.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProductOverview",
       "source": "src/ecommerce.tsx",
@@ -6755,7 +6755,7 @@
             "default": "{}"
           }
         },
-        "usage": "Import { ProductOverview } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProductOverview } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -6780,7 +6780,7 @@
       "name": "ProductQuickView",
       "description": "Mortar product quick view: a ProductOverview in a wide Modal with a link to the full product page.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProductQuickView",
       "source": "src/ecommerce.tsx",
@@ -6887,7 +6887,7 @@
             "required": false
           }
         },
-        "usage": "Import { ProductQuickView } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProductQuickView } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": [
@@ -6916,7 +6916,7 @@
       "name": "ProductReviews",
       "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews, optionally with each reviewer's avatar.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProductReviews",
       "source": "src/ecommerce.tsx",
@@ -6985,7 +6985,7 @@
             "default": "\"Customer reviews\""
           }
         },
-        "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProductReviews } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-avatar"]
@@ -7009,7 +7009,7 @@
       "name": "ProgressBar",
       "description": "Mortar foundation progress bar, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProgressBar",
       "source": "src/display.tsx",
@@ -7056,7 +7056,7 @@
             "required": false
           }
         },
-        "usage": "Import { ProgressBar } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProgressBar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7080,7 +7080,7 @@
       "name": "ProgressSteps",
       "description": "Mortar progress steps: where someone is in a multi-step flow, as numbered bars, circles with descriptions, compact bullets or one filled track (bar) for status such as an order's delivery, with the current step marked for assistive technology. navigation={false} drops the navigation landmark for status-only progress.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProgressSteps",
       "source": "src/application.tsx",
@@ -7124,7 +7124,7 @@
             "default": "\"simple\""
           }
         },
-        "usage": "Import { ProgressSteps } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ProgressSteps } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7148,7 +7148,7 @@
       "name": "Prose",
       "description": "Mortar documentation prose, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Prose",
       "source": "src/layout.tsx",
@@ -7174,7 +7174,7 @@
             "required": false
           }
         },
-        "usage": "Import { Prose } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Prose } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7198,7 +7198,7 @@
       "name": "ProviderButtons",
       "description": "Mortar sign-in provider buttons (GitHub, Google, SSO …): one full-width secondary button per provider, stacked or in a grid. Auth SDKs supply the redirects through onSelect.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ProviderButtons",
       "source": "src/auth.tsx",
@@ -7235,7 +7235,7 @@
             "required": true
           }
         },
-        "usage": "Import { ProviderButtons } from @tony-ui/mortar. Put it inside AuthLayout above or below the email form, separated by <Divider label=\"or continue with\" soft spacing=\"none\" />. Use full labels (\"Continue with GitHub\") in the list layout and short ones (\"GitHub\") in the grid. SignInPanel renders it for its providers.",
+        "usage": "Import { ProviderButtons } from @tonycodes-ui/mortar. Put it inside AuthLayout above or below the email form, separated by <Divider label=\"or continue with\" soft spacing=\"none\" />. Use full labels (\"Continue with GitHub\") in the list layout and short ones (\"GitHub\") in the grid. SignInPanel renders it for its providers.",
         "avoid": "Do not restyle buttons per provider brand or put provider logos in the accessible name.",
         "accessibility": "Each provider is a button named by its label; icons are decorative. Name the group with label when the buttons are not obviously about signing in.",
         "dependencies": ["mortar-button"]
@@ -7260,7 +7260,7 @@
       "name": "RadioGroup",
       "description": "Mortar foundation radio group, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "RadioGroup",
       "source": "src/primitives.tsx",
@@ -7338,7 +7338,7 @@
             "required": true
           }
         },
-        "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { RadioGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7354,7 +7354,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "96544aea9ca63c8ae833e691167feb177b8f712c76c4bc6e595542db67c0b35d"
+        "preview": "190849cbe0837ab114280380f01b3a5533ef5304427e5c8b8c83f3c51c611756"
       }
     },
     {
@@ -7363,7 +7363,7 @@
       "name": "Release",
       "description": "Mortar documentation release, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Release",
       "source": "src/docs.tsx",
@@ -7415,7 +7415,7 @@
             "required": true
           }
         },
-        "usage": "Import { Release } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Release } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7439,7 +7439,7 @@
       "name": "SaveBar",
       "description": "Mortar application save bar, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SaveBar",
       "source": "src/feedback.tsx",
@@ -7504,7 +7504,7 @@
             "default": "\"Save changes\""
           }
         },
-        "usage": "Import { SaveBar } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SaveBar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -7529,7 +7529,7 @@
       "name": "SearchDialog",
       "description": "Mortar documentation search dialog, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SearchDialog",
       "source": "src/docs.tsx",
@@ -7575,7 +7575,7 @@
             "required": true
           }
         },
-        "usage": "Import { SearchDialog } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SearchDialog } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-command-palette", "mortar-kbd"]
@@ -7600,7 +7600,7 @@
       "name": "SearchTrigger",
       "description": "Mortar documentation search trigger, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SearchTrigger",
       "source": "src/docs.tsx",
@@ -7632,7 +7632,7 @@
             "required": true
           }
         },
-        "usage": "Import { SearchTrigger } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SearchTrigger } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Cmd/Ctrl+K shortcut is ignored inside text fields and dialogs and when another trigger handled it; the hint shows the platform modifier.",
         "dependencies": ["mortar-kbd"]
@@ -7657,7 +7657,7 @@
       "name": "SectionHeading",
       "description": "Mortar section heading: a heading for a section within a page, with description, actions, an optional divider and optional page tabs below that replace the divider.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SectionHeading",
       "source": "src/layout.tsx",
@@ -7715,7 +7715,7 @@
             "required": true
           }
         },
-        "usage": "Import { SectionHeading } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SectionHeading } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7739,7 +7739,7 @@
       "name": "Section",
       "description": "Mortar full-bleed marketing section with default, muted and inverse tones for page rhythm.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Section",
       "source": "src/layout.tsx",
@@ -7803,7 +7803,7 @@
             "default": "\"default\""
           }
         },
-        "usage": "Import { Section } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Section } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -7827,7 +7827,7 @@
       "name": "SegmentedControl",
       "description": "Mortar foundation segmented control, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SegmentedControl",
       "source": "src/inspection.tsx",
@@ -7868,7 +7868,7 @@
             "required": true
           }
         },
-        "usage": "Import { SegmentedControl } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SegmentedControl } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7884,7 +7884,7 @@
       },
       "integrity": {
         "source": "8ff19b1cf00665047a58c15ae2a3d2f39f624f96cb15a8f886ddc6057e3ddb3c",
-        "preview": "326a8b791e1e3dbc407c369e97fa7d1154eb499410d695b568659b0d69985931"
+        "preview": "d146f5ef17ffaa0f2e184291cce72b09c1d187a784e83d53ee64bba53f19ef63"
       }
     },
     {
@@ -7893,7 +7893,7 @@
       "name": "Select",
       "description": "Mortar foundation select, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Select",
       "source": "src/primitives.tsx",
@@ -7940,7 +7940,7 @@
             "required": true
           }
         },
-        "usage": "Import { Select } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Select } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -7956,7 +7956,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "8dc41f6539ea62a40f3870f49845c86b220cb50fabc1105c763d5a68f913c938"
+        "preview": "541c6148dd4248015e20a1363a1c2b0995a6e97f7ee77cfd2987caf4fe3b52d0"
       }
     },
     {
@@ -7965,7 +7965,7 @@
       "name": "SettingsSection",
       "description": "Mortar application settings section, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SettingsSection",
       "source": "src/application.tsx",
@@ -8012,7 +8012,7 @@
             "required": true
           }
         },
-        "usage": "Import { SettingsSection } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SettingsSection } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8027,7 +8027,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "c747cc3ac9abd108ddaefd78c36b0fbebca14a85801ebf674a0f88043b4265c5"
+        "preview": "688aa2f5b111ab128e8b38ab47a89d0b923cd1500a3800db46b089cd7b5d4316"
       }
     },
     {
@@ -8036,7 +8036,7 @@
       "name": "ShoppingCart",
       "description": "Mortar shopping cart: bag lines with image, options, price, stock, a quantity select and a remove button labelled with the product name; focus moves to the next line after a removal. Shows an empty state when there are no items. Optional summary column (e.g. an OrderSummary with estimates) and related products shown as a ProductList.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ShoppingCart",
       "source": "src/ecommerce.tsx",
@@ -8107,7 +8107,7 @@
             "required": false
           }
         },
-        "usage": "Import { ShoppingCart } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ShoppingCart } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-empty-state", "mortar-product-list"]
@@ -8132,7 +8132,7 @@
       "name": "Sidebar",
       "description": "Mortar sidebar: vertical application navigation with brand, icons, counts, grouped sections and a footer slot. AppShell composes the same content.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Sidebar",
       "source": "src/application.tsx",
@@ -8193,7 +8193,7 @@
             "required": false
           }
         },
-        "usage": "Import { Sidebar } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Sidebar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8218,7 +8218,7 @@
       "name": "SignInPanel",
       "description": "Mortar sign-in surface with provider buttons and email link form; auth SDKs supply callbacks.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SignInPanel",
       "source": "src/application.tsx",
@@ -8292,7 +8292,7 @@
             "required": true
           }
         },
-        "usage": "Import { SignInPanel } from @tony-ui/mortar. Use it for a passwordless sign-in (providers plus an emailed link) as a section, for example inside a landing page with headingLevel={2}. It renders ProviderButtons and a labelled Divider. For a dedicated sign-in page, or any flow with passwords or codes, compose AuthLayout with ProviderButtons, PasswordInput and CodeInput instead (docs/auth-flows.md).",
+        "usage": "Import { SignInPanel } from @tonycodes-ui/mortar. Use it for a passwordless sign-in (providers plus an emailed link) as a section, for example inside a landing page with headingLevel={2}. It renders ProviderButtons and a labelled Divider. For a dedicated sign-in page, or any flow with passwords or codes, compose AuthLayout with ProviderButtons, PasswordInput and CodeInput instead (docs/auth-flows.md).",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": [
@@ -8322,7 +8322,7 @@
       "name": "SlideOver",
       "description": "Mortar application slide over, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "SlideOver",
       "source": "src/workspace.tsx",
@@ -8379,7 +8379,7 @@
             "required": true
           }
         },
-        "usage": "Import { SlideOver } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { SlideOver } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -8404,7 +8404,7 @@
       "name": "Stack",
       "description": "Mortar layout stack for vertical or horizontal rhythm, replacing consumer flex/gap utilities.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Stack",
       "source": "src/layout.tsx",
@@ -8464,7 +8464,7 @@
             "default": "false"
           }
         },
-        "usage": "Import { Stack } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Stack } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8488,7 +8488,7 @@
       "name": "StackedList",
       "description": "Mortar application stacked list: rows with optional leading media, a second column of meta at the row end (wrapping under the text when narrow), trailing controls, link rows with optional chevrons, and grouped sections with sticky headings.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "StackedList",
       "source": "src/workspace.tsx",
@@ -8553,7 +8553,7 @@
             "required": false
           }
         },
-        "usage": "Import { StackedList } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { StackedList } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8577,7 +8577,7 @@
       "name": "StackedShell",
       "description": "Mortar stacked shell: top Navbar with a centred page column and optional page header, Tailwind's stacked application layout.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "StackedShell",
       "source": "src/application.tsx",
@@ -8645,7 +8645,7 @@
             "default": "\"lg\""
           }
         },
-        "usage": "Import { StackedShell } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { StackedShell } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-navbar"]
@@ -8670,7 +8670,7 @@
       "name": "StatGroup",
       "description": "Mortar marketing stat group, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "StatGroup",
       "source": "src/marketing-sections.tsx",
@@ -8717,7 +8717,7 @@
             "default": "\"grid\""
           }
         },
-        "usage": "Import { StatGroup } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { StatGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -8741,7 +8741,7 @@
       "name": "Steps",
       "description": "Mortar documentation steps, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Steps",
       "source": "src/docs.tsx",
@@ -8778,7 +8778,7 @@
             "required": true
           }
         },
-        "usage": "Import { Steps } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Steps } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8802,7 +8802,7 @@
       "name": "Switch",
       "description": "Mortar foundation switch, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Switch",
       "source": "src/primitives.tsx",
@@ -8837,7 +8837,7 @@
             "required": true
           }
         },
-        "usage": "Import { Switch } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Switch } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8853,7 +8853,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "b16c60adfcab5fb11ee237d74faafd2e1e8fa6d4d84993947a083a5df2802758"
+        "preview": "829e43139e59fdd15de2141ea36d77880b1fe2cd3f0c776c98581faea2482046"
       }
     },
     {
@@ -8862,7 +8862,7 @@
       "name": "TabNav",
       "description": "Mortar tab navigation: tabs that link between pages, such as settings sections, as underlined tabs or pills with optional icons and counts; the current page is marked aria-current=\"page\".",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "TabNav",
       "source": "src/application.tsx",
@@ -8905,7 +8905,7 @@
             "default": "\"underline\""
           }
         },
-        "usage": "Import { TabNav } from @tony-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
+        "usage": "Import { TabNav } from @tonycodes-ui/mortar. Use it for tabs that navigate between pages; use Tabs for panels within one page.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -8929,7 +8929,7 @@
       "name": "Table",
       "description": "Mortar plain semantic table for documents and summaries without row actions.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Table",
       "source": "src/application.tsx",
@@ -8994,7 +8994,7 @@
             "default": "false"
           }
         },
-        "usage": "Import { Table } from @tony-ui/mortar. Pass groups to render each labelled group as its own tbody under a full-width header row (th scope=rowgroup); ungrouped rows render first. Use DataTable instead when rows need selection, sorting, links or loading states.",
+        "usage": "Import { Table } from @tonycodes-ui/mortar. Pass groups to render each labelled group as its own tbody under a full-width header row (th scope=rowgroup); ungrouped rows render first. Use DataTable instead when rows need selection, sorting, links or loading states.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -9009,7 +9009,7 @@
       },
       "integrity": {
         "source": "38f7b987110205137803d0e62e397acf94229b629ff972414929d2e12650701c",
-        "preview": "36ad79e8b711b278689af73af5321086722b16d12b516fa218b1e539a2522bc6"
+        "preview": "03f6a803ca064b5132654dd62bbe3982f3c5e8890ff847cbec7dd74568395f73"
       }
     },
     {
@@ -9018,7 +9018,7 @@
       "name": "Tabs",
       "description": "Mortar foundation tabs, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Tabs",
       "source": "src/primitives.tsx",
@@ -9071,7 +9071,7 @@
             "default": "\"underline\""
           }
         },
-        "usage": "Import { Tabs } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Tabs } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -9087,7 +9087,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "4e4449ad4915b84093191ff1360679e5eaf5975d95c5e81ee449b75f1cb24fbc"
+        "preview": "b817ffee9f06a7c21a124167722e099aef6bd05f14c7b0177dbfb12c5de4afde"
       }
     },
     {
@@ -9096,7 +9096,7 @@
       "name": "TeamGrid",
       "description": "Mortar marketing team grid, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "TeamGrid",
       "source": "src/marketing-sections.tsx",
@@ -9149,7 +9149,7 @@
             "required": true
           }
         },
-        "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { TeamGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Placeholder avatars are hidden because the name is visible.",
         "dependencies": ["mortar-avatar"]
@@ -9173,7 +9173,7 @@
       "name": "TestimonialGrid",
       "description": "Mortar marketing testimonial grid, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "TestimonialGrid",
       "source": "src/marketing-sections.tsx",
@@ -9221,7 +9221,7 @@
             "required": false
           }
         },
-        "usage": "Import { TestimonialGrid } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { TestimonialGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Avatars are hidden because the name is visible.",
         "dependencies": ["mortar-avatar"]
@@ -9245,7 +9245,7 @@
       "name": "Testimonial",
       "description": "Mortar marketing testimonial, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Testimonial",
       "source": "src/marketing.tsx",
@@ -9296,7 +9296,7 @@
             "required": false
           }
         },
-        "usage": "Import { Testimonial } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Testimonial } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
         "dependencies": []
@@ -9311,7 +9311,7 @@
       },
       "integrity": {
         "source": "d42208bdfa9c1611f22340de03cbaad540102cc668c24b5f4a2178ceda01486c",
-        "preview": "a5c3461800f42b6797108074bd560167b7059ca059939caa4e079349af4ab42b"
+        "preview": "b4712c2b728aac1438bc2ea84280bc501df82dcd71ea527ee774930d301c2af0"
       }
     },
     {
@@ -9320,7 +9320,7 @@
       "name": "TextArea",
       "description": "Mortar foundation text area, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "TextArea",
       "source": "src/primitives.tsx",
@@ -9362,7 +9362,7 @@
             "required": true
           }
         },
-        "usage": "Import { TextArea } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { TextArea } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -9378,7 +9378,7 @@
       },
       "integrity": {
         "source": "06dff7d6b97bbd5a0ed6ded1ce12b07285ba1da4bc97d319e42f428f4aa25929",
-        "preview": "cf1642994eff8dc5dca752cb6354f386242499b59ba718b235fca828fce8de10"
+        "preview": "0634b73f8746e05c2ae64f387609b4ea49445447c0864298fb7bf0cc1e526ac1"
       }
     },
     {
@@ -9387,7 +9387,7 @@
       "name": "Text",
       "description": "Mortar body text with semantic tone, size and weight, replacing text-muted/text-ink utilities.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Text",
       "source": "src/layout.tsx",
@@ -9437,7 +9437,7 @@
             "default": "\"regular\""
           }
         },
-        "usage": "Import { Text } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Text } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -9461,7 +9461,7 @@
       "name": "ThemeProvider",
       "description": "Mortar foundation theme provider, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "ThemeProvider",
       "source": "src/foundation.tsx",
@@ -9531,7 +9531,7 @@
             "default": "\"document\""
           }
         },
-        "usage": "Import { ThemeProvider } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { ThemeProvider } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": []
@@ -9547,7 +9547,7 @@
       },
       "integrity": {
         "source": "fe9cbe822ed1ca34f1f90dd091e8cfb034a0fde92eaee45644144407b5bde5a0",
-        "preview": "8d79707d32ce5599b5f2c959c5aad3290cbb9471ca64ed4180c25f26e58a6979"
+        "preview": "5076698caa68df9f21fd19bffc08bfdf20fdefde5042f2df07211ebe276eb372"
       }
     },
     {
@@ -9556,7 +9556,7 @@
       "name": "Toast",
       "description": "Mortar foundation toast, using central semantic tokens.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Toast",
       "source": "src/feedback.tsx",
@@ -9613,7 +9613,7 @@
             "default": "\"neutral\""
           }
         },
-        "usage": "Import { Toast } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Toast } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-button"]
@@ -9638,7 +9638,7 @@
       "name": "Toaster",
       "description": "Mortar foundation toaster: a controlled region of toasts that announces each new toast once, assertively for danger.",
       "stack": "react-tailwind",
-      "package": "@tony-ui/mortar",
+      "package": "@tonycodes-ui/mortar",
       "version": "0.11.0",
       "export": "Toaster",
       "source": "src/feedback.tsx",
@@ -9680,7 +9680,7 @@
             "required": true
           }
         },
-        "usage": "Import { Toaster } from @tony-ui/mortar. Compose with the public typed props.",
+        "usage": "Import { Toaster } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
         "dependencies": ["mortar-toast"]

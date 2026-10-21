@@ -4,7 +4,7 @@
   "name": "Release",
   "description": "Mortar documentation release, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Release",
   "source": "src/docs.tsx",
   "capabilities": [],
@@ -20,7 +20,7 @@
       "className": "string (layout only: margins or grid placement)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3); change groups sit one level below"
     },
-    "usage": "Import { Release } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Release } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

@@ -4,7 +4,7 @@
   "name": "ProviderButtons",
   "description": "Mortar sign-in provider buttons (GitHub, Google, SSO …): one full-width secondary button per provider, stacked or in a grid. Auth SDKs supply the redirects through onSelect.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ProviderButtons",
   "source": "src/auth.tsx",
   "capabilities": ["action"],
@@ -17,7 +17,7 @@
       "label": "string (names the group, e.g. \"Sign in with\")",
       "className": "string"
     },
-    "usage": "Import { ProviderButtons } from @tony-ui/mortar. Put it inside AuthLayout above or below the email form, separated by <Divider label=\"or continue with\" soft spacing=\"none\" />. Use full labels (\"Continue with GitHub\") in the list layout and short ones (\"GitHub\") in the grid. SignInPanel renders it for its providers.",
+    "usage": "Import { ProviderButtons } from @tonycodes-ui/mortar. Put it inside AuthLayout above or below the email form, separated by <Divider label=\"or continue with\" soft spacing=\"none\" />. Use full labels (\"Continue with GitHub\") in the list layout and short ones (\"GitHub\") in the grid. SignInPanel renders it for its providers.",
     "avoid": "Do not restyle buttons per provider brand or put provider logos in the accessible name.",
     "accessibility": "Each provider is a button named by its label; icons are decorative. Name the group with label when the buttons are not obviously about signing in.",
     "dependencies": ["mortar-button"]

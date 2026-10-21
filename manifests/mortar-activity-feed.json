@@ -4,7 +4,7 @@
   "name": "ActivityFeed",
   "description": "Mortar application activity feed, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ActivityFeed",
   "source": "src/application.tsx",
   "capabilities": ["status"],
@@ -16,7 +16,7 @@
       "items": "{ id: string; title: string; description?: string; time: string; tone?: Tone; actor?: ReactNode; body?: ReactNode }[]",
       "className": "string"
     },
-    "usage": "Import { ActivityFeed } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ActivityFeed } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

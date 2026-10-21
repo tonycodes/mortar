@@ -1,6 +1,6 @@
 # Mortar for coding agents
 
-Mortar ships its own agent tooling: an MCP server and a `mortar` command-line tool inside the `@tony-ui/mortar` package. Both read the installed package's catalogue (`catalog.json`), contracts, examples and guides. They run locally and work offline. They need no account, token or hosted service, and they never send anything anywhere. Everything is MIT licensed, like the kit.
+Mortar ships its own agent tooling: an MCP server and a `mortar` command-line tool inside the `@tonycodes-ui/mortar` package. Both read the installed package's catalogue (`catalog.json`), contracts, examples and guides. They run locally and work offline. They need no account, token or hosted service, and they never send anything anywhere. Everything is MIT licensed, like the kit.
 
 The tooling needs Node 22 or newer. It adds no runtime dependencies to your app.
 
@@ -9,20 +9,20 @@ The tooling needs Node 22 or newer. It adds no runtime dependencies to your app.
 In the application:
 
 ```sh
-npm install @tony-ui/mortar react react-dom tailwindcss
+npm install @tonycodes-ui/mortar react react-dom tailwindcss
 ```
 
 In the app's Tailwind CSS entry, after Tailwind:
 
 ```css
 @import "tailwindcss";
-@import "@tony-ui/mortar/styles.css";
+@import "@tonycodes-ui/mortar/styles.css";
 ```
 
 Render one `ThemeProvider` at the root:
 
 ```tsx
-import { ThemeProvider } from "@tony-ui/mortar";
+import { ThemeProvider } from "@tonycodes-ui/mortar";
 
 <ThemeProvider brand="neutral" density="comfortable" initialAppearance="system">
   <App />
@@ -36,7 +36,7 @@ The server speaks the Model Context Protocol over stdio. Inside an app that has 
 **Claude Code:**
 
 ```sh
-claude mcp add mortar -- npx -y @tony-ui/mortar mcp
+claude mcp add mortar -- npx -y @tonycodes-ui/mortar mcp
 ```
 
 Add `--scope project` to share it with the repository through `.mcp.json`.
@@ -48,13 +48,13 @@ Add `--scope project` to share it with the repository through `.mcp.json`.
   "mcpServers": {
     "mortar": {
       "command": "npx",
-      "args": ["-y", "@tony-ui/mortar", "mcp"]
+      "args": ["-y", "@tonycodes-ui/mortar", "mcp"]
     }
   }
 }
 ```
 
-In a project without Mortar installed, `npx -y @tony-ui/mortar mcp` downloads the latest release first. To run a checkout of this repository instead, use `node /path/to/mortar/bin/mortar.mjs mcp` after `npm run build`.
+In a project without Mortar installed, `npx -y @tonycodes-ui/mortar mcp` downloads the latest release first. To run a checkout of this repository instead, use `node /path/to/mortar/bin/mortar.mjs mcp` after `npm run build`.
 
 ## Tools
 
@@ -86,7 +86,7 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 
 1. **Search.** Before writing UI, find what the kit already has: `search_components`, or `list_kits` to browse. Start from the purpose shell: `AppShell` for application screens, `MarketingHeader` (with `Footer`) for public pages, `DocsShell` for documentation and `AuthLayout` for sign-in and registration.
 2. **Packet.** Call `get_build_packet` with the components you picked, or with the brief. Compose from it: the contracts list every prop, and the page templates show complete page patterns to follow.
-3. **Compose.** Use named imports from `@tony-ui/mortar` and the exact props and values in each contract. Keep product names, data, routes, permissions and actions in props and slots. Theme with `ThemeProvider` and tokens (`get_guide theming`). Never copy a component's source, wrap it repeatedly, or override `.m-*` classes or `[data-m-component]` in your CSS.
+3. **Compose.** Use named imports from `@tonycodes-ui/mortar` and the exact props and values in each contract. Keep product names, data, routes, permissions and actions in props and slots. Theme with `ThemeProvider` and tokens (`get_guide theming`). Never copy a component's source, wrap it repeatedly, or override `.m-*` classes or `[data-m-component]` in your CSS.
 4. **Audit.** Run `audit_app` (or `npx mortar audit`) and fix what it finds, then run the app's own typecheck and build. Verify in a browser: mobile and desktop, light and dark, keyboard and focus, and loading, empty and error states.
 5. **Contribute.** If a shared pattern is missing or a component is wrong, fix it in the kit, not in the app. Open a pull request at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar) following [CONTRIBUTING.md](../CONTRIBUTING.md) and [AGENTS.md](../AGENTS.md) (`get_guide contributing`). Maintainer review and CI decide what merges; agents never approve, merge or publish their own changes.
 
@@ -106,7 +106,7 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 | `css-override`           | error    | Consumer CSS selecting Mortar's `.m-*` classes or `[data-m-component]`                                                                                                                                                                                      |
 | `class-override`         | error    | A Tailwind arbitrary variant that targets `.m-*` classes, such as `[&_.m-button]:rounded-none`                                                                                                                                                              |
 | `local-copy`             | error    | A copy of a Mortar source file, or code rendering Mortar's component marker                                                                                                                                                                                 |
-| `missing-styles`         | error    | No import of `@tony-ui/mortar/styles.css`                                                                                                                                                                                                                   |
+| `missing-styles`         | error    | No import of `@tonycodes-ui/mortar/styles.css`                                                                                                                                                                                                              |
 | `styles-order`           | warning  | Mortar's styles imported before Tailwind                                                                                                                                                                                                                    |
 | `missing-theme-provider` | warning  | Mortar components rendered without a `ThemeProvider`                                                                                                                                                                                                        |
 | `kit-class`              | warning  | Mortar-internal class names on the app's own markup                                                                                                                                                                                                         |

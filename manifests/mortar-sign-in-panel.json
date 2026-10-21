@@ -4,7 +4,7 @@
   "name": "SignInPanel",
   "description": "Mortar sign-in surface with provider buttons and email link form; auth SDKs supply callbacks.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "SignInPanel",
   "source": "src/application.tsx",
   "capabilities": ["action"],
@@ -24,7 +24,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { SignInPanel } from @tony-ui/mortar. Use it for a passwordless sign-in (providers plus an emailed link) as a section, for example inside a landing page with headingLevel={2}. It renders ProviderButtons and a labelled Divider. For a dedicated sign-in page, or any flow with passwords or codes, compose AuthLayout with ProviderButtons, PasswordInput and CodeInput instead (docs/auth-flows.md).",
+    "usage": "Import { SignInPanel } from @tonycodes-ui/mortar. Use it for a passwordless sign-in (providers plus an emailed link) as a section, for example inside a landing page with headingLevel={2}. It renders ProviderButtons and a labelled Divider. For a dedicated sign-in page, or any flow with passwords or codes, compose AuthLayout with ProviderButtons, PasswordInput and CodeInput instead (docs/auth-flows.md).",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": [

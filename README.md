@@ -2,7 +2,7 @@
 
 A shared design foundation and purpose-built Application UI, Marketing UI, Docs UI and Ecommerce kits for React 19 and Tailwind CSS 4. MIT licensed. No account, token, registry connection or subscription is required to use the kit, including use by coding agents.
 
-The package is [`@tony-ui/mortar` on npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar). Releases are immutable, publicly installable without any account or token, and published with npm provenance that links each version to the GitHub Actions run that built it. Publishing is automatic and version-driven: merging a version bump to `main` publishes that version once the required checks pass ([release workflow](.github/workflows/release.yml), [process](CONTRIBUTING.md)). The current version is listed on the [GitHub releases](https://github.com/tonycodes/mortar/releases) page. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
+The package is [`@tonycodes-ui/mortar` on npmjs.com](https://www.npmjs.com/package/@tonycodes-ui/mortar). Releases are immutable, publicly installable without any account or token, and published with npm provenance that links each version to the GitHub Actions run that built it. Publishing is automatic and version-driven: merging a version bump to `main` publishes that version once the required checks pass ([release workflow](.github/workflows/release.yml), [process](CONTRIBUTING.md)). The current version is listed on the [GitHub releases](https://github.com/tonycodes/mortar/releases) page. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
 [Explore the live playground](https://mortar.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Free and open](#free-and-open)
 
@@ -31,17 +31,17 @@ example states in the playground.
 ## Install
 
 ```sh
-npm install @tony-ui/mortar react react-dom tailwindcss
+npm install @tonycodes-ui/mortar react react-dom tailwindcss
 ```
 
-No account, token or registry configuration is needed: the package is public on npmjs.com. Versions 0.11 and earlier were published only to the previous owner-hosted registry; if a project pins one of them, or has an `@tony-ui:registry` line in its `.npmrc`, see the [CHANGELOG](CHANGELOG.md) migration note.
+No account, token or registry configuration is needed: the package is public on npmjs.com. Versions 0.11 and earlier were published only to the previous owner-hosted registry; if a project pins one of them, or still has that registry's scope override in its `.npmrc`, see the [CHANGELOG](CHANGELOG.md) migration note.
 
 ## Agents and MCP
 
 The package includes a free, local MCP server and CLI for coding agents. They read the installed version's catalogue, contracts, examples and guides, work offline and need no account:
 
 ```sh
-claude mcp add mortar -- npx -y @tony-ui/mortar mcp
+claude mcp add mortar -- npx -y @tonycodes-ui/mortar mcp
 npx mortar search "sign in"
 npx mortar audit .
 ```
@@ -60,19 +60,19 @@ Pack from this workspace (`npm pack` builds `dist` first):
 npm pack
 ```
 
-Install the resulting `tony-ui-mortar-<version>.tgz` in the consuming app, with React 19, React DOM 19 and Tailwind 4. Public releases come from npmjs.com.
+Install the resulting `tonycodes-ui-mortar-<version>.tgz` in the consuming app, with React 19, React DOM 19 and Tailwind 4. Public releases come from npmjs.com.
 
 In the app's Tailwind CSS entry:
 
 ```css
 @import "tailwindcss";
-@import "@tony-ui/mortar/styles.css";
+@import "@tonycodes-ui/mortar/styles.css";
 ```
 
 The package ships its component styles. No source scanning or account is required.
 
 ```tsx
-import { ThemeProvider, AppShell, Button } from "@tony-ui/mortar";
+import { ThemeProvider, AppShell, Button } from "@tonycodes-ui/mortar";
 
 <ThemeProvider brand="neutral" density="comfortable" initialAppearance="system">
   <AppShell
@@ -100,7 +100,7 @@ contribute to it, including in commercial projects and agent-assisted developmen
 There are no accounts, licence checks, telemetry, paid plans or hosted service;
 the kit makes no network calls of its own.
 
-- **Packages** are published to [npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar)
+- **Packages** are published to [npmjs.com](https://www.npmjs.com/package/@tonycodes-ui/mortar)
   from GitHub Actions with provenance.
 - **The playground** is hosted on [GitHub Pages](https://mortar.tony.codes/playground/).
 - **Bugs and contributions** go through [GitHub issues](https://github.com/tonycodes/mortar/issues)

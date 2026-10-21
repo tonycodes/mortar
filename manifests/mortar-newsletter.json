@@ -4,7 +4,7 @@
   "name": "Newsletter",
   "description": "Mortar marketing newsletter, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Newsletter",
   "source": "src/marketing-sections.tsx",
   "capabilities": [],
@@ -24,7 +24,7 @@
       "layout": "\"split\" | \"center\" (default \"split\": the copy beside the form; center puts the copy above a centred form)",
       "variant": "\"plain\" | \"panel\" (default \"plain\": a section under a top rule; panel is a rounded, sunken card)"
     },
-    "usage": "Import { Newsletter } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Newsletter } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. A persistent role=\"status\" region announces the success message; errors stay on the field.",
     "dependencies": ["mortar-button", "mortar-input"]

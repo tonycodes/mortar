@@ -4,7 +4,7 @@
   "name": "Footer",
   "description": "Mortar marketing footer, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Footer",
   "source": "src/marketing.tsx",
   "capabilities": [],
@@ -26,7 +26,7 @@
       "layout": "\"columns\" | \"center\" (default \"columns\"; center stacks the brand, one row of links per column and the social links, all centred, and the column label only names its navigation)",
       "newsletter": "ReactNode (a signup row above the copyright, usually a Newsletter; inside the footer it loses its section padding and rule)"
     },
-    "usage": "Import { Footer } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Footer } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []

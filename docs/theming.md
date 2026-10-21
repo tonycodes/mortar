@@ -114,12 +114,16 @@ ThemeProvider renders the brand as a `<style>` element beside its content. It is
 - **Fonts** are family names, quoted names and generic families separated by commas, such as `"Inter", sans-serif`. Functions and `url()` are rejected.
 - `;`, `{`, `}`, `<`, `>`, comments and, outside font names, quotes are always rejected.
 
-`isBrandColour`, `isBrandGradient` and `isBrandFont` from `@tony-ui/mortar/brand` run the same checks, for validating a form before you save a tenant's theme.
+`isBrandColour`, `isBrandGradient` and `isBrandFont` from `@tonycodes-ui/mortar/brand` run the same checks, for validating a form before you save a tenant's theme.
 
-Outside ThemeProvider, `@tony-ui/mortar/brand` has the same building blocks:
+Outside ThemeProvider, `@tonycodes-ui/mortar/brand` has the same building blocks:
 
 ```ts
-import { brandToCss, brandToStyle, registerBrand } from "@tony-ui/mortar/brand";
+import {
+  brandToCss,
+  brandToStyle,
+  registerBrand,
+} from "@tonycodes-ui/mortar/brand";
 
 brandToCss("acme", theme); // a CSS rule, e.g. for a build step
 const dispose = registerBrand("acme", theme); // adds a <style>; reference-counted
@@ -156,7 +160,7 @@ What follows the scales, and what does not:
 
 ## Tailwind utilities
 
-`@tony-ui/mortar/styles.css` maps tokens into Tailwind's theme, so utilities follow a retheme:
+`@tonycodes-ui/mortar/styles.css` maps tokens into Tailwind's theme, so utilities follow a retheme:
 
 - **Colours:** `paper`, `surface`, `sunken`, `ink`, `secondary`, `muted`, `line`, `primary`, `on-primary`, `accent`, `on-accent`, `focus`, `link`, `selected`, `success`, `warning`, `danger`, `info`. For example `bg-primary` or `text-muted`.
 - **Radius:** `rounded-m-xs`, `rounded-m-sm`, `rounded-m`, `rounded-m-lg`, `rounded-m-xl`, `rounded-m-full`. Tailwind's own `rounded-sm/md/lg` keep their usual sizes.

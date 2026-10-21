@@ -4,7 +4,7 @@
   "name": "RadioGroup",
   "description": "Mortar foundation radio group, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "RadioGroup",
   "source": "src/primitives.tsx",
   "capabilities": ["input", "validation"],
@@ -24,7 +24,7 @@
       "id": "string (on the fieldset, e.g. an ErrorSummary target)",
       "className": "string (on the root element)"
     },
-    "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { RadioGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

@@ -4,7 +4,7 @@
   "name": "AppShell",
   "description": "Mortar application app shell, using central semantic tokens. An optional aside adds a secondary column (multi-column layout).",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "AppShell",
   "source": "src/application.tsx",
   "capabilities": [],
@@ -26,7 +26,7 @@
       "footer": "ReactNode (account menu pinned to the bottom of the sidebar)",
       "className": "string"
     },
-    "usage": "Import { AppShell } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { AppShell } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-button"]

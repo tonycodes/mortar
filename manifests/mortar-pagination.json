@@ -4,7 +4,7 @@
   "name": "Pagination",
   "description": "Mortar application pagination, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Pagination",
   "source": "src/application.tsx",
   "capabilities": [],
@@ -20,7 +20,7 @@
       "label": "string",
       "className": "string"
     },
-    "usage": "Import { Pagination } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Pagination } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-button"]

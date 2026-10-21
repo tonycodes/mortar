@@ -4,7 +4,7 @@
   "name": "Toaster",
   "description": "Mortar foundation toaster: a controlled region of toasts that announces each new toast once, assertively for danger.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Toaster",
   "source": "src/feedback.tsx",
   "capabilities": [],
@@ -18,7 +18,7 @@
       "id": "string",
       "className": "string (on the root element)"
     },
-    "usage": "Import { Toaster } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Toaster } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-toast"]

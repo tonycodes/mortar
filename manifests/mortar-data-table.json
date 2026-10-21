@@ -4,7 +4,7 @@
   "name": "DataTable",
   "description": "Mortar application data table, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "DataTable",
   "source": "src/application.tsx",
   "capabilities": ["table"],
@@ -36,7 +36,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { DataTable } from @tony-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
+    "usage": "Import { DataTable } from @tonycodes-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"]

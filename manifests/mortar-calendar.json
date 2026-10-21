@@ -4,7 +4,7 @@
   "name": "Calendar",
   "description": "Mortar calendar: one current date shared by a month grid with keyboard navigation, a twelve-month year view with one roving tab stop, and week and day time grids where timed events sit on an hour scale and collapse to an agenda when narrow. An opt-in month agenda lists the selected day's meetings beside the month (below it when narrow). Dates are YYYY-MM-DD strings handled in UTC.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Calendar",
   "source": "src/calendar.tsx",
   "capabilities": ["responsive"],
@@ -34,7 +34,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { Calendar } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Calendar } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-segmented-control"]

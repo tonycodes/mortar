@@ -4,7 +4,7 @@
   "name": "Avatar",
   "description": "Mortar foundation avatar, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Avatar",
   "source": "src/display.tsx",
   "capabilities": [],
@@ -22,7 +22,7 @@
       "decorative": "boolean (hide from assistive technology when the name is visible beside it)",
       "className": "string"
     },
-    "usage": "Import { Avatar } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Avatar } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

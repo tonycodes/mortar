@@ -4,7 +4,7 @@
   "name": "ProductReviews",
   "description": "Mortar product reviews: average rating, an accessible star distribution and individual reviews, optionally with each reviewer's avatar.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ProductReviews",
   "source": "src/ecommerce.tsx",
   "capabilities": [],
@@ -23,7 +23,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { ProductReviews } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ProductReviews } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-avatar"]

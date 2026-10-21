@@ -4,7 +4,7 @@
   "name": "GridList",
   "description": "Mortar grid list: a responsive grid of cards for people, projects, clients or files, with avatar or cover media, metadata, term/value details and actions (inline or split into equal cells with shared borders); a linked title makes the whole card clickable.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "GridList",
   "source": "src/display.tsx",
   "capabilities": [],
@@ -19,7 +19,7 @@
       "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (each card title; default 3)",
       "className": "string"
     },
-    "usage": "Import { GridList } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { GridList } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

@@ -4,7 +4,7 @@
   "name": "CommandPalette",
   "description": "Mortar application command palette, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "CommandPalette",
   "source": "src/workspace.tsx",
   "capabilities": [],
@@ -23,7 +23,7 @@
       "empty": "{ title: string; description?: string } (announced when no group has items; default \"No results for “query”.\")",
       "className": "string"
     },
-    "usage": "Import { CommandPalette } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { CommandPalette } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-kbd"]

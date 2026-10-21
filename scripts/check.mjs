@@ -42,7 +42,7 @@ const FIXED_CLASS = new RegExp(
 const RAW_COLOUR =
   /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch)\(/;
 // Hosted-service coupling that is never legitimate in the public kit.
-const HOSTED = /UI_TOKEN|@tony-ui\/control|ui\.tony\.codes|packages\/control/;
+const HOSTED = /UI_TOKEN|ui\.tony\.codes|packages\/control/;
 // Network APIs, matched as identifiers in code rather than words in prose.
 const NETWORK = new Set([
   "fetch",

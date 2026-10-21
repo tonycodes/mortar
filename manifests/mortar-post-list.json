@@ -4,7 +4,7 @@
   "name": "PostList",
   "description": "Mortar marketing post list, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "PostList",
   "source": "src/marketing-sections.tsx",
   "capabilities": [],
@@ -21,7 +21,7 @@
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
       "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default: one below headingLevel)"
     },
-    "usage": "Import { PostList } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { PostList } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-action-link"]

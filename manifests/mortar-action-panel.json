@@ -4,7 +4,7 @@
   "name": "ActionPanel",
   "description": "Mortar action panel: a titled card with an explanation and one decisive action, with a danger tone for destructive settings.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ActionPanel",
   "source": "src/application.tsx",
   "capabilities": ["action"],
@@ -21,7 +21,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { ActionPanel } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ActionPanel } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": []

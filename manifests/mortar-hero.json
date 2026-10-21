@@ -4,7 +4,7 @@
   "name": "Hero",
   "description": "Mortar marketing hero, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Hero",
   "source": "src/marketing.tsx",
   "capabilities": [],
@@ -25,7 +25,7 @@
       "images": "ReactNode[] (image tiles shown as a staggered collage beside or below the copy; use instead of children)",
       "tone": "\"default\" | \"accent\" (default \"default\"; accent: a full-bleed band of the brand's accent fill, its gradient when it defines one, with on-accent copy and actions; the preview keeps the page's colours; a background takes precedence)"
     },
-    "usage": "Import { Hero } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Hero } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": ["mortar-action-link"]

@@ -4,7 +4,7 @@
   "name": "Navbar",
   "description": "Mortar navbar: horizontal application navigation with brand, current-page indicator and actions, collapsing into a disclosure menu on narrow screens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Navbar",
   "source": "src/application.tsx",
   "capabilities": ["navigation"],
@@ -20,7 +20,7 @@
       "label": "string",
       "className": "string"
     },
-    "usage": "Import { Navbar } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Navbar } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-button"]

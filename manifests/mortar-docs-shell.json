@@ -4,7 +4,7 @@
   "name": "DocsShell",
   "description": "Mortar documentation docs shell, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "DocsShell",
   "source": "src/docs.tsx",
   "capabilities": [],
@@ -28,7 +28,7 @@
       "logo": "ReactNode",
       "className": "string (layout only: margins or grid placement)"
     },
-    "usage": "Import { DocsShell } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { DocsShell } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The Menu button keeps its visible name and declares aria-haspopup=\"dialog\".",
     "dependencies": ["mortar-button"]

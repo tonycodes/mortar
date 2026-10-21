@@ -4,7 +4,7 @@
   "name": "Pricing",
   "description": "Mortar marketing pricing, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "Pricing",
   "source": "src/marketing.tsx",
   "capabilities": [],
@@ -24,7 +24,7 @@
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); plan names sit one level below",
       "extra": "{ name: string; description: string; price?: string; unit?: string; action: LinkAction } (a full-width tier band under the plans, e.g. enterprise or a discount; four plans lay out 4, 2 then 1 across)"
     },
-    "usage": "Import { Pricing } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { Pricing } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Annual prices show only while the billing toggle is visible. Unavailable plans show static status text and no purchase link.",
     "dependencies": ["mortar-action-link", "mortar-segmented-control"]

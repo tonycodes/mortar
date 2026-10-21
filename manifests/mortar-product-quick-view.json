@@ -4,7 +4,7 @@
   "name": "ProductQuickView",
   "description": "Mortar product quick view: a ProductOverview in a wide Modal with a link to the full product page.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "ProductQuickView",
   "source": "src/ecommerce.tsx",
   "capabilities": [],
@@ -31,7 +31,7 @@
       "gallery": "\"thumbnails\" | \"grid\" (default \"thumbnails\"; grid shows all images, first large and the rest tiered beneath)",
       "className": "string (class on the dialog's content wrapper)"
     },
-    "usage": "Import { ProductQuickView } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ProductQuickView } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": [

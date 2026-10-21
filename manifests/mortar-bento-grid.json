@@ -4,7 +4,7 @@
   "name": "BentoGrid",
   "description": "Mortar marketing bento grid, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "BentoGrid",
   "source": "src/marketing-sections.tsx",
   "capabilities": [],
@@ -21,7 +21,7 @@
       "className": "string (layout only: margins or grid placement)",
       "tone": "\"default\" | \"muted\" | \"inverse\" (the section band; inverse gives a dark section)"
     },
-    "usage": "Import { BentoGrid } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { BentoGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []

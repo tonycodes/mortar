@@ -4,7 +4,7 @@
   "name": "TeamGrid",
   "description": "Mortar marketing team grid, using central semantic tokens.",
   "stack": "react-tailwind",
-  "package": "@tony-ui/mortar",
+  "package": "@tonycodes-ui/mortar",
   "export": "TeamGrid",
   "source": "src/marketing-sections.tsx",
   "capabilities": [],
@@ -20,7 +20,7 @@
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)",
       "layout": "\"grid\" | \"large\" | \"list\" (default \"grid\": small square portraits; large: fewer columns of tall portraits; list: each portrait beside the name, role, bio and links)"
     },
-    "usage": "Import { TeamGrid } from @tony-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { TeamGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Placeholder avatars are hidden because the name is visible.",
     "dependencies": ["mortar-avatar"]
