@@ -359,8 +359,44 @@
 }
 /* The inverse band paints edge to edge of the sample, not the viewport. */
 .pg-brand-inverse {
-  margin: 0 -20px -20px;
+  margin: 0 -20px;
   overflow: clip;
+}
+/* The accent band follows the inverse band, edge to edge of the sample. */
+.pg-brand-accent {
+  margin: -20px -20px -20px;
+  overflow: clip;
+}
+.pg-brand-accent .m-cta {
+  padding: 32px 20px;
+}
+.pg-brand-accent .m-cta .m-actions {
+  margin-top: 20px;
+}
+.pg-brand-type {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pg-brand-type h4 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: var(--m-weight-semibold);
+  letter-spacing: var(--m-tracking-heading);
+}
+.pg-brand-type p {
+  margin: 0;
+  color: var(--m-secondary);
+}
+/* The gradient field's swatch: the fill as the preview paints it. */
+.pg-gradient-swatch {
+  display: block;
+  flex: none;
+  align-self: stretch;
+  width: 44px;
+  min-height: 24px;
+  border: 1px solid var(--m-line-strong);
+  border-radius: var(--m-radius-sm);
 }
 .pg-brand-inverse .m-marketing-section {
   padding: 32px 20px;
@@ -410,7 +446,8 @@
   width: 14px;
   height: 14px;
 }
-.pg-brand-inverse :is(h2, h3, h4, .m-section-title) {
+.pg-brand-inverse :is(h2, h3, h4, .m-section-title),
+.pg-brand-accent :is(h2, h3, h4, .m-section-title) {
   font-size: 22px;
 }
 .pg-ratio {

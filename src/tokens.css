@@ -1,11 +1,14 @@
 /* Mortar tokens, in three layers.
-   1. Brand contract: a brand declares --m-brand-l-* (light) and --m-brand-d-*
-      (dark) and nothing else. Every value is optional.
+   1. Brand contract: a brand declares --m-brand-l-* (light), --m-brand-d-*
+      (dark) and --m-brand-font / --m-brand-font-heading, and nothing else.
+      Every value is optional; omitted surfaces keep the defaults below.
    2. Appearance: resolves the contract into the live --m-* tokens and into the
       --m-inv-* tokens (the opposite appearance, used by inverse bands), so
       dark mode and inverse sections never need brand-specific CSS. Hover and
       active mix towards ink, which keeps on-primary contrast at least as high
-      as on the primary itself; selected tints the paper.
+      as on the primary itself; selected tints the paper. --m-accent-fill is
+      an image (the brand's accent gradient, or flat accent) for opt-in
+      accent buttons and bands, painted over background-color: --m-accent.
    3. Scales: type, space, radius, sizing, density and stacking.
    Status colours deliberately differ from brand colours. A light container
    inside a dark document resolves light. */
@@ -24,6 +27,10 @@
   --m-brand-l-focus: initial;
   --m-brand-l-link: initial;
   --m-brand-l-selected: initial;
+  --m-brand-l-paper: initial;
+  --m-brand-l-surface: initial;
+  --m-brand-l-sunken: initial;
+  --m-brand-l-accent-gradient: initial;
   --m-brand-d-primary: initial;
   --m-brand-d-primary-hover: initial;
   --m-brand-d-primary-active: initial;
@@ -33,6 +40,12 @@
   --m-brand-d-focus: initial;
   --m-brand-d-link: initial;
   --m-brand-d-selected: initial;
+  --m-brand-d-paper: initial;
+  --m-brand-d-surface: initial;
+  --m-brand-d-sunken: initial;
+  --m-brand-d-accent-gradient: initial;
+  --m-brand-font: initial;
+  --m-brand-font-heading: initial;
 }
 /* Neutral: the appearance fallbacks supply its colours; it keeps its tuned
    interaction states. */
@@ -65,11 +78,11 @@
 :root,
 [data-mortar-appearance="light"],
 [data-mortar-brand]:not([data-mortar-appearance]) {
-  --m-paper: #ffffff;
-  --m-surface: #ffffff;
-  --m-sunken: #f5f5f7;
+  --m-paper: var(--m-brand-l-paper, #ffffff);
+  --m-surface: var(--m-brand-l-surface, #ffffff);
+  --m-sunken: var(--m-brand-l-sunken, #f5f5f7);
   --m-line: #e5e5ea;
-  --m-line-strong: #8e8e93;
+  --m-line-strong: #8b8b90;
   --m-ink: #000000;
   --m-secondary: #3a3a3c;
   --m-muted: #6e6e73;
@@ -81,7 +94,7 @@
   --m-code-bg: #000000;
   --m-code-line: rgb(255 255 255 / 0.12);
   --m-code-ink: #f5f5f7;
-  --m-code-dim: #8e8e93;
+  --m-code-dim: #8b8b90;
   --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
   --m-scrim: rgb(0 0 0 / 0.5);
   --m-swatch-ring: rgb(0 0 0 / 0.12);
@@ -97,6 +110,10 @@
   --m-on-primary: var(--m-brand-l-on-primary, #ffffff);
   --m-accent: var(--m-brand-l-accent, var(--m-primary));
   --m-on-accent: var(--m-brand-l-on-accent, var(--m-on-primary));
+  --m-accent-fill: var(
+    --m-brand-l-accent-gradient,
+    linear-gradient(var(--m-accent), var(--m-accent))
+  );
   --m-focus: var(--m-brand-l-focus, var(--m-primary));
   --m-link: var(--m-brand-l-link, var(--m-primary));
   --m-selected: var(
@@ -104,9 +121,9 @@
     color-mix(in oklab, var(--m-primary) 8%, var(--m-paper))
   );
   --m-inv-color-scheme: dark;
-  --m-inv-paper: #000000;
-  --m-inv-surface: #1c1c1e;
-  --m-inv-sunken: #1c1c1e;
+  --m-inv-paper: var(--m-brand-d-paper, #000000);
+  --m-inv-surface: var(--m-brand-d-surface, #1c1c1e);
+  --m-inv-sunken: var(--m-brand-d-sunken, #1c1c1e);
   --m-inv-line: #3a3a3c;
   --m-inv-line-strong: #727278;
   --m-inv-ink: #f5f5f7;
@@ -129,6 +146,10 @@
   --m-inv-on-primary: var(--m-brand-d-on-primary, #000000);
   --m-inv-accent: var(--m-brand-d-accent, var(--m-inv-primary));
   --m-inv-on-accent: var(--m-brand-d-on-accent, var(--m-inv-on-primary));
+  --m-inv-accent-fill: var(
+    --m-brand-d-accent-gradient,
+    linear-gradient(var(--m-inv-accent), var(--m-inv-accent))
+  );
   --m-inv-focus: var(--m-brand-d-focus, var(--m-inv-primary));
   --m-inv-link: var(--m-brand-d-link, var(--m-inv-ink));
   --m-inv-selected: var(
@@ -143,9 +164,9 @@
 [data-mortar-appearance="dark"]
   [data-mortar-brand]:not([data-mortar-appearance]) {
   color-scheme: dark;
-  --m-paper: #000000;
-  --m-surface: #0e0e10;
-  --m-sunken: #1c1c1e;
+  --m-paper: var(--m-brand-d-paper, #000000);
+  --m-surface: var(--m-brand-d-surface, #0e0e10);
+  --m-sunken: var(--m-brand-d-sunken, #1c1c1e);
   --m-line: #29292c;
   --m-line-strong: #727278;
   --m-ink: #f5f5f7;
@@ -172,6 +193,10 @@
   --m-on-primary: var(--m-brand-d-on-primary, #000000);
   --m-accent: var(--m-brand-d-accent, var(--m-primary));
   --m-on-accent: var(--m-brand-d-on-accent, var(--m-on-primary));
+  --m-accent-fill: var(
+    --m-brand-d-accent-gradient,
+    linear-gradient(var(--m-accent), var(--m-accent))
+  );
   --m-focus: var(--m-brand-d-focus, var(--m-primary));
   --m-link: var(--m-brand-d-link, var(--m-ink));
   --m-selected: var(
@@ -179,11 +204,11 @@
     color-mix(in oklab, var(--m-primary) 10%, var(--m-paper))
   );
   --m-inv-color-scheme: light;
-  --m-inv-paper: #f5f5f7;
-  --m-inv-surface: #ffffff;
-  --m-inv-sunken: #ffffff;
+  --m-inv-paper: var(--m-brand-l-paper, #f5f5f7);
+  --m-inv-surface: var(--m-brand-l-surface, #ffffff);
+  --m-inv-sunken: var(--m-brand-l-sunken, #ffffff);
   --m-inv-line: #d1d1d6;
-  --m-inv-line-strong: #8e8e93;
+  --m-inv-line-strong: #8b8b90;
   --m-inv-ink: #000000;
   --m-inv-secondary: #3a3a3c;
   --m-inv-muted: #636366;
@@ -204,6 +229,10 @@
   --m-inv-on-primary: var(--m-brand-l-on-primary, #ffffff);
   --m-inv-accent: var(--m-brand-l-accent, var(--m-inv-primary));
   --m-inv-on-accent: var(--m-brand-l-on-accent, var(--m-inv-on-primary));
+  --m-inv-accent-fill: var(
+    --m-brand-l-accent-gradient,
+    linear-gradient(var(--m-inv-accent), var(--m-inv-accent))
+  );
   --m-inv-focus: var(--m-brand-l-focus, var(--m-inv-primary));
   --m-inv-link: var(--m-brand-l-link, var(--m-inv-primary));
   --m-inv-selected: var(
@@ -220,9 +249,9 @@
   :root:not([data-mortar-appearance])
     [data-mortar-brand]:not([data-mortar-appearance]) {
     color-scheme: dark;
-    --m-paper: #000000;
-    --m-surface: #0e0e10;
-    --m-sunken: #1c1c1e;
+    --m-paper: var(--m-brand-d-paper, #000000);
+    --m-surface: var(--m-brand-d-surface, #0e0e10);
+    --m-sunken: var(--m-brand-d-sunken, #1c1c1e);
     --m-line: #29292c;
     --m-line-strong: #727278;
     --m-ink: #f5f5f7;
@@ -249,6 +278,10 @@
     --m-on-primary: var(--m-brand-d-on-primary, #000000);
     --m-accent: var(--m-brand-d-accent, var(--m-primary));
     --m-on-accent: var(--m-brand-d-on-accent, var(--m-on-primary));
+    --m-accent-fill: var(
+      --m-brand-d-accent-gradient,
+      linear-gradient(var(--m-accent), var(--m-accent))
+    );
     --m-focus: var(--m-brand-d-focus, var(--m-primary));
     --m-link: var(--m-brand-d-link, var(--m-ink));
     --m-selected: var(
@@ -256,11 +289,11 @@
       color-mix(in oklab, var(--m-primary) 10%, var(--m-paper))
     );
     --m-inv-color-scheme: light;
-    --m-inv-paper: #f5f5f7;
-    --m-inv-surface: #ffffff;
-    --m-inv-sunken: #ffffff;
+    --m-inv-paper: var(--m-brand-l-paper, #f5f5f7);
+    --m-inv-surface: var(--m-brand-l-surface, #ffffff);
+    --m-inv-sunken: var(--m-brand-l-sunken, #ffffff);
     --m-inv-line: #d1d1d6;
-    --m-inv-line-strong: #8e8e93;
+    --m-inv-line-strong: #8b8b90;
     --m-inv-ink: #000000;
     --m-inv-secondary: #3a3a3c;
     --m-inv-muted: #636366;
@@ -281,6 +314,10 @@
     --m-inv-on-primary: var(--m-brand-l-on-primary, #ffffff);
     --m-inv-accent: var(--m-brand-l-accent, var(--m-inv-primary));
     --m-inv-on-accent: var(--m-brand-l-on-accent, var(--m-inv-on-primary));
+    --m-inv-accent-fill: var(
+      --m-brand-l-accent-gradient,
+      linear-gradient(var(--m-inv-accent), var(--m-inv-accent))
+    );
     --m-inv-focus: var(--m-brand-l-focus, var(--m-inv-primary));
     --m-inv-link: var(--m-brand-l-link, var(--m-inv-primary));
     --m-inv-selected: var(
@@ -299,6 +336,10 @@
   --m-font:
     -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
     sans-serif;
+  /* Headings and component titles. Unset by default, so they keep the font
+     they inherit (the body's --m-font); a brand's fonts.heading
+     (--m-brand-font-heading) wins over it. */
+  --m-font-heading: initial;
   --m-mono: "SF Mono", ui-monospace, Menlo, monospace;
   --m-weight-regular: 400;
   --m-weight-medium: 500;
@@ -388,7 +429,21 @@
   --m-on-primary: var(--m-inv-on-primary);
   --m-accent: var(--m-inv-accent);
   --m-on-accent: var(--m-inv-on-accent);
+  --m-accent-fill: var(--m-inv-accent-fill);
   --m-focus: var(--m-inv-focus);
   --m-link: var(--m-inv-link);
   --m-band: var(--m-inv-paper);
+}
+
+/* Accent wash for the accent hover and active states: the on-accent colour
+   with its lightness flipped to 0 or 1, so the fill moves away from its text.
+   Declared wherever --m-on-accent changes (appearance, brand, inverse band).
+   Browsers without relative colours leave it unset and keep the plain fill. */
+@supports (color: oklch(from white round(1 - l, 1) 0 0)) {
+  :root,
+  [data-mortar-appearance],
+  [data-mortar-brand],
+  [data-tone="inverse"] {
+    --m-accent-wash: oklch(from var(--m-on-accent) round(1 - l, 1) 0 0);
+  }
 }

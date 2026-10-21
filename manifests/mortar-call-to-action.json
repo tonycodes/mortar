@@ -15,7 +15,7 @@
       "title": "string",
       "description": "string",
       "actions": "LinkAction[]",
-      "tone": "\"default\" | \"muted\" | \"inverse\" (default: the page surface; muted: the sunken band; inverse: the inverse token remap)",
+      "tone": "\"default\" | \"muted\" | \"inverse\" | \"accent\" (default: the page surface; muted: the sunken band; inverse: the inverse token remap; accent: the brand's accent fill, its gradient when it defines one, with on-accent copy and actions)",
       "media": "ReactNode",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",

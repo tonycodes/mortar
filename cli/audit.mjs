@@ -108,6 +108,83 @@ function walk(root) {
   return files;
 }
 
+/** Index of the bracket that closes the one at `at`, skipping strings. */
+function closing(src, at) {
+  let depth = 0;
+  for (let i = at; i < src.length; i++) {
+    const c = src[i];
+    if (c === '"' || c === "'" || c === "`") {
+      // Quoted strings end at a newline, as in blankComments.
+      for (i++; i < src.length && src[i] !== c; i++) {
+        if (src[i] === "\\") i++;
+        else if (c !== "`" && src[i] === "\n") break;
+      }
+    } else if (c === "(" || c === "{" || c === "[") depth++;
+    else if (c === ")" || c === "}" || c === "]") {
+      depth--;
+      if (depth === 0) return i;
+    }
+  }
+  return src.length;
+}
+
+const BRAND_TYPE = /\bBrand(?:Definition|AppearanceTokens|Fonts)\b/;
+/**
+ * The [start, end] ranges of `src` that define a brand, where colour literals
+ * belong: the value of a `brandTokens=` prop, the arguments of brandToCss,
+ * brandToStyle and registerBrand, objects typed as or satisfying
+ * BrandDefinition (or BrandAppearanceTokens), the declarations in this file
+ * of names those reference, and `--m-brand-*` custom property values.
+ */
+export function brandRanges(src) {
+  const ranges = [];
+  // Object, array and call declarations in this file, by name.
+  const declarations = new Map();
+  for (const m of src.matchAll(
+    /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*(:[^=;]*)?=\s*(?=[{[(])/g,
+  )) {
+    const start = m.index + m[0].length;
+    const end = closing(src, start);
+    declarations.set(m[1], [start, end]);
+    const after = src.slice(end + 1, end + 80);
+    if (
+      BRAND_TYPE.test(m[2] ?? "") ||
+      new RegExp(`^\\s*(?:satisfies|as)\\s+[^;\\n]*${BRAND_TYPE.source}`).test(
+        after,
+      )
+    )
+      ranges.push([start, end]);
+  }
+  const withReferences = (start, end) => {
+    ranges.push([start, end]);
+    for (const name of src.slice(start, end + 1).match(/[A-Za-z_$][\w$]*/g) ??
+      [])
+      if (declarations.has(name)) ranges.push(declarations.get(name));
+  };
+  for (const m of src.matchAll(/\bbrandTokens\s*=\s*\{/g)) {
+    const start = m.index + m[0].length - 1;
+    withReferences(start, closing(src, start));
+  }
+  for (const m of src.matchAll(
+    /\b(?:brandToCss|brandToStyle|registerBrand)\s*\(/g,
+  )) {
+    const start = m.index + m[0].length - 1;
+    withReferences(start, closing(src, start));
+  }
+  // --m-brand-* values: a quoted string after a quoted key, or a CSS value up
+  // to the end of the declaration.
+  for (const m of src.matchAll(/--m-brand-[\w-]+(["'`]?)\s*:\s*/g)) {
+    const start = m.index + m[0].length;
+    const quote = src[start];
+    let end;
+    if (m[1] && (quote === '"' || quote === "'" || quote === "`"))
+      end = src.indexOf(quote, start + 1);
+    else end = src.slice(start).search(/[;}\n]/) + start;
+    ranges.push([start, end < start ? src.length : end]);
+  }
+  return ranges;
+}
+
 /**
  * Comments replaced by spaces (line numbers and offsets kept). Strings and
  * template literals are respected; single and double quoted strings end at a
@@ -677,7 +754,14 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           "Render the Mortar component instead of copying its classes; the class names are not a public API.",
         );
     }
+    // Colour literals that define a brand are where colours belong.
+    const brand = brandRanges(src);
+    const inBrand = (at) =>
+      brand.some(([start, end]) => at >= start && at <= end);
+    let lineStart = 0;
     src.split("\n").forEach((l, i) => {
+      const offset = lineStart;
+      lineStart += l.length + 1;
       for (const p of l.matchAll(PALETTE_CLASS))
         add(
           "raw-colour",
@@ -691,7 +775,9 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         (h) => /\d/.test(h[0]) || COLOURISH.test(l),
       );
       const fns = COLOURISH.test(l) ? [...l.matchAll(COLOUR_FN)] : [];
-      for (const h of [...hex, ...fns])
+      for (const h of [...hex, ...fns].filter(
+        (h) => !inBrand(offset + h.index),
+      ))
         add(
           "raw-colour",
           "warning",

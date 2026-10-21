@@ -13,7 +13,7 @@
   "contract": {
     "props": {
       "children": "ReactNode",
-      "variant": "primary | secondary | ghost | danger",
+      "variant": "primary | secondary | ghost | danger | accent (the brand's accent fill, its accent gradient when it defines one, with on-accent text)",
       "loading": "boolean (busy: aria-busy and aria-disabled, ignores activation, stays focusable)",
       "disabled": "boolean",
       "type": "button | submit | reset",

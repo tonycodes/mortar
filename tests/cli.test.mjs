@@ -347,6 +347,29 @@ test("the audit finds the seeded problems, with locations and fixes", async (t) 
   assert.equal(readFileSync(join(dir, "src/App.tsx"), "utf8"), before);
 });
 
+test("the audit does not flag colours that define a brand", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/Brand.tsx": readFileSync(
+        join(ROOT, "tests/fixtures/brand-colours/Brand.tsx"),
+        "utf8",
+      ),
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const brand = report.findings.filter(
+    (f) => f.file === "src/Brand.tsx" && f.rule === "raw-colour",
+  );
+  // brandTokens objects (inline and a const), brandToCss arguments, a
+  // BrandDefinition-typed and a satisfies object, and --m-brand-* values are
+  // exempt; the stray colour in the same file is still reported.
+  assert.deepEqual(
+    brand.map((f) => [f.line, f.message]),
+    [[31, "Raw colour #ff00aa in a file that renders Mortar components."]],
+  );
+});
+
 test("the audit finds nothing in a clean app", async (t) => {
   const dir = fixture("clean-app");
   t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -422,7 +445,10 @@ test("the CLI prints help, version, search, packets and audits", (t) => {
     JSON.parse(run("search", "pricing", "--json"))[0].name,
     "Pricing",
   );
-  assert.match(run("component", "Button"), /variant\?: "danger" \| "ghost"/);
+  assert.match(
+    run("component", "Button"),
+    /variant\?: "accent" \| "danger" \| "ghost"/,
+  );
   const packet = JSON.parse(run("packet", "AppShell", "--json"));
   assert.equal(packet.components[0].name, "AppShell");
   assert.match(run("guide", "theming"), /# Theming/);

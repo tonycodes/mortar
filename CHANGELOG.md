@@ -4,7 +4,22 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 ## Unreleased
 
+### Added
+
+- **Surfaces in the brand contract.** A brand can set `paper`, `surface` and `sunken` for each appearance (`--m-brand-l-paper|surface|sunken`, `--m-brand-d-paper|surface|sunken`), for example a navy dark page. Omitted, they keep today's values, and inverse bands take them from the other appearance. Mortar's text and status colours stay fixed, so check them against tinted surfaces: the brand builder's contrast table now does ([#59](https://github.com/tonycodes/mortar/issues/59)).
+- **Accent gradients.** `accentGradient` per appearance (`--m-brand-{l,d}-accent-gradient`) takes a `linear-`, `radial-` or `conic-gradient()` (or a `repeating-` form) whose stops are colours. It is painted only where a component opts in: Button and ActionLink `variant="accent"`, and `tone="accent"` on CallToAction, Hero and Banner, all with `onAccent` text. Without a gradient these paint the flat accent. The appearance exposes the fill as `--m-accent-fill` (an image, painted over `background-color: var(--m-accent)`) and `--m-inv-accent-fill` for inverse bands. On hover and active the fill takes a white or black wash chosen from the on-accent text (`--m-accent-wash`), so contrast rises instead of falling; browsers without relative colours keep the plain fill. The brand builder checks on-accent text against every stop at rest, hover and active.
+- **Heading font.** Headings and component titles (page, section, hero, card, settings, sign-in, auth, post, calendar and stacked-list titles, and prose headings) read `--m-font-heading`. It is unset by default, so headings keep the font they inherit; nothing changes until you set it. A brand can set `fonts: { body, heading }` (`--m-brand-font`, `--m-brand-font-heading`), which apply wherever the brand does, including a container-scoped ThemeProvider. Tailwind gains a `font-heading` utility, and `font-sans` follows a brand's body font.
+- `isBrandColour`, `isBrandGradient` and `isBrandFont` in `@tony-ui/mortar/brand` check a value before you save it. Fonts accept bare `var(--name)` entries, as framework font loaders such as `next/font` hand out.
+- The brand builder checks strong lines (`--m-line-strong`, control borders) at 3:1 on page, surface and sunken.
+
+### Fixed
+
+- **Brand values are checked as colour syntax.** `brandToStyle`, `brandToCss`, `registerBrand` and `brandTokens` accepted any value made of letters, digits and brackets, so `accent: "linear-gradient(…)"` or `url(…)` passed and then failed silently in the browser. A colour is now hex, a colour name (including `transparent` and `currentcolor`), or `rgb()`, `rgba()`, `hsl()`, `hsla()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()`, `color-mix()`, `light-dark()` or `var()`, with nested functions checked the same way. Anything else throws an error that names the key, such as `dark.accent`.
+- **The audit no longer flags brand colours as `raw-colour`.** Colours inside a `brandTokens={…}` value (and a `const` it references in the same file), the arguments of `brandToCss`, `brandToStyle` and `registerBrand`, objects typed as or satisfying `BrandDefinition`, and `--m-brand-*` values are where colours belong. Other colours in the same file are still reported.
+
 ### Changed
+
+- **`--m-line-strong` in light is `#8b8b90`** (was `#8e8e93`), and `--m-inv-line-strong` in dark with it. The old value was 2.99:1 on the default sunken surface, just under the 3:1 that control borders need.
 
 - **Packages are published to npmjs.com.** Install with a plain `npm install @tony-ui/mortar`; no registry configuration, account or token is needed. Releases are published from GitHub Actions with npm trusted publishing (OIDC, no long-lived token) and `--provenance`, so each version on npmjs.com links to the workflow run and commit that built it.
 - **The playground moved to GitHub Pages**, at https://mortar.tony.codes/playground/. The site root links the playground, GitHub, npm and the docs. The package `homepage` points there.
