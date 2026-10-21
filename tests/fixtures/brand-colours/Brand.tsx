@@ -1,7 +1,7 @@
 // Brand definitions for tests/cli.test.mjs: colour literals here define the
 // brand, so only the stray colour at the end is a raw-colour finding.
-import { Button, ThemeProvider } from "@tony-ui/mortar";
-import { brandToCss, type BrandDefinition } from "@tony-ui/mortar/brand";
+import { Button, ThemeProvider } from "@tonycodes-ui/mortar";
+import { brandToCss, type BrandDefinition } from "@tonycodes-ui/mortar/brand";
 
 const tenant = {
   light: { primary: "#1d4ed8", onPrimary: "#ffffff", paper: "#f8fafc" },

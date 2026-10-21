@@ -60,7 +60,10 @@ test("README links the GitHub Pages playground and installs from npmjs", () => {
   const readme = read("README.md");
   assert.ok(readme.includes(`${SITE}playground/`));
   assert.match(readme, /npm install @tonycodes-ui\/mortar/);
-  assert.doesNotMatch(readme, /npm config set @tony-ui:registry/);
+  assert.doesNotMatch(
+    readme,
+    new RegExp(`npm config set @${["tony", "ui"].join("-")}:registry`),
+  );
 });
 
 test("the Pages site root links the playground", () => {

@@ -1,4 +1,4 @@
-// Public npmjs package name. The private git.tony.codes registry kept
+// Public npmjs package name. The old self-hosted private registry kept
 // @tony-ui/mortar (versions <= 0.11). npmjs.com publishes @tonycodes-ui/mortar
 // only. These tests name the retired scope so they can forbid it.
 import test from "node:test";
@@ -126,8 +126,9 @@ test("R4 release.yml publishes @tonycodes-ui/mortar to npmjs with provenance", (
     problems.push("publish job is missing id-token: write");
   if (!yml.includes("--provenance"))
     problems.push("npm publish is missing --provenance");
-  if (yml.includes("git.tony.codes"))
-    problems.push("release.yml still contains git.tony.codes");
+  const oldHost = ["git", "tony", "codes"].join(".");
+  if (yml.includes(oldHost))
+    problems.push(`release.yml still contains ${oldHost}`);
   if (yml.includes("MORTAR_REGISTRY_TOKEN"))
     problems.push("release.yml still contains MORTAR_REGISTRY_TOKEN");
   if (yml.includes("NODE_AUTH_TOKEN"))

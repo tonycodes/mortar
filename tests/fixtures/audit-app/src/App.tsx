@@ -1,5 +1,10 @@
 // Seeded problems for tests/cli.test.mjs. Do not "fix" this file.
-import { Button, Hero, PageHeading, type MarketingTone } from "@tonycodes-ui/mortar";
+import {
+  Button,
+  Hero,
+  PageHeading,
+  type MarketingTone,
+} from "@tonycodes-ui/mortar";
 import { Card as Panel } from "@tonycodes-ui/mortar/src/layout";
 
 export function App({ tone }: { tone: MarketingTone }) {
