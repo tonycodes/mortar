@@ -7,7 +7,7 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 ### Changed
 
 - **Packages are published to npmjs.com.** Install with a plain `npm install @tony-ui/mortar`; no registry configuration, account or token is needed. Releases are published from GitHub Actions with npm trusted publishing (OIDC, no long-lived token) and `--provenance`, so each version on npmjs.com links to the workflow run and commit that built it.
-- **The playground moved to GitHub Pages**, at https://tonycodes.github.io/mortar/playground/. The site root links the playground, GitHub, npm and the docs. The package `homepage` points there.
+- **The playground moved to GitHub Pages**, at https://mortar.tony.codes/playground/. The site root links the playground, GitHub, npm and the docs. The package `homepage` points there.
 - **Everything is free and in this repository.** The hosted Mortar Cloud preview (agent identities, OAuth MCP connections, hosted audits and planned paid plans) is retired. The kit, docs, playground and agent tooling are MIT licensed here, with no accounts, licence checks, telemetry or hosted service. GitHub maintainer review is the only review gate.
 
 ### Migration
@@ -64,7 +64,7 @@ A project that must stay on 0.11 or earlier keeps its scope override (`@tony-ui:
 
 ### Added
 
-- **Playground brand builder** (`?page=brand`, [open it](https://tonycodes.github.io/mortar/playground/?page=brand)): edit a brand's light and dark values, including the optional tokens, and see them live in light, dark and inverse previews with overlays. It reports WCAG contrast for on-primary, hover, active, accent, link and focus as the browser resolves them, exports the CSS rule and the `brandTokens` object, and keeps the brand in the URL so it can be shared. Playground only; the package is unchanged.
+- **Playground brand builder** (`?page=brand`, [open it](https://mortar.tony.codes/playground/?page=brand)): edit a brand's light and dark values, including the optional tokens, and see them live in light, dark and inverse previews with overlays. It reports WCAG contrast for on-primary, hover, active, accent, link and focus as the browser resolves them, exports the CSS rule and the `brandTokens` object, and keeps the brand in the URL so it can be shared. Playground only; the package is unchanged.
 
 ### Changed
 

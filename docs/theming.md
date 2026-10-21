@@ -85,7 +85,7 @@ Inline custom properties apply only to that element's subtree. Menus and dialogs
 
 ### With the brand builder
 
-The playground's [brand builder](https://tonycodes.github.io/mortar/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens; empty fields show the value they derive. Light and dark previews, each with an inverse band and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent and for links, 3:1 for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
+The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens; empty fields show the value they derive. Light and dark previews, each with an inverse band and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent and for links, 3:1 for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
 
 ## Appearance before JavaScript runs
 

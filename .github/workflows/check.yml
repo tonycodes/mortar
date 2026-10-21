@@ -34,7 +34,7 @@ jobs:
           MORTAR_PLAYGROUND_PREBUILT: "1"
       # The GitHub Pages site: site/index.html at the root and the playground
       # under playground/. A relative base keeps the build valid at
-      # https://tonycodes.github.io/mortar/ and on any later custom domain.
+      # https://mortar.tony.codes/ and on any later custom domain.
       - name: Build the GitHub Pages site
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
