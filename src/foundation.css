@@ -15,7 +15,7 @@
     margin: 0;
     background: var(--m-paper);
     color: var(--m-ink);
-    font-family: var(--m-font);
+    font-family: var(--m-brand-font, var(--m-font));
     font-size: 15px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -43,6 +43,28 @@
   }
   [data-mortar] :where(h1, h2, h3, p, figure, dl) {
     margin: 0;
+  }
+  /* Brand fonts. Without a brand font each declaration is invalid, so the
+     element keeps the font it inherits: nothing changes until a brand sets
+     one. A container brand carries its body font; headings and component
+     titles take the brand's heading font, else --m-font-heading. Zero
+     specificity, so a component's own font (e.g. a mono title) still wins. */
+  :where([data-mortar-brand]:not(:root)) {
+    font-family: var(--m-brand-font);
+  }
+  :where(
+    [data-mortar] :is(h1, h2, h3, h4, h5, h6),
+    .m-page-title,
+    .m-section-title,
+    .m-card-title,
+    .m-settings-title,
+    .m-sign-in-title,
+    .m-auth-title,
+    .m-post-title,
+    .m-calendar-title,
+    .m-stacked-title
+  ) {
+    font-family: var(--m-brand-font-heading, var(--m-font-heading));
   }
   .m-required {
     margin-inline-start: 2px;
@@ -418,6 +440,16 @@
     color: var(--m-danger);
     border-color: var(--m-danger);
   }
+  /* Accent: the brand's accent fill (its gradient, or flat accent) under
+     on-accent text. Hover and active lay a wash over the fill that moves away
+     from the text: white under dark on-accent text, black under light. So
+     contrast only rises, on every stop, whatever the brand's colours. */
+  .m-button-accent {
+    background-color: var(--m-accent);
+    background-image: var(--m-accent-fill);
+    color: var(--m-on-accent);
+    border-color: transparent;
+  }
   .m-spinner {
     width: 13px;
     height: 13px;
@@ -435,6 +467,24 @@
   }
   .m-button-primary:active {
     background: var(--m-primary-active);
+  }
+  /* --m-accent-wash (tokens.css) moves the fill away from the on-accent text;
+     where it is unset the mix is transparent and the plain fill stays. */
+  .m-button-accent:hover {
+    background-image:
+      linear-gradient(
+        color-mix(in oklab, var(--m-accent-wash, transparent) 15%, transparent),
+        color-mix(in oklab, var(--m-accent-wash, transparent) 15%, transparent)
+      ),
+      var(--m-accent-fill);
+  }
+  .m-button-accent:active {
+    background-image:
+      linear-gradient(
+        color-mix(in oklab, var(--m-accent-wash, transparent) 28%, transparent),
+        color-mix(in oklab, var(--m-accent-wash, transparent) 28%, transparent)
+      ),
+      var(--m-accent-fill);
   }
   .m-button-secondary:hover,
   .m-button-ghost:hover {

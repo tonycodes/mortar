@@ -392,6 +392,42 @@
   :is(.m-marketing-section, .m-feature-section)[data-tone="muted"] {
     --m-band: var(--m-sunken);
   }
+  /* Accent tone (CallToAction, Hero and Banner): the brand's accent fill (its
+     accent gradient, or flat accent) under on-accent copy and actions. A
+     gradient is an image, so it paints over the flat accent. Media and
+     previews keep the page's tokens. */
+  :is(.m-cta, .m-hero, .m-banner)[data-tone="accent"] {
+    background-color: var(--m-accent);
+    background-image: var(--m-accent-fill);
+    color: var(--m-on-accent);
+  }
+  :is(.m-cta, .m-hero)[data-tone="accent"]
+    > :not(.m-hero-preview, .m-hero-tiles, .m-cta-media),
+  .m-banner[data-tone="accent"] {
+    --m-ink: var(--m-on-accent);
+    --m-secondary: var(--m-on-accent);
+    --m-muted: var(--m-on-accent);
+    --m-link: var(--m-on-accent);
+    --m-focus: var(--m-on-accent);
+    --m-line: color-mix(in oklab, var(--m-on-accent) 35%, transparent);
+    --m-line-strong: var(--m-on-accent);
+    /* Primary actions invert: on-accent with accent text, the same pair. */
+    --m-primary: var(--m-on-accent);
+    --m-primary-hover: var(--m-on-accent);
+    --m-primary-active: var(--m-on-accent);
+    --m-on-primary: var(--m-accent);
+    /* Secondary actions are outlined on the fill. */
+    --m-surface: transparent;
+    --m-sunken: color-mix(in oklab, var(--m-on-accent) 14%, transparent);
+  }
+  .m-hero[data-tone="accent"] > :is(.m-hero-preview, .m-hero-tiles),
+  .m-cta[data-tone="accent"] > .m-cta-media {
+    color: var(--m-ink);
+  }
+  /* Hover keeps the colour pair, so contrast holds; an inner ring marks it. */
+  :is(.m-cta, .m-hero, .m-banner)[data-tone="accent"] .m-button-primary:hover {
+    box-shadow: inset 0 0 0 2px var(--m-accent);
+  }
 
   /* == FeatureSection == */
   .m-feature-section {
@@ -651,6 +687,11 @@
   .m-hero[data-background] .m-hero-preview {
     color: var(--m-ink);
   }
+  /* Hero in the accent tone: a full-bleed band of the accent fill. */
+  .m-hero[data-tone="accent"] {
+    max-width: none;
+    padding-inline: max(32px, calc((100% - 1216px) / 2));
+  }
   @media (max-width: 900px) {
     .m-hero-split,
     .m-feature-section,
@@ -682,7 +723,7 @@
     .m-hero-description {
       font-size: 16px;
     }
-    .m-hero[data-background] {
+    .m-hero:is([data-background], [data-tone="accent"]) {
       padding-inline: 20px;
     }
   }

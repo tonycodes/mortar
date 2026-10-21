@@ -514,7 +514,7 @@
   }
   .m-metrics .m-metric-previous {
     color: var(--m-muted);
-    font: 13px var(--m-font);
+    font: 13px var(--m-brand-font, var(--m-font));
     letter-spacing: 0;
   }
   .m-metric-change,

@@ -72,3 +72,18 @@ export function mixOklab(a, b, percentA) {
   const [x, y] = [toOklab(a), toOklab(b)];
   return fromOklab(x.map((v, i) => v * t + y[i] * (1 - t)));
 }
+
+/** The accent hover wash: the text colour with its oklab lightness flipped to
+    0 or 1, as oklch(from on-accent round(1 - l, 1) 0 0) does in CSS. */
+export function accentWash(onAccent) {
+  return toOklab(onAccent)[0] < 0.5 ? "#ffffff" : "#000000";
+}
+/** `over` at `alpha` composited onto `base`, as the browser paints a
+    semi-transparent gradient layer over the fill (sRGB, gamma-encoded). */
+export function composite(base, over, alpha) {
+  const [b, o] = [channels(base), channels(over)];
+  return `#${b
+    .map((v, i) => Math.round(v * (1 - alpha) + o[i] * alpha))
+    .map((n) => n.toString(16).padStart(2, "0"))
+    .join("")}`;
+}

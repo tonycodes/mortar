@@ -8,7 +8,7 @@
 
 4. **central-fixes** — Contribute missing patterns centrally. Do not duplicate source, create repeated local wrappers or apply consumer CSS overrides.
 
-5. **semantic-themes** — Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme. Accent is a brand token, separate from ink, surface, and the feedback colours. Brands declare only the `--m-brand-l-*`/`--m-brand-d-*` contract; each appearance resolves `--m-accent`, `--m-on-accent` and their `--m-inv-*` twins from it, so every brand gets both without brand-specific CSS. A runtime brand comes from ThemeProvider `brandTokens`. CallToAction and a featured Pricing card use the page surface unless `tone="inverse"` opts into the inverse token remap. `ThemeProvider` `scope="container"` paints those tokens on a wrapper and leaves the document unchanged. The default scope is `document`.
+5. **semantic-themes** — Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme. Accent is a brand token, separate from ink, surface, and the feedback colours. Brands declare only the `--m-brand-*` contract (`--m-brand-l-*`, `--m-brand-d-*` and the brand fonts); each appearance resolves `--m-accent`, `--m-on-accent`, `--m-accent-fill`, the surfaces and their `--m-inv-*` twins from it, so every brand gets both without brand-specific CSS. A runtime brand comes from ThemeProvider `brandTokens`. CallToAction and a featured Pricing card use the page surface unless `tone="inverse"` opts into the inverse token remap. `ThemeProvider` `scope="container"` paints those tokens on a wrapper and leaves the document unchanged. The default scope is `document`.
 
 6. **interaction-quality** — Verify responsive layout, accessible names, keyboard operation, focus and loading/empty/error states. Automated checks alone cannot prove visual quality. A plan that is not available exposes a status and does not offer a purchase link. Column titles accept an explicit heading level so a page can keep a single `h1`.
 
@@ -27,7 +27,7 @@ Every component follows these rules. New props must fit them, and the code revie
   - Tables align columns with `start | end`, not `left | right`.
 - **Tone.**
   - Status uses `Tone` (`neutral | info | success | warning | danger`).
-  - Section surfaces use `tone: "default" | "muted" | "inverse"`.
+  - Section surfaces use `tone: "default" | "muted" | "inverse"`. Promotional bands (CallToAction, Hero and Banner) also take `"accent"`: the brand's accent fill, which is its accent gradient when it defines one, with on-accent text. Button and ActionLink take the same fill as `variant="accent"`. Each component offers only the tones it styles.
   - A destructive action is `tone="danger"`, and a destructive item in a list is `danger: true`.
   - Tone renders as `data-tone`.
 - **State.** Busy work is `loading`. Empty content is `empty?: { title; description?; action? }`. Errors are `error` (string).

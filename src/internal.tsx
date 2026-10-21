@@ -338,7 +338,7 @@ export function titledIntroSlots(props: IntroProps): ReactNode[] {
   return classedIntroSlots(props, "m-section-title");
 }
 /** `data-tone` for a section surface tone; the default tone sets no attribute. */
-export function sectionTone(tone?: "default" | "muted" | "inverse") {
+export function sectionTone(tone?: "default" | "muted" | "inverse" | "accent") {
   return tone && tone !== "default" ? tone : undefined;
 }
 

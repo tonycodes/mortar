@@ -41,7 +41,8 @@ import {
   useField,
 } from "./internal.js";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "ghost" | "danger";
+  /** accent: the brand's accent fill (its accent gradient when it defines one) with on-accent text. */
+  variant?: "primary" | "secondary" | "ghost" | "danger" | "accent";
   /**
    * Busy: shows a spinner, sets aria-busy and aria-disabled and ignores
    * activation. The button stays focusable, so focus is never lost.

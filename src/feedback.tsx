@@ -333,8 +333,8 @@ export function Banner({
   onDismiss?: () => void;
   label?: string;
   dismissLabel?: string;
-  /** "inverse" (default) flips the colours; "default" uses the page surface. */
-  tone?: "default" | "inverse";
+  /** "inverse" (default) flips the colours; "default" uses the page surface; "accent" paints the brand's accent fill (its accent gradient when it defines one) with on-accent text. */
+  tone?: "default" | "inverse" | "accent";
   /** bar: an edge-to-edge strip. floating: an inset, rounded panel with a shadow. */
   variant?: "bar" | "floating";
   /** inline: in the page flow. bottom: fixed to the bottom of the viewport, always with a dismiss button so it never covers content for good. */

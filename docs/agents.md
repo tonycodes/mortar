@@ -94,24 +94,24 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 
 `audit_app` reads the application's files and never changes them. It checks against the contracts of the Mortar version installed in the app (or, for releases older than this tooling, against the tool's own catalogue, and says so).
 
-| Rule                     | Severity | Finds                                                                                               |
-| ------------------------ | -------- | --------------------------------------------------------------------------------------------------- |
-| `not-declared`           | error    | Mortar imported but missing from package.json                                                       |
-| `not-installed`          | error    | Mortar imported but not in node_modules                                                             |
-| `version-mismatch`       | error    | The installed version does not satisfy the package.json range                                       |
-| `unknown-export`         | error    | A named import the installed version does not export, with the replacement for names removed in 0.6 |
-| `deep-import`            | error    | Imports or aliases into the package's `src` or `dist`                                               |
-| `unknown-prop`           | error    | A prop the component's contract does not declare, with the 0.6 rename where there is one            |
-| `invalid-value`          | error    | A literal outside the prop's declared union, such as `layout="centered"` (now `center`)             |
-| `css-override`           | error    | Consumer CSS selecting Mortar's `.m-*` classes or `[data-m-component]`                              |
-| `class-override`         | error    | A Tailwind arbitrary variant that targets `.m-*` classes, such as `[&_.m-button]:rounded-none`      |
-| `local-copy`             | error    | A copy of a Mortar source file, or code rendering Mortar's component marker                         |
-| `missing-styles`         | error    | No import of `@tony-ui/mortar/styles.css`                                                           |
-| `styles-order`           | warning  | Mortar's styles imported before Tailwind                                                            |
-| `missing-theme-provider` | warning  | Mortar components rendered without a `ThemeProvider`                                                |
-| `kit-class`              | warning  | Mortar-internal class names on the app's own markup                                                 |
-| `raw-colour`             | warning  | Hex, `rgb()`/`oklch()` colours or Tailwind palette classes in files that render Mortar components   |
-| `limited-data`           | info     | The installed release has no agent data, so a newer catalogue was used                              |
+| Rule                     | Severity | Finds                                                                                                                                                                                                                                                       |
+| ------------------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `not-declared`           | error    | Mortar imported but missing from package.json                                                                                                                                                                                                               |
+| `not-installed`          | error    | Mortar imported but not in node_modules                                                                                                                                                                                                                     |
+| `version-mismatch`       | error    | The installed version does not satisfy the package.json range                                                                                                                                                                                               |
+| `unknown-export`         | error    | A named import the installed version does not export, with the replacement for names removed in 0.6                                                                                                                                                         |
+| `deep-import`            | error    | Imports or aliases into the package's `src` or `dist`                                                                                                                                                                                                       |
+| `unknown-prop`           | error    | A prop the component's contract does not declare, with the 0.6 rename where there is one                                                                                                                                                                    |
+| `invalid-value`          | error    | A literal outside the prop's declared union, such as `layout="centered"` (now `center`)                                                                                                                                                                     |
+| `css-override`           | error    | Consumer CSS selecting Mortar's `.m-*` classes or `[data-m-component]`                                                                                                                                                                                      |
+| `class-override`         | error    | A Tailwind arbitrary variant that targets `.m-*` classes, such as `[&_.m-button]:rounded-none`                                                                                                                                                              |
+| `local-copy`             | error    | A copy of a Mortar source file, or code rendering Mortar's component marker                                                                                                                                                                                 |
+| `missing-styles`         | error    | No import of `@tony-ui/mortar/styles.css`                                                                                                                                                                                                                   |
+| `styles-order`           | warning  | Mortar's styles imported before Tailwind                                                                                                                                                                                                                    |
+| `missing-theme-provider` | warning  | Mortar components rendered without a `ThemeProvider`                                                                                                                                                                                                        |
+| `kit-class`              | warning  | Mortar-internal class names on the app's own markup                                                                                                                                                                                                         |
+| `raw-colour`             | warning  | Hex, `rgb()`/`oklch()` colours or Tailwind palette classes in files that render Mortar components, except where they define a brand (`brandTokens`, `brandToCss`/`brandToStyle`/`registerBrand` arguments, `BrandDefinition` objects, `--m-brand-*` values) |
+| `limited-data`           | info     | The installed release has no agent data, so a newer catalogue was used                                                                                                                                                                                      |
 
 The audit is a fast scanner, not a type checker. It does not see props passed through a spread (`{...props}`), components re-exported or wrapped under another name, class names built at runtime, or markup in `.vue`, `.svelte`, `.astro` or `.html` files. Run the app's typecheck and build as well.
 

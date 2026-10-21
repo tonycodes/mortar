@@ -20,7 +20,7 @@
     },
     {
       "id": "semantic-themes",
-      "instruction": "Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme. Accent is a brand token, separate from ink, surface, and the feedback colours. Brands declare only the --m-brand-l-*/--m-brand-d-* contract; each appearance resolves --m-accent, --m-on-accent and their --m-inv-* twins from it, so every brand gets both without brand-specific CSS. A runtime brand comes from ThemeProvider brandTokens. CallToAction and a featured Pricing card use the page surface unless tone=\"inverse\" opts into the inverse token remap. ThemeProvider scope=\"container\" paints those tokens on a wrapper and leaves the document unchanged. The default scope is document."
+      "instruction": "Use semantic tokens; keep brand separate from appearance and feedback colours. Verify every supported theme. Accent is a brand token, separate from ink, surface, and the feedback colours. Brands declare only the --m-brand-* contract (--m-brand-l-*, --m-brand-d-* and the brand fonts); each appearance resolves --m-accent, --m-on-accent, --m-accent-fill, the surfaces and their --m-inv-* twins from it, so every brand gets both without brand-specific CSS. A runtime brand comes from ThemeProvider brandTokens. CallToAction and a featured Pricing card use the page surface unless tone=\"inverse\" opts into the inverse token remap. ThemeProvider scope=\"container\" paints those tokens on a wrapper and leaves the document unchanged. The default scope is document."
     },
     {
       "id": "interaction-quality",

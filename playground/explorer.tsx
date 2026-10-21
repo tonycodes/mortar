@@ -34,7 +34,10 @@ export const ordered = kits.flatMap((kit) =>
 
 /** URL keys the brand builder (`?page=brand`) owns; other pages drop them. */
 export const isBrandParam = (key: string) =>
-  key === "name" || /^[ld]-[a-z-]+$/.test(key);
+  key === "name" ||
+  key === "font" ||
+  key === "font-heading" ||
+  /^[ld]-[a-z-]+$/.test(key);
 /** Keys that choose what the page shows; choosing one clears the others. */
 const PLACES = [
   "component",

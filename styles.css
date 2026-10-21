@@ -29,7 +29,12 @@
   --color-secondary: var(--m-secondary);
   --color-selected: var(--m-selected);
   --color-link: var(--m-link);
-  --font-sans: var(--m-font);
+  /* A brand's fonts win where it applies; otherwise the scale tokens. */
+  --font-sans: var(--m-brand-font, var(--m-font));
+  --font-heading: var(
+    --m-brand-font-heading,
+    var(--m-font-heading, var(--m-brand-font, var(--m-font)))
+  );
   --font-mono: var(--m-mono);
   /* Weights equal Tailwind's defaults, so these follow a retheme without
      changing anything until one happens. */
