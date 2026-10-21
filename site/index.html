@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mortar</title>
+    <meta
+      name="description"
+      content="Mortar: a free, MIT-licensed design foundation with application, marketing, docs and ecommerce UI for React 19 and Tailwind CSS 4."
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fafaf9;
+        --fg: #1c1917;
+        --muted: #57534e;
+        --line: #e7e5e4;
+        --card: #ffffff;
+        --link: #1d4ed8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0c0a09;
+          --fg: #f5f5f4;
+          --muted: #a8a29e;
+          --line: #292524;
+          --card: #1c1917;
+          --link: #93c5fd;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          16px/1.6 system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        max-width: 44rem;
+        margin: 0 auto;
+        padding: 4rem 1rem;
+      }
+      h1 {
+        margin: 0 0 0.5rem;
+        font-size: 2.5rem;
+        line-height: 1.1;
+      }
+      p {
+        color: var(--muted);
+        margin: 0 0 1.5rem;
+      }
+      ul {
+        list-style: none;
+        margin: 2rem 0;
+        padding: 0;
+        display: grid;
+        gap: 0.75rem;
+      }
+      li a {
+        display: block;
+        padding: 1rem 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: 0.75rem;
+        background: var(--card);
+        color: var(--fg);
+        text-decoration: none;
+      }
+      li a:hover {
+        border-color: var(--muted);
+      }
+      li a:focus-visible {
+        outline: 2px solid var(--link);
+        outline-offset: 2px;
+      }
+      li strong {
+        display: block;
+      }
+      li span {
+        color: var(--muted);
+        font-size: 0.9375rem;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.9375rem;
+      }
+      footer {
+        font-size: 0.875rem;
+      }
+      footer a {
+        color: var(--link);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Mortar</h1>
+      <p>
+        A shared design foundation with Application, Marketing, Docs and
+        Ecommerce UI for React 19 and Tailwind CSS 4. Free and MIT licensed: no
+        account, licence check, telemetry or hosted service.
+      </p>
+      <p><code>npm install @tony-ui/mortar</code></p>
+      <ul>
+        <li>
+          <a href="playground/">
+            <strong>Playground</strong>
+            <span
+              >Every component, page template and theme, live in the
+              browser.</span
+            >
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/tonycodes/mortar#readme">
+            <strong>Documentation</strong>
+            <span>Install, theming, routing and contribution guides.</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.npmjs.com/package/@tony-ui/mortar">
+            <strong>npm package</strong>
+            <span
+              >@tony-ui/mortar on npmjs.com, published with provenance.</span
+            >
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/tonycodes/mortar">
+            <strong>GitHub</strong>
+            <span>Source, issues, pull requests and releases.</span>
+          </a>
+        </li>
+      </ul>
+      <footer>
+        <p>
+          <a href="https://github.com/tonycodes/mortar/blob/main/CHANGELOG.md"
+            >Changelog</a
+          >
+          ·
+          <a href="https://github.com/tonycodes/mortar/blob/main/LICENSE"
+            >MIT licence</a
+          >
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
