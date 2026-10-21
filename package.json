@@ -70,12 +70,16 @@
   },
   "license": "MIT",
   "publishConfig": {
-    "registry": "https://git.tony.codes/api/packages/tony/npm/",
-    "access": "public"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public",
+    "provenance": true
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/tonycodes/mortar.git"
   },
-  "homepage": "https://mortar.tony.codes/"
+  "homepage": "https://tonycodes.github.io/mortar/",
+  "bugs": {
+    "url": "https://github.com/tonycodes/mortar/issues"
+  }
 }

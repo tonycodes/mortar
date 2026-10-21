@@ -6,24 +6,28 @@ on:
     types: [completed]
 permissions:
   contents: read
-  actions: read
 concurrency:
-  group: playground-production
+  group: github-pages
   cancel-in-progress: false
 jobs:
   deploy:
+    # Publishes the static site that the checks built for this exact main commit
+    # to GitHub Pages. No checkout, dependency install or repository code runs here.
     if: >-
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.event == 'push' &&
       github.event.workflow_run.head_branch == 'main' &&
       github.event.workflow_run.head_repository.full_name == github.repository
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      pages: write
+      id-token: write
     environment:
-      name: playground-production
-      url: https://mortar.tony.codes/playground/
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      # Deliberately no checkout, dependency install or execution of artifact code.
       - name: Download the checked main artifact
         env:
           GH_TOKEN: ${{ github.token }}
@@ -38,26 +42,29 @@ jobs:
             echo 'Superseded run; waiting for the latest main checks.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          ARTIFACT_ID=$(gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" --jq ".artifacts[] | select(.name == \"mortar-playground-production-$SHA\") | .id")
+          ARTIFACT_ID=$(gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" --jq ".artifacts[] | select(.name == \"mortar-pages-$SHA\") | .id")
           [[ "$ARTIFACT_ID" =~ ^[0-9]+$ ]]
-          gh api "repos/$REPO/actions/artifacts/$ARTIFACT_ID/zip" > "$RUNNER_TEMP/playground.zip"
-          echo "ARTIFACT_ID=$ARTIFACT_ID" >> "$GITHUB_ENV"
-      - name: Activate verified static release
-        if: env.ARTIFACT_ID != ''
+          gh api "repos/$REPO/actions/artifacts/$ARTIFACT_ID/zip" > "$RUNNER_TEMP/pages.zip"
+          SITE="$RUNNER_TEMP/site"
+          mkdir "$SITE"
+          unzip -p "$RUNNER_TEMP/pages.zip" site.tar.gz | tar -xz --no-same-owner --no-same-permissions -C "$SITE"
+          # Only regular files and directories; the checked build wrote this commit.
+          [ -z "$(find "$SITE" ! -type f ! -type d)" ]
+          [ -f "$SITE/index.html" ] && [ -f "$SITE/playground/index.html" ]
+          [ "$(cat "$SITE/commit.txt")" = "$SHA" ]
+          echo "SITE=$SITE" >> "$GITHUB_ENV"
+      - name: Upload the site for GitHub Pages
+        if: env.SITE != ''
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.SITE }}
+      - name: Deploy to GitHub Pages
+        if: env.SITE != ''
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Summarise
+        if: env.SITE != ''
         env:
           SHA: ${{ github.event.workflow_run.head_sha }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
-          DEPLOY_KEY: ${{ secrets.PLAYGROUND_DEPLOY_KEY }}
-          KNOWN_HOSTS: ${{ vars.PLAYGROUND_KNOWN_HOSTS }}
-          DEPLOY_HOST: ${{ vars.PLAYGROUND_DEPLOY_HOST }}
-        run: |
-          set -euo pipefail
-          umask 077
-          KEY="$RUNNER_TEMP/playground-key"
-          HOSTS="$RUNNER_TEMP/playground-known-hosts"
-          trap 'rm -f "$KEY" "$HOSTS"' EXIT
-          printf '%s\n' "$DEPLOY_KEY" > "$KEY"
-          printf '%s\n' "$KNOWN_HOSTS" > "$HOSTS"
-          ssh -T -i "$KEY" -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o "UserKnownHostsFile=$HOSTS" \
-            "mortar-playground@$DEPLOY_HOST" "deploy $SHA $RUN_ID $ARTIFACT_ID" < "$RUNNER_TEMP/playground.zip"
-          echo "Deployed [$SHA](https://mortar.tony.codes/playground/) after successful main checks." >> "$GITHUB_STEP_SUMMARY"
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: echo "Deployed $SHA to [$PAGE_URL]($PAGE_URL) ([playground](${PAGE_URL}playground/)) after successful main checks." >> "$GITHUB_STEP_SUMMARY"

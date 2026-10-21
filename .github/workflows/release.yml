@@ -10,7 +10,9 @@ concurrency:
   group: npm-release
   cancel-in-progress: false
 env:
-  REGISTRY: https://git.tony.codes/api/packages/tony/npm/
+  REGISTRY: https://registry.npmjs.org/
+  # npm trusted publishing (OIDC) needs npm 11.5.1 or newer; pinned exactly.
+  NPM_VERSION: 11.6.2
 jobs:
   prepare:
     # Builds the exact checked main commit without any release credential.
@@ -50,6 +52,14 @@ jobs:
             echo "publish=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          # A version tagged on another commit was released already (0.11 and
+          # earlier went only to the retired owner-hosted registry): never re-release it.
+          if TAGGED=$(gh api "repos/$REPO/commits/v$VERSION" --jq .sha 2>/dev/null) && [ "$TAGGED" != "$SHA" ]; then
+            echo "v$VERSION already belongs to $TAGGED; nothing to release." >> "$GITHUB_STEP_SUMMARY"
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # npmjs.com answers anonymous reads; E404 means nothing is published under that name.
           if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" > "$RUNNER_TEMP/view.txt" 2> "$RUNNER_TEMP/view.err"; then
             if [ -s "$RUNNER_TEMP/view.txt" ]; then
               echo "$VERSION is already published; nothing to release." >> "$GITHUB_STEP_SUMMARY"
@@ -92,16 +102,20 @@ jobs:
           retention-days: 30
 
   publish:
-    # Receives the registry token; never checks out or runs repository code.
+    # Authenticates to npmjs.com with a short-lived OIDC token (npm trusted
+    # publishing); no long-lived registry token exists anywhere. Never checks out
+    # or runs repository code. The npm trusted publisher is bound to this
+    # repository, this workflow file (release.yml) and the npm-release environment.
     needs: prepare
     if: needs.prepare.outputs.publish == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     environment:
       name: npm-release
-      url: https://github.com/${{ github.repository }}/releases/tag/v${{ needs.prepare.outputs.version }}
+      url: https://www.npmjs.com/package/@tony-ui/mortar/v/${{ needs.prepare.outputs.version }}
     permissions:
       contents: write
+      id-token: write
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -110,8 +124,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          registry-url: ${{ env.REGISTRY }}
+          registry-url: https://registry.npmjs.org
           scope: "@tony-ui"
+      - name: Install the pinned npm CLI
+        run: |
+          set -euo pipefail
+          npm install -g "npm@$NPM_VERSION"
+          [ "$(npm --version)" = "$NPM_VERSION" ]
+          # Registry reads go out anonymously, never with setup-node's placeholder token.
+          : > "$RUNNER_TEMP/anonymous.npmrc"
       - name: Verify the archive against its provenance
         working-directory: ${{ runner.temp }}/release
         env:
@@ -156,30 +177,36 @@ jobs:
             # The version's CHANGELOG.md section, extracted at the checked commit.
             gh release create "$TAG" --repo "$REPO" --verify-tag --title "$TAG" --notes-file notes.md "${PRERELEASE[@]}" "$TGZ" provenance.json
           fi
-      - name: Publish the exact archive
+      - name: Publish the exact archive with provenance
         working-directory: ${{ runner.temp }}/release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.MORTAR_REGISTRY_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
           set -euo pipefail
-          [ -n "$NODE_AUTH_TOKEN" ] || { echo "::error::MORTAR_REGISTRY_TOKEN is not set on the npm-release environment"; exit 1; }
           DIST_TAG=latest
           [[ "$VERSION" == *-* ]] && DIST_TAG=next
-          if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" 2>/dev/null | grep -q .; then
+          if npm view "@tony-ui/mortar@$VERSION" version --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" 2>/dev/null | grep -q .; then
             echo "$VERSION was published by an earlier attempt; verifying it."
           else
-            npm publish "tony-ui-mortar-$VERSION.tgz" --registry "$REGISTRY" --tag "$DIST_TAG"
+            # npm exchanges this job's OIDC token for a short-lived publish token.
+            # --provenance attests that this workflow run built the package.
+            npm publish "./tony-ui-mortar-$VERSION.tgz" --registry "$REGISTRY" --tag "$DIST_TAG" --provenance --access public
           fi
       - name: Verify the registry serves the released archive
         working-directory: ${{ runner.temp }}/release
         env:
-          # setup-node otherwise sends a placeholder token, which the registry rejects.
-          NODE_AUTH_TOKEN: ${{ secrets.MORTAR_REGISTRY_TOKEN }}
           VERSION: ${{ needs.prepare.outputs.version }}
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
-          INTEGRITY=$(npm view "@tony-ui/mortar@$VERSION" dist.integrity --registry "$REGISTRY")
-          [ "$INTEGRITY" = "$(jq -r .integrity provenance.json)" ] || { echo "::error::Registry integrity $INTEGRITY differs from provenance"; exit 1; }
-          echo "Published [@tony-ui/mortar@$VERSION](https://github.com/$REPO/releases/tag/v$VERSION) from the checked main commit." >> "$GITHUB_STEP_SUMMARY"
+          EXPECTED=$(jq -r .integrity provenance.json)
+          INTEGRITY=""
+          # A new version can take a short while to reach every npmjs.com edge.
+          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+            INTEGRITY=$(npm view "@tony-ui/mortar@$VERSION" dist.integrity --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" --prefer-online 2>/dev/null || true)
+            [ -n "$INTEGRITY" ] && break
+            echo "Waiting for npmjs.com to serve $VERSION (attempt $attempt of 10)."
+            sleep 15
+          done
+          [ "$INTEGRITY" = "$EXPECTED" ] || { echo "::error::Registry integrity '$INTEGRITY' differs from provenance $EXPECTED"; exit 1; }
+          echo "Published [@tony-ui/mortar@$VERSION](https://www.npmjs.com/package/@tony-ui/mortar/v/$VERSION) ([GitHub release](https://github.com/$REPO/releases/tag/v$VERSION)) from the checked main commit." >> "$GITHUB_STEP_SUMMARY"

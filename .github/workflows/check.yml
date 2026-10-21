@@ -23,8 +23,6 @@ jobs:
       - name: Check public kit
         id: kit-check
         run: npm run check
-      - name: Test deployment receiver safety
-        run: python3 -m unittest discover -s ops/tests
       - run: npx playwright install --with-deps chromium
       # Both suites serve the playground-dist that npm run check built.
       - run: npm run test:browser
@@ -34,17 +32,25 @@ jobs:
         run: npm run test:visual
         env:
           MORTAR_PLAYGROUND_PREBUILT: "1"
-      - name: Build production playground
+      # The GitHub Pages site: site/index.html at the root and the playground
+      # under playground/. A relative base keeps the build valid at
+      # https://tonycodes.github.io/mortar/ and on any later custom domain.
+      - name: Build the GitHub Pages site
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          npm run build:playground -- --base /playground/ --outDir ../playground-production
-          tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -czf release.tar.gz -C playground-production .
-      - name: Upload checked production playground
+          set -euo pipefail
+          rm -rf pages-site
+          npm run build:playground -- --base ./ --outDir ../pages-site/playground
+          cp site/index.html pages-site/index.html
+          touch pages-site/.nojekyll
+          echo "$GITHUB_SHA" > pages-site/commit.txt
+          tar --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner -czf site.tar.gz -C pages-site .
+      - name: Upload the checked GitHub Pages site
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
-          name: mortar-playground-production-${{ github.sha }}
-          path: release.tar.gz
+          name: mortar-pages-${{ github.sha }}
+          path: site.tar.gz
           if-no-files-found: error
           retention-days: 14
       - name: Upload interactive review playground
@@ -70,6 +76,6 @@ jobs:
         run: |
           echo '## Component review' >> "$GITHUB_STEP_SUMMARY"
           echo 'Review this exact commit in the pull request. Download the playground artifact, extract it, and serve it locally with `python3 -m http.server 4340 --bind 127.0.0.1`. Open http://127.0.0.1:4340. Inspect the browser-report artifact for both-theme screenshots and accessibility results.' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Artifacts contain untrusted contribution code. Use a separate browser profile; do not serve them on the production/authentication origin. No cloud approval is required after GitHub maintainer review.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Artifacts contain untrusted contribution code. Use a separate browser profile; do not serve them on the production origin. GitHub maintainer review is the only review gate.' >> "$GITHUB_STEP_SUMMARY"
 
-# No package-publishing or cloud-governance credentials belong in this workflow.
+# No package-publishing or deployment credentials belong in this workflow.

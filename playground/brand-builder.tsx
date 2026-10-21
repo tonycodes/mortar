@@ -450,7 +450,7 @@ function Sample({
               <Button variant="secondary">Learn more</Button>
             </div>
             <p className="pg-brand-inverse-link">
-              <a href="https://mortar.tony.codes/">Mortar home</a>
+              <a href="https://github.com/tonycodes/mortar">Mortar home</a>
             </p>
           </Section>
         </div>
