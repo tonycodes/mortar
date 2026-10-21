@@ -2,6 +2,17 @@
 
 Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
 
+## Unreleased
+
+### Added
+
+- **Open agent tooling in the package: an MCP server and the `mortar` CLI.** They read the installed version's catalogue, contracts, examples and guides, run locally, work offline and need no account. They add no runtime dependencies. See [Mortar for coding agents](https://github.com/tonycodes/mortar/blob/main/docs/agents.md).
+  - `mortar mcp` is a stdio MCP server (`claude mcp add mortar -- npx -y @tony-ui/mortar mcp`) with six tools: `search_components`, `get_component` (props with types and defaults, usage notes, dependencies, marker, tested states and a JSX example), `get_build_packet` (for component names or a free-text brief: the dependency closure, imports, CSS and ThemeProvider setup, design principles, API conventions and matching page templates), `get_guide`, `list_kits` and `audit_app`.
+  - `mortar search`, `component`, `packet`, `audit`, `guide` and `kits` give the same answers on the command line, with `--json`.
+  - `mortar audit [path]` is a read-only static audit of an application: version range, imports and props that the installed version does not have (with 0.6 rename suggestions), invalid prop values, CSS overriding `.m-*` classes or `[data-m-component]`, raw colours beside Mortar components, a missing `styles.css` import or ThemeProvider, deep imports and local copies of Mortar source. It exits 1 when it finds errors.
+  - An agent skill, `skills/mortar/SKILL.md` (`npx mortar skill`), with the workflow defaults: search, packet, compose, audit, and contribute by pull request.
+- The package now also ships `AGENTS.md`, `CONTRIBUTING.md`, `TESTING.md` and the guides in `docs/`, which the tools read.
+
 ## 0.11.0 (2026-10-20)
 
 ### Added

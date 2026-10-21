@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* Seeded problem: overriding the kit's own markup. */
+.m-button {
+  border-radius: 0;
+}
+
+.layout {
+  display: grid;
+}

@@ -1,0 +1,10 @@
+{
+  "name": "audit-app",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@tony-ui/mortar": "^0.5.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

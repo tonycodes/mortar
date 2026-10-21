@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@tony-ui/mortar/styles.css";
+
+.layout {
+  display: grid;
+}
