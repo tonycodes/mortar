@@ -1,13 +1,6 @@
 // Sign-in and registration page templates: each step of the flow composed
 // from AuthLayout and the auth fields. docs/auth-flows.md maps them out.
-import {
-  useEffect,
-  useRef,
-  useState,
-  type FormEvent,
-  type ReactNode,
-  type RefObject,
-} from "react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import * as UI from "../src/index.js";
 import {
   authIcons,
@@ -20,66 +13,23 @@ import {
 const EMAIL = "ana@example.com";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-interface FieldError {
-  /** Id of the field the error belongs to; the summary links to it. */
-  id: string;
-  message: string;
-}
 type Errors = Record<string, string | undefined>;
 
 /**
- * Errors from a failed submit, listed with links to their fields. It is an
- * alert and takes focus, so the problem is announced and the person can jump
- * straight to each field.
- */
-function ErrorSummary({
-  errors,
-  summaryRef,
-}: {
-  errors: FieldError[];
-  summaryRef: RefObject<HTMLDivElement | null>;
-}) {
-  if (!errors.length) return null;
-  return (
-    <div ref={summaryRef} tabIndex={-1}>
-      <UI.Notice title="There is a problem" tone="danger" announce>
-        <ul className="m-0 list-none p-0">
-          {errors.map((error) => (
-            <li key={error.id}>
-              <a
-                href={`#${error.id}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  document.getElementById(error.id)?.focus();
-                }}
-              >
-                {error.message}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </UI.Notice>
-    </div>
-  );
-}
-
-/**
- * Validation for one form: `check` returns field errors; on a failed submit
- * the summary takes focus once it has rendered.
+ * Validation for one form: `validate` shows the field errors, and the form's
+ * ErrorSummary lists them with links to their fields. It takes focus after
+ * every failed submit (`submitCount`), but not while a fixed field's error
+ * clears.
  */
 function useValidation(fields: Record<string, string>) {
   const [errors, setErrors] = useState<Errors>({});
   const [attempt, setAttempt] = useState(0);
-  const summaryRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (attempt) summaryRef.current?.focus();
-  }, [attempt]);
-  const list: FieldError[] = Object.entries(errors)
+  const list: UI.ErrorSummaryItem[] = Object.entries(errors)
     .filter((entry): entry is [string, string] => !!entry[1])
-    .map(([key, message]) => ({ id: fields[key], message }));
+    .map(([key, message]) => ({ message, target: fields[key] }));
   return {
     errors,
-    summary: <ErrorSummary errors={list} summaryRef={summaryRef} />,
+    summary: <UI.ErrorSummary errors={list} submitCount={attempt} />,
     /** Shows the errors; returns true when there are none. */
     validate(next: Errors) {
       setErrors(next);
@@ -374,35 +324,22 @@ export function SignUpTemplate() {
             form.clear("password");
           }}
         />
-        <UI.Stack gap="xs">
-          <UI.Checkbox
-            id="sign-up-terms"
-            checked={terms}
-            aria-invalid={!!form.errors.terms || undefined}
-            aria-describedby={
-              form.errors.terms ? "sign-up-terms-error" : undefined
-            }
-            onChange={(e) => {
-              setTerms(e.target.checked);
-              form.clear("terms");
-            }}
-            label={
-              <span>
-                I agree to the <a href="#terms">terms of service</a> and{" "}
-                <a href="#privacy">privacy policy</a>
-              </span>
-            }
-          />
-          {form.errors.terms && (
-            <p
-              id="sign-up-terms-error"
-              className="m-error text-xs"
-              role="alert"
-            >
-              {form.errors.terms}
-            </p>
-          )}
-        </UI.Stack>
+        <UI.Checkbox
+          id="sign-up-terms"
+          required
+          checked={terms}
+          error={form.errors.terms}
+          onChange={(e) => {
+            setTerms(e.target.checked);
+            form.clear("terms");
+          }}
+          label={
+            <span>
+              I agree to the <a href="#terms">terms of service</a> and{" "}
+              <a href="#privacy">privacy policy</a>
+            </span>
+          }
+        />
         <UI.Button type="submit" loading={request.loading}>
           Create account
         </UI.Button>

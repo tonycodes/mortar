@@ -152,6 +152,70 @@ export const implementations = {
     await expect(input).toBeChecked();
     await input.click();
     await expect(input).not.toBeChecked();
+    // An error is linked and marks the box invalid; fixing it keeps focus.
+    const terms = root.getByRole("checkbox", { name: /I agree to the terms/ });
+    await expect(terms).toHaveAttribute("aria-invalid", "true");
+    await expect(terms).toHaveAttribute("required", "");
+    await expect(terms).toHaveAccessibleDescription(
+      "Agree to the terms to continue",
+    );
+    await terms.focus();
+    await page.keyboard.press("Space");
+    await expect(terms).toBeChecked();
+    await expect(terms).not.toHaveAttribute("aria-invalid", "true");
+    await expect(root.getByText("Agree to the terms to continue")).toHaveCount(
+      0,
+    );
+    await expect(terms).toBeFocused();
+  },
+  async "error-summary"({ page, root }) {
+    const summary = root.getByRole("alert", { name: "There is a problem" });
+    const url = page.url();
+    // Shown as after a failed submit, but it does not take focus on load.
+    await expect(summary).toBeVisible();
+    await expect(summary).not.toBeFocused();
+    await expect(summary.getByRole("link")).toHaveText([
+      "Enter your email address",
+      "Choose a plan",
+      "Agree to the terms to continue",
+    ]);
+    // Each link focuses its field, a group's first radio, without a URL change.
+    const email = root.getByRole("textbox", { name: "Work email" });
+    await summary
+      .getByRole("link", { name: "Enter your email address" })
+      .click();
+    await expect(email).toBeFocused();
+    await summary.getByRole("link", { name: "Choose a plan" }).click();
+    await expect(
+      root.getByRole("group", { name: "Plan" }).getByRole("radio").first(),
+    ).toBeFocused();
+    await summary.getByRole("link", { name: /Agree to the terms/ }).focus();
+    await page.keyboard.press("Enter");
+    await expect(
+      root.getByRole("checkbox", { name: /I agree to the terms/ }),
+    ).toBeFocused();
+    expect(page.url()).toBe(url);
+    // A failed submit moves focus to the summary, even with the same errors.
+    const submit = root.getByRole("button", { name: "Book demo" });
+    await submit.click();
+    await expect(summary).toBeFocused();
+    await email.fill("ana@example.com");
+    await expect(summary.getByRole("link")).toHaveCount(2);
+    await expect(email).toBeFocused();
+    await submit.click();
+    await expect(summary).toBeFocused();
+    await root.getByRole("radio", { name: /Team/ }).check();
+    await root.getByRole("checkbox", { name: /I agree to the terms/ }).check();
+    await submit.click();
+    await expect(summary).toHaveCount(0);
+    await expect(root.getByLabel("Form result")).toHaveText("Booked");
+    // It takes focus when it appears again.
+    await email.fill("");
+    await submit.click();
+    await expect(summary).toBeFocused();
+    await expect(summary.getByRole("link")).toHaveText([
+      "Enter your email address",
+    ]);
   },
   async switch({ page, root }) {
     await expect(
