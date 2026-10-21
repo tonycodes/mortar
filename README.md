@@ -2,9 +2,9 @@
 
 A shared design foundation and purpose-built Application UI, Marketing UI, Docs UI and Ecommerce kits for React 19 and Tailwind CSS 4. MIT licensed. No account, token, registry connection or subscription is required to use the kit, including use by coding agents.
 
-The package is `@tony-ui/mortar`, distributed from owner-hosted infrastructure. Releases are immutable and publicly downloadable without a service account. Publishing is automatic and version-driven: merging a version bump to `main` publishes that version once the required checks pass ([release workflow](.github/workflows/release.yml), [process](CONTRIBUTING.md)). The current version is listed on the [GitHub releases](https://github.com/tonycodes/mortar/releases) page. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
+The package is [`@tony-ui/mortar` on npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar). Releases are immutable, publicly installable without any account or token, and published with npm provenance that links each version to the GitHub Actions run that built it. Publishing is automatic and version-driven: merging a version bump to `main` publishes that version once the required checks pass ([release workflow](.github/workflows/release.yml), [process](CONTRIBUTING.md)). The current version is listed on the [GitHub releases](https://github.com/tonycodes/mortar/releases) page. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
-[Explore the live playground](https://mortar.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Hosted agent services](#mortar-cloud-and-premium-services)
+[Explore the live playground](https://tonycodes.github.io/mortar/playground/) · [Contribute](CONTRIBUTING.md) · [Free and open](#free-and-open)
 
 ## See the kit
 
@@ -15,15 +15,15 @@ that are not yet in the latest npm release.
 
 **Marketing UI — a composed landing page in light mode.**
 
-[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://mortar.tony.codes/playground/?recipe=saas-landing&theme=light)
+[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://tonycodes.github.io/mortar/playground/?recipe=saas-landing&theme=light)
 
 **Application UI — a semantic table in dark mode, inside the shared explorer.**
 
-[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://mortar.tony.codes/playground/?component=Table&theme=dark)
+[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://tonycodes.github.io/mortar/playground/?component=Table&theme=dark)
 
 **Docs UI — navigation, search and an article outline using the shared DocsShell.**
 
-[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://mortar.tony.codes/playground/?component=DocsShell&theme=light)
+[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://tonycodes.github.io/mortar/playground/?component=DocsShell&theme=light)
 
 Open any screenshot to try its live example. Switch appearance, brand, density and
 example states in the playground.
@@ -31,11 +31,10 @@ example states in the playground.
 ## Install
 
 ```sh
-npm config set @tony-ui:registry https://git.tony.codes/api/packages/tony/npm/ --location=project
 npm install @tony-ui/mortar react react-dom tailwindcss
 ```
 
-No UI service credential is needed.
+No account, token or registry configuration is needed: the package is public on npmjs.com. Versions 0.11 and earlier were published only to the previous owner-hosted registry; if a project pins one of them, or has an `@tony-ui:registry` line in its `.npmrc`, see the [CHANGELOG](CHANGELOG.md) migration note.
 
 ## Changes and upgrades
 
@@ -49,7 +48,7 @@ Pack from this workspace (`npm pack` builds `dist` first):
 npm pack
 ```
 
-Install the resulting `tony-ui-mortar-<version>.tgz` in the consuming app, with React 19, React DOM 19 and Tailwind 4. Public releases use https://git.tony.codes/api/packages/tony/npm/.
+Install the resulting `tony-ui-mortar-<version>.tgz` in the consuming app, with React 19, React DOM 19 and Tailwind 4. Public releases come from npmjs.com.
 
 In the app's Tailwind CSS entry:
 
@@ -58,7 +57,7 @@ In the app's Tailwind CSS entry:
 @import "@tony-ui/mortar/styles.css";
 ```
 
-The package ships its component styles. Standalone use requires no source scanning or hosted account. The separately governed hosted workflow currently also requires `@source '../node_modules/@tony-ui/mortar/src';` in the CSS entry; generated agent starters include that policy declaration.
+The package ships its component styles. No source scanning or account is required.
 
 ```tsx
 import { ThemeProvider, AppShell, Button } from "@tony-ui/mortar";
@@ -81,44 +80,21 @@ The catalogue assigns each export to one purpose. Foundation primitives serve al
 
 Controls use native HTML and Headless UI. Tabs support arrow/Home/End navigation; dialogs and menus use Headless UI focus management. Density has a 44px control floor on coarse pointers. Feedback colours remain separate from the brand.
 
-## Mortar Cloud and premium services
+## Free and open
 
-The MIT kit is free to use, customise and contribute to, including commercial
-projects and agent-assisted development. Mortar Cloud is the separate hosted
-agent and governance service for keeping applications on a centrally controlled UI.
+Everything is free and lives in this repository under the MIT licence: the kit,
+its documentation, the playground and the agent tooling. Use, customise and
+contribute to it, including in commercial projects and agent-assisted development.
+There are no accounts, licence checks, telemetry, paid plans or hosted service;
+the kit makes no network calls of its own.
 
-| Free MIT kit                                          | Hosted cloud capabilities                                                     |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------- |
-| Components, purpose kits, themes and shared shells    | Registry discovery of approved components and dependency relationships        |
-| Local playground and component contracts              | Agent build packets with reusable components and service workflow defaults    |
-| Local baseline, browser and accessibility checks      | Registry-aware application audits against approved implementations            |
-| GitHub issues, contributions and maintainer PR review | OAuth MCP connections, individual agent credentials and stored audit evidence |
-
-The cloud service helps agents discover what to reuse and gives application teams
-consistent adoption rules and audit feedback. Component source review remains on
-GitHub; a cloud subscription is not required to contribute or install the kit.
-The kit contains no licence checks, telemetry or calls to the cloud service.
-
-**Current availability:** hosted onboarding is available as a preview. Paid plans,
-checkout, subscription activation and premium human-support terms are not yet
-launched. There is currently no purchase or premium-support activation step, and
-no published support SLA. The preview onboarding below does not purchase a plan.
-
-### Connect an agent to the hosted preview
-
-- **Coding agents:** give your agent [the onboarding guide](https://mortar.tony.codes/agent.md)
-  and your application brief. It follows the [service skill](https://mortar.tony.codes/agent-skill.md)
-  to register its own identity, discover components and run the hosted audit. No team
-  invitation or owner token is required. CLI onboarding needs Node 22 or newer.
-- **Remote MCP clients:** add `https://mortar.tony.codes/mcp` as the remote connector URL
-  and complete the browser OAuth consent flow. See the
-  [connector guide](https://mortar.tony.codes/mcp.md) for supported flows.
-- **Kit bugs and contributions:** use [GitHub issues](https://github.com/tonycodes/mortar/issues)
-  and [pull requests](CONTRIBUTING.md). This is community maintenance, not a paid
-  support entitlement. Do not put credentials or private project details in issues.
-
-Visit [the agent area](https://mortar.tony.codes/#agents) for the hosted entry point.
-The private service and its history are not covered by this repository's MIT licence.
+- **Packages** are published to [npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar)
+  from GitHub Actions with provenance.
+- **The playground** is hosted on [GitHub Pages](https://tonycodes.github.io/mortar/playground/).
+- **Bugs and contributions** go through [GitHub issues](https://github.com/tonycodes/mortar/issues)
+  and [pull requests](CONTRIBUTING.md); GitHub maintainer review is the only review
+  gate. This is community maintenance, not a paid support entitlement. Do not put
+  credentials or private project details in issues.
 
 ## Run the playground locally
 
@@ -130,13 +106,13 @@ npm run dev
 Open `http://127.0.0.1:4340`. The playground is this repository's standalone Vite
 application, built directly from `src`, `previews` and the component catalogue.
 It is the local visual development surface for new and updated components.
-No marketing-site process, service account or governance backend is required.
+No service account or backend is required.
 
-In production it has its own build and deployment at
-[mortar.tony.codes/playground/](https://mortar.tony.codes/playground/). It shares the domain
-and hosting infrastructure with the marketing/cloud site, but deploys independently.
-Merges to `main` deploy it after checks pass. Marketing-site changes and immutable
-npm releases have separate deployment/publication workflows. See [operations](ops/README.md).
+In production it is deployed to GitHub Pages at
+[tonycodes.github.io/mortar/playground/](https://tonycodes.github.io/mortar/playground/).
+Merges to `main` deploy it after checks pass; the Pages site root
+(`site/index.html`) links the playground, GitHub, npm and the docs. Package
+releases have their own workflow (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 
 ## Client-side routing
 
