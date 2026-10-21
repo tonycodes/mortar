@@ -441,8 +441,9 @@
     border-color: var(--m-danger);
   }
   /* Accent: the brand's accent fill (its gradient, or flat accent) under
-     on-accent text. Hover and active lay a wash of ink over the fill, as
-     primary's derived states mix towards ink. */
+     on-accent text. Hover and active lay a wash over the fill that moves away
+     from the text: white under dark on-accent text, black under light. So
+     contrast only rises, on every stop, whatever the brand's colours. */
   .m-button-accent {
     background-color: var(--m-accent);
     background-image: var(--m-accent-fill);
@@ -467,19 +468,21 @@
   .m-button-primary:active {
     background: var(--m-primary-active);
   }
+  /* --m-accent-wash (tokens.css) moves the fill away from the on-accent text;
+     where it is unset the mix is transparent and the plain fill stays. */
   .m-button-accent:hover {
     background-image:
       linear-gradient(
-        color-mix(in oklab, var(--m-ink) 15%, transparent),
-        color-mix(in oklab, var(--m-ink) 15%, transparent)
+        color-mix(in oklab, var(--m-accent-wash, transparent) 15%, transparent),
+        color-mix(in oklab, var(--m-accent-wash, transparent) 15%, transparent)
       ),
       var(--m-accent-fill);
   }
   .m-button-accent:active {
     background-image:
       linear-gradient(
-        color-mix(in oklab, var(--m-ink) 28%, transparent),
-        color-mix(in oklab, var(--m-ink) 28%, transparent)
+        color-mix(in oklab, var(--m-accent-wash, transparent) 28%, transparent),
+        color-mix(in oklab, var(--m-accent-wash, transparent) 28%, transparent)
       ),
       var(--m-accent-fill);
   }

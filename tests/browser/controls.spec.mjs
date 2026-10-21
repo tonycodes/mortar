@@ -273,3 +273,20 @@ test("a runtime brand themes the document and flips in inverse bands", async ({
     await background(page.getByRole("button", { name: "Inverse primary" })),
   ).toBe(LIGHT_BLUE);
 });
+
+// Review on #64: the accent hover and active wash moves away from the on-accent
+// text (white under dark text), so contrast rises instead of falling.
+test("the accent wash moves away from dark on-accent text", async ({
+  page,
+}) => {
+  await open(page, "brand-accent");
+  const button = page.getByRole("button", { name: "Accent action" });
+  const layers = () =>
+    button.evaluate((el) => getComputedStyle(el).backgroundImage);
+  expect(await layers()).not.toContain("oklab(1 0 0");
+  await button.hover();
+  expect(await layers()).toMatch(/^linear-gradient\(oklab\(1 0 0 \/ 0\.15\)/);
+  await page.mouse.down();
+  expect(await layers()).toMatch(/^linear-gradient\(oklab\(1 0 0 \/ 0\.28\)/);
+  await page.mouse.up();
+});

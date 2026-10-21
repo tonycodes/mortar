@@ -139,6 +139,14 @@ function TabsCase({ value: initial }: { value: string }) {
   );
 }
 
+const warm = {
+  light: {
+    accent: "#e0702a",
+    onAccent: "#111111",
+    accentGradient: "linear-gradient(90deg, #e0702a, #f59e0b)",
+  },
+};
+
 const acme = {
   light: { primary: "#1d4ed8", onPrimary: "#ffffff" },
   dark: { primary: "#93c5fd", onPrimary: "#0b1f4d" },
@@ -197,6 +205,16 @@ switch (scenario) {
         <div style={{ padding: 16 }}>
           <Button>Primary</Button>
           <Overlays />
+        </div>
+      </ThemeProvider>
+    );
+    break;
+  case "brand-accent":
+    // The review case on #64: a warm accent under dark on-accent text.
+    content = (
+      <ThemeProvider appearance="light" brand="warm" brandTokens={warm}>
+        <div style={{ padding: 16 }}>
+          <Button variant="accent">Accent action</Button>
         </div>
       </ThemeProvider>
     );

@@ -82,7 +82,7 @@
   --m-surface: var(--m-brand-l-surface, #ffffff);
   --m-sunken: var(--m-brand-l-sunken, #f5f5f7);
   --m-line: #e5e5ea;
-  --m-line-strong: #8e8e93;
+  --m-line-strong: #8b8b90;
   --m-ink: #000000;
   --m-secondary: #3a3a3c;
   --m-muted: #6e6e73;
@@ -94,7 +94,7 @@
   --m-code-bg: #000000;
   --m-code-line: rgb(255 255 255 / 0.12);
   --m-code-ink: #f5f5f7;
-  --m-code-dim: #8e8e93;
+  --m-code-dim: #8b8b90;
   --m-float: 0 12px 32px -12px rgb(0 0 0 / 0.14);
   --m-scrim: rgb(0 0 0 / 0.5);
   --m-swatch-ring: rgb(0 0 0 / 0.12);
@@ -208,7 +208,7 @@
   --m-inv-surface: var(--m-brand-l-surface, #ffffff);
   --m-inv-sunken: var(--m-brand-l-sunken, #ffffff);
   --m-inv-line: #d1d1d6;
-  --m-inv-line-strong: #8e8e93;
+  --m-inv-line-strong: #8b8b90;
   --m-inv-ink: #000000;
   --m-inv-secondary: #3a3a3c;
   --m-inv-muted: #636366;
@@ -293,7 +293,7 @@
     --m-inv-surface: var(--m-brand-l-surface, #ffffff);
     --m-inv-sunken: var(--m-brand-l-sunken, #ffffff);
     --m-inv-line: #d1d1d6;
-    --m-inv-line-strong: #8e8e93;
+    --m-inv-line-strong: #8b8b90;
     --m-inv-ink: #000000;
     --m-inv-secondary: #3a3a3c;
     --m-inv-muted: #636366;
@@ -433,4 +433,17 @@
   --m-focus: var(--m-inv-focus);
   --m-link: var(--m-inv-link);
   --m-band: var(--m-inv-paper);
+}
+
+/* Accent wash for the accent hover and active states: the on-accent colour
+   with its lightness flipped to 0 or 1, so the fill moves away from its text.
+   Declared wherever --m-on-accent changes (appearance, brand, inverse band).
+   Browsers without relative colours leave it unset and keep the plain fill. */
+@supports (color: oklch(from white round(1 - l, 1) 0 0)) {
+  :root,
+  [data-mortar-appearance],
+  [data-mortar-brand],
+  [data-tone="inverse"] {
+    --m-accent-wash: oklch(from var(--m-on-accent) round(1 - l, 1) 0 0);
+  }
 }

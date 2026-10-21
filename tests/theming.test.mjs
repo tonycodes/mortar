@@ -163,6 +163,9 @@ test("brand fonts are font-family lists only", () => {
     "'Fira Sans', Georgia, serif",
     '-apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif',
     "system-ui",
+    // Framework font loaders hand out a custom property, e.g. next/font.
+    "var(--font-inter)",
+    "var(--font-geist), system-ui, sans-serif",
   ])
     assert.ok(isBrandFont(value), value);
   for (const value of [
@@ -170,7 +173,10 @@ test("brand fonts are font-family lists only", () => {
     "Inter,",
     "Inter; color: red",
     "url(x)",
-    "var(--font)",
+    "var(--font, Inter)",
+    "var(--font) var(--other)",
+    "var(font)",
+    "var(--a;b)",
     "local(Inter)",
     '"Inter',
     "a { b }",

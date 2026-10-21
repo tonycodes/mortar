@@ -189,6 +189,7 @@ const PROBES = [
     ...FIELDS.filter((f) => f.group !== "gradient").map((f) => f.token),
     "--m-ink",
     "--m-muted",
+    "--m-line-strong",
   ]),
 ];
 
@@ -363,6 +364,25 @@ function luminance(hexColour: string) {
     return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+/** The accent hover or active wash over a fill colour: white under dark
+    on-accent text, black under light (OKLab lightness), as foundation.css
+    paints it, mixed in at `alpha`. */
+function washed(fill: string, onAccent: string, alpha: number) {
+  const [r, g, b] = (onAccent.slice(1).match(/../g) ?? []).map((d) => {
+    const v = parseInt(d, 16) / 255;
+    return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  });
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  const lightness = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  const wash = lightness < 0.5 ? 255 : 0;
+  return hex(
+    (fill.slice(1).match(/../g) ?? []).map((d) =>
+      Math.round(parseInt(d, 16) * (1 - alpha) + wash * alpha),
+    ) as [number, number, number],
+  );
 }
 function ratio(a?: string, b?: string) {
   if (!a || !b) return 0;
@@ -659,6 +679,28 @@ const CHECKS = [
     bg: "--m-sunken",
     min: 4.5,
   },
+  // Strong lines (input and control borders) are non-text: 3:1.
+  {
+    id: "line-page",
+    label: "Strong line on page",
+    fg: "--m-line-strong",
+    bg: "--m-paper",
+    min: 3,
+  },
+  {
+    id: "line-surface",
+    label: "Strong line on surface",
+    fg: "--m-line-strong",
+    bg: "--m-surface",
+    min: 3,
+  },
+  {
+    id: "line-sunken",
+    label: "Strong line on sunken",
+    fg: "--m-line-strong",
+    bg: "--m-sunken",
+    min: 3,
+  },
   {
     id: "focus",
     label: "Focus ring on page",
@@ -703,6 +745,14 @@ function Contrast({
       // Inverse bands use the other appearance's values, gradient included.
       const own = scope === "page" ? mode : OTHER[mode];
       const stops = gradients[own] ? (values[FILL]?.split(" ") ?? []) : [];
+      const onAccent = values["--m-on-accent"];
+      // Hover and active wash every fill colour: each gradient stop, or the
+      // flat accent.
+      const fills = stops.length
+        ? stops.map((stop, index) => [stop, `gradient stop ${index + 1}`])
+        : values["--m-accent"]
+          ? [[values["--m-accent"], "accent"]]
+          : [];
       return {
         mode,
         scope,
@@ -724,11 +774,29 @@ function Contrast({
             result(
               `gradient-${index + 1}`,
               `On accent on gradient stop ${index + 1}`,
-              values["--m-on-accent"],
+              onAccent,
               stop,
               4.5,
             ),
           ),
+          ...(onAccent
+            ? fills.flatMap(([fill, name], index) =>
+                (
+                  [
+                    ["hover", 0.15],
+                    ["active", 0.28],
+                  ] as const
+                ).map(([state, alpha]) =>
+                  result(
+                    `accent-${state}-${index + 1}`,
+                    `On accent on ${name}, ${state}`,
+                    onAccent,
+                    washed(fill, onAccent, alpha),
+                    4.5,
+                  ),
+                ),
+              )
+            : []),
         ],
       };
     }),
@@ -763,13 +831,26 @@ function Contrast({
               check: label,
               colours: (
                 <span className="pg-pair">
-                  <span
-                    className="pg-pair-chip"
-                    style={{ background: bg, color: fg }}
-                    aria-hidden="true"
-                  >
-                    Aa
-                  </span>
+                  {/* Non-text pairs (3:1: lines, the focus ring) sample as a
+                      stroke, not text, so the chip isn't held to text contrast. */}
+                  {min < 4.5 ? (
+                    <span
+                      className="pg-pair-chip"
+                      style={{
+                        background: bg,
+                        boxShadow: `inset 0 0 0 2px ${fg}`,
+                      }}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <span
+                      className="pg-pair-chip"
+                      style={{ background: bg, color: fg }}
+                      aria-hidden="true"
+                    >
+                      Aa
+                    </span>
+                  )}
                   <code>
                     {fg} on {bg}
                   </code>

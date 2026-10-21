@@ -376,3 +376,36 @@ test("output can be copied", async ({ page, context }) => {
     dark: { primary: "#93c5fd", onPrimary: "#0b1f4d" },
   });
 });
+
+test("accent hover and active, and strong lines on surfaces, are checked", async ({
+  page,
+}) => {
+  await open(page);
+  await advanced(page);
+  // The review case on #64: a warm accent under dark text. The wash lightens
+  // it on hover and active, so contrast holds.
+  await page.getByLabel("Light accent", { exact: true }).fill("#e0702a");
+  await page.getByLabel("Light on accent", { exact: true }).fill("#111111");
+  for (const state of ["hover", "active"])
+    await expect(
+      page.locator(`[data-check="light-page-accent-${state}-1"]`),
+    ).toContainText("Pass");
+  await expect(
+    page.getByText("On accent on accent, hover").first(),
+  ).toBeVisible();
+  // With a gradient, every stop is checked in each state.
+  await page
+    .getByLabel("Light accent gradient", { exact: true })
+    .fill("linear-gradient(90deg, #e0702a, #f59e0b)");
+  await expect(
+    page.locator('[data-check="light-page-accent-active-2"]'),
+  ).toContainText("Pass");
+  await expect(
+    page.getByText("On accent on gradient stop 2, active").first(),
+  ).toBeVisible();
+  // A sunken surface too close to the strong line fails 3:1.
+  const line = page.locator('[data-check="light-page-line-sunken"]');
+  await expect(line).toContainText("Pass");
+  await page.getByLabel("Light sunken", { exact: true }).fill("#c7c7cc");
+  await expect(line).toContainText("Fail");
+});

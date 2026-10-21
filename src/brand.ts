@@ -220,11 +220,15 @@ export function isBrandGradient(value: string): boolean {
 const FAMILY =
   /\s*("[^"]*"|'[^']*'|-?[a-z_][a-z0-9_-]*(?:\s+-?[a-z_][a-z0-9_-]*)*)\s*(,|$)/iy;
 /**
- * True for a font-family list: family names, quoted names and generic
- * families, separated by commas. No functions, url() or CSS punctuation.
+ * True for a font-family list: family names, quoted names, generic families
+ * and bare `var(--name)` references (as framework font loaders hand out),
+ * separated by commas. No other functions, url() or CSS punctuation.
  */
 export function isBrandFont(value: string): boolean {
-  const text = value.trim();
+  // A bare var(--name) stands in for one whole entry, like a quoted name, so
+  // two in a row without a comma fail. Anything else with parentheses (a
+  // fallback, url(), local()) is still rejected.
+  const text = value.trim().replace(/var\(\s*--[a-z0-9_-]+\s*\)/gi, '""');
   if (!text || /[;{}<>\\()]|\/\*/.test(text)) return false;
   FAMILY.lastIndex = 0;
   let last = "";

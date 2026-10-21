@@ -69,7 +69,7 @@ A brand never inherits values from an outer brand: every `[data-mortar-brand]` s
 
 `paper` is the page, `surface` is cards, panels and raised controls, and `sunken` is wells, muted bands and hover fills. Inverse bands use the other appearance's surfaces: a brand with a navy dark page (`--m-brand-d-paper: #0b1f3a`) gets navy inverse bands on light pages too. Without a brand surface, an inverse band on a light page keeps `#000000` / `#1c1c1e` / `#1c1c1e`, and on a dark page `#f5f5f7` / `#ffffff` / `#ffffff`. `selected` is tinted into the brand's page.
 
-Text, line and status colours stay Mortar's, so a tinted surface is the brand's contrast responsibility. Muted text and danger are the lowest: on a navy dark page, `#0b1f3a` (paper), `#102a4c` (surface) and `#143156` (sunken) keep every text and status colour at 4.5:1, but a lighter sunken such as `#16365f` drops muted text to 4.2:1. The brand builder's contrast table checks text, muted text and links on all three surfaces.
+Text, line and status colours stay Mortar's, so a tinted surface is the brand's contrast responsibility. Muted text and danger are the lowest text, and strong lines (control borders, 3:1) the lowest overall: on a navy dark page, `#0b1f3a` (paper), `#0d2341` (surface) and `#0f2848` (sunken) keep every text and status colour at 4.5:1 and strong lines at 3:1, but a lighter sunken such as `#143156` drops strong lines to 2.7:1, and `#16365f` drops muted text to 4.2:1. The brand builder's contrast table checks text, muted text, links and strong lines on all three surfaces.
 
 ### Accent gradients
 
@@ -90,7 +90,7 @@ Text, line and status colours stay Mortar's, so a tinted surface is the brand's 
 
 ### Fonts
 
-`fonts: { body, heading }` (`--m-brand-font`, `--m-brand-font-heading`) are font-family lists, the same in light and dark. They apply wherever the brand does, including a container-scoped ThemeProvider. Headings (`h1`–`h6` inside Mortar) and component titles use the heading font; without one they keep the body font. Mortar loads no font files: load them in your app (for example with `@font-face` or your framework's font loader) and name them here.
+`fonts: { body, heading }` (`--m-brand-font`, `--m-brand-font-heading`) are font-family lists, the same in light and dark. They apply wherever the brand does, including a container-scoped ThemeProvider. Headings (`h1`–`h6` inside Mortar) and component titles use the heading font; without one they keep the body font. Mortar loads no font files: load them in your app (for example with `@font-face` or your framework's font loader) and name them here. An entry may be a bare `var(--name)`, as framework font loaders such as `next/font` hand out (`var(--font-inter), system-ui, sans-serif`); a `var()` with a fallback, `url()` and `local()` are rejected.
 
 ### At runtime, from data
 
@@ -130,7 +130,7 @@ Inline custom properties apply only to that element's subtree. Menus and dialogs
 
 ### With the brand builder
 
-The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens, surfaces and accent gradient; empty fields show the value they derive. Set heading and body fonts below. Light and dark previews, each with an inverse band, an accent band, an accent button, a heading sample and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent, for links, text and muted text on page, surface and sunken, and for on-accent text on every gradient stop; 3:1 for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
+The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens, surfaces and accent gradient; empty fields show the value they derive. Set heading and body fonts below. Light and dark previews, each with an inverse band, an accent band, an accent button, a heading sample and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent, for links, text and muted text on page, surface and sunken, and for on-accent text on the accent fill (every gradient stop) at rest, hover and active; 3:1 for strong lines on page, surface and sunken, and for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
 
 ## Appearance before JavaScript runs
 
