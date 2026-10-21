@@ -4,7 +4,7 @@ A shared design foundation and purpose-built Application UI, Marketing UI, Docs 
 
 The package is [`@tony-ui/mortar` on npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar). Releases are immutable, publicly installable without any account or token, and published with npm provenance that links each version to the GitHub Actions run that built it. Publishing is automatic and version-driven: merging a version bump to `main` publishes that version once the required checks pass ([release workflow](.github/workflows/release.yml), [process](CONTRIBUTING.md)). The current version is listed on the [GitHub releases](https://github.com/tonycodes/mortar/releases) page. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).
 
-[Explore the live playground](https://tonycodes.github.io/mortar/playground/) · [Contribute](CONTRIBUTING.md) · [Free and open](#free-and-open)
+[Explore the live playground](https://mortar.tony.codes/playground/) · [Contribute](CONTRIBUTING.md) · [Free and open](#free-and-open)
 
 ## See the kit
 
@@ -15,15 +15,15 @@ that are not yet in the latest npm release.
 
 **Marketing UI — a composed landing page in light mode.**
 
-[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://tonycodes.github.io/mortar/playground/?recipe=saas-landing&theme=light)
+[![Mortar marketing components composing a landing page with navigation, hero, actions and a chat preview](docs/images/marketing-light.jpg)](https://mortar.tony.codes/playground/?recipe=saas-landing&theme=light)
 
 **Application UI — a semantic table in dark mode, inside the shared explorer.**
 
-[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://tonycodes.github.io/mortar/playground/?component=Table&theme=dark)
+[![Mortar dark-mode playground showing the Table component and preview controls](docs/images/application-dark.jpg)](https://mortar.tony.codes/playground/?component=Table&theme=dark)
 
 **Docs UI — navigation, search and an article outline using the shared DocsShell.**
 
-[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://tonycodes.github.io/mortar/playground/?component=DocsShell&theme=light)
+[![Mortar light-mode DocsShell preview with grouped navigation, search and a table of contents](docs/images/documentation-light.jpg)](https://mortar.tony.codes/playground/?component=DocsShell&theme=light)
 
 Open any screenshot to try its live example. Switch appearance, brand, density and
 example states in the playground.
@@ -102,7 +102,7 @@ the kit makes no network calls of its own.
 
 - **Packages** are published to [npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar)
   from GitHub Actions with provenance.
-- **The playground** is hosted on [GitHub Pages](https://tonycodes.github.io/mortar/playground/).
+- **The playground** is hosted on [GitHub Pages](https://mortar.tony.codes/playground/).
 - **Bugs and contributions** go through [GitHub issues](https://github.com/tonycodes/mortar/issues)
   and [pull requests](CONTRIBUTING.md); GitHub maintainer review is the only review
   gate. This is community maintenance, not a paid support entitlement. Do not put
@@ -121,7 +121,7 @@ It is the local visual development surface for new and updated components.
 No service account or backend is required.
 
 In production it is deployed to GitHub Pages at
-[tonycodes.github.io/mortar/playground/](https://tonycodes.github.io/mortar/playground/).
+[mortar.tony.codes/playground/](https://mortar.tony.codes/playground/).
 Merges to `main` deploy it after checks pass; the Pages site root
 (`site/index.html`) links the playground, GitHub, npm and the docs. Package
 releases have their own workflow (see [CONTRIBUTING.md](CONTRIBUTING.md)).

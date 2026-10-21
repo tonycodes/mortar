@@ -8,13 +8,11 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
 // Retired owner-hosted origins. The old registry is named only in CHANGELOG.md,
-// for anyone pinned to 0.11 or earlier.
-const RETIRED = [
-  ["ui", "tony", "codes"].join("."),
-  ["mortar", "tony", "codes"].join("."),
-];
+// for anyone pinned to 0.11 or earlier. mortar.tony.codes is now the GitHub
+// Pages custom domain, not the retired hosted service.
+const RETIRED = [["ui", "tony", "codes"].join(".")];
 const OLD_REGISTRY = ["git", "tony", "codes"].join(".");
-const SITE = "https://tonycodes.github.io/mortar/";
+const SITE = "https://mortar.tony.codes/";
 
 function trackedText() {
   const listed = execFileSync("git", ["ls-files", "-z"], {
@@ -36,12 +34,18 @@ function trackedText() {
   return files;
 }
 
-test("tracked text omits the retired hosted origins", () => {
+test("tracked text omits the retired hosted origins and old Pages URL", () => {
   const files = trackedText();
   const found = files
     .filter((file) => RETIRED.some((host) => file.text.includes(host)))
     .map((file) => file.name);
   assert.deepEqual(found, []);
+  // The site lives on its custom domain; GitHub redirects the github.io URL.
+  const oldSite = ["tonycodes", "github", "io/mortar"].join(".");
+  assert.deepEqual(
+    files.filter((file) => file.text.includes(oldSite)).map((f) => f.name),
+    [],
+  );
   const registry = files
     .filter((file) => file.text.includes(OLD_REGISTRY))
     .map((file) => file.name);
