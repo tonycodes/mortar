@@ -12,7 +12,7 @@
 
 6. **interaction-quality** — Verify responsive layout, accessible names, keyboard operation, focus and loading/empty/error states. Automated checks alone cannot prove visual quality. A plan that is not available exposes a status and does not offer a purchase link. Column titles accept an explicit heading level so a page can keep a single `h1`.
 
-The machine-readable contract is design-principles.json. Both the local contribution workflow and hosted MCP should expose these principles. Detection is split between structural checks and visual maintainer review.
+The machine-readable contract is design-principles.json. Both the local contribution workflow and the open MCP server (`mortar mcp`, [docs/agents.md](docs/agents.md)) expose these principles. Detection is split between structural checks and visual maintainer review.
 
 ## API conventions
 

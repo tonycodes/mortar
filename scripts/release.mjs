@@ -1,6 +1,6 @@
 // Run by the credential-free prepare job of .github/workflows/release.yml on the
 // exact main commit whose checks passed. It builds, packs and records provenance;
-// the separate publish job (the only one with the registry token) publishes it.
+// the separate publish job (the only one allowed to publish, via npm trusted publishing) publishes it.
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";

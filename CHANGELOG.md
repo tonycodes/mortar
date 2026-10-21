@@ -1,6 +1,36 @@
 # Changelog
 
-Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to `https://git.tony.codes/api/packages/tony/npm/`. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
+Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor release may contain breaking changes, and it says so. Each release is published from its `v<version>` tag to [npmjs.com](https://www.npmjs.com/package/@tony-ui/mortar) with npm provenance. Its GitHub release carries the exact archive and a `provenance.json` with the commit and SHA-512 integrity.
+
+## Unreleased
+
+### Changed
+
+- **Packages are published to npmjs.com.** Install with a plain `npm install @tony-ui/mortar`; no registry configuration, account or token is needed. Releases are published from GitHub Actions with npm trusted publishing (OIDC, no long-lived token) and `--provenance`, so each version on npmjs.com links to the workflow run and commit that built it.
+- **The playground moved to GitHub Pages**, at https://tonycodes.github.io/mortar/playground/. The site root links the playground, GitHub, npm and the docs. The package `homepage` points there.
+- **Everything is free and in this repository.** The hosted Mortar Cloud preview (agent identities, OAuth MCP connections, hosted audits and planned paid plans) is retired. The kit, docs, playground and agent tooling are MIT licensed here, with no accounts, licence checks, telemetry or hosted service. GitHub maintainer review is the only review gate.
+
+### Migration
+
+Versions up to 0.11 were published only to the previous owner-hosted registry, `https://git.tony.codes/api/packages/tony/npm/`, which will be retired. New versions are on npmjs.com only. To upgrade, remove the scope override and install from npmjs.com:
+
+```sh
+npm config delete @tony-ui:registry --location=project
+npm install @tony-ui/mortar@latest
+```
+
+A project that must stay on 0.11 or earlier keeps its scope override (`@tony-ui:registry=https://git.tony.codes/api/packages/tony/npm/` in `.npmrc`) while that registry remains available, or installs the archive attached to the version's [GitHub release](https://github.com/tonycodes/mortar/releases).
+
+## Unreleased
+
+### Added
+
+- **Open agent tooling in the package: an MCP server and the `mortar` CLI.** They read the installed version's catalogue, contracts, examples and guides, run locally, work offline and need no account. They add no runtime dependencies. See [Mortar for coding agents](https://github.com/tonycodes/mortar/blob/main/docs/agents.md).
+  - `mortar mcp` is a stdio MCP server (`claude mcp add mortar -- npx -y @tony-ui/mortar mcp`) with six tools: `search_components`, `get_component` (props with types and defaults, usage notes, dependencies, marker, tested states and a JSX example), `get_build_packet` (for component names or a free-text brief: the dependency closure, imports, CSS and ThemeProvider setup, design principles, API conventions and matching page templates), `get_guide`, `list_kits` and `audit_app`.
+  - `mortar search`, `component`, `packet`, `audit`, `guide` and `kits` give the same answers on the command line, with `--json`.
+  - `mortar audit [path]` is a read-only static audit of an application: version range, imports and props that the installed version does not have (with 0.6 rename suggestions), invalid prop values, CSS overriding `.m-*` classes or `[data-m-component]`, raw colours beside Mortar components, a missing `styles.css` import or ThemeProvider, deep imports and local copies of Mortar source. It exits 1 when it finds errors.
+  - An agent skill, `skills/mortar/SKILL.md` (`npx mortar skill`), with the workflow defaults: search, packet, compose, audit, and contribute by pull request.
+- The package now also ships `AGENTS.md`, `CONTRIBUTING.md`, `TESTING.md` and the guides in `docs/`, which the tools read.
 
 ## Unreleased
 
@@ -34,7 +64,7 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 ### Added
 
-- **Playground brand builder** (`?page=brand`, [open it](https://mortar.tony.codes/playground/?page=brand)): edit a brand's light and dark values, including the optional tokens, and see them live in light, dark and inverse previews with overlays. It reports WCAG contrast for on-primary, hover, active, accent, link and focus as the browser resolves them, exports the CSS rule and the `brandTokens` object, and keeps the brand in the URL so it can be shared. Playground only; the package is unchanged.
+- **Playground brand builder** (`?page=brand`, [open it](https://tonycodes.github.io/mortar/playground/?page=brand)): edit a brand's light and dark values, including the optional tokens, and see them live in light, dark and inverse previews with overlays. It reports WCAG contrast for on-primary, hover, active, accent, link and focus as the browser resolves them, exports the CSS rule and the `brandTokens` object, and keeps the brand in the URL so it can be shared. Playground only; the package is unchanged.
 
 ### Changed
 

@@ -13,4 +13,4 @@ Describe the reusable component, fix or chrome change and alternatives considere
 - [ ] Included regression coverage for fixes
 - [ ] Reviewed test profile/state completeness and any visual baseline changes
 
-Maintainers review here. Do not submit a second proposal or approval to Mortar Cloud. Contributors must not approve, merge or publish their own changes.
+Maintainers review here; GitHub review is the only approval step. Contributors must not approve, merge or publish their own changes.

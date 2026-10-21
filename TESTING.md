@@ -28,7 +28,7 @@ Manifests hold only the hand-written contract. `npm run catalog` generates the r
 
 `contract.dependencies` stays hand-written but must list exactly the catalogue components the source renders, following local helpers and contexts that require a provider (M010).
 
-Catalogue shape changes for consumers such as the hosted ARC indexer, which reads only catalog.json: `contract.propTypes` is new; `contract.states` is removed (it was the same five labels on every component; tested scenarios are `testing.states`); `provenance.sourceDigest` is removed (it was never read); `capabilities` is now complete and ordered (`theme`, kit, then vocabulary order). Every other field keeps its meaning.
+Catalogue shape changes for consumers that read only catalog.json, such as agent tooling and indexers: `contract.propTypes` is new; `contract.states` is removed (it was the same five labels on every component; tested scenarios are `testing.states`); `provenance.sourceDigest` is removed (it was never read); `capabilities` is now complete and ordered (`theme`, kit, then vocabulary order). Every other field keeps its meaning.
 
 ## Every component
 
@@ -62,7 +62,7 @@ The full browser command validates successful evidence for every expected compon
 
 For focused development use `npx playwright test tests/browser/components.spec.mjs --grep Button`. This intentionally does not claim complete-contract coverage; the full command remains mandatory before merge. CI uses the Playwright-pinned browser. `UI_TEST_CHROME` is a local diagnostic override, not the canonical visual environment.
 
-ThemeProvider tests check brand, density, light/dark/system changes centrally. The default component sweep covers light/dark, and representative controls/shells exercise green. We do not cross every prop, theme, density and screen size. Global styles and tokens still run the full suite; no dependency graph currently skips required tests. ARC may later select additional impacted checks, but cannot prove interaction or visual correctness.
+ThemeProvider tests check brand, density, light/dark/system changes centrally. The default component sweep covers light/dark, and representative controls/shells exercise green. We do not cross every prop, theme, density and screen size. Global styles and tokens still run the full suite; no dependency graph currently skips required tests.
 
 ## Visual baselines
 

@@ -10,10 +10,9 @@ visual-results/
 visual-report/
 visual-candidates/
 
-# Generated deployment artifacts and Python test caches
-playground-production/
-release.tar.gz
-__pycache__/
+# Generated GitHub Pages site
+pages-site/
+site.tar.gz
 
 # Agent worktrees
 .claude/worktrees/
