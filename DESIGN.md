@@ -32,7 +32,8 @@ Every component follows these rules. New props must fit them, and the code revie
   - Tone renders as `data-tone`.
 - **State.** Busy work is `loading`. Empty content is `empty?: { title; description?; action? }`. Errors are `error` (string).
   - A loading button stays focusable: it sets `aria-busy` and `aria-disabled` and ignores activation instead of becoming natively disabled.
-  - A field `error` is announced when it appears (`role="alert"`). `required` marks the control (native `required` or `aria-required`) and adds a decorative `*` after the label.
+  - A field `error` is announced when it appears (`role="alert"`). `required` marks the control (native `required` or `aria-required`) and adds a decorative `*` after the label. A group (RadioGroup) puts its message under the legend and describes the fieldset with it.
+  - A failed submit also lists its field errors in an ErrorSummary above the form. It takes focus after each failed submit, and each link focuses its field.
   - Status and alert regions stay mounted, and their content changes, so each message is announced once.
   - Dismissing or removing an element that holds focus moves focus to the next control, never to the page body.
 - **Callbacks.** Value changes use `onChange(value)`. Choosing an item or action uses `onSelect`. Dismissal uses `onDismiss` and closing uses `onClose`.

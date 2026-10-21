@@ -23,11 +23,13 @@ export {
   Dropdown,
   Notice,
   EmptyState,
+  ErrorSummary,
 } from "./primitives.js";
 export type {
   ButtonProps,
   ButtonGroupItem,
   DropdownItem,
+  ErrorSummaryItem,
   InputProps,
   LinkAction,
   Tone,

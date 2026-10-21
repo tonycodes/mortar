@@ -16,3 +16,7 @@ site.tar.gz
 
 # Agent worktrees
 .claude/worktrees/
+
+# OS and local tool caches
+.DS_Store
+.code-review-graph/

@@ -132,6 +132,7 @@ const factories = {
   Checkbox: [
     () => html(UI.Checkbox, { label: "Agree" }),
     () => html(UI.Checkbox, { label: "Agree", description: "Terms" }),
+    () => html(UI.Checkbox, { label: "Agree", error: "Agree to continue" }),
   ],
   CodeBlock: [() => html(UI.CodeBlock, { code: "npm i" })],
   CodeTabs: [
@@ -182,6 +183,12 @@ const factories = {
       }),
   ],
   EmptyState: [() => html(UI.EmptyState, { title: "Nothing here" })],
+  ErrorSummary: [
+    () =>
+      html(UI.ErrorSummary, {
+        errors: [{ message: "Enter your email", target: "email" }],
+      }),
+  ],
   FAQ: [
     () =>
       html(UI.FAQ, {

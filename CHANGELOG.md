@@ -32,6 +32,18 @@ A project that must stay on 0.11 or earlier keeps its scope override (`@tony-ui:
   - An agent skill, `skills/mortar/SKILL.md` (`npx mortar skill`), with the workflow defaults: search, packet, compose, audit, and contribute by pull request.
 - The package now also ships `AGENTS.md`, `CONTRIBUTING.md`, `TESTING.md` and the guides in `docs/`, which the tools read.
 
+## Unreleased
+
+### Added
+
+- **`ErrorSummary`** (Foundation › Form controls): the problems that stopped a form submitting, listed above the form with a link to each field. Props: `errors` (`{ message; href?; target? }[]`; renders nothing when empty), `title` (default "There is a problem"), `headingLevel` (default 2), `autoFocus` (default true), `submitCount`, `id` and `className`. It is a `role="alert"` region named by its heading with `tabIndex={-1}`: it takes focus when it appears and whenever `submitCount` changes, but not while a fixed field's error clears. A link focuses its field without changing the URL hash; for a group such as a RadioGroup the checked or first radio takes focus, and the label or legend scrolls into view.
+- **Checkbox `error`**: the message is announced when it appears (`role="alert"`), the box is `aria-invalid` and `aria-describedby` links the description and the error. `required` adds the decorative `*` after the label, as on Input and Select. Without these props the markup is unchanged.
+- **RadioGroup `error`, `hint`, `required` and `id`**: the hint or error sits under the legend and describes the fieldset; with an error each radio is `aria-invalid`, and `required` marks every radio and adds `*` to the legend. Without these props the markup is unchanged.
+
+### Changed
+
+- The sign-up and other auth page templates use `ErrorSummary` and `Checkbox error` instead of a local summary and a hand-wired terms error. The terms checkbox is now `required`.
+
 ## 0.11.0 (2026-10-20)
 
 ### Added

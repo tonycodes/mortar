@@ -12,6 +12,7 @@ export function PreviewCase({ name }: { name: string }) {
     [noticeShown, setNoticeShown] = useState(true),
     [menuChoice, setMenuChoice] = useState("none"),
     [extra, setExtra] = useState(false),
+    [agreed, setAgreed] = useState(false),
     [memory, setMemory] = useState("16"),
     [colour, setColour] = useState("slate"),
     [section, setSection] = useState("profile"),
@@ -172,6 +173,13 @@ export function PreviewCase({ name }: { name: string }) {
             description="Get notified when someone comments on your post."
             checked={extra}
             onChange={(e) => setExtra(e.target.checked)}
+          />
+          <UI.Checkbox
+            label="I agree to the terms of service"
+            required
+            checked={agreed}
+            error={agreed ? undefined : "Agree to the terms to continue"}
+            onChange={(e) => setAgreed(e.target.checked)}
           />
         </UI.Stack>
       );

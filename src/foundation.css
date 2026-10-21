@@ -831,6 +831,24 @@
   .m-choice-described > input {
     margin-top: 2px;
   }
+  /* Error under a checkbox label, and the hint or error under a group's legend. */
+  .m-choice-text p.m-error {
+    color: var(--m-tone);
+    font-size: 12px;
+  }
+  .m-radio-group > p {
+    grid-column: 1 / -1;
+    flex-basis: 100%;
+    margin: -4px 0 0;
+    color: var(--m-muted);
+    font-size: 12px;
+  }
+  .m-radio-group > p.m-error {
+    color: var(--m-tone);
+  }
+  .m-radio-group[data-invalid] .m-radio-card:not(:has(:checked)) {
+    border-color: var(--m-danger);
+  }
   [data-mortar] input.m-switch:checked {
     background: var(--m-primary);
     border-color: var(--m-primary);
@@ -1315,6 +1333,42 @@
   .m-notice[data-dismissible] {
     position: relative;
     padding-inline-end: 48px;
+  }
+
+  /* == ErrorSummary == */
+  .m-error-summary {
+    --m-tone: var(--m-danger);
+    padding: 16px;
+    border: 2px solid var(--m-tone);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    color: var(--m-ink);
+    font-size: var(--m-font-size);
+  }
+  /* Focus moves here after a failed submit, by mouse too: always show it. */
+  .m-error-summary:focus {
+    outline: 2px solid var(--m-focus);
+    outline-offset: 2px;
+  }
+  .m-error-summary-title {
+    font-size: 15px;
+    font-weight: var(--m-weight-semibold);
+  }
+  .m-error-summary ul {
+    display: grid;
+    gap: 6px;
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .m-error-summary li {
+    color: var(--m-tone);
+    font-weight: var(--m-weight-semibold);
+  }
+  .m-error-summary a {
+    color: var(--m-tone);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
   /* == EmptyState == */

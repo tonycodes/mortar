@@ -18,6 +18,10 @@
       "onChange": "(value: string) => void",
       "options": "{ value: string; label: string; description?: string; swatch?: string; disabled?: boolean }[]",
       "layout": "\"list\" | \"grid\" | \"swatches\"",
+      "hint": "string (under the legend, linked by aria-describedby)",
+      "error": "string (announced when it appears; describes the group and marks each radio aria-invalid)",
+      "required": "boolean (native on each radio; adds a decorative marker to the legend)",
+      "id": "string (on the fieldset, e.g. an ErrorSummary target)",
       "className": "string (on the root element)"
     },
     "usage": "Import { RadioGroup } from @tony-ui/mortar. Compose with the public typed props.",
@@ -31,7 +35,7 @@
   "testing": {
     "profile": "control",
     "target": ".m-radio-group",
-    "states": [],
+    "states": ["error"],
     "probe": "radio"
   }
 }

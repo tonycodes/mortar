@@ -32,7 +32,8 @@
             "RadioGroup",
             "Switch",
             "SegmentedControl",
-            "FilterChip"
+            "FilterChip",
+            "ErrorSummary"
           ]
         },
         {
