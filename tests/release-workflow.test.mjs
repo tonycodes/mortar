@@ -42,7 +42,7 @@ test("publishing uses OIDC trusted publishing, never a long-lived token", () => 
   assert.match(publish, /npm install -g "npm@\$NPM_VERSION"/);
   assert.match(
     publish,
-    /npm publish "\.\/tony-ui-mortar-\$VERSION\.tgz" --registry "\$REGISTRY" --tag "\$DIST_TAG" --provenance --access public/,
+    /npm publish "\.\/tonycodes-ui-mortar-\$VERSION\.tgz" --registry "\$REGISTRY" --tag "\$DIST_TAG" --provenance --access public/,
   );
 });
 

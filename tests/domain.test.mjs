@@ -59,7 +59,7 @@ test("package homepage is the GitHub Pages site", () => {
 test("README links the GitHub Pages playground and installs from npmjs", () => {
   const readme = read("README.md");
   assert.ok(readme.includes(`${SITE}playground/`));
-  assert.match(readme, /npm install @tony-ui\/mortar/);
+  assert.match(readme, /npm install @tonycodes-ui\/mortar/);
   assert.doesNotMatch(readme, /npm config set @tony-ui:registry/);
 });
 

@@ -24,7 +24,7 @@ test("Code view imports only public exports and never shows the fixtures' UI nam
     if (/\bUI\./.test(code)) problems.push(`${c.export}: UI. prefix`);
     if (/<Control\b/.test(code)) problems.push(`${c.export}: private Control`);
     const imported = code.match(
-      /^import \{ ([^}]+) \} from "@tony-ui\/mortar";/,
+      /^import \{ ([^}]+) \} from "@tonycodes-ui\/mortar";/,
     );
     if (!imported) problems.push(`${c.export}: no import line`);
     else if (!imported[1].split(", ").includes(c.export))
@@ -61,7 +61,7 @@ test("extraction handles nested parentheses, fall-through cases and local variab
   assert.equal(
     exampleCode("A", fixture, exports),
     [
-      'import { Input, Stack } from "@tony-ui/mortar";',
+      'import { Input, Stack } from "@tonycodes-ui/mortar";',
       "",
       "<Stack>",
       '  {format("x);")}',
@@ -71,6 +71,6 @@ test("extraction handles nested parentheses, fall-through cases and local variab
   );
   assert.equal(
     exampleCode("C", fixture, exports),
-    'import { ChatPreview } from "@tony-ui/mortar";\n\n<ChatPreview title="Hi" />',
+    'import { ChatPreview } from "@tonycodes-ui/mortar";\n\n<ChatPreview title="Hi" />',
   );
 });

@@ -46,7 +46,7 @@ for (const width of [320, 768, 1280]) {
       .getByText("Usage and component contract", { exact: true })
       .click();
     await expect(
-      page.getByText('import { Button } from "@tony-ui/mortar";', {
+      page.getByText('import { Button } from "@tonycodes-ui/mortar";', {
         exact: true,
       }),
     ).toBeVisible();
@@ -235,7 +235,7 @@ test("component code view shows the example source and is shareable", async ({
   await expect(page).toHaveURL(/view=code/);
   const code = page.locator(".pg-example-code");
   await expect(code).toContainText(
-    'import { Button, Card, Stack, Text } from "@tony-ui/mortar";',
+    'import { Button, Card, Stack, Text } from "@tonycodes-ui/mortar";',
   );
   await expect(code).toContainText('<Card tone="muted" padding="compact">');
   await expect(code).not.toContainText("UI.");

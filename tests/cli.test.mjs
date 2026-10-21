@@ -87,7 +87,7 @@ test("search ranks the components a request needs first", () => {
 test("get_component returns the contract with prop types and an example", () => {
   const c = componentDetail(data, data.find("datatable"));
   assert.equal(c.name, "DataTable");
-  assert.equal(c.import, 'import { DataTable } from "@tony-ui/mortar";');
+  assert.equal(c.import, 'import { DataTable } from "@tonycodes-ui/mortar";');
   assert.equal(c.marker, 'data-m-component="DataTable"');
   assert.equal(c.kit, "application");
   assert.ok(c.categoryTitle);
@@ -98,7 +98,7 @@ test("get_component returns the contract with prop types and an example", () => 
   assert.ok(c.dependencies.length);
   assert.match(
     c.example,
-    /^import \{[^}]*\bDataTable\b[^}]*\} from "@tony-ui\/mortar";/,
+    /^import \{[^}]*\bDataTable\b[^}]*\} from "@tonycodes-ui\/mortar";/,
   );
   assert.match(c.example, /<DataTable\b/);
   for (const component of data.components)
@@ -125,11 +125,11 @@ test("a build packet includes the dependency closure and setup", () => {
   );
   assert.equal(
     packet.import,
-    'import { SignInPanel, ThemeProvider } from "@tony-ui/mortar";',
+    'import { SignInPanel, ThemeProvider } from "@tonycodes-ui/mortar";',
   );
   assert.match(
     packet.css.code,
-    /@import "tailwindcss";\n@import "@tony-ui\/mortar\/styles\.css";/,
+    /@import "tailwindcss";\n@import "@tonycodes-ui\/mortar\/styles\.css";/,
   );
   assert.match(packet.themeProvider.code, /<ThemeProvider/);
   assert.equal(packet.principles.length, 6);
@@ -284,11 +284,11 @@ function fixture(name, { version = pkg.version, files = {} } = {}) {
   const dir = mkdtempSync(join(tmpdir(), `mortar-${name}-`));
   cpSync(join(ROOT, "tests/fixtures", name), dir, { recursive: true });
   if (version) {
-    const installed = join(dir, "node_modules/@tony-ui/mortar");
+    const installed = join(dir, "node_modules/@tonycodes-ui/mortar");
     mkdirSync(installed, { recursive: true });
     writeFileSync(
       join(installed, "package.json"),
-      JSON.stringify({ name: "@tony-ui/mortar", version }),
+      JSON.stringify({ name: "@tonycodes-ui/mortar", version }),
     );
   }
   for (const [file, text] of Object.entries(files)) {
@@ -386,7 +386,7 @@ test("the audit detects copies, class overrides and palette classes", async (t) 
         "utf8",
       ),
       "src/Extra.tsx": [
-        'import { Button } from "@tony-ui/mortar";',
+        'import { Button } from "@tonycodes-ui/mortar";',
         "export const Extra = () => (",
         '  <div className="m-card [&_.m-button]:rounded-none bg-blue-500 dark:text-white">',
         "    <Button>Go</Button>",
@@ -394,7 +394,7 @@ test("the audit detects copies, class overrides and palette classes", async (t) 
         ");",
       ].join("\n"),
       "src/late.css":
-        '@import "@tony-ui/mortar/styles.css";\n@import "tailwindcss";\n[data-m-component="Button"] { color: red; }\n',
+        '@import "@tonycodes-ui/mortar/styles.css";\n@import "tailwindcss";\n[data-m-component="Button"] { color: red; }\n',
     },
   });
   t.after(() => rmSync(dir, { recursive: true, force: true }));
