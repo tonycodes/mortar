@@ -164,7 +164,10 @@ test("invalid values show a field error instead of breaking the preview", async 
   await expect(cssOutput(page)).not.toContainText("color: blue");
   await expect(page.getByText("Some values are left out")).toBeVisible();
   await expect(save(page, "light")).toBeVisible();
-  await field.fill("notacolour");
+  // A gradient where a colour belongs is not colour syntax.
+  await field.fill("linear-gradient(90deg, #ff6a00, #ffb300)");
+  await expect(page.getByText(/Use colour syntax only/)).toBeVisible();
+  await field.fill("rgb(1 2)");
   await expect(
     page.getByText("This is not a colour the browser recognises."),
   ).toBeVisible();
@@ -174,6 +177,124 @@ test("invalid values show a field error instead of breaking the preview", async 
   await name.fill("my brand!");
   await expect(name).toHaveAttribute("aria-invalid", "true");
   await expect(cssOutput(page)).toContainText('[data-mortar-brand="custom"]');
+  expect(errors).toEqual([]);
+});
+
+const advanced = (page) =>
+  page.getByText("Advanced: interaction", { exact: false }).click();
+
+test("surfaces, the accent gradient and fonts round-trip through the URL", async ({
+  page,
+}) => {
+  const errors = await open(page);
+  await advanced(page);
+  await page.getByLabel("Dark page", { exact: true }).fill("#0b1f3a");
+  await page.getByLabel("Light sunken", { exact: true }).fill("#eef2f7");
+  await page.getByLabel("Light accent", { exact: true }).fill("#c2410c");
+  await page
+    .getByLabel("Light accent gradient", { exact: true })
+    .fill("linear-gradient(90deg, #c2410c, #9a3412)");
+  await page.getByLabel("Heading font", { exact: true }).fill("Georgia, serif");
+  await expect(page).toHaveURL(/d-paper=%230b1f3a/);
+  await expect(page).toHaveURL(/l-accent-gradient=linear-gradient/);
+  await expect(page).toHaveURL(/font-heading=Georgia/);
+  // The previews paint them: tinted page, gradient accent button and band,
+  // and the heading font.
+  await expect
+    .poll(() => background(sample(page, "dark").locator("..")))
+    .toBe("rgb(11, 31, 58)");
+  const accent = sample(page, "light").getByRole("button", {
+    name: "Upgrade",
+  });
+  await expect
+    .poll(() => accent.evaluate((el) => getComputedStyle(el).backgroundImage))
+    .toBe("linear-gradient(90deg, rgb(194, 65, 12), rgb(154, 52, 18))");
+  await expect(
+    sample(page, "light").locator('.m-cta[data-tone="accent"]'),
+  ).toHaveCSS(
+    "background-image",
+    "linear-gradient(90deg, rgb(194, 65, 12), rgb(154, 52, 18))",
+  );
+  await expect(sample(page, "light").locator("h4").first()).toHaveCSS(
+    "font-family",
+    "Georgia, serif",
+  );
+  await expect(cssOutput(page)).toContainText(
+    "--m-brand-l-accent-gradient: linear-gradient(90deg, #c2410c, #9a3412);",
+  );
+  await expect(cssOutput(page)).toContainText(
+    "--m-brand-font-heading: Georgia, serif;",
+  );
+  await expect(
+    page.locator('[data-check="light-page-gradient-2"]'),
+  ).toContainText("Pass");
+
+  const other = await page.context().newPage();
+  await other.goto(page.url());
+  await other.getByText("Advanced: interaction", { exact: false }).click();
+  await expect(other.getByLabel("Dark page", { exact: true })).toHaveValue(
+    "#0b1f3a",
+  );
+  await expect(other.getByLabel("Light sunken", { exact: true })).toHaveValue(
+    "#eef2f7",
+  );
+  await expect(
+    other.getByLabel("Light accent gradient", { exact: true }),
+  ).toHaveValue("linear-gradient(90deg, #c2410c, #9a3412)");
+  await expect(other.getByLabel("Heading font", { exact: true })).toHaveValue(
+    "Georgia, serif",
+  );
+  await other.close();
+  expect(errors).toEqual([]);
+});
+
+test("a gradient stop that fails on-accent contrast is flagged", async ({
+  page,
+}) => {
+  await open(page);
+  await advanced(page);
+  await page.getByLabel("Light accent", { exact: true }).fill("#c2410c");
+  await page.getByLabel("Light on accent", { exact: true }).fill("#ffffff");
+  await page
+    .getByLabel("Light accent gradient", { exact: true })
+    .fill("linear-gradient(90deg, #c2410c, #ffb300)");
+  await expect(
+    page.locator('[data-check="light-page-gradient-1"]'),
+  ).toContainText("Pass");
+  await expect(
+    page.locator('[data-check="light-page-gradient-2"]'),
+  ).toContainText("Fail");
+  // Light values drive the inverse band on dark pages, gradient included.
+  await expect(
+    page.locator('[data-check="dark-inverse-gradient-2"]'),
+  ).toContainText("Fail");
+  await expect(
+    page.getByText(/On accent on gradient stop 2/).first(),
+  ).toBeVisible();
+});
+
+test("an invalid gradient or font shows a field error", async ({ page }) => {
+  const errors = await open(page);
+  await advanced(page);
+  const gradient = page.getByLabel("Dark accent gradient", { exact: true });
+  for (const value of [
+    "#ff6a00",
+    "linear-gradient(90deg, url(x), #ffb300)",
+    "image-set(url(x) 1x)",
+  ]) {
+    await gradient.fill(value);
+    await expect(gradient).toHaveAttribute("aria-invalid", "true");
+    await expect(
+      page.getByText(/Use linear-gradient\(\), radial-gradient\(\)/),
+    ).toBeVisible();
+  }
+  await expect(cssOutput(page)).not.toContainText("accent-gradient");
+  const font = page.getByLabel("Body font", { exact: true });
+  await font.fill("Inter; color: red");
+  await expect(font).toHaveAttribute("aria-invalid", "true");
+  await expect(cssOutput(page)).not.toContainText("color: red");
+  await font.fill('"Inter", sans-serif');
+  await expect(font).not.toHaveAttribute("aria-invalid", "true");
   expect(errors).toEqual([]);
 });
 

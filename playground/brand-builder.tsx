@@ -1,10 +1,17 @@
 /* Brand builder: design a brand against the 0.9.0 brand contract and see it
    live in light and dark, with contrast checks and copyable output. Every
    value lives in the URL, so a brand can be shared as a link. */
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   Badge,
   Button,
+  CallToAction,
   CodeBlock,
   DataTable,
   Dropdown,
@@ -21,16 +28,22 @@ import {
 } from "../src/index.js";
 import {
   brandToCss,
-  brandToStyle,
+  isBrandColour,
+  isBrandFont,
+  isBrandGradient,
   type BrandAppearanceTokens,
   type BrandDefinition,
+  type BrandFonts,
 } from "../src/brand.js";
 import { Check, Close } from "../src/icons.js";
 import { isBrandParam } from "./explorer.js";
 
 type Key = keyof BrandAppearanceTokens;
 type Mode = "light" | "dark";
-type Values = Record<Mode, Partial<Record<Key, string>>>;
+type FontKey = keyof BrandFonts;
+type Values = Record<Mode, Partial<Record<Key, string>>> & {
+  fonts?: Partial<Record<FontKey, string>>;
+};
 
 interface Field {
   key: Key;
@@ -41,7 +54,9 @@ interface Field {
   token: string;
   /** How the appearance derives it when the brand leaves it empty. */
   derived: Record<Mode, string>;
-  advanced: boolean;
+  /** core: the required pair. advanced: interaction, accent, focus, link and
+      selected. surface: page, surface and sunken. gradient: the accent fill. */
+  group: "core" | "advanced" | "surface" | "gradient";
 }
 
 const FIELDS: Field[] = [
@@ -51,7 +66,7 @@ const FIELDS: Field[] = [
     label: "Primary",
     token: "--m-primary",
     derived: { light: "neutral black", dark: "neutral white" },
-    advanced: false,
+    group: "core",
   },
   {
     key: "onPrimary",
@@ -59,7 +74,7 @@ const FIELDS: Field[] = [
     label: "On primary",
     token: "--m-on-primary",
     derived: { light: "neutral white", dark: "neutral black" },
-    advanced: false,
+    group: "core",
   },
   {
     key: "primaryHover",
@@ -70,7 +85,7 @@ const FIELDS: Field[] = [
       light: "primary mixed 85% with ink",
       dark: "primary mixed 85% with ink",
     },
-    advanced: true,
+    group: "advanced",
   },
   {
     key: "primaryActive",
@@ -81,7 +96,7 @@ const FIELDS: Field[] = [
       light: "primary mixed 72% with ink",
       dark: "primary mixed 72% with ink",
     },
-    advanced: true,
+    group: "advanced",
   },
   {
     key: "accent",
@@ -89,7 +104,7 @@ const FIELDS: Field[] = [
     label: "Accent",
     token: "--m-accent",
     derived: { light: "primary", dark: "primary" },
-    advanced: true,
+    group: "advanced",
   },
   {
     key: "onAccent",
@@ -97,7 +112,7 @@ const FIELDS: Field[] = [
     label: "On accent",
     token: "--m-on-accent",
     derived: { light: "on primary", dark: "on primary" },
-    advanced: true,
+    group: "advanced",
   },
   {
     key: "focus",
@@ -105,7 +120,7 @@ const FIELDS: Field[] = [
     label: "Focus ring",
     token: "--m-focus",
     derived: { light: "primary", dark: "primary" },
-    advanced: true,
+    group: "advanced",
   },
   {
     key: "link",
@@ -113,7 +128,7 @@ const FIELDS: Field[] = [
     label: "Link",
     token: "--m-link",
     derived: { light: "primary", dark: "ink" },
-    advanced: true,
+    group: "advanced",
   },
   {
     key: "selected",
@@ -124,14 +139,58 @@ const FIELDS: Field[] = [
       light: "primary tinted 8% into the page",
       dark: "primary tinted 10% into the page",
     },
-    advanced: true,
+    group: "advanced",
   },
+  {
+    key: "paper",
+    css: "paper",
+    label: "Page",
+    token: "--m-paper",
+    derived: { light: "Mortar's white", dark: "Mortar's black" },
+    group: "surface",
+  },
+  {
+    key: "surface",
+    css: "surface",
+    label: "Surface",
+    token: "--m-surface",
+    derived: { light: "Mortar's white", dark: "Mortar's near-black" },
+    group: "surface",
+  },
+  {
+    key: "sunken",
+    css: "sunken",
+    label: "Sunken",
+    token: "--m-sunken",
+    derived: { light: "Mortar's light grey", dark: "Mortar's dark grey" },
+    group: "surface",
+  },
+  {
+    key: "accentGradient",
+    css: "accent-gradient",
+    label: "Accent gradient",
+    token: "--m-accent-fill",
+    derived: { light: "the flat accent", dark: "the flat accent" },
+    group: "gradient",
+  },
+];
+const FONT_FIELDS: { key: FontKey; css: string; label: string }[] = [
+  { key: "heading", css: "font-heading", label: "Heading font" },
+  { key: "body", css: "font", label: "Body font" },
 ];
 const MODES: Mode[] = ["light", "dark"];
 const PREFIX: Record<Mode, "l" | "d"> = { light: "l", dark: "d" };
 const TITLE: Record<Mode, string> = { light: "Light", dark: "Dark" };
-/** Live tokens the contrast checks and derived hints read from each preview. */
-const PROBES = [...FIELDS.map((f) => f.token), "--m-paper"];
+const OTHER: Record<Mode, Mode> = { light: "dark", dark: "light" };
+/** Live colour tokens the contrast checks and derived hints read from each
+    preview. The accent fill is an image, read separately. */
+const PROBES = [
+  ...new Set([
+    ...FIELDS.filter((f) => f.group !== "gradient").map((f) => f.token),
+    "--m-ink",
+    "--m-muted",
+  ]),
+];
 
 const PRESETS: { id: string; label: string; values: Values }[] = [
   {
@@ -210,6 +269,13 @@ function readUrl(): { name: string; values: Values } {
         any = true;
       }
     }
+  for (const font of FONT_FIELDS) {
+    const value = params.get(font.css);
+    if (value !== null) {
+      (values.fonts ??= {})[font.key] = value;
+      any = true;
+    }
+  }
   const name = params.get("name");
   // A first visit starts from the blue preset; a shared link keeps exactly what it lists.
   if (!any && name === null)
@@ -226,26 +292,41 @@ function writeUrl(name: string, values: Values) {
       const value = values[mode][field.key];
       if (value) params.set(param(mode, field), value);
     }
+  for (const font of FONT_FIELDS) {
+    const value = values.fonts?.[font.key];
+    if (value) params.set(font.css, value);
+  }
   const href = `?${params}`;
   if (href !== location.search) history.replaceState(null, "", href);
 }
 const clone = (values: Values): Values => ({
   light: { ...values.light },
   dark: { ...values.dark },
+  fonts: { ...values.fonts },
 });
 
-/** Why a colour value is rejected, or undefined when it is usable. */
-function colourError(key: Key, value: string | undefined) {
+/** Why a value is rejected, or undefined when it is usable. */
+function fieldError(field: Field, value: string | undefined) {
   const text = value?.trim();
   if (!text) return undefined;
-  try {
-    brandToStyle({ light: { [key]: text } });
-  } catch {
-    return "Use colour syntax only: hex, a colour name, rgb(), oklch(), color-mix() or var().";
+  const supports = (property: string) =>
+    typeof CSS === "undefined" || CSS.supports(property, text);
+  if (field.group === "gradient") {
+    if (!isBrandGradient(text))
+      return "Use linear-gradient(), radial-gradient() or conic-gradient() with at least two colour stops, each in colour syntax.";
+    if (!supports("background-image"))
+      return "This is not a gradient the browser recognises.";
+    return undefined;
   }
-  if (typeof CSS !== "undefined" && !CSS.supports("color", text))
-    return "This is not a colour the browser recognises.";
+  if (!isBrandColour(text))
+    return "Use colour syntax only: hex, a colour name, rgb(), oklch(), color-mix() or var().";
+  if (!supports("color")) return "This is not a colour the browser recognises.";
   return undefined;
+}
+function fontError(value: string | undefined) {
+  const text = value?.trim();
+  if (!text || isBrandFont(text)) return undefined;
+  return 'Use font family names, quoted names and generic families, separated by commas, e.g. "Inter", sans-serif.';
 }
 function nameError(name: string) {
   if (!name.trim()) return "Enter a brand name.";
@@ -289,15 +370,28 @@ function ratio(a?: string, b?: string) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-/** Resolved tokens as hex, keyed by token name. */
+/** Resolved tokens as hex, keyed by token name. The accent fill is its colour
+    stops as hex, separated by spaces. */
 type Resolved = Record<string, string>;
 type Measured = Record<Mode, { page: Resolved; inverse: Resolved }>;
+const FILL = "--m-accent-fill";
+const STOP =
+  /(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^()]*\)|#[0-9a-f]{3,8}\b/gi;
 function readProbes(scope: Element | null | undefined): Resolved {
   const out: Resolved = {};
   scope?.querySelectorAll<HTMLElement>("[data-token]").forEach((probe) => {
     const rgb = toRgb(getComputedStyle(probe).backgroundColor);
     if (rgb) out[probe.dataset.token!] = hex(rgb);
   });
+  const fill = scope?.querySelector<HTMLElement>("[data-fill]");
+  if (fill) {
+    // The computed gradient serialises each stop as a colour function.
+    const stops = (getComputedStyle(fill).backgroundImage.match(STOP) ?? [])
+      .map(toRgb)
+      .filter((rgb) => rgb !== null)
+      .map(hex);
+    if (stops.length) out[FILL] = stops.join(" ");
+  }
   return out;
 }
 function Probes({ scope }: { scope: "page" | "inverse" }) {
@@ -310,6 +404,7 @@ function Probes({ scope }: { scope: "page" | "inverse" }) {
           style={{ backgroundColor: `var(${token})` }}
         />
       ))}
+      <span data-fill style={{ backgroundImage: `var(${FILL})` }} />
     </div>
   );
 }
@@ -355,12 +450,19 @@ function Sample({
                 aria-hidden="true"
               />
               <span>{field.label}</span>
-              <code>{measured?.[field.token] ?? "…"}</code>
+              <code>
+                {measured?.[field.token]?.split(" ").join(" → ") ?? "…"}
+              </code>
             </li>
           ))}
         </ul>
+        <div className="pg-brand-type">
+          <h4>Heading font</h4>
+          <p>Body text in the brand’s body font, with headings above it.</p>
+        </div>
         <div className="pg-brand-row">
           <Button>Save</Button>
+          <Button variant="accent">Upgrade</Button>
           <Button variant="secondary">Preview</Button>
           <Button variant="ghost">Cancel</Button>
           <span className="pg-focus-sample" aria-hidden="true">
@@ -454,6 +556,24 @@ function Sample({
             </p>
           </Section>
         </div>
+        <div className="pg-brand-accent">
+          <CallToAction
+            tone="accent"
+            title={`Accent band on ${title.toLowerCase()}`}
+            description="The accent fill: the brand's gradient, or its flat accent, with on-accent text."
+            actions={[
+              {
+                label: "Start building",
+                href: "https://github.com/tonycodes/mortar",
+              },
+              {
+                label: "Read the guide",
+                href: "https://github.com/tonycodes/mortar/blob/main/docs/theming.md",
+              },
+            ]}
+            headingLevel={4}
+          />
+        </div>
       </div>
     </ThemeProvider>
   );
@@ -496,6 +616,50 @@ const CHECKS = [
     min: 4.5,
   },
   {
+    id: "link-surface",
+    label: "Link on surface",
+    fg: "--m-link",
+    bg: "--m-surface",
+    min: 4.5,
+  },
+  {
+    id: "link-sunken",
+    label: "Link on sunken",
+    fg: "--m-link",
+    bg: "--m-sunken",
+    min: 4.5,
+  },
+  // Text and muted colours stay Mortar's; a tinted surface must keep them
+  // readable. Muted text is the lowest-contrast text, so it is the floor.
+  {
+    id: "text-page",
+    label: "Text on page",
+    fg: "--m-ink",
+    bg: "--m-paper",
+    min: 4.5,
+  },
+  {
+    id: "muted-page",
+    label: "Muted text on page",
+    fg: "--m-muted",
+    bg: "--m-paper",
+    min: 4.5,
+  },
+  {
+    id: "muted-surface",
+    label: "Muted text on surface",
+    fg: "--m-muted",
+    bg: "--m-surface",
+    min: 4.5,
+  },
+  {
+    id: "muted-sunken",
+    label: "Muted text on sunken",
+    fg: "--m-muted",
+    bg: "--m-sunken",
+    min: 4.5,
+  },
+  {
     id: "focus",
     label: "Focus ring on page",
     fg: "--m-focus",
@@ -504,25 +668,73 @@ const CHECKS = [
   },
 ];
 
-function Contrast({ measured }: { measured: Measured | null }) {
+interface Result {
+  id: string;
+  label: string;
+  fg?: string;
+  bg?: string;
+  min: number;
+  value: number;
+  pass: boolean;
+}
+
+function Contrast({
+  measured,
+  gradients,
+}: {
+  measured: Measured | null;
+  /** Which appearances define an accent gradient. */
+  gradients: Record<Mode, boolean>;
+}) {
   if (!measured) return <p>Measuring the preview…</p>;
   const groups = MODES.flatMap((mode) =>
-    (["page", "inverse"] as const).map((scope) => ({
-      mode,
-      scope,
-      label:
-        scope === "page"
-          ? `${TITLE[mode]} page`
-          : `Inverse band on ${TITLE[mode].toLowerCase()}`,
-      results: CHECKS.map((check) => {
-        const values = measured[mode][scope];
-        const value = ratio(values[check.fg], values[check.bg]);
-        return { check, value, pass: value >= check.min, values };
-      }),
-    })),
+    (["page", "inverse"] as const).map((scope) => {
+      const values = measured[mode][scope];
+      const result = (
+        id: string,
+        label: string,
+        fg: string | undefined,
+        bg: string | undefined,
+        min: number,
+      ): Result => {
+        const value = ratio(fg, bg);
+        return { id, label, fg, bg, min, value, pass: value >= min };
+      };
+      // Inverse bands use the other appearance's values, gradient included.
+      const own = scope === "page" ? mode : OTHER[mode];
+      const stops = gradients[own] ? (values[FILL]?.split(" ") ?? []) : [];
+      return {
+        mode,
+        scope,
+        label:
+          scope === "page"
+            ? `${TITLE[mode]} page`
+            : `Inverse band on ${TITLE[mode].toLowerCase()}`,
+        results: [
+          ...CHECKS.map((check) =>
+            result(
+              check.id,
+              check.label,
+              values[check.fg],
+              values[check.bg],
+              check.min,
+            ),
+          ),
+          ...stops.map((stop, index) =>
+            result(
+              `gradient-${index + 1}`,
+              `On accent on gradient stop ${index + 1}`,
+              values["--m-on-accent"],
+              stop,
+              4.5,
+            ),
+          ),
+        ],
+      };
+    }),
   );
   const failures = groups.flatMap((g) =>
-    g.results.filter((r) => !r.pass).map((r) => `${g.label}: ${r.check.label}`),
+    g.results.filter((r) => !r.pass).map((r) => `${g.label}: ${r.label}`),
   );
   return (
     <>
@@ -546,42 +758,41 @@ function Contrast({ measured }: { measured: Measured | null }) {
         ]}
         groups={groups.map((group) => ({
           label: group.label,
-          rows: group.results.map(({ check, value, pass, values }) => ({
-            check: check.label,
-            colours: (
-              <span className="pg-pair">
-                <span
-                  className="pg-pair-chip"
-                  style={{
-                    background: values[check.bg],
-                    color: values[check.fg],
-                  }}
-                  aria-hidden="true"
-                >
-                  Aa
-                </span>
-                <code>
-                  {values[check.fg]} on {values[check.bg]}
-                </code>
-              </span>
-            ),
-            ratio: (
-              <span className="pg-ratio">
-                {value.toFixed(2)}:1
-                <small>needs {check.min}:1</small>
-              </span>
-            ),
-            result: (
-              <span data-check={`${group.mode}-${group.scope}-${check.id}`}>
-                <Badge tone={pass ? "success" : "danger"}>
-                  <span className="pg-result">
-                    {pass ? <Check /> : <Close />}
-                    {pass ? "Pass" : "Fail"}
+          rows: group.results.map(
+            ({ id, label, fg, bg, min, value, pass }) => ({
+              check: label,
+              colours: (
+                <span className="pg-pair">
+                  <span
+                    className="pg-pair-chip"
+                    style={{ background: bg, color: fg }}
+                    aria-hidden="true"
+                  >
+                    Aa
                   </span>
-                </Badge>
-              </span>
-            ),
-          })),
+                  <code>
+                    {fg} on {bg}
+                  </code>
+                </span>
+              ),
+              ratio: (
+                <span className="pg-ratio">
+                  {value.toFixed(2)}:1
+                  <small>needs {min}:1</small>
+                </span>
+              ),
+              result: (
+                <span data-check={`${group.mode}-${group.scope}-${id}`}>
+                  <Badge tone={pass ? "success" : "danger"}>
+                    <span className="pg-result">
+                      {pass ? <Check /> : <Close />}
+                      {pass ? "Pass" : "Fail"}
+                    </span>
+                  </Badge>
+                </span>
+              ),
+            }),
+          ),
         }))}
       />
     </>
@@ -630,14 +841,18 @@ export function BrandBuilder() {
   const [copied, setCopied] = useState("");
   const previews = useRef<HTMLDivElement>(null);
 
-  const errors = Object.fromEntries(
-    MODES.flatMap((mode) =>
+  const errors = Object.fromEntries([
+    ...MODES.flatMap((mode) =>
       FIELDS.map((field) => [
         param(mode, field),
-        colourError(field.key, values[mode][field.key]),
+        fieldError(field, values[mode][field.key]),
       ]),
     ),
-  ) as Record<string, string | undefined>;
+    ...FONT_FIELDS.map((font) => [
+      font.css,
+      fontError(values.fonts?.[font.key]),
+    ]),
+  ]) as Record<string, string | undefined>;
   const invalid = Object.values(errors).filter(Boolean).length;
   const tokens: BrandDefinition = {};
   for (const mode of MODES)
@@ -646,6 +861,10 @@ export function BrandBuilder() {
       if (value && !errors[param(mode, field)])
         (tokens[mode] ??= {})[field.key] = value;
     }
+  for (const font of FONT_FIELDS) {
+    const value = values.fonts?.[font.key]?.trim();
+    if (value && !errors[font.css]) (tokens.fonts ??= {})[font.key] = value;
+  }
   const nameProblem = nameError(name);
   const brandName = nameProblem ? DEFAULT_NAME : name;
   const previewBrand = brandName;
@@ -686,7 +905,52 @@ export function BrandBuilder() {
       ...current,
       [mode]: { ...current[mode], [key]: value },
     }));
+  const updateFont = (key: FontKey, value: string) =>
+    setValues((current) => ({
+      ...current,
+      fonts: { ...current.fonts, [key]: value },
+    }));
+  const gradientField = (mode: Mode, f: Field) => {
+    const id = param(mode, f);
+    const value = values[mode][f.key] ?? "";
+    const stops = measured?.[mode].page[f.token]?.split(" ").join(" → ");
+    return (
+      <Input
+        key={id}
+        label={`${TITLE[mode]} ${f.label.toLowerCase()}`}
+        value={value}
+        spellCheck={false}
+        autoComplete="off"
+        placeholder="linear-gradient(90deg, #c2410c, #9a3412)"
+        error={errors[id]}
+        hint={
+          value.trim()
+            ? `--m-brand-${PREFIX[mode]}-${f.css}. On accent text must reach 4.5:1 on every stop.`
+            : `Empty: the accent fill is ${f.derived[mode]}${stops ? ` (${stops})` : ""}.`
+        }
+        onChange={(e) => update(mode, f.key, e.target.value)}
+        action={
+          <span
+            className="pg-gradient-swatch"
+            data-pg-gradient={mode}
+            style={
+              {
+                // Each preview's own accent fill, as Mortar paints it.
+                backgroundColor: measured?.[mode].page["--m-accent"],
+                backgroundImage:
+                  value.trim() && !errors[id]
+                    ? value
+                    : `linear-gradient(${measured?.[mode].page["--m-accent"] ?? "transparent"}, ${measured?.[mode].page["--m-accent"] ?? "transparent"})`,
+              } as CSSProperties
+            }
+            aria-hidden="true"
+          />
+        }
+      />
+    );
+  };
   const field = (mode: Mode, f: Field) => {
+    if (f.group === "gradient") return gradientField(mode, f);
     const id = param(mode, f);
     const value = values[mode][f.key] ?? "";
     const resolved = measured?.[mode].page[f.token];
@@ -765,13 +1029,16 @@ export function BrandBuilder() {
               legend={TITLE[mode]}
               description={`Required pair for the ${mode} appearance.`}
             >
-              {FIELDS.filter((f) => !f.advanced).map((f) => field(mode, f))}
+              {FIELDS.filter((f) => f.group === "core").map((f) =>
+                field(mode, f),
+              )}
             </Fieldset>
           ))}
         </div>
         <details className="pg-brand-advanced">
           <summary>
-            Advanced: interaction, accent, focus, link and selected
+            Advanced: interaction, accent, focus, link, selected, surfaces and
+            gradient
           </summary>
           <div className="pg-brand-pair">
             {MODES.map((mode) => (
@@ -780,11 +1047,56 @@ export function BrandBuilder() {
                 legend={`${TITLE[mode]}, optional`}
                 description="Leave empty to derive from primary."
               >
-                {FIELDS.filter((f) => f.advanced).map((f) => field(mode, f))}
+                {FIELDS.filter((f) => f.group === "advanced").map((f) =>
+                  field(mode, f),
+                )}
+              </Fieldset>
+            ))}
+          </div>
+          <div className="pg-brand-pair">
+            {MODES.map((mode) => (
+              <Fieldset
+                key={mode}
+                legend={`${TITLE[mode]} surfaces and gradient`}
+                description="Leave empty to keep Mortar's surfaces. Text and status colours stay Mortar's, so check them against tinted surfaces below. The gradient paints accent buttons and accent bands."
+              >
+                {FIELDS.filter(
+                  (f) => f.group === "surface" || f.group === "gradient",
+                ).map((f) => field(mode, f))}
               </Fieldset>
             ))}
           </div>
         </details>
+        <Fieldset
+          legend="Fonts"
+          description="The same in light and dark. Font-family lists only; load the font files in your app."
+        >
+          <div className="pg-brand-pair">
+            {FONT_FIELDS.map((font) => (
+              <Input
+                key={font.css}
+                label={font.label}
+                value={values.fonts?.[font.key] ?? ""}
+                spellCheck={false}
+                autoComplete="off"
+                placeholder={
+                  font.key === "heading"
+                    ? '"Fraunces", Georgia, serif'
+                    : '"Inter", sans-serif'
+                }
+                error={errors[font.css]}
+                hint={
+                  values.fonts?.[font.key]?.trim()
+                    ? `--m-brand-${font.css}`
+                    : font.key === "heading"
+                      ? "Empty: headings use the body font."
+                      : "Empty: Mortar's system font stack."
+                }
+                onChange={(e) => updateFont(font.key, e.target.value)}
+              />
+            ))}
+          </div>
+        </Fieldset>
       </section>
       <section className="pg-brand-section" aria-labelledby="brand-preview">
         <h2 id="brand-preview">Preview</h2>
@@ -805,9 +1117,16 @@ export function BrandBuilder() {
         <p>
           WCAG ratios of the tokens as the browser resolves them in each
           preview, including derived values. Text needs 4.5:1; the focus ring
-          needs 3:1.
+          needs 3:1. With an accent gradient, on-accent text is checked against
+          every stop.
         </p>
-        <Contrast measured={measured} />
+        <Contrast
+          measured={measured}
+          gradients={{
+            light: !!tokens.light?.accentGradient,
+            dark: !!tokens.dark?.accentGradient,
+          }}
+        />
       </section>
       <section className="pg-brand-section" aria-labelledby="brand-export">
         <h2 id="brand-export">Export</h2>
@@ -840,11 +1159,15 @@ export function BrandBuilder() {
 
 /** Values without empty strings, for comparing with presets. */
 function trimmed(values: Values): Values {
-  const out: Values = { light: {}, dark: {} };
+  const out: Values = { light: {}, dark: {}, fonts: {} };
   for (const mode of MODES)
     for (const field of FIELDS) {
       const value = values[mode][field.key]?.trim();
       if (value) out[mode][field.key] = value;
     }
+  for (const font of FONT_FIELDS) {
+    const value = values.fonts?.[font.key]?.trim();
+    if (value) out.fonts![font.key] = value;
+  }
   return out;
 }

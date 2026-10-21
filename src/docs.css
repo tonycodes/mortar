@@ -327,7 +327,7 @@
   }
   .m-file-row small {
     margin-left: auto;
-    font: 11px var(--m-font);
+    font: 11px var(--m-brand-font, var(--m-font));
     color: var(--m-muted);
   }
   [data-folder] > .m-file-row {
@@ -380,7 +380,7 @@
     padding: 4px 8px;
     border-radius: 6px;
     color: var(--m-code-dim);
-    font: 12px var(--m-font);
+    font: 12px var(--m-brand-font, var(--m-font));
     min-height: var(--m-touch-target);
   }
   .m-code-tabs pre {
@@ -509,7 +509,7 @@
     color: var(--m-ink);
   }
   .m-param-list dt span:last-child {
-    font: var(--m-weight-semibold) 12px var(--m-font);
+    font: var(--m-weight-semibold) 12px var(--m-brand-font, var(--m-font));
   }
   .m-param-list dd {
     margin: 4px 0 0;

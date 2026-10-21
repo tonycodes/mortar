@@ -284,6 +284,7 @@ export function Hero({
   headingLevel = 1,
   background,
   images = [],
+  tone = "default",
 }: {
   id?: string;
   className?: string;
@@ -299,6 +300,8 @@ export function Hero({
   background?: ReactNode;
   /** Image tiles shown as a staggered collage beside (split) or below (center) the copy. Use instead of children; give each image its own alt text, or alt="" when decorative. */
   images?: ReactNode[];
+  /** default: the page. accent: a full-bleed band of the brand's accent fill (its accent gradient when it defines one) with on-accent copy and actions; the preview keeps the page's colours. A background takes precedence. */
+  tone?: "default" | "accent";
 }) {
   return (
     <section
@@ -306,7 +309,7 @@ export function Hero({
       className={cx("m-hero", `m-hero-${layout}`, className)}
       {...componentRoot("Hero")}
       data-background={background ? true : undefined}
-      data-tone={background ? "inverse" : undefined}
+      data-tone={background ? "inverse" : sectionTone(tone)}
     >
       {background && (
         <div className="m-hero-background" aria-hidden="true">
@@ -882,8 +885,8 @@ export function CallToAction({
   title: string;
   description?: string;
   actions: LinkAction[];
-  /** default: the page surface. muted: the sunken band. inverse: the inverse token remap. */
-  tone?: SectionTone;
+  /** default: the page surface. muted: the sunken band. inverse: the inverse token remap. accent: the brand's accent fill (its accent gradient when it defines one) with on-accent copy and actions. */
+  tone?: SectionTone | "accent";
   /** Image or screenshot beside the copy (promo layout). */
   media?: ReactNode;
   headingLevel?: HeadingLevel;

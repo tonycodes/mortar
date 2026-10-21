@@ -17,7 +17,7 @@
       "onDismiss": "() => void",
       "label": "string",
       "dismissLabel": "string",
-      "tone": "\"default\" | \"inverse\" (default \"inverse\")",
+      "tone": "\"default\" | \"inverse\" | \"accent\" (default \"inverse\"; accent paints the brand's accent fill, its gradient when it defines one, with on-accent text)",
       "variant": "\"bar\" | \"floating\" (default \"bar\"; floating is an inset, rounded panel with a shadow)",
       "placement": "\"inline\" | \"bottom\" (default \"inline\"; bottom fixes the banner to the bottom of the viewport and always shows the dismiss button, which hides it even when onDismiss is omitted)",
       "id": "string",

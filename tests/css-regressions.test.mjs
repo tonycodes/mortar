@@ -89,7 +89,10 @@ test("forced-colors mode keeps selected and current states visible", () => {
 test("a light container inside a dark document gets the light tokens", () => {
   const css = sources["src/tokens.css"];
   const body = selectorBody(css, '[data-mortar-appearance="light"]');
-  assert.equal(declaration(body, "--m-paper"), "#ffffff");
+  assert.equal(
+    declaration(body, "--m-paper"),
+    "var(--m-brand-l-paper, #ffffff)",
+  );
 });
 
 test("busy (aria-disabled) buttons look like disabled ones", () => {
