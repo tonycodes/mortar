@@ -15,7 +15,10 @@
       "label": "ReactNode",
       "checked": "boolean",
       "onChange": "ChangeEventHandler<HTMLInputElement>",
-      "description": "ReactNode",
+      "description": "ReactNode (the checkbox's hint, linked by aria-describedby)",
+      "error": "string (announced when it appears; marks the checkbox aria-invalid and links the message by aria-describedby)",
+      "id": "string (defaults to a generated id when there is a description or error)",
+      "required": "boolean (native; adds a decorative marker to the label)",
       "className": "string (on the root element)"
     },
     "usage": "Import { Checkbox } from @tony-ui/mortar. Compose with the public typed props.",
@@ -29,7 +32,7 @@
   "testing": {
     "profile": "control",
     "target": ".m-choice input",
-    "states": ["disabled"],
+    "states": ["disabled", "error"],
     "probe": "checkbox"
   }
 }

@@ -4,6 +4,7 @@ import {
   forwardRef,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
   type ButtonHTMLAttributes,
@@ -36,6 +37,7 @@ import {
   useComponentName,
   focusAway,
   rovingIndex,
+  useDomId,
   useField,
 } from "./internal.js";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -390,34 +392,53 @@ export function TextArea({
     </div>
   );
 }
-/** Label beside a control with a description line linked by aria-describedby. */
+/**
+ * Label beside a control, with a description line and an error message under
+ * the label, both linked to the control by aria-describedby.
+ */
 function DescribedChoice({
   component,
   input,
   id,
   label,
   description,
+  error,
+  required,
+  describedBy,
   className,
 }: {
   component: string;
-  input: (attrs: { id: string; "aria-describedby": string }) => ReactNode;
+  input: (attrs: { id: string; "aria-describedby"?: string }) => ReactNode;
   id?: string;
   label: ReactNode;
-  description: ReactNode;
+  description?: ReactNode;
+  error?: string;
+  required?: boolean;
+  /** The consumer's own aria-describedby, kept before the kit's ids. */
+  describedBy?: string;
   className?: string;
 }) {
   const generated = useId();
   const fieldId = id || generated;
   const descriptionId = `${fieldId}-description`;
+  const messageId = `${fieldId}-message`;
+  const ids =
+    [describedBy, description && descriptionId, error && messageId]
+      .filter(Boolean)
+      .join(" ") || undefined;
   return (
     <div
       {...componentRoot(component)}
       className={cx("m-choice", "m-choice-described", className)}
     >
-      {input({ id: fieldId, "aria-describedby": descriptionId })}
+      {input({ id: fieldId, "aria-describedby": ids })}
       <div className="m-choice-text">
-        <label htmlFor={fieldId}>{label}</label>
-        <p id={descriptionId}>{description}</p>
+        <label htmlFor={fieldId}>
+          {label}
+          {required && <RequiredMark />}
+        </label>
+        {description && <p id={descriptionId}>{description}</p>}
+        <FieldFeedback id={messageId} error={error} />
       </div>
     </div>
   );
@@ -425,28 +446,60 @@ function DescribedChoice({
 export function Checkbox({
   label,
   description,
+  error,
   className,
   ...props
 }: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
   label: ReactNode;
-  /** Secondary line under the label, announced as the description. */
+  /** Secondary line under the label, announced as the description (the checkbox's hint). */
   description?: ReactNode;
+  /** Marks the checkbox invalid; the message is announced when it appears. */
+  error?: string;
 }) {
-  if (description)
+  const input = useRef<HTMLInputElement>(null);
+  // Once an error has shown, keep the described layout: switching back to the
+  // plain label would remount the input and drop focus while the person fixes
+  // it. If the layout changes while the input has focus, focus follows it.
+  const [described, setDescribed] = useState(false);
+  const refocus = useRef(false);
+  if (error && !described) {
+    refocus.current =
+      typeof document !== "undefined" &&
+      !!input.current &&
+      input.current === document.activeElement;
+    setDescribed(true);
+  }
+  useLayoutEffect(() => {
+    if (refocus.current) input.current?.focus();
+    refocus.current = false;
+  }, [described]);
+  if (description || error || described)
     return (
       <DescribedChoice
         component="Checkbox"
         id={props.id}
         label={label}
         description={description}
+        error={error}
+        required={props.required}
+        describedBy={props["aria-describedby"]}
         className={className}
-        input={(attrs) => <input {...props} {...attrs} type="checkbox" />}
+        input={(attrs) => (
+          <input
+            {...props}
+            {...attrs}
+            ref={input}
+            aria-invalid={error ? true : props["aria-invalid"]}
+            type="checkbox"
+          />
+        )}
       />
     );
   return (
     <label {...componentRoot("Checkbox")} className={cx("m-choice", className)}>
-      <input {...props} type="checkbox" />
+      <input {...props} ref={input} type="checkbox" />
       {label}
+      {props.required && <RequiredMark />}
     </label>
   );
 }
@@ -493,6 +546,10 @@ export function RadioGroup({
   onChange,
   options,
   layout = "list",
+  hint,
+  error,
+  required,
+  id,
   className,
 }: {
   label: string;
@@ -509,15 +566,34 @@ export function RadioGroup({
   }[];
   /** Stacked cards, a card grid, or colour swatches. */
   layout?: "list" | "grid" | "swatches";
+  /** Help under the legend, announced as the group's description. */
+  hint?: string;
+  /**
+   * Marks the group invalid: the message under the legend is announced when
+   * it appears and describes the group, and each radio is aria-invalid.
+   */
+  error?: string;
+  /** Marks every radio required and adds a decorative marker to the legend. */
+  required?: boolean;
+  /** On the fieldset, e.g. the target of an ErrorSummary link. */
+  id?: string;
   className?: string;
 }) {
+  const { messageId, describedBy } = useField({ id, hint, error });
   return (
     <fieldset
       {...componentRoot("RadioGroup")}
       className={cx("m-radio-group", className)}
       data-layout={layout === "list" ? undefined : layout}
+      id={id}
+      aria-describedby={describedBy}
+      data-invalid={error ? true : undefined}
     >
-      <legend>{label}</legend>
+      <legend>
+        {label}
+        {required && <RequiredMark />}
+      </legend>
+      <FieldFeedback id={messageId} hint={hint} error={error} />
       {options.map((o) => (
         <label className="m-radio-card" key={o.value}>
           <input
@@ -526,6 +602,8 @@ export function RadioGroup({
             value={o.value}
             checked={value === o.value}
             disabled={o.disabled}
+            required={required}
+            aria-invalid={error ? true : undefined}
             onChange={() => onChange(o.value)}
           />
           {layout === "swatches" ? (
@@ -866,6 +944,142 @@ export function Notice({
           <Close />
         </button>
       )}
+    </div>
+  );
+}
+/** One problem in an ErrorSummary. */
+export interface ErrorSummaryItem {
+  /** The field's error, worded the same as the message under the field. */
+  message: string;
+  /** Link to the field; defaults to `#target`. Omit both for a form-level problem without a link. */
+  href?: string;
+  /**
+   * Id of the field the link focuses. Defaults to the id in an in-page
+   * `href`. For a group (a RadioGroup's fieldset, a CodeInput) the checked
+   * or first enabled control inside takes focus.
+   */
+  target?: string;
+}
+const FOCUSABLE_CONTROL =
+  'input:not([type="hidden"]):not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled), [tabindex]:not([tabindex="-1"])';
+/**
+ * Moves focus to the field an ErrorSummary link names, and scrolls its label
+ * or legend into view with it, so the question is visible with the control.
+ */
+function focusField(target: HTMLElement) {
+  const control = target.matches(FOCUSABLE_CONTROL)
+    ? target
+    : (target.querySelector<HTMLElement>(
+        "input:is([type=radio], [type=checkbox]):checked:not(:disabled)",
+      ) ?? target.querySelector<HTMLElement>(FOCUSABLE_CONTROL));
+  const focusable = control ?? (target.tabIndex >= -1 ? target : null);
+  const anchor =
+    target instanceof HTMLFieldSetElement
+      ? target.querySelector("legend")
+      : control instanceof HTMLInputElement ||
+          control instanceof HTMLSelectElement ||
+          control instanceof HTMLTextAreaElement
+        ? control.labels?.[0]
+        : null;
+  focusable?.focus({ preventScroll: true });
+  (anchor ?? focusable ?? target).scrollIntoView({ block: "center" });
+}
+/**
+ * The problems that stopped a form submitting, above the form, each linking
+ * to its field. It is an alert, and it takes focus when it appears and after
+ * every failed submit (`submitCount`), so keyboard and screen reader users
+ * start from the list. Following a link focuses the field without changing the
+ * URL. Renders nothing while `errors` is empty.
+ */
+export function ErrorSummary({
+  errors,
+  title = "There is a problem",
+  headingLevel = 2,
+  autoFocus = true,
+  submitCount,
+  id,
+  className,
+}: {
+  errors: ErrorSummaryItem[];
+  title?: string;
+  headingLevel?: HeadingLevel;
+  /**
+   * Move focus to the summary when it appears and whenever `submitCount`
+   * changes. Turn off only where focus must stay put; the alert still
+   * announces the summary.
+   */
+  autoFocus?: boolean;
+  /**
+   * Count of failed submits. A change moves focus to the summary again even
+   * when the errors are the same; clearing a fixed field's error does not.
+   */
+  submitCount?: number;
+  id?: string;
+  className?: string;
+}) {
+  const root = useRef<HTMLDivElement>(null);
+  const titleId = useDomId("m-error-summary-");
+  const shown = errors.length > 0;
+  useEffect(() => {
+    if (shown && autoFocus) root.current?.focus();
+    // Focus only on appearing and on a new submit, never while errors clear.
+  }, [shown, submitCount]);
+  if (!shown) return null;
+  const Heading = headingTag(headingLevel);
+  return (
+    <div
+      ref={root}
+      id={id}
+      {...componentRoot("ErrorSummary")}
+      className={cx("m-error-summary", className)}
+      role="alert"
+      aria-labelledby={titleId}
+      tabIndex={-1}
+    >
+      <Heading id={titleId} className="m-error-summary-title">
+        {title}
+      </Heading>
+      <ul>
+        {errors.map((error, index) => {
+          const href =
+            error.href ?? (error.target ? `#${error.target}` : undefined);
+          const target =
+            error.target ??
+            (href?.startsWith("#")
+              ? decodeURIComponent(href.slice(1))
+              : undefined);
+          return (
+            <li key={`${error.message}:${href}:${index}`}>
+              {href ? (
+                <a
+                  href={href}
+                  onClick={(event) => {
+                    if (
+                      !target ||
+                      event.defaultPrevented ||
+                      event.button !== 0 ||
+                      event.metaKey ||
+                      event.ctrlKey ||
+                      event.shiftKey ||
+                      event.altKey
+                    )
+                      return;
+                    const field =
+                      event.currentTarget.ownerDocument.getElementById(target);
+                    if (!field) return;
+                    event.preventDefault();
+                    focusField(field);
+                  }}
+                >
+                  {error.message}
+                </a>
+              ) : (
+                error.message
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

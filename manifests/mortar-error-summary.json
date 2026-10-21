@@ -1,0 +1,37 @@
+{
+  "id": "mortar-error-summary",
+  "logicalId": "error-summary",
+  "name": "ErrorSummary",
+  "description": "Mortar foundation error summary: the problems that stopped a form submitting, each linking to its field.",
+  "stack": "react-tailwind",
+  "package": "@tony-ui/mortar",
+  "export": "ErrorSummary",
+  "source": "src/primitives.tsx",
+  "capabilities": ["validation"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
+  "contract": {
+    "props": {
+      "errors": "{ message: string; href?: string; target?: string }[] (renders nothing when empty; href defaults to #target, target to the id in an in-page href)",
+      "title": "string (default \"There is a problem\")",
+      "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (HeadingLevel; default 2)",
+      "autoFocus": "boolean (default true: focus moves to the summary when it appears and when submitCount changes)",
+      "submitCount": "number (failed submits; a change moves focus to the summary again)",
+      "id": "string",
+      "className": "string (on the root element)"
+    },
+    "usage": "Import { ErrorSummary } from @tony-ui/mortar. Place it above the form, pass the same messages as the fields' `error` props with each field's id as `target`, and pass the count of failed submits as `submitCount`.",
+    "avoid": "Do not autofocus it on page load before any submit, list errors that are not shown on their fields, or copy implementations or override central colours.",
+    "accessibility": "role=\"alert\" labelled by its heading, and tabIndex=-1 so it takes focus after a failed submit. Each link moves focus to its field (the checked or first control of a group) and scrolls its label or legend into view without changing the URL.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/ErrorSummaryPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-error-summary",
+    "states": [],
+    "probe": "error-summary"
+  }
+}

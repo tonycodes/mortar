@@ -102,7 +102,25 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
       break;
     case "Checkbox":
       content = (
-        <UI.Checkbox label={label} disabled={disabled} onChange={changed} />
+        <UI.Checkbox
+          label={label}
+          disabled={disabled}
+          error={error}
+          onChange={changed}
+        />
+      );
+      break;
+    case "RadioGroup":
+      content = (
+        <UI.RadioGroup
+          label={label}
+          name="state-radio"
+          value=""
+          error={error}
+          onChange={changed}
+          // One radio: the error assertion reads a single invalid control.
+          options={[{ value: "a", label: "First option" }]}
+        />
       );
       break;
     case "Switch":
