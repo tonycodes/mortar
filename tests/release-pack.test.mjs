@@ -87,6 +87,10 @@ function sandbox(t) {
     join(dir, "scripts", "release.mjs"),
   );
   cpSync(
+    join(root, "scripts", "release-pack.mjs"),
+    join(dir, "scripts", "release-pack.mjs"),
+  );
+  cpSync(
     join(root, "scripts", "auto-release", "tree.mjs"),
     join(dir, "scripts", "auto-release", "tree.mjs"),
   );

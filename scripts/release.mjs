@@ -7,6 +7,7 @@ import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { checkKit, ROOT } from "./check.mjs";
 import { unexpectedChanges } from "./auto-release/tree.mjs";
+import { parsePackOutput } from "./release-pack.mjs";
 const report = await checkKit();
 if (!report.passed)
   throw Error("Baseline checks failed; run npm run check:json.");
@@ -30,7 +31,7 @@ const pkg = JSON.parse(await readFile(resolve(ROOT, "package.json"), "utf8"));
 const out = resolve(ROOT, "release", pkg.version);
 await mkdir(resolve(ROOT, "release"), { recursive: true });
 await mkdir(out, { recursive: false });
-const packed = JSON.parse(
+const packed = parsePackOutput(
   execFileSync(
     "npm",
     ["pack", "--json", "--ignore-scripts", "--pack-destination", out],
@@ -39,7 +40,7 @@ const packed = JSON.parse(
       encoding: "utf8",
     },
   ),
-)[0];
+);
 const bytes = await readFile(resolve(out, packed.filename));
 const provenance = {
   schemaVersion: 1,
