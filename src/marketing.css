@@ -2483,6 +2483,82 @@
     background: var(--m-primary);
     color: var(--m-on-primary);
   }
+
+  /* == NetworkIllustration == */
+  /* Nodes and connections from data; signals travel along connections. Every
+     colour is a token, so the drawing follows the brand and appearance. */
+  .m-network {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .m-network svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .m-network-link {
+    stroke: var(--m-line-strong);
+    stroke-width: 1.5;
+    /* Lines keep their width however large the drawing is shown. */
+    vector-effect: non-scaling-stroke;
+  }
+  /* The outline is the strong line (3:1) whatever the fill, so nodes stay visible. */
+  .m-network-node {
+    fill: var(--m-surface);
+    stroke: var(--m-line-strong);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .m-network-node[data-tone="accent"] {
+    fill: var(--m-accent);
+  }
+  .m-network-label {
+    fill: var(--m-secondary);
+    font-size: 12px;
+  }
+  .m-network-signal {
+    fill: var(--m-accent);
+    translate: var(--m-signal-from);
+    animation: m-network-signal 3s linear infinite;
+  }
+  .m-network[data-paused] .m-network-signal {
+    animation-play-state: paused;
+  }
+  /* Below the drawing, never over it, so no node is covered at any size. */
+  .m-network-toggle {
+    align-self: flex-end;
+    padding: 4px 10px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius-sm);
+    background: var(--m-surface);
+    color: var(--m-secondary);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .m-network-toggle:hover {
+    color: var(--m-ink);
+  }
+  /* Before scripts run, and whenever reduced motion is requested, show the
+     static drawing; the script then stops rendering the signals. */
+  @media (prefers-reduced-motion: reduce) {
+    .m-network-signal {
+      display: none;
+    }
+    .m-network-toggle {
+      display: none;
+    }
+  }
+}
+@keyframes m-network-signal {
+  from {
+    translate: var(--m-signal-from);
+  }
+  to {
+    translate: var(--m-signal-to);
+  }
 }
 @keyframes m-chat-dot {
   0%,
