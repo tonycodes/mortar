@@ -47,15 +47,16 @@ test("P-1 release.mjs packs with --ignore-scripts so prepack output cannot corru
   );
 });
 
-function stubNpm(dir) {
-  const bin = join(dir, "bin");
-  mkdirSync(bin);
+function stubNpm(t) {
+  // Outside the repo sandbox: release.mjs refuses a dirty checkout.
+  const bin = mkdtempSync(join(os.tmpdir(), "mortar-npm-"));
+  t.after(() => rmSync(bin, { recursive: true, force: true }));
   const file = join(bin, "npm");
   // Behaves like npm 10.9.x: without --ignore-scripts, pack runs prepack and its stdout
   // lands ahead of the JSON array.
   writeFileSync(
     file,
-    `#!${process.execPath}
+    `#!/usr/bin/env node
 const { writeFileSync } = require("node:fs");
 const { join } = require("node:path");
 const args = process.argv.slice(2);
@@ -121,7 +122,7 @@ export async function checkKit() { return { passed: true, policyVersion: 7 }; }
 
 test("P-2 release:prepare survives a leading stdout line from npm pack and writes provenance", (t) => {
   const { dir, env } = sandbox(t);
-  const bin = stubNpm(dir);
+  const bin = stubNpm(t);
   const result = spawnSync(process.execPath, ["scripts/release.mjs"], {
     cwd: dir,
     encoding: "utf8",
