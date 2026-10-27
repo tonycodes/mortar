@@ -207,6 +207,7 @@
             "Banner",
             "MarketingHeader",
             "Footer",
+            "MarketingPage",
             "Newsletter",
             "ContactSection",
             "NotFound"
@@ -220,6 +221,7 @@
             "ContentSection",
             "PostList",
             "MockWindow",
+            "NetworkIllustration",
             "ChatPreview"
           ]
         }

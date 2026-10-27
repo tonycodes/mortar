@@ -5,8 +5,11 @@ import {
   createContext,
   createElement,
   useContext,
+  useEffect,
   useId,
+  useState,
   type HTMLAttributes,
+  type RefObject,
   type ReactNode,
   cloneElement,
   isValidElement,
@@ -71,6 +74,8 @@ export interface IntroProps {
   eyebrow?: string;
   /** Omit to render no heading. */
   title?: string;
+  /** A phrase in `title` to emphasise; its first occurrence renders as `<em>`. */
+  emphasis?: string;
   description?: string;
   /** Id for the heading, e.g. the target of the section's aria-labelledby. */
   id?: string;
@@ -87,6 +92,7 @@ export interface IntroProps {
 export function introSlots({
   eyebrow,
   title,
+  emphasis,
   description,
   id,
   headingLevel = 2,
@@ -95,11 +101,25 @@ export function introSlots({
   const Heading = headingTag(headingLevel);
   return [
     eyebrow && <p className="m-eyebrow">{eyebrow}</p>,
-    title !== undefined && <Heading id={id}>{title}</Heading>,
+    title !== undefined && (
+      <Heading id={id}>{emphasise(title, emphasis)}</Heading>
+    ),
     description && (
       <p className={descriptionClassName ?? undefined}>{description}</p>
     ),
   ];
+}
+/** `title` with the first occurrence of `phrase` in `<em>`; unchanged when absent. */
+function emphasise(title: string, phrase?: string): ReactNode {
+  const at = phrase ? title.indexOf(phrase) : -1;
+  if (!phrase || at < 0) return title;
+  return (
+    <>
+      {title.slice(0, at)}
+      <em className="m-emphasis">{phrase}</em>
+      {title.slice(at + phrase.length)}
+    </>
+  );
 }
 /** The section intro as one element, for parents where nothing user-supplied follows it. */
 export function SectionIntro(props: IntroProps) {
@@ -208,6 +228,72 @@ export function LinkContent({
 /** A generated id that is safe in CSS selectors and URL fragments. */
 export function useDomId(prefix: string) {
   return prefix + useId().replace(/[^a-zA-Z0-9-]/g, "");
+}
+
+/** Why an animation is not running; null while it plays. */
+export type PauseReason = "user" | "motion" | "hidden" | "offscreen" | null;
+/**
+ * Shared pause and resume for decorative motion. It plays only while the
+ * user has not paused it, reduced motion is not requested, the document is
+ * visible and `ref` is on screen. The user's pause is kept apart from the
+ * automatic reasons, so returning to the page never overrides it. `paused`
+ * and `onPausedChange` make the user's choice controlled, for example one
+ * state shared by several animations. Every listener is removed on unmount.
+ */
+export function usePlayback(
+  ref: RefObject<Element | null>,
+  {
+    paused,
+    onPausedChange,
+    enabled = true,
+  }: {
+    paused?: boolean;
+    onPausedChange?: (paused: boolean) => void;
+    enabled?: boolean;
+  },
+) {
+  const [ownPaused, setOwnPaused] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [offscreen, setOffscreen] = useState(false);
+  const userPaused = paused ?? ownPaused;
+  useEffect(() => {
+    if (!enabled) return;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onMedia = () => setReduced(media.matches);
+    const onVisibility = () => setHidden(document.visibilityState === "hidden");
+    onMedia();
+    onVisibility();
+    media.addEventListener("change", onMedia);
+    document.addEventListener("visibilitychange", onVisibility);
+    const observer =
+      ref.current && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(([entry]) =>
+            setOffscreen(!entry.isIntersecting),
+          )
+        : null;
+    if (observer && ref.current) observer.observe(ref.current);
+    return () => {
+      media.removeEventListener("change", onMedia);
+      document.removeEventListener("visibilitychange", onVisibility);
+      observer?.disconnect();
+    };
+  }, [enabled, ref]);
+  const reason: PauseReason = userPaused
+    ? "user"
+    : reduced
+      ? "motion"
+      : hidden
+        ? "hidden"
+        : offscreen
+          ? "offscreen"
+          : null;
+  const toggle = () => {
+    const next = !userPaused;
+    if (paused === undefined) setOwnPaused(next);
+    onPausedChange?.(next);
+  };
+  return { reason, reduced, userPaused, toggle };
 }
 
 /**

@@ -1,0 +1,35 @@
+{
+  "id": "mortar-marketing-page",
+  "logicalId": "marketing-page",
+  "name": "MarketingPage",
+  "description": "Mortar public page shell: header, a main region that fills the viewport, and footer.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar",
+  "export": "MarketingPage",
+  "source": "src/marketing.tsx",
+  "capabilities": [],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "contract": {
+    "props": {
+      "header": "ReactNode (usually a MarketingHeader)",
+      "footer": "ReactNode (usually a Footer)",
+      "children": "ReactNode (the page's sections, rendered in <main>)",
+      "align": "\"start\" | \"center\" (default \"start\"; center centres the content in the space between header and footer, for a single hero)",
+      "id": "string (the root element's id)",
+      "className": "string (layout only: margins or grid placement)"
+    },
+    "usage": "Import { MarketingPage } from @tonycodes-ui/mortar. Pass a MarketingHeader as header, a Footer as footer and the sections as children. The page is at least the viewport's height; the main region grows and longer content scrolls, never clips.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval. Do not set a fixed height on the page or its sections.",
+    "accessibility": "Renders one <main> landmark between the header and footer, in reading order. Do not nest another main. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/MarketingPagePreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-marketing-page",
+    "states": []
+  }
+}

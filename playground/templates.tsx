@@ -29,6 +29,14 @@ export const templates: PageTemplate[] = [
     Component: recipe("SaasLandingRecipe"),
   },
   {
+    id: "split-landing",
+    title: "Landing page, split",
+    description:
+      "One-screen landing with a split hero, an illustration and a compact footer.",
+    kind: "Marketing",
+    Component: page("SplitLandingTemplate"),
+  },
+  {
     id: "pricing",
     title: "Pricing page",
     description: "Plans, comparison table, questions and a call to action.",

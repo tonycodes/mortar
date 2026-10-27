@@ -64,6 +64,7 @@ export const probes = Object.freeze({
   ProductQuickView: "dialog",
   ProductFilters: "filters",
   Banner: "banner",
+  NetworkIllustration: "network",
 });
 /** Scenarios a manifest may declare in `testing.states`. */
 export const states = Object.freeze([

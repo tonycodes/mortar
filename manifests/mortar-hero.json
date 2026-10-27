@@ -23,7 +23,10 @@
       "className": "string (layout only: margins or grid placement)",
       "layout": "\"center\" | \"split\" | \"angled\" (default center). angled: copy beside an image (children) that fills the end half to the edge on a slant",
       "images": "ReactNode[] (image tiles shown as a staggered collage beside or below the copy; use instead of children)",
-      "tone": "\"default\" | \"accent\" (default \"default\"; accent: a full-bleed band of the brand's accent fill, its gradient when it defines one, with on-accent copy and actions; the preview keeps the page's colours; a background takes precedence)"
+      "tone": "\"default\" | \"accent\" (default \"default\"; accent: a full-bleed band of the brand's accent fill, its gradient when it defines one, with on-accent copy and actions; the preview keeps the page's colours; a background takes precedence)",
+      "emphasis": "string (a phrase in the title to emphasise: its first occurrence renders as <em class=\"m-emphasis\"> inside the one heading, in the brand's link colour; a phrase not in the title is ignored, so the title stays a plain string)",
+      "note": "ReactNode (short supporting content below the actions, such as a note or a Notice)",
+      "wide": "\"copy\" | \"preview\" (split only: the column that takes three fifths of the width; omitted, the columns are even; narrow screens stack them)"
     },
     "usage": "Import { Hero } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",

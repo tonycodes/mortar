@@ -22,7 +22,7 @@ const golden = [
   "ProductOverview",
   "ShoppingCart",
 ];
-const templates = ["saas-landing", "cart-page"];
+const templates = ["saas-landing", "cart-page", "split-landing"];
 
 for (const name of golden)
   for (const theme of ["light", "dark"])
