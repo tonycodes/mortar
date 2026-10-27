@@ -1040,6 +1040,21 @@ test("R-AR-17 release.yml retains credential isolation and serialized publishing
       "singular main ref write",
       "gh api repos/$REPO/git/ref/heads/main -f sha=$SHA -F force=true",
     ],
+    ["git push with -C", "git -C . push origin HEAD:main"],
+    ["git push with -c", "git -c user.name=x push origin HEAD:main"],
+    ["git push with two spaces", "git  push origin HEAD:main"],
+    [
+      "GraphQL updateRef",
+      'gh api graphql -f query=\'mutation { updateRef(input:{refId:"x",oid:"y",force:true}) { clientMutationId } }\'',
+    ],
+    [
+      "GraphQL deleteRef",
+      "gh api graphql -f query='mutation { deleteRef(input:{refId:\"x\"}) { clientMutationId } }'",
+    ],
+    ["release delete", "gh release delete $TAG --yes"],
+    ["force tag", "git tag -f v1 && true"],
+    ["force tag long option", "git tag --force v1"],
+    ["tag ref delete", "gh api -X DELETE repos/$REPO/git/refs/tags/$TAG"],
   ]) {
     assert.ok(
       workflowViolations(`${workflow}\n${command}\n`).length > 0,
