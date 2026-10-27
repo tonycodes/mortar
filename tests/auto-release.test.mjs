@@ -978,7 +978,24 @@ function workflowViolations(text) {
   if (/(?:-X\s*|--method(?:=|\s+))["']?(?:PATCH|PUT|DELETE)\b/i.test(logical)) {
     violations.push("mutating HTTP method");
   }
-  if (/\bgit\s+push\b/.test(logical)) violations.push("git push");
+  // Options may sit between git and the subcommand (git -C . push, git -c k=v push).
+  const git = String.raw`(?:^|[\s;|&(])git(?:\s+(?:-C\s+\S+|-c\s+\S+|--[\w-]+(?:=\S+)?))*\s+`;
+  if (new RegExp(`${git}push\\b`, "m").test(logical)) {
+    violations.push("git push");
+  }
+  if (/\b(?:update|delete|create)Ref\b/.test(logical)) {
+    violations.push("GraphQL ref mutation");
+  }
+  if (/\bgh\s+release\s+delete\b/.test(logical)) {
+    violations.push("release delete");
+  }
+  if (
+    new RegExp(`${git}tag\\b[^\\n;|&]*(?:\\s-[a-zA-Z]*f|--force)`, "m").test(
+      logical,
+    )
+  ) {
+    violations.push("force tag");
+  }
   for (const command of logical.match(/\bgh\s+api\b[^\n;]*/g) ?? []) {
     if (
       /git\/ref\//.test(command) &&
