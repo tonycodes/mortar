@@ -108,6 +108,7 @@ function Flyout({
 }
 export function MarketingHeader({
   brand,
+  tagline,
   homeHref = "/",
   logo,
   links,
@@ -119,6 +120,8 @@ export function MarketingHeader({
   id,
 }: {
   brand: string;
+  /** A short descriptor beside the wordmark, outside the home link. Hidden on narrow screens. */
+  tagline?: string;
   logo?: ReactNode;
   homeHref?: string;
   /** Links, or groups of items that open a flyout panel. */
@@ -137,11 +140,20 @@ export function MarketingHeader({
   const navId = useDomId("m-marketing-nav");
   const panel = mobileMenu === "panel";
   const close = () => setOpen(false);
-  const brandLink = (
+  const homeLink = (
     <KitLink className="m-brand" href={homeHref}>
       <BrandMark logo={logo} />
       {brand}
     </KitLink>
+  );
+  // The tagline sits outside the link so the link's name stays the brand.
+  const brandLink = tagline ? (
+    <div className="m-brand-lockup">
+      {homeLink}
+      <span className="m-brand-tagline">{tagline}</span>
+    </div>
+  ) : (
+    homeLink
   );
   const menuButton = (
     <Button
@@ -272,15 +284,53 @@ function PanelLinks({
     </nav>
   );
 }
+/**
+ * A public page: the header, a main region that grows to fill the viewport, and
+ * the footer. Content is never clipped; a longer page simply scrolls.
+ */
+export function MarketingPage({
+  header,
+  footer,
+  children,
+  align = "start",
+  id,
+  className,
+}: {
+  /** Usually a MarketingHeader. */
+  header?: ReactNode;
+  /** Usually a Footer. */
+  footer?: ReactNode;
+  children: ReactNode;
+  /** start: content from the top. center: content centred in the space between header and footer, for a single hero. */
+  align?: "start" | "center";
+  id?: string;
+  className?: string;
+}) {
+  return (
+    <div
+      id={id}
+      className={cx("m-marketing-page", className)}
+      {...componentRoot("MarketingPage")}
+      data-align={align === "center" ? "center" : undefined}
+    >
+      {header}
+      <main className="m-marketing-main">{children}</main>
+      {footer}
+    </div>
+  );
+}
 export function Hero({
   id,
   className,
   eyebrow,
   title,
+  emphasis,
   description,
   actions = [],
+  note,
   children,
   layout = "center",
+  wide,
   headingLevel = 1,
   background,
   images = [],
@@ -290,11 +340,17 @@ export function Hero({
   className?: string;
   eyebrow?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em>` inside the one heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description: string;
   actions?: LinkAction[];
+  /** Short supporting content below the actions, such as a note or a Notice. */
+  note?: ReactNode;
   children?: ReactNode;
   /** center: copy above the preview. split: copy beside the preview. angled: copy beside an image that fills the end half to the edge, cut on a slant (pass one img or video as children). */
   layout?: "center" | "split" | "angled";
+  /** Split only: the column that takes more of the width. Omitted, the columns are even. */
+  wide?: "copy" | "preview";
   headingLevel?: HeadingLevel;
   /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
   background?: ReactNode;
@@ -308,6 +364,7 @@ export function Hero({
       id={id}
       className={cx("m-hero", `m-hero-${layout}`, className)}
       {...componentRoot("Hero")}
+      data-wide={layout === "split" ? wide : undefined}
       data-background={background ? true : undefined}
       data-tone={background ? "inverse" : sectionTone(tone)}
     >
@@ -320,10 +377,12 @@ export function Hero({
         <TitledIntro
           eyebrow={eyebrow}
           title={title}
+          emphasis={emphasis}
           headingLevel={headingLevel}
         />
         <p className="m-hero-description">{description}</p>
         <ActionLinks actions={actions} />
+        {note && <div className="m-hero-note">{note}</div>}
       </div>
       {images.length > 0 && (
         <div className="m-hero-tiles">
@@ -928,7 +987,7 @@ export function Footer({
   logo,
   description,
   note,
-  columns,
+  columns = [],
   copyright,
   legal = [],
   itemHeadingLevel = 2,
@@ -940,30 +999,31 @@ export function Footer({
   className?: string;
   brand: string;
   logo?: ReactNode;
-  description: string;
+  description?: string;
   note?: ReactNode;
-  /** Link columns; each label is the column's visible heading and its navigation name. Centred, the label only names the navigation. */
-  columns: ItemGroup<LinkAction>[];
+  /** Link columns; each label is the column's visible heading and its navigation name. Centred or inline, the label only names the navigation. */
+  columns?: ItemGroup<LinkAction>[];
   copyright: string;
   legal?: LinkAction[];
   /** Level of the column headings. */
   itemHeadingLevel?: HeadingLevel;
   /** Social profiles, usually icon-only; each label names its link. */
   social?: IconLink[];
-  /** columns: the brand beside headed link columns. center: brand, a row of links and social links, all centred. */
-  layout?: "columns" | "center";
+  /** columns: the brand beside headed link columns. center: brand, a row of links and social links, all centred. inline: one compact row of brand, notes, links and copyright that wraps in reading order. */
+  layout?: "columns" | "center" | "inline";
   /** A signup row above the copyright, usually a Newsletter; the footer removes its section padding. */
   newsletter?: ReactNode;
 }) {
   const Heading = headingTag(itemHeadingLevel);
   const center = layout === "center";
+  const inline = layout === "inline";
   const identity = (
     <>
       <strong className="m-brand">
         <BrandMark logo={logo} />
         {brand}
       </strong>
-      <p>{description}</p>
+      {description && <p>{description}</p>}
       {note && <p>{note}</p>}
     </>
   );
@@ -972,8 +1032,8 @@ export function Footer({
   );
   const navs = columns.map((column) => (
     <nav key={column.label} aria-label={column.label}>
-      {/* Centred, the links sit in one row and the label only names the navigation. */}
-      {!center && <Heading>{column.label}</Heading>}
+      {/* Centred or inline, the links sit in one row and the label only names the navigation. */}
+      {!center && !inline && <Heading>{column.label}</Heading>}
       {column.items.map((link, index) => (
         <KitLink href={link.href} key={`${link.label}:${link.href}:${index}`}>
           {link.label}
@@ -981,6 +1041,34 @@ export function Footer({
       ))}
     </nav>
   ));
+  const legalLinks = (
+    <div>
+      {legal.map((link, index) => (
+        <KitLink key={`${link.label}:${link.href}:${index}`} href={link.href}>
+          {link.label}
+        </KitLink>
+      ))}
+    </div>
+  );
+  if (inline)
+    return (
+      <footer
+        id={id}
+        className={cx("m-footer", className)}
+        {...componentRoot("Footer")}
+        data-layout="inline"
+      >
+        {/* One wrapping row; the DOM order is the reading order at every width. */}
+        <div className="m-footer-inline">
+          {identity}
+          {navs}
+          {socialLinks}
+          <span>{copyright}</span>
+          {legal.length > 0 && legalLinks}
+        </div>
+        {newsletter && <div className="m-footer-newsletter">{newsletter}</div>}
+      </footer>
+    );
   return (
     <footer
       id={id}
@@ -1006,16 +1094,7 @@ export function Footer({
       {newsletter && <div className="m-footer-newsletter">{newsletter}</div>}
       <div className="m-footer-bottom">
         <span>{copyright}</span>
-        <div>
-          {legal.map((link, index) => (
-            <KitLink
-              key={`${link.label}:${link.href}:${index}`}
-              href={link.href}
-            >
-              {link.label}
-            </KitLink>
-          ))}
-        </div>
+        {legalLinks}
       </div>
     </footer>
   );

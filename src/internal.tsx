@@ -74,6 +74,8 @@ export interface IntroProps {
   eyebrow?: string;
   /** Omit to render no heading. */
   title?: string;
+  /** A phrase in `title` to emphasise; its first occurrence renders as `<em>`. */
+  emphasis?: string;
   description?: string;
   /** Id for the heading, e.g. the target of the section's aria-labelledby. */
   id?: string;
@@ -90,6 +92,7 @@ export interface IntroProps {
 export function introSlots({
   eyebrow,
   title,
+  emphasis,
   description,
   id,
   headingLevel = 2,
@@ -98,11 +101,25 @@ export function introSlots({
   const Heading = headingTag(headingLevel);
   return [
     eyebrow && <p className="m-eyebrow">{eyebrow}</p>,
-    title !== undefined && <Heading id={id}>{title}</Heading>,
+    title !== undefined && (
+      <Heading id={id}>{emphasise(title, emphasis)}</Heading>
+    ),
     description && (
       <p className={descriptionClassName ?? undefined}>{description}</p>
     ),
   ];
+}
+/** `title` with the first occurrence of `phrase` in `<em>`; unchanged when absent. */
+function emphasise(title: string, phrase?: string): ReactNode {
+  const at = phrase ? title.indexOf(phrase) : -1;
+  if (!phrase || at < 0) return title;
+  return (
+    <>
+      {title.slice(0, at)}
+      <em className="m-emphasis">{phrase}</em>
+      {title.slice(at + phrase.length)}
+    </>
+  );
 }
 /** The section intro as one element, for parents where nothing user-supplied follows it. */
 export function SectionIntro(props: IntroProps) {

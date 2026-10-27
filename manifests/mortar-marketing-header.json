@@ -13,6 +13,7 @@
   "contract": {
     "props": {
       "brand": "string",
+      "tagline": "string (a short descriptor beside the wordmark, outside the home link so the link's name stays the brand; hidden at 560px and narrower)",
       "homeHref": "string",
       "links": "HeaderLink[] (LinkAction | { label: string; items: FlyoutItem[]; footer?: LinkAction[]; layout?: \"list\" | \"columns\" | \"full\" }; a group's layout picks its flyout: list (default) one column, columns a wider two-column panel, full a panel as wide as the viewport allows (up to 1248px) with up to four columns; footer is a row of actions under the items)",
       "action": "LinkAction",
