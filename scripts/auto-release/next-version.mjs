@@ -92,7 +92,7 @@ export function decideRelease({ sha, mainSha, tags, commits, published = [] }) {
       reason: "resume",
       version: headTag.version,
       tag: headTag.tag,
-      bump: bumpBetween(previous?.version, headTag.version),
+      bump: null,
       previousTag: previous?.tag ?? null,
     };
   }
@@ -176,15 +176,21 @@ if (
       commits,
     };
     if (values["github-output"]) {
+      // Skips carry no version or tag line: an empty value could be mistaken for one.
       appendFileSync(
         values["github-output"],
-        `publish=${result.release}\nreason=${result.reason}\nversion=${result.version ?? ""}\ntag=${result.tag ?? ""}\n`,
+        `publish=${result.release}\nreason=${result.reason}\n` +
+          (result.release
+            ? `version=${result.version}\ntag=${result.tag}\n`
+            : ""),
       );
     }
-    if (result.warning) console.error(`::warning::${result.warning}`);
+    // Workflow commands are read from stdout, so annotations go there.
+    if (result.warning) console.log(`::warning::${result.warning}`);
     if (result.reason === "npm-published") {
-      console.error(
-        `::error::Version ${nextVersion(previous.version, commits)} is already on npm but has no tag. Tag the commit it was published from (or deprecate it) before releasing again.`,
+      const next = nextVersion(previous.version, commits);
+      console.log(
+        `::error::Version ${next} is already on npm but v${next} has no release tag. Tag the commit it was published from (or deprecate it) before releasing again.`,
       );
     }
     console.log(JSON.stringify(result));

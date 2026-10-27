@@ -66,25 +66,27 @@ jobs:
             if (typeof v !== "string" && !Array.isArray(v)) throw Error("Unexpected npm versions response");
             process.stdout.write(JSON.stringify([].concat(v)));
           ' "$RUNNER_TEMP/versions.json")
-          node scripts/auto-release/next-version.mjs --sha "$SHA" --main-sha "$MAIN_SHA" --published "$PUBLISHED" > "$RUNNER_TEMP/release-plan.json"
+          # The planner appends publish, reason, version and tag to GITHUB_OUTPUT itself and
+          # prints one JSON decision line plus any ::warning:: / ::error:: annotations.
+          node scripts/auto-release/next-version.mjs --sha "$SHA" --main-sha "$MAIN_SHA" --published "$PUBLISHED" --github-output "$GITHUB_OUTPUT" > "$RUNNER_TEMP/release-plan.txt"
+          cat "$RUNNER_TEMP/release-plan.txt"
+          grep '^{' "$RUNNER_TEMP/release-plan.txt" > "$RUNNER_TEMP/release-plan.json"
           read_plan() { node -p 'const v = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))[process.argv[2]]; v === null || v === undefined ? "" : String(v)' "$RUNNER_TEMP/release-plan.json" "$1"; }
           REASON=$(read_plan reason)
           PUBLISH=$(read_plan release)
           VERSION=$(read_plan version)
           TAG=$(read_plan tag)
-          echo "reason=$REASON" >> "$GITHUB_OUTPUT"
           if [ "$PUBLISH" != "true" ]; then
             case "$REASON" in
               superseded) echo "Superseded run; the latest main commit releases the accumulated changes." >> "$GITHUB_STEP_SUMMARY" ;;
-              head-tagged) echo "This commit is already tagged and published; nothing to release." >> "$GITHUB_STEP_SUMMARY" ;;
+              head-tagged) echo "This commit is already tagged and published; nothing to release (an older tag on it is also skipped)." >> "$GITHUB_STEP_SUMMARY" ;;
               no-commits) echo "No commits since the latest release; nothing to release." >> "$GITHUB_STEP_SUMMARY" ;;
               npm-published)
-                # The version is on npm but no tag marks it: fail loudly instead of stalling every later merge.
-                echo "::error::The next version is already on npm without a release tag; nothing was released. Tag the commit it was published from."
+                # The version is on npm but no tag marks it: fail loudly (the planner printed the ::error::).
+                echo "The next version is already on npm without a release tag; nothing was released." >> "$GITHUB_STEP_SUMMARY"
                 exit 1 ;;
               *) echo "::error::Unexpected release decision: $REASON"; exit 1 ;;
             esac
-            echo "publish=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           # The version reaches shell commands, file names and the registry: validate it first.
@@ -93,11 +95,6 @@ jobs:
           if [ "$REASON" = "resume" ]; then
             echo "Reusing the existing $TAG on this commit; $VERSION is not on npm yet, so the publish is resumed." >> "$GITHUB_STEP_SUMMARY"
           fi
-          {
-            echo "publish=true"
-            echo "version=$VERSION"
-            echo "tag=$TAG"
-          } >> "$GITHUB_OUTPUT"
       - if: steps.plan.outputs.publish == 'true'
         run: npm ci --ignore-scripts
       - name: Build and prepare the release archive

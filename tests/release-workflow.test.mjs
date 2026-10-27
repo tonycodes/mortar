@@ -64,7 +64,7 @@ test("the published archive is the provenance-checked one and versions are never
   assert.match(prepare, /Reusing the existing \$TAG on this commit/);
   assert.match(
     prepare,
-    /::error::The next version is already on npm without a release tag/,
+    /npm-published\)[^]*?already on npm without a release tag[^]*?exit 1/,
   );
   // Only new refs/tags/ entries are ever written; no ref updates, deletes or contents writes.
   assert.match(publish, /-f ref="refs\/tags\/\$TAG"/);
