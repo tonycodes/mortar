@@ -1516,6 +1516,21 @@ test("R-AR-24 CLI reports an error with a successful skip when npm has the next 
     /^::error::.*v0\.12\.0/m,
     "R-AR-24 names missing tag in error",
   );
+  assert.match(
+    result.stdout,
+    /^::error::.*push the v0\.12\.0 tag at the commit that was published/im,
+    "R-AR-24 tells the operator to push the matching tag at the published commit",
+  );
+  assert.match(
+    result.stdout,
+    /^::error::.*CONTRIBUTING\.md/m,
+    "R-AR-24 references the CONTRIBUTING recovery note",
+  );
+  assert.doesNotMatch(
+    result.stdout,
+    /deprecat/i,
+    "R-AR-24 does not suggest deprecating the version",
+  );
   const decisions = result.stdout
     .split(/\r?\n/)
     .filter((line) => line.startsWith("{"));
