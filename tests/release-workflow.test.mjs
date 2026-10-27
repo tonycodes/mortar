@@ -58,9 +58,20 @@ test("the publish job runs no repository code", () => {
 
 test("the published archive is the provenance-checked one and versions are never overwritten", () => {
   assert.match(prepare, /npm run release:prepare/);
-  assert.match(prepare, /already published; nothing to release/);
+  // npm E404 means "nothing published yet"; any other registry failure stops the run.
   assert.match(prepare, /grep -q E404/);
-  assert.match(prepare, /already belongs to \$TAGGED; nothing to release/);
+  assert.match(prepare, /already tagged and published; nothing to release/);
+  assert.match(prepare, /Reusing the existing \$TAG on this commit/);
+  assert.match(
+    prepare,
+    /npm-published\)[^]*?already on npm without a release tag[^]*?exit 1/,
+  );
+  // Only new refs/tags/ entries are ever written; no ref updates, deletes or contents writes.
+  assert.match(publish, /-f ref="refs\/tags\/\$TAG"/);
+  assert.doesNotMatch(
+    workflow,
+    /-X\s+(?:PATCH|PUT|DELETE)|--method\s+(?:PATCH|PUT|DELETE)|\/contents\/|refs\/heads\//,
+  );
   assert.match(publish, /Verify the archive against its provenance/);
   assert.match(publish, /already points at/);
   assert.match(publish, /was published by an earlier attempt/);

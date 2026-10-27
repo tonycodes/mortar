@@ -6,6 +6,10 @@ on:
     types: [completed]
 permissions:
   contents: read
+# Releases are serialized. GitHub keeps one running and one pending run per group and
+# replaces older pending runs, so a burst of merges leaves only the newest main commit
+# waiting. That is safe: a run whose commit is no longer main's head exits as "superseded"
+# (--main-sha), and the newest run releases every commit since the last tag in one version.
 concurrency:
   group: npm-release
   cancel-in-progress: false
@@ -31,10 +35,11 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Decide whether this commit carries an unpublished version
+      - name: Compute the release from tags and commits
         id: plan
         env:
           GH_TOKEN: ${{ github.token }}
@@ -43,34 +48,53 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$SHA" =~ ^[0-9a-f]{40}$ ]]
-          VERSION=$(node -p 'require("./package.json").version')
-          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           MAIN_SHA=$(gh api "repos/$REPO/git/ref/heads/main" --jq .object.sha)
-          if [ "$MAIN_SHA" != "$SHA" ]; then
-            echo "Superseded run; the latest main commit releases $VERSION if needed." >> "$GITHUB_STEP_SUMMARY"
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # A version tagged on another commit was released already (0.11 and
-          # earlier went only to the retired owner-hosted registry): never re-release it.
-          if TAGGED=$(gh api "repos/$REPO/commits/v$VERSION" --jq .sha 2>/dev/null) && [ "$TAGGED" != "$SHA" ]; then
-            echo "v$VERSION already belongs to $TAGGED; nothing to release." >> "$GITHUB_STEP_SUMMARY"
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # npmjs.com answers anonymous reads; E404 means nothing is published under that name.
-          if npm view "@tonycodes-ui/mortar@$VERSION" version --registry "$REGISTRY" > "$RUNNER_TEMP/view.txt" 2> "$RUNNER_TEMP/view.err"; then
-            if [ -s "$RUNNER_TEMP/view.txt" ]; then
-              echo "$VERSION is already published; nothing to release." >> "$GITHUB_STEP_SUMMARY"
-              echo "publish=false" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-          elif ! grep -q E404 "$RUNNER_TEMP/view.err"; then
-            cat "$RUNNER_TEMP/view.err"
+          [[ "$MAIN_SHA" =~ ^[0-9a-f]{40}$ ]]
+          # npmjs.com answers anonymous reads. E404 means nothing is published under
+          # that name yet; every other failure stops the run (fail closed).
+          if npm view "@tonycodes-ui/mortar" versions --json --registry "$REGISTRY" > "$RUNNER_TEMP/versions.json" 2> "$RUNNER_TEMP/view.err"; then
+            [ -s "$RUNNER_TEMP/versions.json" ] || { echo "::error::npm returned no versions"; exit 1; }
+          elif grep -q E404 "$RUNNER_TEMP/view.err"; then
+            echo '[]' > "$RUNNER_TEMP/versions.json"
+          else
+            cat "$RUNNER_TEMP/view.err" >&2
             exit 1
           fi
-          echo "publish=true" >> "$GITHUB_OUTPUT"
+          # npm prints a bare string when exactly one version exists; normalise to an array.
+          PUBLISHED=$(node -e '
+            const v = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"));
+            if (typeof v !== "string" && !Array.isArray(v)) throw Error("Unexpected npm versions response");
+            process.stdout.write(JSON.stringify([].concat(v)));
+          ' "$RUNNER_TEMP/versions.json")
+          # The planner appends publish, reason, version and tag to GITHUB_OUTPUT itself and
+          # prints one JSON decision line plus any ::warning:: / ::error:: annotations.
+          node scripts/auto-release/next-version.mjs --sha "$SHA" --main-sha "$MAIN_SHA" --published "$PUBLISHED" --github-output "$GITHUB_OUTPUT" > "$RUNNER_TEMP/release-plan.txt"
+          cat "$RUNNER_TEMP/release-plan.txt"
+          grep '^{' "$RUNNER_TEMP/release-plan.txt" > "$RUNNER_TEMP/release-plan.json"
+          read_plan() { node -p 'const v = JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))[process.argv[2]]; v === null || v === undefined ? "" : String(v)' "$RUNNER_TEMP/release-plan.json" "$1"; }
+          REASON=$(read_plan reason)
+          PUBLISH=$(read_plan release)
+          VERSION=$(read_plan version)
+          TAG=$(read_plan tag)
+          if [ "$PUBLISH" != "true" ]; then
+            case "$REASON" in
+              superseded) echo "Superseded run; the latest main commit releases the accumulated changes." >> "$GITHUB_STEP_SUMMARY" ;;
+              head-tagged) echo "This commit is already tagged and published; nothing to release (an older tag on it is also skipped)." >> "$GITHUB_STEP_SUMMARY" ;;
+              no-commits) echo "No commits since the latest release; nothing to release." >> "$GITHUB_STEP_SUMMARY" ;;
+              npm-published)
+                # The version is on npm but no tag marks it: fail loudly (the planner printed the ::error::).
+                echo "The next version is already on npm without a release tag; nothing was released." >> "$GITHUB_STEP_SUMMARY"
+                exit 1 ;;
+              *) echo "::error::Unexpected release decision: $REASON"; exit 1 ;;
+            esac
+            exit 0
+          fi
+          # The version reaches shell commands, file names and the registry: validate it first.
+          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          [ "$TAG" = "v$VERSION" ]
+          if [ "$REASON" = "resume" ]; then
+            echo "Reusing the existing $TAG on this commit; $VERSION is not on npm yet, so the publish is resumed." >> "$GITHUB_STEP_SUMMARY"
+          fi
       - if: steps.plan.outputs.publish == 'true'
         run: npm ci --ignore-scripts
       - name: Build and prepare the release archive
@@ -80,6 +104,17 @@ jobs:
           VERSION: ${{ steps.plan.outputs.version }}
         run: |
           set -euo pipefail
+          npm version "$VERSION" --no-git-tag-version --ignore-scripts --allow-same-version
+          npm run catalog
+          # Release notes: Unreleased now, minus what was already released at the previous tag.
+          PREVIOUS_TAG=$(node -p 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8")).previousTag ?? ""' "$RUNNER_TEMP/release-plan.json")
+          if [ -n "$PREVIOUS_TAG" ]; then
+            [[ "$PREVIOUS_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+            git show "$PREVIOUS_TAG:CHANGELOG.md" > "$RUNNER_TEMP/previous-changelog.md"
+          else
+            : > "$RUNNER_TEMP/previous-changelog.md"
+          fi
+          node scripts/auto-release/changelog.mjs --file CHANGELOG.md --plan "$RUNNER_TEMP/release-plan.json" --date "$(date -u +%F)" --previous-file "$RUNNER_TEMP/previous-changelog.md"
           rm -rf dist
           npm run build
           npm run release:prepare
