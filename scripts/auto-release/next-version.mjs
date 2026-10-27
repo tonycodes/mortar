@@ -80,6 +80,11 @@ export function decideRelease({ sha, mainSha, tags, commits, published = [] }) {
       !previous ||
       latestStableTag([headTag?.tag, previous.tag].filter(Boolean))?.tag ===
         headTag?.tag;
+    if (headTag && !newest)
+      return {
+        ...skip("head-tagged"),
+        warning: `${headTag.tag} on this commit is older than the latest release ${previous.tag}; skipping it so no out-of-order version is published.`,
+      };
     if (!headTag || !newest || published.includes(headTag.version))
       return skip("head-tagged");
     return {
@@ -176,6 +181,7 @@ if (
         `publish=${result.release}\nreason=${result.reason}\nversion=${result.version ?? ""}\ntag=${result.tag ?? ""}\n`,
       );
     }
+    if (result.warning) console.error(`::warning::${result.warning}`);
     if (result.reason === "npm-published") {
       console.error(
         `::error::Version ${nextVersion(previous.version, commits)} is already on npm but has no tag. Tag the commit it was published from (or deprecate it) before releasing again.`,
