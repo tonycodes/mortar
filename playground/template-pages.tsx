@@ -83,11 +83,12 @@ function SiteFooter() {
  * the consumer's own asset, passed through the logo slot.
  */
 export function SplitLandingTemplate() {
+  // The consumer's own mark: inline SVG in currentColor follows the theme.
   const logo = (
-    <img
-      alt=""
-      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='currentColor' stroke-width='2'/%3E%3Ccircle cx='8' cy='8' r='3' fill='currentColor'/%3E%3C/svg%3E"
-    />
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="8" cy="8" r="6" />
+      <circle cx="8" cy="8" r="2" fill="currentColor" />
+    </svg>
   );
   return (
     <UI.MarketingPage

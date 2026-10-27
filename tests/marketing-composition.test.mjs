@@ -192,3 +192,15 @@ test("MarketingPage fills the viewport and lets content grow", () => {
     "center",
   );
 });
+
+test("Hero split keeps the description at the column's start however wide it is", () => {
+  // margin: auto centres the 660px-wide description inside a wider copy column
+  // (wide="copy" at desktop widths), indenting it from the title.
+  assert.equal(
+    declaration(
+      selectorBody(css, ".m-hero-split .m-hero-description"),
+      "margin-inline",
+    ),
+    "0",
+  );
+});

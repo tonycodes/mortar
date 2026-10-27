@@ -634,6 +634,11 @@
   .m-hero-split .m-section-title {
     font-size: clamp(40px, 5vw, 64px);
   }
+  /* Beside a preview the copy is start-aligned: no auto margins, which would
+     centre the description inside a copy column wider than its max width. */
+  .m-hero-split .m-hero-description {
+    margin-inline: 0;
+  }
   .m-hero-split[data-wide="copy"] {
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   }
