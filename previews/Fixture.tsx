@@ -880,6 +880,7 @@ export function PreviewCase({ name }: { name: string }) {
           />
           <UI.MarketingHeader
             brand="Atlas"
+            tagline="Clinic scheduling"
             homeHref="#atlas"
             layout="center"
             mobileMenu="panel"
@@ -982,9 +983,12 @@ export function PreviewCase({ name }: { name: string }) {
           <UI.Hero
             headingLevel={2}
             layout="split"
+            wide="copy"
             title="Your inbox, in your pocket."
+            emphasis="in your pocket"
             description="Reply to customers from anywhere with the mobile app."
             actions={[action]}
+            note={<p>Free for teams of up to five.</p>}
           >
             <UI.MockWindow variant="phone" label="Northwind mobile inbox">
               <UI.StackedList
@@ -1297,6 +1301,56 @@ export function PreviewCase({ name }: { name: string }) {
         </>
       );
       break;
+    case "MarketingPage":
+      example = (
+        <UI.MarketingPage
+          align="center"
+          header={
+            <UI.MarketingHeader
+              brand="Northwind"
+              tagline="Scheduling for small teams"
+              homeHref="#home"
+              links={[
+                { label: "Pricing", href: "#pricing" },
+                { label: "Docs", href: "#docs" },
+              ]}
+              action={{ label: "Sign in", href: "#sign-in" }}
+            />
+          }
+          footer={
+            <UI.Footer
+              layout="inline"
+              brand="Northwind"
+              note="Built for teams of every size."
+              copyright="© Example company"
+              legal={[
+                { label: "Privacy", href: "#privacy" },
+                { label: "Terms", href: "#terms" },
+              ]}
+            />
+          }
+        >
+          <UI.Hero
+            layout="split"
+            wide="copy"
+            title="Bring every team onto one schedule."
+            emphasis="every team"
+            description="Shifts, rooms and bookings in one place, in sync for everyone."
+            actions={[
+              { label: "Start free", href: "#start" },
+              { label: "Sign in", href: "#sign-in" },
+            ]}
+            note={
+              <UI.Notice title="Scheduled maintenance">
+                Sign-in is unavailable on Sunday from 02:00 to 03:00 UTC.
+              </UI.Notice>
+            }
+          >
+            <img alt="" src={scenes[0]} />
+          </UI.Hero>
+        </UI.MarketingPage>
+      );
+      break;
     case "Footer":
       example = (
         <>
@@ -1365,6 +1419,22 @@ export function PreviewCase({ name }: { name: string }) {
               { label: "Atlas website", href: "#atlas-web", icon: icons.globe },
               { label: "Atlas on GitHub", href: "#atlas-gh", icon: icons.code },
             ]}
+          />
+          <UI.Footer
+            layout="inline"
+            brand="Atlas"
+            note="Made for clinics and agencies."
+            columns={[
+              {
+                label: "Product links",
+                items: [
+                  { label: "Status", href: "#status" },
+                  { label: "Changelog", href: "#changelog" },
+                ],
+              },
+            ]}
+            copyright="© Example company"
+            legal={[{ label: "Privacy", href: "#atlas-privacy" }]}
           />
         </>
       );

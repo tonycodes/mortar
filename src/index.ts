@@ -94,6 +94,7 @@ export type {
 } from "./auth.js";
 export {
   MarketingHeader,
+  MarketingPage,
   Hero,
   FeatureGrid,
   FeatureSection,

@@ -965,16 +965,25 @@ export const implementations = {
       await root.getByRole("link", { name: "Features", exact: true }).click();
       await expect(opener).toHaveAttribute("aria-expanded", "false");
 
-      // Centred header: the brand sits between the links and the actions.
+      // Centred header: the brand, with its tagline, sits between the links and the actions.
       const atlas = preview.locator(".m-marketing-header").nth(1);
       await page.setViewportSize({ width: 1280, height: 900 });
       const [links, brand, actions] = await Promise.all(
-        ["nav", ".m-brand", ".m-actions"].map((selector) =>
-          atlas.locator(`:scope > ${selector}`).boundingBox(),
+        ["nav", ":is(.m-brand, .m-brand-lockup)", ".m-actions"].map(
+          (selector) => atlas.locator(`:scope > ${selector}`).boundingBox(),
         ),
       );
       expect(links.x + links.width).toBeLessThanOrEqual(brand.x);
       expect(brand.x + brand.width).toBeLessThanOrEqual(actions.x);
+      // The tagline sits outside the home link and is hidden on narrow screens.
+      const tagline = atlas.locator(".m-brand-tagline");
+      await expect(tagline).toBeVisible();
+      await expect(
+        atlas.getByRole("link", { name: "Atlas", exact: true }),
+      ).toBeVisible();
+      await page.setViewportSize({ width: 390, height: 900 });
+      await expect(tagline).toBeHidden();
+      await page.setViewportSize({ width: 1280, height: 900 });
       // A full-width flyout spans the viewport less its padding; a two-column one lays out in two columns.
       const solutions = atlas.getByRole("button", { name: "Solutions" });
       await solutions.click();

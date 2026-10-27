@@ -13,8 +13,8 @@
   "contract": {
     "props": {
       "brand": "string",
-      "description": "string",
-      "columns": "ItemGroup<LinkAction>[] ({ label; items }; the label is the column heading and its navigation name)",
+      "description": "string (optional)",
+      "columns": "ItemGroup<LinkAction>[] (optional; { label; items }; the label is the column heading and its navigation name)",
       "copyright": "string",
       "legal": "LinkAction[]",
       "logo": "ReactNode",
@@ -23,7 +23,7 @@
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
       "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); the column headings",
-      "layout": "\"columns\" | \"center\" (default \"columns\"; center stacks the brand, one row of links per column and the social links, all centred, and the column label only names its navigation)",
+      "layout": "\"columns\" | \"center\" | \"inline\" (default \"columns\"; center stacks the brand, one row of links per column and the social links, all centred; inline is one compact row of brand, description, note, links, social links, copyright and legal links that wraps without changing reading order. Centred or inline, the column label only names its navigation)",
       "newsletter": "ReactNode (a signup row above the copyright, usually a Newsletter; inside the footer it loses its section padding and rule)"
     },
     "usage": "Import { Footer } from @tonycodes-ui/mortar. Compose with the public typed props.",

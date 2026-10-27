@@ -11,6 +11,11 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 - **Heading font.** Headings and component titles (page, section, hero, card, settings, sign-in, auth, post, calendar and stacked-list titles, and prose headings) read `--m-font-heading`. It is unset by default, so headings keep the font they inherit; nothing changes until you set it. A brand can set `fonts: { body, heading }` (`--m-brand-font`, `--m-brand-font-heading`), which apply wherever the brand does, including a container-scoped ThemeProvider. Tailwind gains a `font-heading` utility, and `font-sans` follows a brand's body font.
 - `isBrandColour`, `isBrandGradient` and `isBrandFont` in `@tonycodes-ui/mortar/brand` check a value before you save it. Fonts accept bare `var(--name)` entries, as framework font loaders such as `next/font` hand out.
 - The brand builder checks strong lines (`--m-line-strong`, control borders) at 3:1 on page, surface and sunken.
+- **Landing-page composition** ([#68](https://github.com/tonycodes/mortar/issues/68)). All additions are optional, and default markup is unchanged.
+  - **MarketingPage** frames a public page: a header, a `<main>` that grows to fill the viewport, and a footer. `align="center"` centres a single hero between them. The page is at least the viewport's height, and longer content scrolls rather than clipping.
+  - **Hero** `emphasis` marks a phrase of the title as `<em class="m-emphasis">` inside the one heading, in the brand's link colour. The title stays a string, and a phrase that isn't in it is ignored. `note` adds supporting content below the actions, such as a note or a Notice. `wide="copy" | "preview"` gives one split column three fifths of the width.
+  - **MarketingHeader** `tagline` shows a short descriptor beside the wordmark, outside the home link. It is hidden at 560px and narrower.
+  - **Footer** `layout="inline"` is one compact row of brand, notes, links, copyright and legal links. It wraps without changing reading order. `description` and `columns` are now optional.
 
 ### Fixed
 
