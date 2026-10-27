@@ -216,10 +216,16 @@ test("R-AR-5 decideRelease skips stale, tagged and empty runs and validates inpu
     "superseded",
     "R-AR-5",
   );
-  for (const name of ["v0.11.0", "v0.8.0", "v1.0.0-rc.1"]) {
+  for (const [name, published] of [
+    ["v0.11.0", ["0.11.0"]],
+    ["v0.8.0", []],
+    ["v0.8.0", ["0.8.0"]],
+    ["v1.0.0-rc.1", []],
+  ]) {
     const data = input();
     data.tags = data.tags.filter((tag) => tag.name !== name);
     data.tags.push({ name, sha: data.sha });
+    data.published = published;
     assertSkip(nv.decideRelease(data), "head-tagged", "R-AR-5");
   }
   assertSkip(
@@ -306,6 +312,7 @@ test("R-AR-7 decideRelease guards npm versions and concurrent merges", () => {
     nv.decideRelease({
       ...b,
       tags: [...input().tags, { name: "v0.12.0", sha: b.sha }],
+      published: ["0.12.0"],
     }),
     "head-tagged",
     "R-AR-7",
@@ -430,12 +437,27 @@ test("R-AR-9 CLI skips tagged, superseded, published and empty runs", (t) => {
     const result = cli("scripts/auto-release/next-version.mjs", [
       ...planArgs(dir, head, main),
       "--published",
-      reason === "npm-published" ? "0.10.0,0.12.0" : "0.10.0",
+      reason === "npm-published"
+        ? "0.10.0,0.12.0"
+        : reason === "head-tagged"
+          ? "0.10.0,0.11.0"
+          : "0.10.0",
       "--github-output",
       output,
     ]);
     assert.equal(result.status, 0, `R-AR-9 ${reason}: ${result.stderr}`);
-    assertSkip(JSON.parse(result.stdout), reason, "R-AR-9");
+    if (reason === "npm-published") {
+      assert.match(
+        result.stdout,
+        /^::error::.*0\.12\.0.*(?:tag|npm)/m,
+        "R-AR-9 published version fails visibly",
+      );
+    }
+    const decisions = result.stdout
+      .split(/\r?\n/)
+      .filter((line) => line.startsWith("{"));
+    assert.equal(decisions.length, 1, "R-AR-9 one JSON decision line");
+    assertSkip(JSON.parse(decisions[0]), reason, "R-AR-9");
     const text = readFileSync(output, "utf8");
     assert.match(text, /^publish=false\r?$/m, "R-AR-9 publish false");
     assert.match(
@@ -831,6 +853,20 @@ test("R-AR-15 unexpectedChanges allows only release-generated paths", () => {
     ["notes.txt", "src/Old.tsx"],
     "R-AR-15 reports deleted unexpected paths",
   );
+  for (const [status, unexpected] of [
+    ["R  src/x.ts -> CHANGELOG.md", "src/x.ts"],
+    ["R  CHANGELOG.md -> src/y.ts", "src/y.ts"],
+    [" R package.json -> docs/p.json", "docs/p.json"],
+    ["C  src/a.ts -> package.json", "src/a.ts"],
+    ["RM manifests/a.json -> src/b.json", "src/b.json"],
+  ]) {
+    const changes = tree.unexpectedChanges(`${status}\n`);
+    assert.ok(changes.length > 0, `R-AR-15 reports ${status}`);
+    assert.ok(
+      changes.some((path) => path.includes(unexpected)),
+      `R-AR-15 identifies ${unexpected}`,
+    );
+  }
   assert.deepEqual(tree.unexpectedChanges(""), [], "R-AR-15 blank status");
 });
 
@@ -868,13 +904,67 @@ test("R-AR-16 release.yml computes and applies the version before preparation", 
     prepare,
     [
       "node scripts/auto-release/next-version.mjs",
-      'npm version "$VERSION" --no-git-tag-version',
+      'npm version "$VERSION" --no-git-tag-version --ignore-scripts',
       "npm run catalog",
       "node scripts/auto-release/changelog.mjs",
       "npm run release:prepare",
     ],
     "R-AR-16",
   );
+  assert.match(
+    prepare,
+    /--previous-file\s+\S+/,
+    "R-AR-16 passes previous changelog",
+  );
+  assert.match(
+    prepare,
+    /git show [^\n]*:CHANGELOG\.md/,
+    "R-AR-16 reads tagged changelog",
+  );
+  assert.match(prepare, /previousTag/, "R-AR-16 previous tag comes from plan");
+  const changelogCommand =
+    prepare
+      .replace(/\\\r?\n\s*/g, " ")
+      .match(/node scripts\/auto-release\/changelog\.mjs[^\n]*/)?.[0] ?? "";
+  assert.match(
+    changelogCommand,
+    /--previous-file\s+\S+/,
+    "R-AR-16 changelog receives previous file",
+  );
+  assert.match(
+    changelogCommand,
+    /--plan\s+\S+/,
+    "R-AR-16 changelog receives plan",
+  );
+  assert.match(
+    changelogCommand,
+    /--date\s+\S+/,
+    "R-AR-16 changelog receives date",
+  );
+  assert.match(prepare, /\[\[ "\$VERSION" =~ \^/, "R-AR-16 validates semver");
+  assertOrder(
+    prepare,
+    ['[[ "$VERSION" =~ ^', 'npm version "$VERSION"'],
+    "R-AR-16",
+  );
+  assert.match(
+    prepare,
+    /npm view[^\n]*\bversions\b[^\n]*--json/,
+    "R-AR-16 reads JSON versions",
+  );
+  assert.match(prepare, /E404/, "R-AR-16 handles missing package");
+  assert.match(prepare, /\[\]/, "R-AR-16 missing package uses empty list");
+  assert.match(
+    prepare,
+    /E404[\s\S]*exit 1/,
+    "R-AR-16 other registry failures fail closed",
+  );
+  assert.match(
+    prepare,
+    /Array\.isArray|\btype\b|typeof/,
+    "R-AR-16 normalises single version",
+  );
+  assert.match(prepare, /--github-output\s+\S+/, "R-AR-16 reads CLI outputs");
   assert.doesNotMatch(
     prepare,
     /carries an unpublished version|require\(["']\.\/package\.json["']\)\.version/,
@@ -882,8 +972,81 @@ test("R-AR-16 release.yml computes and applies the version before preparation", 
   );
 });
 
+function workflowViolations(text) {
+  const violations = [];
+  const logical = text.replace(/\\\r?\n\s*/g, " ");
+  if (/(?:-X\s*|--method(?:=|\s+))["']?(?:PATCH|PUT|DELETE)\b/i.test(logical)) {
+    violations.push("mutating HTTP method");
+  }
+  if (/\bgit\s+push\b/.test(logical)) violations.push("git push");
+  for (const command of logical.match(/\bgh\s+api\b[^\n;]*/g) ?? []) {
+    if (
+      /git\/ref\//.test(command) &&
+      /(?:-[fF]\s+["']?sha\s*=|--input(?:=|\s|$))/.test(command)
+    ) {
+      violations.push("singular ref write");
+    }
+  }
+  if (/\/contents\//i.test(logical)) violations.push("contents API");
+  if (/git\/refs\/heads/i.test(logical)) violations.push("branch refs API");
+  for (const line of logical.split(/\r?\n/)) {
+    const withoutReads = line
+      .replace(
+        /\bgh api\s+["']?repos\/[^\s"']+\/git\/ref\/heads\/main["']?(?=\s|$)/g,
+        "",
+      )
+      .replace(/\bgit ls-remote\b[^\n;]*heads\/main/g, "");
+    if (withoutReads.includes("heads/main")) {
+      violations.push("main ref outside read");
+    }
+  }
+  for (const field of logical.matchAll(/\bref\s*=\s*["']?([^\s"']+)/g)) {
+    if (!field[1].startsWith("refs/tags/"))
+      violations.push("non-tag ref field");
+  }
+  const creations = (logical.match(/\bgh api\b[^\n;]*/g) ?? []).filter(
+    (command) => /git\/refs(?=["'\s]|$)/.test(command),
+  );
+  if (creations.length !== 1) violations.push("tag ref creation count");
+  if (
+    creations.some((command) => !command.includes('-f ref="refs/tags/$TAG"'))
+  ) {
+    violations.push("non-tag ref creation");
+  }
+  return violations;
+}
+
 test("R-AR-17 release.yml retains credential isolation and serialized publishing", () => {
   const workflow = read(".github/workflows/release.yml");
+  assert.deepEqual(
+    workflowViolations(workflow),
+    [],
+    "R-AR-17 no ref writes except tag creation",
+  );
+  for (const [mutant, command] of [
+    [
+      "PATCH main",
+      "gh api -X PATCH repos/$REPO/git/refs/heads/main -f sha=$SHA",
+    ],
+    [
+      "PUT contents",
+      "gh api -X PUT repos/$REPO/contents/package.json -f message=x",
+    ],
+    [
+      "create main ref",
+      "gh api repos/$REPO/git/refs -f ref=refs/heads/main -f sha=$SHA",
+    ],
+    [
+      "singular main ref write",
+      "gh api repos/$REPO/git/ref/heads/main -f sha=$SHA -F force=true",
+    ],
+  ]) {
+    assert.ok(
+      workflowViolations(`${workflow}\n${command}\n`).length > 0,
+      `R-AR-17 flags ${mutant}`,
+    );
+  }
+
   const [prepare, publish] = workflow
     .split(/\n  (?=prepare:|publish:)/)
     .slice(1);
@@ -1000,6 +1163,11 @@ test("R-AR-18 release.mjs checks unexpected changes and retains provenance", () 
 
 test("R-AR-19 CONTRIBUTING.md documents automatic conventional-commit releases", () => {
   const text = read("CONTRIBUTING.md").toLowerCase().replace(/\s+/g, " ");
+  assert.doesNotMatch(
+    text,
+    /only a merged version bump/,
+    "R-AR-19 stale version-bump publish claim removed",
+  );
   assert.match(
     text,
     /(?:every|each|all) merge[^.]*main[^.]*automatic|automatic[^.]*releas[^.]*every merge[^.]*main/,
@@ -1134,5 +1302,322 @@ Mortar release history.
       false,
       "R-AR-20 missing file not created",
     );
+  }
+});
+
+test("R-AR-21 decideRelease resumes a head-tagged release that was never published", () => {
+  const data = {
+    ...input(),
+    tags: [
+      { name: "v0.10.0", sha: sha("1") },
+      { name: "v0.11.0", sha: input().sha },
+    ],
+    commits: ["feat: x"],
+    published: ["0.10.0"],
+  };
+  const before = structuredClone(data);
+  const expected = {
+    release: true,
+    reason: "resume",
+    version: "0.11.0",
+    tag: "v0.11.0",
+    previousTag: "v0.10.0",
+    bump: null,
+  };
+  assert.deepEqual(
+    nv.decideRelease(data),
+    expected,
+    "R-AR-21 resumes existing version without a bump",
+  );
+  assert.deepEqual(data, before, "R-AR-21 resume does not mutate inputs");
+  assertSkip(
+    nv.decideRelease({ ...data, published: ["0.10.0", "0.11.0"] }),
+    "head-tagged",
+    "R-AR-21",
+  );
+  assert.deepEqual(
+    nv.decideRelease({ ...data, tags: [data.tags[1]], published: [] }),
+    { ...expected, previousTag: null },
+    "R-AR-21 first tag resumes without previous tag",
+  );
+  assertSkip(
+    nv.decideRelease({ ...data, mainSha: sha("b") }),
+    "superseded",
+    "R-AR-21",
+  );
+});
+
+test("R-AR-22 CLI resumes lightweight and annotated head tags with full messages", (t) => {
+  for (const annotated of [false, true]) {
+    const dir = repo(t, "R-AR-22");
+    git(dir, "R-AR-22", "tag", "v0.11.0");
+    const message =
+      "feat: add panel\n\nPreserve the full body.\nAnd this continuation.";
+    git(dir, "R-AR-22", "commit", "--allow-empty", "-m", message);
+    const head = git(dir, "R-AR-22", "rev-parse", "HEAD");
+    git(
+      dir,
+      "R-AR-22",
+      "tag",
+      ...(annotated ? ["-a", "v0.12.0", "-m", "release"] : ["v0.12.0"]),
+    );
+    for (const published of ["0.11.0", "0.11.0,0.12.0"]) {
+      const output = join(dir, "github-output");
+      writeFileSync(output, "existing=value\n");
+      const result = cli("scripts/auto-release/next-version.mjs", [
+        ...planArgs(dir, head),
+        "--published",
+        published,
+        "--github-output",
+        output,
+      ]);
+      assert.equal(
+        result.status,
+        0,
+        `R-AR-22 ${annotated ? "annotated" : "lightweight"} CLI: ${result.stderr}`,
+      );
+      const decision = JSON.parse(result.stdout);
+      const lines = readFileSync(output, "utf8").split(/\r?\n/);
+      assert.ok(lines.includes("existing=value"), "R-AR-22 appends outputs");
+      if (published === "0.11.0") {
+        for (const [key, value] of Object.entries({
+          release: true,
+          reason: "resume",
+          version: "0.12.0",
+          tag: "v0.12.0",
+          previousTag: "v0.11.0",
+          bump: null,
+        })) {
+          assert.equal(decision[key], value, `R-AR-22 resume ${key}`);
+        }
+        assert.deepEqual(
+          decision.commits.map((commit) => commit.trim()),
+          [message],
+          "R-AR-22 rebuilds notes from full messages after previous tag",
+        );
+        for (const line of [
+          "version=0.12.0",
+          "tag=v0.12.0",
+          "publish=true",
+          "reason=resume",
+        ]) {
+          assert.ok(lines.includes(line), `R-AR-22 outputs ${line}`);
+        }
+      } else {
+        assertSkip(decision, "head-tagged", "R-AR-22");
+        assert.ok(
+          lines.includes("publish=false"),
+          "R-AR-22 published tag skips",
+        );
+        assert.ok(
+          lines.includes("reason=head-tagged"),
+          "R-AR-22 published skip reason",
+        );
+        assert.ok(
+          !lines.some((line) => line.startsWith("version=")),
+          "R-AR-22 skip has no version output",
+        );
+      }
+    }
+  }
+});
+
+test("R-AR-23 release.yml resumes an existing tag at the same SHA", () => {
+  const workflow = read(".github/workflows/release.yml");
+  const [prepare, publish] = workflow
+    .split(/\n  (?=prepare:|publish:)/)
+    .slice(1);
+  assert.match(
+    publish,
+    /already points at/,
+    "R-AR-23 retains existing tag SHA check",
+  );
+  assert.match(
+    prepare,
+    /npm-published[\s\S]{0,300}exit 1/,
+    "R-AR-23 npm-published plan fails the workflow",
+  );
+  assert.match(
+    prepare,
+    /::error::|(?:cat|tee)\s+[^\n]*plan/,
+    "R-AR-23 emits an error annotation or forwards CLI plan output",
+  );
+  assert.match(
+    prepare,
+    /resume/i,
+    "R-AR-23 prepare accounts for resume reason",
+  );
+  assert.match(
+    prepare,
+    /if:[^\n]*outputs\.publish\s*==\s*'true'/,
+    "R-AR-23 builds when plan says publish true",
+  );
+  assertOrder(
+    prepare,
+    ["node scripts/auto-release/next-version.mjs", "npm run release:prepare"],
+    "R-AR-23",
+  );
+});
+
+test("R-AR-24 CLI reports an error with a successful skip when npm has the next version without its tag", (t) => {
+  const dir = repo(t, "R-AR-24");
+  git(dir, "R-AR-24", "tag", "v0.11.0");
+  git(dir, "R-AR-24", "commit", "--allow-empty", "-m", "feat: add panel");
+  const head = git(dir, "R-AR-24", "rev-parse", "HEAD");
+  const output = join(dir, "github-output");
+  writeFileSync(output, "existing=value\n");
+  const result = cli("scripts/auto-release/next-version.mjs", [
+    ...planArgs(dir, head),
+    "--published",
+    "0.11.0,0.12.0",
+    "--github-output",
+    output,
+  ]);
+  assert.equal(result.status, 0, `R-AR-24 skip exit: ${result.stderr}`);
+  assert.match(
+    result.stdout,
+    /^::error::.*0\.12\.0.*(?:tag|npm)/m,
+    `R-AR-24 names published version in error: ${result.stderr}`,
+  );
+  assert.match(
+    result.stdout,
+    /^::error::.*v0\.12\.0/m,
+    "R-AR-24 names missing tag in error",
+  );
+  const decisions = result.stdout
+    .split(/\r?\n/)
+    .filter((line) => line.startsWith("{"));
+  assert.equal(decisions.length, 1, "R-AR-24 one JSON decision line");
+  assertSkip(JSON.parse(decisions[0]), "npm-published", "R-AR-24");
+  const text = readFileSync(output, "utf8");
+  for (const line of [
+    "existing=value",
+    "publish=false",
+    "reason=npm-published",
+  ]) {
+    assert.ok(text.split(/\r?\n/).includes(line), `R-AR-24 appends ${line}`);
+  }
+  assert.doesNotMatch(text, /^version=/m, "R-AR-24 no version output");
+});
+
+test("R-AR-25 AGENTS.md reflects automatic releases", () => {
+  const text = read("AGENTS.md");
+  assert.doesNotMatch(
+    text,
+    /never approve, merge, publish or bump the version/i,
+    "R-AR-25 obsolete release prohibition removed",
+  );
+  assert.doesNotMatch(
+    text,
+    /bump the version/i,
+    "R-AR-25 no manual version bump guidance",
+  );
+  assert.match(
+    text,
+    /(?:release[^.]*automatic|automatic[^.]*release)/i,
+    "R-AR-25 releases are automatic",
+  );
+  assert.match(text, /CONTRIBUTING\.md/, "R-AR-25 links contribution workflow");
+  assert.match(
+    text,
+    /never weaken a protected check, policy or workflow/i,
+    "R-AR-25 protected checks remain protected",
+  );
+});
+
+test("R-AR-26 release-workflow tests retain publishing guards", () => {
+  const text = read("tests/release-workflow.test.mjs");
+  for (const phrase of ["OIDC", "provenance", "E404", "already points at"]) {
+    assert.ok(text.includes(phrase), `R-AR-26 retains ${phrase}`);
+  }
+  assert.match(
+    text,
+    /doesNotMatch\(workflow, \/secrets\\\./,
+    "R-AR-26 retains no-secrets assertion",
+  );
+});
+
+test("R-AR-27 decideRelease never resumes a stable tag older than the latest release", () => {
+  const data = {
+    ...input(),
+    tags: [
+      { name: "v0.11.0", sha: sha("1") },
+      { name: "v0.8.0", sha: input().sha },
+    ],
+  };
+  for (const published of [[], ["0.8.0"], ["0.8.0", "0.11.0"]]) {
+    assertSkip(
+      nv.decideRelease({ ...data, published }),
+      "head-tagged",
+      "R-AR-27",
+    );
+  }
+  assert.deepEqual(
+    nv.decideRelease({
+      ...input(),
+      tags: [
+        { name: "v0.10.0", sha: sha("1") },
+        { name: "v0.11.0", sha: input().sha },
+      ],
+      published: ["0.10.0"],
+    }),
+    {
+      release: true,
+      reason: "resume",
+      version: "0.11.0",
+      tag: "v0.11.0",
+      previousTag: "v0.10.0",
+      bump: null,
+    },
+    "R-AR-27 latest unpublished tag still resumes",
+  );
+});
+
+test("R-AR-28 CLI visibly skips older lightweight and annotated stable head tags", (t) => {
+  for (const annotated of [false, true]) {
+    const dir = repo(t, "R-AR-28");
+    git(dir, "R-AR-28", "tag", "v0.11.0");
+    git(dir, "R-AR-28", "commit", "--allow-empty", "-m", "feat: x");
+    const head = git(dir, "R-AR-28", "rev-parse", "HEAD");
+    git(
+      dir,
+      "R-AR-28",
+      "tag",
+      ...(annotated ? ["-a", "v0.8.0", "-m", "x"] : ["v0.8.0"]),
+    );
+    for (const published of ["0.8.0", ""]) {
+      const output = join(dir, "github-output");
+      writeFileSync(output, "existing=value\n");
+      const result = cli("scripts/auto-release/next-version.mjs", [
+        ...planArgs(dir, head),
+        "--published",
+        published,
+        "--github-output",
+        output,
+      ]);
+      assert.equal(result.status, 0, `R-AR-28 CLI skip: ${result.stderr}`);
+      const decisions = result.stdout
+        .split(/\r?\n/)
+        .filter((line) => line.startsWith("{"));
+      assert.equal(decisions.length, 1, "R-AR-28 one JSON decision line");
+      assertSkip(JSON.parse(decisions[0]), "head-tagged", "R-AR-28");
+      const text = readFileSync(output, "utf8");
+      for (const line of [
+        "existing=value",
+        "publish=false",
+        "reason=head-tagged",
+      ]) {
+        assert.ok(
+          text.split(/\r?\n/).includes(line),
+          `R-AR-28 appends ${line}`,
+        );
+      }
+      assert.doesNotMatch(text, /^version=/m, "R-AR-28 no version output");
+      assert.match(
+        result.stdout,
+        /^::warning::.*v0\.8\.0.*v0\.11\.0/m,
+        "R-AR-28 warning names head tag and latest release",
+      );
+    }
   }
 });
