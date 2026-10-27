@@ -1526,9 +1526,14 @@ test("R-AR-24 CLI reports an error with a successful skip when npm has the next 
     /^::error::.*CONTRIBUTING\.md/m,
     "R-AR-24 references the CONTRIBUTING recovery note",
   );
+  assert.match(
+    result.stdout,
+    /^::error::.*Deprecating or unpublishing it does not clear this error\.$/m,
+    "R-AR-24 says deprecating or unpublishing does not clear the error",
+  );
   assert.doesNotMatch(
     result.stdout,
-    /deprecat/i,
+    /\(or deprecate it\)|or deprecate/i,
     "R-AR-24 does not suggest deprecating the version",
   );
   const decisions = result.stdout
