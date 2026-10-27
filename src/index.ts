@@ -229,3 +229,5 @@ export type {
 export { CommentComposer } from "./composer.js";
 export type { LinkItem, ItemGroup } from "./navigation.js";
 export type { HeadingLevel } from "./heading.js";
+export { NetworkIllustration } from "./illustration.js";
+export type { NetworkNode, NetworkConnection } from "./illustration.js";

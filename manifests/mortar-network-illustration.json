@@ -1,0 +1,42 @@
+{
+  "id": "mortar-network-illustration",
+  "logicalId": "network-illustration",
+  "name": "NetworkIllustration",
+  "description": "Mortar network drawing: nodes and connections from data, with optional travelling signals and accessible motion controls.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar",
+  "export": "NetworkIllustration",
+  "source": "src/illustration.tsx",
+  "capabilities": [],
+  "owner": "Mortar maintainers",
+  "kitId": "marketing",
+  "contract": {
+    "props": {
+      "nodes": "NetworkNode[] ({ id: string; x: number; y: number; label?: string; tone?: \"default\" | \"accent\" }; x and y are viewBox units; label is drawn under the node)",
+      "connections": "NetworkConnection[] ({ from: string; to: string; signal?: boolean; duration?: number; delay?: number }; straight lines between node ids, skipped when either id is unknown; signal defaults to true; duration and delay are seconds and override the illustration's timing)",
+      "width": "number (default 480; the viewBox width, the drawing scales to its container)",
+      "height": "number (default 320; the viewBox height)",
+      "label": "string (makes the drawing informative: an image named by this text; omitted, the drawing is decorative and hidden from assistive technology)",
+      "description": "string (with a label, a longer description linked by aria-describedby)",
+      "motion": "\"auto\" | \"static\" (default \"auto\"; static draws the same nodes and connections with no signals and no control)",
+      "duration": "number (default 3; seconds for a signal to cross a connection; signals without a delay are staggered evenly)",
+      "paused": "boolean (the user's pause; pass with onPausedChange to control it or share one state between illustrations)",
+      "onPausedChange": "(paused: boolean) => void (called when the pause control is used)",
+      "id": "string (the root element's id)",
+      "className": "string (layout only: margins or grid placement)"
+    },
+    "usage": "Import { NetworkIllustration } from @tonycodes-ui/mortar. Supply nodes and connections as data, for example beside a split Hero. Colours come from tokens: nodes use the surface and strong line, accent nodes and signals the brand accent, labels the secondary text colour.",
+    "avoid": "Do not copy implementations, override central colours or grant component approval. Do not present the animation as live activity or status; it is illustrative. Do not use it as an interactive graph or editor.",
+    "accessibility": "Decorative by default (aria-hidden SVG). With a label it is one image (role=\"img\") named by its title and described by its description. When signals move, a visible Pause animation / Play animation button controls them. Motion stops automatically when reduced motion is requested (the static drawing, with no control), while the document is hidden and while the drawing is off screen; returning never overrides the user's pause. Nothing is announced as live. The root exposes data-paused (user, motion, hidden or offscreen) while signals are stopped, and data-m-component for tests and consumers; neither is a styling hook.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/NetworkIllustrationPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-network",
+    "probe": "network",
+    "states": []
+  }
+}
