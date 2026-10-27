@@ -23,17 +23,22 @@ const commit = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: ROOT,
   encoding: "utf8",
 }).trim();
-// Pack exactly what this commit builds, never a stale dist.
+// Pack exactly what this commit builds, never a stale dist. Pack itself runs with
+// --ignore-scripts: prepack would rebuild and write to stdout ahead of the --json output.
 execFileSync("npm", ["run", "build"], { cwd: ROOT, stdio: "inherit" });
 const pkg = JSON.parse(await readFile(resolve(ROOT, "package.json"), "utf8"));
 const out = resolve(ROOT, "release", pkg.version);
 await mkdir(resolve(ROOT, "release"), { recursive: true });
 await mkdir(out, { recursive: false });
 const packed = JSON.parse(
-  execFileSync("npm", ["pack", "--json", "--pack-destination", out], {
-    cwd: ROOT,
-    encoding: "utf8",
-  }),
+  execFileSync(
+    "npm",
+    ["pack", "--json", "--ignore-scripts", "--pack-destination", out],
+    {
+      cwd: ROOT,
+      encoding: "utf8",
+    },
+  ),
 )[0];
 const bytes = await readFile(resolve(out, packed.filename));
 const provenance = {

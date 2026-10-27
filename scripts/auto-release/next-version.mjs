@@ -190,7 +190,7 @@ if (
     if (result.reason === "npm-published") {
       const next = nextVersion(previous.version, commits);
       console.log(
-        `::error::Version ${next} is already on npm but v${next} has no release tag. Push the v${next} tag at the commit that was published, as described under Manual recovery in CONTRIBUTING.md, then re-run this workflow.`,
+        `::error::Version ${next} is already on npm but v${next} has no release tag. Push the v${next} tag at the commit that was published, as described under Manual recovery in CONTRIBUTING.md, then re-run this workflow. Deprecating or unpublishing it does not clear this error.`,
       );
     }
     console.log(JSON.stringify(result));
