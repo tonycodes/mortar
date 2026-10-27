@@ -13,12 +13,15 @@ import {
 import os from "node:os";
 import { delimiter, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 
 // P-1..P-3: release.mjs parses `npm pack --json`. `prepack` runs the build, whose last step
 // (agent-data.mjs) prints "Wrote .../agent-data.json" to stdout ahead of the JSON array, so
 // pack must run with --ignore-scripts (release.mjs builds just before). P-4/P-5 pin the docs
 // the PO asked for, and P-6 forbids ${{ }} interpolation inside run: blocks.
+
+const loadParser = async () =>
+  (await import("../scripts/release-pack.mjs")).parsePackOutput;
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -194,4 +197,52 @@ test("P-6 no run: block in release.yml interpolates ${{ }}", () => {
     });
   }
   assert.deepEqual(offenders, [], "P-6 pass values through env:, not ${{ }}");
+});
+
+test("P-7 a REAL npm pack --json --ignore-scripts parses with release.mjs's own parser", async (t) => {
+  const parsePackOutput = await loadParser();
+  // No publish: the tarball goes to a temp --pack-destination and is removed afterwards.
+  const dest = mkdtempSync(join(os.tmpdir(), "mortar-realpack-"));
+  t.after(() => rmSync(dest, { recursive: true, force: true }));
+  const stdout = execFileSync(
+    "npm",
+    ["pack", "--json", "--ignore-scripts", "--pack-destination", dest],
+    { cwd: root, encoding: "utf8" },
+  );
+  const packed = parsePackOutput(stdout);
+  const pkg = JSON.parse(read("package.json"));
+  assert.equal(packed.name, pkg.name, "P-7 pack reports the package name");
+  assert.equal(packed.version, pkg.version, "P-7 pack reports the version");
+  assert.match(packed.filename, /\.tgz$/, "P-7 pack reports a tarball");
+  assert.ok(
+    existsSync(join(dest, packed.filename)),
+    "P-7 the tarball is in the temp destination",
+  );
+});
+
+test("P-8 the shared parser reads clean output and rejects prepack noise", async () => {
+  const parsePackOutput = await loadParser();
+  const ok = parsePackOutput(
+    JSON.stringify([{ name: "n", version: "1.0.0", filename: "n-1.0.0.tgz" }]),
+  );
+  assert.equal(ok.filename, "n-1.0.0.tgz");
+  assert.throws(
+    () => parsePackOutput('Wrote /tmp/agent-data.json\n[{"filename":"x.tgz"}]'),
+    SyntaxError,
+  );
+  assert.throws(() => parsePackOutput("[]"), /pack/i);
+});
+
+test("P-9 release.mjs uses the shared pack parser", () => {
+  const source = read("scripts/release.mjs");
+  assert.match(source, /from "\.\/release-pack\.mjs"/);
+  assert.match(source, /parsePackOutput\(/);
+});
+
+test("P-10 CONTRIBUTING says a re-run after the recovery tag releases only if newer commits exist", () => {
+  const text = read("CONTRIBUTING.md").replace(/\s+/g, " ");
+  assert.match(
+    text,
+    /after the recovery tag is pushed, a re-run releases the next version only if there are newer commits after the tagged one; otherwise it skips/i,
+  );
 });
