@@ -24,6 +24,21 @@
     font-weight: var(--m-weight-bold);
     letter-spacing: var(--m-tracking-heading);
   }
+  /* A short descriptor beside the wordmark, outside the home link. */
+  .m-brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .m-brand-tagline {
+    max-width: 28ch;
+    padding-left: 12px;
+    border-left: 1px solid var(--m-line);
+    color: var(--m-muted);
+    font-size: 13px;
+    line-height: 1.3;
+  }
   .m-marketing-header nav {
     display: flex;
     gap: 22px;
@@ -192,7 +207,8 @@
     grid-column: 1;
     grid-row: 1;
   }
-  .m-marketing-header[data-layout="center"] > .m-brand {
+  .m-marketing-header[data-layout="center"] > .m-brand,
+  .m-marketing-header[data-layout="center"] > .m-brand-lockup {
     grid-column: 2;
     grid-row: 1;
   }
@@ -253,7 +269,8 @@
     .m-marketing-header[data-layout="center"] {
       grid-template-columns: auto minmax(0, 1fr) auto;
     }
-    .m-marketing-header[data-layout="center"] > .m-brand {
+    .m-marketing-header[data-layout="center"] > .m-brand,
+    .m-marketing-header[data-layout="center"] > .m-brand-lockup {
       justify-self: center;
     }
     .m-marketing-header[data-layout="center"] > .m-actions .m-button {
@@ -274,6 +291,32 @@
     .m-flyout-panel[data-layout="columns"] ul {
       grid-template-columns: minmax(0, 1fr);
     }
+    .m-brand-tagline {
+      display: none;
+    }
+  }
+
+  /* == MarketingPage == */
+  /* Header, main and footer fill the viewport; main grows, nothing is clipped. */
+  .m-marketing-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  /* Header, sections and footer centre themselves with auto margins, which in a
+     flex column would shrink them to their content; keep them full width. */
+  .m-marketing-page > *,
+  .m-marketing-page[data-align="center"] > .m-marketing-main > * {
+    width: 100%;
+  }
+  .m-marketing-main {
+    flex: 1 0 auto;
+  }
+  .m-marketing-page[data-align="center"] > .m-marketing-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   /* == Banner == */
@@ -591,6 +634,30 @@
   .m-hero-split .m-section-title {
     font-size: clamp(40px, 5vw, 64px);
   }
+  /* Beside a preview the copy is start-aligned: no auto margins, which would
+     centre the description inside a copy column wider than its max width. */
+  .m-hero-split .m-hero-description {
+    margin-inline: 0;
+  }
+  .m-hero-split[data-wide="copy"] {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+  .m-hero-split[data-wide="preview"] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+  /* An emphasised phrase in the title: the brand's text-safe link colour. */
+  .m-hero .m-emphasis {
+    font-style: normal;
+    color: var(--m-link);
+  }
+  .m-hero:is([data-background], [data-tone="accent"]) .m-emphasis {
+    color: inherit;
+  }
+  .m-hero-note {
+    margin-top: 20px;
+    color: var(--m-muted);
+    font-size: 14px;
+  }
   .m-hero-preview {
     margin-top: 48px;
     text-align: left;
@@ -694,6 +761,7 @@
   }
   @media (max-width: 900px) {
     .m-hero-split,
+    .m-hero-split[data-wide],
     .m-feature-section,
     .m-faq {
       grid-template-columns: minmax(0, 1fr);
@@ -1892,6 +1960,41 @@
     justify-content: center;
     text-align: center;
     margin-top: 40px;
+  }
+  /* Footer: one compact row that wraps in reading order. */
+  .m-footer[data-layout="inline"] {
+    padding-block: 24px;
+    border-top: 1px solid var(--m-line);
+  }
+  .m-footer-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-footer-inline .m-brand {
+    font-size: 14px;
+    color: var(--m-ink);
+  }
+  .m-footer-inline p {
+    margin: 0;
+  }
+  .m-footer-inline > :is(nav, div) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+  .m-footer-inline a {
+    color: var(--m-muted);
+    text-decoration: none;
+  }
+  .m-footer-inline a:hover {
+    color: var(--m-ink);
+  }
+  .m-footer-inline > .m-icon-links {
+    margin: 0;
   }
   @media (max-width: 900px) {
     .m-footer-grid {

@@ -260,6 +260,20 @@ const factories = {
   ],
   MarketingHeader: [
     () => html(UI.MarketingHeader, { brand: "Northwind", links: [action] }),
+    () =>
+      html(UI.MarketingHeader, {
+        brand: "Northwind",
+        tagline: "Scheduling",
+        links: [action],
+      }),
+  ],
+  MarketingPage: [
+    () =>
+      html(
+        UI.MarketingPage,
+        { header: h(UI.MarketingHeader, { brand: "N", links: [] }) },
+        "Body",
+      ),
   ],
   MediaObject: [() => html(UI.MediaObject, { media: "M" }, "Body")],
   MetricGroup: [
