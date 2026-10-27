@@ -273,6 +273,23 @@ const factories = {
     () => html(UI.MockWindow, { label: "Example window", children: "Body" }),
   ],
   Navbar: [() => html(UI.Navbar, { brand: "B", items: navigation })],
+  NetworkIllustration: [
+    () =>
+      html(UI.NetworkIllustration, {
+        nodes: [
+          { id: "a", x: 0, y: 0 },
+          { id: "b", x: 10, y: 0 },
+        ],
+        connections: [{ from: "a", to: "b" }],
+      }),
+    () =>
+      html(UI.NetworkIllustration, {
+        motion: "static",
+        label: "Two points",
+        nodes: [],
+        connections: [],
+      }),
+  ],
   Newsletter: [() => html(UI.Newsletter, { title: "Updates", onSubmit: noop })],
   NotFound: [() => html(UI.NotFound, { title: "Missing", actions: [action] })],
   Notice: [() => html(UI.Notice, { title: "Saved" })],

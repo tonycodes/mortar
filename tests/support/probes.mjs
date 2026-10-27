@@ -903,6 +903,136 @@ export const implementations = {
     await reports.click();
     await expect(revenue).toBeHidden();
   },
+  async network({ page, root }) {
+    const drawing = root.locator(".m-network").first();
+    const signal = drawing.locator(".m-network-signal").first();
+    const playState = () =>
+      signal.evaluate((el) => getComputedStyle(el).animationPlayState);
+    // Informative: one image named by its title, described, and nothing live.
+    await expect(
+      drawing.getByRole("img", { name: "Five connected points" }),
+    ).toHaveAccessibleDescription(/Web and Mobile connect to a hub/);
+    await expect(root.locator("[aria-live], [role=status]")).toHaveCount(0);
+    // Decorative drawings are hidden from assistive technology.
+    await expect(root.locator(".m-network svg[aria-hidden=true]")).toHaveCount(
+      3,
+    );
+    // The suite runs with reduced motion: every drawing is static, with no
+    // signals and no control, and the connections are still drawn.
+    await expect(drawing).toHaveAttribute("data-paused", "motion");
+    await expect(
+      root.locator(".m-network-signal, .m-network button"),
+    ).toHaveCount(0);
+    await expect(drawing.locator(".m-network-link")).toHaveCount(5);
+
+    // Without reduced motion the signals travel.
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await expect(drawing).not.toHaveAttribute("data-paused");
+    await expect(drawing.locator(".m-network-signal")).toHaveCount(4);
+    expect(await playState()).toBe("running");
+
+    // Keyboard pause and resume.
+    const pause = drawing.getByRole("button", { name: "Pause animation" });
+    await pause.focus();
+    await page.keyboard.press("Enter");
+    await expect(drawing).toHaveAttribute("data-paused", "user");
+    const play = drawing.getByRole("button", { name: "Play animation" });
+    await expect(play).toBeFocused();
+    expect(await playState()).toBe("paused");
+
+    // Hiding and showing the document never overrides the user's pause.
+    const setVisibility = (state) =>
+      page.evaluate((state) => {
+        Object.defineProperty(document, "visibilityState", {
+          configurable: true,
+          get: () => state,
+        });
+        document.dispatchEvent(new Event("visibilitychange"));
+      }, state);
+    await setVisibility("hidden");
+    await expect(drawing).toHaveAttribute("data-paused", "user");
+    await setVisibility("visible");
+    await expect(drawing).toHaveAttribute("data-paused", "user");
+    await page.keyboard.press("Space");
+    await expect(drawing).not.toHaveAttribute("data-paused");
+    expect(await playState()).toBe("running");
+
+    // Without a user pause, a hidden document suspends it and showing resumes.
+    await setVisibility("hidden");
+    await expect(drawing).toHaveAttribute("data-paused", "hidden");
+    expect(await playState()).toBe("paused");
+    await setVisibility("visible");
+    await expect(drawing).not.toHaveAttribute("data-paused");
+    await page.evaluate(() => delete document.visibilityState);
+
+    // Off screen it suspends; back on screen it resumes.
+    await drawing.evaluate((el) => (el.style.translate = "0 -20000px"));
+    await expect(drawing).toHaveAttribute("data-paused", "offscreen");
+    await drawing.evaluate((el) => (el.style.translate = ""));
+    await expect(drawing).not.toHaveAttribute("data-paused");
+
+    // Shared pause: one control pauses both drawings that share the state.
+    const pair = root.locator("[data-network-pair] .m-network");
+    await pair.first().getByRole("button", { name: "Pause animation" }).click();
+    await expect(pair.nth(0)).toHaveAttribute("data-paused", "user");
+    await expect(pair.nth(1)).toHaveAttribute("data-paused", "user");
+    await expect(root.getByLabel("Shared pause")).toHaveText("paused");
+    await pair.nth(1).getByRole("button", { name: "Play animation" }).click();
+    await expect(pair.nth(0)).not.toHaveAttribute("data-paused");
+    await expect(root.getByLabel("Shared pause")).toHaveText("playing");
+
+    // Static: the same drawing with no signals and no control.
+    const still = root.locator('.m-network[data-motion="static"]');
+    await expect(still.locator(".m-network-link")).toHaveCount(4);
+    await expect(still.locator(".m-network-signal, button")).toHaveCount(0);
+
+    // Reduced motion: the static drawing, with no control, until it is lifted.
+    // (Using the pair scrolled the first drawing away; bring it back first.)
+    await drawing.scrollIntoViewIfNeeded();
+    await expect(drawing).not.toHaveAttribute("data-paused");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(drawing).toHaveAttribute("data-paused", "motion");
+    await expect(drawing.locator(".m-network-signal, button")).toHaveCount(0);
+    await expect(drawing.locator(".m-network-link")).toHaveCount(5);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await expect(drawing).not.toHaveAttribute("data-paused");
+    await expect(
+      drawing.getByRole("button", { name: "Pause animation" }),
+    ).toBeVisible();
+
+    // Unmounting removes every listener and observer it added.
+    await page.evaluate(() => {
+      const count = (window.__networkListeners = { add: 0, remove: 0, io: 0 });
+      const add = document.addEventListener;
+      const remove = document.removeEventListener;
+      document.addEventListener = function (type, ...rest) {
+        if (type === "visibilitychange") count.add++;
+        return add.call(this, type, ...rest);
+      };
+      document.removeEventListener = function (type, ...rest) {
+        if (type === "visibilitychange") count.remove++;
+        return remove.call(this, type, ...rest);
+      };
+      const disconnect = IntersectionObserver.prototype.disconnect;
+      IntersectionObserver.prototype.disconnect = function () {
+        count.io++;
+        return disconnect.call(this);
+      };
+    });
+    // Three drawings animate; the static one adds nothing. Hide, show, hide.
+    await root.getByRole("button", { name: "Hide illustration" }).click();
+    await expect(root.locator(".m-network")).toHaveCount(0);
+    await root.getByRole("button", { name: "Show illustration" }).click();
+    await expect(drawing).toBeVisible();
+    await root.getByRole("button", { name: "Hide illustration" }).click();
+    await expect(root.locator(".m-network")).toHaveCount(0);
+    const counts = await page.evaluate(() => window.__networkListeners);
+    expect(counts.add).toBe(3);
+    expect(counts.remove).toBe(6);
+    expect(counts.io).toBe(6);
+    await root.getByRole("button", { name: "Show illustration" }).click();
+    await page.emulateMedia({ reducedMotion: "reduce" });
+  },
   async banner({ page, root }) {
     const banner = root.getByRole("region", { name: "Announcement" });
     await expect(
