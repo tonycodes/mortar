@@ -115,6 +115,8 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 
 The audit is a fast scanner, not a type checker. It does not see props passed through a spread (`{...props}`), components re-exported or wrapped under another name, class names built at runtime, or markup in `.vue`, `.svelte`, `.astro` or `.html` files. Run the app's typecheck and build as well.
 
+A clean audit means the audit found none of the problems above. It is not proof that a page is built only from Mortar components: hand-written layout, typography or animation in the app's own markup is invisible to it unless it touches Mortar's classes or colours. Do not report a passing audit as that proof. To show a page is composed from the kit, point to the components it renders (each root carries `data-m-component`) and to [what you can extend](theming.md#what-you-can-extend).
+
 ## Agent skill
 
 [`skills/mortar/SKILL.md`](../skills/mortar/SKILL.md) is a ready-made skill with these workflow defaults. For Claude Code, install it once:

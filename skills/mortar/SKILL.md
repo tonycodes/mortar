@@ -31,6 +31,6 @@ If a shared pattern is missing or a component is wrong, fix it centrally instead
 
 ## Completion
 
-Required evidence: the app's build, typecheck, a clean `mortar audit`, and browser checks of responsive layout, light and dark, and keyboard and accessibility. Automated checks cannot prove visual quality or complete accessibility; report what you verified and any remaining blockers. Do not declare completion with failing required checks.
+Required evidence: the app's build, typecheck, a clean `mortar audit`, and browser checks of responsive layout, light and dark, and keyboard and accessibility. Automated checks cannot prove visual quality or complete accessibility; report what you verified and any remaining blockers. A clean audit is not proof that a page uses Mortar components exclusively; point to the rendered components instead. Do not declare completion with failing required checks.
 
 Provide a local preview by default. Deploy only with the user's authorisation; existing explicit authorisation counts. A passing audit is not deployment permission.

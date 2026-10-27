@@ -136,6 +136,43 @@ Inline custom properties apply only to that element's subtree. Menus and dialogs
 
 The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens, surfaces and accent gradient; empty fields show the value they derive. Set heading and body fonts below. Light and dark previews, each with an inverse band, an accent band, an accent button, a heading sample and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent, for links, text and muted text on page, surface and sunken, and for on-accent text on the accent fill (every gradient stop) at rest, hover and active; 3:1 for strong lines on page, surface and sunken, and for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
 
+## Marketing surfaces and illustrations
+
+A branded landing page needs no CSS of its own. MarketingPage, MarketingHeader, Hero, Footer and NetworkIllustration read the same semantic tokens as every other component, so one brand, in CSS or from `brandTokens` at runtime, restyles all of them in both appearances. The [split landing template](../playground/template-pages.tsx) (`?recipe=split-landing`) is composed this way.
+
+| Role                | Token                                    | Brand contract               | Used by                                                                                                                              |
+| ------------------- | ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Canvas and surfaces | `--m-paper`, `--m-surface`, `--m-sunken` | `paper`, `surface`, `sunken` | The page; illustration nodes and the pause control on `surface`                                                                      |
+| Text                | `--m-ink`, `--m-secondary`, `--m-muted`  | (fixed by Mortar)            | Titles; the hero description and illustration labels; the tagline, hero note and inline footer                                       |
+| Borders             | `--m-line`, `--m-line-strong`            | (fixed by Mortar)            | Header and inline-footer rules and the tagline divider; illustration connections and node outlines on `line-strong`, which keeps 3:1 |
+| Emphasis            | `--m-link`                               | `link`                       | Hero `emphasis`. On an accent or background hero it takes the band's text colour instead                                             |
+| Accent              | `--m-accent`, `--m-accent-fill`          | `accent`, `accentGradient`   | Accent nodes and travelling signals; `tone="accent"` on Hero, CallToAction and Banner; `variant="accent"` buttons                    |
+| Focus               | `--m-focus`                              | `focus`                      | Every link and button, including the illustration's pause control                                                                    |
+
+Emphasis uses the brand's `link` colour because link is the brand's text-safe colour. Accent is a fill and may be too light or too dark to read as text. In the neutral brand, link is ink, so an emphasised phrase looks like the rest of the title and keeps only its `<em>` meaning. Set `link` to give it a colour.
+
+No new tokens were needed for these components: each role above already had one. If your brand needs a role that is missing, raise it as an issue rather than styling around it.
+
+### Your own SVG
+
+Draw your own illustration with the same tokens so it follows the brand and appearance: `fill="var(--m-accent)"`, `stroke="var(--m-line-strong)"`, or Tailwind's `fill-accent` and `stroke-line` on your own elements. Give decorative SVG `aria-hidden="true"`, and give informative SVG `role="img"` and a `<title>`. Pause any motion under `prefers-reduced-motion`, and let people pause it.
+
+### What you can extend
+
+Supported extension points:
+
+- **The brand contract.** CSS `--m-brand-*` values, or `brandTokens` and `ThemeProvider` (including `scope="container"` for one branded region).
+- **Props and slots.** Logos stay your own assets, passed through `logo`. Also `controls`, `action`, `tagline`, Hero `children`, `images`, `background` and `note`, MarketingPage `header`, `footer` and children, and NetworkIllustration's `nodes` and `connections`.
+- **`className` for layout only.** Margins, grid placement and a maximum width on a component's root.
+- **The scales and Tailwind utilities** in your own markup (above and below).
+
+Not supported, and flagged by `mortar audit` where it can see them:
+
+- Selectors on `.m-*` classes or `[data-m-component]` (`css-override`)
+- Tailwind arbitrary variants into the kit (`class-override`)
+- Raw colours on Mortar components (`raw-colour`)
+- Styling by state attributes such as `data-paused`, which are for tests and scripts
+
 ## Appearance before JavaScript runs
 
 Until ThemeProvider sets `data-mortar-appearance` (during server rendering, or with JavaScript off), Mortar follows the operating system's colour scheme, so dark-mode users don't see a light flash. To always start light, render `data-mortar-appearance="light"` on `<html>`.

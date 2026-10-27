@@ -76,6 +76,99 @@ function SiteFooter() {
 }
 
 /** Pricing page: intro, plans, a comparison table, questions and a closing call to action. */
+/**
+ * A one-screen landing page composed only from public components: the page
+ * shell, a header with a descriptor, a split hero with an emphasised title,
+ * supporting feedback and an illustration, and a compact footer. The logo is
+ * the consumer's own asset, passed through the logo slot.
+ */
+export function SplitLandingTemplate() {
+  const logo = (
+    <img
+      alt=""
+      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='currentColor' stroke-width='2'/%3E%3Ccircle cx='8' cy='8' r='3' fill='currentColor'/%3E%3C/svg%3E"
+    />
+  );
+  return (
+    <UI.MarketingPage
+      align="center"
+      header={
+        <UI.MarketingHeader
+          brand="Northwind"
+          logo={logo}
+          tagline="Chat and booking for small teams"
+          homeHref="?recipe=split-landing"
+          links={[
+            { label: "Pricing", href: "?recipe=pricing" },
+            { label: "About", href: "?recipe=about" },
+          ]}
+          action={{ label: "Sign in", href: "?recipe=sign-in-split" }}
+          controls={<UI.AppearanceControl />}
+        />
+      }
+      footer={
+        <UI.Footer
+          layout="inline"
+          brand="Northwind"
+          logo={logo}
+          note="Made for teams of every size."
+          columns={[
+            {
+              label: "Help",
+              items: [
+                { label: "Status", href: "#status" },
+                { label: "Support", href: "#support" },
+              ],
+            },
+          ]}
+          copyright="© Example company"
+          legal={[
+            { label: "Privacy", href: "#privacy" },
+            { label: "Terms", href: "#terms" },
+          ]}
+        />
+      }
+    >
+      <UI.Hero
+        layout="split"
+        wide="copy"
+        eyebrow="Now with booking"
+        title="Answer every visitor, day and night."
+        emphasis="every visitor"
+        description="One inbox for chat and bookings, connected to the tools you already use."
+        actions={[
+          { label: "Start free", href: "#start" },
+          { label: "Sign in", href: "?recipe=sign-in-split" },
+        ]}
+        note={
+          <UI.Notice title="Free for 14 days">
+            No card needed. Cancel any time.
+          </UI.Notice>
+        }
+      >
+        <UI.NetworkIllustration
+          width={400}
+          height={320}
+          nodes={[
+            { id: "site", x: 60, y: 60, label: "Site" },
+            { id: "chat", x: 60, y: 260, label: "Chat" },
+            { id: "inbox", x: 200, y: 160, label: "Inbox", tone: "accent" },
+            { id: "calendar", x: 340, y: 60, label: "Calendar" },
+            { id: "email", x: 340, y: 260, label: "Email" },
+          ]}
+          connections={[
+            { from: "site", to: "inbox" },
+            { from: "chat", to: "inbox" },
+            { from: "inbox", to: "calendar" },
+            { from: "inbox", to: "email", duration: 4 },
+            { from: "site", to: "calendar", signal: false },
+          ]}
+        />
+      </UI.Hero>
+    </UI.MarketingPage>
+  );
+}
+
 export function PricingPageTemplate() {
   const start = { label: "Start free", href: "#start" };
   return (
