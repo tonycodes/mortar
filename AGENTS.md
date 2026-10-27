@@ -7,4 +7,4 @@
 - Fix shared problems centrally in `src`, with the fixture in `previews` and the contract in `manifests`. Do not copy components or override their styles in a consumer.
 - Run `npm run check` first. If it reports M007 or M008, review what changed in your diff, then run `npm run catalog`. It prints which components' fingerprints and contracts changed. Never run `npm run catalog` just to make a failing check pass.
 - Run `npm run test:browser` and `npm run test:visual` before opening a PR, and report the actual results.
-- Never approve, merge, publish or bump the version on your own initiative, and never weaken a protected check, policy or workflow to make a change pass.
+- Never approve or merge on your own initiative, and never publish or tag by hand: releases and versions are computed by the release workflow from conventional commits. Never weaken a protected check, policy or workflow to make a change pass.

@@ -6,14 +6,17 @@ import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { checkKit, ROOT } from "./check.mjs";
+import { unexpectedChanges } from "./auto-release/tree.mjs";
 const report = await checkKit();
 if (!report.passed)
   throw Error("Baseline checks failed; run npm run check:json.");
 if (
-  execFileSync("git", ["status", "--porcelain"], {
-    cwd: ROOT,
-    encoding: "utf8",
-  }).trim()
+  unexpectedChanges(
+    execFileSync("git", ["status", "--porcelain", "--untracked-files=all"], {
+      cwd: ROOT,
+      encoding: "utf8",
+    }),
+  ).length
 )
   throw Error("Release requires a clean checkout.");
 const commit = execFileSync("git", ["rev-parse", "HEAD"], {
