@@ -587,23 +587,83 @@ export const implementations = {
     await grouped.getByRole("checkbox", { name: "Select all rows" }).click();
     await expect(grouped.getByText("5 selected")).toBeVisible();
   },
-  async navbar({ page, root }) {
-    const nav = root.getByRole("navigation", { name: "Primary" });
+  async navbar({ page, root, component }) {
+    // The Navbar preview also shows inverse and accent bars; the first is the subject.
+    const bar = root.locator(".m-navbar").first();
+    const nav = bar.getByRole("navigation", { name: "Primary" });
     await expect(nav.getByRole("link", { name: "Dashboard" })).toHaveAttribute(
       "aria-current",
       "page",
     );
+    // A group opens a dropdown panel from the bar: keyboard opens, Escape
+    // closes and returns focus to the trigger.
+    const groupName =
+      component.export === "StackedShell" ? "Projects" : "Reports";
+    const firstItem =
+      component.export === "StackedShell" ? /Website relaunch/ : /Revenue/;
+    const group = nav.getByRole("button", { name: groupName });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await group.focus();
+    await page.keyboard.press("Enter");
+    await expect(group).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByRole("link", { name: firstItem })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(group).toHaveAttribute("aria-expanded", "false");
+    await expect(group).toBeFocused();
+
     await page.setViewportSize({ width: 390, height: 900 });
-    const opener = root.getByRole("button", { name: "Menu", exact: true });
+    const opener = bar.getByRole("button", { name: "Menu", exact: true });
     await expect(nav).toBeHidden();
     await opener.focus();
     await page.keyboard.press("Enter");
     await expect(opener).toHaveAttribute("aria-expanded", "true");
     await expect(nav).toBeVisible();
+    // Inside the narrow menu a group opens too, and choosing an item closes the menu.
+    await group.click();
+    await page.getByRole("link", { name: firstItem }).click();
+    await expect(opener).toHaveAttribute("aria-expanded", "false");
+    await opener.click();
     await nav.getByRole("link", { name: "Team" }).click();
     await expect(page).toHaveURL(/#team$/);
     await expect(opener).toHaveAttribute("aria-expanded", "false");
     await expect(nav).toBeHidden();
+    await page.setViewportSize({ width: 1280, height: 900 });
+
+    if (component.export === "StackedShell") {
+      // The second row: page tabs named by their label, after the bar.
+      const tabs = root.getByRole("navigation", { name: "Dashboard sections" });
+      await expect(
+        tabs.getByRole("link", { name: "Overview" }),
+      ).toHaveAttribute("aria-current", "page");
+      return;
+    }
+    // A group holding the current page is marked current on its trigger.
+    const inverse = root.locator('.m-navbar[data-tone="inverse"]');
+    await expect(inverse.locator(".m-flyout")).toHaveAttribute(
+      "data-current",
+      "true",
+    );
+    // Accent: the accent fill with on-accent links, the same pair the brand
+    // contract guarantees at 4.5:1.
+    const accent = root.locator('.m-navbar[data-tone="accent"]');
+    const [fill, onAccent, link] = await accent.evaluate((el) => {
+      const probe = document.createElement("span");
+      probe.style.color = "var(--m-on-accent)";
+      probe.style.backgroundColor = "var(--m-accent)";
+      el.append(probe);
+      const resolved = getComputedStyle(probe);
+      const out = [
+        resolved.backgroundColor,
+        resolved.color,
+        getComputedStyle(el.querySelector("nav a")).color,
+      ];
+      probe.remove();
+      return out;
+    });
+    expect(
+      await accent.evaluate((el) => getComputedStyle(el).backgroundColor),
+    ).toBe(fill);
+    expect(link).toBe(onAccent);
   },
   async calendar({ page, root }) {
     const calendar = root.locator(".m-calendar").first();

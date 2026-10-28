@@ -15,17 +15,19 @@
       "brand": "string",
       "logo": "ReactNode",
       "homeHref": "string",
-      "navigation": "LinkItem[]",
+      "navigation": "NavbarItem[] (top-level LinkItem links, or a group { label: string; items: FlyoutItem[] } opens a dropdown panel of links ({ label; href; description?; icon?; current? }); a group holding the current page is marked current, and on narrow screens it opens inside the menu)",
       "actions": "ReactNode",
       "header": "ReactNode",
       "width": "\"md\" | \"lg\" | \"xl\" | \"full\"",
       "children": "ReactNode",
-      "className": "string"
+      "className": "string",
+      "tone": "\"default\" | \"inverse\" | \"accent\" (default \"default\"; the bar's surface. inverse: the other appearance, through the inverse token remap. accent: the brand's accent fill, its gradient when it defines one, with on-accent links, focus and actions. Dropdown panels keep the page's colours); passed to the Navbar",
+      "tabs": "ItemGroup<TabNavItem> ({ label: string; items: TabNavItem[] }; a second row of page tabs under the bar, rendered as a TabNav named by label)"
     },
     "usage": "Import { StackedShell } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": ["mortar-navbar"]
+    "dependencies": ["mortar-navbar", "mortar-tab-nav"]
   },
   "preview": {
     "source": "previews/StackedShellPreview.tsx"

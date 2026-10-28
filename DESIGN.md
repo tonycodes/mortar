@@ -27,7 +27,7 @@ Every component follows these rules. New props must fit them, and the code revie
   - Tables align columns with `start | end`, not `left | right`.
 - **Tone.**
   - Status uses `Tone` (`neutral | info | success | warning | danger`).
-  - Section surfaces use `tone: "default" | "muted" | "inverse"`. Promotional bands (CallToAction, Hero and Banner) also take `"accent"`: the brand's accent fill, which is its accent gradient when it defines one, with on-accent text. Button and ActionLink take the same fill as `variant="accent"`. Each component offers only the tones it styles.
+  - Section surfaces use `tone: "default" | "muted" | "inverse"`. Promotional bands (CallToAction, Hero and Banner) also take `"accent"`: the brand's accent fill, which is its accent gradient when it defines one, with on-accent text. Button and ActionLink take the same fill as `variant="accent"`. The application bar (Navbar, and StackedShell through it) takes `tone: "default" | "inverse" | "accent"`; it has no muted tone. Each component offers only the tones it styles.
   - A destructive action is `tone="danger"`, and a destructive item in a list is `danger: true`.
   - Tone renders as `data-tone`.
 - **State.** Busy work is `loading`. Empty content is `empty?: { title; description?; action? }`. Errors are `error` (string).

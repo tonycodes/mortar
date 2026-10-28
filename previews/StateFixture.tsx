@@ -226,6 +226,23 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         />
       );
       break;
+    case "Navbar":
+      content = (
+        <UI.Navbar
+          brand="Northwind"
+          homeHref="#home"
+          tone={state === "inverse" ? "inverse" : "default"}
+          items={[
+            { label: "Dashboard", href: "#dashboard", current: true },
+            {
+              label: "Reports",
+              items: [{ label: "Revenue", href: "#revenue" }],
+            },
+          ]}
+          actions={<UI.Button variant="secondary">Invite</UI.Button>}
+        />
+      );
+      break;
     case "CallToAction":
       content = (
         <UI.CallToAction
