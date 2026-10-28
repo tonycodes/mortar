@@ -14,8 +14,17 @@ import {
   cloneElement,
   isValidElement,
 } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { KitLink, type ItemGroup } from "./navigation.js";
+import {
+  CloseButton,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+} from "@headlessui/react";
+import { KitLink, type ItemGroup, type LinkItem } from "./navigation.js";
+import { ChevronDown } from "./icons.js";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 
@@ -697,4 +706,86 @@ export function focusAfterRemoval(element: HTMLElement) {
       }
     }
   });
+}
+
+/** An item in a flyout panel; `current` marks the page you are on. */
+export type FlyoutItem = Pick<
+  LinkItem,
+  "label" | "href" | "description" | "icon" | "current"
+>;
+/**
+ * A labelled group of links in a header that opens an anchored panel
+ * (MarketingHeader and Navbar). The group is marked current when one of its
+ * items is the current page.
+ */
+export function Flyout({
+  label,
+  items,
+  footer = [],
+  layout = "list",
+  onNavigate,
+}: {
+  label: string;
+  items: FlyoutItem[];
+  footer?: LinkAction[];
+  layout?: "list" | "columns" | "full";
+  onNavigate: () => void;
+}) {
+  const dataLayout = layout === "list" ? undefined : layout;
+  const current = items.some((item) => item.current);
+  return (
+    <Popover
+      className="m-flyout"
+      data-current={current || undefined}
+      data-layout={dataLayout}
+    >
+      <PopoverButton className="m-flyout-trigger">
+        {label}
+        <ChevronDown />
+      </PopoverButton>
+      {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off. */}
+      <PopoverPanel
+        anchor="bottom"
+        className="m-flyout-panel"
+        data-layout={dataLayout}
+      >
+        <ul>
+          {items.map((item, index) => (
+            <li key={`${item.label}:${item.href}:${index}`}>
+              <CloseButton
+                as={KitLink}
+                href={item.href}
+                aria-current={item.current ? "page" : undefined}
+                onClick={onNavigate}
+              >
+                {item.icon && (
+                  <span className="m-flyout-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                )}
+                <span className="m-flyout-text">
+                  <strong>{item.label}</strong>
+                  {item.description && <span>{item.description}</span>}
+                </span>
+              </CloseButton>
+            </li>
+          ))}
+        </ul>
+        {footer.length > 0 && (
+          <div className="m-flyout-footer">
+            {footer.map((link, index) => (
+              <CloseButton
+                as={KitLink}
+                key={`${link.label}:${link.href}:${index}`}
+                href={link.href}
+                onClick={onNavigate}
+              >
+                {link.label}
+              </CloseButton>
+            ))}
+          </div>
+        )}
+      </PopoverPanel>
+    </Popover>
+  );
 }

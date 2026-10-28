@@ -278,22 +278,71 @@ export function StructureCase({ name }: { name: string }) {
       break;
     case "Navbar":
       example = (
-        <UI.Navbar
-          brand="Northwind"
-          homeHref="#home"
-          items={[
-            { label: "Dashboard", href: "#dashboard", current: true },
-            { label: "Team", href: "#team" },
-            { label: "Projects", href: "#projects" },
-            { label: "Calendar", href: "#calendar" },
-          ]}
-          actions={
-            <>
-              <UI.Button variant="secondary">Invite</UI.Button>
-              <UI.Avatar name="Ana Kovač" size="sm" />
-            </>
-          }
-        />
+        <div className="m-stack">
+          <UI.Navbar
+            brand="Northwind"
+            homeHref="#home"
+            items={[
+              { label: "Dashboard", href: "#dashboard", current: true },
+              { label: "Team", href: "#team" },
+              {
+                label: "Reports",
+                items: [
+                  {
+                    label: "Revenue",
+                    href: "#revenue",
+                    description: "Monthly and yearly totals.",
+                  },
+                  {
+                    label: "Usage",
+                    href: "#usage",
+                    description: "Seats and storage by team.",
+                  },
+                ],
+              },
+              { label: "Calendar", href: "#calendar" },
+            ]}
+            actions={
+              <>
+                <UI.Button variant="secondary">Invite</UI.Button>
+                <UI.Avatar name="Ana Kovač" size="sm" />
+              </>
+            }
+          />
+          <UI.Navbar
+            tone="inverse"
+            label="Inverse example"
+            brand="Atlas"
+            homeHref="#atlas"
+            items={[
+              { label: "Overview", href: "#overview" },
+              {
+                label: "Clinics",
+                items: [
+                  { label: "North", href: "#north", current: true },
+                  { label: "South", href: "#south" },
+                ],
+              },
+            ]}
+            actions={<UI.Button variant="secondary">Invite</UI.Button>}
+          />
+          <UI.Navbar
+            tone="accent"
+            label="Accent example"
+            brand="Lumen"
+            homeHref="#lumen"
+            items={[
+              { label: "Home", href: "#lumen-home", current: true },
+              { label: "Billing", href: "#billing" },
+            ]}
+            actions={
+              <>
+                <UI.Button variant="secondary">Help</UI.Button>
+                <UI.Button>Upgrade</UI.Button>
+              </>
+            }
+          />
+        </div>
       );
       break;
     case "Sidebar":
@@ -538,9 +587,23 @@ export function StructureCase({ name }: { name: string }) {
           navigation={[
             { label: "Dashboard", href: "#dashboard", current: true },
             { label: "Team", href: "#team" },
-            { label: "Projects", href: "#projects" },
+            {
+              label: "Projects",
+              items: [
+                { label: "Website relaunch", href: "#relaunch" },
+                { label: "Mobile app", href: "#mobile" },
+              ],
+            },
             { label: "Calendar", href: "#calendar" },
           ]}
+          tabs={{
+            label: "Dashboard sections",
+            items: [
+              { label: "Overview", href: "#overview", current: true },
+              { label: "Deploys", href: "#deploys", count: 48 },
+              { label: "Incidents", href: "#incidents" },
+            ],
+          }}
           actions={<UI.Avatar name="Ana Kovač" size="sm" />}
           header={
             <UI.PageHeading

@@ -249,6 +249,102 @@ export function AboutPageTemplate() {
 }
 
 /** Settings screen: tabs, grouped fields, a destructive action and an unsaved-changes bar. */
+/**
+ * An application screen with top navigation instead of a sidebar: StackedShell
+ * with an inverse bar, a dropdown group, a second row of page tabs and a
+ * centred column.
+ */
+export function StackedDashboardTemplate() {
+  return (
+    <UI.StackedShell
+      brand="Northwind"
+      homeHref="?recipe=stacked-dashboard"
+      tone="inverse"
+      navigation={[
+        { label: "Dashboard", href: "#dashboard", current: true },
+        { label: "Inbox", href: "#inbox", count: 4 },
+        {
+          label: "Reports",
+          items: [
+            {
+              label: "Conversations",
+              href: "#conversations",
+              description: "Volume and response times.",
+            },
+            {
+              label: "Bookings",
+              href: "#bookings",
+              description: "Booked, moved and cancelled.",
+            },
+          ],
+        },
+        { label: "Settings", href: "?recipe=settings" },
+      ]}
+      tabs={{
+        label: "Dashboard sections",
+        items: [
+          { label: "Overview", href: "#overview", current: true },
+          { label: "Team", href: "#team" },
+          { label: "Channels", href: "#channels" },
+        ],
+      }}
+      actions={
+        <>
+          <UI.AppearanceControl />
+          <UI.Avatar name="Ana Kovač" size="sm" />
+        </>
+      }
+      header={
+        <UI.PageHeading
+          title="Dashboard"
+          description="How your team handled conversations and bookings this week."
+        />
+      }
+    >
+      <div className="m-stack">
+        <UI.MetricGroup
+          label="This week"
+          items={[
+            {
+              label: "Conversations",
+              value: "1,284",
+              change: "+12%",
+              tone: "success",
+            },
+            {
+              label: "Median reply",
+              value: "3m",
+              change: "−40s",
+              tone: "success",
+            },
+            { label: "Bookings", value: "96", change: "+8", tone: "success" },
+          ]}
+        />
+        <UI.StackedList
+          label="Needs a reply"
+          items={[
+            {
+              id: "ana",
+              title: "Ana Kovač",
+              description: "Can I move my booking to Thursday?",
+            },
+            {
+              id: "tom",
+              title: "Tom Cook",
+              description: "Is parking included with the room?",
+            },
+            {
+              id: "lia",
+              title: "Lia Chen",
+              description: "Do you take group bookings?",
+            },
+          ]}
+        />
+      </div>
+    </UI.StackedShell>
+  );
+}
+
 export function SettingsScreenTemplate() {
   const [tab, setTab] = useState("general");
   const [name, setName] = useState("Northwind");

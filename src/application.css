@@ -264,6 +264,20 @@
   .m-stacked-shell > main:focus {
     outline: none;
   }
+  /* A second row of page tabs under the bar; the row draws the full-width rule. */
+  .m-stacked-tabs {
+    padding: 0 24px;
+    border-bottom: 1px solid var(--m-line);
+    background: var(--m-surface);
+  }
+  .m-stacked-tabs .m-tab-nav ul {
+    border-bottom: 0;
+  }
+  @media (max-width: 900px) {
+    .m-stacked-tabs {
+      padding: 0 16px;
+    }
+  }
 
   /* == Navbar == */
   .m-navbar {
@@ -274,6 +288,32 @@
     padding: 0 24px;
     border-bottom: 1px solid var(--m-line);
     background: var(--m-surface);
+    color: var(--m-ink);
+  }
+  /* Accent bar: the brand's accent fill, remapped like the accent bands
+     (marketing.css): on-accent text, links and focus, inverted primary
+     actions and outlined secondary ones. Panels open in a portal and keep the
+     page's colours. Inverse needs nothing here: [data-tone="inverse"] remaps
+     every token (tokens.css). */
+  .m-navbar[data-tone="accent"] {
+    background-color: var(--m-accent);
+    background-image: var(--m-accent-fill);
+    --m-ink: var(--m-on-accent);
+    --m-secondary: var(--m-on-accent);
+    --m-muted: var(--m-on-accent);
+    --m-link: var(--m-on-accent);
+    --m-focus: var(--m-on-accent);
+    --m-line: color-mix(in oklab, var(--m-on-accent) 35%, transparent);
+    --m-line-strong: var(--m-on-accent);
+    --m-primary: var(--m-on-accent);
+    --m-primary-hover: var(--m-on-accent);
+    --m-primary-active: var(--m-on-accent);
+    --m-on-primary: var(--m-accent);
+    --m-surface: transparent;
+    --m-sunken: color-mix(in oklab, var(--m-on-accent) 14%, transparent);
+  }
+  .m-navbar[data-tone="accent"] .m-button-primary:hover {
+    box-shadow: inset 0 0 0 2px var(--m-accent);
   }
   .m-navbar > .m-brand {
     display: inline-flex;
@@ -312,6 +352,27 @@
     box-shadow: inset 0 -2px 0 var(--m-line-strong);
   }
   .m-navbar > nav a[aria-current="page"] {
+    color: var(--m-ink);
+    font-weight: var(--m-weight-semibold);
+    box-shadow: inset 0 -2px 0 var(--m-primary);
+  }
+  /* A group's trigger looks like the links beside it; its panel is the
+     shared flyout (marketing.css). */
+  .m-navbar > nav > .m-flyout {
+    display: flex;
+  }
+  .m-navbar .m-flyout-trigger {
+    padding: 0 10px;
+    color: var(--m-secondary);
+    font-size: var(--m-font-size);
+    font-weight: var(--m-weight-medium);
+    box-shadow: inset 0 -2px 0 transparent;
+  }
+  .m-navbar .m-flyout-trigger:hover {
+    color: var(--m-ink);
+    box-shadow: inset 0 -2px 0 var(--m-line-strong);
+  }
+  .m-navbar .m-flyout[data-current] > .m-flyout-trigger {
     color: var(--m-ink);
     font-weight: var(--m-weight-semibold);
     box-shadow: inset 0 -2px 0 var(--m-primary);
@@ -359,6 +420,25 @@
       background: var(--m-sunken);
     }
     .m-navbar > nav a[aria-current="page"] {
+      box-shadow: inset 3px 0 0 var(--m-primary);
+      background: var(--m-sunken);
+    }
+    .m-navbar > nav > .m-flyout {
+      display: block;
+    }
+    .m-navbar .m-flyout-trigger {
+      width: 100%;
+      min-height: 44px;
+      justify-content: space-between;
+      padding: 0 12px;
+      border-radius: var(--m-radius);
+      box-shadow: none;
+    }
+    .m-navbar .m-flyout-trigger:hover {
+      box-shadow: none;
+      background: var(--m-sunken);
+    }
+    .m-navbar .m-flyout[data-current] > .m-flyout-trigger {
       box-shadow: inset 3px 0 0 var(--m-primary);
       background: var(--m-sunken);
     }

@@ -13,6 +13,7 @@ import { AuthHeader, ProviderButtons, type SignInProvider } from "./auth.js";
 import { ArrowDown, ArrowUp, Check, SortArrows } from "./icons.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 import {
+  Flyout,
   LinkContent,
   NavGroups,
   NavTreeLinks,
@@ -21,7 +22,9 @@ import {
   cx,
   componentRoot,
   classedIntroSlots,
+  sectionTone,
   useDomId,
+  type FlyoutItem,
 } from "./internal.js";
 /**
  * A navigation link; `icon` replaces the default marker in the sidebar. With
@@ -189,11 +192,16 @@ export interface StackedShellProps {
   brand: string;
   logo?: ReactNode;
   homeHref?: string;
-  navigation: LinkItem[];
+  /** Top-level links, or labelled groups that open a dropdown panel. */
+  navigation: NavbarItem[];
   actions?: ReactNode;
   /** Page heading shown above the content, e.g. a PageHeading. */
   header?: ReactNode;
   width?: "md" | "lg" | "xl" | "full";
+  /** The bar's surface: default, inverse (the other appearance) or accent (the brand's accent fill). */
+  tone?: NavbarTone;
+  /** A second row of page tabs under the bar, rendered as a TabNav named by `label`. */
+  tabs?: ItemGroup<TabNavItem>;
   children: ReactNode;
   className?: string;
 }
@@ -206,6 +214,8 @@ export function StackedShell({
   actions,
   header,
   width = "lg",
+  tone,
+  tabs,
   children,
   className,
 }: StackedShellProps) {
@@ -224,7 +234,13 @@ export function StackedShell({
         homeHref={homeHref}
         items={navigation}
         actions={actions}
+        tone={tone}
       />
+      {tabs && (
+        <div className="m-stacked-tabs">
+          <TabNav label={tabs.label} items={tabs.items} />
+        </div>
+      )}
       <main id={contentId} tabIndex={-1} data-width={width}>
         {header && <div className="m-stacked-header">{header}</div>}
         {children}
@@ -232,13 +248,20 @@ export function StackedShell({
     </div>
   );
 }
+/** A labelled group of links that opens a dropdown panel from the bar. */
+export type NavbarGroup = ItemGroup<FlyoutItem>;
+/** A top-level link, or a group; a group holding the current page is marked current. */
+export type NavbarItem = LinkItem | NavbarGroup;
+export type NavbarTone = "default" | "inverse" | "accent";
 export interface NavbarProps {
   brand: string;
   logo?: ReactNode;
   homeHref?: string;
-  /** Top-level links; the navbar has no sub-menus. */
-  items: LinkItem[];
+  /** Top-level links, or labelled groups that open a dropdown panel. */
+  items: NavbarItem[];
   actions?: ReactNode;
+  /** The bar's surface: default, inverse (the other appearance) or accent (the brand's accent fill). */
+  tone?: NavbarTone;
   /** Accessible name of the navigation landmark. */
   label?: string;
   className?: string;
@@ -250,13 +273,19 @@ export function Navbar({
   homeHref = "/",
   items,
   actions,
+  tone,
   label = "Primary",
   className,
 }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const id = useId();
+  const close = () => setOpen(false);
   return (
-    <header {...componentRoot("Navbar")} className={cx("m-navbar", className)}>
+    <header
+      {...componentRoot("Navbar")}
+      className={cx("m-navbar", className)}
+      data-tone={sectionTone(tone)}
+    >
       <KitLink className="m-brand" href={homeHref}>
         <BrandMark logo={logo} />
         {brand}
@@ -271,21 +300,30 @@ export function Navbar({
         Menu
       </Button>
       <nav id={id} aria-label={label} data-open={open || undefined}>
-        {items.map((item, index) => (
-          <KitLink
-            key={`${item.label}:${item.href}:${index}`}
-            href={item.href}
-            aria-current={item.current ? "page" : undefined}
-            onClick={() => setOpen(false)}
-          >
-            <LinkContent
-              prefix="nav"
-              icon={item.icon}
+        {items.map((item, index) =>
+          "items" in item ? (
+            <Flyout
+              key={`${item.label}:group:${index}`}
               label={item.label}
-              count={item.count}
+              items={item.items}
+              onNavigate={close}
             />
-          </KitLink>
-        ))}
+          ) : (
+            <KitLink
+              key={`${item.label}:${item.href}:${index}`}
+              href={item.href}
+              aria-current={item.current ? "page" : undefined}
+              onClick={close}
+            >
+              <LinkContent
+                prefix="nav"
+                icon={item.icon}
+                label={item.label}
+                count={item.count}
+              />
+            </KitLink>
+          ),
+        )}
       </nav>
       {actions && <div className="m-actions">{actions}</div>}
     </header>

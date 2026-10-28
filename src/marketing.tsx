@@ -3,17 +3,9 @@ import {
   KitLink,
   type IconLink,
   type ItemGroup,
-  type LinkItem,
 } from "./navigation.js";
 import { useId, useState, type CSSProperties, type ReactNode } from "react";
-import {
-  CloseButton,
-  DialogPanel,
-  DialogTitle,
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-} from "@headlessui/react";
+import { DialogPanel, DialogTitle } from "@headlessui/react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, Prose, type SectionTone } from "./layout.js";
 import { SegmentedControl } from "./inspection.js";
@@ -23,6 +15,8 @@ import { childLevel, headingTag, type HeadingLevel } from "./heading.js";
 import {
   ActionLinks,
   DialogFrame,
+  Flyout,
+  type FlyoutItem,
   TermList,
   TitledIntro,
   cx,
@@ -32,10 +26,7 @@ import {
   useDomId,
 } from "./internal.js";
 
-export type FlyoutItem = Pick<
-  LinkItem,
-  "label" | "href" | "description" | "icon"
->;
+export type { FlyoutItem } from "./internal.js";
 /** A header link, or a labelled group that opens a flyout panel. */
 export type HeaderLink =
   | LinkAction
@@ -45,67 +36,6 @@ export type HeaderLink =
       layout?: "list" | "columns" | "full";
     });
 
-function Flyout({
-  label,
-  items,
-  footer = [],
-  layout = "list",
-  onNavigate,
-}: {
-  label: string;
-  items: FlyoutItem[];
-  footer?: LinkAction[];
-  layout?: "list" | "columns" | "full";
-  onNavigate: () => void;
-}) {
-  const dataLayout = layout === "list" ? undefined : layout;
-  return (
-    <Popover className="m-flyout" data-layout={dataLayout}>
-      <PopoverButton className="m-flyout-trigger">
-        {label}
-        <ChevronDown />
-      </PopoverButton>
-      {/* Anchored panels render in a portal, so headers inside clipped containers never cut them off. */}
-      <PopoverPanel
-        anchor="bottom"
-        className="m-flyout-panel"
-        data-layout={dataLayout}
-      >
-        <ul>
-          {items.map((item, index) => (
-            <li key={`${item.label}:${item.href}:${index}`}>
-              <CloseButton as={KitLink} href={item.href} onClick={onNavigate}>
-                {item.icon && (
-                  <span className="m-flyout-icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                )}
-                <span className="m-flyout-text">
-                  <strong>{item.label}</strong>
-                  {item.description && <span>{item.description}</span>}
-                </span>
-              </CloseButton>
-            </li>
-          ))}
-        </ul>
-        {footer.length > 0 && (
-          <div className="m-flyout-footer">
-            {footer.map((link, index) => (
-              <CloseButton
-                as={KitLink}
-                key={`${link.label}:${link.href}:${index}`}
-                href={link.href}
-                onClick={onNavigate}
-              >
-                {link.label}
-              </CloseButton>
-            ))}
-          </div>
-        )}
-      </PopoverPanel>
-    </Popover>
-  );
-}
 export function MarketingHeader({
   brand,
   tagline,
