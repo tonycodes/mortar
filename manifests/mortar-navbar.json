@@ -15,10 +15,11 @@
       "brand": "string",
       "logo": "ReactNode",
       "homeHref": "string",
-      "items": "LinkItem[] ({ label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode }; no sub-menus)",
+      "items": "NavbarItem[] (LinkItem { label: string; href: string; current?: boolean; count?: number | string; icon?: ReactNode }, or a group { label: string; items: FlyoutItem[] } opens a dropdown panel of links ({ label; href; description?; icon?; current? }); a group holding the current page is marked current, and on narrow screens it opens inside the menu)",
       "actions": "ReactNode",
       "label": "string",
-      "className": "string"
+      "className": "string",
+      "tone": "\"default\" | \"inverse\" | \"accent\" (default \"default\"; the bar's surface. inverse: the other appearance, through the inverse token remap. accent: the brand's accent fill, its gradient when it defines one, with on-accent links, focus and actions. Dropdown panels keep the page's colours)"
     },
     "usage": "Import { Navbar } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
@@ -32,6 +33,6 @@
     "profile": "composite",
     "target": ".m-navbar",
     "probe": "navbar",
-    "states": []
+    "states": ["inverse"]
   }
 }

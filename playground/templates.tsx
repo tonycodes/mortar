@@ -50,6 +50,14 @@ export const templates: PageTemplate[] = [
     Component: recipe("ProjectWorkspaceRecipe"),
   },
   {
+    id: "stacked-dashboard",
+    title: "Dashboard, top navigation",
+    description:
+      "Top bar with a dropdown group, page tabs and a centred column.",
+    kind: "Application",
+    Component: page("StackedDashboardTemplate"),
+  },
+  {
     id: "settings",
     title: "Settings screen",
     description: "Tabs, grouped fields, a danger zone and unsaved changes.",
