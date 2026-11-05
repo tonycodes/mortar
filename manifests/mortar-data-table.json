@@ -13,7 +13,7 @@
   "contract": {
     "props": {
       "caption": "string",
-      "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: start | end; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean }[]",
+      "columns": "{ key: string; label: string; render: (row: T) => ReactNode; align?: start | end; sortable?: boolean; sortValue?: (row: T) => string | number | Date | null; width?: string; truncate?: boolean; priority?: high | medium | low; pin?: end }[]",
       "rows": "T[] where T extends { id: string }",
       "rowLabel": "(row: T) => string",
       "selectedIds": "string[] (may include rows on other pages; select all adds or removes only this page's rows)",
@@ -36,7 +36,7 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { DataTable } from @tonycodes-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
+    "usage": "Import { DataTable } from @tonycodes-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer. On narrow tables, give secondary columns priority \"medium\" (hidden below 480px of table width) or \"low\" (below 768px); the first column always shows, and truncated columns keep shrinking so the rest fits. Pin a row-actions column with pin: \"end\" so it stays visible while the table scrolls sideways.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"],

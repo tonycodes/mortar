@@ -9,6 +9,7 @@
   /* One table base for DataTable, Table, PlanComparison and prose tables. Each sets
      its cell padding; DataTable and Table follow density through --m-row-pad. */
   .m-data-table {
+    container: m-data-table / inline-size;
     overflow: hidden;
     min-width: 0;
     --m-cell-pad-y: var(--m-row-pad);
@@ -255,9 +256,60 @@
   .m-data-table[data-density="compact"] .m-table-group th {
     padding-block: 4px;
   }
+  /* Pinned columns stay at the trailing edge while the table scrolls. Sticky
+     cells need an opaque background: the surface, or the row's own state.
+     Zero-specificity base, so stripes (after it) and hover and selection win. */
+  :where(.m-data-table) [data-pin="end"] {
+    position: sticky;
+    inset-inline-end: 0;
+    z-index: 2;
+    background-color: var(--m-surface);
+    box-shadow: inset 1px 0 0 var(--m-line);
+  }
+  :where(.m-data-table:dir(rtl)) [data-pin="end"] {
+    box-shadow: inset -1px 0 0 var(--m-line);
+  }
+  :where(
+      .m-data-table[data-striped]
+        tbody
+        tr:nth-child(even of :not(.m-table-group))
+    )
+    > [data-pin] {
+    background-color: var(--m-sunken);
+  }
+  .m-data-table thead th[data-pin] {
+    background-color: var(--m-paper);
+  }
+  .m-table-scroll[data-sticky] thead th[data-pin] {
+    z-index: 3;
+  }
+  .m-data-table tr[data-linked]:hover > [data-pin] {
+    background-color: var(--m-sunken);
+  }
+  .m-data-table tr[data-selected] > [data-pin] {
+    background-color: var(--m-selected);
+  }
+  /* Column priority follows the table's own width, so a table in a narrow
+     panel collapses as it would on a phone. */
+  @container m-data-table (max-width: 767px) {
+    .m-data-table [data-priority="low"] {
+      display: none;
+    }
+  }
+  @container m-data-table (max-width: 479px) {
+    .m-data-table [data-priority="medium"] {
+      display: none;
+    }
+  }
+  /* A table with column priorities is meant to fit, so truncated columns keep
+     shrinking on narrow screens, down to a readable floor. */
+  .m-data-table[data-prioritised] [data-truncate] .m-truncate {
+    min-width: 5rem;
+  }
   @media (max-width: 640px) {
-    /* Narrow screens scroll the table instead of collapsing truncated columns. */
-    .m-data-table [data-truncate] {
+    /* Narrow screens scroll the table instead of collapsing truncated columns,
+       unless it has column priorities (above). */
+    .m-data-table:not([data-prioritised]) [data-truncate] {
       max-width: none;
     }
     .m-truncate {

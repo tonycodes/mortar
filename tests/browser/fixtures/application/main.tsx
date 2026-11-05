@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
+  Badge,
   Button,
   CommandPalette,
   DataTable,
@@ -80,26 +81,95 @@ function Palette() {
   );
 }
 
+// #77: an API keys table like Hive's (tony/arc ARC-22). Low and medium
+// priority columns collapse as the table narrows; the action column is pinned.
+const keys = [
+  {
+    id: "k1",
+    name: "Production deploy key for the EU gateway",
+    status: "Active",
+  },
+  { id: "k2", name: "Staging", status: "Revoked" },
+];
+function KeysTable({ wide = false }: { wide?: boolean }) {
+  const [selected, setSelected] = useState<string[]>(["k2"]);
+  // `wide` keeps every column (all high priority) so the table must scroll.
+  const priority = (level: "medium" | "low") => (wide ? "high" : level);
+  return (
+    <DataTable
+      caption={wide ? "Wide keys" : "API keys"}
+      density="compact"
+      striped
+      rows={keys}
+      rowLabel={(row) => row.name}
+      selectedIds={selected}
+      onSelectionChange={setSelected}
+      columns={[
+        { key: "name", label: "Name", truncate: true, render: (r) => r.name },
+        {
+          key: "status",
+          label: "Status",
+          render: (r) => <Badge>{r.status}</Badge>,
+        },
+        {
+          key: "prefix",
+          label: "Prefix",
+          priority: priority("low"),
+          render: () => "mk_live_4f9a",
+        },
+        {
+          key: "created",
+          label: "Created",
+          priority: priority("low"),
+          render: () => "12 October 2026",
+        },
+        {
+          key: "used",
+          label: "Last used",
+          priority: priority("medium"),
+          render: () => "3 November 2026",
+        },
+        {
+          key: "action",
+          label: "Action",
+          pin: "end",
+          render: (r) => <Button variant="secondary">Revoke {r.id}</Button>,
+        },
+      ]}
+    />
+  );
+}
+
 const root = document.getElementById("root");
 if (!root) throw new Error("missing fixture root");
+const scenario = new URLSearchParams(location.search).get("case");
 createRoot(root).render(
-  <ThemeProvider>
-    <main>
-      <h1>Application fixture</h1>
-      <PagedTable />
-      <Chips />
-      <GridList
-        label="Team"
-        items={[
-          {
-            id: "ana",
-            title: "Ana Kovač",
-            href: "#ana",
-            meta: <a href="#platform">Platform team</a>,
-          },
-        ]}
-      />
-      <Palette />
-    </main>
-  </ThemeProvider>,
+  scenario === "keys" ? (
+    <ThemeProvider>
+      <main style={{ padding: 16 }}>
+        <KeysTable />
+        <KeysTable wide />
+      </main>
+    </ThemeProvider>
+  ) : (
+    <ThemeProvider>
+      <main>
+        <h1>Application fixture</h1>
+        <PagedTable />
+        <Chips />
+        <GridList
+          label="Team"
+          items={[
+            {
+              id: "ana",
+              title: "Ana Kovač",
+              href: "#ana",
+              meta: <a href="#platform">Platform team</a>,
+            },
+          ]}
+        />
+        <Palette />
+      </main>
+    </ThemeProvider>
+  ),
 );

@@ -689,6 +689,28 @@ export interface DataTableColumn<T> {
   width?: string;
   /** Clip long values to one line with an ellipsis. */
   truncate?: boolean;
+  /**
+   * How long the column stays as the table narrows (its own width, not the
+   * screen's): `medium` hides below 480px, `low` below 768px. The first
+   * column always shows. Hidden columns leave the accessibility tree too, so
+   * keep what people need in visible columns or on the detail page.
+   */
+  priority?: "high" | "medium" | "low";
+  /**
+   * `end` pins the column to the trailing edge while the table scrolls
+   * sideways, so a row-actions or status column stays reachable.
+   */
+  pin?: "end";
+}
+/** Responsive attributes shared by a column's `col`, header and cells. */
+function columnLayout<T>(col: DataTableColumn<T>, index: number) {
+  return {
+    "data-priority":
+      index > 0 && col.priority && col.priority !== "high"
+        ? col.priority
+        : undefined,
+    "data-pin": col.pin,
+  };
 }
 export interface DataTableProps<T extends { id: string }> {
   caption: string;
@@ -894,6 +916,7 @@ export function DataTable<T extends { id: string }>({
             <th
               scope="row"
               key={col.key}
+              {...columnLayout(col, index)}
               data-align={columnAlign(col.align)}
               data-truncate={col.truncate || undefined}
             >
@@ -908,6 +931,7 @@ export function DataTable<T extends { id: string }>({
           ) : (
             <td
               key={col.key}
+              {...columnLayout(col, index)}
               data-align={columnAlign(col.align)}
               data-truncate={col.truncate || undefined}
             >
@@ -926,6 +950,11 @@ export function DataTable<T extends { id: string }>({
       aria-label={caption}
       data-density={density === "default" ? undefined : density}
       data-striped={striped || undefined}
+      data-prioritised={
+        columns.some((col, index) => columnLayout(col, index)["data-priority"])
+          ? true
+          : undefined
+      }
     >
       {(toolbar || selectedIds.length > 0) && (
         <div className="m-table-toolbar">
@@ -977,9 +1006,10 @@ export function DataTable<T extends { id: string }>({
             {columns.some((col) => col.width) && (
               <colgroup>
                 {onSelectionChange && <col className="m-table-select-col" />}
-                {columns.map((col) => (
+                {columns.map((col, index) => (
                   <col
                     key={col.key}
+                    {...columnLayout(col, index)}
                     style={col.width ? { width: col.width } : undefined}
                   />
                 ))}
@@ -996,13 +1026,14 @@ export function DataTable<T extends { id: string }>({
                     />
                   </th>
                 )}
-                {columns.map((col) => {
+                {columns.map((col, index) => {
                   const direction =
                     sort?.key === col.key ? sort.direction : undefined;
                   return (
                     <th
                       key={col.key}
                       scope="col"
+                      {...columnLayout(col, index)}
                       data-align={columnAlign(col.align)}
                       aria-sort={col.sortable ? direction || "none" : undefined}
                     >
