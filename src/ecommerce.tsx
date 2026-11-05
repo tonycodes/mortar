@@ -1,3 +1,4 @@
+import { KitImage, type ImageFallback } from "./image.js";
 import {
   useEffect,
   useId,
@@ -26,7 +27,7 @@ import {
   cx,
 } from "./internal.js";
 
-export interface ProductImage {
+export interface ProductImage extends ImageFallback {
   src: string;
   /** Describe the product shown; images are the main product information. */
   alt: string;
@@ -105,11 +106,7 @@ export function ProductList({
         return (
           <li key={product.id}>
             <div className="m-product-image">
-              <img
-                src={product.image.src}
-                alt={product.image.alt}
-                loading="lazy"
-              />
+              <KitImage {...product.image} loading="lazy" />
               {product.badge && (
                 <span className="m-product-badge">{product.badge}</span>
               )}
@@ -217,7 +214,7 @@ export function ProductOverview({
         <div className="m-product-gallery" data-gallery="grid">
           {images.map((image) => (
             <div key={image.src} className="m-product-image">
-              <img src={image.src} alt={image.alt} />
+              <KitImage {...image} />
             </div>
           ))}
         </div>
@@ -225,7 +222,7 @@ export function ProductOverview({
         <div className="m-product-gallery">
           {shown && (
             <div className="m-product-image">
-              <img src={shown.src} alt={shown.alt} />
+              <KitImage {...shown} />
             </div>
           )}
           {images.length > 1 && (
@@ -242,7 +239,7 @@ export function ProductOverview({
                   aria-label={`Show image ${index + 1} of ${images.length}: ${image.alt}`}
                   onClick={() => setCurrent(index)}
                 >
-                  <img src={image.src} alt="" />
+                  <KitImage {...image} alt="" />
                 </button>
               ))}
             </div>
@@ -488,7 +485,7 @@ function CartLines({
         return (
           <li key={item.id}>
             <div className="m-product-image">
-              <img src={item.image.src} alt={item.image.alt} loading="lazy" />
+              <KitImage {...item.image} loading="lazy" />
             </div>
             <div className="m-cart-info">
               <Heading className="m-cart-item-title">
@@ -1002,11 +999,7 @@ export function OrderHistory({
               {order.items.map((item) => (
                 <li key={item.id}>
                   <div className="m-product-image">
-                    <img
-                      src={item.image.src}
-                      alt={item.image.alt}
-                      loading="lazy"
-                    />
+                    <KitImage {...item.image} loading="lazy" />
                   </div>
                   <div>
                     <p className="m-order-item-name">

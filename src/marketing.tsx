@@ -1,3 +1,4 @@
+import { useImageFallback } from "./image.js";
 import {
   IconLinks,
   KitLink,
@@ -545,6 +546,15 @@ export function Testimonial({
     </figure>
   );
 }
+/** A logo, or its name as text when there is no image or it fails to load. */
+function Logo({ name, image }: { name: string; image?: string }) {
+  const logo = useImageFallback(image ?? "");
+  return logo.current ? (
+    <img ref={logo.ref} src={logo.current} alt={name} onError={logo.onError} />
+  ) : (
+    <span>{name}</span>
+  );
+}
 export function LogoCloud({
   id,
   className,
@@ -576,11 +586,7 @@ export function LogoCloud({
     <ul>
       {items.map((item) => (
         <li key={item.name}>
-          {item.image ? (
-            <img src={item.image} alt={item.name} />
-          ) : (
-            <span>{item.name}</span>
-          )}
+          <Logo name={item.name} image={item.image} />
         </li>
       ))}
     </ul>

@@ -198,3 +198,56 @@ for (const theme of ["light", "dark"]) {
     await accessibility(page);
   });
 }
+// #67: a failed data-driven image falls back once, keeps its box and its name.
+test("failed images fall back without looping, shifting or losing their name", async ({
+  page,
+}) => {
+  const requests = [];
+  page.on("request", (r) => requests.push(new URL(r.url()).pathname));
+  await page.goto(`${base()}/?case=images`);
+  const covers = page.getByRole("list", { name: "Covers" });
+  // src and fallbackSrc both fail: a placeholder named by the alt text.
+  const placeholder = covers.getByRole("img", { name: "Harbour at dawn" });
+  await expect(placeholder).toBeVisible();
+  await expect(placeholder).not.toHaveJSProperty("tagName", "IMG");
+  expect(await covers.locator("img").count()).toBe(1);
+  // The placeholder fills the cover's reserved 16:9 box.
+  const box = await placeholder.evaluate((el) => {
+    const r = el.parentElement.getBoundingClientRect();
+    const own = el.getBoundingClientRect();
+    // clientHeight: inside the cover's bottom border.
+    return {
+      ratio: r.width / r.height,
+      fills: Math.abs(own.height - el.parentElement.clientHeight) < 1,
+    };
+  });
+  expect(box.ratio).toBeCloseTo(16 / 9, 1);
+  expect(box.fills).toBe(true);
+  // Each source was tried once: no retry loop.
+  await page.waitForTimeout(300);
+  expect(requests.filter((p) => p === "/missing-cover.png")).toHaveLength(1);
+  expect(requests.filter((p) => p === "/missing-fallback.png")).toHaveLength(1);
+  // A new src starts over.
+  await page.getByRole("button", { name: "Fix cover" }).click();
+  await expect(
+    covers.getByRole("img", { name: "Harbour at dawn" }),
+  ).toHaveJSProperty("tagName", "IMG");
+
+  const products = page.getByRole("list", { name: "Products" });
+  // A working fallbackSrc replaces the image and keeps its alt.
+  await expect(
+    products.getByRole("img", { name: "Canvas tote" }),
+  ).toHaveAttribute("src", /^data:image\/svg/);
+  // An empty src goes straight to the fallback node, named once.
+  await expect(
+    products.getByRole("img", { name: "Stoneware mug" }),
+  ).toHaveCount(1);
+  await expect(products.getByText("No photo")).toBeVisible();
+
+  // Avatar and LogoCloud fall back to what they show without an image.
+  const avatar = page.getByRole("img", { name: "Ana Kovač" });
+  await expect(avatar).toHaveText("AK");
+  await expect(
+    page.getByRole("region", { name: "Customers" }).getByText("Northwind"),
+  ).toBeVisible();
+});

@@ -1,3 +1,4 @@
+import { KitImage, useImageFallback, type ImageFallback } from "./image.js";
 import { useId, type ReactNode } from "react";
 import { KitLink } from "./navigation.js";
 import type { Tone } from "./primitives.js";
@@ -45,6 +46,8 @@ export function Avatar({
   decorative = false,
   className,
 }: AvatarProps) {
+  // A broken or expired photo falls back to the placeholder.
+  const image = useImageFallback(src ?? "");
   return (
     <span
       {...componentRoot("Avatar")}
@@ -57,8 +60,13 @@ export function Avatar({
             "aria-label": status ? `${name}, ${status}` : name,
           })}
     >
-      {src ? (
-        <img src={src} alt="" />
+      {image.current ? (
+        <img
+          ref={image.ref}
+          src={image.current}
+          alt=""
+          onError={image.onError}
+        />
       ) : placeholder === "icon" ? (
         <Person className="m-avatar-placeholder" />
       ) : (
@@ -329,7 +337,8 @@ export interface GridListItem {
   /** Avatar or icon shown beside the title. */
   media?: ReactNode;
   /** Image across the top of the card. Use alt="" when the title already describes it. */
-  cover?: { src: string; alt: string };
+  /** A cover image. `fallbackSrc` and `fallback` cover a missing or broken image. */
+  cover?: { src: string; alt: string } & ImageFallback;
   /** Badges, dates or counts under the description. */
   meta?: ReactNode;
   /** Term/value pairs under the body, e.g. a client card's last invoice and amount. */
@@ -372,7 +381,7 @@ export function GridList({
         <li key={item.id}>
           {item.cover && (
             <div className="m-grid-list-cover">
-              <img src={item.cover.src} alt={item.cover.alt} loading="lazy" />
+              <KitImage {...item.cover} loading="lazy" />
             </div>
           )}
           <div className="m-grid-list-body">

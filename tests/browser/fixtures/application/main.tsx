@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
+  Avatar,
   Badge,
   Button,
   CommandPalette,
   DataTable,
   FilterChip,
   GridList,
+  LogoCloud,
+  ProductList,
   Pagination,
   ThemeProvider,
 } from "../../../../src/index.js";
@@ -140,6 +143,69 @@ function KeysTable({ wide = false }: { wide?: boolean }) {
   );
 }
 
+// #67: data-driven images that fail. /missing-*.png are not served.
+const pixel =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'/%3E";
+function Images() {
+  const [cover, setCover] = useState("/missing-cover.png");
+  return (
+    <>
+      <GridList
+        label="Covers"
+        items={[
+          {
+            id: "a",
+            title: "Broken twice",
+            cover: {
+              src: cover,
+              alt: "Harbour at dawn",
+              fallbackSrc: "/missing-fallback.png",
+            },
+          },
+          {
+            id: "b",
+            title: "Loads",
+            cover: { src: pixel, alt: "Loaded cover" },
+          },
+        ]}
+      />
+      <Button onClick={() => setCover(pixel)}>Fix cover</Button>
+      <ProductList
+        label="Products"
+        products={[
+          {
+            id: "p1",
+            name: "Tote",
+            href: "#tote",
+            price: "£32",
+            image: {
+              src: "/missing-tote.png",
+              alt: "Canvas tote",
+              fallbackSrc: pixel,
+            },
+          },
+          {
+            id: "p2",
+            name: "Mug",
+            href: "#mug",
+            price: "£12",
+            image: {
+              src: "",
+              alt: "Stoneware mug",
+              fallback: <span>No photo</span>,
+            },
+          },
+        ]}
+      />
+      <Avatar name="Ana Kovač" src="/missing-avatar.png" />
+      <LogoCloud
+        label="Customers"
+        items={[{ name: "Northwind", image: "/missing-logo.svg" }]}
+      />
+    </>
+  );
+}
+
 const root = document.getElementById("root");
 if (!root) throw new Error("missing fixture root");
 const params = new URLSearchParams(location.search);
@@ -151,6 +217,12 @@ createRoot(root).render(
       <main style={{ padding: 16 }}>
         <KeysTable />
         <KeysTable wide />
+      </main>
+    </ThemeProvider>
+  ) : scenario === "images" ? (
+    <ThemeProvider>
+      <main style={{ padding: 16 }}>
+        <Images />
       </main>
     </ThemeProvider>
   ) : (

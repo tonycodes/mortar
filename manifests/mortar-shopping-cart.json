@@ -12,7 +12,7 @@
   "kitId": "ecommerce",
   "contract": {
     "props": {
-      "items": "CartItem[] ({ id: string; name: string; href: string; price: string; quantity: number; image: { src: string; alt: string }; meta?: string; stock?: string })",
+      "items": "CartItem[] ({ id: string; name: string; href: string; price: string; quantity: number; image: { src: string; alt: string; fallbackSrc?: string; fallback?: ReactNode }; meta?: string; stock?: string })",
       "onQuantityChange": "(id: string, quantity: number) => void",
       "onRemove": "(id: string) => void",
       "label": "string",

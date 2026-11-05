@@ -19,7 +19,7 @@
       "name": "string",
       "price": "string",
       "description": "ReactNode",
-      "images": "{ src: string; alt: string }[]",
+      "images": "{ src: string; alt: string; fallbackSrc?: string; fallback?: ReactNode }[]",
       "rating": "{ value: number; count: number; href?: string }",
       "options": "ProductOption[] ({ id: string; label: string; values: { value: string; label: string; swatch?: string; disabled?: boolean }[] })",
       "selected": "Record<string, string>",

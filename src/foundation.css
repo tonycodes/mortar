@@ -1227,6 +1227,22 @@
     font-size: 12px;
     font-weight: var(--m-weight-bold);
   }
+  /* A data-driven image that failed (KitImage, image.tsx): a placeholder that
+     fills the container's reserved box. */
+  .m-image-fallback {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    /* Containers sized by aspect-ratio have no definite height to fill. */
+    aspect-ratio: inherit;
+    color: var(--m-muted);
+    --m-icon-size: 28px;
+  }
+  .m-image-fallback svg {
+    width: var(--m-icon-size);
+    height: var(--m-icon-size);
+  }
   .m-avatar img {
     width: 100%;
     height: 100%;

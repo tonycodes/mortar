@@ -235,3 +235,14 @@ export function Circle() {
     </Icon>
   );
 }
+
+/** A picture frame, for an image that failed to load. */
+export function ImageMissing({ className }: { className?: string }) {
+  return (
+    <Icon className={className} stroke="currentColor" strokeWidth="1.5">
+      <rect x="2.75" y="3.75" width="14.5" height="12.5" rx="2" />
+      <circle cx="7.25" cy="8" r="1.5" />
+      <path d="m3 14.5 4.25-4 3 2.75 2.5-2.25 4.25 3.75" />
+    </Icon>
+  );
+}

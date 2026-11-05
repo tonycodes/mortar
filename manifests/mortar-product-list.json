@@ -13,7 +13,7 @@
   "contract": {
     "props": {
       "label": "string",
-      "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string }; meta?: string; badge?: string; description?: string; swatches?: { label: string; swatch: string }[]; action?: ReactNode })",
+      "products": "ProductCard[] ({ id: string; name: string; href: string; price: string; image: { src: string; alt: string; fallbackSrc?: string; fallback?: ReactNode }; meta?: string; badge?: string; description?: string; swatches?: { label: string; swatch: string }[]; action?: ReactNode })",
       "columns": "2 | 3 | 4",
       "itemHeadingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 3; the level of each product name)",
       "variant": "\"plain\" | \"cards\" | \"overlay\" (default \"plain\"; cards frames each product for full-detail listings; overlay sets the name and price on a panel over the image)",
