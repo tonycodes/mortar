@@ -1128,9 +1128,13 @@
   }
 
   /* == SegmentedControl == */
+  /* Never wider than its container: long or many options scroll inside the
+     control, which keeps the selected option in view (inspection.tsx). */
   .m-segmented {
     display: inline-flex;
     width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
     background: var(--m-sunken);
     padding: 3px;
     gap: 2px;
@@ -1146,6 +1150,12 @@
     padding: 5px 10px;
     cursor: pointer;
     min-height: max(28px, var(--m-touch-target));
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  /* Inside the 3px padding, so the scroll container doesn't clip the ring. */
+  .m-segmented button:focus-visible {
+    outline-offset: 1px;
   }
   .m-segmented [aria-pressed="true"] {
     background: var(--m-surface);

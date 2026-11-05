@@ -107,7 +107,7 @@ tenant.theme = {
 };
 ```
 
-ThemeProvider renders the brand as a `<style>` element beside its content. It is included in server-rendered HTML, so there is no unstyled flash; it updates when the tokens change and is removed with the provider. Overlays opened inside the provider share it, because the rule matches the brand attribute they carry. Brand names may contain only letters, digits and hyphens. Every value is checked, and anything else throws an error that names the key (such as `dark.accent`), so tenant data cannot inject CSS and a value of the wrong kind cannot fail silently:
+ThemeProvider renders the brand as an inline `<style>` element beside its content, so it needs a Content Security Policy that allows inline styles (see [Under a strict Content Security Policy](#under-a-strict-content-security-policy)). It is included in server-rendered HTML, so there is no unstyled flash; it updates when the tokens change and is removed with the provider. Overlays opened inside the provider share it, because the rule matches the brand attribute they carry. Brand names may contain only letters, digits and hyphens. Every value is checked, and anything else throws an error that names the key (such as `dark.accent`), so tenant data cannot inject CSS and a value of the wrong kind cannot fail silently:
 
 - **Colours** are hex, a colour name (including `transparent` and `currentcolor`), or `rgb()`, `rgba()`, `hsl()`, `hsla()`, `hwb()`, `lab()`, `lch()`, `oklab()`, `oklch()`, `color()`, `color-mix()`, `light-dark()` or `var(--name)`. Arguments may nest those functions and `calc()`, `min()`, `max()` or `clamp()`. A gradient, `url()`, top-level `calc()`, `attr()` or `image-set()` is rejected.
 - **`accentGradient`** is a gradient whose stops follow the colour rules (see [Accent gradients](#accent-gradients)).
@@ -131,6 +131,40 @@ brandToStyle(theme); // inline custom properties for one element
 ```
 
 Inline custom properties apply only to that element's subtree. Menus and dialogs portal outside it, so prefer `brandTokens` or `registerBrand` for anything with overlays.
+
+### Under a strict Content Security Policy
+
+`brandTokens` and `registerBrand` add an inline `<style>` element. Under a policy of `style-src 'self'` without `'unsafe-inline'`, the browser blocks it. The page still renders and `data-mortar-brand` is still set, but no `--m-brand-*` property applies, so the brand silently falls back to Mortar's defaults. The console shows a `style-src` violation. A server-rendered `style` attribute, for example from `brandToStyle` on the server, is blocked in the same way (`style-src-attr`).
+
+**For brands you know at build time, ship the brand as a stylesheet.** `brandToCss` returns the same rule `brandTokens` injects. Write it into your CSS at build time, import it after Mortar's styles, and give ThemeProvider the brand name only:
+
+```ts
+// scripts/brand-css.mjs, run before your build (for example in "prebuild")
+import { writeFileSync } from "node:fs";
+import { brandToCss } from "@tonycodes-ui/mortar/brand";
+import { acme } from "../src/brand.js"; // a BrandDefinition
+
+writeFileSync("src/brand.generated.css", `${brandToCss("acme", acme)}\n`);
+```
+
+```css
+@import "@tonycodes-ui/mortar/styles.css";
+@import "./brand.generated.css";
+```
+
+```tsx
+<ThemeProvider brand="acme">…</ThemeProvider> {/* no brandTokens */}
+```
+
+A same-origin stylesheet satisfies `style-src 'self'`, and the rule is identical to the injected one, so overlays, inverse bands and container-scoped providers behave the same. `brandToCss` validates the definition exactly as `brandTokens` does, so a bad value fails the build instead of the page. To keep a checked-in stylesheet in step with the definition, compare them in a test: `expect(readFileSync("src/brand.generated.css", "utf8").trim()).toBe(brandToCss("acme", acme))`.
+
+**For tenant brands loaded at runtime** (from a database or CMS), `brandTokens` needs the policy to allow the inline style:
+
+- **`'unsafe-inline'` in `style-src`.** This is simplest, but it allows any inline style.
+- **A hash of the exact rule** (`'sha256-…'`). This is brittle: any change to the palette changes the hash.
+- **Serve each tenant's rule as a stylesheet instead**, for example from a route that returns `brandToCss(tenant.slug, tenant.theme)` as `text/css`, linked with `<link rel="stylesheet">`. Tenant data is validated by `brandToCss`, so it cannot inject other CSS.
+
+Mortar's own styles and the no-JavaScript appearance fallback are ordinary stylesheet rules and need nothing beyond `style-src 'self'`.
 
 ### With the brand builder
 

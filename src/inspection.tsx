@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react";
 import { KitLink } from "./navigation.js";
 import { componentRoot, cx, useComponentName } from "./internal.js";
 export function SegmentedControl({
@@ -14,8 +15,22 @@ export function SegmentedControl({
   className?: string;
 }) {
   const name = useComponentName("SegmentedControl");
+  const group = useRef<HTMLDivElement>(null);
+  // When the options scroll (narrow screens), keep the selected one in view,
+  // on mount and on change. Only the control scrolls, never the page.
+  useLayoutEffect(() => {
+    const root = group.current;
+    const selected = root?.querySelector<HTMLElement>('[aria-pressed="true"]');
+    if (!root || !selected || root.scrollWidth <= root.clientWidth) return;
+    const outer = root.getBoundingClientRect();
+    const inner = selected.getBoundingClientRect();
+    if (inner.left < outer.left) root.scrollLeft -= outer.left - inner.left;
+    else if (inner.right > outer.right)
+      root.scrollLeft += inner.right - outer.right;
+  }, [value]);
   return (
     <div
+      ref={group}
       {...componentRoot(name)}
       className={cx("m-segmented", className)}
       role="group"

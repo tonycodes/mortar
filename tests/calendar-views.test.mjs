@@ -35,9 +35,11 @@ const base = {
 test("week view shows the selected week as labelled day groups", () => {
   const markup = html(Calendar, { ...base, view: "week" });
   assert.match(markup, /data-view="week"/);
+  // ICU spaces date ranges differently across Node 22 patches (#73):
+  // "19–25" or "19 – 25" with thin spaces.
   assert.match(
     markup,
-    /<h2 id="[^"]+" class="m-calendar-title" aria-live="polite">19\s.\s25 October 2026<\/h2>/,
+    /<h2 id="[^"]+" class="m-calendar-title" aria-live="polite">19\s*–\s*25 October 2026<\/h2>/,
   );
   const days = [
     ...markup.matchAll(
