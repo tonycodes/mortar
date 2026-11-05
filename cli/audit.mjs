@@ -44,6 +44,8 @@ export const RULES = {
   "missing-theme-provider":
     "Mortar components are rendered but ThemeProvider is never rendered.",
   "local-copy": "A local copy of Mortar source.",
+  "raw-element":
+    "A raw HTML element (such as <table> or <select>) that a Mortar component replaces, in an app that uses Mortar.",
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -291,6 +293,65 @@ export function jsxAttributes(src, i) {
   }
   return attrs;
 }
+
+/**
+ * The text with string and template-literal contents blanked, so HTML inside
+ * strings (an email template, say) is not read as JSX. Lengths and newlines
+ * are kept, so offsets still map to lines.
+ */
+export function blankStrings(src) {
+  const out = src.split("");
+  const n = src.length;
+  for (let i = 0; i < n; i++) {
+    const q = src[i];
+    if (q !== '"' && q !== "'" && q !== "`") continue;
+    // A quote in JSX text (Don't) is not a string: only a quote that follows
+    // an operator, a bracket, `=` or a keyword starts one.
+    const before = src.slice(0, i).trimEnd();
+    if (
+      q !== "`" &&
+      !/(?:^|[=(,:?&|[{}+;!]|\breturn|\bfrom|\bimport)$/.test(before)
+    )
+      continue;
+    let j = i + 1;
+    while (j < n && src[j] !== q) {
+      if (src[j] === "\\") j++;
+      else if (q !== "`" && src[j] === "\n") break;
+      j++;
+    }
+    for (let k = i + 1; k < Math.min(j, n); k++)
+      if (out[k] !== "\n") out[k] = " ";
+    i = j;
+  }
+  return out.join("");
+}
+
+/**
+ * Raw element → the Mortar components that replace it, from each contract's
+ * `replaces` (an element name, optionally with `[type=…]` for inputs).
+ */
+function replacements(data) {
+  const map = new Map();
+  for (const c of data.components ?? [])
+    for (const element of c.contract?.replaces ?? [])
+      map.set(element, [...(map.get(element) ?? []), c.export]);
+  return map;
+}
+// Inputs with no Mortar equivalent (hidden values, file pickers, sliders).
+const NATIVE_ONLY = new Set(["hidden", "file", "range", "color", "image"]);
+const TEXT_LIKE = new Set([
+  "text",
+  "email",
+  "search",
+  "url",
+  "tel",
+  "number",
+  "date",
+  "time",
+  "datetime-local",
+  "month",
+  "week",
+]);
 
 function lineAt(text) {
   const starts = [0];
@@ -568,6 +629,13 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     );
   }
   const classes = new Set(data.agent.classes);
+  // An installed release older than the `replaces` field falls back to this
+  // tool's mapping; every component it names has existed since 0.1.
+  let rawElements = replacements(data);
+  if (!rawElements.size) rawElements = replacements(bundled);
+  // Raw elements are collected from every JSX file and reported once the
+  // whole app is known to use Mortar.
+  const rawHits = [];
 
   const files = walk(root);
   const hashes = data.agent.sourceHashes ?? {};
@@ -644,6 +712,30 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
+    if (JSX.has(ext)) {
+      const jsx = blankStrings(src);
+      for (const m of jsx.matchAll(/<([a-z][a-z0-9]*)(?=[\s/>])/g)) {
+        const tagName = m[1];
+        let element = tagName;
+        if (tagName === "input") {
+          const type = jsxAttributes(jsx, m.index + m[0].length).find(
+            (a) => a.name === "type",
+          );
+          // A dynamic type is read as a text-like input.
+          const value = type
+            ? src
+                .slice(type.index)
+                .match(/^type\s*=\s*(?:\{\s*)?(["'`])([^"'`]*)\1/)?.[2]
+            : undefined;
+          if (value && NATIVE_ONLY.has(value)) continue;
+          element =
+            value && !TEXT_LIKE.has(value) ? `input[type=${value}]` : "input";
+        }
+        const components = rawElements.get(element);
+        if (!components) continue;
+        rawHits.push({ file, line: line(m.index), tag: element, components });
+      }
+    }
     for (const m of src.matchAll(DEEP)) {
       usesMortar = true;
       add(
@@ -859,6 +951,21 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       }
     }
   }
+
+  if (usesMortar)
+    for (const hit of rawHits) {
+      const names = hit.components.map((c) => `<${c}>`);
+      add(
+        "raw-element",
+        // A raw <button> is often a deliberate custom trigger; the rest are
+        // contract breaks that ship unthemed, untested markup.
+        hit.tag === "button" ? "warning" : "error",
+        hit.file,
+        hit.line,
+        `Raw <${hit.tag.replace(/\[type=(.*)\]/, ' type="$1"')}> in an app that uses Mortar.`,
+        `Use ${names.length > 1 ? `${names.slice(0, -1).join(", ")} or ${names.at(-1)}` : names[0]} from "${PKG}" (mortar component ${hit.components[0]}).`,
+      );
+    }
 
   // Package-level rules.
   let pkgJson;

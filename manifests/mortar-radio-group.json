@@ -27,7 +27,8 @@
     "usage": "Import { RadioGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": [],
+    "replaces": ["input[type=radio]"]
   },
   "preview": {
     "source": "previews/RadioGroupPreview.tsx"

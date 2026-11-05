@@ -1301,7 +1301,13 @@
         "usage": "Import { Button } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": [
+          "button",
+          "input[type=submit]",
+          "input[type=button]",
+          "input[type=reset]"
+        ]
       },
       "preview": {
         "source": "previews/ButtonPreview.tsx"
@@ -1927,7 +1933,8 @@
         "usage": "Import { Checkbox } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["input[type=checkbox]"]
       },
       "preview": {
         "source": "previews/CheckboxPreview.tsx"
@@ -3039,7 +3046,12 @@
         "usage": "Import { DataTable } from @tonycodes-ui/mortar. Without onSortChange, sortable columns sort rows locally (stable; empty values last). With onSortChange, order rows yourself (e.g. server-side) and pass sort. groupBy renders each group as its own tbody under a full-width header row spanning every column (selection included); groups keep their first-appearance order in rows and sorting applies within each group. Put Pagination in footer.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": ["mortar-button", "mortar-empty-state", "mortar-notice"]
+        "dependencies": [
+          "mortar-button",
+          "mortar-empty-state",
+          "mortar-notice"
+        ],
+        "replaces": ["table"]
       },
       "preview": {
         "source": "previews/DataTablePreview.tsx"
@@ -4519,7 +4531,8 @@
         "usage": "Import { Input } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["input"]
       },
       "preview": {
         "source": "previews/InputPreview.tsx"
@@ -5256,7 +5269,8 @@
         "usage": "Import { Modal } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": ["mortar-button"]
+        "dependencies": ["mortar-button"],
+        "replaces": ["dialog"]
       },
       "preview": {
         "source": "previews/ModalPreview.tsx"
@@ -6267,7 +6281,8 @@
         "usage": "Import { PasswordInput } from @tonycodes-ui/mortar. Use it for every password field instead of Input type=\"password\". Sign-in: purpose=\"current\" (the default, autocomplete=\"current-password\"). Sign-up and reset: purpose=\"new\" (autocomplete=\"new-password\"), with every rule the server enforces listed in requirements from the start and marked met as the person types; add strength from a real estimator. Pair it with a username or email field that has autocomplete=\"username\" or \"email\" in the same form so password managers save both. For a confirm field, use a second PasswordInput purpose=\"new\" and validate the match on submit. See docs/auth-flows.md.",
         "avoid": "Do not block paste, hide password rules until a failed submit, or add your own show/hide button. Do not copy implementations or override central colours.",
         "accessibility": "The toggle is a button named \"Show password\" with aria-pressed, controls the field and keeps focus. Requirements are a named list that describes the field, each item ending in \"met\" or \"not met\"; a polite status announces only when every requirement becomes met (or stops being met), not on each keystroke. The strength meter is role=\"meter\" with the label as its value text.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["input[type=password]"]
       },
       "preview": {
         "source": "previews/PasswordInputPreview.tsx"
@@ -7256,7 +7271,8 @@
         "usage": "Import { ProgressBar } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["progress"]
       },
       "preview": {
         "source": "previews/ProgressBarPreview.tsx"
@@ -7538,7 +7554,8 @@
         "usage": "Import { RadioGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["input[type=radio]"]
       },
       "preview": {
         "source": "previews/RadioGroupPreview.tsx"
@@ -8140,7 +8157,8 @@
         "usage": "Import { Select } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["select"]
       },
       "preview": {
         "source": "previews/SelectPreview.tsx"
@@ -9037,7 +9055,8 @@
         "usage": "Import { Switch } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["input[type=checkbox]"]
       },
       "preview": {
         "source": "previews/SwitchPreview.tsx"
@@ -9194,7 +9213,8 @@
         "usage": "Import { Table } from @tonycodes-ui/mortar. Pass groups to render each labelled group as its own tbody under a full-width header row (th scope=rowgroup); ungrouped rows render first. Use DataTable instead when rows need selection, sorting, links or loading states.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["table"]
       },
       "preview": {
         "source": "previews/TablePreview.tsx"
@@ -9562,7 +9582,8 @@
         "usage": "Import { TextArea } from @tonycodes-ui/mortar. Compose with the public typed props.",
         "avoid": "Do not copy implementations, override central colours or grant component approval.",
         "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-        "dependencies": []
+        "dependencies": [],
+        "replaces": ["textarea"]
       },
       "preview": {
         "source": "previews/TextAreaPreview.tsx"

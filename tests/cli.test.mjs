@@ -415,6 +415,109 @@ test("the audit detects copies, class overrides and palette classes", async (t) 
   assert.ok(has(report, "css-override", "src/late.css", /data-m-component/));
 });
 
+test("the audit flags raw elements that a Mortar component replaces", async (t) => {
+  // #76: Hive's API keys panel shipped a raw <table> and the audit was clean.
+  const keys = [
+    "export const Keys = ({ rows }: { rows: string[] }) => (",
+    "  <table>",
+    "    <tbody>{rows.map((r) => <tr key={r}><td>{r}</td></tr>)}</tbody>",
+    "  </table>",
+    ");",
+  ].join("\n");
+  const form = [
+    'import { Button } from "@tonycodes-ui/mortar";',
+    'const email = "<table><tr><td>Hi</td></tr></table>";',
+    "export const Form = ({ kind }: { kind: string }) => (",
+    "  <form>",
+    '    <p>Don\'t <select name="plan" /></p>',
+    '    <input type="checkbox" />',
+    '    <input type={"email"} name="e" />',
+    "    <input type={kind} />",
+    '    <input type="hidden" name="csrf" />',
+    '    <input type="file" />',
+    "    <textarea />",
+    "    <button>Raw</button>",
+    "    <Button>Kit</Button>",
+    "  </form>",
+    ");",
+  ].join("\n");
+  const dir = fixture("clean-app", {
+    files: { "src/Keys.tsx": keys, "src/Form.tsx": form },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const raw = report.findings
+    .filter((f) => f.rule === "raw-element")
+    .map((f) => [f.file, f.line, f.severity, f.message, f.fix]);
+  const use = (names, id) =>
+    `Use ${names} from "@tonycodes-ui/mortar" (mortar component ${id}).`;
+  assert.deepEqual(raw, [
+    [
+      "src/Form.tsx",
+      5,
+      "error",
+      "Raw <select> in an app that uses Mortar.",
+      use("<Select>", "Select"),
+    ],
+    [
+      "src/Form.tsx",
+      6,
+      "error",
+      'Raw <input type="checkbox"> in an app that uses Mortar.',
+      use("<Checkbox> or <Switch>", "Checkbox"),
+    ],
+    [
+      "src/Form.tsx",
+      7,
+      "error",
+      "Raw <input> in an app that uses Mortar.",
+      use("<Input>", "Input"),
+    ],
+    [
+      "src/Form.tsx",
+      8,
+      "error",
+      "Raw <input> in an app that uses Mortar.",
+      use("<Input>", "Input"),
+    ],
+    [
+      "src/Form.tsx",
+      11,
+      "error",
+      "Raw <textarea> in an app that uses Mortar.",
+      use("<TextArea>", "TextArea"),
+    ],
+    // A file that imports nothing from Mortar is still part of the app.
+    [
+      "src/Keys.tsx",
+      2,
+      "error",
+      "Raw <table> in an app that uses Mortar.",
+      use("<DataTable> or <Table>", "DataTable"),
+    ],
+    [
+      "src/Form.tsx",
+      12,
+      "warning",
+      "Raw <button> in an app that uses Mortar.",
+      use("<Button>", "Button"),
+    ],
+  ]);
+});
+
+test("raw elements are not reported in an app that does not use Mortar", async (t) => {
+  const dir = fixture("clean-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  rmSync(join(dir, "src/App.tsx"));
+  writeFileSync(join(dir, "package.json"), JSON.stringify({ name: "x" }));
+  writeFileSync(
+    join(dir, "src/Plain.tsx"),
+    "export const Plain = () => <table />;\n",
+  );
+  const report = await auditApp(dir);
+  assert.ok(!has(report, "raw-element"));
+});
+
 test("the audit reports a missing install and declaration", async (t) => {
   const dir = fixture("clean-app", { version: null });
   t.after(() => rmSync(dir, { recursive: true, force: true }));

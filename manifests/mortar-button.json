@@ -27,7 +27,13 @@
     "usage": "Import { Button } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": [],
+    "replaces": [
+      "button",
+      "input[type=submit]",
+      "input[type=button]",
+      "input[type=reset]"
+    ]
   },
   "preview": {
     "source": "previews/ButtonPreview.tsx"
