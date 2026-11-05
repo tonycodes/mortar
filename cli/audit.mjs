@@ -298,31 +298,76 @@ export function jsxAttributes(src, i) {
  * The text with string and template-literal contents blanked, so HTML inside
  * strings (an email template, say) is not read as JSX. Lengths and newlines
  * are kept, so offsets still map to lines.
+ *
+ * A quote starts a string when it follows an operator, a bracket, `=>`, or
+ * `return`, `case`, `throw`, `from` or `import`. An apostrophe in JSX text
+ * (`Don't`) does not. Template literals recurse into `${…}`: strings and
+ * nested templates there are blanked, and a backtick quoted inside the
+ * interpolation does not end the outer template or blank the lines after it.
+ * JSX in an interpolation is left in place.
  */
 export function blankStrings(src) {
   const out = src.split("");
   const n = src.length;
-  for (let i = 0; i < n; i++) {
+  // A quote in JSX text (Don't) is not a string.
+  const starts = (i) => {
     const q = src[i];
-    if (q !== '"' && q !== "'" && q !== "`") continue;
-    // A quote in JSX text (Don't) is not a string: only a quote that follows
-    // an operator, a bracket, `=` or a keyword starts one.
+    if (q !== '"' && q !== "'" && q !== "`") return false;
+    if (q === "`") return true;
     const before = src.slice(0, i).trimEnd();
-    if (
-      q !== "`" &&
-      !/(?:^|[=(,:?&|[{}+;!]|\breturn|\bfrom|\bimport)$/.test(before)
-    )
-      continue;
+    return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
+      before,
+    );
+  };
+  const blank = (from, to) => {
+    for (let k = from; k < Math.min(to, n); k++)
+      if (out[k] !== "\n") out[k] = " ";
+  };
+  // Blank the string whose opening quote is at `i`. Returns the index of the
+  // closing quote, the newline that ends a non-template, or `end`.
+  const blankOne = (i, end) => {
+    const q = src[i];
     let j = i + 1;
-    while (j < n && src[j] !== q) {
-      if (src[j] === "\\") j++;
-      else if (q !== "`" && src[j] === "\n") break;
+    let literal = j;
+    while (j < end) {
+      if (src[j] === "\\") {
+        j += 2;
+        continue;
+      }
+      if (q === "`" && src[j] === "$" && src[j + 1] === "{") {
+        blank(literal, j);
+        const close = blankCode(j + 2, end, true);
+        j = close < end ? close + 1 : end;
+        literal = j;
+        continue;
+      }
+      if (src[j] === q) break;
+      if (q !== "`" && src[j] === "\n") break;
       j++;
     }
-    for (let k = i + 1; k < Math.min(j, n); k++)
-      if (out[k] !== "\n") out[k] = " ";
-    i = j;
-  }
+    blank(literal, j);
+    return j;
+  };
+  // Walk code in [start, end). With `expr`, the `{` of `${` is already
+  // counted and the walk stops at the matching `}`.
+  const blankCode = (start, end, expr) => {
+    let depth = expr ? 1 : 0;
+    let i = start;
+    while (i < end) {
+      const c = src[i];
+      if (expr && c === "{") depth++;
+      else if (expr && c === "}") {
+        if (--depth === 0) return i;
+      } else if ((c === '"' || c === "'" || c === "`") && starts(i)) {
+        i = blankOne(i, end);
+        if (i < end) i++;
+        continue;
+      }
+      i++;
+    }
+    return i;
+  };
+  blankCode(0, n, false);
   return out.join("");
 }
 
