@@ -142,10 +142,12 @@ function KeysTable({ wide = false }: { wide?: boolean }) {
 
 const root = document.getElementById("root");
 if (!root) throw new Error("missing fixture root");
-const scenario = new URLSearchParams(location.search).get("case");
+const params = new URLSearchParams(location.search);
+const scenario = params.get("case");
+const appearance = params.get("theme") === "dark" ? "dark" : "light";
 createRoot(root).render(
   scenario === "keys" ? (
-    <ThemeProvider>
+    <ThemeProvider appearance={appearance}>
       <main style={{ padding: 16 }}>
         <KeysTable />
         <KeysTable wide />

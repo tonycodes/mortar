@@ -283,10 +283,14 @@
   .m-table-scroll[data-sticky] thead th[data-pin] {
     z-index: 3;
   }
-  .m-data-table tr[data-linked]:hover > [data-pin] {
+  /* (0,2,1): above the pinned stripe, below forced-colours selection (0,3,0).
+     :where(.m-data-table) does that for a selected cell. Hover also zeroes
+     [data-linked]; :hover alone would stay at (0,3,1) and keep HighlightText
+     on the author's background. */
+  :where(.m-data-table) tr:where([data-linked]):hover > [data-pin] {
     background-color: var(--m-sunken);
   }
-  .m-data-table tr[data-selected] > [data-pin] {
+  :where(.m-data-table) tr[data-selected] > [data-pin] {
     background-color: var(--m-selected);
   }
   /* Column priority follows the table's own width, so a table in a narrow

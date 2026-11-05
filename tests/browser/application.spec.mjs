@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { useFixtureServer } from "../support/fixture-server.mjs";
+import { accessibility } from "../support/preview.mjs";
 
 // Regression tests for application-family behaviour that the preview probes
 // do not reach: selection across pages, focus after removal, stretched links
@@ -104,7 +105,9 @@ test("category template headings keep their order", async ({ page }) => {
   ).toBe("H2");
 });
 
-// #77: column priority and a pinned action column on narrow screens.
+// #77: column priority and a pinned action column on narrow screens, in both
+// appearances. The keys fixture reads ?theme=; it does not change the golden
+// DataTable preview.
 const keysHeaders = (page, caption) =>
   page
     .getByRole("region", { name: caption, exact: true })
@@ -113,65 +116,85 @@ const keysHeaders = (page, caption) =>
       all.filter((th) => th.offsetParent !== null).map((th) => th.innerText),
     );
 
-for (const [width, expected] of [
-  [1280, ["Name", "Status", "Prefix", "Created", "Last used", "Action"]],
-  [700, ["Name", "Status", "Last used", "Action"]],
-  [375, ["Name", "Status", "Action"]],
-])
-  test(`DataTable shows columns by priority at ${width}px`, async ({
+for (const theme of ["light", "dark"]) {
+  for (const [width, expected] of [
+    [1280, ["Name", "Status", "Prefix", "Created", "Last used", "Action"]],
+    [700, ["Name", "Status", "Last used", "Action"]],
+    [375, ["Name", "Status", "Action"]],
+  ])
+    test(`DataTable shows columns by priority at ${width}px (${theme})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto(`${base()}/?case=keys&theme=${theme}`);
+      await expect(page.locator("html")).toHaveAttribute(
+        "data-mortar-appearance",
+        theme,
+      );
+      // The selection column has no text; compare the named columns.
+      expect((await keysHeaders(page, "API keys")).filter(Boolean)).toEqual(
+        expected,
+      );
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBe(true);
+      // Every visible column fits: no sideways scroll inside the table either.
+      const area = page.getByRole("region", { name: "API keys scroll area" });
+      expect(
+        await area.evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
+      ).toBe(true);
+      const box = await area.boundingBox();
+      const revoke = await area
+        .getByRole("button", { name: "Revoke k1" })
+        .boundingBox();
+      expect(revoke.x + revoke.width).toBeLessThanOrEqual(
+        box.x + box.width + 1,
+      );
+      await expect(
+        area.getByRole("columnheader", { name: "Action" }),
+      ).toHaveAttribute("data-pin", "end");
+      await accessibility(page);
+    });
+
+  test(`a pinned column stays in view while the table scrolls (${theme})`, async ({
     page,
   }) => {
-    await page.setViewportSize({ width, height: 800 });
-    await page.goto(`${base()}/?case=keys`);
-    // The selection column has no text; compare the named columns.
-    expect((await keysHeaders(page, "API keys")).filter(Boolean)).toEqual(
-      expected,
+    await page.setViewportSize({ width: 375, height: 800 });
+    await page.goto(`${base()}/?case=keys&theme=${theme}`);
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-mortar-appearance",
+      theme,
     );
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth,
-      ),
-    ).toBe(true);
-    // Every visible column fits: no sideways scroll inside the table either.
-    const area = page.getByRole("region", { name: "API keys scroll area" });
-    expect(
-      await area.evaluate((el) => el.scrollWidth <= el.clientWidth + 1),
-    ).toBe(true);
+    const area = page.getByRole("region", { name: "Wide keys scroll area" });
+    expect(await area.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
+      true,
+    );
     const box = await area.boundingBox();
-    const revoke = await area
-      .getByRole("button", { name: "Revoke k1" })
-      .boundingBox();
-    expect(revoke.x + revoke.width).toBeLessThanOrEqual(box.x + box.width + 1);
+    const revoke = area.getByRole("button", { name: "Revoke k1" });
+    for (const scroll of [0, 10_000]) {
+      await area.evaluate((el, x) => (el.scrollLeft = x), scroll);
+      const b = await revoke.boundingBox();
+      expect(b.x).toBeGreaterThanOrEqual(box.x - 1);
+      expect(b.x + b.width).toBeLessThanOrEqual(box.x + box.width + 1);
+    }
+    await area.evaluate((el) => (el.scrollLeft = 0));
+    await revoke.click();
+    // The pinned cell is opaque and follows the row: surface, stripe, selected.
+    const cellBg = (name) =>
+      area
+        .getByRole("button", { name })
+        .evaluate((b) => getComputedStyle(b.closest("td")).backgroundColor);
+    const rowBg = (name) =>
+      area
+        .getByRole("button", { name })
+        .evaluate((b) => getComputedStyle(b.closest("tr")).backgroundColor);
+    expect(await cellBg("Revoke k2")).toBe(await rowBg("Revoke k2"));
+    expect(await cellBg("Revoke k1")).not.toBe("rgba(0, 0, 0, 0)");
+    await expect(
+      area.getByRole("columnheader", { name: "Action" }),
+    ).toHaveAttribute("data-pin", "end");
+    await accessibility(page);
   });
-
-test("a pinned column stays in view while the table scrolls", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 375, height: 800 });
-  await page.goto(`${base()}/?case=keys`);
-  const area = page.getByRole("region", { name: "Wide keys scroll area" });
-  expect(await area.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(
-    true,
-  );
-  const box = await area.boundingBox();
-  const revoke = area.getByRole("button", { name: "Revoke k1" });
-  for (const scroll of [0, 10_000]) {
-    await area.evaluate((el, x) => (el.scrollLeft = x), scroll);
-    const b = await revoke.boundingBox();
-    expect(b.x).toBeGreaterThanOrEqual(box.x - 1);
-    expect(b.x + b.width).toBeLessThanOrEqual(box.x + box.width + 1);
-  }
-  await area.evaluate((el) => (el.scrollLeft = 0));
-  await revoke.click();
-  // The pinned cell is opaque and follows the row: surface, stripe, selected.
-  const cellBg = (name) =>
-    area
-      .getByRole("button", { name })
-      .evaluate((b) => getComputedStyle(b.closest("td")).backgroundColor);
-  const rowBg = (name) =>
-    area
-      .getByRole("button", { name })
-      .evaluate((b) => getComputedStyle(b.closest("tr")).backgroundColor);
-  expect(await cellBg("Revoke k2")).toBe(await rowBg("Revoke k2"));
-  expect(await cellBg("Revoke k1")).not.toBe("rgba(0, 0, 0, 0)");
-});
+}
