@@ -290,3 +290,79 @@ test("the accent wash moves away from dark on-accent text", async ({
   expect(await layers()).toMatch(/^linear-gradient\(oklab\(1 0 0 \/ 0\.28\)/);
   await page.mouse.up();
 });
+
+// #78: a Switch or Checkbox whose description appears and disappears as it
+// toggles keeps keyboard focus, so Space can toggle it again.
+for (const [role, name] of [
+  ["switch", "Show revoked keys"],
+  ["checkbox", "Include archived"],
+])
+  test(`a ${role} keeps focus while its description comes and goes`, async ({
+    page,
+  }) => {
+    await open(page, "choice-description");
+    const control = page.getByRole(role, { name });
+    await control.focus();
+    for (const checked of [true, false, true, false]) {
+      await page.keyboard.press("Space");
+      if (checked) await expect(control).toBeChecked();
+      else await expect(control).not.toBeChecked();
+      await expect(control).toBeFocused();
+    }
+  });
+
+for (const width of [320, 375])
+  test(`MetricGroup and SegmentedControl fit a ${width}px screen`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height: 800 });
+    await open(page, "narrow");
+    // No page-level sideways scroll.
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+    // #81: no metric value is clipped, and short values still pair up.
+    const clipped = await page
+      .locator(".m-metrics dd")
+      .evaluateAll((all) =>
+        all
+          .filter((dd) => dd.scrollWidth > dd.clientWidth + 1)
+          .map((dd) => dd.textContent),
+      );
+    expect(clipped).toEqual([]);
+    const short = page.locator('.m-metrics[aria-label="Short"] dd');
+    const [a, b] = await short.evaluateAll((all) =>
+      all.map((dd) => dd.getBoundingClientRect().top),
+    );
+    expect(a).toBe(b);
+    // #80: the control scrolls inside itself, and the selected option (the
+    // last, initially off the end) is in view, on mount and after a change.
+    const control = page.getByRole("group", { name: "Range" });
+    const inView = (name) =>
+      control.evaluate((root, label) => {
+        const option = [...root.querySelectorAll("button")].find(
+          (b) => b.textContent === label,
+        );
+        const outer = root.getBoundingClientRect();
+        const inner = option.getBoundingClientRect();
+        return inner.left >= outer.left - 1 && inner.right <= outer.right + 1;
+      }, name);
+    expect(
+      await control.evaluate((el) => el.scrollWidth > el.clientWidth),
+    ).toBe(true);
+    expect(await inView("Year to date")).toBe(true);
+    await control.getByRole("button", { name: "Last hour" }).click();
+    await expect(
+      control.getByRole("button", { name: "Last hour" }),
+    ).toHaveAttribute("aria-pressed", "true");
+    expect(await inView("Last hour")).toBe(true);
+    // Keyboard focus moving along the options keeps the focused one visible.
+    await control.getByRole("button", { name: "Last hour" }).focus();
+    for (let i = 0; i < 4; i++) await page.keyboard.press("Tab");
+    await expect(
+      control.getByRole("button", { name: "Year to date" }),
+    ).toBeFocused();
+    expect(await inView("Year to date")).toBe(true);
+  });

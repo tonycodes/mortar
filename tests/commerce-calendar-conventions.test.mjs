@@ -181,7 +181,9 @@ test("Calendar shows the controlled date in every view", () => {
   assert.match(month, />January 2027<\/h2>/);
   assert.match(month, /<button[^>]*data-date="2027-01-12"[^>]*tabindex="0"/);
   const week = html(Calendar, { ...base, view: "week" });
-  assert.match(week, />11\s.\s17 January 2027<\/h2>/);
+  // ICU spaces date ranges differently across Node 22 patches (#73):
+  // "19–25" or "19 – 25" with thin spaces.
+  assert.match(week, />11\s*–\s*17 January 2027<\/h2>/);
   const day = html(Calendar, { ...base, view: "day" });
   assert.match(day, />Tuesday, 12 January 2027<\/h2>/);
   assert.match(html(Calendar, { ...base, view: "year" }), />2027<\/h2>/);

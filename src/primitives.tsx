@@ -444,6 +444,31 @@ function DescribedChoice({
     </div>
   );
 }
+/**
+ * Keeps a choice in the described layout once it has had a description or
+ * error. Switching back to the plain label would remount the input and drop
+ * focus mid-interaction (for example a description that changes with the
+ * value). If the layout changes while the input has focus, focus follows it.
+ */
+function useDescribedLayout(
+  active: boolean,
+  input: { current: HTMLInputElement | null },
+) {
+  const [described, setDescribed] = useState(false);
+  const refocus = useRef(false);
+  if (active && !described) {
+    refocus.current =
+      typeof document !== "undefined" &&
+      !!input.current &&
+      input.current === document.activeElement;
+    setDescribed(true);
+  }
+  useLayoutEffect(() => {
+    if (refocus.current) input.current?.focus();
+    refocus.current = false;
+  }, [described, input]);
+  return described;
+}
 export function Checkbox({
   label,
   description,
@@ -458,23 +483,8 @@ export function Checkbox({
   error?: string;
 }) {
   const input = useRef<HTMLInputElement>(null);
-  // Once an error has shown, keep the described layout: switching back to the
-  // plain label would remount the input and drop focus while the person fixes
-  // it. If the layout changes while the input has focus, focus follows it.
-  const [described, setDescribed] = useState(false);
-  const refocus = useRef(false);
-  if (error && !described) {
-    refocus.current =
-      typeof document !== "undefined" &&
-      !!input.current &&
-      input.current === document.activeElement;
-    setDescribed(true);
-  }
-  useLayoutEffect(() => {
-    if (refocus.current) input.current?.focus();
-    refocus.current = false;
-  }, [described]);
-  if (description || error || described)
+  const described = useDescribedLayout(!!(description || error), input);
+  if (described)
     return (
       <DescribedChoice
         component="Checkbox"
@@ -514,7 +524,9 @@ export function Switch({
   /** Secondary line under the label, announced as the description. */
   description?: ReactNode;
 }) {
-  if (description)
+  const input = useRef<HTMLInputElement>(null);
+  const described = useDescribedLayout(!!description, input);
+  if (described)
     return (
       <DescribedChoice
         component="Switch"
@@ -526,6 +538,7 @@ export function Switch({
           <input
             {...props}
             {...attrs}
+            ref={input}
             type="checkbox"
             role="switch"
             className="m-switch"
@@ -535,7 +548,13 @@ export function Switch({
     );
   return (
     <label {...componentRoot("Switch")} className={cx("m-choice", className)}>
-      <input {...props} type="checkbox" role="switch" className="m-switch" />
+      <input
+        {...props}
+        ref={input}
+        type="checkbox"
+        role="switch"
+        className="m-switch"
+      />
       {label}
     </label>
   );

@@ -3,11 +3,15 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import {
   ActionLink,
   Button,
+  Checkbox,
   Dropdown,
   Listbox,
+  MetricGroup,
   Modal,
   Notice,
   SaveBar,
+  SegmentedControl,
+  Switch,
   Tabs,
   ThemeProvider,
   Toaster,
@@ -18,6 +22,65 @@ import "../../../../playground/styles.css";
 const scenario = new URLSearchParams(location.search).get("case");
 const root = document.getElementById("root");
 if (!root) throw new Error("missing fixture root");
+
+// #78: a description that is set only in one state (here, only when on).
+function ChoiceDescriptions() {
+  const [on, setOn] = useState(false);
+  const [checked, setChecked] = useState(false);
+  return (
+    <div style={{ padding: 16 }}>
+      <Switch
+        label="Show revoked keys"
+        description={on ? "Showing all 4 keys" : ""}
+        checked={on}
+        onChange={(event) => setOn(event.target.checked)}
+      />
+      <Checkbox
+        label="Include archived"
+        description={checked ? "Archived rows are shown" : undefined}
+        checked={checked}
+        onChange={(event) => setChecked(event.target.checked)}
+      />
+    </div>
+  );
+}
+
+// #80 and #81: long values and options at phone widths.
+const ranges = [
+  "Last hour",
+  "Last 24 hours",
+  "Last 7 days",
+  "Last 30 days",
+  "Year to date",
+];
+function NarrowLayouts() {
+  const [range, setRange] = useState(ranges[4]);
+  return (
+    <div style={{ padding: 16 }}>
+      <MetricGroup
+        label="Gateway"
+        items={[
+          { label: "Status", value: "Operational" },
+          { label: "Uptime", value: "99.98%" },
+          { label: "Region", value: "Frankfurt-Central-Two" },
+        ]}
+      />
+      <MetricGroup
+        label="Short"
+        items={[
+          { label: "Requests", value: "1.42M" },
+          { label: "Latency", value: "184ms" },
+        ]}
+      />
+      <SegmentedControl
+        label="Range"
+        value={range}
+        onChange={setRange}
+        options={ranges.map((value) => ({ value, label: value }))}
+      />
+    </div>
+  );
+}
 
 function Overlays() {
   const [open, setOpen] = useState(false);
@@ -218,6 +281,12 @@ switch (scenario) {
         </div>
       </ThemeProvider>
     );
+    break;
+  case "narrow":
+    content = <NarrowLayouts />;
+    break;
+  case "choice-description":
+    content = <ChoiceDescriptions />;
     break;
   case "brand-document":
     content = (
