@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import ts from "typescript";
-import { accessibility } from "../support/preview.mjs";
+import { accessibility, tokenColor } from "../support/preview.mjs";
 import AxeBuilder from "@axe-core/playwright";
 for (const width of [320, 768, 1280]) {
   test(`playground browsing and settings at ${width}`, async ({ page }) => {
@@ -346,6 +346,107 @@ for (const id of templateIds)
       expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
       expect(errors).toEqual([]);
     });
+
+// #68: the split landing page is composed only from public components and
+// holds up at 320px reflow, 200% zoom and long text, in both themes, with a
+// keyboard order that follows the reading order and a visible focus.
+for (const theme of ["light", "dark"])
+  test(`split landing reflows, zooms and keeps keyboard order (${theme})`, async ({
+    page,
+  }) => {
+    const errors = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto(`/?recipe=split-landing&theme=${theme}`);
+    const shell = page.locator('[data-m-component="MarketingPage"]');
+    await expect(shell).toBeVisible();
+    // Composed from the kit: header, hero, illustration and footer are kit components.
+    for (const name of [
+      "MarketingHeader",
+      "Hero",
+      "NetworkIllustration",
+      "Footer",
+    ])
+      await expect(shell.locator(`[data-m-component="${name}"]`)).toHaveCount(
+        1,
+      );
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      "Answer every visitor, day and night.",
+    );
+    await expect(page.locator("h1 em")).toHaveText("every visitor");
+    expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+    await accessibility(page);
+
+    // 200% zoom of a 1280px window is a 640px layout viewport.
+    await page.setViewportSize({ width: 640, height: 450 });
+    expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+
+    // Long text wraps rather than overflowing or clipping.
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.evaluate(() => {
+      const long = (el, text) => el && (el.textContent = text);
+      long(document.querySelector("h1"), "Answer every visitor, ".repeat(6));
+      long(
+        document.querySelector(".m-hero-description"),
+        "Long description ".repeat(30),
+      );
+      long(
+        document.querySelector(".m-footer-inline p"),
+        "A longer footer note ".repeat(8),
+      );
+    });
+    expect(await pageOverflow(page)).toBeLessThanOrEqual(1);
+    const hero = await page.locator(".m-hero").boundingBox();
+    const footer = await page.locator(".m-footer").boundingBox();
+    expect(footer.y).toBeGreaterThanOrEqual(hero.y + hero.height - 1);
+
+    // Keyboard: header, then hero actions, then footer links, each with a visible focus.
+    await page.reload();
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    const order = [
+      page.getByRole("link", { name: "Northwind", exact: true }).first(),
+      page.getByRole("link", { name: "Start free" }),
+      page.getByRole("link", { name: "Sign in" }).last(),
+      page.getByRole("button", { name: "Pause animation" }),
+      page.getByRole("link", { name: "Status" }),
+      page.getByRole("link", { name: "Terms" }),
+    ];
+    const reached = [];
+    for (let i = 0; i < 40 && reached.length < order.length; i++) {
+      await page.keyboard.press("Tab");
+      const next = order[reached.length];
+      if (await next.evaluate((el) => el === document.activeElement)) {
+        const outline = await next.evaluate(
+          (el) => getComputedStyle(el).outlineStyle,
+        );
+        expect(outline, "visible focus").not.toBe("none");
+        reached.push(i);
+      }
+    }
+    expect(reached).toHaveLength(order.length);
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    expect(errors).toEqual([]);
+  });
+
+// #68 AC: emphasis is the brand's link colour. Neutral makes --m-link equal
+// --m-ink, so this runs the green brand, where the two differ, in both themes.
+for (const theme of ["light", "dark"])
+  test(`split landing emphasis uses the green brand link colour (${theme})`, async ({
+    page,
+  }) => {
+    await page.goto(`/?recipe=split-landing&brand=green&theme=${theme}`);
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-mortar-brand",
+      "green",
+    );
+    const emphasis = page.locator("h1 em.m-emphasis");
+    await expect(emphasis).toBeVisible();
+    await accessibility(page);
+    const colour = await emphasis.evaluate((el) => getComputedStyle(el).color);
+    expect(colour).toBe(await tokenColor(page, "--m-link", emphasis));
+    expect(colour).not.toBe(await tokenColor(page, "--m-ink", emphasis));
+  });
 
 // Shop templates keep a gapless outline below their single h1 (the cart page
 // used to jump from h1 to the bag lines' h3).
