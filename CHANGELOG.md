@@ -25,6 +25,7 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 ### Changed
 
+- **Brands under a strict Content Security Policy are documented** ([#82](https://github.com/tonycodes/mortar/issues/82)). `brandTokens` and `registerBrand` inject an inline `<style>`, which `style-src 'self'` blocks, silently dropping the brand. `docs/theming.md` now shows the CSP-safe path: generate the rule with `brandToCss` at build time, import it after Mortar's styles, and pass ThemeProvider the brand name only. It also covers the options for runtime tenant brands (`'unsafe-inline'`, a hash, or serving each tenant's rule as a stylesheet).
 - **`--m-line-strong` in light is `#8b8b90`** (was `#8e8e93`), and `--m-inv-line-strong` in dark with it. The old value was 2.99:1 on the default sunken surface, just under the 3:1 that control borders need.
 
 - **Packages are published to npmjs.com.** Install with a plain `npm install @tonycodes-ui/mortar`; no registry configuration, account or token is needed. Releases are published from GitHub Actions with npm trusted publishing (OIDC, no long-lived token) and `--provenance`, so each version on npmjs.com links to the workflow run and commit that built it.

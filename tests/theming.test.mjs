@@ -257,6 +257,29 @@ test("ThemeProvider renders a runtime brand as a stylesheet beside its content",
   );
 });
 
+// #82: under style-src 'self' the brand ships as a stylesheet (brandToCss)
+// and ThemeProvider gets the name only, which must render no inline styles.
+test("ThemeProvider with a brand name only renders no inline style", () => {
+  const markup = html(
+    ThemeProvider,
+    { brand: "acme", scope: "container" },
+    h("p", null, "Hi"),
+  );
+  assert.match(markup, /data-mortar-brand="acme"/);
+  assert.doesNotMatch(markup, /<style|style="/);
+  // The stylesheet is the rule brandTokens would inject.
+  const injected = html(
+    ThemeProvider,
+    { brand: "acme", brandTokens: acme, scope: "container" },
+    h("p", null, "Hi"),
+  );
+  const rule = brandToCss("acme", acme);
+  assert.ok(
+    injected.includes(rule.replaceAll('"', "&quot;")) ||
+      injected.includes(rule),
+  );
+});
+
 test("the no-JavaScript dark fallback matches the dark appearance exactly", async () => {
   const css = await readSource("src/tokens.css");
   // Compare values, not indentation: the fallback sits inside @media.
