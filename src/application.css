@@ -292,9 +292,12 @@
   }
   /* Accent bar: the brand's accent fill, remapped like the accent bands
      (marketing.css): on-accent text, links and focus, inverted primary
-     actions and outlined secondary ones. Panels open in a portal and keep the
-     page's colours. Inverse needs nothing here: [data-tone="inverse"] remaps
-     every token (tokens.css). */
+     actions and outlined secondary ones. --m-sunken uses --m-accent-wash, the
+     same direction as an accent button's hover, so a selected row or hover
+     moves the fill away from the on-accent text. A mix towards --m-on-accent
+     drops that text below 4.5:1. Panels open in a portal and keep the page's
+     colours. Inverse needs nothing here: [data-tone="inverse"] remaps every
+     token (tokens.css). */
   .m-navbar[data-tone="accent"] {
     background-color: var(--m-accent);
     background-image: var(--m-accent-fill);
@@ -310,7 +313,11 @@
     --m-primary-active: var(--m-on-accent);
     --m-on-primary: var(--m-accent);
     --m-surface: transparent;
-    --m-sunken: color-mix(in oklab, var(--m-on-accent) 14%, transparent);
+    --m-sunken: color-mix(
+      in oklab,
+      var(--m-accent-wash, transparent) 14%,
+      transparent
+    );
   }
   .m-navbar[data-tone="accent"] .m-button-primary:hover {
     box-shadow: inset 0 0 0 2px var(--m-accent);

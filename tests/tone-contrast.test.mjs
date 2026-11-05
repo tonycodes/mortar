@@ -1,11 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { accentWash, composite, contrast } from "./support/color.mjs";
+import { accentWash, composite, contrast, mixOklab } from "./support/color.mjs";
 import {
   selectorBody,
   customProperties,
+  declaration,
   readSource,
   resolveTokens,
+  section,
 } from "./support/css.mjs";
 
 const css = await readSource("src/tokens.css");
@@ -207,3 +209,94 @@ test("a wash towards ink would fail the warm accent's hover; the wash away from 
   assert.equal(accentWash(text), "#ffffff");
   assert.ok(contrast(text, composite(stop, accentWash(text), 0.28)) >= 4.5);
 });
+
+// The accent navbar paints --m-sunken at rest on the open mobile menu's
+// current item and current group, and on Avatar, SegmentedControl and
+// secondary/menu hovers in the bar. That layer sits on the accent fill under
+// on-accent text. A mix towards --m-on-accent drops #ffffff on the built-in
+// green light fill from 5.48:1 to about 4.20:1. The wash has to move away
+// from the text, the same direction as .m-button-accent:hover.
+const applicationCss = await readSource("src/application.css");
+const navbarSunken = declaration(
+  selectorBody(
+    section(applicationCss, "Navbar"),
+    '.m-navbar[data-tone="accent"]',
+  ),
+  "--m-sunken",
+);
+
+/** Replace var() in a navbar sunken value. --m-accent-wash is the wash away
+    from on-accent text; other tokens are already resolved for the theme. */
+function substituteVars(value, tokens) {
+  let text = value.trim();
+  for (;;) {
+    const use = text.match(
+      /var\(\s*--([a-z0-9-]+)\s*(?:,\s*((?:[^()]|\([^()]*\))*))?\)/i,
+    );
+    if (!use) break;
+    const [whole, name, fallback] = use;
+    const replacement =
+      name === "m-accent-wash"
+        ? accentWash(tokens["m-on-accent"])
+        : name in tokens && tokens[name] !== "initial"
+          ? tokens[name]
+          : fallback !== undefined
+            ? fallback
+            : "transparent";
+    text = text.replace(whole, replacement);
+  }
+  return text.replace(/\s+/g, " ");
+}
+
+/** A color-mix layer: an opaque or semi-transparent colour, as the browser
+    paints color-mix(..., transparent) over the accent fill. */
+function cssLayer(value, tokens, depth = 0) {
+  if (depth > 16) throw Error(`circular sunken value: ${value}`);
+  const text = substituteVars(value, tokens);
+  if (text === "transparent") return { color: "#000000", alpha: 0 };
+  const mix = text.match(
+    /^color-mix\(\s*in oklab,\s*(.+?)\s+([\d.]+)%,\s*(.+)\)$/i,
+  );
+  if (mix) {
+    const t = Number(mix[2]) / 100;
+    const left = cssLayer(mix[1], tokens, depth + 1);
+    const right = cssLayer(mix[3], tokens, depth + 1);
+    if (left.alpha === 0 && right.alpha === 0)
+      return { color: "#000000", alpha: 0 };
+    if (right.alpha === 0) return { color: left.color, alpha: left.alpha * t };
+    if (left.alpha === 0)
+      return { color: right.color, alpha: right.alpha * (1 - t) };
+    return {
+      color: mixOklab(left.color, right.color, t * 100),
+      alpha: left.alpha * t + right.alpha * (1 - t),
+    };
+  }
+  if (/^#|^rgb/i.test(text)) return { color: text, alpha: 1 };
+  throw Error(`unresolved navbar sunken layer: ${text}`);
+}
+
+/** on-accent text against --m-sunken painted over one accent-fill stop. */
+function sunkenContrast(tokens, stop) {
+  assert.notEqual(navbarSunken, "", "accent navbar sets --m-sunken");
+  const layer = cssLayer(navbarSunken, tokens);
+  const background =
+    layer.alpha <= 0
+      ? stop
+      : layer.alpha >= 1
+        ? layer.color
+        : composite(stop, layer.color, layer.alpha);
+  return { background, ratio: contrast(tokens["m-on-accent"], background) };
+}
+
+for (const [theme, tokens] of Object.entries(themes))
+  test(`accent navbar sunken keeps on-accent text at 4.5:1 in ${theme}`, () => {
+    const failures = [];
+    for (const stop of gradientStops(tokens["m-accent-fill"])) {
+      const { background, ratio } = sunkenContrast(tokens, stop);
+      if (ratio < 4.5)
+        failures.push(
+          `on-accent on sunken over ${stop}: ${ratio.toFixed(2)} (${tokens["m-on-accent"]} on ${background})`,
+        );
+    }
+    assert.deepEqual(failures, []);
+  });
