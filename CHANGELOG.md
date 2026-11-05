@@ -24,6 +24,7 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 ### Fixed
 
+- **Pinned DataTable cells keep the forced-colours highlight.** A selected or hovered pinned cell was specific enough to paint its own background over `Highlight`, so the text stayed `HighlightText` on `--m-selected`. Those backgrounds now sit below the forced-colours rule, and still cover the stripe in ordinary colours.
 - **Switch and Checkbox keep keyboard focus when their description comes and goes** ([#78](https://github.com/tonycodes/mortar/issues/78)). A description set in only one state (for example "Showing all 4 keys" when on) swapped the layout and remounted the input, so Space stopped working. Once a choice has had a description or error it keeps the described layout, and focus follows if the layout changes.
 - **MetricGroup no longer clips long values on phones** ([#81](https://github.com/tonycodes/mortar/issues/81)). Below 560px metrics still sit two to a row, but a value too wide for half a row (such as "Operational" at 320px) takes a row of its own, and a value wider than the row wraps.
 - **SegmentedControl no longer pushes the page sideways** ([#80](https://github.com/tonycodes/mortar/issues/80)). It is never wider than its container: options scroll inside the control, the selected option is scrolled into view on mount and on change, and the focus ring isn't clipped. Apps can drop local overflow wrappers.
