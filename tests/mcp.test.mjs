@@ -248,6 +248,9 @@ test("npm pack ships the CLI, its data and the docs it reads", () => {
     "docs/agents.md",
     "docs/theming.md",
     "docs/auth-flows.md",
+    "docs/email.md",
+    "dist/email.js",
+    "dist/email.d.ts",
     "docs/migrating-to-0.6.md",
     "skills/mortar/SKILL.md",
   ])

@@ -604,6 +604,22 @@ function exportsFromDts(root) {
 const IMPORT =
   /\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(@tonycodes-ui\/mortar(?:\/[^"']*)?)\4/g;
 const SIDE_EFFECT = /\bimport\s*(["'])(@tonycodes-ui\/mortar\/[^"']*)\1/g;
+// A file that builds an email: it imports Mortar's email entry or React Email.
+const EMAIL_FILE =
+  /\bfrom\s*["'](?:@tonycodes-ui\/mortar\/email|@react-email\/[^"']+)["']/;
+// App components with an email counterpart, for the email-app-import fix.
+const EMAIL_EQUIVALENT = {
+  Button: "EmailButton",
+  ActionLink: "EmailButton",
+  Notice: "EmailCallout",
+  Banner: "EmailCallout",
+  Divider: "EmailDivider",
+  OrderSummary: "EmailSummary",
+  Text: "EmailText",
+  PageHeading: "EmailHeading",
+  SectionHeading: "EmailHeading",
+  CodeInput: "EmailCode",
+};
 const DEEP =
   /@tonycodes-ui\/mortar\/(src|dist)\b|node_modules\/@tonycodes-ui\/mortar\/(src|dist)\b/g;
 const PALETTE =
@@ -685,6 +701,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
   const files = walk(root);
   const hashes = data.agent.sourceHashes ?? {};
   let usesMortar = false;
+  let usesEmail = false;
   let stylesImported = false;
   let themeProvider = false;
   let firstMortarFile;
@@ -757,7 +774,9 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
-    if (JSX.has(ext)) {
+    // Email markup is tables by design, and has its own components.
+    const emailFile = EMAIL_FILE.test(src);
+    if (JSX.has(ext) && !emailFile) {
       const jsx = blankStrings(src);
       for (const m of jsx.matchAll(/<([a-z][a-z0-9]*)(?=[\s/>])/g)) {
         const tagName = m[1];
@@ -788,7 +807,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         "error",
         file,
         line(m.index),
-        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css" and "${PKG}/brand" are public.`,
+        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand" and "${PKG}/email" are public.`,
         `Import from "${PKG}" instead, and remove any alias to the package's source.`,
       );
     }
@@ -807,7 +826,18 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       );
     }
     for (const m of src.matchAll(SIDE_EFFECT))
-      if (m[2] === `${PKG}/styles.css`) stylesImported = true;
+      if (m[2] === `${PKG}/styles.css`) {
+        if (emailFile)
+          add(
+            "email-app-import",
+            "error",
+            file,
+            line(m.index),
+            "Imports Mortar's stylesheet into an email. Email clients don't load stylesheets.",
+            `Remove the import. The components from "${PKG}/email" carry their styles inline.`,
+          );
+        else stylesImported = true;
+      }
 
     // Local name → export name for this file.
     const locals = new Map();
@@ -815,6 +845,35 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     let imported = false;
     for (const m of src.matchAll(IMPORT)) {
       const [, kind, typeOnly, clause, , spec] = m;
+      if (spec === `${PKG}/email`) {
+        usesEmail = true;
+        // Older releases' data has no email exports; skip the check then.
+        const known = data.agent.emailExports;
+        const named = clause.match(/\{([\s\S]*)\}/);
+        if (!known || !named) continue;
+        const names = new Set([...known.values, ...known.types]);
+        const offset = m.index + m[0].indexOf("{");
+        for (const raw of named[1].split(",")) {
+          const name = raw
+            .trim()
+            .replace(/^type\s+/, "")
+            .split(/\s+as\s+/)[0]
+            .trim();
+          if (!name || names.has(name)) continue;
+          const guess = closest(name, names, 3);
+          add(
+            "unknown-export",
+            "error",
+            file,
+            line(offset + named[0].indexOf(raw.trimStart() || raw)),
+            `${PKG}/email ${data.version} has no export "${name}".`,
+            guess
+              ? `Import ${guess} instead.`
+              : "See the email components and templates (get_guide email).",
+          );
+        }
+        continue;
+      }
       if (spec !== PKG) {
         if (spec !== `${PKG}/brand` && spec !== `${PKG}/styles.css`)
           if (!/\/(src|dist)\b/.test(spec))
@@ -828,8 +887,13 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             );
         continue;
       }
-      imported = usesMortar = true;
-      firstMortarFile ??= file;
+      imported = true;
+      // An email that imports app components is reported below; it doesn't
+      // make the email service an app that needs styles and a ThemeProvider.
+      if (!emailFile) {
+        usesMortar = true;
+        firstMortarFile ??= file;
+      }
       const ns = clause.match(/\*\s*as\s+([\w$]+)/);
       if (ns) namespaces.add(ns[1]);
       const named = clause.match(/\{([\s\S]*)\}/);
@@ -858,6 +922,19 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
               : "Search the catalogue (mortar search) for the current component.",
           );
           continue;
+        }
+        if (!isType && emailFile) {
+          const equivalent = EMAIL_EQUIVALENT[name];
+          add(
+            "email-app-import",
+            "error",
+            file,
+            line(at),
+            `Uses the app component ${name} in an email. App components need Mortar's stylesheet, which email clients don't load.`,
+            equivalent
+              ? `Use ${equivalent} from "${PKG}/email".`
+              : `Compose the email from "${PKG}/email" (get_guide email).`,
+          );
         }
         if (!isType && kind === "import") locals.set(alias ?? name, name);
       }
@@ -1022,7 +1099,22 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     pkgJson?.dependencies?.[PKG] ??
     pkgJson?.devDependencies?.[PKG] ??
     pkgJson?.peerDependencies?.[PKG];
-  if (usesMortar || range) {
+  const reactEmail = "@react-email/components";
+  if (
+    usesEmail &&
+    pkgJson &&
+    !pkgJson.dependencies?.[reactEmail] &&
+    !pkgJson.devDependencies?.[reactEmail]
+  )
+    add(
+      "email-peer-missing",
+      "error",
+      pkgFile,
+      1,
+      `${PKG}/email is imported, but its peer dependency ${reactEmail} is not in package.json.`,
+      `npm install ${reactEmail}`,
+    );
+  if (usesMortar || usesEmail || range) {
     if (!range && pkgJson)
       add(
         "not-declared",

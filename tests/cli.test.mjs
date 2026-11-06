@@ -189,6 +189,7 @@ test("every guide topic loads from the package", () => {
   assert.match(data.guide("conventions"), /^## API conventions/);
   assert.doesNotMatch(data.guide("conventions"), /## Composing flows/);
   assert.match(data.guide("auth-flows"), /AuthLayout/);
+  assert.match(data.guide("email"), /renderEmail/);
   assert.match(data.guide("contributing"), /# Agent instructions/);
 });
 
@@ -687,4 +688,129 @@ test("the CLI prints help, version, search, packets and audits", (t) => {
   const clean = fixture("clean-app");
   t.after(() => rmSync(clean, { recursive: true, force: true }));
   assert.match(run("audit", clean), /0 errors, 0 warnings/);
+});
+
+// #91: emails import @tonycodes-ui/mortar/email, which is public, and must not
+// use app components, which need a stylesheet email clients don't load.
+const EMAIL_PACKAGE = JSON.stringify({
+  name: "mail-service",
+  private: true,
+  type: "module",
+  dependencies: {
+    "@tonycodes-ui/mortar": ">=0.6.0",
+    "@react-email/components": "^1.0.12",
+    react: "^19.0.0",
+  },
+});
+
+test("the audit checks email files against the email entry, not the app's rules", async (t) => {
+  const email = [
+    'import { EmailShell, EmailText, EmailButtn } from "@tonycodes-ui/mortar/email";',
+    'import { Button, Notice, Stack, type Tone } from "@tonycodes-ui/mortar";',
+    'import "@tonycodes-ui/mortar/styles.css";',
+    "export const Welcome = ({ tone }: { tone: Tone }) => (",
+    '  <EmailShell preview="Hi">',
+    "    <table><tbody><tr><td>",
+    "      <EmailText>Welcome</EmailText>",
+    "      <Button>Open</Button>",
+    "    </td></tr></tbody></table>",
+    "  </EmailShell>",
+    ");",
+  ].join("\n");
+  const dir = fixture("clean-app", {
+    files: { "src/emails/Welcome.tsx": email },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const file = "src/emails/Welcome.tsx";
+  const rows = report.findings
+    .filter((f) => f.file === file)
+    .map((f) => [f.rule, f.line, f.fix]);
+  assert.deepEqual(rows, [
+    ["unknown-export", 1, "Import EmailButton instead."],
+    [
+      "email-app-import",
+      2,
+      'Use EmailButton from "@tonycodes-ui/mortar/email".',
+    ],
+    [
+      "email-app-import",
+      2,
+      'Use EmailCallout from "@tonycodes-ui/mortar/email".',
+    ],
+    [
+      "email-app-import",
+      2,
+      'Compose the email from "@tonycodes-ui/mortar/email" (get_guide email).',
+    ],
+    [
+      "email-app-import",
+      3,
+      'Remove the import. The components from "@tonycodes-ui/mortar/email" carry their styles inline.',
+    ],
+  ]);
+  // The email entry is public, and email tables are not raw DataTables.
+  assert.ok(!has(report, "deep-import"));
+  assert.ok(!has(report, "raw-element"));
+  // The peer dependency is missing from this app.
+  assert.ok(
+    has(
+      report,
+      "email-peer-missing",
+      "package.json",
+      /npm install @react-email\/components/,
+    ),
+  );
+});
+
+test("an email-only service needs React Email, not app styles or a ThemeProvider", async (t) => {
+  const email = [
+    'import { VerifyEmail, emailTheme, renderEmail } from "@tonycodes-ui/mortar/email";',
+    "export const send = () =>",
+    '  renderEmail(<VerifyEmail productName="Hive" code="1" theme={emailTheme()} />);',
+  ].join("\n");
+  const dir = fixture("clean-app", {
+    files: { "src/verify.tsx": email, "package.json": EMAIL_PACKAGE },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  rmSync(join(dir, "src/App.tsx"));
+  rmSync(join(dir, "src/index.css"));
+  const report = await auditApp(dir);
+  assert.deepEqual(
+    report.findings.filter((f) => f.severity !== "info"),
+    [],
+    JSON.stringify(report.findings, null, 2),
+  );
+
+  // Without a declared dependency it's still an app that imports Mortar.
+  writeFileSync(
+    join(dir, "package.json"),
+    JSON.stringify({
+      name: "x",
+      dependencies: { "@react-email/components": "^1" },
+    }),
+  );
+  assert.ok(has(await auditApp(dir), "not-declared", "package.json"));
+});
+
+test("a brief about emails points the packet at the email entry", async () => {
+  const data = await loadData();
+  for (const brief of [
+    "Password reset email and order receipt emails for our shop",
+    "Transactional emails for invites",
+    "An email template for weekly digests",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(packet.guides.includes("email"), brief);
+    assert.equal(packet.email.import, "@tonycodes-ui/mortar/email");
+    assert.match(packet.email.install, /@react-email\/components/);
+  }
+  for (const brief of [
+    "A sign-in page with an email field",
+    "Settings page to change your email address",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(!packet.guides.includes("email"), brief);
+    assert.equal(packet.email, undefined);
+  }
 });

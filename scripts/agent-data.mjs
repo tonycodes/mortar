@@ -3,7 +3,7 @@
 // computed here, during `npm run build`, into dist/agent-data.json:
 //   - each component's example JSX (the playground Code view, playground/examples.mjs)
 //   - the playground taxonomy and page templates with the components they compose
-//   - the package's value and type exports
+//   - the package's value and type exports, and the email entry's
 //   - every prop name each component accepts, including inherited DOM attributes
 //   - the kit's `m-*` class names and source file hashes, for the application audit
 // catalog.json and the shipped docs are read at runtime, so the CLI always
@@ -27,11 +27,11 @@ const parse = (file) =>
     ts.ScriptKind.TSX,
   );
 
-/** Value and type names exported from src/index.ts. */
-export function packageExports(root = ROOT) {
+/** Value and type names exported from an entry point (src/index.ts by default). */
+export function packageExports(root = ROOT, entry = "src/index.ts") {
   const values = new Set();
   const types = new Set();
-  for (const statement of parse(resolve(root, "src/index.ts")).statements) {
+  for (const statement of parse(resolve(root, entry)).statements) {
     if (
       !ts.isExportDeclaration(statement) ||
       !statement.exportClause ||
@@ -183,6 +183,8 @@ export function agentData(root = ROOT) {
     ),
     templates: pageTemplates(root, components),
     exports: packageExports(root),
+    // @tonycodes-ui/mortar/email, for the audit's import checks.
+    emailExports: packageExports(root, "src/email.ts"),
     examples,
     inherited,
     inheritedSets,

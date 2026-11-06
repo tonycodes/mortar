@@ -6,6 +6,8 @@ The first Linux images were rendered on Ubuntu 24.04 by [candidate run 385969209
 
 The nine components and two templates added later (Button, Tabs, TabNav, DataTable, Calendar, Pricing, Hero, ProductOverview, ShoppingCart, `saas-landing`, `cart-page`) were rendered for Linux by [candidate run 39311215642](https://github.com/tonycodes/mortar/actions/runs/39311215642).
 
+The twelve email images (`email-<template>-375` and `email-<template>-600`, [#91](https://github.com/tonycodes/mortar/issues/91)) render each template from `@tonycodes-ui/mortar/email` as a mail client shows it, light only. The macOS images were rendered locally and the Linux images by the candidate run on the email pull request.
+
 ## linux
 
 ### AppShell-dark-1280

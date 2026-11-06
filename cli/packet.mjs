@@ -132,6 +132,11 @@ const PURPOSES = [
   },
 ];
 
+// A brief about emails the product sends. Emails use @tonycodes-ui/mortar/email,
+// not the app components, so the packet points there.
+const EMAIL_WORDS =
+  /\b(?:(?:transactional|verification|verify|welcome|invite|invitation|receipt|order confirmation|confirmation|password reset|reset|magic[\s-]link|sign[\s-]in|notification|digest|billing)\s+e-?mails?|e-?mail\s+templates?)\b/i;
+
 /** Pick components for a free-text brief, with the reason for each. */
 export function chooseForBrief(data, brief) {
   const purposes = PURPOSES.filter((p) => p.words.test(brief));
@@ -207,6 +212,8 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
   const guides = ["design", "conventions", "theming"];
   if (usesAuth || purposes.some((p) => p.id === "auth"))
     guides.push("auth-flows");
+  const emails = !!brief && EMAIL_WORDS.test(brief);
+  if (emails) guides.push("email");
   return {
     package: data.packageName,
     version: data.version,
@@ -256,6 +263,16 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
       instruction: p.instruction,
     })),
     conventions: data.guide("conventions"),
+    ...(emails
+      ? {
+          email: {
+            import: `${data.packageName}/email`,
+            install: "npm install @react-email/components",
+            notes:
+              "Emails can't use the app components or styles.css: email clients don't load stylesheets. Build them from the Email components and templates, themed with emailTheme(brand), and send both parts of renderEmail (get_guide email).",
+          },
+        }
+      : {}),
     guides,
     next: [
       "Compose with named imports from the package; keep product names, data, routes and actions in props and slots.",

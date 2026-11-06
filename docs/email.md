@@ -114,3 +114,13 @@ Send a password reset only to an address that has an account, and show the same 
 - Don't rely on hover, scripts or forms. Email clients remove them.
 - Keep each email under about 100 KB of HTML. Gmail clips longer messages behind a "View entire message" link.
 - Before a release, check new emails in real clients (Gmail, Outlook for Windows, Apple Mail) with a service such as Litmus or Email on Acid.
+
+## Checks
+
+`npx mortar audit` (or the MCP `audit_app` tool) treats a file that imports `@tonycodes-ui/mortar/email` or React Email as an email:
+
+- **`email-app-import`** reports an app component or `styles.css` imported into an email, and names the email component to use (`Button` → `EmailButton`, `Notice` → `EmailCallout`, `OrderSummary` → `EmailSummary`).
+- **`email-peer-missing`** reports a project that imports the email entry without `@react-email/components` in its package.json.
+- Named imports from `@tonycodes-ui/mortar/email` are checked against what it exports.
+- Raw `<table>` and other elements in an email are not reported, because email layout is tables.
+- A service that only sends email isn't asked for `styles.css` or a ThemeProvider.

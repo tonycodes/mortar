@@ -35,6 +35,11 @@ export const GUIDES = {
     summary:
       "Sign-in and registration: each step mapped to components, autocomplete values, validation, security and accessibility.",
   },
+  email: {
+    file: "docs/email.md",
+    summary:
+      "Transactional email from @tonycodes-ui/mortar/email: emailTheme, the Email components, the templates (verify email, magic link, password reset, invite, receipt, notification) and renderEmail.",
+  },
   "migrating-0.6": {
     file: "docs/migrating-to-0.6.md",
     summary: "Every prop and markup change from 0.5 to 0.6.",
