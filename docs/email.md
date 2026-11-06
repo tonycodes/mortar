@@ -58,38 +58,53 @@ Emails render light. Most clients either ignore a dark design or recolour it the
 
 ## Components
 
-| Component      | Use                                                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `EmailShell`   | The whole email: the inbox `preview` line, an optional `logo`, a card up to 600px wide and a `footer`. It sets the theme for the components inside it. |
-| `EmailHeading` | `level={1}` is the email's title (once per email); `level={2}` is a section.                                                                           |
-| `EmailText`    | A paragraph, 16px. `tone="muted"` and `size="sm"` are for details such as an expiry time.                                                              |
-| `EmailButton`  | The main action. It keeps its padding in Outlook for Windows. Follow it with the URL as an `EmailLink`, for clients that block buttons.                |
-| `EmailLink`    | An inline link. Without children it shows the URL itself.                                                                                              |
-| `EmailCode`    | A one-time code, large and spaced.                                                                                                                     |
+| Component      | Use                                                                                                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `EmailShell`   | The whole email: the inbox `preview` line, an optional `logo`, a card up to 600px wide and a `footer`. It sets the theme for the components inside it.                           |
+| `EmailHeading` | `level={1}` is the email's title (once per email); `level={2}` is a section.                                                                                                     |
+| `EmailText`    | A paragraph, 16px. `tone="muted"` and `size="sm"` are for details such as an expiry time.                                                                                        |
+| `EmailButton`  | The main action. It keeps its padding in Outlook for Windows. Follow it with the URL as an `EmailLink`, for clients that block buttons.                                          |
+| `EmailLink`    | An inline link. Without children it shows the URL itself.                                                                                                                        |
+| `EmailCode`    | A one-time code, large and spaced.                                                                                                                                               |
+| `EmailCallout` | A highlighted block with an optional `title`. `tone` (`info`, `success`, `warning`, `danger`) colours its edge; `neutral`, the default, is an aside such as a quoted message.    |
+| `EmailDivider` | A rule between sections.                                                                                                                                                         |
+| `EmailSummary` | A receipt's `items` (name, preformatted `price`, optional `quantity` and `meta`), cost `lines` and `total`, as OrderSummary takes them. In the plain-text part it reads as rows. |
 
-Links and the logo need absolute `https://` URLs (`EmailLink` also takes `mailto:`), because the email is read away from your site. Anything else throws.
+`EmailShell` takes `dir="rtl"`, and the components that place things at the start or end follow it: the callout's edge and the summary's amounts.
+
+Links and the logo need absolute `http://` or `https://` URLs (`EmailLink` also takes `mailto:`), because the email is read away from your site. Anything else, such as a relative or `javascript:` URL, throws.
 
 Compose your own email from these:
 
 ```tsx
 <EmailShell
-  preview="Ana invited you to Hive"
+  preview="3 tasks are due this week"
   theme={theme}
-  footer="Sent by Hive."
+  footer="You get this summary every Monday."
 >
-  <EmailHeading>Join Ana on Hive</EmailHeading>
-  <EmailText>Ana invited you to the Design workspace.</EmailText>
-  <EmailButton href={inviteUrl}>Accept invitation</EmailButton>
+  <EmailHeading>Your week in Hive</EmailHeading>
+  <EmailText>3 tasks are due this week.</EmailText>
+  <EmailCallout tone="warning" title="Overdue">
+    Launch checklist, due Friday
+  </EmailCallout>
+  <EmailButton href={tasksUrl}>Open your tasks</EmailButton>
 </EmailShell>
 ```
 
 ## Templates
 
-| Template      | Auth step                           | Props                                                                                               |
-| ------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `VerifyEmail` | [Verify email](auth-flows.md#steps) | `productName`, and a `code`, an `href` or both; optional `recipient`, `expiresIn`, `logo`, `footer` |
+Every template takes `productName`, and optionally `theme`, `logo`, `footer` (replacing its "why you got this" line), `lang` and `dir`. Times and amounts are preformatted strings, so you choose the locale.
 
-More templates (magic link, password reset, invite, receipt and notification) are planned in [#91](https://github.com/tonycodes/mortar/issues/91).
+| Template        | Use                                               | Props                                                                                                                   |
+| --------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `VerifyEmail`   | The [verify-email step](auth-flows.md#steps)      | A `code`, an `href` or both; optional `recipient`, `expiresIn`                                                          |
+| `MagicLink`     | A passwordless sign-in link, as SignInPanel sends | `href`; optional `expiresIn`, `requestedFrom` (e.g. "Chrome on macOS, near London")                                     |
+| `PasswordReset` | The [reset-password step](auth-flows.md#steps)    | `href`; optional `recipient`, `expiresIn`, `requestedFrom`                                                              |
+| `Invite`        | An invitation to a workspace                      | `inviterName`, `href`; optional `workspaceName`, `message` (the inviter's note, quoted), `expiresIn`                    |
+| `Receipt`       | An order confirmation or receipt                  | `orderNumber`, `date`, `items`, `total`; optional `lines`, `paymentMethod`, `href` ("View order"), `title`              |
+| `Notification`  | A product notification                            | `title`, `children` (a string becomes a paragraph); optional `action` (`{ label, href }`), `preview`, `preferencesHref` |
+
+Send a password reset only to an address that has an account, and show the same "check your email" page either way, so the form never reveals whether an account exists.
 
 ## Rules
 

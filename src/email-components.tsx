@@ -1,4 +1,4 @@
-/* Transactional email: @tonycodes-ui/mortar/email. Built on React Email,
+/* Email components for @tonycodes-ui/mortar/email. Built on React Email,
    which renders the table layout and inline styles email clients need; these
    components give it Mortar's tokens, brand and copy. Nothing here uses
    Mortar's stylesheet or app components, which email clients cannot run.
@@ -16,6 +16,7 @@ import {
   Container,
   Head,
   Heading,
+  Hr,
   Html,
   Img,
   Link,
@@ -23,20 +24,29 @@ import {
   Text,
   render,
 } from "@react-email/components";
+import type { Tone } from "./primitives.js";
 import { emailTheme, type EmailTheme } from "./email-theme.js";
 
-export { emailTheme } from "./email-theme.js";
-export type { EmailTheme } from "./email-theme.js";
-
-const ThemeContext = createContext<EmailTheme | undefined>(undefined);
+const ShellContext = createContext<
+  { theme: EmailTheme; dir: "ltr" | "rtl" } | undefined
+>(undefined);
 let neutral: EmailTheme | undefined;
 /** The theme from the enclosing EmailShell, or Mortar's neutral theme. */
 function useTheme(): EmailTheme {
-  return useContext(ThemeContext) ?? (neutral ??= emailTheme());
+  return useContext(ShellContext)?.theme ?? (neutral ??= emailTheme());
+}
+/* Email clients don't support logical properties, so the inline start and
+   end are worked out from the shell's direction. */
+function useSides() {
+  const rtl = useContext(ShellContext)?.dir === "rtl";
+  return {
+    start: rtl ? "right" : "left",
+    end: rtl ? "left" : "right",
+  } as const;
 }
 
 /* Links leave the mail client, so only web and mail addresses are allowed. */
-function assertHref(href: string, component: string, mail = false) {
+export function assertHref(href: string, component: string, mail = false) {
   if (!(mail ? /^(?:https?:|mailto:)/i : /^https?:\/\//i).test(href.trim()))
     throw new Error(
       `Mortar ${component} needs an absolute ${mail ? "http(s) or mailto" : "http(s)"} URL: "${href}"`,
@@ -107,7 +117,7 @@ export function EmailShell({
   const theme = given ?? emailTheme();
   if (logo) assertHref(logo.src, "EmailShell logo");
   return (
-    <ThemeContext.Provider value={theme}>
+    <ShellContext.Provider value={{ theme, dir }}>
       <Html lang={lang} dir={dir}>
         <Head>
           <meta name="color-scheme" content="light" />
@@ -162,7 +172,7 @@ export function EmailShell({
           </Container>
         </Body>
       </Html>
-    </ThemeContext.Provider>
+    </ShellContext.Provider>
   );
 }
 
@@ -270,7 +280,8 @@ export function EmailLink({ href, children }: EmailLinkProps) {
       style={{
         color: theme.link,
         textDecoration: "underline",
-        wordBreak: "break-all",
+        // A bare URL may break anywhere so it can't widen the email.
+        wordBreak: children === undefined ? "break-all" : undefined,
       }}
     >
       {children ?? href}
@@ -312,6 +323,180 @@ export function EmailCode({ code }: EmailCodeProps) {
   );
 }
 
+export interface EmailCalloutProps {
+  /** Colours the edge: a status, or `neutral` for an aside such as a quoted message. */
+  tone?: Tone;
+  title?: string;
+  children: ReactNode;
+}
+/** A highlighted block: a warning, a status or a quoted personal message. */
+export function EmailCallout({
+  tone = "neutral",
+  title,
+  children,
+}: EmailCalloutProps) {
+  const theme = useTheme();
+  const { start } = useSides();
+  const edge = tone === "neutral" ? theme.line : theme[tone];
+  return (
+    <Cell style={{ padding: "8px 0 24px" }}>
+      <Cell
+        style={{
+          backgroundColor: theme.sunken,
+          [start === "left" ? "borderLeft" : "borderRight"]:
+            `4px solid ${edge}`,
+          padding: "16px 20px",
+          fontFamily: theme.font,
+          fontSize: "15px",
+          lineHeight: "22px",
+          color: theme.ink,
+        }}
+      >
+        {title && (
+          <Text
+            style={{
+              margin: "0 0 4px",
+              fontFamily: theme.font,
+              fontSize: "15px",
+              lineHeight: "22px",
+              fontWeight: 600,
+              color: theme.ink,
+            }}
+          >
+            {title}
+          </Text>
+        )}
+        {children}
+      </Cell>
+    </Cell>
+  );
+}
+
+/** A rule between sections of an email. */
+export function EmailDivider() {
+  const theme = useTheme();
+  return (
+    <Hr
+      style={{
+        margin: "8px 0 24px",
+        border: "none",
+        borderTop: `1px solid ${theme.line}`,
+      }}
+    />
+  );
+}
+
+export interface EmailSummaryItem {
+  name: string;
+  /** Preformatted, e.g. "£42.00". */
+  price: string;
+  quantity?: number;
+  /** Chosen options, e.g. "Natural · Small". */
+  meta?: string;
+}
+export interface EmailSummaryProps {
+  /** Line items, each with its preformatted price. */
+  items?: EmailSummaryItem[];
+  /** Cost lines under the items, as OrderSummary takes them: subtotal, shipping, tax. */
+  lines?: { label: string; value: string }[];
+  total: { label: string; value: string };
+}
+/**
+ * A receipt's items, cost lines and total, as a two-column table: labels at
+ * the start, amounts at the end. Amounts are preformatted strings, as in
+ * Mortar's commerce components.
+ */
+export function EmailSummary({
+  items = [],
+  lines = [],
+  total,
+}: EmailSummaryProps) {
+  const theme = useTheme();
+  const { start, end } = useSides();
+  const cell = (side: "start" | "end", extra: CSSProperties = {}) => ({
+    padding: "8px 0",
+    textAlign: side === "start" ? start : end,
+    verticalAlign: "top",
+    fontFamily: theme.font,
+    fontSize: "15px",
+    lineHeight: "22px",
+    color: theme.ink,
+    ...extra,
+  });
+  const rule = `1px solid ${theme.line}`;
+  return (
+    <Cell style={{ padding: "8px 0 24px" }}>
+      <table
+        data-summary=""
+        role="presentation"
+        width="100%"
+        border={0}
+        cellPadding={0}
+        cellSpacing={0}
+      >
+        <tbody>
+          {items.map((item, i) => (
+            <tr key={i}>
+              <td style={cell("start", { borderBottom: rule })}>
+                {item.name}
+                {item.quantity !== undefined && item.quantity !== 1 && (
+                  <span style={{ color: theme.muted }}> × {item.quantity}</span>
+                )}
+                {item.meta && (
+                  <>
+                    <br />
+                    <span style={{ fontSize: "13px", color: theme.muted }}>
+                      {item.meta}
+                    </span>
+                  </>
+                )}
+              </td>
+              <td
+                style={cell("end", {
+                  borderBottom: rule,
+                  whiteSpace: "nowrap",
+                  [start === "left" ? "paddingLeft" : "paddingRight"]: "16px",
+                })}
+              >
+                {item.price}
+              </td>
+            </tr>
+          ))}
+          {lines.map((line, i) => (
+            <tr key={`line-${i}`}>
+              <td style={cell("start", { color: theme.secondary })}>
+                {line.label}
+              </td>
+              <td
+                style={cell("end", {
+                  color: theme.secondary,
+                  whiteSpace: "nowrap",
+                })}
+              >
+                {line.value}
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <td style={cell("start", { borderTop: rule, fontWeight: 600 })}>
+              {total.label}
+            </td>
+            <td
+              style={cell("end", {
+                borderTop: rule,
+                fontWeight: 600,
+                whiteSpace: "nowrap",
+              })}
+            >
+              {total.value}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </Cell>
+  );
+}
+
 export interface RenderedEmail {
   html: string;
   /** The plain-text alternative: send it with the HTML. */
@@ -325,89 +510,19 @@ export interface RenderedEmail {
 export async function renderEmail(element: ReactNode): Promise<RenderedEmail> {
   const [html, text] = await Promise.all([
     render(element),
-    render(element, { plainText: true }),
+    render(element, {
+      plainText: true,
+      htmlToTextOptions: {
+        // A summary reads as rows of label and amount, not run together.
+        selectors: [
+          {
+            selector: "table[data-summary]",
+            format: "dataTable",
+            options: { maxColumnWidth: 48 },
+          },
+        ],
+      },
+    }),
   ]);
   return { html, text };
-}
-
-/* Templates */
-
-export interface VerifyEmailProps {
-  /** Your product, as the person knows it. */
-  productName: string;
-  /** A one-time code to type in, shown large. */
-  code?: string;
-  /** A confirmation link, shown as a button. Give `code`, `href` or both. */
-  href?: string;
-  /** The address being confirmed. */
-  recipient?: string;
-  /** Preformatted, e.g. "10 minutes". */
-  expiresIn?: string;
-  theme?: EmailTheme;
-  logo?: EmailLogo;
-  /** Replaces the default "if this wasn't you" footer. */
-  footer?: ReactNode;
-  lang?: string;
-}
-/**
- * Confirms an email address with a code, a link or both: the email for the
- * auth flow's verify-email step.
- */
-export function VerifyEmail({
-  productName,
-  code,
-  href,
-  recipient,
-  expiresIn,
-  theme,
-  logo,
-  footer,
-  lang,
-}: VerifyEmailProps) {
-  if (!code && !href)
-    throw new Error("Mortar VerifyEmail needs a `code`, an `href` or both.");
-  const address = recipient ?? "your email address";
-  return (
-    <EmailShell
-      preview={`Confirm your email address for ${productName}`}
-      theme={theme}
-      logo={logo}
-      lang={lang}
-      footer={
-        footer ??
-        `You received this email because this address was used to sign up for ${productName}. If that wasn't you, you can ignore it.`
-      }
-    >
-      <EmailHeading>Confirm your email address</EmailHeading>
-      {code && (
-        <>
-          <EmailText>
-            Enter this code in {productName} to confirm {address}:
-          </EmailText>
-          <EmailCode code={code} />
-        </>
-      )}
-      {href && (
-        <>
-          <EmailText>
-            {code
-              ? "Or confirm with one click:"
-              : `Confirm ${address} to finish setting up your ${productName} account.`}
-          </EmailText>
-          <EmailButton href={href}>Confirm email address</EmailButton>
-          <EmailText tone="muted" size="sm">
-            If the button doesn't work, paste this link into your browser:{" "}
-            <EmailLink href={href} />
-          </EmailText>
-        </>
-      )}
-      {expiresIn && (
-        <EmailText tone="muted" size="sm">
-          {code && href
-            ? `This code and link expire in ${expiresIn}.`
-            : `This ${code ? "code" : "link"} expires in ${expiresIn}.`}
-        </EmailText>
-      )}
-    </EmailShell>
-  );
 }

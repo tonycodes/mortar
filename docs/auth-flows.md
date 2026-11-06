@@ -27,7 +27,7 @@ The playground has a page template for each step (`?recipe=<id>`).
 | Verify email     | `verify-email`             | AuthLayout, CodeInput, Button, a resend Button with a countdown, a "Change your email" link                                                                                 | `CodeInput` (`one-time-code`, `inputmode="numeric"`)                                                                                                                           |
 | Two-factor       | `two-factor`               | AuthLayout, CodeInput, Button, a ghost Button that switches to a recovery code                                                                                              | Authenticator: `CodeInput`. Recovery: `CodeInput alphanumeric length={8}`                                                                                                      |
 
-The email for the verify-email step is `VerifyEmail` from `@tonycodes-ui/mortar/email`. See [Transactional email](email.md).
+The emails for these steps come from `@tonycodes-ui/mortar/email`: `VerifyEmail` for verify email, `PasswordReset` for forgot password, and `MagicLink` for a passwordless sign-in with SignInPanel. See [Transactional email](email.md).
 
 ## Validation and errors
 

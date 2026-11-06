@@ -4,7 +4,15 @@ import { readFile } from "node:fs/promises";
 import { createElement as h } from "react";
 import {
   EmailButton,
+  EmailCallout,
   EmailCode,
+  EmailDivider,
+  EmailSummary,
+  Invite,
+  MagicLink,
+  Notification,
+  PasswordReset,
+  Receipt,
   EmailHeading,
   EmailLink,
   EmailShell,
@@ -262,4 +270,233 @@ test("the app entry point never loads React Email", async () => {
     pkg.peerDependenciesMeta["@react-email/components"].optional,
     true,
   );
+});
+
+const RECEIPT = {
+  productName: "Hive",
+  orderNumber: "HV-1042",
+  date: "6 November 2026",
+  items: [
+    { name: "Team plan, annual", price: "£480.00", meta: "5 seats" },
+    { name: "Extra storage", quantity: 2, price: "£40.00" },
+    { name: "Support", quantity: 1, price: "£0.00" },
+  ],
+  lines: [
+    { label: "Subtotal", value: "£520.00" },
+    { label: "VAT (20%)", value: "£104.00" },
+  ],
+  total: { label: "Total", value: "£624.00" },
+  paymentMethod: "Visa ending 4242",
+  href: "https://hive.example/orders/1042",
+};
+const TEMPLATES = {
+  MagicLink: h(MagicLink, {
+    productName: "Hive",
+    href: "https://hive.example/signin?t=x",
+    expiresIn: "15 minutes",
+    requestedFrom: "Chrome on macOS, near London",
+  }),
+  PasswordReset: h(PasswordReset, {
+    productName: "Hive",
+    href: "https://hive.example/reset?t=x",
+    recipient: "ana@example.com",
+    expiresIn: "1 hour",
+  }),
+  Invite: h(Invite, {
+    productName: "Hive",
+    inviterName: "Ana Kovač",
+    workspaceName: "Design",
+    href: "https://hive.example/join/x",
+    message: "Come and join us!",
+    expiresIn: "7 days",
+  }),
+  Receipt: h(Receipt, RECEIPT),
+  Notification: h(
+    Notification,
+    {
+      productName: "Hive",
+      title: "Deploy failed on production",
+      action: { label: "View deploy", href: "https://hive.example/d/9" },
+      preferencesHref: "https://hive.example/settings/email",
+    },
+    "The deploy of main failed at the migrate step.",
+  ),
+};
+
+for (const [name, element] of Object.entries(TEMPLATES))
+  test(`${name} renders self-contained HTML and a complete plain-text part`, async () => {
+    const { html, text } = await renderEmail(element);
+    assert.doesNotMatch(
+      html,
+      /<style|rel="stylesheet"|class="|var\(|color-mix\(|oklch\(/,
+    );
+    assert.doesNotMatch(
+      html,
+      /<table[^>]*style="[^"]*(?:padding|margin|background)/,
+    );
+    assert.equal((html.match(/<h1[ >]/g) ?? []).length, 1, "one title");
+    assert.match(text, /You received|If you didn't ask/); // says why it came
+    assert.ok(html.length < 100_000);
+    for (const href of html.matchAll(/href="([^"]+)"/g))
+      assert.match(href[1], /^(?:https:|mailto:)/, href[1]);
+    // Every link in the HTML is in the text too.
+    for (const href of new Set(
+      [...html.matchAll(/<a href="([^"]+)"/g)].map((m) =>
+        m[1].replaceAll("&amp;", "&"),
+      ),
+    ))
+      assert.ok(text.includes(href), `${href} in text`);
+  });
+
+test("templates say why they were sent, and what each link does", async () => {
+  const magic = (await renderEmail(TEMPLATES.MagicLink)).text;
+  assert.match(magic, /Sign in to Hive https:\/\/hive\.example\/signin\?t=x/);
+  assert.match(magic, /This link expires in 15 minutes\./);
+  assert.match(magic, /Requested from Chrome on macOS, near London\./);
+  assert.match(magic, /If that wasn't you, you can ignore it\./);
+
+  const reset = (await renderEmail(TEMPLATES.PasswordReset)).text;
+  assert.match(
+    reset,
+    /reset the password for the Hive account ana@example\.com\./,
+  );
+  assert.match(reset, /Your password won't change\./);
+
+  const invite = await renderEmail(TEMPLATES.Invite);
+  assert.match(invite.text, /ANA KOVAČ INVITED YOU TO DESIGN/);
+  assert.match(invite.text, /Message from Ana Kovač\s+Come and join us!/);
+  assert.match(invite.text, /This invitation expires in 7 days\./);
+  assert.match(
+    invite.html,
+    /data-skip-in-text="true">Ana Kovač invited you to Design</,
+  ); // preview
+
+  const noWorkspace = await renderEmail(
+    h(Invite, {
+      productName: "Hive",
+      inviterName: "Ana",
+      href: "https://hive.example/j",
+    }),
+  );
+  assert.match(
+    noWorkspace.text,
+    /ANA INVITED YOU TO HIVE\s+Join Ana on Hive\./,
+  );
+
+  const note = await renderEmail(TEMPLATES.Notification);
+  assert.match(note.html, /<p [^>]*>The deploy of main failed/); // a string body is a paragraph
+  assert.match(note.text, /View deploy https:\/\/hive\.example\/d\/9/);
+  assert.match(
+    note.text,
+    /notification settings in Hive\. Manage email preferences https:/,
+  );
+  const custom = await renderEmail(
+    h(
+      Notification,
+      { productName: "Hive", title: "Hi", footer: "Sent by Hive." },
+      "Body",
+    ),
+  );
+  assert.match(custom.text, /Sent by Hive\.$/);
+  assert.doesNotMatch(custom.text, /notification settings/);
+});
+
+test("a personal message is quoted as text, never as markup", async () => {
+  const { html } = await renderEmail(
+    h(Invite, {
+      productName: "Hive",
+      inviterName: "Ana",
+      href: "https://hive.example/j",
+      message: '<a href="https://evil.example">Claim prize</a>',
+    }),
+  );
+  assert.doesNotMatch(html, /evil\.example">/);
+  assert.match(html, /&lt;a href=/);
+});
+
+test("template links must be absolute web addresses too", async () => {
+  for (const element of [
+    h(Invite, {
+      productName: "Hive",
+      inviterName: "Ana",
+      href: "javascript:alert(1)",
+    }),
+    h(MagicLink, { productName: "Hive", href: "/signin" }),
+    h(Receipt, { ...RECEIPT, href: "data:text/html,x" }),
+    h(
+      Notification,
+      { productName: "Hive", title: "x", action: { label: "Go", href: "x" } },
+      "x",
+    ),
+  ])
+    await assert.rejects(renderEmail(element), /needs an absolute/);
+});
+
+test("EmailSummary lists items, cost lines and total, as rows in plain text", async () => {
+  const { html, text } = await renderEmail(h(Receipt, RECEIPT));
+  for (const row of [
+    /Team plan, annual +£480\.00\n5 seats/,
+    /Extra storage × 2 +£40\.00/,
+    /Support +£0\.00/, // a quantity of 1 isn't shown
+    /Subtotal +£520\.00/,
+    /VAT \(20%\) +£104\.00/,
+    /Total +£624\.00/,
+  ])
+    assert.match(text, row);
+  assert.doesNotMatch(text, /Support × 1/);
+  assert.match(text, /Paid with Visa ending 4242\./);
+  // Amounts sit at the end and don't wrap; the total is bold.
+  assert.match(html, /text-align:right;[^"]*white-space:nowrap[^"]*">£480\.00/);
+  assert.match(html, /font-weight:600[^"]*">Total</);
+});
+
+test("right-to-left emails mirror the summary and callout", async () => {
+  const ltr = await renderEmail(
+    h(EmailShell, { preview: "x" }, h(EmailCallout, { tone: "danger" }, "x")),
+  );
+  assert.match(ltr.html, /border-left:4px solid #c70014/);
+  const rtl = await renderEmail(
+    h(Receipt, { ...RECEIPT, dir: "rtl", lang: "ar" }),
+  );
+  assert.match(rtl.html, /<html dir="rtl" lang="ar">/);
+  assert.match(rtl.html, /text-align:right[^"]*">Team plan, annual/);
+  assert.match(rtl.html, /text-align:left;[^"]*">£480\.00/);
+  const callout = await renderEmail(
+    h(
+      EmailShell,
+      { preview: "x", dir: "rtl" },
+      h(EmailCallout, { tone: "danger" }, "x"),
+    ),
+  );
+  assert.match(callout.html, /border-right:4px solid #c70014/);
+});
+
+test("callouts take Mortar's tones; neutral is an aside", async () => {
+  const theme = emailTheme();
+  for (const tone of ["info", "success", "warning", "danger"]) {
+    const { html } = await renderEmail(
+      h(EmailCallout, { tone, title: "Title" }, "Body"),
+    );
+    assert.match(html, new RegExp(`border-left:4px solid ${theme[tone]}`));
+    assert.ok(contrast(theme.ink, theme.sunken) >= 4.5);
+  }
+  const { html } = await renderEmail(h(EmailCallout, null, "Aside"));
+  assert.match(html, new RegExp(`border-left:4px solid ${theme.line}`));
+});
+
+test("EmailDivider is a themed rule; only bare URLs break anywhere", async () => {
+  const { html } = await renderEmail(h(EmailDivider));
+  assert.match(html, /<hr [^>]*border-top:1px solid #e5e5ea/);
+  const named = await renderEmail(
+    h(
+      EmailLink,
+      { href: "https://hive.example/s" },
+      "Manage email preferences",
+    ),
+  );
+  assert.doesNotMatch(named.html, /word-break/);
+  const bare = await renderEmail(
+    h(EmailLink, { href: "https://hive.example/s" }),
+  );
+  assert.match(bare.html, /word-break:break-all/);
 });
