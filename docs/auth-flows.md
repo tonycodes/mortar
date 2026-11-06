@@ -27,6 +27,8 @@ The playground has a page template for each step (`?recipe=<id>`).
 | Verify email     | `verify-email`             | AuthLayout, CodeInput, Button, a resend Button with a countdown, a "Change your email" link                                                                                 | `CodeInput` (`one-time-code`, `inputmode="numeric"`)                                                                                                                           |
 | Two-factor       | `two-factor`               | AuthLayout, CodeInput, Button, a ghost Button that switches to a recovery code                                                                                              | Authenticator: `CodeInput`. Recovery: `CodeInput alphanumeric length={8}`                                                                                                      |
 
+The email for the verify-email step is `VerifyEmail` from `@tonycodes-ui/mortar/email`. See [Transactional email](email.md).
+
 ## Validation and errors
 
 - Validate on submit, not while the person is still typing. Clear a field's error as soon as they change it.
