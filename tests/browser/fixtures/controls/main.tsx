@@ -18,7 +18,6 @@ import {
   Toaster,
   type ToastItem,
 } from "../../../../src/index.js";
-import { icons } from "../../../../src/icons.js";
 import "../../../../playground/styles.css";
 
 const scenario = new URLSearchParams(location.search).get("case");
@@ -58,12 +57,23 @@ const ranges = [
 
 // #104: labeled Input adornments sit inside the text box, not against the label.
 function InputAdornments() {
+  const searchIcon = (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
+      <circle cx="9" cy="9" r="6" />
+      <path d="M14 14l3.5 3.5" />
+    </svg>
+  );
   return (
     <div style={{ padding: 16, maxWidth: 360 }}>
       <Input
         label="Search restaurants"
         type="search"
-        leadingIcon={icons.search}
+        leadingIcon={searchIcon}
         defaultValue="Noodle"
       />
       <Input label="Tax rate" type="number" suffix="%" defaultValue="8.5" />
