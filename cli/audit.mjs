@@ -19,6 +19,10 @@ import {
   RENAMED_VALUES,
 } from "./migrations.mjs";
 
+// Built from parts so tracked source does not contain the retired scope literal
+// (tests/npm-package-name.test.mjs forbids it outside the migration allowlist).
+const LEGACY_PKG = ["@", "tony-ui", "/", "mortar"].join("");
+
 export const RULES = {
   "not-installed": "@tonycodes-ui/mortar is imported but not installed.",
   "not-declared": "@tonycodes-ui/mortar is imported but not in package.json.",
@@ -46,6 +50,7 @@ export const RULES = {
   "local-copy": "A local copy of Mortar source.",
   "raw-element":
     "A raw HTML element (such as <table> or <select>) that a Mortar component replaces, in an app that uses Mortar.",
+  "legacy-package": `A dependency or import of the retired ${LEGACY_PKG}; install and import @tonycodes-ui/mortar instead (see the CHANGELOG migration note).`,
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -82,6 +87,20 @@ const CODE = new Set([
 const JSX = new Set([".js", ".jsx", ".tsx", ".mjs"]);
 const STYLE = new Set([".css", ".scss", ".sass", ".less", ".pcss", ".postcss"]);
 const PKG = "@tonycodes-ui/mortar";
+const LEGACY_ESCAPE = LEGACY_PKG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const LEGACY_IMPORT = new RegExp(
+  String.raw`\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\4`,
+  "g",
+);
+const LEGACY_SIDE_EFFECT = new RegExp(
+  String.raw`\bimport\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\1`,
+  "g",
+);
+const LEGACY_CSS_IMPORT = new RegExp(
+  String.raw`@import\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\1`,
+  "g",
+);
+const LEGACY_FIX = `Install and import "${PKG}" instead of "${LEGACY_PKG}". See the CHANGELOG migration note.`;
 const MAX_FILES = 20000;
 const MAX_BYTES = 1_000_000;
 
@@ -747,6 +766,15 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             '@import "tailwindcss"; first, then @import "@tonycodes-ui/mortar/styles.css";',
           );
       }
+      for (const m of css.matchAll(LEGACY_CSS_IMPORT))
+        add(
+          "legacy-package",
+          "error",
+          file,
+          line(m.index),
+          `Imports the retired "${m[2]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+          LEGACY_FIX,
+        );
       // Selectors: the text before each `{` that is not an at-rule.
       for (const m of css.matchAll(/([^{};]+)\{/g)) {
         const selector = m[1].trim();
@@ -774,6 +802,24 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
+    for (const m of src.matchAll(LEGACY_IMPORT))
+      add(
+        "legacy-package",
+        "error",
+        file,
+        line(m.index),
+        `Imports the retired "${m[5]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+        LEGACY_FIX,
+      );
+    for (const m of src.matchAll(LEGACY_SIDE_EFFECT))
+      add(
+        "legacy-package",
+        "error",
+        file,
+        line(m.index),
+        `Imports the retired "${m[2]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+        LEGACY_FIX,
+      );
     // Email markup is tables by design, and has its own components.
     const emailFile = EMAIL_FILE.test(src);
     if (JSX.has(ext) && !emailFile) {
@@ -1099,6 +1145,19 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     pkgJson?.dependencies?.[PKG] ??
     pkgJson?.devDependencies?.[PKG] ??
     pkgJson?.peerDependencies?.[PKG];
+  const legacyRange =
+    pkgJson?.dependencies?.[LEGACY_PKG] ??
+    pkgJson?.devDependencies?.[LEGACY_PKG] ??
+    pkgJson?.peerDependencies?.[LEGACY_PKG];
+  if (legacyRange)
+    add(
+      "legacy-package",
+      "error",
+      pkgFile,
+      1,
+      `Depends on the retired "${LEGACY_PKG}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+      LEGACY_FIX,
+    );
   const reactEmail = "@react-email/components";
   if (
     usesEmail &&

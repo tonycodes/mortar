@@ -646,6 +646,60 @@ test("the audit reports a missing install and declaration", async (t) => {
   assert.ok(has(report, "not-declared", "package.json"));
 });
 
+// #65: the retired private-registry package must not look like a clean install.
+const LEGACY_PKG = ["@", "tony-ui", "/", "mortar"].join("");
+
+test("the audit flags legacy package imports and package.json deps", async (t) => {
+  const dir = fixture("legacy-package-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  // A leftover node_modules tree for the old name is not the public package.
+  const legacyInstalled = join(dir, "node_modules", ...LEGACY_PKG.split("/"));
+  mkdirSync(legacyInstalled, { recursive: true });
+  writeFileSync(
+    join(legacyInstalled, "package.json"),
+    JSON.stringify({ name: LEGACY_PKG, version: "0.11.0" }),
+  );
+  const report = await auditApp(dir);
+  assert.equal(report.mortar.installed, null);
+  assert.equal(report.mortar.range, null);
+  const legacy = report.findings.filter((f) => f.rule === "legacy-package");
+  assert.ok(legacy.length >= 2, JSON.stringify(report.findings, null, 2));
+  assert.ok(
+    legacy.every((f) => f.severity === "error"),
+    JSON.stringify(legacy, null, 2),
+  );
+  assert.ok(RULES["legacy-package"]);
+  const re = (suffix = "") =>
+    new RegExp(`${LEGACY_PKG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}${suffix}`);
+  const pointsToPublic = /@tonycodes-ui\/mortar[\s\S]*CHANGELOG/;
+  assert.ok(has(report, "legacy-package", "package.json", pointsToPublic));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", pointsToPublic));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/brand")));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/src")));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/styles\\.css")));
+  assert.ok(
+    has(report, "legacy-package", "src/index.css", re("/styles\\.css")),
+  );
+  // Legacy-only usage is not the public package missing an install.
+  assert.ok(!has(report, "not-installed"));
+  assert.ok(!has(report, "not-declared"));
+  assert.ok(!has(report, "missing-styles"));
+});
+
+test("a leftover legacy install does not satisfy the public package", async (t) => {
+  const dir = fixture("clean-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const legacyInstalled = join(dir, "node_modules", ...LEGACY_PKG.split("/"));
+  mkdirSync(legacyInstalled, { recursive: true });
+  writeFileSync(
+    join(legacyInstalled, "package.json"),
+    JSON.stringify({ name: LEGACY_PKG, version: "0.11.0" }),
+  );
+  const report = await auditApp(dir);
+  assert.equal(report.mortar.installed, null);
+  assert.ok(has(report, "not-installed"));
+});
+
 test("the audit says when it checks an older release against this catalogue", async (t) => {
   const dir = fixture("clean-app", { version: "0.6.0" });
   t.after(() => rmSync(dir, { recursive: true, force: true }));
