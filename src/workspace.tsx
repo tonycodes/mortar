@@ -18,8 +18,8 @@ import {
   componentRoot,
   cx,
   useComponentName,
+  type OverlayPortal,
 } from "./internal.js";
-
 export interface SlideOverProps {
   open: boolean;
   onClose: () => void;
@@ -31,6 +31,11 @@ export interface SlideOverProps {
   size?: "md" | "lg" | "xl";
   /** Class on the sliding panel. */
   className?: string;
+  /**
+   * document (default) portals over the page. contained keeps the overlay
+   * inside the nearest ThemeProvider scope="container" host.
+   */
+  portal?: OverlayPortal;
 }
 export function SlideOver({
   open,
@@ -41,25 +46,59 @@ export function SlideOver({
   actions,
   size = "md",
   className,
+  portal = "document",
 }: SlideOverProps) {
+  const titleId = useId();
+  const panelClass = cx("m-slide-over", className);
+  const panelSize = size === "md" ? undefined : size;
+  const header = (
+    <header>
+      <div>
+        {portal === "contained" ? (
+          <h2 id={titleId}>{title}</h2>
+        ) : (
+          <DialogTitle>{title}</DialogTitle>
+        )}
+        {description &&
+          (portal === "contained" ? (
+            <p>{description}</p>
+          ) : (
+            <Description>{description}</Description>
+          ))}
+      </div>
+      <Button variant="ghost" onClick={onClose} aria-label="Close panel">
+        <Close />
+      </Button>
+    </header>
+  );
+  const body = (
+    <>
+      {header}
+      <div className="m-slide-over-body">{children}</div>
+      {actions && <footer className="m-actions">{actions}</footer>}
+    </>
+  );
   return (
-    <DialogFrame open={open} onClose={onClose} component="SlideOver">
-      <DialogPanel
-        className={cx("m-slide-over", className)}
-        data-size={size === "md" ? undefined : size}
-      >
-        <header>
-          <div>
-            <DialogTitle>{title}</DialogTitle>
-            {description && <Description>{description}</Description>}
-          </div>
-          <Button variant="ghost" onClick={onClose} aria-label="Close panel">
-            <Close />
-          </Button>
-        </header>
-        <div className="m-slide-over-body">{children}</div>
-        {actions && <footer className="m-actions">{actions}</footer>}
-      </DialogPanel>
+    <DialogFrame
+      open={open}
+      onClose={onClose}
+      component="SlideOver"
+      portal={portal}
+      labelledBy={portal === "contained" ? titleId : undefined}
+    >
+      {portal === "contained" ? (
+        <div
+          className={panelClass}
+          data-size={panelSize}
+          onClick={(event) => event.stopPropagation()}
+        >
+          {body}
+        </div>
+      ) : (
+        <DialogPanel className={panelClass} data-size={panelSize}>
+          {body}
+        </DialogPanel>
+      )}
     </DialogFrame>
   );
 }

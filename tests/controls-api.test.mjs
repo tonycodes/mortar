@@ -362,6 +362,6 @@ test("container ThemeProvider renders a light system appearance on the server", 
   );
   assert.match(
     markup,
-    /^<div data-m-component="ThemeProvider" data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light" class="frame">Hi<\/div>$/,
+    /^<div data-m-component="ThemeProvider" data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light" class="frame">Hi<div class="m-overlay-host"><\/div><\/div>$/,
   );
 });

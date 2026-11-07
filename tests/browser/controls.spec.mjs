@@ -67,6 +67,57 @@ for (const appearance of ["dark", "light"])
     expect(ring[1]).toBe(await tokenColor(page, "--m-focus", wrapper));
   });
 
+test("a contained modal stays inside the widget and leaves host controls usable", async ({
+  page,
+}) => {
+  await open(page, "contained-modal");
+  const widget = page.getByTestId("widget");
+  const hostAction = page.locator("#host-action");
+  await expect(hostAction).toBeVisible();
+
+  await page.getByRole("button", { name: "Customise item" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute("data-portal", "contained");
+
+  // The dialog lives under the widget overlay host, not the document body root.
+  expect(
+    await dialog.evaluate(
+      (el) =>
+        !!el.closest(".m-overlay-host") && !!el.closest("[data-testid=widget]"),
+    ),
+  ).toBe(true);
+  expect(
+    await dialog.evaluate(
+      (el) => el.parentElement?.id === "headlessui-portal-root",
+    ),
+  ).toBe(false);
+
+  const widgetBox = await widget.boundingBox();
+  const dialogBox = await dialog.boundingBox();
+  expect(widgetBox).toBeTruthy();
+  expect(dialogBox).toBeTruthy();
+  expect(dialogBox.x).toBeGreaterThanOrEqual(widgetBox.x - 1);
+  expect(dialogBox.y).toBeGreaterThanOrEqual(widgetBox.y - 1);
+  expect(dialogBox.x + dialogBox.width).toBeLessThanOrEqual(
+    widgetBox.x + widgetBox.width + 1,
+  );
+  expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(
+    widgetBox.y + widgetBox.height + 1,
+  );
+
+  // Host controls outside the widget stay clickable while the modal is open.
+  await hostAction.click();
+  await expect(dialog).toBeVisible();
+  await expect(hostAction).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Customise item" }),
+  ).toBeFocused();
+});
+
 test("a nested provider without navigate keeps the outer router", async ({
   page,
 }) => {
