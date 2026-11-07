@@ -2,6 +2,19 @@
   "name": "@tonycodes-ui/mortar",
   "version": "0.11.0",
   "description": "Mortar: a shared design foundation, application and marketing UI for React and Tailwind.",
+  "keywords": [
+    "react",
+    "tailwind",
+    "ui",
+    "design-system",
+    "components",
+    "accessibility",
+    "mcp",
+    "email"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
   "type": "module",
   "files": [
     "dist",
