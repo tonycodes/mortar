@@ -328,6 +328,7 @@ export function Banner({
   id,
   className,
 }: {
+  /** Phrasing content only (text, links, emphasis). Rendered inside a `<p>`. */
   children: ReactNode;
   action?: LinkAction;
   onDismiss?: () => void;

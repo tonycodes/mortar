@@ -74,6 +74,7 @@ export function AuthHeader({
 }: {
   logo?: ReactNode;
   title: string;
+  /** Phrasing content only; rendered inside a `<p>`. */
   description?: ReactNode;
   headingLevel: HeadingLevel;
   headingId: string;
@@ -95,6 +96,7 @@ export function AuthHeader({
 export interface AuthLayoutProps {
   /** The screen's heading, e.g. "Sign in to your account". */
   title: string;
+  /** Phrasing content only (text, links, emphasis). Rendered inside a `<p>`. */
   description?: ReactNode;
   /** Logo node above the heading. */
   logo?: ReactNode;

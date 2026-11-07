@@ -46,6 +46,8 @@ export const RULES = {
   "local-copy": "A local copy of Mortar source.",
   "raw-element":
     "A raw HTML element (such as <table> or <select>) that a Mortar component replaces, in an app that uses Mortar.",
+  "invalid-phrasing":
+    "A block HTML element in a phrasing-only slot that Mortar renders inside a <p>.",
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -254,14 +256,27 @@ const NAME = /[A-Za-z_$][\w$]*(?:[-:.][\w$]+)*/y;
 
 /**
  * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
- * for string literals (`a="x"` or `a={"x"}`), the value.
+ * for string literals (`a="x"` or `a={"x"}`), the value. Brace values also get
+ * `expression: { start, end }` covering the inner text. The returned array has
+ * `end` (index after the opening tag) and `selfClosing`.
  */
 export function jsxAttributes(src, i) {
   const attrs = [];
   const n = src.length;
   while (i < n) {
     while (i < n && /\s/.test(src[i])) i++;
-    if (src[i] === ">" || (src[i] === "/" && src[i + 1] === ">")) break;
+    if (src[i] === "/" && src[i + 1] === ">") {
+      i += 2;
+      attrs.end = i;
+      attrs.selfClosing = true;
+      return attrs;
+    }
+    if (src[i] === ">") {
+      i += 1;
+      attrs.end = i;
+      attrs.selfClosing = false;
+      return attrs;
+    }
     if (src[i] === "{") {
       i = skipBraces(src, i);
       continue;
@@ -283,6 +298,7 @@ export function jsxAttributes(src, i) {
         i = end + 1;
       } else if (q === "{") {
         const end = skipBraces(src, i);
+        attr.expression = { start: i + 1, end: end - 1 };
         const inner = src.slice(i + 1, end - 1).trim();
         const literal = inner.match(/^(["'`])([^"'`$\\]*)\1$/);
         if (literal) attr.value = literal[2];
@@ -291,7 +307,105 @@ export function jsxAttributes(src, i) {
     }
     attrs.push(attr);
   }
+  attrs.end = i;
+  attrs.selfClosing = false;
   return attrs;
+}
+
+/** HTML elements that cannot nest inside a `<p>` (obvious block tags). */
+export const PHRASING_BLOCK_TAGS = new Set([
+  "address",
+  "article",
+  "aside",
+  "blockquote",
+  "div",
+  "dl",
+  "dt",
+  "dd",
+  "fieldset",
+  "figcaption",
+  "figure",
+  "footer",
+  "form",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "header",
+  "hr",
+  "li",
+  "main",
+  "nav",
+  "ol",
+  "p",
+  "pre",
+  "section",
+  "table",
+  "ul",
+]);
+
+const BLOCK_TAG = /<([a-z][a-z0-9]*)(?=[\s/>])/g;
+
+/**
+ * Offsets of obvious block HTML tags in `src.slice(start, end)`.
+ * Strings should already be blanked so markup inside quotes is ignored.
+ */
+export function blockTagsIn(src, start = 0, end = src.length) {
+  const hits = [];
+  BLOCK_TAG.lastIndex = start;
+  let m;
+  while ((m = BLOCK_TAG.exec(src)) && m.index < end) {
+    if (PHRASING_BLOCK_TAGS.has(m[1]))
+      hits.push({ tag: m[1], index: m.index });
+  }
+  return hits;
+}
+
+/**
+ * The [start, end) range of JSX children for the element whose name is
+ * `tagName` and whose attributes start at `afterName`. Null when self-closing
+ * or the closing tag is missing.
+ */
+export function jsxChildrenRange(src, tagName, afterName) {
+  const attrs = jsxAttributes(src, afterName);
+  if (attrs.selfClosing || attrs.end == null) return null;
+  const start = attrs.end;
+  const open = new RegExp(`<${escapeRegExp(tagName)}(?=[\\s/>])`, "g");
+  const close = new RegExp(`</${escapeRegExp(tagName)}\\s*>`, "g");
+  let depth = 1;
+  let i = start;
+  while (i < src.length && depth > 0) {
+    open.lastIndex = i;
+    close.lastIndex = i;
+    const nextOpen = open.exec(src);
+    const nextClose = close.exec(src);
+    if (!nextClose) return null;
+    if (nextOpen && nextOpen.index < nextClose.index) {
+      depth++;
+      i = nextOpen.index + nextOpen[0].length;
+    } else {
+      depth--;
+      if (depth === 0) return { start, end: nextClose.index };
+      i = nextClose.index + nextClose[0].length;
+    }
+  }
+  return null;
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Export name → phrasing-only prop names from each contract's `phrasingSlots`. */
+function phrasingSlotMap(data) {
+  const map = new Map();
+  for (const c of data.components ?? []) {
+    const slots = c.contract?.phrasingSlots;
+    if (slots?.length) map.set(c.export, slots);
+  }
+  return map;
 }
 
 /**
@@ -694,6 +808,13 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
   // tool's mapping; every component it names has existed since 0.1.
   let rawElements = replacements(data);
   if (!rawElements.size) rawElements = replacements(bundled);
+  // Phrasing-only slots (rendered inside a <p>). Older catalogues fall back
+  // to this tool's map so Banner/AuthLayout stay checked after upgrade of the
+  // CLI alone.
+  const bundledPhrasing = phrasingSlotMap(bundled);
+  const dataPhrasing = phrasingSlotMap(data);
+  const phrasingSlotsOf = (exportName) =>
+    dataPhrasing.get(exportName) ?? bundledPhrasing.get(exportName) ?? [];
   // Raw elements are collected from every JSX file and reported once the
   // whole app is known to use Mortar.
   const rawHits = [];
@@ -1003,6 +1124,8 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     });
 
     if (!JSX.has(ext)) continue;
+    // Blank string contents so "<div>" inside a quote is not read as a tag.
+    const jsx = blankStrings(src);
     // JSX opening tags of Mortar components.
     const tag = /<([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?)(?=[\s/>])/g;
     for (const m of src.matchAll(tag)) {
@@ -1027,7 +1150,9 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const propTypes = component.contract.propTypes;
       if (!propTypes) continue;
       const accepts = data.accepts(component);
-      for (const attr of jsxAttributes(src, m.index + m[0].length)) {
+      const afterName = m.index + m[0].length;
+      const attrs = jsxAttributes(src, afterName);
+      for (const attr of attrs) {
         const name = attr.name;
         if (name === "key" || /[-:]/.test(name)) continue;
         if (!accepts.has(name)) {
@@ -1070,6 +1195,38 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           `<${exportName} ${name}="${attr.value}"> is not one of ${allowed.map((a) => `"${a}"`).join(", ")}.`,
           guess ? `Use ${name}="${guess}".` : undefined,
         );
+      }
+      // Phrasing-only slots: block HTML children inside a <p> are invalid.
+      const slots = phrasingSlotsOf(exportName);
+      if (!slots.length) continue;
+      const reportBlock = (slot, hit) =>
+        add(
+          "invalid-phrasing",
+          "error",
+          file,
+          line(hit.index),
+          `<${exportName}> ${slot} is phrasing-only (rendered inside a <p>); <${hit.tag}> is a block element.`,
+          slot === "children"
+            ? "Pass text, a link or emphasis. For a full section, use Section."
+            : "Pass a string or inline markup (links, emphasis), not a nested <p> or other block element.",
+        );
+      for (const slot of slots) {
+        const attr = attrs.find((a) => a.name === slot);
+        if (attr?.expression) {
+          for (const hit of blockTagsIn(
+            jsx,
+            attr.expression.start,
+            attr.expression.end,
+          ))
+            reportBlock(slot, hit);
+          continue;
+        }
+        if (attr) continue; // string literal or bare boolean — no JSX blocks
+        if (slot !== "children" || attrs.selfClosing) continue;
+        const body = jsxChildrenRange(src, m[1], afterName);
+        if (!body) continue;
+        for (const hit of blockTagsIn(jsx, body.start, body.end))
+          reportBlock(slot, hit);
       }
     }
   }
