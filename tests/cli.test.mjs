@@ -286,6 +286,52 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
   );
 });
 
+test("the JSX scanner keeps attributes inside the opening tag when a slot has an apostrophe", () => {
+  // Apostrophes in JSX text must not be read as JS string quotes (#100).
+  const cases = [
+    `footer={<>Don't have an account? <a href="/signup">Sign up</a></>}`,
+    `footer={<>It's fine with "quoted" text too</>}`,
+    `footer={<><span>Don't</span> leave</>}`,
+    `footer={<>{"Don't quote me"}</>}`,
+  ];
+  for (const slot of cases) {
+    const src = `export function App() {\n  return <AuthLayout title="Sign in" ${slot}>Form</AuthLayout>;\n}\nexport default App;\n`;
+    const i = src.indexOf("<AuthLayout") + "<AuthLayout".length;
+    const attrs = jsxAttributes(src, i);
+    assert.deepEqual(
+      attrs.map((a) => a.name),
+      ["title", "footer"],
+      `unexpected attrs for ${slot}`,
+    );
+  }
+});
+
+test("the audit does not invent unknown-prop findings from apostrophes in slot JSX", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { AuthLayout, ThemeProvider } from "@tonycodes-ui/mortar";
+export function App() {
+  return (
+    <ThemeProvider>
+      <AuthLayout title="Sign in" footer={<>Don't have an account? <a href="/signup">Sign up</a></>}>
+        Form
+      </AuthLayout>
+    </ThemeProvider>
+  );
+}
+export default App;
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "unknown-prop").length,
+    0,
+    JSON.stringify(report.findings, null, 2),
+  );
+});
+
 /** A copy of a fixture app with this package "installed" in node_modules. */
 function fixture(name, { version = pkg.version, files = {} } = {}) {
   const dir = mkdtempSync(join(tmpdir(), `mortar-${name}-`));
