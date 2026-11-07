@@ -21,6 +21,8 @@ import {
   blankStrings,
   satisfies,
   jsxAttributes,
+  hasVisualDeclarations,
+  parseAncestorNativeSelector,
   RULES,
 } from "../cli/audit.mjs";
 import { TOOLS, validateArguments } from "../cli/tools.mjs";
@@ -420,6 +422,57 @@ test("the audit detects copies, class overrides and palette classes", async (t) 
   assert.ok(has(report, "raw-colour", "src/Extra.tsx", /dark:text-white/));
   assert.ok(has(report, "styles-order", "src/late.css"));
   assert.ok(has(report, "css-override", "src/late.css", /data-m-component/));
+});
+
+test("ancestor CSS that visually overrides a Mortar control is flagged", async (t) => {
+  // #107: `.toolbar button { … }` around <Button> reported nothing.
+  const dir = fixture("ancestor-visual-override");
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.ok(
+    has(
+      report,
+      "ancestor-override",
+      "src/styles.css",
+      /\.toolbar button[\s\S]*Button/,
+    ),
+  );
+  assert.equal(
+    report.findings.filter((f) => f.rule === "ancestor-override").length,
+    1,
+  );
+});
+
+test("ancestor CSS with only layout properties stays clean", async (t) => {
+  const dir = fixture("ancestor-layout-only");
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "ancestor-override").length,
+    0,
+  );
+});
+
+test("ancestor CSS over a native button does not flag Mortar elsewhere", async (t) => {
+  const dir = fixture("ancestor-native-button");
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "ancestor-override").length,
+    0,
+  );
+});
+
+test("parseAncestorNativeSelector and hasVisualDeclarations stay conservative", () => {
+  assert.deepEqual(
+    parseAncestorNativeSelector(".toolbar button").map((t) => t.tag),
+    ["button"],
+  );
+  assert.equal(parseAncestorNativeSelector(".m-button").length, 0);
+  assert.equal(parseAncestorNativeSelector("button").length, 0);
+  assert.equal(parseAncestorNativeSelector(".a .b button").length, 0);
+  assert.ok(hasVisualDeclarations("border-radius: 999px; font-size: 9px;"));
+  assert.ok(!hasVisualDeclarations("display: flex; margin: 8px; gap: 4px;"));
 });
 
 test("the audit flags raw elements that a Mortar component replaces", async (t) => {

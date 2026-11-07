@@ -32,6 +32,8 @@ export const RULES = {
   "invalid-value": "A literal value outside the prop's declared union.",
   "css-override":
     "Consumer CSS that selects Mortar's .m-* classes or [data-m-component].",
+  "ancestor-override":
+    "Consumer CSS that uses an ancestor/native-element selector to restyle a Mortar control.",
   "class-override":
     "A Tailwind arbitrary variant in a className that targets Mortar's .m-* classes.",
   "kit-class":
@@ -382,6 +384,239 @@ function replacements(data) {
       map.set(element, [...(map.get(element) ?? []), c.export]);
   return map;
 }
+
+/** Export → the native elements that component replaces. */
+function replacesByExport(data) {
+  const map = new Map();
+  for (const c of data.components ?? []) {
+    const list = c.contract?.replaces ?? [];
+    if (list.length) map.set(c.export, list);
+  }
+  return map;
+}
+
+/**
+ * Visual properties that restyle a control. Layout (margin, display, flex,
+ * width, …) is ignored so composition wrappers stay quiet.
+ */
+const VISUAL_PROP = new Set([
+  "background",
+  "background-color",
+  "background-image",
+  "border",
+  "border-color",
+  "border-style",
+  "border-width",
+  "border-top",
+  "border-right",
+  "border-bottom",
+  "border-left",
+  "border-top-color",
+  "border-right-color",
+  "border-bottom-color",
+  "border-left-color",
+  "border-top-style",
+  "border-right-style",
+  "border-bottom-style",
+  "border-left-style",
+  "border-top-width",
+  "border-right-width",
+  "border-bottom-width",
+  "border-left-width",
+  "border-radius",
+  "border-top-left-radius",
+  "border-top-right-radius",
+  "border-bottom-right-radius",
+  "border-bottom-left-radius",
+  "color",
+  "font",
+  "font-family",
+  "font-size",
+  "font-weight",
+  "font-style",
+  "font-variant",
+  "line-height",
+  "letter-spacing",
+  "text-decoration",
+  "text-decoration-line",
+  "text-decoration-color",
+  "text-decoration-style",
+  "text-transform",
+  "text-shadow",
+]);
+
+/** True when a CSS rule body sets a visual property. */
+export function hasVisualDeclarations(body) {
+  for (const m of body.matchAll(/(?:^|[{;])\s*([a-z-]+)\s*:/gi)) {
+    if (VISUAL_PROP.has(m[1].toLowerCase())) return true;
+  }
+  return false;
+}
+
+/**
+ * An obvious ancestor + native-element selector: `.toolbar button`,
+ * `#bar > input`, `div.panel select:hover`. Returns nothing when the selector
+ * is complex, targets kit classes, or has no class/id ancestor marker.
+ */
+export function parseAncestorNativeSelector(selector) {
+  const parts = [];
+  let buf = "";
+  let depth = 0;
+  for (let i = 0; i < selector.length; i++) {
+    const c = selector[i];
+    if (c === "(" || c === "[") depth++;
+    else if (c === ")" || c === "]") depth = Math.max(0, depth - 1);
+    else if (c === "," && depth === 0) {
+      parts.push(buf);
+      buf = "";
+      continue;
+    }
+    buf += c;
+  }
+  parts.push(buf);
+
+  const out = [];
+  for (const raw of parts) {
+    const part = raw.trim();
+    if (!part || part.startsWith("@")) continue;
+    if (/\.m-[a-z]|\[data-m-component\b/.test(part)) continue;
+    const m = part.match(
+      /^(.+?)\s*(?:>|\s)\s*([a-z][a-z0-9]*)(\[[^\]]+\])?((?:::[a-z-]+|:[a-z-]+(?:\([^)]*\))?)*)\s*$/i,
+    );
+    if (!m) continue;
+    const ancestor = m[1].trim();
+    const subject = m[2].toLowerCase();
+    const attr = m[3] ?? "";
+    // One simple ancestor only: `.a .b button` stays manual.
+    if (/[\s>+~]/.test(ancestor)) continue;
+    // Subject must stay a bare native element (optional [type=…] / pseudos).
+    if (/[.#]/.test(m[4] ?? "")) continue;
+    const classes = [...ancestor.matchAll(/\.([A-Za-z_][\w-]*)/g)].map(
+      (x) => x[1],
+    );
+    const id = ancestor.match(/#([A-Za-z_][\w-]*)/)?.[1];
+    if (!classes.length && !id) continue;
+    const type = attr.match(
+      /^\[\s*type\s*=\s*(?:["']?)([\w-]+)(?:["']?)\s*\]$/i,
+    )?.[1];
+    if (attr && !type) continue;
+    out.push({
+      selector: part,
+      tag: subject,
+      type: type?.toLowerCase(),
+      classes,
+      id,
+    });
+  }
+  return out;
+}
+
+function openingEnd(src, i) {
+  const n = src.length;
+  while (i < n) {
+    while (i < n && /\s/.test(src[i])) i++;
+    if (src[i] === "/" && src[i + 1] === ">")
+      return { end: i + 2, selfClose: true };
+    if (src[i] === ">") return { end: i + 1, selfClose: false };
+    if (src[i] === "{") {
+      i = skipBraces(src, i);
+      continue;
+    }
+    NAME.lastIndex = i;
+    const m = NAME.exec(src);
+    if (!m) return { end: i, selfClose: false };
+    i += m[0].length;
+    while (i < n && /\s/.test(src[i])) i++;
+    if (src[i] !== "=") continue;
+    i++;
+    while (i < n && /\s/.test(src[i])) i++;
+    const q = src[i];
+    if (q === '"' || q === "'") {
+      const end = src.indexOf(q, i + 1);
+      if (end < 0) return { end: n, selfClose: false };
+      i = end + 1;
+    } else if (q === "{") i = skipBraces(src, i);
+    else return { end: i, selfClose: false };
+  }
+  return { end: n, selfClose: false };
+}
+
+function replacesMatch(replaces, tag, type) {
+  for (const r of replaces) {
+    const m = /^([a-z]+)(?:\[type=(.+)\])?$/.exec(r);
+    if (!m || m[1] !== tag) continue;
+    if (!type) return true;
+    if (!m[2] || m[2] === type) return true;
+  }
+  return false;
+}
+
+/**
+ * Mortar controls in `src` that replace a native element, with literal
+ * className/id markers on open host ancestors. Complex className expressions
+ * are ignored.
+ */
+export function findMortarPlacements(src, locals, namespaces, byExport) {
+  const stack = [];
+  const placements = [];
+  const re = /<\/?([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?)(?=[\s/>])/g;
+  let m;
+  while ((m = re.exec(src))) {
+    const at = m.index;
+    const name = m[1];
+    const isClose = src[at + 1] === "/";
+    const host = /^[a-z]/.test(name);
+    if (isClose) {
+      if (host) {
+        for (let i = stack.length - 1; i >= 0; i--) {
+          if (stack[i].name === name) {
+            stack.length = i;
+            break;
+          }
+        }
+      }
+      continue;
+    }
+    const attrsStart = at + m[0].length;
+    const { end, selfClose } = openingEnd(src, attrsStart);
+    const attrs = jsxAttributes(src, attrsStart);
+    let exportName;
+    const [ns, member] = name.split(".");
+    if (member && namespaces.has(ns)) exportName = member;
+    else if (!member) exportName = locals.get(name);
+    const replaces = exportName ? byExport.get(exportName) : undefined;
+    if (replaces) {
+      placements.push({
+        exportName,
+        replaces,
+        frames: stack.map((f) => ({
+          classes: new Set(f.classes),
+          id: f.id,
+        })),
+      });
+    }
+    if (host && !selfClose) {
+      const classAttr = attrs.find(
+        (a) => a.name === "className" || a.name === "class",
+      );
+      const idAttr = attrs.find((a) => a.name === "id");
+      const classes = (classAttr?.value ?? "").split(/\s+/).filter(Boolean);
+      stack.push({
+        name,
+        classes,
+        id: idAttr?.value,
+      });
+    }
+    re.lastIndex = end;
+  }
+  return placements;
+}
+
+function frameMatches(frame, classes, id) {
+  if (id && frame.id !== id) return false;
+  return classes.every((c) => frame.classes.has(c));
+}
+
 // Inputs with no Mortar equivalent (hidden values, file pickers, sliders).
 const NATIVE_ONLY = new Set(["hidden", "file", "range", "color", "image"]);
 const TEXT_LIKE = new Set([
@@ -694,9 +929,16 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
   // tool's mapping; every component it names has existed since 0.1.
   let rawElements = replacements(data);
   if (!rawElements.size) rawElements = replacements(bundled);
+  const byExport = replacesByExport(data);
+  if (![...byExport.keys()].length)
+    for (const [k, v] of replacesByExport(bundled)) byExport.set(k, v);
   // Raw elements are collected from every JSX file and reported once the
   // whole app is known to use Mortar.
   const rawHits = [];
+  // Ancestor/native-element CSS rules that set visual properties, matched
+  // later against Mortar controls under a matching host ancestor.
+  const ancestorRules = [];
+  const mortarPlacements = [];
 
   const files = walk(root);
   const hashes = data.agent.sourceHashes ?? {};
@@ -751,6 +993,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       for (const m of css.matchAll(/([^{};]+)\{/g)) {
         const selector = m[1].trim();
         if (!selector || selector.startsWith("@")) continue;
+        const selAt = m.index + m[0].length - m[1].trimStart().length - 1;
         const hits = [
           ...[...selector.matchAll(/\.(m-[a-z][a-z0-9-]*)/g)]
             .map((x) => x[1])
@@ -765,10 +1008,20 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             "css-override",
             "error",
             file,
-            line(m.index + m[0].length - m[1].trimStart().length - 1),
+            line(selAt),
             `Overrides Mortar markup (${[...new Set(hits)].join(", ")}).`,
             "Remove the override. Use component props, className for layout only, or theme tokens (brandTokens, --m-brand-*). If the kit is wrong, fix it centrally with a pull request.",
           );
+        const braceAt = m.index + m[0].length - 1;
+        const body = css.slice(braceAt + 1, closing(css, braceAt));
+        if (!hits.length && hasVisualDeclarations(body)) {
+          for (const target of parseAncestorNativeSelector(selector))
+            ancestorRules.push({
+              file,
+              line: line(selAt),
+              ...target,
+            });
+        }
       }
       continue;
     }
@@ -941,6 +1194,10 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
     if (!imported) continue;
 
+    if (JSX.has(ext) && !emailFile && byExport.size)
+      for (const p of findMortarPlacements(src, locals, namespaces, byExport))
+        mortarPlacements.push(p);
+
     // className tokens on the app's own markup and arbitrary variants.
     for (const m of src.matchAll(
       /\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*)\1/g,
@@ -1086,6 +1343,24 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         hit.line,
         `Raw <${hit.tag.replace(/\[type=(.*)\]/, ' type="$1"')}> in an app that uses Mortar.`,
         `Use ${names.length > 1 ? `${names.slice(0, -1).join(", ")} or ${names.at(-1)}` : names[0]} from "${PKG}" (mortar component ${hit.components[0]}).`,
+      );
+    }
+
+  if (usesMortar)
+    for (const rule of ancestorRules) {
+      const hit = mortarPlacements.find(
+        (p) =>
+          replacesMatch(p.replaces, rule.tag, rule.type) &&
+          p.frames.some((f) => frameMatches(f, rule.classes, rule.id)),
+      );
+      if (!hit) continue;
+      add(
+        "ancestor-override",
+        "error",
+        rule.file,
+        rule.line,
+        `Ancestor selector \`${rule.selector}\` restyles Mortar's <${hit.exportName}> (${rule.tag}${rule.type ? `[type=${rule.type}]` : ""}).`,
+        "Remove the override. Use component props, className for layout only, or theme tokens (brandTokens, --m-brand-*). If the kit is wrong, fix it centrally with a pull request.",
       );
     }
 
