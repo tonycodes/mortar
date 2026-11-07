@@ -10,6 +10,10 @@
   "capabilities": ["input", "validation"],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
+  "platforms": {
+    "swiftui": "MortarTextField",
+    "compose": "MortarTextField"
+  },
   "contract": {
     "props": {
       "label": "string",

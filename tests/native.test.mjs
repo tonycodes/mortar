@@ -12,12 +12,19 @@ import {
   nativeTokenFiles,
 } from "../scripts/native-tokens.mjs";
 import {
+  ROOT,
+  checkKit,
+  indexNativeTypes,
+  platformsErrors,
+} from "../scripts/check.mjs";
+import {
   customProperties,
   readSource,
   resolveTokens,
   selectorBody,
 } from "./support/css.mjs";
 import { contrast } from "./support/color.mjs";
+import { readdirSync, readFileSync } from "node:fs";
 
 const css = await readSource("src/tokens.css");
 const layer = (selector) => {
@@ -255,6 +262,60 @@ test("the Swift and Kotlin token files are generated from the native theme", asy
   assert.match(kotlin, /^package codes\.tony\.mortar$/m);
   assert.match(kotlin, /paper = 0xFF000000,/);
   assert.match(kotlin, /public const val weightSemibold: Int = 600/);
+});
+
+/** Web components on main that already ship SwiftUI and Compose ports. */
+const NATIVE_ON_MAIN = {
+  Button: "MortarButton",
+  Badge: "MortarBadge",
+  Card: "MortarCard",
+  Input: "MortarTextField",
+  Switch: "MortarSwitch",
+  Avatar: "MortarAvatar",
+  Notice: "MortarNotice",
+  EmptyState: "MortarEmptyState",
+};
+
+test("manifest platforms name the native types that exist on main", async () => {
+  const manifests = readdirSync(join(ROOT, "manifests"))
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => JSON.parse(readFileSync(join(ROOT, "manifests", f), "utf8")));
+  const withPlatforms = manifests.filter((m) => m.platforms);
+  assert.deepEqual(
+    Object.fromEntries(
+      withPlatforms.map((m) => [m.export, m.platforms.swiftui]),
+    ),
+    NATIVE_ON_MAIN,
+  );
+  for (const m of withPlatforms) {
+    assert.deepEqual(m.platforms, {
+      swiftui: NATIVE_ON_MAIN[m.export],
+      compose: NATIVE_ON_MAIN[m.export],
+    });
+    assert.deepEqual(platformsErrors(m.platforms), []);
+  }
+  const nativeTypes = await indexNativeTypes(ROOT);
+  for (const type of Object.values(NATIVE_ON_MAIN)) {
+    assert.ok(nativeTypes.swiftui.has(type), `SwiftUI declares ${type}`);
+    assert.ok(nativeTypes.compose.has(type), `Compose declares ${type}`);
+  }
+  const report = await checkKit(ROOT);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "M011").length,
+    0,
+    JSON.stringify(
+      report.findings.filter((f) => f.rule === "M011"),
+      null,
+      2,
+    ),
+  );
+});
+
+test("platformsErrors rejects unknown keys and non-Mortar type names", () => {
+  assert.match(platformsErrors(["swiftui"]).join(" "), /must be an object/);
+  assert.match(platformsErrors({}).join(" "), /at least one/);
+  assert.match(platformsErrors({ ios: "MortarButton" }).join(" "), /unknown/);
+  assert.match(platformsErrors({ swiftui: "Button" }).join(" "), /Mortar/);
 });
 
 test("native buttons default to the web Button's variant", async () => {

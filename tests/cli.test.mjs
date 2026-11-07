@@ -116,6 +116,15 @@ test("get_component returns the contract with prop types and an example", () => 
   const auth = componentDetail(data, data.find("AuthLayout"));
   assert.ok(auth.templates.includes("sign-in"));
   assert.match(auth.usage, /AuthLayout/);
+  assert.equal(c.platforms, undefined);
+  assert.deepEqual(componentDetail(data, data.find("Button")).platforms, {
+    swiftui: "MortarButton",
+    compose: "MortarButton",
+  });
+  assert.deepEqual(componentDetail(data, data.find("Input")).platforms, {
+    swiftui: "MortarTextField",
+    compose: "MortarTextField",
+  });
 });
 
 test("a build packet includes the dependency closure and setup", () => {
@@ -190,6 +199,7 @@ test("every guide topic loads from the package", () => {
   assert.doesNotMatch(data.guide("conventions"), /## Composing flows/);
   assert.match(data.guide("auth-flows"), /AuthLayout/);
   assert.match(data.guide("email"), /renderEmail/);
+  assert.match(data.guide("native"), /Manifest `platforms`/);
   assert.match(data.guide("contributing"), /# Agent instructions/);
 });
 

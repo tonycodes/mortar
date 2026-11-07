@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "package": "@tonycodes-ui/mortar",
   "version": "0.11.0",
-  "policyVersion": "1.4.0",
+  "policyVersion": "1.5.0",
   "tokens": [
     "--m-accent",
     "--m-accent-fill",
@@ -879,6 +879,10 @@
         "target": ".m-avatar",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarAvatar",
+        "compose": "MortarAvatar"
+      },
       "integrity": {
         "source": "7393469440759a345bcd83fcfe10364f6f15e2dfea146429c3c192865da6edd4",
         "preview": "bdc2bd0dece56c46626b84292e509b4ad629115fc57cd08b72bf5b105b28746e"
@@ -934,6 +938,10 @@
         "profile": "display",
         "target": ".m-badge",
         "states": []
+      },
+      "platforms": {
+        "swiftui": "MortarBadge",
+        "compose": "MortarBadge"
       },
       "integrity": {
         "source": "e3c08e5d032fd437ae37a3274c8d5c13ac55d9beb3074a190bd8d3ab4529aab9",
@@ -1317,6 +1325,10 @@
         "target": ".m-button",
         "states": ["disabled", "loading"],
         "probe": "button"
+      },
+      "platforms": {
+        "swiftui": "MortarButton",
+        "compose": "MortarButton"
       },
       "integrity": {
         "source": "e3c08e5d032fd437ae37a3274c8d5c13ac55d9beb3074a190bd8d3ab4529aab9",
@@ -1720,6 +1732,10 @@
         "profile": "display",
         "target": ".m-card",
         "states": []
+      },
+      "platforms": {
+        "swiftui": "MortarCard",
+        "compose": "MortarCard"
       },
       "integrity": {
         "source": "7b8af4f4840b11da16873da10a03395d3d1d31ba799686d55aee9c2a34d01d8e",
@@ -3505,6 +3521,10 @@
         "target": ".m-empty",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarEmptyState",
+        "compose": "MortarEmptyState"
+      },
       "integrity": {
         "source": "e3c08e5d032fd437ae37a3274c8d5c13ac55d9beb3074a190bd8d3ab4529aab9",
         "preview": "f09f0d6eb552143285e67e0564b270a08d8d345dba00bc5821eaab80bd61137f"
@@ -4542,6 +4562,10 @@
         "target": ".m-input-group input",
         "states": ["disabled", "error", "long"],
         "probe": "input"
+      },
+      "platforms": {
+        "swiftui": "MortarTextField",
+        "compose": "MortarTextField"
       },
       "integrity": {
         "source": "e3c08e5d032fd437ae37a3274c8d5c13ac55d9beb3074a190bd8d3ab4529aab9",
@@ -5750,6 +5774,10 @@
         "target": ".m-notice",
         "states": [],
         "probe": "notice"
+      },
+      "platforms": {
+        "swiftui": "MortarNotice",
+        "compose": "MortarNotice"
       },
       "integrity": {
         "source": "e3c08e5d032fd437ae37a3274c8d5c13ac55d9beb3074a190bd8d3ab4529aab9",
@@ -9081,6 +9109,10 @@
         "target": ".m-switch",
         "states": ["disabled"],
         "probe": "switch"
+      },
+      "platforms": {
+        "swiftui": "MortarSwitch",
+        "compose": "MortarSwitch"
       },
       "integrity": {
         "source": "e3c08e5d032fd437ae37a3274c8d5c13ac55d9beb3074a190bd8d3ab4529aab9",

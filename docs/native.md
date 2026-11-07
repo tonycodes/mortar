@@ -4,6 +4,8 @@ Mortar is coming to iPhone, iPad and Android as a SwiftUI package and a Jetpack 
 
 The playground's **Native gallery** (`?page=native`) shows each component on the web beside its SwiftUI and Compose snapshot references, in light, dark and large text.
 
+Agents: `get_guide native` (or `npx mortar guide native`) returns this page. Components that already have native ports declare them on their catalogue entry as `platforms` (see below); `search_components` and `get_component` surface that field.
+
 ## Tokens
 
 SwiftUI and Compose cannot read `tokens.css`, so each library gets its tokens as literal values in a generated file:
@@ -61,6 +63,32 @@ A brand is a `MortarTheme`: its light and dark `MortarPalette`s, font family nam
 | `MortarEmptyState`                                         | EmptyState     | SF Symbol, description, action, dashed, centred or leading.                                                                                                                                            |
 
 On both platforms the switch sits at the end of its row, after the label, as in iOS and Android settings; on the web it comes first.
+
+### Manifest `platforms`
+
+Web manifests for components that have a native counterpart name those ports:
+
+```json
+"platforms": {
+  "swiftui": "MortarButton",
+  "compose": "MortarButton"
+}
+```
+
+Each key is `swiftui` or `compose`. The value is the public SwiftUI `struct` or Compose `@Composable fun` name. The web export and the native type can differ (Input → `MortarTextField`). Only components that ship native ports today set the field; the rest stay web-only. `npm run check` rejects a `platforms` entry whose type is missing from `native/apple` or `native/android`.
+
+| Web export | SwiftUI / Compose  |
+| ---------- | ------------------ |
+| Button     | `MortarButton`     |
+| Badge      | `MortarBadge`      |
+| Card       | `MortarCard`       |
+| Input      | `MortarTextField`  |
+| Switch     | `MortarSwitch`     |
+| Avatar     | `MortarAvatar`     |
+| Notice     | `MortarNotice`     |
+| EmptyState | `MortarEmptyState` |
+
+More of the core set is tracked in [#95](https://github.com/tonycodes/mortar/issues/95); Maven hosting for Compose is still open.
 
 ### Snapshot tests
 

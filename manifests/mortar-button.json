@@ -10,6 +10,10 @@
   "capabilities": ["action"],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
+  "platforms": {
+    "swiftui": "MortarButton",
+    "compose": "MortarButton"
+  },
   "contract": {
     "props": {
       "children": "ReactNode",

@@ -46,6 +46,7 @@ export function componentDetail(data, c, { example = true } = {}) {
     avoid: c.contract.avoid,
     accessibility: c.contract.accessibility,
     capabilities: c.capabilities,
+    ...(c.platforms ? { platforms: c.platforms } : {}),
     dependencies: (c.contract.dependencies ?? [])
       .map((id) => data.byId(id)?.export ?? id)
       .sort(),

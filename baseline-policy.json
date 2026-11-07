@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.4.0",
+  "version": "1.5.0",
   "rules": {
     "M001": "Exports require unique manifests and preview fixtures",
     "M002": "Source and preview paths stay inside the repository",
@@ -11,6 +11,7 @@
     "M007": "Source and preview import-closure fingerprints must match; generated fields stay out of manifests",
     "M008": "Committed catalogue matches the manifests",
     "M009": "Brands declare only the --m-brand-* contract, and every appearance resolves the accent pair and its inverse",
-    "M010": "Manifest dependencies match the catalogue components the source renders"
+    "M010": "Manifest dependencies match the catalogue components the source renders",
+    "M011": "Manifest platforms name SwiftUI and Compose counterparts that exist in native/"
   }
 }

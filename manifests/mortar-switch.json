@@ -10,6 +10,10 @@
   "capabilities": ["input", "validation"],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
+  "platforms": {
+    "swiftui": "MortarSwitch",
+    "compose": "MortarSwitch"
+  },
   "contract": {
     "props": {
       "label": "string",

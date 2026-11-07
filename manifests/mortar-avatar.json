@@ -10,6 +10,10 @@
   "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
+  "platforms": {
+    "swiftui": "MortarAvatar",
+    "compose": "MortarAvatar"
+  },
   "contract": {
     "props": {
       "name": "string",

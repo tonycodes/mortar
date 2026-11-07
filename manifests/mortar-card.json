@@ -10,6 +10,10 @@
   "capabilities": [],
   "owner": "Mortar maintainers",
   "kitId": "foundation",
+  "platforms": {
+    "swiftui": "MortarCard",
+    "compose": "MortarCard"
+  },
   "contract": {
     "props": {
       "as": "\"div\" | \"section\" | \"article\"",
