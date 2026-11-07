@@ -357,8 +357,7 @@ export function blockTagsIn(src, start = 0, end = src.length) {
   BLOCK_TAG.lastIndex = start;
   let m;
   while ((m = BLOCK_TAG.exec(src)) && m.index < end) {
-    if (PHRASING_BLOCK_TAGS.has(m[1]))
-      hits.push({ tag: m[1], index: m.index });
+    if (PHRASING_BLOCK_TAGS.has(m[1])) hits.push({ tag: m[1], index: m.index });
   }
   return hits;
 }
