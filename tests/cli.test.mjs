@@ -294,16 +294,14 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
     src.slice(onClick.expression.start, onClick.expression.end),
     /go\("}"\)/,
   );
-
 });
-
 
 test("static Input.action expressions are distinguished from controls", () => {
   assert.equal(isStaticInputAction('"%"'), true);
   assert.equal(isStaticInputAction("<span>%</span>"), true);
   assert.equal(isStaticInputAction("<>%</>"), true);
   assert.equal(isStaticInputAction("<Button>Sort</Button>"), false);
-  assert.equal(isStaticInputAction('<span onClick={fn}>%</span>'), false);
+  assert.equal(isStaticInputAction("<span onClick={fn}>%</span>"), false);
   assert.equal(isStaticInputAction("sortAction"), false);
 });
 
@@ -386,7 +384,6 @@ test("the audit flags Input adornments migrated into action or absolute siblings
   assert.ok(RULES["input-static-action"]);
   assert.ok(RULES["input-absolute-adornment"]);
 });
-
 
 /** A copy of a fixture app with this package "installed" in node_modules. */
 function fixture(name, { version = pkg.version, files = {} } = {}) {

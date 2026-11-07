@@ -368,20 +368,20 @@ export function isStaticInputAction(expression) {
   const inner = expression.trim();
   if (!inner) return false;
   if (/^(["'`])([^"'`$\\]*)\1$/.test(inner)) return true;
-  if (/\bon[A-Z]\w*\s*=/.test(inner) || /\bhref\s*=/.test(inner))
-    return false;
+  if (/\bon[A-Z]\w*\s*=/.test(inner) || /\bhref\s*=/.test(inner)) return false;
   if (/<\/?(?:button|a|input|select|textarea)\b/i.test(inner)) return false;
   if (/<[A-Z][\w$]*\b/.test(inner)) return false;
   if (/^<>\s*[^<{]+?\s*<\/>$/.test(inner)) return true;
-  if (/^<\s*span\b[^>]*>\s*[^<{]+?\s*<\/\s*span\s*>$/i.test(inner))
-    return true;
+  if (/^<\s*span\b[^>]*>\s*[^<{]+?\s*<\/\s*span\s*>$/i.test(inner)) return true;
   return false;
 }
 
 /**
  * Absolutely positioned decorative siblings near a Mortar Input, typically
  * left over from wrapping an unlabeled native input. Bounded: string
- * `className` literals only, and a nearby `relative` wrapper.
+ * `className` literals only, a nearby `relative` wrapper, and only the
+ * immediate sibling before or after this Input (so later Inputs in the same
+ * file are not flagged for an earlier icon).
  */
 export function absoluteAdornmentsBesideInput(src, inputStart, inputEnd) {
   const windowStart = Math.max(0, inputStart - 1000);
@@ -394,34 +394,65 @@ export function absoluteAdornmentsBesideInput(src, inputStart, inputEnd) {
     );
   if (!hasRelative(before)) return [];
   const hits = [];
-  const pattern =
-    /<(svg|img|span|i|div|em)\b(?=[^>]*\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*\babsolute\b[^"'`]*)\2)[^>]*>/gi;
-  const scan = (slice, base, fallbackSide) => {
-    let m;
-    while ((m = pattern.exec(slice))) {
-      const tag = m[1].toLowerCase();
-      const cls = m[3];
-      const open = m[0];
-      if (/\bon[A-Z]\w*\s*=/.test(open) || /\bhref\s*=/.test(open)) continue;
-      const decorative =
-        tag === "svg" ||
-        tag === "img" ||
-        /\baria-hidden\b/.test(open) ||
-        tag === "span" ||
-        tag === "i" ||
-        tag === "em" ||
-        tag === "div";
-      if (!decorative) continue;
-      const side = /\b(?:right-|end-|inset-e|inset-inline-end)/.test(cls)
-        ? "trailing"
-        : /\b(?:left-|start-|inset-s|inset-inline-start)/.test(cls)
-          ? "leading"
-          : fallbackSide;
-      hits.push({ index: base + m.index, side });
-    }
+  const open =
+    /<(svg|img|span|i|div|em)\b(?=[^>]*\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*\babsolute\b[^"'`]*)\2)[^>]*>/i;
+  const sideFrom = (cls, fallback) =>
+    /\b(?:right-|end-|inset-e|inset-inline-end)/.test(cls)
+      ? "trailing"
+      : /\b(?:left-|start-|inset-s|inset-inline-start)/.test(cls)
+        ? "leading"
+        : fallback;
+  const decorative = (tag, openText) => {
+    if (/\bon[A-Z]\w*\s*=/.test(openText) || /\bhref\s*=/.test(openText))
+      return false;
+    return (
+      tag === "svg" ||
+      tag === "img" ||
+      /\baria-hidden\b/.test(openText) ||
+      tag === "span" ||
+      tag === "i" ||
+      tag === "em" ||
+      tag === "div"
+    );
   };
-  scan(before, windowStart, "leading");
-  scan(after, inputEnd, "trailing");
+  // Immediate previous sibling: the last absolute tag in `before`, with only
+  // whitespace (and its own closing) between it and the Input.
+  {
+    let last;
+    const re = new RegExp(open.source, "gi");
+    let m;
+    while ((m = re.exec(before))) last = m;
+    if (last) {
+      const tag = last[1].toLowerCase();
+      const cls = last[3];
+      const openText = last[0];
+      const from = last.index;
+      let afterOpen = from + openText.length;
+      if (!/\/>\s*$/.test(openText)) {
+        const close = before
+          .slice(afterOpen)
+          .match(new RegExp(`^[\\s\\S]*?</${tag}\\s*>`, "i"));
+        if (close) afterOpen += close[0].length;
+      }
+      if (/^\s*$/.test(before.slice(afterOpen)) && decorative(tag, openText))
+        hits.push({
+          index: windowStart + from,
+          side: sideFrom(cls, "leading"),
+        });
+    }
+  }
+  // Immediate next sibling: the first absolute tag in `after`, with only
+  // whitespace between the Input and it.
+  {
+    const m = after.match(new RegExp("^\\s*" + open.source, "i"));
+    if (m && decorative(m[1].toLowerCase(), m[0].trimStart() || m[0])) {
+      const absAt = m[0].indexOf("<");
+      hits.push({
+        index: inputEnd + absAt,
+        side: sideFrom(m[3], "trailing"),
+      });
+    }
+  }
   return hits;
 }
 
@@ -1134,8 +1165,6 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     });
 
     if (!JSX.has(ext)) continue;
-    // Blank string contents so markup inside quotes is not read as a tag.
-    const jsx = blankStrings(src);
     // JSX opening tags of Mortar components.
     const tag = /<([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?)(?=[\s/>])/g;
     for (const m of src.matchAll(tag)) {
@@ -1229,13 +1258,14 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             "Use `suffix` (or `prefix`) for end/start text adornments such as `%` or units.",
           );
         const elementEnd = jsxElementEnd(src, m[1], afterName, attrs);
+        // Use comment-blanked source (not string-blanked): className values
+        // must stay readable so absolute/relative tokens are visible.
         for (const hit of absoluteAdornmentsBesideInput(
-          jsx,
+          src,
           m.index,
           elementEnd,
         )) {
-          const prop =
-            hit.side === "trailing" ? "trailingIcon" : "leadingIcon";
+          const prop = hit.side === "trailing" ? "trailingIcon" : "leadingIcon";
           add(
             "input-absolute-adornment",
             "warning",

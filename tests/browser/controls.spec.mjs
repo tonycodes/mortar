@@ -291,7 +291,6 @@ test("the accent wash moves away from dark on-accent text", async ({
   await page.mouse.up();
 });
 
-
 // #104: leadingIcon and suffix align with the text box, not the field label.
 test("Input adornments sit inside the text box beside the value", async ({
   page,
