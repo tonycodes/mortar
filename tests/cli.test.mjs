@@ -21,6 +21,8 @@ import {
   blankStrings,
   satisfies,
   jsxAttributes,
+  isStaticInputAction,
+  absoluteAdornmentsBesideInput,
   RULES,
 } from "../cli/audit.mjs";
 import { TOOLS, validateArguments } from "../cli/tools.mjs";
@@ -284,7 +286,107 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
       ["aria-label", "a > b"],
     ],
   );
+  assert.equal(attrs.selfClosing, false);
+  assert.equal(attrs.end, src.length);
+  const onClick = attrs.find((a) => a.name === "onClick");
+  assert.ok(onClick.expression);
+  assert.match(
+    src.slice(onClick.expression.start, onClick.expression.end),
+    /go\("}"\)/,
+  );
+
 });
+
+
+test("static Input.action expressions are distinguished from controls", () => {
+  assert.equal(isStaticInputAction('"%"'), true);
+  assert.equal(isStaticInputAction("<span>%</span>"), true);
+  assert.equal(isStaticInputAction("<>%</>"), true);
+  assert.equal(isStaticInputAction("<Button>Sort</Button>"), false);
+  assert.equal(isStaticInputAction('<span onClick={fn}>%</span>'), false);
+  assert.equal(isStaticInputAction("sortAction"), false);
+});
+
+test("absolute adornments beside Input are detected in a relative wrapper", () => {
+  const src = [
+    '<div className="relative">',
+    '  <svg className="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />',
+    '  <Input label="Search restaurants" type="search" />',
+    '  <span className="absolute right-3 top-1/2 -translate-y-1/2">x</span>',
+    "</div>",
+  ].join("\n");
+  const inputAt = src.indexOf("<Input");
+  const end = src.indexOf("/>", inputAt) + 2;
+  const hits = absoluteAdornmentsBesideInput(src, inputAt, end);
+  assert.deepEqual(
+    hits.map((h) => [h.side, src.slice(h.index, h.index + 4)]),
+    [
+      ["leading", "<svg"],
+      ["trailing", "<spa"],
+    ],
+  );
+  assert.deepEqual(
+    absoluteAdornmentsBesideInput(
+      '<div><svg className="absolute left-3" /><Input label="x" /></div>',
+      40,
+      60,
+    ),
+    [],
+  );
+});
+
+test("the audit flags Input adornments migrated into action or absolute siblings", async (t) => {
+  // #104: unlabeled native inputs often become a labeled Input still wrapped
+  // in relative/absolute chrome, or with units stuffed into action.
+  const file = [
+    'import { Input, Button, ThemeProvider } from "@tonycodes-ui/mortar";',
+    "export function App() {",
+    "  return (",
+    "    <ThemeProvider>",
+    '      <div className="relative">',
+    '        <svg className="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />',
+    '        <Input label="Search restaurants" type="search" />',
+    "      </div>",
+    '      <Input label="Tax rate" type="number" action={<span>%</span>} />',
+    '      <Input label="Website" prefix="https://" suffix=".com" />',
+    "      <Input",
+    '        label="Candidates"',
+    '        type="search"',
+    '        leadingIcon={<svg aria-hidden="true" />}',
+    '        action={<Button variant="secondary">Sort</Button>}',
+    "      />",
+    "    </ThemeProvider>",
+    "  );",
+    "}",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/Adornments.tsx": file } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const adorn = report.findings
+    .filter((f) =>
+      ["input-static-action", "input-absolute-adornment"].includes(f.rule),
+    )
+    .map((f) => [f.rule, f.severity, f.line, f.message, f.fix]);
+  assert.deepEqual(adorn, [
+    [
+      "input-absolute-adornment",
+      "warning",
+      6,
+      "Absolutely positioned decorative sibling next to <Input>; it centres against the whole field (including the label).",
+      "Pass the icon as `leadingIcon` so it sits inside the text box.",
+    ],
+    [
+      "input-static-action",
+      "warning",
+      9,
+      "<Input> action holds static text; action is for an attached control such as a Button.",
+      "Use `suffix` (or `prefix`) for end/start text adornments such as `%` or units.",
+    ],
+  ]);
+  assert.ok(RULES["input-static-action"]);
+  assert.ok(RULES["input-absolute-adornment"]);
+});
+
 
 /** A copy of a fixture app with this package "installed" in node_modules. */
 function fixture(name, { version = pkg.version, files = {} } = {}) {

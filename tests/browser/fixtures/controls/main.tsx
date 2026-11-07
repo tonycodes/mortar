@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   Dropdown,
+  Input,
   Listbox,
   MetricGroup,
   Modal,
@@ -17,6 +18,7 @@ import {
   Toaster,
   type ToastItem,
 } from "../../../../src/index.js";
+import { icons } from "../../../../src/icons.js";
 import "../../../../playground/styles.css";
 
 const scenario = new URLSearchParams(location.search).get("case");
@@ -53,6 +55,22 @@ const ranges = [
   "Last 30 days",
   "Year to date",
 ];
+
+// #104: labeled Input adornments sit inside the text box, not against the label.
+function InputAdornments() {
+  return (
+    <div style={{ padding: 16, maxWidth: 360 }}>
+      <Input
+        label="Search restaurants"
+        type="search"
+        leadingIcon={icons.search}
+        defaultValue="Noodle"
+      />
+      <Input label="Tax rate" type="number" suffix="%" defaultValue="8.5" />
+    </div>
+  );
+}
+
 function NarrowLayouts() {
   const [range, setRange] = useState(ranges[4]);
   return (
@@ -287,6 +305,13 @@ switch (scenario) {
     break;
   case "choice-description":
     content = <ChoiceDescriptions />;
+    break;
+  case "input-adornments":
+    content = (
+      <ThemeProvider appearance="light">
+        <InputAdornments />
+      </ThemeProvider>
+    );
     break;
   case "brand-document":
     content = (
