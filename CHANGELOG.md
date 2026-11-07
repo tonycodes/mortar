@@ -42,6 +42,7 @@ Mortar follows [semantic versioning](https://semver.org/). Before 1.0, a minor r
 
 ### Fixed
 
+- **Switch, Checkbox, Input and PasswordInput reject React children** ([#98](https://github.com/tonycodes/mortar/issues/98)). Their types no longer inherit `children` from the native input attributes (the accessible name is `label`), and a leftover child is dropped so it cannot be forwarded onto a void `<input>` and crash React. `mortar audit` reports JSX body children on components with no children slot as `unknown-prop`.
 - **Native buttons default to primary**, as the web Button does. `MortarButton`, `MortarButtonStyle` and `.mortar()` in SwiftUI and `MortarButton` in Compose defaulted to secondary, so a button without a variant looked different on each platform. The Native gallery showed it.
 - **Pinned DataTable cells keep the forced-colours highlight.** A selected or hovered pinned cell was specific enough to paint its own background over `Highlight`, so the text stayed `HighlightText` on `--m-selected`. Those backgrounds now sit below the forced-colours rule, and still cover the stripe in ordinary colours.
 - **Switch and Checkbox keep keyboard focus when their description comes and goes** ([#78](https://github.com/tonycodes/mortar/issues/78)). A description set in only one state (for example "Showing all 4 keys" when on) swapped the layout and remounted the input, so Space stopped working. Once a choice has had a description or error it keeps the described layout, and focus follows if the layout changes.

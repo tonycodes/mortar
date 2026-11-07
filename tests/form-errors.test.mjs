@@ -8,6 +8,22 @@ import {
   ErrorSummary,
 } from "./support/render.mjs";
 
+test("Switch and Checkbox ignore children so a native input never receives them (#98)", () => {
+  // createElement still passes children at runtime; they must not land on <input>.
+  assert.equal(
+    html(
+      Switch,
+      { label: "Show logo", checked: true, onChange() {} },
+      "Show logo",
+    ),
+    '<label data-m-component="Switch" class="m-choice"><input type="checkbox" role="switch" class="m-switch" checked=""/>Show logo</label>',
+  );
+  assert.equal(
+    html(Checkbox, { label: "Agree" }, "Agree"),
+    '<label data-m-component="Checkbox" class="m-choice"><input type="checkbox"/>Agree</label>',
+  );
+});
+
 test("Checkbox, Switch and RadioGroup keep their markup when the new props are unused", () => {
   assert.equal(
     html(Checkbox, { label: "Remember me" }),

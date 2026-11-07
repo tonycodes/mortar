@@ -21,6 +21,7 @@ import {
   blankStrings,
   satisfies,
   jsxAttributes,
+  jsxHasChildren,
   RULES,
 } from "../cli/audit.mjs";
 import { TOOLS, validateArguments } from "../cli/tools.mjs";
@@ -283,6 +284,50 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
       ["disabled", undefined],
       ["aria-label", "a > b"],
     ],
+  );
+});
+
+test("jsxHasChildren sees body content and ignores empty or self-closing tags", () => {
+  assert.equal(
+    jsxHasChildren("<Switch>Show</Switch>", "<Switch>".length, "Switch"),
+    true,
+  );
+  assert.equal(
+    jsxHasChildren(
+      "<Switch label='x'></Switch>",
+      "<Switch label='x'>".length,
+      "Switch",
+    ),
+    false,
+  );
+  assert.equal(jsxHasChildren("<A><A/>keep</A>", "<A>".length, "A"), true);
+  assert.equal(jsxHasChildren("<A><A>inner</A></A>", "<A>".length, "A"), true);
+});
+
+test("the audit flags JSX children on Switch, which has no children slot", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { Switch, ThemeProvider } from "@tonycodes-ui/mortar";
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Switch label="Show logo" checked onChange={() => {}}>Show logo</Switch>
+    </ThemeProvider>
+  );
+}
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.ok(
+    has(
+      report,
+      "unknown-prop",
+      "src/App.tsx",
+      /<Switch> has no prop "children"/,
+    ),
+    JSON.stringify(report.findings, null, 2),
   );
 });
 

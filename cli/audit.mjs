@@ -4,10 +4,12 @@
 // The scanner is deliberately lightweight (no TypeScript or Babel at runtime):
 // comments are blanked, imports from the package are read with patterns, and
 // JSX opening tags of imported Mortar components are tokenised to read their
-// attribute names and literal values. Known limits: props passed through a
-// spread ({...props}) are not checked; components re-exported or wrapped under
-// another name are not followed; JSX in .vue/.svelte/.astro/.html files is not
-// read; dynamic class names built at runtime are not resolved.
+// attribute names and literal values. Components whose contract has no children
+// slot are also checked for JSX body children between the tags. Known limits:
+// props passed through a spread ({...props}) are not checked; components
+// re-exported or wrapped under another name are not followed; JSX in
+// .vue/.svelte/.astro/.html files is not read; dynamic class names built at
+// runtime are not resolved.
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { resolve, join, relative, dirname, extname, sep } from "node:path";
 import { createHash } from "node:crypto";
@@ -253,15 +255,18 @@ function skipBraces(src, i) {
 const NAME = /[A-Za-z_$][\w$]*(?:[-:.][\w$]+)*/y;
 
 /**
- * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
- * for string literals (`a="x"` or `a={"x"}`), the value.
+ * Walk from the end of a JSX tag name to the `>` or `/>` that closes the
+ * opening tag. Returns the attributes, the index after the delimiter, and
+ * whether the tag was self-closing.
  */
-export function jsxAttributes(src, i) {
+function jsxOpening(src, i) {
   const attrs = [];
   const n = src.length;
   while (i < n) {
     while (i < n && /\s/.test(src[i])) i++;
-    if (src[i] === ">" || (src[i] === "/" && src[i + 1] === ">")) break;
+    if (src[i] === "/" && src[i + 1] === ">")
+      return { attrs, end: i + 2, selfClosing: true };
+    if (src[i] === ">") return { attrs, end: i + 1, selfClosing: false };
     if (src[i] === "{") {
       i = skipBraces(src, i);
       continue;
@@ -291,7 +296,45 @@ export function jsxAttributes(src, i) {
     }
     attrs.push(attr);
   }
-  return attrs;
+  return { attrs, end: i, selfClosing: false };
+}
+
+/**
+ * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
+ * for string literals (`a="x"` or `a={"x"}`), the value.
+ */
+export function jsxAttributes(src, i) {
+  return jsxOpening(src, i).attrs;
+}
+
+/**
+ * True when the JSX element whose body starts at `bodyStart` (just after `>`)
+ * has non-whitespace children before its matching close tag. Nested elements
+ * with the same local name are counted so `<A><A/></A>` is not truncated.
+ */
+export function jsxHasChildren(src, bodyStart, tagName) {
+  const open = new RegExp(`<${tagName}(?=[\\s/>])`, "g");
+  const close = new RegExp(`</${tagName}\\s*>`, "g");
+  let depth = 1;
+  let i = bodyStart;
+  while (i < src.length && depth > 0) {
+    open.lastIndex = i;
+    close.lastIndex = i;
+    const nextOpen = open.exec(src);
+    const nextClose = close.exec(src);
+    if (!nextClose) return /\S/.test(src.slice(bodyStart));
+    if (nextOpen && nextOpen.index < nextClose.index) {
+      const nested = jsxOpening(src, nextOpen.index + nextOpen[0].length);
+      // Self-closing nested tags do not change depth.
+      if (!nested.selfClosing) depth++;
+      i = nested.end;
+    } else {
+      depth--;
+      if (depth === 0) return /\S/.test(src.slice(bodyStart, nextClose.index));
+      i = nextClose.index + nextClose[0].length;
+    }
+  }
+  return false;
 }
 
 /**
@@ -1027,7 +1070,8 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const propTypes = component.contract.propTypes;
       if (!propTypes) continue;
       const accepts = data.accepts(component);
-      for (const attr of jsxAttributes(src, m.index + m[0].length)) {
+      const opening = jsxOpening(src, m.index + m[0].length);
+      for (const attr of opening.attrs) {
         const name = attr.name;
         if (name === "key" || /[-:]/.test(name)) continue;
         if (!accepts.has(name)) {
@@ -1069,6 +1113,26 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           line(attr.index),
           `<${exportName} ${name}="${attr.value}"> is not one of ${allowed.map((a) => `"${a}"`).join(", ")}.`,
           guess ? `Use ${name}="${guess}".` : undefined,
+        );
+      }
+      // JSX body children on a control with no children slot (e.g. Switch).
+      if (
+        !opening.selfClosing &&
+        !accepts.has("children") &&
+        jsxHasChildren(src, opening.end, m[1])
+      ) {
+        const guess = accepts.has("label")
+          ? "label"
+          : closest("children", Object.keys(propTypes), 2);
+        add(
+          "unknown-prop",
+          "error",
+          file,
+          line(opening.end),
+          `<${exportName}> has no prop "children".`,
+          guess
+            ? `Use \`${guess}\` (${propTypes[guess]?.type ?? "see the contract"}).`
+            : `See the contract: mortar component ${exportName}.`,
         );
       }
     }
