@@ -1,0 +1,62 @@
+name: Component request
+description: Ask for a new public component or an extension to an existing one.
+title: "[component] "
+labels: ["enhancement"]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Component name
+      description: Proposed public name, or the existing component to extend.
+      placeholder: Timeline
+    validations:
+      required: true
+  - type: dropdown
+    id: kit
+    attributes:
+      label: Kit
+      options:
+        - Application
+        - Marketing
+        - Email
+        - Native
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What the consumer cannot do today without this component.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: Props, states and composition you need. Prefer DESIGN.md conventions.
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: related
+    attributes:
+      label: Related components
+      description: Existing Mortar components that are close, or that this would compose.
+  - type: input
+    id: playground
+    attributes:
+      label: Playground URL
+      description: A playground page or recipe that shows the gap (optional).
+      placeholder: https://mortar.tony.codes/playground/?recipe=...
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or references
+      description: Sketches, product screenshots or links that show the desired UI.
+  - type: checkboxes
+    id: agent
+    attributes:
+      label: Agent readiness
+      options:
+        - label: Enough detail here for an agent labelled agent:ready to open a PR (component, expected behaviour, and at least one fixture or screenshot).

@@ -1,0 +1,53 @@
+name: Theming / brand
+description: Brand tokens, ThemeProvider, CSP, accent gradients or surface colours.
+title: "[theming] "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - Bug in theming
+        - New brand capability
+        - Docs clarification
+        - CSP / build-time brand
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component or surface
+      description: Where the theme shows up (for example Button accent, Navbar tone, Hero).
+      placeholder: Button variant="accent"
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: Token names, brand fields or CSS variables involved.
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What happens today, including contrast or CSP failures.
+  - type: textarea
+    id: brand
+    attributes:
+      label: Brand snippet
+      description: Minimal BrandDefinition or CSS that reproduces the issue.
+      render: tsx
+  - type: input
+    id: playground
+    attributes:
+      label: Playground URL
+      description: Brand builder or playground link (optional).
+      placeholder: https://mortar.tony.codes/playground/
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Light and dark appearances when relevant.

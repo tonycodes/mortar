@@ -1,0 +1,44 @@
+# Dependabot for npm and GitHub Actions. Weekly, grouped.
+# Auto-merge is intentionally not configured (needs a maintainer policy decision; see #62).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      react-headless:
+        patterns:
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+          - "@headlessui/react"
+      tailwind-vite:
+        patterns:
+          - tailwindcss
+          - "@tailwindcss/*"
+          - vite
+          - "@vitejs/*"
+      playwright:
+        patterns:
+          - "@playwright/*"
+          - playwright
+          - "@axe-core/playwright"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    groups:
+      actions:
+        patterns:
+          - "*"

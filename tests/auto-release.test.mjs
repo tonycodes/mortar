@@ -1150,13 +1150,16 @@ test("R-AR-17 release.yml retains credential isolation and serialized publishing
     readdirSync(join(root, ".github/workflows")).sort(),
     [
       "check.yml",
+      "codeql.yml",
+      "dependency-review.yml",
       "deploy-playground.yml",
+      "health.yml",
       "native-android.yml",
       "native-apple.yml",
       "release.yml",
       "visual-candidates.yml",
     ].sort(),
-    "R-AR-17 exactly six workflow files",
+    "R-AR-17 expected workflow files only",
   );
   // The native libraries' checks run beside the release path: read only, no
   // secrets, and never the workflow the release waits for.
