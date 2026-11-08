@@ -97,8 +97,8 @@ dependencyResolutionManagement {
 Then the dependency, at the same version as `@tonycodes-ui/mortar`:
 
 ```kotlin
-// The release that adds publishing (#95) is the first in GitHub Packages.
-implementation("codes.tony:mortar:0.21.0")
+// 0.22.0 is the first version in GitHub Packages.
+implementation("codes.tony:mortar:0.22.0")
 ```
 
 To try unreleased changes, build the library into your local Maven repository with Gradle 8.11 and JDK 17 and depend on `0.0.0-local`:
