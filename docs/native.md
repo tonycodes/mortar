@@ -153,7 +153,7 @@ MortarForm("Connect mail") {
 }
 ```
 
-- `MortarForm` scrolls a column at most 760 points wide (`measure`) on the paper, with an optional title and description, and pins `actions` at the bottom, trailing. Use the same view in a navigation destination or a sheet. On a Mac it gives a sheet a sensible size of its own.
+- `MortarForm` scrolls a column at most 760 points wide (`measure`) on the paper, with an optional title and description, and pins `actions` at the bottom, trailing. The actions sit on one row when they fit the width they're offered and stack, still trailing, when they don't. That choice uses the proposed width only, so resizing can't feed a measurement back into itself. Use the same view in a navigation destination or a sheet. On a Mac it gives a sheet a sensible size of its own.
 - `MortarFormSection` is the web SettingsSection: title and description in a third, fields in two thirds, from 560 points wide.
 - `MortarField` puts Mortar's label, required marker, hint and error around any other control, such as a `DatePicker`, a `Stepper` or a control of your own, and gives VoiceOver the same name and hint as the other fields.
 - Disable a field, or a whole section, with `.disabled(_:)`. While saving, give the primary action `isLoading`.
