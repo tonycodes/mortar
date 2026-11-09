@@ -263,6 +263,22 @@ final class MortarSnapshotTests: XCTestCase {
         )
     }
 
+    func testForm() {
+        for (name, traits) in phone {
+            assertSnapshot(
+                of: SettingsFormSample(),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13), traits: traits),
+                named: name
+            )
+        }
+        assertSnapshot(
+            of: SettingsFormSample(),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPadPro11),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "ipad"
+        )
+    }
+
     /// The bubble's spoken name is the prose, not the Markdown source.
     /// The simulator host does not publish SwiftUI's accessibility elements to
     /// this unit-test process (the walk came back empty), so this checks the

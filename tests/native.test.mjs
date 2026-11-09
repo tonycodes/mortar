@@ -338,7 +338,7 @@ test("manifests name native components that exist, and every native component ha
   composables.delete("MortarTheme");
   const catalog = JSON.parse(await readSource("catalog.json"));
   const named = catalog.components.filter((c) => c.platforms);
-  assert.equal(named.length, 17);
+  assert.equal(named.length, 20);
   // A component may exist on one platform before the other.
   for (const c of named) {
     if (c.platforms.swiftui)
@@ -352,6 +352,10 @@ test("manifests name native components that exist, and every native component ha
         `${c.export}: ${c.platforms.compose} in Compose`,
       );
   }
+  // Layout pieces with no web component of their own, documented in
+  // docs/native.md instead of a manifest.
+  const nativeOnly = ["MortarField", "MortarForm"];
+  for (const name of nativeOnly) assert.ok(swiftViews.delete(name), name);
   assert.deepEqual(
     [...swiftViews].sort(),
     [...new Set(named.map((c) => c.platforms.swiftui).filter(Boolean))].sort(),
