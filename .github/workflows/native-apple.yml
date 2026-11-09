@@ -139,13 +139,13 @@ jobs:
             -destination 'platform=macOS' \
             -only-testing:MortarTests/MortarMacTests/testConnectorFormOpensAndClosesWithoutLayoutLoop \
             -only-testing:MortarTests/MortarMacTests/testConnectorSheetPresentsAndDismissesWithoutLayoutLoop \
-            -only-testing:MortarTests/MortarMacTests/testFormActionsStayInARowWhenTheyFitAndStackWhenTheyDoNot \
+            -only-testing:MortarTests/MortarMacTests/testFormActionsResizeWithoutLayoutLoop \
             2>&1 | tee "$log"
           grep -q "TEST SUCCEEDED" "$log"
           for test in \
             testConnectorFormOpensAndClosesWithoutLayoutLoop \
             testConnectorSheetPresentsAndDismissesWithoutLayoutLoop \
-            testFormActionsStayInARowWhenTheyFitAndStackWhenTheyDoNot
+            testFormActionsResizeWithoutLayoutLoop
           do
             grep -E "${test}.*passed" "$log"
           done
