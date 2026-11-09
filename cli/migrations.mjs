@@ -2,6 +2,11 @@
 // CHANGELOG. The audit uses them to suggest the current name for an import, a
 // prop or a value. tests/cli.test.mjs checks every replacement exists in the
 // catalogue and every removed prop is gone.
+//
+// Input adornments (audit rules input-static-action / input-absolute-adornment):
+// when migrating an unlabeled native <input> to Mortar's labeled Input, use
+// prefix/suffix for static text and leadingIcon/trailingIcon for decorative
+// icons. Do not keep absolute siblings or put static text in action.
 
 export const REMOVED_EXPORTS = {
   MarketingTone: {

@@ -67,6 +67,57 @@ for (const appearance of ["dark", "light"])
     expect(ring[1]).toBe(await tokenColor(page, "--m-focus", wrapper));
   });
 
+test("a contained modal stays inside the widget and leaves host controls usable", async ({
+  page,
+}) => {
+  await open(page, "contained-modal");
+  const widget = page.getByTestId("widget");
+  const hostAction = page.locator("#host-action");
+  await expect(hostAction).toBeVisible();
+
+  await page.getByRole("button", { name: "Customise item" }).click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute("data-portal", "contained");
+
+  // The dialog lives under the widget overlay host, not the document body root.
+  expect(
+    await dialog.evaluate(
+      (el) =>
+        !!el.closest(".m-overlay-host") && !!el.closest("[data-testid=widget]"),
+    ),
+  ).toBe(true);
+  expect(
+    await dialog.evaluate(
+      (el) => el.parentElement?.id === "headlessui-portal-root",
+    ),
+  ).toBe(false);
+
+  const widgetBox = await widget.boundingBox();
+  const dialogBox = await dialog.boundingBox();
+  expect(widgetBox).toBeTruthy();
+  expect(dialogBox).toBeTruthy();
+  expect(dialogBox.x).toBeGreaterThanOrEqual(widgetBox.x - 1);
+  expect(dialogBox.y).toBeGreaterThanOrEqual(widgetBox.y - 1);
+  expect(dialogBox.x + dialogBox.width).toBeLessThanOrEqual(
+    widgetBox.x + widgetBox.width + 1,
+  );
+  expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(
+    widgetBox.y + widgetBox.height + 1,
+  );
+
+  // Host controls outside the widget stay clickable while the modal is open.
+  await hostAction.click();
+  await expect(dialog).toBeVisible();
+  await expect(hostAction).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Customise item" }),
+  ).toBeFocused();
+});
+
 test("a nested provider without navigate keeps the outer router", async ({
   page,
 }) => {
@@ -289,6 +340,58 @@ test("the accent wash moves away from dark on-accent text", async ({
   await page.mouse.down();
   expect(await layers()).toMatch(/^linear-gradient\(oklab\(1 0 0 \/ 0\.28\)/);
   await page.mouse.up();
+});
+
+// #104: leadingIcon and suffix align with the text box, not the field label.
+test("Input adornments sit inside the text box beside the value", async ({
+  page,
+}) => {
+  await open(page, "input-adornments");
+  const search = page.getByRole("searchbox", { name: "Search restaurants" });
+  const tax = page.getByRole("spinbutton", { name: "Tax rate" });
+  await expect(search).toBeVisible();
+  await expect(tax).toBeVisible();
+  const searchAlign = await search.evaluate((input) => {
+    const group = input.closest(".m-input-group");
+    const icon = group?.querySelector(".m-input-icon");
+    const field = input.closest(".m-field");
+    const label = field?.querySelector("label");
+    if (!group || !icon || !label) return null;
+    const i = input.getBoundingClientRect();
+    const g = icon.getBoundingClientRect();
+    const l = label.getBoundingClientRect();
+    return {
+      iconInGroup: group.contains(icon),
+      iconMidY: (g.top + g.bottom) / 2,
+      inputMidY: (i.top + i.bottom) / 2,
+      labelMidY: (l.top + l.bottom) / 2,
+    };
+  });
+  expect(searchAlign).toBeTruthy();
+  expect(searchAlign.iconInGroup).toBe(true);
+  expect(Math.abs(searchAlign.iconMidY - searchAlign.inputMidY)).toBeLessThan(
+    2,
+  );
+  expect(
+    Math.abs(searchAlign.iconMidY - searchAlign.labelMidY),
+  ).toBeGreaterThan(8);
+  const taxAlign = await tax.evaluate((input) => {
+    const group = input.closest(".m-input-group");
+    const suffix = [...(group?.children ?? [])].find(
+      (el) => el.tagName === "SPAN" && el.textContent === "%",
+    );
+    if (!group || !suffix) return null;
+    const i = input.getBoundingClientRect();
+    const s = suffix.getBoundingClientRect();
+    return {
+      suffixInGroup: group.contains(suffix),
+      suffixMidY: (s.top + s.bottom) / 2,
+      inputMidY: (i.top + i.bottom) / 2,
+    };
+  });
+  expect(taxAlign).toBeTruthy();
+  expect(taxAlign.suffixInGroup).toBe(true);
+  expect(Math.abs(taxAlign.suffixMidY - taxAlign.inputMidY)).toBeLessThan(2);
 });
 
 // #78: a Switch or Checkbox whose description appears and disappears as it

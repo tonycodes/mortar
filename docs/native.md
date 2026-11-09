@@ -4,8 +4,6 @@ Mortar is coming to iPhone, iPad and Android as a SwiftUI package and a Jetpack 
 
 The playground's **Native gallery** (`?page=native`) shows each component on the web beside its SwiftUI and Compose snapshot references, in light, dark and large text.
 
-Agents: `get_guide native` (or `npx mortar guide native`) returns this page. Components that already have native ports declare them on their catalogue entry as `platforms` (see below); `search_components` and `get_component` surface that field.
-
 ## Tokens
 
 SwiftUI and Compose cannot read `tokens.css`, so each library gets its tokens as literal values in a generated file:
@@ -51,44 +49,25 @@ Button("Cancel", action: cancel).buttonStyle(.mortar(.ghost))
 
 A brand is a `MortarTheme`: its light and dark `MortarPalette`s, font family names (registered by the app) and density. Every component reads the palette that matches the colour scheme, and scales its text with Dynamic Type.
 
-| Component                                                  | Web equivalent | Notes                                                                                                                                                                                                  |
-| ---------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `MortarButton`, `.buttonStyle(.mortar(_:size:isLoading:))` | Button         | `primary` (the default, as on the web), `secondary`, `ghost`, `danger`, `accent`; `sm`, `md`, `lg`; loading; SF Symbol, icon-only with the title as its accessible name. Medium is at least 44pt tall. |
-| `MortarBadge`                                              | Badge          | Tones `neutral`, `info`, `success`, `warning`, `danger`.                                                                                                                                               |
-| `MortarCard`                                               | Card           | Title, description, header actions, footer, `compact` or `none` padding, `muted` tone.                                                                                                                 |
-| `MortarTextField`                                          | Input          | Label, prompt, hint, error, required marker, secure entry. VoiceOver reads the label as its name, then "required", the error and the hint.                                                             |
-| `MortarSwitch`, `.toggleStyle(.mortar)`                    | Switch         | The whole row toggles; VoiceOver sees a standard switch.                                                                                                                                               |
-| `MortarAvatar`                                             | Avatar         | Image URL with initials while loading or on failure, five sizes, circle or square, online or offline status, decorative.                                                                               |
-| `MortarNotice`                                             | Notice         | Tone, message, actions, dismiss button, VoiceOver announcement.                                                                                                                                        |
-| `MortarEmptyState`                                         | EmptyState     | SF Symbol, description, action, dashed, centred or leading.                                                                                                                                            |
+| Component                                                  | Web equivalent   | Notes                                                                                                                                                                                                  |
+| ---------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `MortarButton`, `.buttonStyle(.mortar(_:size:isLoading:))` | Button           | `primary` (the default, as on the web), `secondary`, `ghost`, `danger`, `accent`; `sm`, `md`, `lg`; loading; SF Symbol, icon-only with the title as its accessible name. Medium is at least 44pt tall. |
+| `MortarBadge`                                              | Badge            | Tones `neutral`, `info`, `success`, `warning`, `danger`.                                                                                                                                               |
+| `MortarCard`                                               | Card             | Title, description, header actions, footer, `compact` or `none` padding, `muted` tone.                                                                                                                 |
+| `MortarTextField`                                          | Input            | Label, prompt, hint, error, required marker, secure entry. VoiceOver reads the label as its name, then "required", the error and the hint.                                                             |
+| `MortarSwitch`, `.toggleStyle(.mortar)`                    | Switch           | The whole row toggles; VoiceOver sees a standard switch.                                                                                                                                               |
+| `MortarAvatar`                                             | Avatar           | Image URL with initials while loading or on failure, five sizes, circle or square, online or offline status, decorative.                                                                               |
+| `MortarNotice`                                             | Notice           | Tone, message, actions, dismiss button, VoiceOver announcement.                                                                                                                                        |
+| `MortarEmptyState`                                         | EmptyState       | SF Symbol, description, action, dashed, centred or leading.                                                                                                                                            |
+| `MortarCheckbox`                                           | Checkbox         | Label, description, error, required marker. The whole row toggles; VoiceOver reads a checkbox.                                                                                                         |
+| `MortarRadioGroup`                                         | RadioGroup       | Label, hint, error, options with descriptions and disabled options.                                                                                                                                    |
+| `MortarSegmentedControl`                                   | SegmentedControl | A labelled set of segments; scrolls sideways when they don't fit.                                                                                                                                      |
+| `MortarProgressBar`                                        | ProgressBar      | Label, value and total, a value label (a percentage by default), a status tone.                                                                                                                        |
+| `MortarDivider`                                            | Divider          | Optional label, soft line, spacing `none`, `sm`, `md` or `lg`.                                                                                                                                         |
+| `MortarStackedList`                                        | StackedList      | Rows with an avatar or SF Symbol, description, trailing text and an action; grouped under headings; chevrons.                                                                                          |
+| `MortarAppShell`                                           | AppShell         | Top-level destinations: a tab bar on iPhone, a sidebar on iPad and Mac, each destination in its own navigation stack.                                                                                  |
 
 On both platforms the switch sits at the end of its row, after the label, as in iOS and Android settings; on the web it comes first.
-
-### Manifest `platforms`
-
-Web manifests for components that have a native counterpart name those ports:
-
-```json
-"platforms": {
-  "swiftui": "MortarButton",
-  "compose": "MortarButton"
-}
-```
-
-Each key is `swiftui` or `compose`. The value is the public SwiftUI `struct` or Compose `@Composable fun` name. The web export and the native type can differ (Input → `MortarTextField`). Only components that ship native ports today set the field; the rest stay web-only. `npm run check` rejects a `platforms` entry whose type is missing from `native/apple` or `native/android`.
-
-| Web export | SwiftUI / Compose  |
-| ---------- | ------------------ |
-| Button     | `MortarButton`     |
-| Badge      | `MortarBadge`      |
-| Card       | `MortarCard`       |
-| Input      | `MortarTextField`  |
-| Switch     | `MortarSwitch`     |
-| Avatar     | `MortarAvatar`     |
-| Notice     | `MortarNotice`     |
-| EmptyState | `MortarEmptyState` |
-
-More of the core set is tracked in [#95](https://github.com/tonycodes/mortar/issues/95); Maven hosting for Compose is still open.
 
 ### Snapshot tests
 
@@ -98,15 +77,39 @@ Rendering differs between iOS versions, so the reference images are recorded on 
 
 ## Jetpack Compose
 
-The library is in `native/android` (module `mortar`, package `codes.tony.mortar`) for Android 7.0 (API 24) and later. Until its Maven repository is chosen ([#95](https://github.com/tonycodes/mortar/issues/95)), build it into your local Maven repository with Gradle 8.11 and JDK 17:
+The library is in `native/android` (module `mortar`, package `codes.tony.mortar`) for Android 7.0 (API 24) and later. Each Mortar release publishes it to [GitHub Packages](https://github.com/tonycodes/mortar/packages) at the npm package's version. GitHub's Maven registry asks for a token even for public packages, so add the repository in `settings.gradle.kts` with a GitHub username and a personal access token that has `read:packages`, kept out of source control (here in `~/.gradle/gradle.properties`):
+
+```kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://maven.pkg.github.com/tonycodes/mortar") {
+            credentials {
+                username = providers.gradleProperty("gpr.user").get()
+                password = providers.gradleProperty("gpr.key").get()
+            }
+        }
+    }
+}
+```
+
+Then the dependency, at the same version as `@tonycodes-ui/mortar`:
+
+```kotlin
+// 0.22.0 is the first version in GitHub Packages.
+implementation("codes.tony:mortar:0.22.0")
+```
+
+To try unreleased changes, build the library into your local Maven repository with Gradle 8.11 and JDK 17 and depend on `0.0.0-local`:
 
 ```sh
 gradle -p native/android :mortar:publishToMavenLocal -Pversion=0.0.0-local
 ```
 
-```kotlin
-implementation("codes.tony:mortar:0.0.0-local")
-```
+### Publishing
+
+`.github/workflows/publish-android.yml` runs after each successful **Release package** run on main. It finds the release tag on the released commit (a run that released nothing leaves none), skips a version GitHub Packages already has, and publishes `codes.tony:mortar:<version>` with `gradle :mortar:publishReleasePublicationToGitHubPackagesRepository`. It publishes with the run's own `GITHUB_TOKEN` and `packages: write`, so no secret is stored, and it has no manual trigger, so a version is only published from its release. The release policy test (R-AR-17) keeps it that way: read-only contents, no ref writes, no secrets.
 
 Theme the app once near its root, then use the components:
 
@@ -120,16 +123,27 @@ setContent {
 
 A brand is a `MortarBrand`: its light and dark `MortarPalette`s, `FontFamily`s and density. `MortarTheme` follows the system's dark theme unless you pass `darkTheme`; components read `Mortar.palette` and `Mortar.brand`. Text sizes are in sp, so they follow the font scale.
 
-The components and their parameters match the SwiftUI table above, with Compose names: `MortarButton`, `MortarBadge`, `MortarCard`, `MortarTextField`, `MortarSwitch`, `MortarAvatar`, `MortarNotice` and `MortarEmptyState`. Differences:
+The components and their parameters match the SwiftUI table above, with Compose names: `MortarButton`, `MortarBadge`, `MortarCard`, `MortarTextField`, `MortarSwitch`, `MortarAvatar`, `MortarNotice`, `MortarEmptyState`, `MortarCheckbox`, `MortarRadioGroup`, `MortarSegmentedControl`, `MortarProgressBar`, `MortarDivider`, `MortarStackedList` and `MortarAppShell`. Differences:
 
 - Medium controls and touch targets are 48dp, Material's minimum, instead of 44.
 - `MortarAvatar` takes a `Painter`: load the picture with your image library (Coil, Glide) and pass null while it loads or when it fails, to show the initials.
-- Icons are `ImageVector`s, such as `Icons.Filled.Share`.
+- Icons are `ImageVector`s, such as `Icons.Filled.Share`; a `MortarStackedList` row leads with `MortarListLeading.Avatar` or `MortarListLeading.Icon`.
+- `MortarAppShell` follows Android's window size classes: a bottom navigation bar under 600dp, a navigation rail to 840dp, and a sidebar with the brand name from 840dp.
 - `MortarNotice(announce = true)` is a live region: polite, or assertive for `Danger`.
 
 ### Snapshot tests
 
 `native/android/mortar/src/test` holds unit tests and [Paparazzi](https://github.com/cashapp/paparazzi) snapshots of each component on a Pixel 5 in light, dark and twice the font size, and a branded screen on a Pixel C tablet. Paparazzi renders on the JVM, without an emulator, so the references in `src/test/snapshots` match on any machine. The **Mortar for Compose** workflow runs `gradle :mortar:verifyPaparazziDebug` on every change to `native/android`. When it fails, it records what the code renders now and uploads the images as `mortar-compose-snapshots-<sha>` to review and commit. Locally, `gradle -p native/android :mortar:recordPaparazziDebug` does the same.
+
+## For agents
+
+A component with a native version names it in its manifest:
+
+```json
+"platforms": { "swiftui": "MortarTextField", "compose": "MortarTextField" }
+```
+
+`get_component` shows it as `native`, with each import, and a build packet for a brief about an iOS, iPadOS or Android app adds this guide and a `native` section listing every component the libraries have. `tests/native.test.mjs` checks that each named view or composable exists, and that every public one is named by a manifest. `npm run check` also rejects a malformed `platforms` entry, or one naming a type the native sources do not define (rule M011).
 
 ## Brands
 

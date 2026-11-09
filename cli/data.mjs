@@ -43,7 +43,7 @@ export const GUIDES = {
   native: {
     file: "docs/native.md",
     summary:
-      "SwiftUI and Jetpack Compose libraries: tokens, MortarTheme, the components that have native ports (manifest platforms), snapshot tests and local install.",
+      "Mortar for SwiftUI (iPhone, iPad, Mac) and Jetpack Compose (Android): install, MortarTheme and brands, the native components and their web equivalents, the generated tokens and snapshot tests.",
   },
   "migrating-0.6": {
     file: "docs/migrating-to-0.6.md",

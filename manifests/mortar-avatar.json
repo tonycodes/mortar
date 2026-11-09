@@ -6,14 +6,14 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Avatar",
-  "source": "src/display.tsx",
-  "capabilities": [],
-  "owner": "Mortar maintainers",
-  "kitId": "foundation",
   "platforms": {
     "swiftui": "MortarAvatar",
     "compose": "MortarAvatar"
   },
+  "source": "src/display.tsx",
+  "capabilities": [],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
   "contract": {
     "props": {
       "name": "string",

@@ -19,8 +19,15 @@ import { componentDetail, buildPacket } from "../cli/packet.mjs";
 import {
   auditApp,
   blankStrings,
+  blockTagsIn,
   satisfies,
   jsxAttributes,
+  hasVisualDeclarations,
+  parseAncestorNativeSelector,
+  isStaticInputAction,
+  absoluteAdornmentsBesideInput,
+  jsxChildrenRange,
+  jsxHasChildren,
   RULES,
 } from "../cli/audit.mjs";
 import { TOOLS, validateArguments } from "../cli/tools.mjs";
@@ -117,14 +124,6 @@ test("get_component returns the contract with prop types and an example", () => 
   assert.ok(auth.templates.includes("sign-in"));
   assert.match(auth.usage, /AuthLayout/);
   assert.equal(c.platforms, undefined);
-  assert.deepEqual(componentDetail(data, data.find("Button")).platforms, {
-    swiftui: "MortarButton",
-    compose: "MortarButton",
-  });
-  assert.deepEqual(componentDetail(data, data.find("Input")).platforms, {
-    swiftui: "MortarTextField",
-    compose: "MortarTextField",
-  });
 });
 
 test("a build packet includes the dependency closure and setup", () => {
@@ -199,7 +198,7 @@ test("every guide topic loads from the package", () => {
   assert.doesNotMatch(data.guide("conventions"), /## Composing flows/);
   assert.match(data.guide("auth-flows"), /AuthLayout/);
   assert.match(data.guide("email"), /renderEmail/);
-  assert.match(data.guide("native"), /Manifest `platforms`/);
+  assert.match(data.guide("native"), /MortarTheme/);
   assert.match(data.guide("contributing"), /# Agent instructions/);
 });
 
@@ -293,6 +292,193 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
       ["disabled", undefined],
       ["aria-label", "a > b"],
     ],
+  );
+  assert.equal(attrs.selfClosing, false);
+  assert.equal(attrs.end, src.length);
+  const onClick = attrs.find((a) => a.name === "onClick");
+  assert.ok(onClick.expression);
+  assert.match(
+    src.slice(onClick.expression.start, onClick.expression.end),
+    /go\("}"\)/,
+  );
+});
+
+test("static Input.action expressions are distinguished from controls", () => {
+  assert.equal(isStaticInputAction('"%"'), true);
+  assert.equal(isStaticInputAction("<span>%</span>"), true);
+  assert.equal(isStaticInputAction("<>%</>"), true);
+  assert.equal(isStaticInputAction("<Button>Sort</Button>"), false);
+  assert.equal(isStaticInputAction("<span onClick={fn}>%</span>"), false);
+  assert.equal(isStaticInputAction("sortAction"), false);
+});
+
+test("absolute adornments beside Input are detected in a relative wrapper", () => {
+  const src = [
+    '<div className="relative">',
+    '  <svg className="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />',
+    '  <Input label="Search restaurants" type="search" />',
+    '  <span className="absolute right-3 top-1/2 -translate-y-1/2">x</span>',
+    "</div>",
+  ].join("\n");
+  const inputAt = src.indexOf("<Input");
+  const end = src.indexOf("/>", inputAt) + 2;
+  const hits = absoluteAdornmentsBesideInput(src, inputAt, end);
+  assert.deepEqual(
+    hits.map((h) => [h.side, src.slice(h.index, h.index + 4)]),
+    [
+      ["leading", "<svg"],
+      ["trailing", "<spa"],
+    ],
+  );
+  assert.deepEqual(
+    absoluteAdornmentsBesideInput(
+      '<div><svg className="absolute left-3" /><Input label="x" /></div>',
+      40,
+      60,
+    ),
+    [],
+  );
+});
+
+test("the audit flags Input adornments migrated into action or absolute siblings", async (t) => {
+  // #104: unlabeled native inputs often become a labeled Input still wrapped
+  // in relative/absolute chrome, or with units stuffed into action.
+  const file = [
+    'import { Input, Button, ThemeProvider } from "@tonycodes-ui/mortar";',
+    "export function App() {",
+    "  return (",
+    "    <ThemeProvider>",
+    '      <div className="relative">',
+    '        <svg className="absolute left-3 top-1/2 -translate-y-1/2" aria-hidden="true" />',
+    '        <Input label="Search restaurants" type="search" />',
+    "      </div>",
+    '      <Input label="Tax rate" type="number" action={<span>%</span>} />',
+    '      <Input label="Website" prefix="https://" suffix=".com" />',
+    "      <Input",
+    '        label="Candidates"',
+    '        type="search"',
+    '        leadingIcon={<svg aria-hidden="true" />}',
+    '        action={<Button variant="secondary">Sort</Button>}',
+    "      />",
+    "    </ThemeProvider>",
+    "  );",
+    "}",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/Adornments.tsx": file } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const adorn = report.findings
+    .filter((f) =>
+      ["input-static-action", "input-absolute-adornment"].includes(f.rule),
+    )
+    .map((f) => [f.rule, f.severity, f.line, f.message, f.fix]);
+  assert.deepEqual(adorn, [
+    [
+      "input-absolute-adornment",
+      "warning",
+      6,
+      "Absolutely positioned decorative sibling next to <Input>; it centres against the whole field (including the label).",
+      "Pass the icon as `leadingIcon` so it sits inside the text box.",
+    ],
+    [
+      "input-static-action",
+      "warning",
+      9,
+      "<Input> action holds static text; action is for an attached control such as a Button.",
+      "Use `suffix` (or `prefix`) for end/start text adornments such as `%` or units.",
+    ],
+  ]);
+  assert.ok(RULES["input-static-action"]);
+  assert.ok(RULES["input-absolute-adornment"]);
+});
+
+test("the JSX scanner keeps attributes inside the opening tag when a slot has an apostrophe", () => {
+  // Apostrophes in JSX text must not be read as JS string quotes (#100).
+  const cases = [
+    `footer={<>Don't have an account? <a href="/signup">Sign up</a></>}`,
+    `footer={<>It's fine with "quoted" text too</>}`,
+    `footer={<><span>Don't</span> leave</>}`,
+    `footer={<>{"Don't quote me"}</>}`,
+  ];
+  for (const slot of cases) {
+    const src = `export function App() {\n  return <AuthLayout title="Sign in" ${slot}>Form</AuthLayout>;\n}\nexport default App;\n`;
+    const i = src.indexOf("<AuthLayout") + "<AuthLayout".length;
+    const attrs = jsxAttributes(src, i);
+    assert.deepEqual(
+      attrs.map((a) => a.name),
+      ["title", "footer"],
+      `unexpected attrs for ${slot}`,
+    );
+  }
+});
+
+test("the audit does not invent unknown-prop findings from apostrophes in slot JSX", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { AuthLayout, ThemeProvider } from "@tonycodes-ui/mortar";
+export function App() {
+  return (
+    <ThemeProvider>
+      <AuthLayout title="Sign in" footer={<>Don't have an account? <a href="/signup">Sign up</a></>}>
+        Form
+      </AuthLayout>
+    </ThemeProvider>
+  );
+}
+export default App;
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "unknown-prop").length,
+    0,
+    JSON.stringify(report.findings, null, 2),
+  );
+});
+
+test("jsxHasChildren sees body content and ignores empty or self-closing tags", () => {
+  assert.equal(
+    jsxHasChildren("<Switch>Show</Switch>", "<Switch>".length, "Switch"),
+    true,
+  );
+  assert.equal(
+    jsxHasChildren(
+      "<Switch label='x'></Switch>",
+      "<Switch label='x'>".length,
+      "Switch",
+    ),
+    false,
+  );
+  assert.equal(jsxHasChildren("<A><A/>keep</A>", "<A>".length, "A"), true);
+  assert.equal(jsxHasChildren("<A><A>inner</A></A>", "<A>".length, "A"), true);
+});
+
+test("the audit flags JSX children on Switch, which has no children slot", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { Switch, ThemeProvider } from "@tonycodes-ui/mortar";
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Switch label="Show logo" checked onChange={() => {}}>Show logo</Switch>
+    </ThemeProvider>
+  );
+}
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.ok(
+    has(
+      report,
+      "unknown-prop",
+      "src/App.tsx",
+      /<Switch> has no prop "children"/,
+    ),
+    JSON.stringify(report.findings, null, 2),
   );
 });
 
@@ -430,6 +616,57 @@ test("the audit detects copies, class overrides and palette classes", async (t) 
   assert.ok(has(report, "raw-colour", "src/Extra.tsx", /dark:text-white/));
   assert.ok(has(report, "styles-order", "src/late.css"));
   assert.ok(has(report, "css-override", "src/late.css", /data-m-component/));
+});
+
+test("ancestor CSS that visually overrides a Mortar control is flagged", async (t) => {
+  // #107: `.toolbar button { … }` around <Button> reported nothing.
+  const dir = fixture("ancestor-visual-override");
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.ok(
+    has(
+      report,
+      "ancestor-override",
+      "src/styles.css",
+      /\.toolbar button[\s\S]*Button/,
+    ),
+  );
+  assert.equal(
+    report.findings.filter((f) => f.rule === "ancestor-override").length,
+    1,
+  );
+});
+
+test("ancestor CSS with only layout properties stays clean", async (t) => {
+  const dir = fixture("ancestor-layout-only");
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "ancestor-override").length,
+    0,
+  );
+});
+
+test("ancestor CSS over a native button does not flag Mortar elsewhere", async (t) => {
+  const dir = fixture("ancestor-native-button");
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "ancestor-override").length,
+    0,
+  );
+});
+
+test("parseAncestorNativeSelector and hasVisualDeclarations stay conservative", () => {
+  assert.deepEqual(
+    parseAncestorNativeSelector(".toolbar button").map((t) => t.tag),
+    ["button"],
+  );
+  assert.equal(parseAncestorNativeSelector(".m-button").length, 0);
+  assert.equal(parseAncestorNativeSelector("button").length, 0);
+  assert.equal(parseAncestorNativeSelector(".a .b button").length, 0);
+  assert.ok(hasVisualDeclarations("border-radius: 999px; font-size: 9px;"));
+  assert.ok(!hasVisualDeclarations("display: flex; margin: 8px; gap: 4px;"));
 });
 
 test("the audit flags raw elements that a Mortar component replaces", async (t) => {
@@ -656,6 +893,133 @@ test("the audit reports a missing install and declaration", async (t) => {
   assert.ok(has(report, "not-declared", "package.json"));
 });
 
+test("the JSX children range and block-tag scanner find nested markup", () => {
+  const src = `<Banner>\n  <div><h2>Start</h2></div>\n</Banner>`;
+  const body = jsxChildrenRange(src, "Banner", "<Banner".length);
+  assert.deepEqual(body, {
+    start: "<Banner>".length,
+    end: src.lastIndexOf("</Banner>"),
+  });
+  assert.deepEqual(
+    blockTagsIn(src, body.start, body.end).map((h) => h.tag),
+    ["div", "h2"],
+  );
+  const attrs = jsxAttributes(
+    `<AuthLayout description={<p>Bring your menu.</p>} />`,
+    "<AuthLayout".length,
+  );
+  const description = attrs.find((a) => a.name === "description");
+  assert.ok(description.expression);
+  assert.deepEqual(
+    blockTagsIn(
+      `<AuthLayout description={<p>Bring your menu.</p>} />`,
+      description.expression.start,
+      description.expression.end,
+    ).map((h) => h.tag),
+    ["p"],
+  );
+});
+
+test("the audit flags block elements in phrasing-only slots", async (t) => {
+  // #102: Banner/AuthLayout wrap phrasing slots in <p>; block children nested.
+  const app = [
+    'import { Banner, AuthLayout, ThemeProvider } from "@tonycodes-ui/mortar";',
+    "export function App() {",
+    "  return (",
+    "    <ThemeProvider>",
+    "      <Banner>",
+    "        <div><h2>Start ordering</h2><p>Free orders.</p></div>",
+    "      </Banner>",
+    '      <AuthLayout title="Sign up" description={<p>Bring your menu.</p>}>',
+    "        <form />",
+    "      </AuthLayout>",
+    '      <Banner>Safe <strong>phrasing</strong> with a <a href="/">link</a>.</Banner>',
+    '      <AuthLayout title="Ok" description="A string is fine."><form /></AuthLayout>',
+    "    </ThemeProvider>",
+    "  );",
+    "}",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/App.tsx": app } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const phrasing = report.findings
+    .filter((f) => f.rule === "invalid-phrasing")
+    .map((f) => [f.line, f.message]);
+  assert.deepEqual(phrasing, [
+    [
+      6,
+      "<Banner> children is phrasing-only (rendered inside a <p>); <div> is a block element.",
+    ],
+    [
+      6,
+      "<Banner> children is phrasing-only (rendered inside a <p>); <h2> is a block element.",
+    ],
+    [
+      6,
+      "<Banner> children is phrasing-only (rendered inside a <p>); <p> is a block element.",
+    ],
+    [
+      8,
+      "<AuthLayout> description is phrasing-only (rendered inside a <p>); <p> is a block element.",
+    ],
+  ]);
+  assert.ok(RULES["invalid-phrasing"]);
+});
+
+// #65: the retired private-registry package must not look like a clean install.
+const LEGACY_PKG = ["@", "tony-ui", "/", "mortar"].join("");
+
+test("the audit flags legacy package imports and package.json deps", async (t) => {
+  const dir = fixture("legacy-package-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  // A leftover node_modules tree for the old name is not the public package.
+  const legacyInstalled = join(dir, "node_modules", ...LEGACY_PKG.split("/"));
+  mkdirSync(legacyInstalled, { recursive: true });
+  writeFileSync(
+    join(legacyInstalled, "package.json"),
+    JSON.stringify({ name: LEGACY_PKG, version: "0.11.0" }),
+  );
+  const report = await auditApp(dir);
+  assert.equal(report.mortar.installed, null);
+  assert.equal(report.mortar.range, null);
+  const legacy = report.findings.filter((f) => f.rule === "legacy-package");
+  assert.ok(legacy.length >= 2, JSON.stringify(report.findings, null, 2));
+  assert.ok(
+    legacy.every((f) => f.severity === "error"),
+    JSON.stringify(legacy, null, 2),
+  );
+  assert.ok(RULES["legacy-package"]);
+  const re = (suffix = "") =>
+    new RegExp(`${LEGACY_PKG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}${suffix}`);
+  const pointsToPublic = /@tonycodes-ui\/mortar[\s\S]*CHANGELOG/;
+  assert.ok(has(report, "legacy-package", "package.json", pointsToPublic));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", pointsToPublic));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/brand")));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/src")));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/styles\\.css")));
+  assert.ok(
+    has(report, "legacy-package", "src/index.css", re("/styles\\.css")),
+  );
+  // Legacy-only usage is not the public package missing an install.
+  assert.ok(!has(report, "not-installed"));
+  assert.ok(!has(report, "not-declared"));
+  assert.ok(!has(report, "missing-styles"));
+});
+
+test("a leftover legacy install does not satisfy the public package", async (t) => {
+  const dir = fixture("clean-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const legacyInstalled = join(dir, "node_modules", ...LEGACY_PKG.split("/"));
+  mkdirSync(legacyInstalled, { recursive: true });
+  writeFileSync(
+    join(legacyInstalled, "package.json"),
+    JSON.stringify({ name: LEGACY_PKG, version: "0.11.0" }),
+  );
+  const report = await auditApp(dir);
+  assert.equal(report.mortar.installed, null);
+  assert.ok(has(report, "not-installed"));
+});
+
 test("the audit says when it checks an older release against this catalogue", async (t) => {
   const dir = fixture("clean-app", { version: "0.6.0" });
   t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -822,5 +1186,54 @@ test("a brief about emails points the packet at the email entry", async () => {
     const packet = buildPacket(data, { brief });
     assert.ok(!packet.guides.includes("email"), brief);
     assert.equal(packet.email, undefined);
+  }
+});
+
+// #95: components with SwiftUI and Compose versions name them, and a brief
+// for a native app gets the native libraries.
+test("get_component names a component's native equivalents", () => {
+  const input = componentDetail(
+    data,
+    data.components.find((c) => c.export === "Input"),
+  );
+  assert.deepEqual(input.native, {
+    swiftui: { name: "MortarTextField", import: "import Mortar" },
+    compose: {
+      name: "MortarTextField",
+      import: "import codes.tony.mortar.MortarTextField",
+    },
+  });
+  const web = componentDetail(
+    data,
+    data.components.find((c) => c.export === "DataTable"),
+  );
+  assert.equal(web.native, undefined);
+});
+
+test("a brief for a native app points the packet at the native libraries", async () => {
+  const data = await loadData();
+  for (const brief of [
+    "An iPhone and iPad app for team inboxes",
+    "Android app settings screen in Jetpack Compose",
+    "Native mobile apps for our booking product",
+    "A SwiftUI onboarding flow",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(packet.guides.includes("native"), brief);
+    assert.equal(packet.native.swiftui.import, "import Mortar");
+    assert.equal(packet.native.compose.package, "codes.tony:mortar");
+    assert.equal(packet.native.components.length, 15);
+    assert.deepEqual(
+      packet.native.components.find((c) => c.web === "Button"),
+      { web: "Button", swiftui: "MortarButton", compose: "MortarButton" },
+    );
+  }
+  for (const brief of [
+    "A responsive dashboard that works on mobile",
+    "Marketing site with a compose-your-plan pricing page",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(!packet.guides.includes("native"), brief);
+    assert.equal(packet.native, undefined);
   }
 });

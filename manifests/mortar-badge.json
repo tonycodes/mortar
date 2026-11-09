@@ -6,14 +6,14 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Badge",
-  "source": "src/primitives.tsx",
-  "capabilities": ["status"],
-  "owner": "Mortar maintainers",
-  "kitId": "foundation",
   "platforms": {
     "swiftui": "MortarBadge",
     "compose": "MortarBadge"
   },
+  "source": "src/primitives.tsx",
+  "capabilities": ["status"],
+  "owner": "Mortar maintainers",
+  "kitId": "foundation",
   "contract": {
     "props": {
       "children": "ReactNode",

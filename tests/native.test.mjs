@@ -11,12 +11,7 @@ import {
   SWIFT_FILE,
   nativeTokenFiles,
 } from "../scripts/native-tokens.mjs";
-import {
-  ROOT,
-  checkKit,
-  indexNativeTypes,
-  platformsErrors,
-} from "../scripts/check.mjs";
+import { ROOT, checkKit, platformsErrors } from "../scripts/check.mjs";
 import {
   customProperties,
   readSource,
@@ -264,51 +259,17 @@ test("the Swift and Kotlin token files are generated from the native theme", asy
   assert.match(kotlin, /public const val weightSemibold: Int = 600/);
 });
 
-/** Web components on main that already ship SwiftUI and Compose ports. */
-const NATIVE_ON_MAIN = {
-  Button: "MortarButton",
-  Badge: "MortarBadge",
-  Card: "MortarCard",
-  Input: "MortarTextField",
-  Switch: "MortarSwitch",
-  Avatar: "MortarAvatar",
-  Notice: "MortarNotice",
-  EmptyState: "MortarEmptyState",
-};
-
-test("manifest platforms name the native types that exist on main", async () => {
+test("every manifest platforms entry passes the M011 check", async () => {
   const manifests = readdirSync(join(ROOT, "manifests"))
     .filter((f) => f.endsWith(".json"))
     .map((f) => JSON.parse(readFileSync(join(ROOT, "manifests", f), "utf8")));
   const withPlatforms = manifests.filter((m) => m.platforms);
-  assert.deepEqual(
-    Object.fromEntries(
-      withPlatforms.map((m) => [m.export, m.platforms.swiftui]),
-    ),
-    NATIVE_ON_MAIN,
-  );
-  for (const m of withPlatforms) {
-    assert.deepEqual(m.platforms, {
-      swiftui: NATIVE_ON_MAIN[m.export],
-      compose: NATIVE_ON_MAIN[m.export],
-    });
-    assert.deepEqual(platformsErrors(m.platforms), []);
-  }
-  const nativeTypes = await indexNativeTypes(ROOT);
-  for (const type of Object.values(NATIVE_ON_MAIN)) {
-    assert.ok(nativeTypes.swiftui.has(type), `SwiftUI declares ${type}`);
-    assert.ok(nativeTypes.compose.has(type), `Compose declares ${type}`);
-  }
+  assert.ok(withPlatforms.length > 0, "some manifests declare platforms");
+  for (const m of withPlatforms)
+    assert.deepEqual(platformsErrors(m.platforms), [], m.export);
   const report = await checkKit(ROOT);
-  assert.equal(
-    report.findings.filter((f) => f.rule === "M011").length,
-    0,
-    JSON.stringify(
-      report.findings.filter((f) => f.rule === "M011"),
-      null,
-      2,
-    ),
-  );
+  const m011 = report.findings.filter((f) => f.rule === "M011");
+  assert.equal(m011.length, 0, JSON.stringify(m011, null, 2));
 });
 
 test("platformsErrors rejects unknown keys and non-Mortar type names", () => {
@@ -343,6 +304,60 @@ test("native buttons default to the web Button's variant", async () => {
       kotlin,
     )?.[1],
     "Primary",
+  );
+});
+
+test("manifests name native components that exist, and every native component has one", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const sources = async (dir, ext) => {
+    const files = (await readdir(new URL(`../${dir}`, import.meta.url))).filter(
+      (f) => f.endsWith(ext),
+    );
+    return (
+      await Promise.all(files.map((f) => readSource(`${dir}/${f}`)))
+    ).join("\n");
+  };
+  const swift = await sources("native/apple/Sources/Mortar", ".swift");
+  const kotlin = await sources(
+    "native/android/mortar/src/main/kotlin/codes/tony/mortar",
+    ".kt",
+  );
+  // Public views and composables named Mortar…, except the theme itself.
+  const swiftViews = new Set(
+    [...swift.matchAll(/public struct (Mortar\w+)(?:<[^>]*>)?: View\b/g)].map(
+      (m) => m[1],
+    ),
+  );
+  const composables = new Set(
+    [
+      ...kotlin.matchAll(
+        /@Composable\n(?:@\w+(?:\([^)]*\))?\n)*public fun (?:<[^>]+> )?(Mortar\w+)\(/g,
+      ),
+    ].map((m) => m[1]),
+  );
+  composables.delete("MortarTheme");
+  const catalog = JSON.parse(await readSource("catalog.json"));
+  const named = catalog.components.filter((c) => c.platforms);
+  assert.equal(named.length, 15);
+  for (const c of named) {
+    assert.ok(
+      swiftViews.has(c.platforms.swiftui),
+      `${c.export}: ${c.platforms.swiftui} in SwiftUI`,
+    );
+    assert.ok(
+      composables.has(c.platforms.compose),
+      `${c.export}: ${c.platforms.compose} in Compose`,
+    );
+  }
+  assert.deepEqual(
+    [...swiftViews].sort(),
+    [...new Set(named.map((c) => c.platforms.swiftui))].sort(),
+    "every public SwiftUI component is named by a manifest",
+  );
+  assert.deepEqual(
+    [...composables].sort(),
+    [...new Set(named.map((c) => c.platforms.compose))].sort(),
+    "every public composable is named by a manifest",
   );
 });
 

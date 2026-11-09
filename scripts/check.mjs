@@ -60,7 +60,7 @@ export async function indexNativeTypes(root = ROOT) {
     const pattern =
       platform === "swiftui"
         ? /(?:^|\n)\s*public\s+struct\s+(Mortar[A-Z][A-Za-z0-9]*)\b/g
-        : /(?:^|\n)\s*public\s+fun\s+(Mortar[A-Z][A-Za-z0-9]*)\s*\(/g;
+        : /(?:^|\n)\s*public\s+fun\s+(?:<[^>]*>\s*)?(Mortar[A-Z][A-Za-z0-9]*)\s*\(/g;
     for (const name of entries) {
       if (!name.endsWith(ext)) continue;
       const file = `${NATIVE_SOURCES[platform]}/${name}`;

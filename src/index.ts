@@ -5,6 +5,7 @@ export type {
   Appearance,
   Brand,
   Density,
+  OverlayPortal,
 } from "./foundation.js";
 export {
   Button,

@@ -2,8 +2,10 @@ import { NavigationContext, type Navigate } from "./navigation.js";
 import { SegmentedControl } from "./inspection.js";
 import {
   AsComponentRoot,
+  ContainedPortalContext,
   ThemeScopeContext,
   componentRoot,
+  type OverlayPortal,
 } from "./internal.js";
 import { Portal } from "@headlessui/react";
 import { brandToCss, type BrandDefinition } from "./brand.js";
@@ -12,10 +14,13 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useState,
   useSyncExternalStore,
   type ReactNode,
 } from "react";
+
+export type { OverlayPortal };
 
 export type Appearance = "light" | "dark" | "system";
 /**
@@ -50,7 +55,8 @@ export interface ThemeProviderProps {
   /**
    * document writes the root element. container paints a wrapper and leaves
    * the document unchanged; menus, listboxes and dialogs opened inside it keep
-   * its theme.
+   * its theme. Container scope also mounts an overlay host so Modal and
+   * SlideOver can use portal="contained" and stay inside the wrapper.
    */
   scope?: "document" | "container";
   /** On the container wrapper (container scope only). */
@@ -126,6 +132,8 @@ export function ThemeProvider({
     "data-mortar-appearance": resolvedAppearance,
   };
   const host = usePortalHost(scope === "container", attributes);
+  const [overlayHost, setOverlayHost] = useState<HTMLElement | null>(null);
+  const containedPortal = useMemo(() => ({ host: overlayHost }), [overlayHost]);
   useEffect(() => {
     if (scope !== "document") return;
     const element = document.documentElement;
@@ -182,7 +190,10 @@ export function ThemeProvider({
         className={className}
       >
         <ThemeScopeContext.Provider value={attributes}>
-          <Portal.Group target={host}>{theme}</Portal.Group>
+          <ContainedPortalContext.Provider value={containedPortal}>
+            <Portal.Group target={host}>{theme}</Portal.Group>
+            <div ref={setOverlayHost} className="m-overlay-host" />
+          </ContainedPortalContext.Provider>
         </ThemeScopeContext.Provider>
       </div>
     );

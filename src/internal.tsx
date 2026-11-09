@@ -7,6 +7,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useRef,
   useState,
   type HTMLAttributes,
   type RefObject,
@@ -14,6 +15,7 @@ import {
   cloneElement,
   isValidElement,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   CloseButton,
   Dialog,
@@ -373,19 +375,149 @@ export function FieldMessage({
   ) : null;
 }
 
+/**
+ * Where an overlay portals. `document` (default) uses Headless UI's body
+ * portal. `contained` keeps the overlay inside the nearest container-scoped
+ * ThemeProvider's overlay host so an embedded widget does not cover the page.
+ */
+export type OverlayPortal = "document" | "contained";
+
+/**
+ * The overlay host of the nearest container-scoped ThemeProvider.
+ * Undefined outside one; `{ host: null }` while the host node is mounting.
+ * Default is undefined (like ThemeScopeContext) so document-portal dialogs do
+ * not depend on ThemeProvider in the catalogue.
+ */
+export const ContainedPortalContext = createContext<
+  { host: HTMLElement | null } | undefined
+>(undefined);
+
+const FOCUSABLE =
+  'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+/**
+ * Dialog root portalled into a container ThemeProvider's overlay host.
+ * Bounds, backdrop and focus stay inside the widget; the host page outside it
+ * stays usable. Escape closes; Tab cycles within the dialog.
+ */
+function ContainedDialogFrame({
+  open,
+  onClose,
+  component,
+  labelledBy,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  component?: string;
+  labelledBy?: string;
+  children: ReactNode;
+}) {
+  const portal = useContext(ContainedPortalContext);
+  if (!portal)
+    throw new Error(
+      'portal="contained" requires a ThemeProvider with scope="container".',
+    );
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  useEffect(() => {
+    if (!open) return;
+    const root = dialogRef.current;
+    if (!root) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const focusables = () =>
+      [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (el) => el.offsetParent !== null || el === document.activeElement,
+      );
+    const initial = focusables()[0] ?? root;
+    initial.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        onCloseRef.current();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const items = focusables();
+      if (items.length === 0) {
+        event.preventDefault();
+        root.focus();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, true);
+      previouslyFocused?.focus?.();
+    };
+  }, [open]);
+
+  if (!open || !portal.host) return null;
+  return createPortal(
+    <div
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={labelledBy}
+      tabIndex={-1}
+      className="m-dialog"
+      data-portal="contained"
+      {...componentRoot(component ?? "", component !== undefined)}
+    >
+      <div
+        className="m-backdrop"
+        aria-hidden="true"
+        onClick={() => onCloseRef.current()}
+      />
+      {children}
+    </div>,
+    portal.host,
+  );
+}
+
 /** Headless dialog root with the shared backdrop. */
 export function DialogFrame({
   open,
   onClose,
   component,
+  portal = "document",
+  labelledBy,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   /** The catalogue component this dialog is the root of, if any. */
   component?: string;
+  /** document (default) portals to the body; contained stays in the widget host. */
+  portal?: OverlayPortal;
+  /** Accessible name for contained portals (document mode uses DialogTitle). */
+  labelledBy?: string;
   children: ReactNode;
 }) {
+  if (portal === "contained")
+    return (
+      <ContainedDialogFrame
+        open={open}
+        onClose={onClose}
+        component={component}
+        labelledBy={labelledBy}
+      >
+        {children}
+      </ContainedDialogFrame>
+    );
   return (
     <Dialog
       open={open}
@@ -640,8 +772,9 @@ export const ThemeScopeContext = createContext<
 >(undefined);
 /**
  * Re-applies a container-scoped theme to content rendered outside its wrapper
- * (dialogs portal to the document body). The wrapper is display: contents, so
- * it carries the tokens without adding a box.
+ * (document-portal dialogs land on the body). Contained portals render inside
+ * the wrapper and do not need this. The wrapper is display: contents, so it
+ * carries the tokens without adding a box.
  */
 export function ThemeScope({ children }: { children: ReactNode }) {
   const attributes = useContext(ThemeScopeContext);

@@ -19,6 +19,7 @@
       "children": "ReactNode",
       "actions": "ReactNode",
       "size": "md | lg | xl",
+      "portal": "\"document\" | \"contained\" (contained keeps the overlay inside ThemeProvider scope=\"container\")",
       "className": "string"
     },
     "usage": "Import { SlideOver } from @tonycodes-ui/mortar. Compose with the public typed props.",

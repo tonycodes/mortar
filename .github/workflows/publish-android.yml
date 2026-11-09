@@ -1,0 +1,83 @@
+name: Publish Android library
+# After the npm release, publishes Mortar for Jetpack Compose to GitHub
+# Packages at the same version. Runs only after a successful release of main;
+# there is no manual trigger, so a version is only ever published from its
+# release tag. The run's own GITHUB_TOKEN publishes: no stored secret.
+on:
+  workflow_run:
+    workflows: [Release package]
+    types: [completed]
+permissions:
+  contents: read
+  packages: write
+concurrency:
+  group: maven-release
+  cancel-in-progress: false
+env:
+  MAVEN_REPOSITORY: https://maven.pkg.github.com/tonycodes/mortar
+jobs:
+  publish:
+    name: Publish to GitHub Packages
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      # The release workflow tags the commit it released. A run that released
+      # nothing (superseded, or no changes) leaves no tag here.
+      - name: Find the release
+        id: release
+        run: |
+          set -euo pipefail
+          TAG=$(git tag --points-at HEAD --list 'v*' | sort -V | tail -n 1)
+          if [ -z "$TAG" ]; then
+            echo "No release tag at $(git rev-parse --short HEAD); nothing to publish."
+            echo "version=" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Skip a version already published
+        id: existing
+        if: steps.release.outputs.version != ''
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          POM="$MAVEN_REPOSITORY/codes/tony/mortar/$VERSION/mortar-$VERSION.pom"
+          STATUS=$(curl -s -o /dev/null -w '%{http_code}' -u "$GITHUB_ACTOR:$GITHUB_TOKEN" "$POM")
+          echo "published=$([ "$STATUS" = 200 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@v4
+        if: steps.existing.outputs.published == 'false'
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.existing.outputs.published == 'false'
+        with:
+          gradle-version: "8.11.1"
+          cache-read-only: true
+      - name: Publish
+        if: steps.existing.outputs.published == 'false'
+        working-directory: native/android
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: gradle :mortar:publishReleasePublicationToGitHubPackagesRepository -Pversion="$VERSION"
+      - name: Verify the repository serves it
+        if: steps.existing.outputs.published == 'false'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl -sf -u "$GITHUB_ACTOR:$GITHUB_TOKEN" -o /dev/null \
+            "$MAVEN_REPOSITORY/codes/tony/mortar/$VERSION/mortar-$VERSION.aar"
+          echo "codes.tony:mortar:$VERSION is on GitHub Packages."

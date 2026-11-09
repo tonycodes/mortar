@@ -1,0 +1,49 @@
+name: Docs
+description: Fix or improve documentation for humans or coding agents.
+title: "[docs] "
+labels: ["documentation"]
+body:
+  - type: dropdown
+    id: doc
+    attributes:
+      label: Document
+      options:
+        - README
+        - DESIGN.md
+        - AGENTS.md / docs/agents.md
+        - docs/theming.md
+        - docs/email.md
+        - docs/native.md
+        - CONTRIBUTING.md / TESTING.md
+        - Agent skill (skills/mortar)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: section
+    attributes:
+      label: Section or anchor
+      description: Heading or URL fragment if known.
+      placeholder: "#the-audit"
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What the docs should say, or which gap an agent hits.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Current text or gap
+      description: Quote or summarise what is wrong or missing.
+  - type: input
+    id: playground
+    attributes:
+      label: Playground URL
+      description: Optional link that the docs should point at.
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Optional. Useful for visual docs gaps.
