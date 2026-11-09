@@ -275,29 +275,21 @@ enum MacWindow {
         all(in: window).compactMap(text(of:)).filter { !$0.isEmpty }
     }
 
-    /// Presses a control. The Swift overlay is an optional method on the
-    /// snapshot toolchain and a plain method on the macOS 26 toolchain.
+    /// Presses a control. Xcode 16.4 and Xcode 26 both import this as a
+    /// plain method. Optional chaining does not compile on either.
     static func press(_ element: any NSAccessibilityProtocol) -> Bool {
-        #if compiler(>=6.2)
         element.accessibilityPerformPress()
-        #else
-        element.accessibilityPerformPress?() ?? false
-        #endif
     }
 
     private static func text(of element: any NSAccessibilityProtocol) -> String? {
-        #if compiler(>=6.2)
         element.accessibilityLabel()
-        #else
-        element.accessibilityLabel?()
-        #endif
     }
 
     private static func children(of element: any NSAccessibilityProtocol) -> [Any] {
         #if compiler(>=6.2)
         element.accessibilityChildren() ?? []
         #else
-        element.accessibilityChildren?() ?? []
+        element.accessibilityChildren()
         #endif
     }
 
