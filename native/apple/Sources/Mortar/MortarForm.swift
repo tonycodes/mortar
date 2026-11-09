@@ -69,9 +69,16 @@ public struct MortarForm<Content: View, Actions: View>: View {
             if Actions.self != EmptyView.self {
                 VStack(spacing: 0) {
                     Rectangle().fill(p[\.line]).frame(height: 1)
-                    HStack(spacing: 12) {
-                        Spacer(minLength: 0)
-                        actions
+                    // Side by side, trailing; stacked full width when they
+                    // don't fit, as at the largest text sizes.
+                    ViewThatFits(in: .horizontal) {
+                        HStack(spacing: 12) {
+                            Spacer(minLength: 0)
+                            actions
+                        }
+                        VStack(alignment: .trailing, spacing: 8) {
+                            actions
+                        }
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
@@ -263,6 +270,7 @@ struct FieldChrome<Control: View>: View {
                 Label { error } icon: { Image(systemName: "exclamationmark.circle") }
                     .font(mortar.font(12))
                     .foregroundStyle(p[\.danger])
+                    .tint(p[\.danger])
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityHidden(true)
             }
@@ -270,6 +278,7 @@ struct FieldChrome<Control: View>: View {
                 hint
                     .font(mortar.font(12))
                     .foregroundStyle(p[\.muted])
+                    .tint(p[\.muted])
                     .fixedSize(horizontal: false, vertical: true)
                     .accessibilityHidden(true)
             }
