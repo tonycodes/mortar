@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Badge",
+  "platforms": {
+    "swiftui": "MortarBadge",
+    "compose": "MortarBadge"
+  },
   "source": "src/primitives.tsx",
   "capabilities": ["status"],
   "owner": "Mortar maintainers",

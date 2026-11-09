@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Divider",
+  "platforms": {
+    "swiftui": "MortarDivider",
+    "compose": "MortarDivider"
+  },
   "source": "src/layout.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",
