@@ -227,13 +227,26 @@ final class MortarSnapshotTests: XCTestCase {
             ("ipad", .iPadPro11, UITraitCollection(userInterfaceStyle: .light)),
             ("ipad-dark", .iPadPro11, UITraitCollection(userInterfaceStyle: .dark)),
             ("ipad-large-text", .iPadPro11, large),
-            ("iphone", .iPhone13, UITraitCollection(userInterfaceStyle: .light)),
         ]
         for (name, device, traits) in variants {
-            // A tab bar can't show a long name; the sidebar variants cover it.
             assertSnapshot(
-                of: AppShellSectionsSample(longName: device.size?.width ?? 0 > 600),
+                of: AppShellSectionsSample(),
                 as: .image(perceptualPrecision: 0.98, layout: .device(config: device), traits: traits),
+                named: name
+            )
+        }
+    }
+
+    /// The iPhone tab bar, drawn through a real window: the plain layer
+    /// rendering drops the tint UIKit applies to unselected tab icons, so
+    /// they'd be missing from the image though an app shows them. A tab bar
+    /// can't show a long name, so this sample's names are short.
+    func testAppShellTabBar() {
+        for (name, style) in [("light", UIUserInterfaceStyle.light), ("dark", .dark)] {
+            assertSnapshot(
+                of: AppShellSectionsSample(longName: false),
+                as: .image(drawHierarchyInKeyWindow: true, perceptualPrecision: 0.98,
+                           layout: .device(config: .iPhone13), traits: UITraitCollection(userInterfaceStyle: style)),
                 named: name
             )
         }
