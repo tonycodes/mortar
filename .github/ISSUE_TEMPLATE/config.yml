@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Mortar docs
+    url: https://github.com/tonycodes/mortar/blob/main/docs/agents.md
+    about: Guides for agents, theming, email and native.
+  - name: Playground
+    url: https://mortar.tony.codes/playground/
+    about: Try components and templates in the browser.

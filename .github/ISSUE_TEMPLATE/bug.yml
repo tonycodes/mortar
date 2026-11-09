@@ -1,0 +1,72 @@
+name: Bug report
+description: Something in Mortar behaves incorrectly.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Where the bug shows up.
+      options:
+        - Component
+        - Theme / brand
+        - Playground
+        - CLI / MCP / audit
+        - Email
+        - Native (SwiftUI / Compose)
+        - Docs
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      description: Public component name if known (for example Button, DataTable, Hero).
+      placeholder: Button
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What should happen.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What happens instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps or JSX that reproduces the bug.
+      render: markdown
+    validations:
+      required: true
+  - type: input
+    id: playground
+    attributes:
+      label: Playground URL
+      description: A playground link that shows the problem (optional).
+      placeholder: https://mortar.tony.codes/playground/?page=...
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Drag images here, or link them. Light and dark, and phone and desktop when relevant.
+  - type: input
+    id: version
+    attributes:
+      label: Mortar version
+      description: npm package version, or commit SHA if from main.
+      placeholder: 0.11.0
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, React and Tailwind versions if relevant.
+      render: markdown
