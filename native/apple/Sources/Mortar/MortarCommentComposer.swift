@@ -1,5 +1,20 @@
 import SwiftUI
 
+/// Send rules for ``MortarCommentComposer``, without a window. The view
+/// writes `text` back after ``send(_:)``.
+struct MortarComposerDraft: Equatable {
+    var text: String
+    var isStreaming = false
+
+    /// Calls `onSend` with the trimmed draft, then clears it. Whitespace-only
+    /// text and a streaming reply do not send, and they leave `text` as it is.
+    mutating func send(_ onSend: (String) -> Void) {
+        let message = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !message.isEmpty, !isStreaming else { return }
+        onSend(message)
+    }
+}
+
 /// A compact message composer, as the web CommentComposer: one row that
 /// grows with its text, an optional attachment action at the leading edge
 /// and Send (or Stop, while a reply streams) at the trailing edge.
@@ -162,10 +177,9 @@ public struct MortarCommentComposer: View {
     }
 
     private func send() {
-        let message = trimmed
-        guard !message.isEmpty, !isStreaming else { return }
-        onSend(message)
-        text = ""
+        var draft = MortarComposerDraft(text: text, isStreaming: isStreaming)
+        draft.send(onSend)
+        text = draft.text
     }
 
     private var accessibilityHint: Text {
