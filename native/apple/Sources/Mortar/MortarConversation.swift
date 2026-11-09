@@ -171,9 +171,19 @@ private struct MessageRow: View {
         return false
     }
 
+    /// The message's Markdown, with links in the link colour (on-primary in
+    /// the user's bubble) and underlined, so they don't rely on colour alone.
     private var content: AttributedString {
         let options = AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
-        return (try? AttributedString(markdown: message.text, options: options)) ?? AttributedString(message.text)
+        var text = (try? AttributedString(markdown: message.text, options: options)) ?? AttributedString(message.text)
+        let p = mortar.palette
+        var link = AttributeContainer()
+        link.foregroundColor = isUser ? p[\.onPrimary] : p[\.link]
+        link.underlineStyle = Text.LineStyle.single
+        for run in text.runs where run.link != nil {
+            text[run.range].mergeAttributes(link)
+        }
+        return text
     }
 
     var body: some View {
@@ -199,7 +209,6 @@ private struct MessageRow: View {
                         .font(mortar.font(15))
                         .lineSpacing(3)
                         .foregroundStyle(isUser ? p[\.onPrimary] : p[\.ink])
-                        .tint(isUser ? p[\.onPrimary] : p[\.link])
                         .textSelection(.enabled)
                         .fixedSize(horizontal: false, vertical: true)
                 }
@@ -262,11 +271,16 @@ private struct ChoicePill<Label: View>: View {
         label
             .font(mortar.font(13, .medium))
             .foregroundStyle(isPressed ? p[\.ink] : p[\.secondary])
+            .lineLimit(1)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
             .frame(minHeight: 32)
-            .background(shape.fill(isPressed ? p[\.sunken] : p[\.surface]))
-            .overlay(shape.strokeBorder(isFocused ? p[\.focus] : p[\.line], lineWidth: isFocused ? 2 : 1))
+            .fixedSize()
+            .background {
+                shape
+                    .fill(isPressed ? p[\.sunken] : p[\.surface])
+                    .strokeBorder(isFocused ? p[\.focus] : p[\.line], lineWidth: isFocused ? 2 : 1)
+            }
             .contentShape(shape)
             .focusEffectDisabled()
     }
@@ -302,7 +316,7 @@ private struct ChoiceFlow: Layout {
                 x = bounds.minX
                 rowHeight = 0
             }
-            subview.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
+            subview.place(at: CGPoint(x: x, y: y), proposal: .unspecified)
             x += size.width + spacing
             rowHeight = max(rowHeight, size.height)
         }
