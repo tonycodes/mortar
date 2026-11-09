@@ -127,7 +127,9 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
                                     .padding(.vertical, 10)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                            .background(p[\.sunken])
+                            // The surface, not the sidebar's sunken grey, so an
+                            // avatar's sunken disc shows against it.
+                            .background(p[\.surface])
                         }
                     }
                     .modifier(SidebarTitle(brand: brand))
