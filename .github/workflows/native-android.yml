@@ -24,14 +24,14 @@ jobs:
       run:
         working-directory: native/android
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: "8.11.1"
       - name: Unit and snapshot tests
@@ -44,7 +44,7 @@ jobs:
         run: gradle :mortar:recordPaparazziDebug
       - name: Upload snapshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mortar-compose-snapshots-${{ github.sha }}
           path: |

@@ -31,12 +31,12 @@ jobs:
       version: ${{ steps.plan.outputs.version }}
       publish: ${{ steps.plan.outputs.publish }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "22"
       - name: Compute the release from tags and commits
@@ -129,7 +129,7 @@ jobs:
           ' "$DIR" "$SHA" "$VERSION"
           node scripts/release-notes.mjs "$VERSION" > "$DIR/notes.md"
       - if: steps.plan.outputs.publish == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mortar-release-${{ steps.plan.outputs.version }}
           path: release/${{ steps.plan.outputs.version }}/
@@ -152,11 +152,11 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: mortar-release-${{ needs.prepare.outputs.version }}
           path: ${{ runner.temp }}/release
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: "22"
           registry-url: https://registry.npmjs.org
