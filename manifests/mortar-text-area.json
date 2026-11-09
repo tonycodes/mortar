@@ -6,6 +6,9 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "TextArea",
+  "platforms": {
+    "swiftui": "MortarTextEditor"
+  },
   "source": "src/primitives.tsx",
   "capabilities": ["input", "validation"],
   "owner": "Mortar maintainers",

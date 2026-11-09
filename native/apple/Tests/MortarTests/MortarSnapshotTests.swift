@@ -265,6 +265,22 @@ final class MortarSnapshotTests: XCTestCase {
         )
     }
 
+    func testForm() {
+        for (name, traits) in phone {
+            assertSnapshot(
+                of: SettingsFormSample(),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13), traits: traits),
+                named: name
+            )
+        }
+        assertSnapshot(
+            of: SettingsFormSample(),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPadPro11),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "ipad"
+        )
+    }
+
     func testBrandOnIPad() {
         let brand = MortarTheme(
             light: { var p = MortarTokens.light; p.primary = 0x1D4ED8; p.primaryActive = 0x1E40AF; p.focus = 0x1D4ED8; return p }(),
