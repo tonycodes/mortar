@@ -1222,10 +1222,15 @@ test("a brief for a native app points the packet at the native libraries", async
     assert.ok(packet.guides.includes("native"), brief);
     assert.equal(packet.native.swiftui.import, "import Mortar");
     assert.equal(packet.native.compose.package, "codes.tony:mortar");
-    assert.equal(packet.native.components.length, 15);
+    assert.equal(packet.native.components.length, 17);
     assert.deepEqual(
       packet.native.components.find((c) => c.web === "Button"),
       { web: "Button", swiftui: "MortarButton", compose: "MortarButton" },
+    );
+    // SwiftUI before Compose: no compose name is invented.
+    assert.deepEqual(
+      packet.native.components.find((c) => c.web === "CommentComposer"),
+      { web: "CommentComposer", swiftui: "MortarCommentComposer" },
     );
   }
   for (const brief of [
