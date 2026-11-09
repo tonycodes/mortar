@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "@tonycodes-ui/mortar/styles.css";
+
+.toolbar button {
+  border: 0;
+  border-radius: 999px;
+  font-size: 9px;
+  background: var(--m-surface);
+}
