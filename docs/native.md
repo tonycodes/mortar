@@ -68,6 +68,9 @@ A brand is a `MortarTheme`: its light and dark `MortarPalette`s, font family nam
 | `MortarAppShell`                                           | AppShell         | Top-level destinations: a tab bar on iPhone, a sidebar on iPad and Mac. Labelled `sections` and per-item counts; an optional brand title; a sidebar `footer` for the app's account menu. Each destination starts its own navigation stack. |
 | `MortarCommentComposer`                                    | CommentComposer  | A one-row composer that grows to six lines: attachment button, Send, or Stop while a reply streams; optional character count; Command-Return sends; an external focus binding. SwiftUI only so far.                                        |
 | `MortarConversation`                                       | ChatPreview      | Messages in a readable column with Markdown, roles, inline choices, failed and streaming states, an empty state and a pinned composer. SwiftUI only so far.                                                                                |
+| `MortarFormSection`                                        | SettingsSection  | A titled group of fields: title and description beside the fields from 560 points wide, above them below that, with a rule underneath. SwiftUI only so far.                                                                                |
+| `MortarTextEditor`                                         | TextArea         | Label, prompt, hint, error, required marker; grows from `minLines` to `maxLines`. SwiftUI only so far.                                                                                                                                     |
+| `MortarPicker`                                             | Select           | One option from a menu, in Mortar's field box; placeholder, hint, error, required marker. SwiftUI only so far.                                                                                                                             |
 
 ### App shell
 
@@ -125,13 +128,44 @@ MortarConversation(messages: messages) {
 - A message's `status` is `.complete`, `.streaming` (dots until the first text, and VoiceOver reads "Responding") or `.failed(reason, retry:)`. `choices` are pills under a message that wrap onto more rows when there are more than fit.
 - The column is at most 720 points wide (`measure`) and centred, so lines stay readable in a wide Mac window.
 
+### Settings and editors
+
+Build settings screens and editors from `MortarForm` and `MortarFormSection`, not `Form` or `List`, whose grouped grey surfaces don't match Mortar's paper.
+
+```swift
+MortarForm("Connect mail") {
+    MortarFormSection("Server", description: "From your mail provider.") {
+        MortarTextField("IMAP host", text: $host, isRequired: true)
+        MortarTextField("Password", text: $password, error: passwordError, isRequired: true, isSecure: true)
+        MortarPicker("Security", selection: $security, options: [
+            MortarPickerOption("SSL/TLS", value: .tls),
+            MortarPickerOption("STARTTLS", value: .startTLS),
+        ])
+    }
+    MortarFormSection("Sync") {
+        MortarField("Check from", hint: "Mail before this time isn't fetched.") {
+            DatePicker("", selection: $since, displayedComponents: .date).labelsHidden()
+        }
+    }
+} actions: {
+    MortarButton("Cancel", variant: .ghost) { dismiss() }
+    MortarButton("Connect", variant: .primary, isLoading: isConnecting) { connect() }
+}
+```
+
+- `MortarForm` scrolls a column at most 760 points wide (`measure`) on the paper, with an optional title and description, and pins `actions` at the bottom, trailing. Use the same view in a navigation destination or a sheet. On a Mac it gives a sheet a sensible size of its own.
+- `MortarFormSection` is the web SettingsSection: title and description in a third, fields in two thirds, from 560 points wide.
+- `MortarField` puts Mortar's label, required marker, hint and error around any other control, such as a `DatePicker`, a `Stepper` or a control of your own, and gives VoiceOver the same name and hint as the other fields.
+- Disable a field, or a whole section, with `.disabled(_:)`. While saving, give the primary action `isLoading`.
+- `MortarForm` and `MortarField` are layout pieces with no web component, so no manifest names them.
+
 On both platforms the switch sits at the end of its row, after the label, as in iOS and Android settings; on the web it comes first.
 
 ### Snapshot tests
 
 `native/apple/Tests/MortarTests` renders each component on an iPhone simulator in light, dark and a large accessibility text size, and a branded screen on iPad, with [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing). The **Mortar for SwiftUI** workflow runs those snapshots on macOS 15, and runs `MortarMacTests` in a real Mac window on macOS 26, on every change to `Package.swift`, `native/apple` or that workflow.
 
-`MortarMacTests` runs on the Mac itself, not as an iPad app: each screen is hosted in a real window, in light and dark, at more than one size, and resized. Its references are recorded on CI's Mac in the same way.
+`MortarMacTests` runs on the Mac itself, not as an iPad app: each screen is hosted in a real window, in light and dark, at more than one size, and resized. It also opens and closes a form with text and secure fields in a split view's detail and in a sheet, many times, and fails if layout doesn't settle. Its references are recorded on CI's Mac in the same way.
 
 Rendering differs between iOS versions, so the reference images are recorded on CI's simulator, not on a developer's Mac. To add or update one, delete the old image (or add the test), push, and download the `mortar-swift-snapshots-<sha>` artifact from the failed run: it holds the newly recorded images and any failed comparisons. Review them, commit them under `__Snapshots__`, and push again. Mac references are in the separate `mortar-mac-snapshots-<pull-request-head-sha>` artifact from the Mac job. Review those before committing: a dark sidebar that is a blank white panel is macOS 26's sidebar glass drawn offscreen, and is not a usable reference.
 

@@ -6,6 +6,9 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "SettingsSection",
+  "platforms": {
+    "swiftui": "MortarFormSection"
+  },
   "source": "src/application.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",

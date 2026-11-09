@@ -90,6 +90,66 @@ final class MortarMacTests: XCTestCase {
         XCTAssertEqual(model.text, "Hello")
     }
 
+    /// The settings page in a narrow and a wide window and in dark: sections
+    /// stack below 560 points and sit beside their titles above it, in a
+    /// readable column.
+    func testForm() {
+        for (name, width, dark) in [("narrow", 520.0, false), ("wide", 1100, false), ("dark", 1100, true)] {
+            let window = MacWindow.host(SettingsFormSample(isSaving: false),
+                                        size: CGSize(width: width, height: 900), dark: dark)
+            defer { window.close() }
+            snapshot(window, named: name)
+        }
+    }
+
+    /// The integration reported on macOS 26.2: a connector form with a text
+    /// and a secure field, in a split view's detail, opened and closed and
+    /// resized. AppKit stops a layout loop with an exception, so a loop fails
+    /// this test; each step must also settle quickly.
+    func testConnectorFormOpensAndClosesWithoutLayoutLoop() {
+        let model = ConnectorModel()
+        let window = MacWindow.host(ConnectorSplitSample(model: model), size: CGSize(width: 1000, height: 700))
+        defer { window.close() }
+        for round in 0..<20 {
+            model.showsForm = true
+            assertSettles(window, "open \(round)")
+            if round.isMultiple(of: 5) {
+                model.password = round.isMultiple(of: 10) ? "" : "app-password"
+                assertSettles(window, "type \(round)")
+            }
+            model.showsForm = false
+            assertSettles(window, "close \(round)")
+        }
+        model.showsForm = true
+        for width in [700.0, 1400, 820, 1000] {
+            window.setContentSize(CGSize(width: width, height: 700))
+            assertSettles(window, "resize \(width)")
+        }
+    }
+
+    /// The same form as a fixed 680x650 sheet, presented and dismissed.
+    func testConnectorSheetPresentsAndDismissesWithoutLayoutLoop() {
+        let model = ConnectorModel()
+        let window = MacWindow.host(ConnectorSplitSample(model: model), size: CGSize(width: 1000, height: 760))
+        defer { window.close() }
+        for round in 0..<10 {
+            model.showsSheet = true
+            assertSettles(window, "present \(round)")
+            XCTAssertNotNil(window.attachedSheet, "sheet \(round)")
+            model.showsSheet = false
+            assertSettles(window, "dismiss \(round)")
+        }
+    }
+
+    /// Lays the window (and any sheet) out; fails if it takes more than a
+    /// second, which a layout loop would.
+    private func assertSettles(_ window: NSWindow, _ step: String, line: UInt = #line) {
+        let start = Date()
+        MacWindow.settle(window, for: 0.15)
+        window.attachedSheet?.layoutIfNeeded()
+        XCTAssertLessThan(Date().timeIntervalSince(start), 1.0, "\(step) took too long to lay out", line: line)
+    }
+
     private func snapshot(
         _ window: NSWindow,
         named name: String,

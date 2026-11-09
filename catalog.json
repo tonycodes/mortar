@@ -8240,6 +8240,9 @@
         "states": ["disabled", "error"],
         "probe": "select"
       },
+      "platforms": {
+        "swiftui": "MortarPicker"
+      },
       "integrity": {
         "source": "e58118a1a1ba5cfbb39bc3bc5a899d8022b3060d93a19ac71247d4e56c10659b",
         "preview": "3baa66880245cc15ab40bec1106cc1f4f1214f73dd6a57ac5bd6aaaf035500c3"
@@ -8310,6 +8313,9 @@
         "profile": "composite",
         "target": ".m-settings-section",
         "states": []
+      },
+      "platforms": {
+        "swiftui": "MortarFormSection"
       },
       "integrity": {
         "source": "93f9b7b8b369edec2086a9b549a63f904e11842e3f13d2ba6a957c008c2e810d",
@@ -9688,6 +9694,9 @@
         "target": ".m-field textarea",
         "states": ["disabled", "error", "long"],
         "probe": "textarea"
+      },
+      "platforms": {
+        "swiftui": "MortarTextEditor"
       },
       "integrity": {
         "source": "e58118a1a1ba5cfbb39bc3bc5a899d8022b3060d93a19ac71247d4e56c10659b",

@@ -117,3 +117,112 @@ struct ConversationSample: View {
         }
     }
 }
+
+/// A settings page with every field type, long hint and error text, a
+/// secure field, and actions with Save loading.
+struct SettingsFormSample: View {
+    var title: LocalizedStringKey? = "Account"
+    var isSaving = true
+
+    var body: some View {
+        MortarForm(title, description: "Changes apply to every workspace you belong to.") {
+            MortarFormSection("Profile", description: "Shown to people you work with.") {
+                MortarTextField("Display name", text: .constant("Ada Lovelace"))
+                MortarTextField("Email", text: .constant("ada@"), isRequired: true)
+                MortarTextField("Work email", text: .constant("ada@analytical"),
+                                hint: "We send sign-in links and security alerts here, so use an address you check "
+                                    + "often. It isn't shown to anyone outside your workspaces.",
+                                error: "Enter an email address with a domain, such as ada@example.com, so we "
+                                    + "can send your sign-in links.",
+                                isRequired: true)
+                MortarTextEditor("Bio", text: .constant("Mathematician. Writes the notes on the engine."),
+                                 hint: "A sentence or two.")
+                MortarPicker("Time zone", selection: .constant("london"), options: [
+                    MortarPickerOption("London", value: "london"),
+                    MortarPickerOption("New York", value: "new-york"),
+                    MortarPickerOption("Tokyo", value: "tokyo"),
+                ], hint: "Used for reminders and digests.")
+            }
+            MortarFormSection("Security") {
+                MortarTextField("Current password", text: .constant("hunter22"), isSecure: true)
+                MortarTextField("New password", text: .constant(""), hint: "At least 12 characters.",
+                                isRequired: true, isSecure: true)
+                MortarPicker("Sign-in method", selection: .constant(""), options: [
+                    MortarPickerOption("Passkey", value: "passkey"),
+                    MortarPickerOption("Password and code", value: "password"),
+                ], placeholder: "Choose…", error: "Choose how you sign in.", isRequired: true)
+            }
+            MortarFormSection("Notifications") {
+                MortarField("Quiet hours start", hint: "No notifications after this time.") {
+                    DatePicker("", selection: .constant(Date(timeIntervalSince1970: 79_200)),
+                               displayedComponents: .hourAndMinute)
+                        .labelsHidden()
+                }
+                MortarSwitch("Daily digest", isOn: .constant(true))
+                MortarTextField("Webhook", text: .constant("https://example.com/hooks/ada"))
+                    .disabled(true)
+            }
+        } actions: {
+            MortarButton("Cancel", variant: .ghost) {}
+            MortarButton("Save changes", variant: .primary, isLoading: isSaving) {}
+        }
+        .environment(\.timeZone, TimeZone(identifier: "UTC")!)
+        .environment(\.locale, Locale(identifier: "en_GB"))
+    }
+}
+
+/// The integration that hit an AppKit layout loop on macOS 26.2: a split
+/// view whose detail is a scrolling connector form with a text field and a
+/// secure field, opened and closed repeatedly, and the same form in a
+/// fixed-size sheet.
+@MainActor
+@Observable
+final class ConnectorModel {
+    var showsForm = false
+    var showsSheet = false
+    var host = "imap.example.com"
+    var password = ""
+}
+
+struct ConnectorSplitSample: View {
+    @Bindable var model: ConnectorModel
+
+    var body: some View {
+        NavigationSplitView {
+            List {
+                Text(verbatim: "Mail")
+                Text(verbatim: "Calendar")
+            }
+        } detail: {
+            if model.showsForm {
+                ConnectorForm(model: model)
+            } else {
+                MortarEmptyState("Choose a connector", systemImage: "puzzlepiece.extension")
+            }
+        }
+        .sheet(isPresented: $model.showsSheet) {
+            ConnectorForm(model: model)
+                .frame(width: 680, height: 650)
+        }
+    }
+}
+
+struct ConnectorForm: View {
+    @Bindable var model: ConnectorModel
+
+    var body: some View {
+        MortarForm("Connect mail", description: "Mortar never stores this password in plain text.") {
+            MortarFormSection("Server") {
+                MortarTextField("IMAP host", text: $model.host, prompt: "imap.example.com",
+                                hint: "Ask your mail provider if you don't know it. It's often imap. followed by "
+                                    + "your email domain.", isRequired: true)
+                MortarTextField("Password", text: $model.password,
+                                error: model.password.isEmpty ? "Enter the app password from your provider." : nil,
+                                isRequired: true, isSecure: true)
+            }
+        } actions: {
+            MortarButton("Cancel", variant: .ghost) { model.showsForm = false; model.showsSheet = false }
+            MortarButton("Connect", variant: .primary) {}
+        }
+    }
+}
