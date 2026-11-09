@@ -230,8 +230,9 @@ final class MortarSnapshotTests: XCTestCase {
             ("iphone", .iPhone13, UITraitCollection(userInterfaceStyle: .light)),
         ]
         for (name, device, traits) in variants {
+            // A tab bar can't show a long name; the sidebar variants cover it.
             assertSnapshot(
-                of: AppShellSectionsSample(),
+                of: AppShellSectionsSample(longName: device.size?.width ?? 0 > 600),
                 as: .image(perceptualPrecision: 0.98, layout: .device(config: device), traits: traits),
                 named: name
             )

@@ -5,6 +5,8 @@ import SwiftUI
 
 /// Groups, counts, a long name, no brand and an account footer.
 struct AppShellSectionsSample: View {
+    /// A destination name too long for one line in the sidebar.
+    var longName = true
     @State private var selection = "inbox"
 
     var body: some View {
@@ -14,7 +16,8 @@ struct AppShellSectionsSample: View {
             MortarNavigationItem("Sent", systemImage: "paperplane", value: "sent"),
         ], sections: [
             MortarNavigationGroup("Projects", items: [
-                MortarNavigationItem("Quarterly planning and roadmap review", systemImage: "folder",
+                MortarNavigationItem(longName ? "Quarterly planning and roadmap review" : "Planning",
+                                     systemImage: "folder",
                                      value: "planning", count: 3),
                 MortarNavigationItem("Design", systemImage: "folder", value: "design"),
             ]),
