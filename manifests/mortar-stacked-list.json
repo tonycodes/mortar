@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "StackedList",
+  "platforms": {
+    "swiftui": "MortarStackedList",
+    "compose": "MortarStackedList"
+  },
   "source": "src/workspace.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",

@@ -13,7 +13,7 @@
   "contract": {
     "props": {
       "title": "string",
-      "description": "ReactNode",
+      "description": "ReactNode (phrasing only: text, links and emphasis; rendered inside a <p>, so no nested <p> or other block elements)",
       "logo": "ReactNode",
       "layout": "\"center\" | \"cards\" | \"split\" (default \"center\")",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 1)",
@@ -23,9 +23,10 @@
       "id": "string",
       "className": "string"
     },
-    "usage": "Import { AuthLayout } from @tonycodes-ui/mortar. Use it as the whole page for each auth step, outside AppShell and MarketingHeader. It renders the page's main landmark and h1. Put a <form> directly in children (fields stack, direct Button children fill the width), with ProviderButtons and a labelled Divider where providers apply, and the switch link (\"Don't have an account? Sign up\") in footer. Fields: Input type=\"email\" autoComplete=\"email\" (or autoComplete=\"username\"), PasswordInput, CodeInput, Input autoComplete=\"name\". For a section inside another page, use SignInPanel. See docs/auth-flows.md for every step.",
-    "avoid": "Do not nest it in another shell or page main, add a second h1, or hide password rules and errors.",
+    "usage": "Import { AuthLayout } from @tonycodes-ui/mortar. Use it as the whole page for each auth step, outside AppShell and MarketingHeader. It renders the page's main landmark and h1. Pass description as a string or inline markup (not a nested <p>). Put a <form> directly in children (fields stack, direct Button children fill the width), with ProviderButtons and a labelled Divider where providers apply, and the switch link (\"Don't have an account? Sign up\") in footer. Fields: Input type=\"email\" autoComplete=\"email\" (or autoComplete=\"username\"), PasswordInput, CodeInput, Input autoComplete=\"name\". For a section inside another page, use SignInPanel. See docs/auth-flows.md for every step.",
+    "avoid": "Do not nest it in another shell or page main, add a second h1, put block elements in description, or hide password rules and errors.",
     "accessibility": "main is named by the heading. On narrow screens the split layout puts text asides after the form and hides a lone image or video.",
+    "phrasingSlots": ["description"],
     "dependencies": []
   },
   "preview": {

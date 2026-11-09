@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Text
@@ -138,6 +140,97 @@ class MortarSnapshotTest {
             action = { MortarButton("New project", onClick = {}, variant = MortarButtonVariant.Primary) },
         )
         MortarEmptyState("No results", description = "Try a different search.", dashed = true)
+    }
+
+    @Test
+    fun checkbox() = check {
+        MortarCheckbox(true, {}, "Email me a weekly summary", description = "Every Monday morning.")
+        MortarCheckbox(false, {}, "I agree to the terms", error = "Agree to the terms to continue.", required = true)
+        MortarCheckbox(false, {}, "Beta features", enabled = false)
+    }
+
+    @Test
+    fun radioGroup() = check {
+        MortarRadioGroup(
+            "Plan",
+            selected = "team",
+            onSelect = {},
+            options = listOf(
+                MortarRadioOption("personal", "Personal", "One seat."),
+                MortarRadioOption("team", "Team", "Up to 20 seats."),
+                MortarRadioOption("enterprise", "Enterprise", disabled = true),
+            ),
+            hint = "You can change plan at any time.",
+        )
+    }
+
+    @Test
+    fun segmentedControl() = check {
+        MortarSegmentedControl("Range", "week", {}, listOf("day" to "Day", "week" to "Week", "month" to "Month"))
+        MortarSegmentedControl("View", "list", {}, listOf("list" to "List", "board" to "Board"))
+    }
+
+    @Test
+    fun progressBar() = check {
+        MortarProgressBar("Storage", 62f)
+        MortarProgressBar("Onboarding", 3f, max = 5f, valueLabel = "3 of 5 steps", tone = MortarTone.Success)
+        MortarProgressBar("Quota", 96f, tone = MortarTone.Danger)
+    }
+
+    @Test
+    fun divider() = check {
+        Text("Above")
+        MortarDivider()
+        Text("Between")
+        MortarDivider(label = "or")
+        Text("Below")
+        MortarDivider(soft = true, spacing = MortarDividerSpacing.Sm)
+    }
+
+    @Test
+    fun stackedList() = check {
+        MortarStackedList(
+            groups = listOf(
+                MortarListGroup(
+                    "Owners",
+                    listOf(
+                        MortarListItem("1", "Ada Lovelace", "ada@example.com", MortarListLeading.Avatar("Ada Lovelace"), "Owner") {},
+                    ),
+                ),
+                MortarListGroup(
+                    "Files",
+                    listOf(
+                        MortarListItem("2", "Quarterly report.pdf", "2.4 MB", MortarListLeading.Icon(Icons.Outlined.Info), "Today") {},
+                        MortarListItem("3", "Roadmap.key", "18 MB", MortarListLeading.Icon(Icons.Outlined.Info), "Monday"),
+                    ),
+                ),
+            ),
+            title = "Team",
+            chevrons = true,
+        )
+    }
+
+    @Test
+    fun appShell() {
+        for ((name, device) in listOf("phone" to DeviceConfig.PIXEL_5, "tablet" to DeviceConfig.PIXEL_C)) {
+            paparazzi.unsafeUpdateConfig(deviceConfig = device)
+            paparazzi.snapshot(name = name) {
+                MortarTheme(darkTheme = false) {
+                    MortarAppShell(
+                        brand = "Hive",
+                        selected = "inbox",
+                        onSelect = {},
+                        items = listOf(
+                            MortarNavigationItem("inbox", "Inbox", Icons.Filled.Email),
+                            MortarNavigationItem("projects", "Projects", Icons.Filled.Share),
+                            MortarNavigationItem("settings", "Settings", Icons.Filled.Settings),
+                        ),
+                    ) {
+                        MortarEmptyState("Inbox zero", description = "New messages appear here.", icon = Icons.Filled.Email)
+                    }
+                }
+            }
+        }
     }
 
     @Test

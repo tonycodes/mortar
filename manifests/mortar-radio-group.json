@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "RadioGroup",
+  "platforms": {
+    "swiftui": "MortarRadioGroup",
+    "compose": "MortarRadioGroup"
+  },
   "source": "src/primitives.tsx",
   "capabilities": ["input", "validation"],
   "owner": "Mortar maintainers",

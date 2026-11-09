@@ -60,7 +60,7 @@ test("every native gallery entry has a SwiftUI and a Compose reference", async (
   const ids = await select
     .locator("option")
     .evaluateAll((options) => options.map((o) => o.value));
-  expect(ids.length).toBe(9);
+  expect(ids.length).toBe(17);
   for (const id of ids) {
     await select.selectOption(id);
     const variants = page
@@ -68,7 +68,9 @@ test("every native gallery entry has a SwiftUI and a Compose reference", async (
       .getByRole("button");
     await expect(variants.first()).toBeVisible();
     const count = await variants.count();
-    expect(count, `${id} variants`).toBe(id === "tablet" ? 2 : 3);
+    expect(count, `${id} variants`).toBe(
+      id === "tablet" ? 2 : id.startsWith("app-shell") ? 1 : 3,
+    );
     for (const variant of await variants.all()) {
       await variant.click();
       await expect(variant).toHaveAttribute("aria-pressed", "true");

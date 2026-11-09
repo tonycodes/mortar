@@ -291,6 +291,58 @@ test("the accent wash moves away from dark on-accent text", async ({
   await page.mouse.up();
 });
 
+// #104: leadingIcon and suffix align with the text box, not the field label.
+test("Input adornments sit inside the text box beside the value", async ({
+  page,
+}) => {
+  await open(page, "input-adornments");
+  const search = page.getByRole("searchbox", { name: "Search restaurants" });
+  const tax = page.getByRole("spinbutton", { name: "Tax rate" });
+  await expect(search).toBeVisible();
+  await expect(tax).toBeVisible();
+  const searchAlign = await search.evaluate((input) => {
+    const group = input.closest(".m-input-group");
+    const icon = group?.querySelector(".m-input-icon");
+    const field = input.closest(".m-field");
+    const label = field?.querySelector("label");
+    if (!group || !icon || !label) return null;
+    const i = input.getBoundingClientRect();
+    const g = icon.getBoundingClientRect();
+    const l = label.getBoundingClientRect();
+    return {
+      iconInGroup: group.contains(icon),
+      iconMidY: (g.top + g.bottom) / 2,
+      inputMidY: (i.top + i.bottom) / 2,
+      labelMidY: (l.top + l.bottom) / 2,
+    };
+  });
+  expect(searchAlign).toBeTruthy();
+  expect(searchAlign.iconInGroup).toBe(true);
+  expect(Math.abs(searchAlign.iconMidY - searchAlign.inputMidY)).toBeLessThan(
+    2,
+  );
+  expect(
+    Math.abs(searchAlign.iconMidY - searchAlign.labelMidY),
+  ).toBeGreaterThan(8);
+  const taxAlign = await tax.evaluate((input) => {
+    const group = input.closest(".m-input-group");
+    const suffix = [...(group?.children ?? [])].find(
+      (el) => el.tagName === "SPAN" && el.textContent === "%",
+    );
+    if (!group || !suffix) return null;
+    const i = input.getBoundingClientRect();
+    const s = suffix.getBoundingClientRect();
+    return {
+      suffixInGroup: group.contains(suffix),
+      suffixMidY: (s.top + s.bottom) / 2,
+      inputMidY: (i.top + i.bottom) / 2,
+    };
+  });
+  expect(taxAlign).toBeTruthy();
+  expect(taxAlign.suffixInGroup).toBe(true);
+  expect(Math.abs(taxAlign.suffixMidY - taxAlign.inputMidY)).toBeLessThan(2);
+});
+
 // #78: a Switch or Checkbox whose description appears and disappears as it
 // toggles keeps keyboard focus, so Space can toggle it again.
 for (const [role, name] of [

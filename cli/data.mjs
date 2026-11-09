@@ -40,6 +40,11 @@ export const GUIDES = {
     summary:
       "Transactional email from @tonycodes-ui/mortar/email: emailTheme, the Email components, the templates (verify email, magic link, password reset, invite, receipt, notification) and renderEmail.",
   },
+  native: {
+    file: "docs/native.md",
+    summary:
+      "Mortar for SwiftUI (iPhone, iPad, Mac) and Jetpack Compose (Android): install, MortarTheme and brands, the native components and their web equivalents, the generated tokens and snapshot tests.",
+  },
   "migrating-0.6": {
     file: "docs/migrating-to-0.6.md",
     summary: "Every prop and markup change from 0.5 to 0.6.",

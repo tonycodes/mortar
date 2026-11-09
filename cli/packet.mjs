@@ -14,6 +14,36 @@ export const THEME_SETUP = `import { ThemeProvider } from "@tonycodes-ui/mortar"
 const importLine = (data, names) =>
   `import { ${[...new Set(names)].sort().join(", ")} } from "${data.packageName}";`;
 
+// The native libraries (docs/native.md): a Swift package and an Android
+// library, built from the same tokens.
+export const NATIVE = {
+  swiftui: {
+    package: "https://github.com/tonycodes/mortar",
+    import: "import Mortar",
+    theme: ".mortarTheme(.neutral)",
+  },
+  compose: {
+    package: "codes.tony:mortar",
+    import: "import codes.tony.mortar.*",
+    theme: "MortarTheme(brand = MortarBrand.Neutral) { … }",
+  },
+};
+
+/** A component's SwiftUI and Compose equivalents, from its manifest. */
+const nativeDetail = (platforms) =>
+  Object.fromEntries(
+    Object.entries(platforms).map(([platform, name]) => [
+      platform,
+      {
+        name,
+        import:
+          platform === "compose"
+            ? `import codes.tony.mortar.${name}`
+            : NATIVE.swiftui.import,
+      },
+    ]),
+  );
+
 /** The full contract of one component, as get_component returns it. */
 export function componentDetail(data, c, { example = true } = {}) {
   const p = data.placement(c);
@@ -46,6 +76,7 @@ export function componentDetail(data, c, { example = true } = {}) {
     avoid: c.contract.avoid,
     accessibility: c.contract.accessibility,
     capabilities: c.capabilities,
+    ...(c.platforms ? { native: nativeDetail(c.platforms) } : {}),
     dependencies: (c.contract.dependencies ?? [])
       .map((id) => data.byId(id)?.export ?? id)
       .sort(),
@@ -137,6 +168,11 @@ const PURPOSES = [
 const EMAIL_WORDS =
   /\b(?:(?:transactional|verification|verify|welcome|invite|invitation|receipt|order confirmation|confirmation|password reset|reset|magic[\s-]link|sign[\s-]in|notification|digest|billing)\s+e-?mails?|e-?mail\s+templates?)\b/i;
 
+// A brief for an iOS, iPadOS or Android app. The native libraries mirror a
+// core set of components, so the packet lists them.
+const NATIVE_WORDS =
+  /\b(?:ios|ipados|iphone|ipad|android|swift(?:ui)?|jetpack compose|kotlin|(?:native|mobile)\s+apps?)\b/i;
+
 /** Pick components for a free-text brief, with the reason for each. */
 export function chooseForBrief(data, brief) {
   const purposes = PURPOSES.filter((p) => p.words.test(brief));
@@ -214,6 +250,8 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
     guides.push("auth-flows");
   const emails = !!brief && EMAIL_WORDS.test(brief);
   if (emails) guides.push("email");
+  const native = !!brief && NATIVE_WORDS.test(brief);
+  if (native) guides.push("native");
   return {
     package: data.packageName,
     version: data.version,
@@ -270,6 +308,19 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
             install: "npm install @react-email/components",
             notes:
               "Emails can't use the app components or styles.css: email clients don't load stylesheets. Build them from the Email components and templates, themed with emailTheme(brand), and send both parts of renderEmail (get_guide email).",
+          },
+        }
+      : {}),
+    ...(native
+      ? {
+          native: {
+            swiftui: NATIVE.swiftui,
+            compose: NATIVE.compose,
+            components: data.components
+              .filter((c) => c.platforms)
+              .map((c) => ({ web: c.export, ...c.platforms })),
+            notes:
+              "The native libraries mirror these core components with the same props in each platform's idiom, themed from the same tokens. Everything else is web only: build it from the platform's own controls styled with MortarTokens, or contribute it (get_guide native).",
           },
         }
       : {}),
