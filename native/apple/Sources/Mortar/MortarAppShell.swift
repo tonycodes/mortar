@@ -106,9 +106,10 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
                                 ForEach(sections[index].items) { row($0) }
                             } header: {
                                 Text(sections[index].label)
-                                    .font(mortar.font(12, .semibold))
+                                    .font(mortar.font(11, .semibold))
+                                    .tracking(11 * MortarTokens.trackingCaps)
+                                    .textCase(.uppercase)
                                     .foregroundStyle(p[\.muted])
-                                    .textCase(nil)
                                     .accessibilityAddTraits(.isHeader)
                             }
                         }
@@ -150,9 +151,8 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
                 Spacer(minLength: 8)
                 if let count {
                     Text(count, format: .number)
-                        .monospacedDigit()
-                        .font(mortar.font(12, .semibold))
-                        .foregroundStyle(isSelected ? mortar.palette[\.ink] : mortar.palette[\.muted])
+                        .font(mortar.font(11).monospaced())
+                        .foregroundStyle(mortar.palette[\.muted])
                         .accessibilityHidden(true)
                 }
             }
@@ -161,7 +161,7 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
         .focusEffectDisabled()
         .listRowBackground(
             RoundedRectangle(cornerRadius: MortarTokens.radius)
-                .fill(isSelected ? mortar.palette[\.selected] : .clear)
+                .fill(isSelected ? mortar.palette[\.surface] : .clear)
                 .padding(.horizontal, 8)
         )
         .accessibilityValue(count.map { Text("\($0)") } ?? Text(verbatim: ""))
@@ -208,7 +208,8 @@ private struct SidebarTitle: ViewModifier {
     }
 }
 
-/// A sidebar row: Mortar's type, the selected weight and colour, and
+/// A sidebar row, as the web sidebar's links: the current destination on
+/// the surface in the link colour and semibold. Mortar's type, and
 /// Mortar's focus ring for keyboard focus in place of the system's.
 private struct SidebarRowStyle: ButtonStyle {
     let isSelected: Bool
@@ -236,7 +237,7 @@ private struct SidebarRow<Label: View>: View {
         let shape = RoundedRectangle(cornerRadius: MortarTokens.radius)
         label
             .font(mortar.font(mortar.theme.density.fontSize, isSelected ? .semibold : .regular))
-            .foregroundStyle(isSelected || isPressed ? p[\.ink] : p[\.secondary])
+            .foregroundStyle(isSelected ? p[\.link] : isPressed ? p[\.ink] : p[\.secondary])
             .frame(maxWidth: .infinity, minHeight: MortarTokens.touchTarget - 8, alignment: .leading)
             .contentShape(Rectangle())
             .overlay {
