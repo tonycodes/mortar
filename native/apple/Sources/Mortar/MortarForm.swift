@@ -69,17 +69,10 @@ public struct MortarForm<Content: View, Actions: View>: View {
             if Actions.self != EmptyView.self {
                 VStack(spacing: 0) {
                     Rectangle().fill(p[\.line]).frame(height: 1)
-                    // Side by side, trailing; stacked full width when they
-                    // don't fit, as at the largest text sizes.
-                    ViewThatFits(in: .horizontal) {
-                        HStack(spacing: 12) {
-                            Spacer(minLength: 0)
-                            actions
-                        }
-                        VStack(alignment: .trailing, spacing: 8) {
-                            actions
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                    // Side by side, trailing, when they fit; stacked,
+                    // trailing, when they don't, as at the largest text sizes.
+                    TrailingActions {
+                        actions
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
@@ -192,6 +185,81 @@ private struct SectionColumns: Layout {
     private func columns(_ width: CGFloat) -> (CGFloat, CGFloat) {
         let available = width - 40
         return (available / 3, available * 2 / 3)
+    }
+}
+
+/// The page's actions. One row, trailing, when they fit the proposed width;
+/// stacked, trailing, when they don't. The choice uses that width only, as
+/// `SectionColumns` does, so it can't feed back into itself while a window
+/// resizes the way `ViewThatFits` can.
+private struct TrailingActions: Layout {
+    var spacing: CGFloat = 12
+    var stackSpacing: CGFloat = 8
+
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        let ideals = idealSizes(subviews)
+        if fitsInARow(proposal, ideals: ideals) {
+            return rowContent(ideals)
+        }
+        return stackContent(ideals, limit: proposal.width ?? .greatestFiniteMagnitude)
+    }
+
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        let ideals = idealSizes(subviews)
+        if fitsInARow(proposal, ideals: ideals) {
+            let height = rowContent(ideals).height
+            var x = bounds.minX
+            for (subview, ideal) in zip(subviews, ideals) {
+                subview.place(
+                    at: CGPoint(x: x, y: bounds.minY + (height - ideal.height) / 2),
+                    proposal: ProposedViewSize(width: ideal.width, height: ideal.height)
+                )
+                x += ideal.width + spacing
+            }
+        } else {
+            var y = bounds.minY
+            for (subview, ideal) in zip(subviews, ideals) {
+                let width = min(ideal.width, bounds.width)
+                subview.place(
+                    at: CGPoint(x: bounds.maxX - width, y: y),
+                    proposal: ProposedViewSize(width: width, height: ideal.height)
+                )
+                y += ideal.height + stackSpacing
+            }
+        }
+    }
+
+    /// Unspecified-width sizes, so a button keeps its label width instead of
+    /// growing into the proposal.
+    private func idealSizes(_ subviews: Subviews) -> [CGSize] {
+        subviews.map { $0.sizeThatFits(.unspecified) }
+    }
+
+    /// True when the proposal is missing or not yet a real width, or when
+    /// the row fits. A zero width is the first pass, not a reason to stack.
+    private func fitsInARow(_ proposal: ProposedViewSize, ideals: [CGSize]) -> Bool {
+        guard let width = proposal.width, width > 0 else { return true }
+        return rowMinimum(ideals) <= width
+    }
+
+    /// Button widths plus the gaps between them.
+    private func rowContent(_ ideals: [CGSize]) -> CGSize {
+        guard !ideals.isEmpty else { return .zero }
+        let width = ideals.reduce(CGFloat(0)) { $0 + $1.width } + spacing * CGFloat(ideals.count - 1)
+        return CGSize(width: width, height: ideals.map(\.height).max() ?? 0)
+    }
+
+    /// The row's minimum, including the gap `ViewThatFits` used to keep
+    /// after its leading spacer, so the stack starts at the same width.
+    private func rowMinimum(_ ideals: [CGSize]) -> CGFloat {
+        rowContent(ideals).width + (ideals.isEmpty ? 0 : spacing)
+    }
+
+    private func stackContent(_ ideals: [CGSize], limit: CGFloat) -> CGSize {
+        guard !ideals.isEmpty else { return .zero }
+        let width = min(limit, ideals.map(\.width).max() ?? 0)
+        let height = ideals.reduce(CGFloat(0)) { $0 + $1.height } + stackSpacing * CGFloat(ideals.count - 1)
+        return CGSize(width: width, height: height)
     }
 }
 
