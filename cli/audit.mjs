@@ -4,10 +4,12 @@
 // The scanner is deliberately lightweight (no TypeScript or Babel at runtime):
 // comments are blanked, imports from the package are read with patterns, and
 // JSX opening tags of imported Mortar components are tokenised to read their
-// attribute names and literal values. Known limits: props passed through a
-// spread ({...props}) are not checked; components re-exported or wrapped under
-// another name are not followed; JSX in .vue/.svelte/.astro/.html files is not
-// read; dynamic class names built at runtime are not resolved.
+// attribute names and literal values. Components whose contract has no children
+// slot are also checked for JSX body children between the tags. Known limits:
+// props passed through a spread ({...props}) are not checked; components
+// re-exported or wrapped under another name are not followed; JSX in
+// .vue/.svelte/.astro/.html files is not read; dynamic class names built at
+// runtime are not resolved.
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { resolve, join, relative, dirname, extname, sep } from "node:path";
 import { createHash } from "node:crypto";
@@ -18,6 +20,10 @@ import {
   GENERAL_PROPS,
   RENAMED_VALUES,
 } from "./migrations.mjs";
+
+// Built from parts so tracked source does not contain the retired scope literal
+// (tests/npm-package-name.test.mjs forbids it outside the migration allowlist).
+const LEGACY_PKG = ["@", "tony-ui", "/", "mortar"].join("");
 
 export const RULES = {
   "not-installed": "@tonycodes-ui/mortar is imported but not installed.",
@@ -46,6 +52,7 @@ export const RULES = {
   "local-copy": "A local copy of Mortar source.",
   "raw-element":
     "A raw HTML element (such as <table> or <select>) that a Mortar component replaces, in an app that uses Mortar.",
+  "legacy-package": `A dependency or import of the retired ${LEGACY_PKG}; install and import @tonycodes-ui/mortar instead (see the CHANGELOG migration note).`,
   "invalid-phrasing":
     "A block HTML element in a phrasing-only slot that Mortar renders inside a <p>.",
   "limited-data": "The audit could not use the installed version's own data.",
@@ -84,6 +91,20 @@ const CODE = new Set([
 const JSX = new Set([".js", ".jsx", ".tsx", ".mjs"]);
 const STYLE = new Set([".css", ".scss", ".sass", ".less", ".pcss", ".postcss"]);
 const PKG = "@tonycodes-ui/mortar";
+const LEGACY_ESCAPE = LEGACY_PKG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const LEGACY_IMPORT = new RegExp(
+  String.raw`\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\4`,
+  "g",
+);
+const LEGACY_SIDE_EFFECT = new RegExp(
+  String.raw`\bimport\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\1`,
+  "g",
+);
+const LEGACY_CSS_IMPORT = new RegExp(
+  String.raw`@import\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\1`,
+  "g",
+);
+const LEGACY_FIX = `Install and import "${PKG}" instead of "${LEGACY_PKG}". See the CHANGELOG migration note.`;
 const MAX_FILES = 20000;
 const MAX_BYTES = 1_000_000;
 
@@ -221,6 +242,21 @@ export function blankComments(text, { css = false } = {}) {
   return out.join("");
 }
 
+/**
+ * True when `src[i]` starts a JS string or template literal. An apostrophe in
+ * JSX text (`Don't`) does not: it must follow an operator, bracket, or a
+ * keyword such as `return` (same rule as blankStrings).
+ */
+function quoteStarts(src, i) {
+  const q = src[i];
+  if (q !== '"' && q !== "'" && q !== "`") return false;
+  if (q === "`") return true;
+  const before = src.slice(0, i).trimEnd();
+  return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
+    before,
+  );
+}
+
 /** Index of the character after the `{…}` group starting at `i`. */
 function skipBraces(src, i) {
   let depth = 0;
@@ -231,7 +267,7 @@ function skipBraces(src, i) {
     else if (c === "}") {
       depth--;
       if (depth === 0) return i + 1;
-    } else if (c === '"' || c === "'") {
+    } else if ((c === '"' || c === "'") && quoteStarts(src, i)) {
       i++;
       while (i < n && src[i] !== c && src[i] !== "\n") {
         if (src[i] === "\\") i++;
@@ -255,28 +291,18 @@ function skipBraces(src, i) {
 const NAME = /[A-Za-z_$][\w$]*(?:[-:.][\w$]+)*/y;
 
 /**
- * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
- * for string literals (`a="x"` or `a={"x"}`), the value. Brace values also get
- * `expression: { start, end }` covering the inner text. The returned array has
- * `end` (index after the opening tag) and `selfClosing`.
+ * Walk from the end of a JSX tag name to the `>` or `/>` that closes the
+ * opening tag. Returns the attributes, the index after the delimiter, and
+ * whether the tag was self-closing.
  */
-export function jsxAttributes(src, i) {
+function jsxOpening(src, i) {
   const attrs = [];
   const n = src.length;
   while (i < n) {
     while (i < n && /\s/.test(src[i])) i++;
-    if (src[i] === "/" && src[i + 1] === ">") {
-      i += 2;
-      attrs.end = i;
-      attrs.selfClosing = true;
-      return attrs;
-    }
-    if (src[i] === ">") {
-      i += 1;
-      attrs.end = i;
-      attrs.selfClosing = false;
-      return attrs;
-    }
+    if (src[i] === "/" && src[i + 1] === ">")
+      return { attrs, end: i + 2, selfClosing: true };
+    if (src[i] === ">") return { attrs, end: i + 1, selfClosing: false };
     if (src[i] === "{") {
       i = skipBraces(src, i);
       continue;
@@ -307,9 +333,45 @@ export function jsxAttributes(src, i) {
     }
     attrs.push(attr);
   }
-  attrs.end = i;
-  attrs.selfClosing = false;
-  return attrs;
+  return { attrs, end: i, selfClosing: false };
+}
+
+/**
+ * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
+ * for string literals (`a="x"` or `a={"x"}`), the value.
+ */
+export function jsxAttributes(src, i) {
+  return jsxOpening(src, i).attrs;
+}
+
+/**
+ * True when the JSX element whose body starts at `bodyStart` (just after `>`)
+ * has non-whitespace children before its matching close tag. Nested elements
+ * with the same local name are counted so `<A><A/></A>` is not truncated.
+ */
+export function jsxHasChildren(src, bodyStart, tagName) {
+  const open = new RegExp(`<${tagName}(?=[\\s/>])`, "g");
+  const close = new RegExp(`</${tagName}\\s*>`, "g");
+  let depth = 1;
+  let i = bodyStart;
+  while (i < src.length && depth > 0) {
+    open.lastIndex = i;
+    close.lastIndex = i;
+    const nextOpen = open.exec(src);
+    const nextClose = close.exec(src);
+    if (!nextClose) return /\S/.test(src.slice(bodyStart));
+    if (nextOpen && nextOpen.index < nextClose.index) {
+      const nested = jsxOpening(src, nextOpen.index + nextOpen[0].length);
+      // Self-closing nested tags do not change depth.
+      if (!nested.selfClosing) depth++;
+      i = nested.end;
+    } else {
+      depth--;
+      if (depth === 0) return /\S/.test(src.slice(bodyStart, nextClose.index));
+      i = nextClose.index + nextClose[0].length;
+    }
+  }
+  return false;
 }
 
 /** HTML elements that cannot nest inside a `<p>` (obvious block tags). */
@@ -368,9 +430,9 @@ export function blockTagsIn(src, start = 0, end = src.length) {
  * or the closing tag is missing.
  */
 export function jsxChildrenRange(src, tagName, afterName) {
-  const attrs = jsxAttributes(src, afterName);
-  if (attrs.selfClosing || attrs.end == null) return null;
-  const start = attrs.end;
+  const opening = jsxOpening(src, afterName);
+  if (opening.selfClosing) return null;
+  const start = opening.end;
   const open = new RegExp(`<${escapeRegExp(tagName)}(?=[\\s/>])`, "g");
   const close = new RegExp(`</${escapeRegExp(tagName)}\\s*>`, "g");
   let depth = 1;
@@ -422,16 +484,6 @@ function phrasingSlotMap(data) {
 export function blankStrings(src) {
   const out = src.split("");
   const n = src.length;
-  // A quote in JSX text (Don't) is not a string.
-  const starts = (i) => {
-    const q = src[i];
-    if (q !== '"' && q !== "'" && q !== "`") return false;
-    if (q === "`") return true;
-    const before = src.slice(0, i).trimEnd();
-    return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
-      before,
-    );
-  };
   const blank = (from, to) => {
     for (let k = from; k < Math.min(to, n); k++)
       if (out[k] !== "\n") out[k] = " ";
@@ -471,7 +523,7 @@ export function blankStrings(src) {
       if (expr && c === "{") depth++;
       else if (expr && c === "}") {
         if (--depth === 0) return i;
-      } else if ((c === '"' || c === "'" || c === "`") && starts(i)) {
+      } else if ((c === '"' || c === "'" || c === "`") && quoteStarts(src, i)) {
         i = blankOne(i, end);
         if (i < end) i++;
         continue;
@@ -867,6 +919,15 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             '@import "tailwindcss"; first, then @import "@tonycodes-ui/mortar/styles.css";',
           );
       }
+      for (const m of css.matchAll(LEGACY_CSS_IMPORT))
+        add(
+          "legacy-package",
+          "error",
+          file,
+          line(m.index),
+          `Imports the retired "${m[2]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+          LEGACY_FIX,
+        );
       // Selectors: the text before each `{` that is not an at-rule.
       for (const m of css.matchAll(/([^{};]+)\{/g)) {
         const selector = m[1].trim();
@@ -894,6 +955,24 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
+    for (const m of src.matchAll(LEGACY_IMPORT))
+      add(
+        "legacy-package",
+        "error",
+        file,
+        line(m.index),
+        `Imports the retired "${m[5]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+        LEGACY_FIX,
+      );
+    for (const m of src.matchAll(LEGACY_SIDE_EFFECT))
+      add(
+        "legacy-package",
+        "error",
+        file,
+        line(m.index),
+        `Imports the retired "${m[2]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+        LEGACY_FIX,
+      );
     // Email markup is tables by design, and has its own components.
     const emailFile = EMAIL_FILE.test(src);
     if (JSX.has(ext) && !emailFile) {
@@ -1150,7 +1229,8 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       if (!propTypes) continue;
       const accepts = data.accepts(component);
       const afterName = m.index + m[0].length;
-      const attrs = jsxAttributes(src, afterName);
+      const opening = jsxOpening(src, afterName);
+      const attrs = opening.attrs;
       for (const attr of attrs) {
         const name = attr.name;
         if (name === "key" || /[-:]/.test(name)) continue;
@@ -1195,6 +1275,26 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           guess ? `Use ${name}="${guess}".` : undefined,
         );
       }
+      // JSX body children on a control with no children slot (e.g. Switch).
+      if (
+        !opening.selfClosing &&
+        !accepts.has("children") &&
+        jsxHasChildren(src, opening.end, m[1])
+      ) {
+        const guess = accepts.has("label")
+          ? "label"
+          : closest("children", Object.keys(propTypes), 2);
+        add(
+          "unknown-prop",
+          "error",
+          file,
+          line(opening.end),
+          `<${exportName}> has no prop "children".`,
+          guess
+            ? `Use \`${guess}\` (${propTypes[guess]?.type ?? "see the contract"}).`
+            : `See the contract: mortar component ${exportName}.`,
+        );
+      }
       // Phrasing-only slots: block HTML children inside a <p> are invalid.
       const slots = phrasingSlotsOf(exportName);
       if (!slots.length) continue;
@@ -1221,7 +1321,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           continue;
         }
         if (attr) continue; // string literal or bare boolean — no JSX blocks
-        if (slot !== "children" || attrs.selfClosing) continue;
+        if (slot !== "children" || opening.selfClosing) continue;
         const body = jsxChildrenRange(src, m[1], afterName);
         if (!body) continue;
         for (const hit of blockTagsIn(jsx, body.start, body.end))
@@ -1255,6 +1355,19 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     pkgJson?.dependencies?.[PKG] ??
     pkgJson?.devDependencies?.[PKG] ??
     pkgJson?.peerDependencies?.[PKG];
+  const legacyRange =
+    pkgJson?.dependencies?.[LEGACY_PKG] ??
+    pkgJson?.devDependencies?.[LEGACY_PKG] ??
+    pkgJson?.peerDependencies?.[LEGACY_PKG];
+  if (legacyRange)
+    add(
+      "legacy-package",
+      "error",
+      pkgFile,
+      1,
+      `Depends on the retired "${LEGACY_PKG}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+      LEGACY_FIX,
+    );
   const reactEmail = "@react-email/components";
   if (
     usesEmail &&

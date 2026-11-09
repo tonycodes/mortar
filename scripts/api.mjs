@@ -237,18 +237,22 @@ export function componentApi(root, manifests) {
         declaration,
       );
       for (const prop of propsType.getProperties()) {
-        accepts.add(prop.name);
         const d = prop.declarations?.[0];
+        // `children?: never` (and similar) rejects a prop in TypeScript without
+        // advertising it as a real slot in the catalogue or the audit.
+        const described = describeType(
+          checker,
+          d?.type
+            ? checker.getTypeFromTypeNode(d.type)
+            : checker.getTypeOfSymbolAtLocation(prop, declaration),
+        );
+        if (described === "never") continue;
+        accepts.add(prop.name);
         if (!d || !inKit(d)) continue;
         const entry = {
           // The declared type node keeps aliases such as ReactNode and ElementType
           // readable; literal unions are expanded either way.
-          type: describeType(
-            checker,
-            d.type
-              ? checker.getTypeFromTypeNode(d.type)
-              : checker.getTypeOfSymbolAtLocation(prop, declaration),
-          ),
+          type: described,
           required: !(prop.flags & ts.SymbolFlags.Optional),
         };
         if (defaultValues.has(prop.name))

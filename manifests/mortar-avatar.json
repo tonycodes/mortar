@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Avatar",
+  "platforms": {
+    "swiftui": "MortarAvatar",
+    "compose": "MortarAvatar"
+  },
   "source": "src/display.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",

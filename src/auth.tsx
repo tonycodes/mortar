@@ -178,7 +178,7 @@ export interface PasswordStrength {
 }
 export interface PasswordInputProps
   extends
-    Omit<InputHTMLAttributes<HTMLInputElement>, "type">,
+    Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "children">,
     FieldDescription {
   /**
    * `current` (sign-in) sets autocomplete="current-password"; `new` (sign-up,
@@ -191,6 +191,8 @@ export interface PasswordInputProps
   strength?: PasswordStrength;
   /** Accessible name of the show/hide toggle; its pressed state says whether the password is visible. */
   toggleLabel?: string;
+  /** Not accepted: the accessible name is `label`. */
+  children?: never;
 }
 /**
  * Password field with a show/hide toggle, optional requirement checklist and
@@ -209,10 +211,12 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
       strength,
       toggleLabel = "Show password",
       autoComplete,
+      children: _children,
       ...props
     },
     ref,
   ) {
+    void _children;
     const [visible, setVisible] = useState(false);
     const requirementsId = useId();
     const { fieldId, messageId, describedBy } = useField({

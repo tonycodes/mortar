@@ -142,6 +142,78 @@ final class MortarSnapshotTests: XCTestCase {
         })
     }
 
+    func testCheckbox() {
+        check(VStack(alignment: .leading, spacing: 4) {
+            MortarCheckbox("Email me a weekly summary", isOn: .constant(true), description: "Every Monday morning.")
+            MortarCheckbox("I agree to the terms", isOn: .constant(false),
+                           error: "Agree to the terms to continue.", isRequired: true)
+            MortarCheckbox("Beta features", isOn: .constant(false)).disabled(true)
+        })
+    }
+
+    func testRadioGroup() {
+        check(MortarRadioGroup("Plan", selection: .constant("team"), options: [
+            MortarRadioOption("Personal", value: "personal", description: "One seat."),
+            MortarRadioOption("Team", value: "team", description: "Up to 20 seats."),
+            MortarRadioOption("Enterprise", value: "enterprise", isDisabled: true),
+        ], hint: "You can change plan at any time."))
+    }
+
+    func testSegmentedControl() {
+        check(VStack(alignment: .leading, spacing: 16) {
+            MortarSegmentedControl("Range", selection: .constant("week"),
+                                   options: [("day", "Day"), ("week", "Week"), ("month", "Month")])
+            MortarSegmentedControl("View", selection: .constant("list"),
+                                   options: [("list", "List"), ("board", "Board")])
+        })
+    }
+
+    func testProgressBar() {
+        check(VStack(spacing: 20) {
+            MortarProgressBar("Storage", value: 62)
+            MortarProgressBar("Onboarding", value: 3, total: 5, valueLabel: "3 of 5 steps", tone: .success)
+            MortarProgressBar("Quota", value: 96, tone: .danger)
+        })
+    }
+
+    func testDivider() {
+        check(VStack(alignment: .leading, spacing: 0) {
+            Text(verbatim: "Above")
+            MortarDivider()
+            Text(verbatim: "Between")
+            MortarDivider("or")
+            Text(verbatim: "Below")
+            MortarDivider(soft: true, spacing: .sm)
+        })
+    }
+
+    func testStackedList() {
+        check(MortarStackedList("Team", groups: [
+            (label: "Owners", items: [
+                MortarListItem(id: "1", title: "Ada Lovelace", description: "ada@example.com",
+                               leading: .avatar(name: "Ada Lovelace"), trailing: "Owner", action: {}),
+            ]),
+            (label: "Files", items: [
+                MortarListItem(id: "2", title: "Quarterly report.pdf", description: "2.4 MB",
+                               leading: .systemImage("doc"), trailing: "Today", action: {}),
+                MortarListItem(id: "3", title: "Roadmap.key", description: "18 MB",
+                               leading: .systemImage("doc.richtext"), trailing: "Monday"),
+            ]),
+        ], chevrons: true))
+    }
+
+    func testAppShell() {
+        let shell = AppShellSample()
+        for (name, device) in [("iphone", ViewImageConfig.iPhone13), ("ipad", ViewImageConfig.iPadPro11)] {
+            assertSnapshot(
+                of: shell,
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: device),
+                           traits: UITraitCollection(userInterfaceStyle: .light)),
+                named: name
+            )
+        }
+    }
+
     func testBrandOnIPad() {
         let brand = MortarTheme(
             light: { var p = MortarTokens.light; p.primary = 0x1D4ED8; p.primaryActive = 0x1E40AF; p.focus = 0x1D4ED8; return p }(),
@@ -168,6 +240,21 @@ final class MortarSnapshotTests: XCTestCase {
             device: .iPadPro11,
             variants: Array(phone.prefix(2))
         )
+    }
+}
+
+private struct AppShellSample: View {
+    @State private var selection = "inbox"
+
+    var body: some View {
+        MortarAppShell("Hive", selection: $selection, items: [
+            MortarNavigationItem("Inbox", systemImage: "tray", value: "inbox"),
+            MortarNavigationItem("Projects", systemImage: "folder", value: "projects"),
+            MortarNavigationItem("Settings", systemImage: "gearshape", value: "settings"),
+        ]) { value in
+            MortarEmptyState("Inbox zero", description: "New messages appear here.", systemImage: "tray")
+                .navigationTitle(value.capitalized)
+        }
     }
 }
 

@@ -23,6 +23,7 @@ import {
   satisfies,
   jsxAttributes,
   jsxChildrenRange,
+  jsxHasChildren,
   RULES,
 } from "../cli/audit.mjs";
 import { TOOLS, validateArguments } from "../cli/tools.mjs";
@@ -192,6 +193,7 @@ test("every guide topic loads from the package", () => {
   assert.doesNotMatch(data.guide("conventions"), /## Composing flows/);
   assert.match(data.guide("auth-flows"), /AuthLayout/);
   assert.match(data.guide("email"), /renderEmail/);
+  assert.match(data.guide("native"), /MortarTheme/);
   assert.match(data.guide("contributing"), /# Agent instructions/);
 });
 
@@ -285,6 +287,96 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
       ["disabled", undefined],
       ["aria-label", "a > b"],
     ],
+  );
+});
+
+test("the JSX scanner keeps attributes inside the opening tag when a slot has an apostrophe", () => {
+  // Apostrophes in JSX text must not be read as JS string quotes (#100).
+  const cases = [
+    `footer={<>Don't have an account? <a href="/signup">Sign up</a></>}`,
+    `footer={<>It's fine with "quoted" text too</>}`,
+    `footer={<><span>Don't</span> leave</>}`,
+    `footer={<>{"Don't quote me"}</>}`,
+  ];
+  for (const slot of cases) {
+    const src = `export function App() {\n  return <AuthLayout title="Sign in" ${slot}>Form</AuthLayout>;\n}\nexport default App;\n`;
+    const i = src.indexOf("<AuthLayout") + "<AuthLayout".length;
+    const attrs = jsxAttributes(src, i);
+    assert.deepEqual(
+      attrs.map((a) => a.name),
+      ["title", "footer"],
+      `unexpected attrs for ${slot}`,
+    );
+  }
+});
+
+test("the audit does not invent unknown-prop findings from apostrophes in slot JSX", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { AuthLayout, ThemeProvider } from "@tonycodes-ui/mortar";
+export function App() {
+  return (
+    <ThemeProvider>
+      <AuthLayout title="Sign in" footer={<>Don't have an account? <a href="/signup">Sign up</a></>}>
+        Form
+      </AuthLayout>
+    </ThemeProvider>
+  );
+}
+export default App;
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "unknown-prop").length,
+    0,
+    JSON.stringify(report.findings, null, 2),
+  );
+});
+
+test("jsxHasChildren sees body content and ignores empty or self-closing tags", () => {
+  assert.equal(
+    jsxHasChildren("<Switch>Show</Switch>", "<Switch>".length, "Switch"),
+    true,
+  );
+  assert.equal(
+    jsxHasChildren(
+      "<Switch label='x'></Switch>",
+      "<Switch label='x'>".length,
+      "Switch",
+    ),
+    false,
+  );
+  assert.equal(jsxHasChildren("<A><A/>keep</A>", "<A>".length, "A"), true);
+  assert.equal(jsxHasChildren("<A><A>inner</A></A>", "<A>".length, "A"), true);
+});
+
+test("the audit flags JSX children on Switch, which has no children slot", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { Switch, ThemeProvider } from "@tonycodes-ui/mortar";
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Switch label="Show logo" checked onChange={() => {}}>Show logo</Switch>
+    </ThemeProvider>
+  );
+}
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.ok(
+    has(
+      report,
+      "unknown-prop",
+      "src/App.tsx",
+      /<Switch> has no prop "children"/,
+    ),
+    JSON.stringify(report.findings, null, 2),
   );
 });
 
@@ -721,6 +813,60 @@ test("the audit flags block elements in phrasing-only slots", async (t) => {
   assert.ok(RULES["invalid-phrasing"]);
 });
 
+// #65: the retired private-registry package must not look like a clean install.
+const LEGACY_PKG = ["@", "tony-ui", "/", "mortar"].join("");
+
+test("the audit flags legacy package imports and package.json deps", async (t) => {
+  const dir = fixture("legacy-package-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  // A leftover node_modules tree for the old name is not the public package.
+  const legacyInstalled = join(dir, "node_modules", ...LEGACY_PKG.split("/"));
+  mkdirSync(legacyInstalled, { recursive: true });
+  writeFileSync(
+    join(legacyInstalled, "package.json"),
+    JSON.stringify({ name: LEGACY_PKG, version: "0.11.0" }),
+  );
+  const report = await auditApp(dir);
+  assert.equal(report.mortar.installed, null);
+  assert.equal(report.mortar.range, null);
+  const legacy = report.findings.filter((f) => f.rule === "legacy-package");
+  assert.ok(legacy.length >= 2, JSON.stringify(report.findings, null, 2));
+  assert.ok(
+    legacy.every((f) => f.severity === "error"),
+    JSON.stringify(legacy, null, 2),
+  );
+  assert.ok(RULES["legacy-package"]);
+  const re = (suffix = "") =>
+    new RegExp(`${LEGACY_PKG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}${suffix}`);
+  const pointsToPublic = /@tonycodes-ui\/mortar[\s\S]*CHANGELOG/;
+  assert.ok(has(report, "legacy-package", "package.json", pointsToPublic));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", pointsToPublic));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/brand")));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/src")));
+  assert.ok(has(report, "legacy-package", "src/App.tsx", re("/styles\\.css")));
+  assert.ok(
+    has(report, "legacy-package", "src/index.css", re("/styles\\.css")),
+  );
+  // Legacy-only usage is not the public package missing an install.
+  assert.ok(!has(report, "not-installed"));
+  assert.ok(!has(report, "not-declared"));
+  assert.ok(!has(report, "missing-styles"));
+});
+
+test("a leftover legacy install does not satisfy the public package", async (t) => {
+  const dir = fixture("clean-app", { version: null });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const legacyInstalled = join(dir, "node_modules", ...LEGACY_PKG.split("/"));
+  mkdirSync(legacyInstalled, { recursive: true });
+  writeFileSync(
+    join(legacyInstalled, "package.json"),
+    JSON.stringify({ name: LEGACY_PKG, version: "0.11.0" }),
+  );
+  const report = await auditApp(dir);
+  assert.equal(report.mortar.installed, null);
+  assert.ok(has(report, "not-installed"));
+});
+
 test("the audit says when it checks an older release against this catalogue", async (t) => {
   const dir = fixture("clean-app", { version: "0.6.0" });
   t.after(() => rmSync(dir, { recursive: true, force: true }));
@@ -887,5 +1033,54 @@ test("a brief about emails points the packet at the email entry", async () => {
     const packet = buildPacket(data, { brief });
     assert.ok(!packet.guides.includes("email"), brief);
     assert.equal(packet.email, undefined);
+  }
+});
+
+// #95: components with SwiftUI and Compose versions name them, and a brief
+// for a native app gets the native libraries.
+test("get_component names a component's native equivalents", () => {
+  const input = componentDetail(
+    data,
+    data.components.find((c) => c.export === "Input"),
+  );
+  assert.deepEqual(input.native, {
+    swiftui: { name: "MortarTextField", import: "import Mortar" },
+    compose: {
+      name: "MortarTextField",
+      import: "import codes.tony.mortar.MortarTextField",
+    },
+  });
+  const web = componentDetail(
+    data,
+    data.components.find((c) => c.export === "DataTable"),
+  );
+  assert.equal(web.native, undefined);
+});
+
+test("a brief for a native app points the packet at the native libraries", async () => {
+  const data = await loadData();
+  for (const brief of [
+    "An iPhone and iPad app for team inboxes",
+    "Android app settings screen in Jetpack Compose",
+    "Native mobile apps for our booking product",
+    "A SwiftUI onboarding flow",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(packet.guides.includes("native"), brief);
+    assert.equal(packet.native.swiftui.import, "import Mortar");
+    assert.equal(packet.native.compose.package, "codes.tony:mortar");
+    assert.equal(packet.native.components.length, 15);
+    assert.deepEqual(
+      packet.native.components.find((c) => c.web === "Button"),
+      { web: "Button", swiftui: "MortarButton", compose: "MortarButton" },
+    );
+  }
+  for (const brief of [
+    "A responsive dashboard that works on mobile",
+    "Marketing site with a compose-your-plan pricing page",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(!packet.guides.includes("native"), brief);
+    assert.equal(packet.native, undefined);
   }
 });

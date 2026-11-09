@@ -1153,10 +1153,11 @@ test("R-AR-17 release.yml retains credential isolation and serialized publishing
       "deploy-playground.yml",
       "native-android.yml",
       "native-apple.yml",
+      "publish-android.yml",
       "release.yml",
       "visual-candidates.yml",
     ].sort(),
-    "R-AR-17 exactly six workflow files",
+    "R-AR-17 exactly seven workflow files",
   );
   // The native libraries' checks run beside the release path: read only, no
   // secrets, and never the workflow the release waits for.
@@ -1171,6 +1172,36 @@ test("R-AR-17 release.yml retains credential isolation and serialized publishing
     assert.doesNotMatch(native, /^name: Mortar contribution checks$/m, file);
     assert.match(native, /persist-credentials: false/, file);
   }
+  // The Android library publishes to GitHub Packages after a release, at its
+  // tag, with the run's own token: no manual trigger, no ref writes, no
+  // stored secrets, and package write as its only write permission.
+  const android = read(".github/workflows/publish-android.yml");
+  const androidTriggers =
+    android.match(/^on:\s*\n([\s\S]*?)(?=^\S)/m)?.[1] ?? "";
+  assert.match(
+    androidTriggers,
+    /^  workflow_run:\n    workflows: \[Release package\]\n    types: \[completed\]\n$/,
+  );
+  assert.match(
+    android,
+    /^permissions:\n  contents: read\n  packages: write\n(?!  )/m,
+  );
+  assert.doesNotMatch(
+    android,
+    /secrets\.|\bgit\s+(?:push|commit|tag\s+-|config)\b|gh api|id-token/,
+  );
+  assert.equal(
+    android.match(/permissions:/g).length,
+    1,
+    "no job-level permissions",
+  );
+  assert.match(android, /github\.event\.workflow_run\.conclusion == 'success'/);
+  assert.match(android, /github\.event\.workflow_run\.head_branch == 'main'/);
+  assert.match(
+    android,
+    /ref: \$\{\{ github\.event\.workflow_run\.head_sha \}\}/,
+  );
+  assert.match(android, /persist-credentials: false/);
 });
 
 test("R-AR-18 release.mjs checks unexpected changes and retains provenance", () => {
