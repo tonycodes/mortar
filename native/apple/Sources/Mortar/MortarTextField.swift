@@ -72,12 +72,14 @@ public struct MortarTextField: View {
                 Label { error } icon: { Image(systemName: "exclamationmark.circle") }
                     .font(mortar.font(12))
                     .foregroundStyle(p[\.danger])
+                    .tint(p[\.danger])
                     .accessibilityHidden(true)
             }
             if let hint {
                 hint
                     .font(mortar.font(12))
                     .foregroundStyle(p[\.muted])
+                    .tint(p[\.muted])
                     .accessibilityHidden(true)
             }
         }
