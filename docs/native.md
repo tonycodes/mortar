@@ -121,6 +121,7 @@ MortarConversation(messages: messages) {
 - `maxLength` cuts text off at that length; `showsCount` also shows the count, which isn't shown by default.
 - `isFocused` moves focus to the field (after correcting a message, say) or away, which dismisses the keyboard on iOS. Dragging the conversation also dismisses it.
 - Messages are Markdown. Emphasis, code and links are styled; lists and headings show as written.
+- VoiceOver reads each bubble as one element: the speaker, then the prose. Emphasis, code and link titles are spoken; the Markdown source and the link URL are not. Each link is an action on that element. A streaming bubble's value is "Responding".
 - A message's `status` is `.complete`, `.streaming` (dots until the first text, and VoiceOver reads "Responding") or `.failed(reason, retry:)`. `choices` are pills under a message that wrap onto more rows when there are more than fit.
 - The column is at most 720 points wide (`measure`) and centred, so lines stay readable in a wide Mac window.
 

@@ -265,21 +265,26 @@ final class MortarSnapshotTests: XCTestCase {
 
     /// VoiceOver reads one element per bubble: the speaker and the prose.
     /// Markdown syntax (emphasis, code, link URLs) is not part of that label.
+    /// Each link is an action on the bubble, named with its title.
     func testConversationVoiceOverReadsProse() {
-        let labels = hostedAccessibilityLabels(of: ConversationSpeechSample())
-        let assistant = labels.first { $0.contains("tax lines") || $0.contains("**tax") }
+        let access = hostedAccessibility(of: ConversationSpeechSample())
+        let assistant = access.labels.first { $0.contains("tax lines") || $0.contains("**tax") }
         XCTAssertEqual(
             assistant,
             "Assistant: Invoices include tax lines and billing-2026-11.csv. See the notes.",
-            "labels: \(labels)"
+            "labels: \(access.labels)"
         )
-        XCTAssertTrue(labels.contains("Yes, update it"), "labels: \(labels)")
-        XCTAssertTrue(labels.contains("You: Show me the diff"), "labels: \(labels)")
+        XCTAssertTrue(access.labels.contains("Yes, update it"), "labels: \(access.labels)")
+        XCTAssertTrue(access.labels.contains("You: Show me the diff"), "labels: \(access.labels)")
         XCTAssertTrue(
-            labels.contains { $0.contains("Not sent. Check your connection.") },
-            "labels: \(labels)"
+            access.labels.contains { $0.contains("Not sent. Check your connection.") },
+            "labels: \(access.labels)"
         )
-        XCTAssertTrue(labels.contains("Retry"), "labels: \(labels)")
+        XCTAssertTrue(access.labels.contains("Retry"), "labels: \(access.labels)")
+        XCTAssertTrue(
+            access.actions.contains("the notes"),
+            "actions: \(access.actions); labels: \(access.labels)"
+        )
     }
 
     /// Text past maxLength is cut off, and the count tells VoiceOver how many
@@ -287,11 +292,11 @@ final class MortarSnapshotTests: XCTestCase {
     /// on the iOS job that already exists on this branch.
     func testComposerMaxLengthCutsAndCounts() {
         let model = ComposerDraft()
-        let labels = hostedAccessibilityLabels(of: ComposerCountHarness(model: model)) {
+        let access = hostedAccessibility(of: ComposerCountHarness(model: model)) {
             model.text = "Hello, world"
         }
         XCTAssertEqual(model.text, "Hello")
-        XCTAssertTrue(labels.contains("0 characters left"), "labels: \(labels)")
+        XCTAssertTrue(access.labels.contains("0 characters left"), "labels: \(access.labels)")
     }
 
     /// Every tab on iPhone carries its icon. The snapshot rendering drops
@@ -324,12 +329,18 @@ final class MortarSnapshotTests: XCTestCase {
         return nil
     }
 
+    /// What VoiceOver can read on a hosted view: labels, and custom action names.
+    private struct HostedAccessibility {
+        var labels: [String] = []
+        var actions: [String] = []
+    }
+
     /// Hosts a SwiftUI view in a window, runs `change` (a binding update),
     /// then collects accessibility labels the way VoiceOver would.
-    private func hostedAccessibilityLabels<V: View>(
+    private func hostedAccessibility<V: View>(
         of view: V,
         after change: () -> Void = {}
-    ) -> [String] {
+    ) -> HostedAccessibility {
         let controller = UIHostingController(rootView: view.mortarTheme(.neutral))
         let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
         window.rootViewController = controller
@@ -342,20 +353,25 @@ final class MortarSnapshotTests: XCTestCase {
         controller.view.layoutIfNeeded()
         RunLoop.main.run(until: Date().addingTimeInterval(0.4))
         var seen = Set<ObjectIdentifier>()
-        return Self.accessibilityLabels(in: controller.view, seen: &seen)
+        var access = HostedAccessibility()
+        Self.collectAccessibility(in: controller.view, seen: &seen, into: &access)
+        return access
     }
 
-    private static func accessibilityLabels(
+    private static func collectAccessibility(
         in object: Any,
-        seen: inout Set<ObjectIdentifier>
-    ) -> [String] {
-        guard let obj = object as? NSObject else { return [] }
-        guard seen.insert(ObjectIdentifier(obj)).inserted else { return [] }
-        var found: [String] = []
-        if let label = obj.accessibilityLabel, !label.isEmpty { found.append(label) }
+        seen: inout Set<ObjectIdentifier>,
+        into access: inout HostedAccessibility
+    ) {
+        guard let obj = object as? NSObject else { return }
+        guard seen.insert(ObjectIdentifier(obj)).inserted else { return }
+        if let label = obj.accessibilityLabel, !label.isEmpty { access.labels.append(label) }
+        if let names = obj.accessibilityCustomActions?.map(\.name) {
+            access.actions += names.filter { !$0.isEmpty }
+        }
         if let elements = obj.accessibilityElements {
             for element in elements {
-                found += accessibilityLabels(in: element, seen: &seen)
+                collectAccessibility(in: element, seen: &seen, into: &access)
             }
         }
         if let view = obj as? UIView {
@@ -363,15 +379,14 @@ final class MortarSnapshotTests: XCTestCase {
             if count > 0 && count != NSNotFound {
                 for index in 0..<count {
                     if let element = view.accessibilityElement(at: index) {
-                        found += accessibilityLabels(in: element, seen: &seen)
+                        collectAccessibility(in: element, seen: &seen, into: &access)
                     }
                 }
             }
             for subview in view.subviews {
-                found += accessibilityLabels(in: subview, seen: &seen)
+                collectAccessibility(in: subview, seen: &seen, into: &access)
             }
         }
-        return found
     }
 
     func testBrandOnIPad() {

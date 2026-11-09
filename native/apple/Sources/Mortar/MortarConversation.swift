@@ -186,8 +186,21 @@ private struct MessageRow: View {
         return text
     }
 
+    /// Link titles become VoiceOver actions on the one bubble element.
+    /// The URL stays out of the spoken label.
+    private func linkActions(in prose: AttributedString) -> [(title: String, url: URL)] {
+        var found: [(title: String, url: URL)] = []
+        for run in prose.runs {
+            guard let url = run.link else { continue }
+            let title = String(prose[run.range].characters)
+            if !title.isEmpty { found.append((title, url)) }
+        }
+        return found
+    }
+
     var body: some View {
         let p = mortar.palette
+        let prose = content
         let big = MortarTokens.radiusXl
         let small = MortarTokens.radiusSm
         let shape = UnevenRoundedRectangle(
@@ -197,28 +210,32 @@ private struct MessageRow: View {
             topTrailingRadius: big
         )
         VStack(alignment: isUser ? .trailing : .leading, spacing: 8) {
-            Group {
-                if isStreaming && message.text.isEmpty {
-                    Image(systemName: "ellipsis")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(p[\.muted])
-                        .symbolEffect(.variableColor.iterative, options: .repeating)
-                        .frame(minWidth: 32, minHeight: 20)
-                } else {
-                    Text(content)
-                        .font(mortar.font(15))
-                        .lineSpacing(3)
-                        .foregroundStyle(isUser ? p[\.onPrimary] : p[\.ink])
-                        .textSelection(.enabled)
-                        .fixedSize(horizontal: false, vertical: true)
+            BubbleLinks(links: linkActions(in: prose)) {
+                Group {
+                    if isStreaming && message.text.isEmpty {
+                        Image(systemName: "ellipsis")
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundStyle(p[\.muted])
+                            .symbolEffect(.variableColor.iterative, options: .repeating)
+                            .frame(minWidth: 32, minHeight: 20)
+                    } else {
+                        Text(prose)
+                            .font(mortar.font(15))
+                            .lineSpacing(3)
+                            .foregroundStyle(isUser ? p[\.onPrimary] : p[\.ink])
+                            .textSelection(.enabled)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(shape.fill(isUser ? p[\.primary] : p[\.sunken]))
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(
+                    speaker + Text(verbatim: ": ") + Text(verbatim: String(prose.characters))
+                )
+                .accessibilityValue(isStreaming ? Text("Responding") : Text(verbatim: ""))
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .background(shape.fill(isUser ? p[\.primary] : p[\.sunken]))
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel(speaker + Text(verbatim: ": ") + Text(message.text))
-            .accessibilityValue(isStreaming ? Text("Responding") : Text(verbatim: ""))
 
             if case let .failed(reason, retry) = message.status {
                 HStack(spacing: 8) {
@@ -244,6 +261,32 @@ private struct MessageRow: View {
         }
         .padding(isUser ? .leading : .trailing, 48)
         .frame(maxWidth: .infinity, alignment: isUser ? .trailing : .leading)
+    }
+}
+
+/// Chains one VoiceOver action per link onto a bubble that is a single
+/// element, so the link can be opened without putting the URL in the label.
+private struct BubbleLinks<Content: View>: View {
+    let links: [(title: String, url: URL)]
+    let content: Content
+    @Environment(\.openURL) private var openURL
+
+    init(links: [(title: String, url: URL)], @ViewBuilder content: () -> Content) {
+        self.links = links
+        self.content = content()
+    }
+
+    var body: some View {
+        if let link = links.first {
+            let open = openURL
+            BubbleLinks(links: Array(links.dropFirst())) {
+                content.accessibilityAction(named: Text(verbatim: link.title)) {
+                    open(link.url)
+                }
+            }
+        } else {
+            content
+        }
     }
 }
 
