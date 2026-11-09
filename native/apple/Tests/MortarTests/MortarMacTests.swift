@@ -178,7 +178,7 @@ enum MacWindow {
 
     private static func text(of element: any NSAccessibilityProtocol) -> String? {
         #if compiler(>=6.2)
-        element.accessibilityLabel
+        element.accessibilityLabel()
         #else
         element.accessibilityLabel?()
         #endif
@@ -186,7 +186,7 @@ enum MacWindow {
 
     private static func children(of element: any NSAccessibilityProtocol) -> [Any] {
         #if compiler(>=6.2)
-        element.accessibilityChildren ?? []
+        element.accessibilityChildren() ?? []
         #else
         element.accessibilityChildren?() ?? []
         #endif
