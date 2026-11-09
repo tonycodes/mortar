@@ -16,7 +16,7 @@ Components only read the live `--m-*` tokens. Never style components directly; c
 </ThemeProvider>
 ```
 
-ThemeProvider writes `data-mortar-brand`, `data-mortar-appearance` and `data-mortar-density` on the document root, or on a wrapper with `scope="container"`. Menus, listboxes and dialogs opened inside a container keep its theme.
+ThemeProvider writes `data-mortar-brand`, `data-mortar-appearance` and `data-mortar-density` on the document root, or on a wrapper with `scope="container"`. Menus, listboxes and dialogs opened inside a container keep its theme. A container also mounts an overlay host: Modal and SlideOver `portal="contained"` render into that host so the backdrop and panel stay inside the wrapper (for embedded widgets) instead of covering the host page. The default `portal="document"` still uses the page-level dialog portal.
 
 ## Adding a brand
 

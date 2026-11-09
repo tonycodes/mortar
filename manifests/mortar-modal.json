@@ -18,6 +18,7 @@
       "children": "ReactNode",
       "actions": "ReactNode",
       "size": "\"md\" | \"lg\"",
+      "portal": "\"document\" | \"contained\" (contained keeps the overlay inside ThemeProvider scope=\"container\")",
       "className": "string (on the dialog panel)"
     },
     "usage": "Import { Modal } from @tonycodes-ui/mortar. Compose with the public typed props.",

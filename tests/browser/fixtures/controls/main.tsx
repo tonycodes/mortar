@@ -136,6 +136,24 @@ function Overlays() {
   );
 }
 
+function ContainedModalCase() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Customise item</Button>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Customise"
+        portal="contained"
+      >
+        <p>Widget-local options</p>
+        <Button onClick={() => setOpen(false)}>Save</Button>
+      </Modal>
+    </>
+  );
+}
+
 function Loading() {
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
@@ -383,12 +401,45 @@ switch (scenario) {
     // Hydrate the markup a server renders (it has no window, so a system
     // appearance is light there; tests/controls-api.test.mjs checks that).
     root.innerHTML =
-      '<div data-m-component="ThemeProvider" data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light"><p>Hydrated</p></div>';
+      '<div data-m-component="ThemeProvider" data-mortar="" data-mortar-brand="neutral" data-mortar-density="comfortable" data-mortar-appearance="light"><p>Hydrated</p><div class="m-overlay-host"></div></div>';
     hydrateRoot(
       root,
       <ThemeProvider scope="container" initialAppearance="system">
         <p>Hydrated</p>
       </ThemeProvider>,
+    );
+    break;
+  }
+  case "contained-modal": {
+    // Embedded widget on a host page: the modal must stay inside the widget
+    // and leave host controls outside it usable (#101).
+    content = (
+      <div style={{ padding: 24 }}>
+        <button type="button" id="host-action">
+          Host page action
+        </button>
+        <div
+          data-testid="widget"
+          style={{
+            marginTop: 16,
+            width: 360,
+            height: 280,
+            border: "1px solid #ccc",
+            position: "relative",
+          }}
+        >
+          <ThemeProvider
+            scope="container"
+            appearance="light"
+            className="contained-widget"
+          >
+            <div style={{ padding: 16 }}>
+              <ContainedModalCase />
+            </div>
+          </ThemeProvider>
+        </div>
+        <style>{`.contained-widget{position:absolute;inset:0;overflow:hidden}`}</style>
+      </div>
     );
     break;
   }

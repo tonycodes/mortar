@@ -5,6 +5,29 @@
    one section, ordered base, then variants and states, then media and container
    queries, except where that would change which equal-specificity rule wins. */
 @layer components {
+  /* == Contained overlay host == */
+  /* ThemeProvider scope="container" mounts this for portal="contained". */
+  [data-m-component="ThemeProvider"] {
+    position: relative;
+  }
+  .m-overlay-host {
+    position: absolute;
+    inset: 0;
+    z-index: var(--m-z-overlay);
+    pointer-events: none;
+  }
+  .m-overlay-host > * {
+    pointer-events: auto;
+  }
+  .m-dialog[data-portal="contained"],
+  .m-dialog[data-portal="contained"] .m-backdrop,
+  .m-dialog[data-portal="contained"] .m-dialog-position {
+    position: absolute;
+  }
+  .m-dialog[data-portal="contained"] .m-slide-over {
+    position: absolute;
+  }
+
   /* == Modal == */
   .m-dialog {
     position: fixed;

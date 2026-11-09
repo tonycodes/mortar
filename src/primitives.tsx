@@ -39,6 +39,7 @@ import {
   rovingIndex,
   useDomId,
   useField,
+  type OverlayPortal,
 } from "./internal.js";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** accent: the brand's accent fill (its accent gradient when it defines one) with on-accent text. */
@@ -761,6 +762,7 @@ export function Modal({
   actions,
   size = "md",
   className,
+  portal = "document",
 }: {
   open: boolean;
   onClose: () => void;
@@ -771,24 +773,57 @@ export function Modal({
   size?: "md" | "lg";
   /** On the dialog panel. */
   className?: string;
+  /**
+   * document (default) portals over the page. contained keeps the overlay
+   * inside the nearest ThemeProvider scope="container" host.
+   */
+  portal?: OverlayPortal;
 }) {
   const component = useComponentName("Modal");
+  const titleId = useId();
+  const panelClass = cx("m-dialog-panel", className);
+  const panelSize = size === "md" ? undefined : size;
+  const heading = (
+    <div className="m-dialog-heading">
+      {portal === "contained" ? (
+        <h2 id={titleId}>{title}</h2>
+      ) : (
+        <DialogTitle>{title}</DialogTitle>
+      )}
+      <Button variant="ghost" onClick={onClose} aria-label="Close dialog">
+        Close
+      </Button>
+    </div>
+  );
+  const body = (
+    <>
+      {heading}
+      {children}
+      {actions && <div className="m-actions">{actions}</div>}
+    </>
+  );
   return (
-    <DialogFrame open={open} onClose={onClose} component={component}>
+    <DialogFrame
+      open={open}
+      onClose={onClose}
+      component={component}
+      portal={portal}
+      labelledBy={portal === "contained" ? titleId : undefined}
+    >
       <div className="m-dialog-position">
-        <DialogPanel
-          className={cx("m-dialog-panel", className)}
-          data-size={size === "md" ? undefined : size}
-        >
-          <div className="m-dialog-heading">
-            <DialogTitle>{title}</DialogTitle>
-            <Button variant="ghost" onClick={onClose} aria-label="Close dialog">
-              Close
-            </Button>
+        {portal === "contained" ? (
+          <div
+            className={panelClass}
+            data-size={panelSize}
+            onClick={(event) => event.stopPropagation()}
+          >
+            {body}
           </div>
-          {children}
-          {actions && <div className="m-actions">{actions}</div>}
-        </DialogPanel>
+        ) : (
+          <DialogPanel className={panelClass} data-size={panelSize}>
+            {body}
+          </DialogPanel>
+        )}
       </div>
     </DialogFrame>
   );
