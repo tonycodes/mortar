@@ -263,6 +263,37 @@ final class MortarSnapshotTests: XCTestCase {
         )
     }
 
+    /// VoiceOver reads one element per bubble: the speaker and the prose.
+    /// Markdown syntax (emphasis, code, link URLs) is not part of that label.
+    func testConversationVoiceOverReadsProse() {
+        let labels = hostedAccessibilityLabels(of: ConversationSpeechSample())
+        let assistant = labels.first { $0.contains("tax lines") || $0.contains("**tax") }
+        XCTAssertEqual(
+            assistant,
+            "Assistant: Invoices include tax lines and billing-2026-11.csv. See the notes.",
+            "labels: \(labels)"
+        )
+        XCTAssertTrue(labels.contains("Yes, update it"), "labels: \(labels)")
+        XCTAssertTrue(labels.contains("You: Show me the diff"), "labels: \(labels)")
+        XCTAssertTrue(
+            labels.contains { $0.contains("Not sent. Check your connection.") },
+            "labels: \(labels)"
+        )
+        XCTAssertTrue(labels.contains("Retry"), "labels: \(labels)")
+    }
+
+    /// Text past maxLength is cut off, and the count tells VoiceOver how many
+    /// characters remain. The same behaviour is in MortarMacTests; this runs
+    /// on the iOS job that already exists on this branch.
+    func testComposerMaxLengthCutsAndCounts() {
+        let model = ComposerDraft()
+        let labels = hostedAccessibilityLabels(of: ComposerCountHarness(model: model)) {
+            model.text = "Hello, world"
+        }
+        XCTAssertEqual(model.text, "Hello")
+        XCTAssertTrue(labels.contains("0 characters left"), "labels: \(labels)")
+    }
+
     /// Every tab on iPhone carries its icon. The snapshot rendering drops
     /// the tint UIKit gives unselected tab icons, so the image shows only
     /// the selected tab's; this checks the tab bar itself.
@@ -291,6 +322,56 @@ final class MortarSnapshotTests: XCTestCase {
             if let match = find(type, in: child) { return match }
         }
         return nil
+    }
+
+    /// Hosts a SwiftUI view in a window, runs `change` (a binding update),
+    /// then collects accessibility labels the way VoiceOver would.
+    private func hostedAccessibilityLabels<V: View>(
+        of view: V,
+        after change: () -> Void = {}
+    ) -> [String] {
+        let controller = UIHostingController(rootView: view.mortarTheme(.neutral))
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.rootViewController = controller
+        window.isHidden = false
+        window.makeKeyAndVisible()
+        controller.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
+        change()
+        controller.view.setNeedsLayout()
+        controller.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.4))
+        var seen = Set<ObjectIdentifier>()
+        return Self.accessibilityLabels(in: controller.view, seen: &seen)
+    }
+
+    private static func accessibilityLabels(
+        in object: Any,
+        seen: inout Set<ObjectIdentifier>
+    ) -> [String] {
+        guard let obj = object as? NSObject else { return [] }
+        guard seen.insert(ObjectIdentifier(obj)).inserted else { return [] }
+        var found: [String] = []
+        if let label = obj.accessibilityLabel, !label.isEmpty { found.append(label) }
+        if let elements = obj.accessibilityElements {
+            for element in elements {
+                found += accessibilityLabels(in: element, seen: &seen)
+            }
+        }
+        if let view = obj as? UIView {
+            let count = view.accessibilityElementCount()
+            if count > 0 && count != NSNotFound {
+                for index in 0..<count {
+                    if let element = view.accessibilityElement(at: index) {
+                        found += accessibilityLabels(in: element, seen: &seen)
+                    }
+                }
+            }
+            for subview in view.subviews {
+                found += accessibilityLabels(in: subview, seen: &seen)
+            }
+        }
+        return found
     }
 
     func testBrandOnIPad() {
@@ -334,6 +415,42 @@ private struct AppShellSample: View {
             MortarEmptyState("Inbox zero", description: "New messages appear here.", systemImage: "tray")
                 .navigationTitle(value.capitalized)
         }
+    }
+}
+
+/// One assistant message with inline Markdown, a choice, and a failed send.
+/// Short enough that every row is on screen (a lazy stack drops the rest).
+private struct ConversationSpeechSample: View {
+    var body: some View {
+        MortarConversation(messages: [
+            MortarChatMessage(
+                id: "1", role: .assistant,
+                text: "Invoices include **tax lines** and `billing-2026-11.csv`. "
+                    + "See [the notes](https://example.com).",
+                choices: [MortarChatChoice("Yes, update it") {}]
+            ),
+            MortarChatMessage(
+                id: "2", role: .user, text: "Show me the diff",
+                status: .failed("Not sent. Check your connection.", retry: {})
+            ),
+        ]) {
+            EmptyView()
+        }
+    }
+}
+
+@MainActor
+@Observable
+private final class ComposerDraft {
+    var text = ""
+}
+
+private struct ComposerCountHarness: View {
+    @Bindable var model: ComposerDraft
+
+    var body: some View {
+        MortarCommentComposer(text: $model.text, maxLength: 5, showsCount: true) { _ in }
+            .padding(20)
     }
 }
 
