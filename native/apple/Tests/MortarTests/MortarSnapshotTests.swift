@@ -214,6 +214,26 @@ final class MortarSnapshotTests: XCTestCase {
         }
     }
 
+    func testAppShellSections() {
+        let large = UITraitCollection(traitsFrom: [
+            UITraitCollection(userInterfaceStyle: .light),
+            UITraitCollection(preferredContentSizeCategory: .accessibilityLarge),
+        ])
+        let variants: [(String, ViewImageConfig, UITraitCollection)] = [
+            ("ipad", .iPadPro11, UITraitCollection(userInterfaceStyle: .light)),
+            ("ipad-dark", .iPadPro11, UITraitCollection(userInterfaceStyle: .dark)),
+            ("ipad-large-text", .iPadPro11, large),
+            ("iphone", .iPhone13, UITraitCollection(userInterfaceStyle: .light)),
+        ]
+        for (name, device, traits) in variants {
+            assertSnapshot(
+                of: AppShellSectionsSample(),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: device), traits: traits),
+                named: name
+            )
+        }
+    }
+
     func testBrandOnIPad() {
         let brand = MortarTheme(
             light: { var p = MortarTokens.light; p.primary = 0x1D4ED8; p.primaryActive = 0x1E40AF; p.focus = 0x1D4ED8; return p }(),
