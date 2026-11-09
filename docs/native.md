@@ -66,6 +66,8 @@ A brand is a `MortarTheme`: its light and dark `MortarPalette`s, font family nam
 | `MortarDivider`                                            | Divider          | Optional label, soft line, spacing `none`, `sm`, `md` or `lg`.                                                                                                                                                                             |
 | `MortarStackedList`                                        | StackedList      | Rows with an avatar or SF Symbol, description, trailing text and an action; grouped under headings; chevrons.                                                                                                                              |
 | `MortarAppShell`                                           | AppShell         | Top-level destinations: a tab bar on iPhone, a sidebar on iPad and Mac. Labelled `sections` and per-item counts; an optional brand title; a sidebar `footer` for the app's account menu. Each destination starts its own navigation stack. |
+| `MortarCommentComposer`                                    | CommentComposer  | A one-row composer that grows to six lines: attachment button, Send, or Stop while a reply streams; optional character count; Command-Return sends; an external focus binding. SwiftUI only so far.                                        |
+| `MortarConversation`                                       | ChatPreview      | Messages in a readable column with Markdown, roles, inline choices, failed and streaming states, an empty state and a pinned composer. SwiftUI only so far.                                                                                |
 
 ### App shell
 
@@ -91,6 +93,37 @@ MortarAppShell(selection: $destination, items: [
 - Without a brand, the sidebar keeps a compact bar for its toggle on iPad instead of an empty large title.
 - The footer is pinned under the sidebar's list on iPad and Mac. iPhone has no sidebar, so give account actions a destination there.
 - Changing destination starts it at its root, so Back never leads to a screen pushed under another destination.
+
+### Conversations
+
+`MortarConversation` and `MortarCommentComposer` are the chat pattern for an assistant or a mail thread: the app supplies messages and actions, and Mortar draws the rest.
+
+```swift
+MortarConversation(messages: messages) {
+    MortarCommentComposer(
+        text: $draft,
+        placeholder: "Ask anything",
+        maxLength: 4000,
+        isStreaming: reply.isStreaming,
+        isFocused: $composerFocused,
+        onAttach: { showsFilePicker = true },
+        onStop: { reply.cancel() }
+    ) { text in
+        send(text)  // the composer then clears the draft
+    }
+} empty: {
+    MortarEmptyState("Ask about your account", systemImage: "bubble.left.and.bubble.right")
+}
+```
+
+- The composer is one row that grows to six lines. Return adds a line, Command-Return sends (on a Mac or a hardware keyboard), and Command-. stops.
+- While `isStreaming`, Stop replaces Send and the text stays editable. The composer disables nothing else, so the app's navigation keeps working during a reply.
+- `maxLength` cuts text off at that length; `showsCount` also shows the count, which isn't shown by default.
+- `isFocused` moves focus to the field (after correcting a message, say) or away, which dismisses the keyboard on iOS. Dragging the conversation also dismisses it.
+- Messages are Markdown. Emphasis, code and links are styled; lists and headings show as written.
+- VoiceOver reads each bubble as one element: the speaker, then the prose. Emphasis, code and link titles are spoken; the Markdown source and the link URL are not. Each link is an action on that element. A streaming bubble's value is "Responding".
+- A message's `status` is `.complete`, `.streaming` (dots until the first text, and VoiceOver reads "Responding") or `.failed(reason, retry:)`. `choices` are pills under a message that wrap onto more rows when there are more than fit.
+- The column is at most 720 points wide (`measure`) and centred, so lines stay readable in a wide Mac window.
 
 On both platforms the switch sits at the end of its row, after the label, as in iOS and Android settings; on the web it comes first.
 
