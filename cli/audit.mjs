@@ -55,6 +55,10 @@ export const RULES = {
   "legacy-package": `A dependency or import of the retired ${LEGACY_PKG}; install and import @tonycodes-ui/mortar instead (see the CHANGELOG migration note).`,
   "invalid-phrasing":
     "A block HTML element in a phrasing-only slot that Mortar renders inside a <p>.",
+  "input-static-action":
+    "Static text passed to Input.action; use prefix or suffix instead.",
+  "input-absolute-adornment":
+    "An absolutely positioned decorative sibling of Input; use leadingIcon or trailingIcon.",
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -338,10 +342,15 @@ function jsxOpening(src, i) {
 
 /**
  * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
- * for string literals (`a="x"` or `a={"x"}`), the value.
+ * for string literals (`a="x"` or `a={"x"}`), the value. Brace values also get
+ * `expression: { start, end }` covering the inner text. The returned array has
+ * `end` (index after the opening tag) and `selfClosing`.
  */
 export function jsxAttributes(src, i) {
-  return jsxOpening(src, i).attrs;
+  const { attrs, end, selfClosing } = jsxOpening(src, i);
+  attrs.end = end;
+  attrs.selfClosing = selfClosing;
+  return attrs;
 }
 
 /**
@@ -467,6 +476,113 @@ function phrasingSlotMap(data) {
     if (slots?.length) map.set(c.export, slots);
   }
   return map;
+}
+
+/** End index of the JSX element that opens with `tagName` at `afterName`. */
+function jsxElementEnd(src, tagName, afterName, opening) {
+  if (opening.selfClosing) return opening.end;
+  const body = jsxChildrenRange(src, tagName, afterName);
+  if (!body) return opening.end;
+  const close = src
+    .slice(body.end)
+    .match(new RegExp(`^</${escapeRegExp(tagName)}\\s*>`));
+  return body.end + (close ? close[0].length : 0);
+}
+
+/**
+ * True when an `action={…}` expression is obvious static end content (a string
+ * or a noninteractive span/fragment), not an attached control.
+ */
+export function isStaticInputAction(expression) {
+  const inner = expression.trim();
+  if (!inner) return false;
+  if (/^(["'`])([^"'`$\\]*)\1$/.test(inner)) return true;
+  if (/\bon[A-Z]\w*\s*=/.test(inner) || /\bhref\s*=/.test(inner)) return false;
+  if (/<\/?(?:button|a|input|select|textarea)\b/i.test(inner)) return false;
+  if (/<[A-Z][\w$]*\b/.test(inner)) return false;
+  if (/^<>\s*[^<{]+?\s*<\/>$/.test(inner)) return true;
+  if (/^<\s*span\b[^>]*>\s*[^<{]+?\s*<\/\s*span\s*>$/i.test(inner)) return true;
+  return false;
+}
+
+/**
+ * Absolutely positioned decorative siblings near a Mortar Input, typically
+ * left over from wrapping an unlabeled native input. Bounded: string
+ * `className` literals only, a nearby `relative` wrapper, and only the
+ * immediate sibling before or after this Input (so later Inputs in the same
+ * file are not flagged for an earlier icon).
+ */
+export function absoluteAdornmentsBesideInput(src, inputStart, inputEnd) {
+  const windowStart = Math.max(0, inputStart - 1000);
+  const windowEnd = Math.min(src.length, inputEnd + 1000);
+  const before = src.slice(windowStart, inputStart);
+  const after = src.slice(inputEnd, windowEnd);
+  const hasRelative = (slice) =>
+    /\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*\brelative\b[^"'`]*)\1/.test(
+      slice,
+    );
+  if (!hasRelative(before)) return [];
+  const hits = [];
+  const open =
+    /<(svg|img|span|i|div|em)\b(?=[^>]*\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*\babsolute\b[^"'`]*)\2)[^>]*>/i;
+  const sideFrom = (cls, fallback) =>
+    /\b(?:right-|end-|inset-e|inset-inline-end)/.test(cls)
+      ? "trailing"
+      : /\b(?:left-|start-|inset-s|inset-inline-start)/.test(cls)
+        ? "leading"
+        : fallback;
+  const decorative = (tag, openText) => {
+    if (/\bon[A-Z]\w*\s*=/.test(openText) || /\bhref\s*=/.test(openText))
+      return false;
+    return (
+      tag === "svg" ||
+      tag === "img" ||
+      /\baria-hidden\b/.test(openText) ||
+      tag === "span" ||
+      tag === "i" ||
+      tag === "em" ||
+      tag === "div"
+    );
+  };
+  // Immediate previous sibling: the last absolute tag in `before`, with only
+  // whitespace (and its own closing) between it and the Input.
+  {
+    let last;
+    const re = new RegExp(open.source, "gi");
+    let m;
+    while ((m = re.exec(before))) last = m;
+    if (last) {
+      const tag = last[1].toLowerCase();
+      const cls = last[3];
+      const openText = last[0];
+      const from = last.index;
+      let afterOpen = from + openText.length;
+      if (!/\/>\s*$/.test(openText)) {
+        const close = before
+          .slice(afterOpen)
+          .match(new RegExp(`^[\\s\\S]*?</${tag}\\s*>`, "i"));
+        if (close) afterOpen += close[0].length;
+      }
+      if (/^\s*$/.test(before.slice(afterOpen)) && decorative(tag, openText))
+        hits.push({
+          index: windowStart + from,
+          side: sideFrom(cls, "leading"),
+        });
+    }
+  }
+  // Immediate next sibling: the first absolute tag in `after`, with only
+  // whitespace between the Input and it.
+  {
+    const m = after.match(new RegExp("^\\s*" + open.source, "i"));
+    if (m && decorative(m[1].toLowerCase(), m[0].trimStart() || m[0])) {
+      const absAt = m[0].indexOf("<");
+      hits.push({
+        index: inputEnd + absAt,
+        side: sideFrom(m[3], "trailing"),
+      });
+    }
+  }
+  return hits;
 }
 
 /**
@@ -1274,6 +1390,47 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           `<${exportName} ${name}="${attr.value}"> is not one of ${allowed.map((a) => `"${a}"`).join(", ")}.`,
           guess ? `Use ${name}="${guess}".` : undefined,
         );
+      }
+      // Input adornments: static text in `action`, or absolute decorative
+      // siblings left over from migrating an unlabeled native input.
+      if (exportName === "Input") {
+        const action = attrs.find((a) => a.name === "action");
+        const staticAction =
+          action &&
+          (action.value !== undefined
+            ? true
+            : action.expression
+              ? isStaticInputAction(
+                  src.slice(action.expression.start, action.expression.end),
+                )
+              : false);
+        if (staticAction)
+          add(
+            "input-static-action",
+            "warning",
+            file,
+            line(action.index),
+            `<Input> action holds static text; action is for an attached control such as a Button.`,
+            "Use `suffix` (or `prefix`) for end/start text adornments such as `%` or units.",
+          );
+        const elementEnd = jsxElementEnd(src, m[1], afterName, opening);
+        // Use comment-blanked source (not string-blanked): className values
+        // must stay readable so absolute/relative tokens are visible.
+        for (const hit of absoluteAdornmentsBesideInput(
+          src,
+          m.index,
+          elementEnd,
+        )) {
+          const prop = hit.side === "trailing" ? "trailingIcon" : "leadingIcon";
+          add(
+            "input-absolute-adornment",
+            "warning",
+            file,
+            line(hit.index),
+            `Absolutely positioned decorative sibling next to <Input>; it centres against the whole field (including the label).`,
+            `Pass the icon as \`${prop}\` so it sits inside the text box.`,
+          );
+        }
       }
       // JSX body children on a control with no children slot (e.g. Switch).
       if (
