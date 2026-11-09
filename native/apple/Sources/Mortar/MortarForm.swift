@@ -79,6 +79,7 @@ public struct MortarForm<Content: View, Actions: View>: View {
                         VStack(alignment: .trailing, spacing: 8) {
                             actions
                         }
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
