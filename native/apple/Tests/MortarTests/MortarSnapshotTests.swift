@@ -239,6 +239,10 @@ final class MortarSnapshotTests: XCTestCase {
         }
     }
 
+    func testZPillDebug() {
+        check(_PillDebug(), variants: Array(phone.prefix(1)))
+    }
+
     func testCommentComposer() {
         check(ComposerStatesSample())
     }

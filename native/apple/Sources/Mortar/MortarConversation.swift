@@ -322,3 +322,23 @@ private struct ChoiceFlow: Layout {
         }
     }
 }
+
+// TEMPORARY diagnostic, never merged.
+public struct _PillDebug: View {
+    public init() {}
+    public var body: some View {
+        let label = Text(verbatim: "Not now").font(.system(size: 13, weight: .medium)).padding(.horizontal, 12).padding(.vertical, 6).frame(minHeight: 32)
+        VStack(alignment: .leading, spacing: 16) {
+            Text(verbatim: "a plain view")
+            label.background(Capsule().fill(Color.white).strokeBorder(Color.gray, lineWidth: 1))
+            Text(verbatim: "b Button + ChoiceStyle in HStack")
+            HStack { Button("Not now") {}.buttonStyle(ChoiceStyle()) }
+            Text(verbatim: "c Button + ChoiceStyle in ChoiceFlow")
+            ChoiceFlow(spacing: 8) { Button("Not now") {}.buttonStyle(ChoiceStyle()); Button("Yes") {}.buttonStyle(ChoiceStyle()) }
+            Text(verbatim: "d Button + plain style, RoundedRectangle 16")
+            Button {} label: { label.background(RoundedRectangle(cornerRadius: 16).strokeBorder(Color.gray, lineWidth: 1)) }.buttonStyle(.plain)
+            Text(verbatim: "e Button + ChoiceStyle, focusEffectDisabled on button")
+            Button("Not now") {}.buttonStyle(ChoiceStyle()).focusEffectDisabled()
+        }
+    }
+}
