@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Notice",
+  "platforms": {
+    "swiftui": "MortarNotice",
+    "compose": "MortarNotice"
+  },
   "source": "src/primitives.tsx",
   "capabilities": ["status"],
   "owner": "Mortar maintainers",

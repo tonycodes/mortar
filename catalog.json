@@ -524,6 +524,10 @@
         "states": [],
         "probe": "navigation"
       },
+      "platforms": {
+        "swiftui": "MortarAppShell",
+        "compose": "MortarAppShell"
+      },
       "integrity": {
         "source": "86890a6d6583db165dd553840df6679481ed43df27c34337315d4672e841ff07",
         "preview": "1f0c3c649ed40f937c7847cbe3a763cc76efcf6ba2ee3181fde73ddba5676f4a"
@@ -879,6 +883,10 @@
         "target": ".m-avatar",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarAvatar",
+        "compose": "MortarAvatar"
+      },
       "integrity": {
         "source": "46b75bf5556041c3305e89f02af06d276bcbad490ec28c8ac8e1d58d22dc2ac6",
         "preview": "b130558c0799ce01e20eab1f9c7a802428630fb1b19e324e171e1d8030308781"
@@ -934,6 +942,10 @@
         "profile": "display",
         "target": ".m-badge",
         "states": []
+      },
+      "platforms": {
+        "swiftui": "MortarBadge",
+        "compose": "MortarBadge"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -1317,6 +1329,10 @@
         "target": ".m-button",
         "states": ["disabled", "loading"],
         "probe": "button"
+      },
+      "platforms": {
+        "swiftui": "MortarButton",
+        "compose": "MortarButton"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -1721,6 +1737,10 @@
         "target": ".m-card",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarCard",
+        "compose": "MortarCard"
+      },
       "integrity": {
         "source": "a4a3c3fdbd974e4546d920dba813b02e6b7d3666c34467e3c2f9c0532e9b0cce",
         "preview": "904ba38f3b4b89e5d1bb5574986b6cdfc79d137a9914346d300142c939255c65"
@@ -1944,6 +1964,10 @@
         "target": ".m-choice input",
         "states": ["disabled", "error"],
         "probe": "checkbox"
+      },
+      "platforms": {
+        "swiftui": "MortarCheckbox",
+        "compose": "MortarCheckbox"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -3207,6 +3231,10 @@
         "target": ".m-divider",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarDivider",
+        "compose": "MortarDivider"
+      },
       "integrity": {
         "source": "a4a3c3fdbd974e4546d920dba813b02e6b7d3666c34467e3c2f9c0532e9b0cce",
         "preview": "b634519a6c1104c9b6449c869fb8e14fb11c01c763db85137d14ba0094da1843"
@@ -3504,6 +3532,10 @@
         "profile": "display",
         "target": ".m-empty",
         "states": []
+      },
+      "platforms": {
+        "swiftui": "MortarEmptyState",
+        "compose": "MortarEmptyState"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -4542,6 +4574,10 @@
         "target": ".m-input-group input",
         "states": ["disabled", "error", "long"],
         "probe": "input"
+      },
+      "platforms": {
+        "swiftui": "MortarTextField",
+        "compose": "MortarTextField"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -5750,6 +5786,10 @@
         "target": ".m-notice",
         "states": [],
         "probe": "notice"
+      },
+      "platforms": {
+        "swiftui": "MortarNotice",
+        "compose": "MortarNotice"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -7287,6 +7327,10 @@
         "target": ".m-progress",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarProgressBar",
+        "compose": "MortarProgressBar"
+      },
       "integrity": {
         "source": "46b75bf5556041c3305e89f02af06d276bcbad490ec28c8ac8e1d58d22dc2ac6",
         "preview": "828c5b67734b7234967e9a27e7e334b787dddf49b399019b5bad969abe385c39"
@@ -7570,6 +7614,10 @@
         "target": ".m-radio-group",
         "states": ["error"],
         "probe": "radio"
+      },
+      "platforms": {
+        "swiftui": "MortarRadioGroup",
+        "compose": "MortarRadioGroup"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",
@@ -8100,6 +8148,10 @@
         "target": ".m-segmented",
         "states": [],
         "probe": "segmented"
+      },
+      "platforms": {
+        "swiftui": "MortarSegmentedControl",
+        "compose": "MortarSegmentedControl"
       },
       "integrity": {
         "source": "cd187057d15ba034b6ebd578d3324f33fa5b742f74ae619d18d3304c97ccf0c3",
@@ -8786,6 +8838,10 @@
         "target": ".m-stacked-list",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarStackedList",
+        "compose": "MortarStackedList"
+      },
       "integrity": {
         "source": "cc2cfadc81cd53ce2325a29c451541f83e2a869179a0915b3c229636f465d94b",
         "preview": "cb2504eec291bd9079d966a60da7957590b5b2a9b700957710a1c451282fb8d9"
@@ -9081,6 +9137,10 @@
         "target": ".m-switch",
         "states": ["disabled"],
         "probe": "switch"
+      },
+      "platforms": {
+        "swiftui": "MortarSwitch",
+        "compose": "MortarSwitch"
       },
       "integrity": {
         "source": "d4d753e788546a09f754dee5dc3fc5419880c24720158bd074c24ae6f99e078f",

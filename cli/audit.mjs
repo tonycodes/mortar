@@ -221,6 +221,21 @@ export function blankComments(text, { css = false } = {}) {
   return out.join("");
 }
 
+/**
+ * True when `src[i]` starts a JS string or template literal. An apostrophe in
+ * JSX text (`Don't`) does not: it must follow an operator, bracket, or a
+ * keyword such as `return` (same rule as blankStrings).
+ */
+function quoteStarts(src, i) {
+  const q = src[i];
+  if (q !== '"' && q !== "'" && q !== "`") return false;
+  if (q === "`") return true;
+  const before = src.slice(0, i).trimEnd();
+  return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
+    before,
+  );
+}
+
 /** Index of the character after the `{…}` group starting at `i`. */
 function skipBraces(src, i) {
   let depth = 0;
@@ -231,7 +246,7 @@ function skipBraces(src, i) {
     else if (c === "}") {
       depth--;
       if (depth === 0) return i + 1;
-    } else if (c === '"' || c === "'") {
+    } else if ((c === '"' || c === "'") && quoteStarts(src, i)) {
       i++;
       while (i < n && src[i] !== c && src[i] !== "\n") {
         if (src[i] === "\\") i++;
@@ -352,16 +367,6 @@ export function jsxHasChildren(src, bodyStart, tagName) {
 export function blankStrings(src) {
   const out = src.split("");
   const n = src.length;
-  // A quote in JSX text (Don't) is not a string.
-  const starts = (i) => {
-    const q = src[i];
-    if (q !== '"' && q !== "'" && q !== "`") return false;
-    if (q === "`") return true;
-    const before = src.slice(0, i).trimEnd();
-    return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
-      before,
-    );
-  };
   const blank = (from, to) => {
     for (let k = from; k < Math.min(to, n); k++)
       if (out[k] !== "\n") out[k] = " ";
@@ -401,7 +406,7 @@ export function blankStrings(src) {
       if (expr && c === "{") depth++;
       else if (expr && c === "}") {
         if (--depth === 0) return i;
-      } else if ((c === '"' || c === "'" || c === "`") && starts(i)) {
+      } else if ((c === '"' || c === "'" || c === "`") && quoteStarts(src, i)) {
         i = blankOne(i, end);
         if (i < end) i++;
         continue;

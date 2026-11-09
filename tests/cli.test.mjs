@@ -191,6 +191,7 @@ test("every guide topic loads from the package", () => {
   assert.doesNotMatch(data.guide("conventions"), /## Composing flows/);
   assert.match(data.guide("auth-flows"), /AuthLayout/);
   assert.match(data.guide("email"), /renderEmail/);
+  assert.match(data.guide("native"), /MortarTheme/);
   assert.match(data.guide("contributing"), /# Agent instructions/);
 });
 
@@ -284,6 +285,52 @@ test("the JSX scanner reads attributes across lines, braces and strings", () => 
       ["disabled", undefined],
       ["aria-label", "a > b"],
     ],
+  );
+});
+
+test("the JSX scanner keeps attributes inside the opening tag when a slot has an apostrophe", () => {
+  // Apostrophes in JSX text must not be read as JS string quotes (#100).
+  const cases = [
+    `footer={<>Don't have an account? <a href="/signup">Sign up</a></>}`,
+    `footer={<>It's fine with "quoted" text too</>}`,
+    `footer={<><span>Don't</span> leave</>}`,
+    `footer={<>{"Don't quote me"}</>}`,
+  ];
+  for (const slot of cases) {
+    const src = `export function App() {\n  return <AuthLayout title="Sign in" ${slot}>Form</AuthLayout>;\n}\nexport default App;\n`;
+    const i = src.indexOf("<AuthLayout") + "<AuthLayout".length;
+    const attrs = jsxAttributes(src, i);
+    assert.deepEqual(
+      attrs.map((a) => a.name),
+      ["title", "footer"],
+      `unexpected attrs for ${slot}`,
+    );
+  }
+});
+
+test("the audit does not invent unknown-prop findings from apostrophes in slot JSX", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/App.tsx": `import { AuthLayout, ThemeProvider } from "@tonycodes-ui/mortar";
+export function App() {
+  return (
+    <ThemeProvider>
+      <AuthLayout title="Sign in" footer={<>Don't have an account? <a href="/signup">Sign up</a></>}>
+        Form
+      </AuthLayout>
+    </ThemeProvider>
+  );
+}
+export default App;
+`,
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  assert.equal(
+    report.findings.filter((f) => f.rule === "unknown-prop").length,
+    0,
+    JSON.stringify(report.findings, null, 2),
   );
 });
 
@@ -857,5 +904,54 @@ test("a brief about emails points the packet at the email entry", async () => {
     const packet = buildPacket(data, { brief });
     assert.ok(!packet.guides.includes("email"), brief);
     assert.equal(packet.email, undefined);
+  }
+});
+
+// #95: components with SwiftUI and Compose versions name them, and a brief
+// for a native app gets the native libraries.
+test("get_component names a component's native equivalents", () => {
+  const input = componentDetail(
+    data,
+    data.components.find((c) => c.export === "Input"),
+  );
+  assert.deepEqual(input.native, {
+    swiftui: { name: "MortarTextField", import: "import Mortar" },
+    compose: {
+      name: "MortarTextField",
+      import: "import codes.tony.mortar.MortarTextField",
+    },
+  });
+  const web = componentDetail(
+    data,
+    data.components.find((c) => c.export === "DataTable"),
+  );
+  assert.equal(web.native, undefined);
+});
+
+test("a brief for a native app points the packet at the native libraries", async () => {
+  const data = await loadData();
+  for (const brief of [
+    "An iPhone and iPad app for team inboxes",
+    "Android app settings screen in Jetpack Compose",
+    "Native mobile apps for our booking product",
+    "A SwiftUI onboarding flow",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(packet.guides.includes("native"), brief);
+    assert.equal(packet.native.swiftui.import, "import Mortar");
+    assert.equal(packet.native.compose.package, "codes.tony:mortar");
+    assert.equal(packet.native.components.length, 15);
+    assert.deepEqual(
+      packet.native.components.find((c) => c.web === "Button"),
+      { web: "Button", swiftui: "MortarButton", compose: "MortarButton" },
+    );
+  }
+  for (const brief of [
+    "A responsive dashboard that works on mobile",
+    "Marketing site with a compose-your-plan pricing page",
+  ]) {
+    const packet = buildPacket(data, { brief });
+    assert.ok(!packet.guides.includes("native"), brief);
+    assert.equal(packet.native, undefined);
   }
 });

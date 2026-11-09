@@ -285,6 +285,60 @@ test("native buttons default to the web Button's variant", async () => {
   );
 });
 
+test("manifests name native components that exist, and every native component has one", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const sources = async (dir, ext) => {
+    const files = (await readdir(new URL(`../${dir}`, import.meta.url))).filter(
+      (f) => f.endsWith(ext),
+    );
+    return (
+      await Promise.all(files.map((f) => readSource(`${dir}/${f}`)))
+    ).join("\n");
+  };
+  const swift = await sources("native/apple/Sources/Mortar", ".swift");
+  const kotlin = await sources(
+    "native/android/mortar/src/main/kotlin/codes/tony/mortar",
+    ".kt",
+  );
+  // Public views and composables named Mortar…, except the theme itself.
+  const swiftViews = new Set(
+    [...swift.matchAll(/public struct (Mortar\w+)(?:<[^>]*>)?: View\b/g)].map(
+      (m) => m[1],
+    ),
+  );
+  const composables = new Set(
+    [
+      ...kotlin.matchAll(
+        /@Composable\n(?:@\w+(?:\([^)]*\))?\n)*public fun (?:<[^>]+> )?(Mortar\w+)\(/g,
+      ),
+    ].map((m) => m[1]),
+  );
+  composables.delete("MortarTheme");
+  const catalog = JSON.parse(await readSource("catalog.json"));
+  const named = catalog.components.filter((c) => c.platforms);
+  assert.equal(named.length, 15);
+  for (const c of named) {
+    assert.ok(
+      swiftViews.has(c.platforms.swiftui),
+      `${c.export}: ${c.platforms.swiftui} in SwiftUI`,
+    );
+    assert.ok(
+      composables.has(c.platforms.compose),
+      `${c.export}: ${c.platforms.compose} in Compose`,
+    );
+  }
+  assert.deepEqual(
+    [...swiftViews].sort(),
+    [...new Set(named.map((c) => c.platforms.swiftui))].sort(),
+    "every public SwiftUI component is named by a manifest",
+  );
+  assert.deepEqual(
+    [...composables].sort(),
+    [...new Set(named.map((c) => c.platforms.compose))].sort(),
+    "every public composable is named by a manifest",
+  );
+});
+
 /* The compilers run where they exist; CI sets MORTAR_NATIVE_COMPILE=1 so a
    missing compiler fails there instead of skipping. */
 const REQUIRED = process.env.MORTAR_NATIVE_COMPILE === "1";
