@@ -69,14 +69,22 @@ enum MacWindow {
         window.contentView = NSHostingView(rootView: view.mortarTheme(.neutral))
         window.setContentSize(size)
         window.orderFrontRegardless()
+        window.makeKeyAndOrderFront(nil)
         settle(window)
         return window
     }
 
-    /// Lays the window out and lets SwiftUI apply pending updates.
-    static func settle(_ window: NSWindow, for seconds: TimeInterval = 0.3) {
-        window.layoutIfNeeded()
-        RunLoop.main.run(until: Date().addingTimeInterval(seconds))
+    /// Lays the window out and lets SwiftUI apply pending updates, over
+    /// several passes: a NavigationSplitView fills its sidebar column a run
+    /// loop turn or more after the first layout, so one pass can catch it
+    /// blank.
+    static func settle(_ window: NSWindow, for seconds: TimeInterval = 1.0, passes: Int = 4) {
+        let slice = seconds / TimeInterval(max(passes, 1))
+        for _ in 0..<max(passes, 1) {
+            window.contentView?.needsLayout = true
+            window.layoutIfNeeded()
+            RunLoop.main.run(until: Date().addingTimeInterval(slice))
+        }
         window.layoutIfNeeded()
     }
 }
