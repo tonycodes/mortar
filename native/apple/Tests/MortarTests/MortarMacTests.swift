@@ -286,11 +286,7 @@ enum MacWindow {
     }
 
     private static func children(of element: any NSAccessibilityProtocol) -> [Any] {
-        #if compiler(>=6.2)
         element.accessibilityChildren() ?? []
-        #else
-        element.accessibilityChildren()
-        #endif
     }
 
     private static func all(in window: NSWindow) -> [any NSAccessibilityProtocol] {
