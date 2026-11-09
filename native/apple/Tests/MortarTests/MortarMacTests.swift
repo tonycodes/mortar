@@ -145,8 +145,13 @@ final class MortarMacTests: XCTestCase {
     /// edge when they don't (the largest text sizes). Resizing across that
     /// point has to settle: a layout that remeasures itself here loops.
     func testFormActionsStayInARowWhenTheyFitAndStackWhenTheyDoNot() {
+        // Accessibility children are only published once the process has an
+        // application object. The layout-loop tests don't need one.
+        NSApplication.shared.setActivationPolicy(.accessory)
         let wide = MacWindow.host(SettingsFormSample(isSaving: false), size: CGSize(width: 1100, height: 800))
         defer { wide.close() }
+        wide.makeKeyAndOrderFront(nil)
+        MacWindow.settle(wide)
         let cancel = frame(labelled: "Cancel", in: wide)
         let save = frame(labelled: "Save changes", in: wide)
         XCTAssertEqual(cancel.midY, save.midY, accuracy: 8, "wide actions share a row: cancel \(cancel) save \(save)")
@@ -158,6 +163,8 @@ final class MortarMacTests: XCTestCase {
             size: CGSize(width: 380, height: 800)
         )
         defer { narrow.close() }
+        narrow.makeKeyAndOrderFront(nil)
+        MacWindow.settle(narrow)
         let stackedCancel = frame(labelled: "Cancel", in: narrow)
         let stackedSave = frame(labelled: "Save changes", in: narrow)
         XCTAssertGreaterThan(
@@ -179,7 +186,10 @@ final class MortarMacTests: XCTestCase {
     /// Screen coordinates, origin at the bottom left.
     private func frame(labelled label: String, in window: NSWindow, line: UInt = #line) -> CGRect {
         guard let element = MacWindow.element(labelled: label, in: window) else {
-            XCTFail("No \(label); accessibility labels: \(MacWindow.labels(in: window))", line: line)
+            XCTFail(
+                "No \(label); \(MacWindow.elementCount(in: window)) elements; labels: \(MacWindow.labels(in: window))",
+                line: line
+            )
             return .zero
         }
         let rect = element.accessibilityFrame()
@@ -274,6 +284,8 @@ enum MacWindow {
     static func labels(in window: NSWindow) -> [String] {
         all(in: window).compactMap(text(of:)).filter { !$0.isEmpty }
     }
+
+    static func elementCount(in window: NSWindow) -> Int { all(in: window).count }
 
     /// Presses a control. The Swift overlay is an optional method on the
     /// snapshot toolchain and a plain method on the macOS 26 toolchain.
