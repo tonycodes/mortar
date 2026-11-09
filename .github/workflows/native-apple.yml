@@ -85,7 +85,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mortar-mac-snapshots-${{ github.sha }}
+          name: mortar-mac-snapshots-${{ github.event.pull_request.head.sha || github.sha }}
           path: |
             native/apple/Tests/MortarTests/__Snapshots__
             ${{ runner.temp }}/snapshot-failures-mac
