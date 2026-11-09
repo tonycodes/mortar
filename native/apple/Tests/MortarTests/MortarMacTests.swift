@@ -43,6 +43,8 @@ final class MortarMacTests: XCTestCase {
         line: UInt = #line
     ) {
         guard let view = window.contentView else { return XCTFail("No content view", line: line) }
+        MacWindow.revealGlassContent(in: view)
+        MacWindow.settle(window, for: 0.25, passes: 1)
         assertSnapshot(
             of: view,
             as: .image(perceptualPrecision: 0.98),
@@ -68,10 +70,36 @@ enum MacWindow {
         window.appearance = NSAppearance(named: dark ? .darkAqua : .aqua)
         window.contentView = NSHostingView(rootView: view.mortarTheme(.neutral))
         window.setContentSize(size)
+        // A test bundle's process starts as a background app: make it a
+        // regular, active one so the window can become key as an app's does.
+        _ = NSApplication.shared.setActivationPolicy(.regular)
+        NSApp.activate(ignoringOtherApps: true)
         window.orderFrontRegardless()
         window.makeKeyAndOrderFront(nil)
         settle(window)
+        // Not asserted: a CI runner may not let a test process take key.
+        if !window.isKeyWindow {
+            print("MacWindow: window is not key (visible: \(window.isVisible))")
+        }
         return window
+    }
+
+    /// Hides the glass that macOS 26 draws behind a sidebar, and the
+    /// backdrops beside it. Drawn offscreen, as a snapshot draws the view, the
+    /// glass is an opaque white panel over the sidebar's content (which a live
+    /// window composites behind it) and a backdrop is a black strip. The
+    /// glass's content holder stays; only its own drawing goes.
+    static func revealGlassContent(in view: NSView) {
+        if let layer = view.layer, String(describing: type(of: layer)) == "CABackdropLayer" {
+            view.isHidden = true
+        }
+        if String(describing: type(of: view)).contains("GlassEffectView") {
+            for subview in view.subviews
+            where !String(describing: type(of: subview)).contains("ContentHolder") {
+                subview.isHidden = true
+            }
+        }
+        view.subviews.forEach(revealGlassContent(in:))
     }
 
     /// Lays the window out and lets SwiftUI apply pending updates, over
