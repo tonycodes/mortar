@@ -59,10 +59,13 @@ final class MortarMacTests: XCTestCase {
 
     /// The composer sends on Command-Return, follows an external focus
     /// binding, trims what it sends and clears afterwards.
-    func testComposerSendsAndClears() {
+    /// A runner that cannot make the window key has an empty accessibility
+    /// tree, so the press is skipped there. `testComposerMaxLength` still runs.
+    func testComposerSendsAndClears() throws {
         let model = ComposerModel()
         let window = MacWindow.host(ComposerHarness(model: model), size: CGSize(width: 480, height: 160))
         defer { window.close() }
+        try XCTSkipUnless(window.isKeyWindow, "Runner did not make the window key (visible: \(window.isVisible)), so the accessibility press cannot run.")
         model.isFocused = true
         MacWindow.settle(window)
         XCTAssertTrue(model.isFocused)
