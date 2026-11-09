@@ -237,6 +237,32 @@ final class MortarSnapshotTests: XCTestCase {
         }
     }
 
+    func testCommentComposer() {
+        check(ComposerStatesSample())
+    }
+
+    func testConversation() {
+        for (name, traits) in phone {
+            assertSnapshot(
+                of: ConversationSample(),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13), traits: traits),
+                named: name
+            )
+        }
+        assertSnapshot(
+            of: ConversationSample(),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPadPro11),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "ipad"
+        )
+        assertSnapshot(
+            of: ConversationSample(isEmpty: true),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "empty"
+        )
+    }
+
     /// Every tab on iPhone carries its icon. The snapshot rendering drops
     /// the tint UIKit gives unselected tab icons, so the image shows only
     /// the selected tab's; this checks the tab bar itself.
