@@ -130,10 +130,8 @@ struct SettingsFormSample: View {
                 MortarTextField("Display name", text: .constant("Ada Lovelace"))
                 MortarTextField("Email", text: .constant("ada@"), isRequired: true)
                 MortarTextField("Work email", text: .constant("ada@analytical"),
-                                hint: "We send sign-in links and security alerts here, so use an address you check "
-                                    + "often. It isn't shown to anyone outside your workspaces.",
-                                error: "Enter an email address with a domain, such as ada@example.com, so we "
-                                    + "can send your sign-in links.",
+                                hint: "We send sign-in links and security alerts here, so use an address you check often. It isn't shown to anyone outside your workspaces.",
+                                error: "Enter an email address with a domain, such as ada@example.com, so we can send your sign-in links.",
                                 isRequired: true)
                 MortarTextEditor("Bio", text: .constant("Mathematician. Writes the notes on the engine."),
                                  hint: "A sentence or two.")
@@ -214,8 +212,7 @@ struct ConnectorForm: View {
         MortarForm("Connect mail", description: "Mortar never stores this password in plain text.") {
             MortarFormSection("Server") {
                 MortarTextField("IMAP host", text: $model.host, prompt: "imap.example.com",
-                                hint: "Ask your mail provider if you don't know it. It's often imap. followed by "
-                                    + "your email domain.", isRequired: true)
+                                hint: "Ask your mail provider if you don't know it. It's often imap. followed by your email domain.", isRequired: true)
                 MortarTextField("Password", text: $model.password,
                                 error: model.password.isEmpty ? "Enter the app password from your provider." : nil,
                                 isRequired: true, isSecure: true)
