@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "ProgressBar",
+  "platforms": {
+    "swiftui": "MortarProgressBar",
+    "compose": "MortarProgressBar"
+  },
   "source": "src/display.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",

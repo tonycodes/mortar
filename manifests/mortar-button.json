@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "Button",
+  "platforms": {
+    "swiftui": "MortarButton",
+    "compose": "MortarButton"
+  },
   "source": "src/primitives.tsx",
   "capabilities": ["action"],
   "owner": "Mortar maintainers",

@@ -1,5 +1,10 @@
 # Mortar
 
+[![npm](https://img.shields.io/npm/v/@tonycodes-ui/mortar?logo=npm)](https://www.npmjs.com/package/@tonycodes-ui/mortar)
+[![provenance](https://img.shields.io/badge/npm-provenance-brightgreen)](https://www.npmjs.com/package/@tonycodes-ui/mortar?activeTab=versions)
+[![CI](https://github.com/tonycodes/mortar/actions/workflows/check.yml/badge.svg)](https://github.com/tonycodes/mortar/actions/workflows/check.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A shared design foundation and purpose-built Application UI, Marketing UI, Docs UI and Ecommerce kits for React 19 and Tailwind CSS 4. MIT licensed. No account, token, registry connection or subscription is required to use the kit, including use by coding agents.
 
 The package is [`@tonycodes-ui/mortar` on npmjs.com](https://www.npmjs.com/package/@tonycodes-ui/mortar). Releases are immutable, publicly installable without any account or token, and published with npm provenance that links each version to the GitHub Actions run that built it. Publishing is automatic: every merge to `main` auto-releases the next version, worked out from conventional commits, once the required checks pass ([release workflow](.github/workflows/release.yml), [process](CONTRIBUTING.md)). The current version is listed on the [GitHub releases](https://github.com/tonycodes/mortar/releases) page. Source, issues and contributions live at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar).

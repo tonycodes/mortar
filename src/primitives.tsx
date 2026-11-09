@@ -39,6 +39,7 @@ import {
   rovingIndex,
   useDomId,
   useField,
+  type OverlayPortal,
 } from "./internal.js";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** accent: the brand's accent fill (its accent gradient when it defines one) with on-accent text. */
@@ -233,7 +234,9 @@ export function FieldLabel({
   );
 }
 export interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>, FieldDescription {
+  extends
+    Omit<InputHTMLAttributes<HTMLInputElement>, "children">,
+    FieldDescription {
   prefix?: string;
   suffix?: string;
   /** Decorative icon inside the field, before the text. */
@@ -242,6 +245,8 @@ export interface InputProps
   trailingIcon?: ReactNode;
   /** Button or menu attached to the end of the field, e.g. "Sort" or "Copy". */
   action?: ReactNode;
+  /** Not accepted: use label, prefix, suffix or the icon slots. */
+  children?: never;
 }
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
@@ -255,10 +260,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     trailingIcon,
     action,
     className,
+    children: _children,
     ...props
   },
   ref,
 ) {
+  void _children;
   const { fieldId, messageId, describedBy } = useField({
     id,
     hint,
@@ -474,14 +481,18 @@ export function Checkbox({
   description,
   error,
   className,
+  children: _children,
   ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "children"> & {
   label: ReactNode;
   /** Secondary line under the label, announced as the description (the checkbox's hint). */
   description?: ReactNode;
   /** Marks the checkbox invalid; the message is announced when it appears. */
   error?: string;
+  /** Not accepted: the accessible name is `label`. */
+  children?: never;
 }) {
+  void _children;
   const input = useRef<HTMLInputElement>(null);
   const described = useDescribedLayout(!!(description || error), input);
   if (described)
@@ -518,12 +529,16 @@ export function Switch({
   label,
   description,
   className,
+  children: _children,
   ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "role"> & {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "role" | "children"> & {
   label: string;
   /** Secondary line under the label, announced as the description. */
   description?: ReactNode;
+  /** Not accepted: the accessible name is `label`. */
+  children?: never;
 }) {
+  void _children;
   const input = useRef<HTMLInputElement>(null);
   const described = useDescribedLayout(!!description, input);
   if (described)
@@ -747,6 +762,7 @@ export function Modal({
   actions,
   size = "md",
   className,
+  portal = "document",
 }: {
   open: boolean;
   onClose: () => void;
@@ -757,24 +773,57 @@ export function Modal({
   size?: "md" | "lg";
   /** On the dialog panel. */
   className?: string;
+  /**
+   * document (default) portals over the page. contained keeps the overlay
+   * inside the nearest ThemeProvider scope="container" host.
+   */
+  portal?: OverlayPortal;
 }) {
   const component = useComponentName("Modal");
+  const titleId = useId();
+  const panelClass = cx("m-dialog-panel", className);
+  const panelSize = size === "md" ? undefined : size;
+  const heading = (
+    <div className="m-dialog-heading">
+      {portal === "contained" ? (
+        <h2 id={titleId}>{title}</h2>
+      ) : (
+        <DialogTitle>{title}</DialogTitle>
+      )}
+      <Button variant="ghost" onClick={onClose} aria-label="Close dialog">
+        Close
+      </Button>
+    </div>
+  );
+  const body = (
+    <>
+      {heading}
+      {children}
+      {actions && <div className="m-actions">{actions}</div>}
+    </>
+  );
   return (
-    <DialogFrame open={open} onClose={onClose} component={component}>
+    <DialogFrame
+      open={open}
+      onClose={onClose}
+      component={component}
+      portal={portal}
+      labelledBy={portal === "contained" ? titleId : undefined}
+    >
       <div className="m-dialog-position">
-        <DialogPanel
-          className={cx("m-dialog-panel", className)}
-          data-size={size === "md" ? undefined : size}
-        >
-          <div className="m-dialog-heading">
-            <DialogTitle>{title}</DialogTitle>
-            <Button variant="ghost" onClick={onClose} aria-label="Close dialog">
-              Close
-            </Button>
+        {portal === "contained" ? (
+          <div
+            className={panelClass}
+            data-size={panelSize}
+            onClick={(event) => event.stopPropagation()}
+          >
+            {body}
           </div>
-          {children}
-          {actions && <div className="m-actions">{actions}</div>}
-        </DialogPanel>
+        ) : (
+          <DialogPanel className={panelClass} data-size={panelSize}>
+            {body}
+          </DialogPanel>
+        )}
       </div>
     </DialogFrame>
   );

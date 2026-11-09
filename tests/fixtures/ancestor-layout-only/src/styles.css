@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@import "@tonycodes-ui/mortar/styles.css";
+
+.toolbar button {
+  display: inline-flex;
+  margin-inline: 0.5rem;
+  gap: 0.25rem;
+}

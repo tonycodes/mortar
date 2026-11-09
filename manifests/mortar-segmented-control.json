@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "SegmentedControl",
+  "platforms": {
+    "swiftui": "MortarSegmentedControl",
+    "compose": "MortarSegmentedControl"
+  },
   "source": "src/inspection.tsx",
   "capabilities": ["action"],
   "owner": "Mortar maintainers",

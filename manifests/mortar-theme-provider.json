@@ -20,7 +20,7 @@
       "appearance": "\"light\" | \"dark\" | \"system\" (optional; controlled together with onAppearanceChange)",
       "onAppearanceChange": "(appearance: Appearance) => void",
       "navigate": "Optional (href: string) => void | false. Connect your router; false preserves native navigation. A nested provider without it keeps the outer router.",
-      "scope": "\"document\" | \"container\" (container overlays keep the container's theme)",
+      "scope": "\"document\" | \"container\" (container overlays keep the container's theme; mounts an overlay host for portal=\"contained\")",
       "className": "string (on the container wrapper)"
     },
     "usage": "Import { ThemeProvider } from @tonycodes-ui/mortar. Compose with the public typed props.",

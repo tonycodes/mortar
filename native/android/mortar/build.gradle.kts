@@ -48,8 +48,9 @@ dependencies {
     testImplementation(libs.junit)
 }
 
-// The Maven repository is chosen in #95; until then `publishToMavenLocal`
-// builds the artefact. The release version comes from -Pversion.
+// Released to GitHub Packages by .github/workflows/publish-android.yml, at the
+// version of the npm release (-Pversion), with the run's GITHUB_TOKEN.
+// `publishToMavenLocal` builds the artefact locally without credentials.
 publishing {
     publications {
         register<MavenPublication>("release") {
@@ -67,6 +68,16 @@ publishing {
                         url.set("https://github.com/tonycodes/mortar/blob/main/LICENSE")
                     }
                 }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/tonycodes/mortar")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }

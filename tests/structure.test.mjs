@@ -143,3 +143,19 @@ test("Banner is a labelled region with an optional link and dismiss button", () 
   assert.match(own, /<button type="button" aria-label="Dismiss announcement"/);
   assert.doesNotMatch(html(Banner, { children: "Static" }), /<button/);
 });
+
+test("Banner children are phrasing inside a paragraph (#102)", () => {
+  // Locks the container: children stay inside <p>, so block children nest.
+  assert.match(html(Banner, { children: "Hello" }), /<p>Hello<\/p>/);
+  assert.match(
+    html(Banner, {}, h("strong", null, "Sale")),
+    /<p><strong>Sale<\/strong><\/p>/,
+  );
+  // Invalid nesting in the rendered tree (React warns about this in the browser).
+  const nested = html(
+    Banner,
+    {},
+    h("div", null, h("h2", null, "Start"), h("p", null, "Free")),
+  );
+  assert.match(nested, /<p><div><h2>Start<\/h2><p>Free<\/p><\/div><\/p>/);
+});

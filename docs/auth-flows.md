@@ -2,7 +2,7 @@
 
 Every auth screen is a page of its own, built from the same parts:
 
-- **AuthLayout** is the page. It renders the `main` landmark and the page's `h1`, with an optional logo, description and footer link. `layout="center"` sets the form on the page, `layout="cards"` on a raised card, and `layout="split"` beside an `aside` (a quote or image) on wide screens.
+- **AuthLayout** is the page. It renders the `main` landmark and the page's `h1`, with an optional logo, description and footer link. The description is phrasing-only (a string or inline markup): it sits inside a `<p>`, so a nested `<p>`, `<div>` or heading is invalid. `layout="center"` sets the form on the page, `layout="cards"` on a raised card, and `layout="split"` beside an `aside` (a quote or image) on wide screens.
 - **ProviderButtons** lists sign-in providers (GitHub, Google, SSO). Separate them from the email form with `<Divider label="or continue with" soft spacing="none" />`.
 - **PasswordInput** is every password field: a show/hide toggle, the right `autocomplete`, an optional requirement checklist and a strength meter.
 - **CodeInput** is every one-time code: one input drawn as a cell per character.

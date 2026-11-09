@@ -8,12 +8,17 @@ import {
   Badge,
   Button,
   Card,
+  Checkbox,
+  Divider,
   EmptyState,
   Input,
   Notice,
   PageHeading,
+  ProgressBar,
+  RadioGroup,
   SegmentedControl,
   Select,
+  StackedList,
   Switch,
 } from "../src/index.js";
 
@@ -36,6 +41,8 @@ interface Entry {
   compose: string;
   devices: [string, string];
   variants: Variant[];
+  /** For a single shot whose files are named by device, not variant. */
+  shot?: { swift: string; compose: string };
   web: () => ReactNode;
 }
 
@@ -226,6 +233,188 @@ const ENTRIES: Entry[] = [
     ),
   },
   {
+    id: "checkbox",
+    label: "Checkbox",
+    swift: "testCheckbox",
+    compose: "checkbox",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light", "dark", "large-text"],
+    web: () => (
+      <div className="m-stack">
+        <Checkbox
+          label="Email me a weekly summary"
+          description="Every Monday morning."
+          defaultChecked
+        />
+        <Checkbox
+          label="I agree to the terms"
+          error="Agree to the terms to continue."
+          required
+        />
+        <Checkbox label="Beta features" disabled />
+      </div>
+    ),
+  },
+  {
+    id: "radio-group",
+    label: "Radio group",
+    swift: "testRadioGroup",
+    compose: "radioGroup",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light", "dark", "large-text"],
+    web: () => (
+      <RadioGroup
+        label="Plan"
+        name="gallery-plan"
+        value="team"
+        onChange={() => {}}
+        hint="You can change plan at any time."
+        options={[
+          { value: "personal", label: "Personal", description: "One seat." },
+          { value: "team", label: "Team", description: "Up to 20 seats." },
+          { value: "enterprise", label: "Enterprise", disabled: true },
+        ]}
+      />
+    ),
+  },
+  {
+    id: "segmented-control",
+    label: "Segmented control",
+    swift: "testSegmentedControl",
+    compose: "segmentedControl",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light", "dark", "large-text"],
+    web: () => (
+      <div className="m-stack items-start">
+        <SegmentedControl
+          label="Range"
+          value="week"
+          onChange={() => {}}
+          options={[
+            { value: "day", label: "Day" },
+            { value: "week", label: "Week" },
+            { value: "month", label: "Month" },
+          ]}
+        />
+        <SegmentedControl
+          label="View"
+          value="list"
+          onChange={() => {}}
+          options={[
+            { value: "list", label: "List" },
+            { value: "board", label: "Board" },
+          ]}
+        />
+      </div>
+    ),
+  },
+  {
+    id: "progress-bar",
+    label: "Progress bar",
+    swift: "testProgressBar",
+    compose: "progressBar",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light", "dark", "large-text"],
+    web: () => (
+      <div className="m-stack">
+        <ProgressBar label="Storage" value={62} />
+        <ProgressBar
+          label="Onboarding"
+          value={3}
+          max={5}
+          valueLabel="3 of 5 steps"
+          tone="success"
+        />
+        <ProgressBar label="Quota" value={96} tone="danger" />
+      </div>
+    ),
+  },
+  {
+    id: "divider",
+    label: "Divider",
+    swift: "testDivider",
+    compose: "divider",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light", "dark", "large-text"],
+    web: () => (
+      <div>
+        <p>Above</p>
+        <Divider />
+        <p>Between</p>
+        <Divider label="or" />
+        <p>Below</p>
+        <Divider soft spacing="sm" />
+      </div>
+    ),
+  },
+  {
+    id: "stacked-list",
+    label: "Stacked list",
+    swift: "testStackedList",
+    compose: "stackedList",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light", "dark", "large-text"],
+    web: () => (
+      <StackedList
+        title="Team"
+        chevrons
+        groups={[
+          {
+            label: "Owners",
+            items: [
+              {
+                id: "1",
+                title: "Ada Lovelace",
+                description: "ada@example.com",
+                leading: <Avatar name="Ada Lovelace" decorative />,
+                trailing: "Owner",
+                href: "#ada",
+              },
+            ],
+          },
+          {
+            label: "Files",
+            items: [
+              {
+                id: "2",
+                title: "Quarterly report.pdf",
+                description: "2.4 MB",
+                trailing: "Today",
+                href: "#report",
+              },
+              {
+                id: "3",
+                title: "Roadmap.key",
+                description: "18 MB",
+                trailing: "Monday",
+              },
+            ],
+          },
+        ]}
+      />
+    ),
+  },
+  {
+    id: "app-shell-phone",
+    label: "App shell, phone",
+    swift: "testAppShell",
+    compose: "appShell",
+    devices: ["iPhone 13", "Pixel 5"],
+    variants: ["light"],
+    shot: { swift: "iphone", compose: "phone" },
+    web: () => null,
+  },
+  {
+    id: "app-shell-tablet",
+    label: "App shell, tablet",
+    swift: "testAppShell",
+    compose: "appShell",
+    devices: ["iPad Pro 11", "Pixel C"],
+    variants: ["light"],
+    shot: { swift: "ipad", compose: "tablet" },
+    web: () => null,
+  },
+  {
     id: "tablet",
     label: "Branded tablet screen",
     swift: "testBrandOnIPad",
@@ -241,8 +430,8 @@ function reference(platform: "swift" | "compose", entry: Entry, v: Variant) {
   const images = platform === "swift" ? apple : android;
   const file =
     platform === "swift"
-      ? `/${entry.swift}.${v}.png`
-      : `/codes.tony.mortar_MortarSnapshotTest_${entry.compose}_${v}.png`;
+      ? `/${entry.swift}.${entry.shot?.swift ?? v}.png`
+      : `/codes.tony.mortar_MortarSnapshotTest_${entry.compose}_${entry.shot?.compose ?? v}.png`;
   return Object.entries(images).find(([path]) => path.endsWith(file))?.[1];
 }
 
