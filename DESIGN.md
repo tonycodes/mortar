@@ -46,6 +46,7 @@ Every component follows these rules. New props must fit them, and the code revie
 - **Data attributes.** A boolean attribute appears only when true (`data-x="true"`). An enum attribute is omitted for the default value. Styles select on these attributes, never on text or `aria-label`.
 - **Icons and decoration.** Shared icons come from `src/icons.tsx` and are `aria-hidden`. Decorative glyphs such as arrows are hidden from assistive technology, and their meaning is carried by text.
 - **Input adornments.** `prefix` and `suffix` are static strings beside the value. `leadingIcon` and `trailingIcon` are decorative icons inside the text box. `action` is an attached control at the end of the field (a Button or menu such as Sort or Copy), not generic end content: put units and symbols in `suffix`/`prefix`. When migrating an unlabeled native `<input>`, do not keep an absolutely positioned icon sibling or wrap a labeled `Input` in `relative`/`absolute` chrome; those centres against the whole field (including the label). `mortar audit` reports the obvious cases (`input-static-action`, `input-absolute-adornment`).
+- **Phrasing slots.** Some props are rendered inside a `<p>` and accept phrasing content only (text, links, emphasis): `Banner` `children` and `AuthLayout` `description`. Block elements (`div`, nested `p`, headings, lists) are invalid HTML there. Contracts list these as `phrasingSlots`; `mortar audit` reports obvious block JSX in them (`invalid-phrasing`). For a full section, use `Section` instead of stuffing blocks into a banner.
 
 ## Composing flows
 

@@ -6,6 +6,10 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "AppShell",
+  "platforms": {
+    "swiftui": "MortarAppShell",
+    "compose": "MortarAppShell"
+  },
   "source": "src/application.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",

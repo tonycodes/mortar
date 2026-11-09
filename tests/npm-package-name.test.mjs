@@ -54,6 +54,28 @@ const ALLOWLIST = [
       return null;
     },
   },
+  // #65: the legacy-package audit fixture must import and depend on the old name.
+  {
+    file: "tests/fixtures/legacy-package-app/package.json",
+    reason: "Fixture seeds a package.json dependency on the retired package.",
+    lines() {
+      return null;
+    },
+  },
+  {
+    file: "tests/fixtures/legacy-package-app/src/App.tsx",
+    reason: "Fixture seeds imports from the retired package.",
+    lines() {
+      return null;
+    },
+  },
+  {
+    file: "tests/fixtures/legacy-package-app/src/index.css",
+    reason: "Fixture seeds a CSS import of the retired package styles.",
+    lines() {
+      return null;
+    },
+  },
 ];
 
 function allow(file, line) {
