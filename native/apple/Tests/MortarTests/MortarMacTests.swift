@@ -139,10 +139,10 @@ final class MortarMacTests: XCTestCase {
         MacWindow.settle(window, for: 0.4)
         for round in 0..<10 {
             model.showsSheet = true
-            assertSettles(window, "present \(round)")
+            assertSettles(window, "present \(round)") { window.attachedSheet != nil }
             XCTAssertNotNil(window.attachedSheet, "sheet \(round)")
             model.showsSheet = false
-            assertSettles(window, "dismiss \(round)")
+            assertSettles(window, "dismiss \(round)") { window.attachedSheet == nil }
         }
     }
 
@@ -164,12 +164,32 @@ final class MortarMacTests: XCTestCase {
         }
     }
 
-    /// Lays the window (and any sheet) out; fails if it takes more than a
-    /// second, which a layout loop would.
-    private func assertSettles(_ window: NSWindow, _ step: String, line: UInt = #line) {
+    /// Lays the window (and any sheet) out. Fails if it takes a second,
+    /// which a layout loop would. When `ready` is set, waits inside that
+    /// second for the sheet to finish presenting or dismissing: a fixed
+    /// 0.15s sample missed a sheet that was still in flight on macos-15.
+    private func assertSettles(
+        _ window: NSWindow,
+        _ step: String,
+        ready: (() -> Bool)? = nil,
+        line: UInt = #line
+    ) {
         let start = Date()
-        MacWindow.settle(window, for: 0.15)
-        window.attachedSheet?.layoutIfNeeded()
+        let limit = start.addingTimeInterval(0.9)
+        func pump() {
+            window.layoutIfNeeded()
+            window.attachedSheet?.layoutIfNeeded()
+            RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+        }
+        pump()
+        if let ready {
+            while !ready(), Date() < limit {
+                pump()
+            }
+        } else if Date() < start.addingTimeInterval(0.15) {
+            RunLoop.main.run(until: start.addingTimeInterval(0.15))
+            window.layoutIfNeeded()
+        }
         XCTAssertLessThan(Date().timeIntervalSince(start), 1.0, "\(step) took too long to lay out", line: line)
     }
 
