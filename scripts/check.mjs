@@ -30,6 +30,81 @@ export function selectorBody(css, selector) {
 }
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
+/** Native libraries that a manifest may declare under `platforms`. */
+export const NATIVE_PLATFORMS = ["swiftui", "compose"];
+
+/** Source directories that hold the public native component types. */
+export const NATIVE_SOURCES = {
+  swiftui: "native/apple/Sources/Mortar",
+  compose: "native/android/mortar/src/main/kotlin/codes/tony/mortar",
+};
+
+const NATIVE_TYPE_NAME = /^Mortar[A-Z][A-Za-z0-9]*$/;
+
+/**
+ * Public native component types under each platform root, mapped to the file
+ * that declares them. Shared files (one source holding several types) are fine:
+ * each type indexes to the same path.
+ */
+export async function indexNativeTypes(root = ROOT) {
+  const index = Object.fromEntries(NATIVE_PLATFORMS.map((p) => [p, new Map()]));
+  for (const platform of NATIVE_PLATFORMS) {
+    const dir = resolve(root, NATIVE_SOURCES[platform]);
+    let entries;
+    try {
+      entries = await readdir(dir);
+    } catch {
+      continue;
+    }
+    const ext = platform === "swiftui" ? ".swift" : ".kt";
+    const pattern =
+      platform === "swiftui"
+        ? /(?:^|\n)\s*public\s+struct\s+(Mortar[A-Z][A-Za-z0-9]*)\b/g
+        : /(?:^|\n)\s*public\s+fun\s+(?:<[^>]*>\s*)?(Mortar[A-Z][A-Za-z0-9]*)\s*\(/g;
+    for (const name of entries) {
+      if (!name.endsWith(ext)) continue;
+      const file = `${NATIVE_SOURCES[platform]}/${name}`;
+      const text = await readFile(resolve(root, file), "utf8");
+      for (const match of text.matchAll(pattern))
+        index[platform].set(match[1], file);
+    }
+  }
+  return index;
+}
+
+/** Shape errors for an optional `platforms` field, or an empty list. */
+export function platformsErrors(platforms) {
+  if (platforms === undefined) return [];
+  const messages = [];
+  if (
+    !platforms ||
+    Array.isArray(platforms) ||
+    typeof platforms !== "object" ||
+    Object.getPrototypeOf(platforms) !== Object.prototype
+  ) {
+    return [
+      '"platforms" must be an object whose keys are swiftui and/or compose, each naming a Mortar… type.',
+    ];
+  }
+  const keys = Object.keys(platforms);
+  if (!keys.length)
+    messages.push(
+      '"platforms" must name at least one of swiftui or compose when present.',
+    );
+  for (const key of keys) {
+    if (!NATIVE_PLATFORMS.includes(key))
+      messages.push(
+        `"platforms.${key}" is unknown; use ${NATIVE_PLATFORMS.join(" or ")}.`,
+      );
+    const type = platforms[key];
+    if (typeof type !== "string" || !NATIVE_TYPE_NAME.test(type))
+      messages.push(
+        `"platforms.${key}" must be a Mortar… type name (for example MortarButton).`,
+      );
+  }
+  return messages;
+}
+
 // Every Tailwind palette name. Components use semantic tokens instead.
 const PALETTE =
   "slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose";
@@ -138,6 +213,8 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       );
     for (const message of [...contractErrors(c), ...capabilityErrors(c)])
       add("M006", `manifests/${c.id}.json`, message);
+    for (const message of platformsErrors(c.platforms))
+      add("M011", `manifests/${c.id}.json`, message);
     ids.add(c.id);
     names.add(c.export);
     for (const [file, prefix] of [
@@ -173,6 +250,28 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
           `manifests/${c.id}.json`,
           `Unknown component dependency ${id}.`,
         );
+  // When the native trees are present, every declared platforms type must
+  // exist there. Temp kit copies used by baseline tests omit native/, so the
+  // check is skipped until those directories appear.
+  const nativeTypes = await indexNativeTypes(root);
+  const nativePresent = NATIVE_PLATFORMS.some(
+    (platform) => nativeTypes[platform].size > 0,
+  );
+  if (nativePresent) {
+    for (const c of manifests) {
+      if (!c.platforms || platformsErrors(c.platforms).length) continue;
+      for (const platform of NATIVE_PLATFORMS) {
+        const type = c.platforms[platform];
+        if (!type) continue;
+        if (!nativeTypes[platform].has(type))
+          add(
+            "M011",
+            `manifests/${c.id}.json`,
+            `"platforms.${platform}" names ${type}, but no public ${platform === "swiftui" ? "struct" : "fun"} ${type} exists under ${NATIVE_SOURCES[platform]}.`,
+          );
+      }
+    }
+  }
   async function inspect(directory) {
     for (const entry of await readdir(resolve(root, directory), {
       withFileTypes: true,

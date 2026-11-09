@@ -123,6 +123,7 @@ test("get_component returns the contract with prop types and an example", () => 
   const auth = componentDetail(data, data.find("AuthLayout"));
   assert.ok(auth.templates.includes("sign-in"));
   assert.match(auth.usage, /AuthLayout/);
+  assert.equal(c.platforms, undefined);
 });
 
 test("a build packet includes the dependency closure and setup", () => {

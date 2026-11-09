@@ -143,7 +143,7 @@ A component with a native version names it in its manifest:
 "platforms": { "swiftui": "MortarTextField", "compose": "MortarTextField" }
 ```
 
-`get_component` shows it as `native`, with each import, and a build packet for a brief about an iOS, iPadOS or Android app adds this guide and a `native` section listing every component the libraries have. `tests/native.test.mjs` checks that each named view or composable exists, and that every public one is named by a manifest.
+`get_component` shows it as `native`, with each import, and a build packet for a brief about an iOS, iPadOS or Android app adds this guide and a `native` section listing every component the libraries have. `tests/native.test.mjs` checks that each named view or composable exists, and that every public one is named by a manifest. `npm run check` also rejects a malformed `platforms` entry, or one naming a type the native sources do not define (rule M011).
 
 ## Brands
 

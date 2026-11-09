@@ -11,6 +11,7 @@ import {
   SWIFT_FILE,
   nativeTokenFiles,
 } from "../scripts/native-tokens.mjs";
+import { ROOT, checkKit, platformsErrors } from "../scripts/check.mjs";
 import {
   customProperties,
   readSource,
@@ -18,6 +19,7 @@ import {
   selectorBody,
 } from "./support/css.mjs";
 import { contrast } from "./support/color.mjs";
+import { readdirSync, readFileSync } from "node:fs";
 
 const css = await readSource("src/tokens.css");
 const layer = (selector) => {
@@ -255,6 +257,26 @@ test("the Swift and Kotlin token files are generated from the native theme", asy
   assert.match(kotlin, /^package codes\.tony\.mortar$/m);
   assert.match(kotlin, /paper = 0xFF000000,/);
   assert.match(kotlin, /public const val weightSemibold: Int = 600/);
+});
+
+test("every manifest platforms entry passes the M011 check", async () => {
+  const manifests = readdirSync(join(ROOT, "manifests"))
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => JSON.parse(readFileSync(join(ROOT, "manifests", f), "utf8")));
+  const withPlatforms = manifests.filter((m) => m.platforms);
+  assert.ok(withPlatforms.length > 0, "some manifests declare platforms");
+  for (const m of withPlatforms)
+    assert.deepEqual(platformsErrors(m.platforms), [], m.export);
+  const report = await checkKit(ROOT);
+  const m011 = report.findings.filter((f) => f.rule === "M011");
+  assert.equal(m011.length, 0, JSON.stringify(m011, null, 2));
+});
+
+test("platformsErrors rejects unknown keys and non-Mortar type names", () => {
+  assert.match(platformsErrors(["swiftui"]).join(" "), /must be an object/);
+  assert.match(platformsErrors({}).join(" "), /at least one/);
+  assert.match(platformsErrors({ ios: "MortarButton" }).join(" "), /unknown/);
+  assert.match(platformsErrors({ swiftui: "Button" }).join(" "), /Mortar/);
 });
 
 test("native buttons default to the web Button's variant", async () => {

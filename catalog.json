@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "package": "@tonycodes-ui/mortar",
   "version": "0.11.0",
-  "policyVersion": "1.4.0",
+  "policyVersion": "1.5.0",
   "tokens": [
     "--m-accent",
     "--m-accent-fill",
