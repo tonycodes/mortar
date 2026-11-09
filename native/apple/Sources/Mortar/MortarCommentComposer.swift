@@ -12,6 +12,7 @@ struct MortarComposerDraft: Equatable {
         let message = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !message.isEmpty, !isStreaming else { return }
         onSend(message)
+        text = ""
     }
 }
 
