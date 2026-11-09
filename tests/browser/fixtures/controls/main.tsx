@@ -5,6 +5,7 @@ import {
   Button,
   Checkbox,
   Dropdown,
+  Input,
   Listbox,
   MetricGroup,
   Modal,
@@ -53,6 +54,33 @@ const ranges = [
   "Last 30 days",
   "Year to date",
 ];
+
+// #104: labeled Input adornments sit inside the text box, not against the label.
+function InputAdornments() {
+  const searchIcon = (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    >
+      <circle cx="9" cy="9" r="6" />
+      <path d="M14 14l3.5 3.5" />
+    </svg>
+  );
+  return (
+    <div style={{ padding: 16, maxWidth: 360 }}>
+      <Input
+        label="Search restaurants"
+        type="search"
+        leadingIcon={searchIcon}
+        defaultValue="Noodle"
+      />
+      <Input label="Tax rate" type="number" suffix="%" defaultValue="8.5" />
+    </div>
+  );
+}
+
 function NarrowLayouts() {
   const [range, setRange] = useState(ranges[4]);
   return (
@@ -305,6 +333,13 @@ switch (scenario) {
     break;
   case "choice-description":
     content = <ChoiceDescriptions />;
+    break;
+  case "input-adornments":
+    content = (
+      <ThemeProvider appearance="light">
+        <InputAdornments />
+      </ThemeProvider>
+    );
     break;
   case "brand-document":
     content = (

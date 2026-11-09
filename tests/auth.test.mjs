@@ -168,6 +168,26 @@ test("ProviderButtons: a secondary button per provider, optionally a named group
   );
 });
 
+test("AuthLayout description is phrasing inside a paragraph (#102)", () => {
+  // Locks the container: description stays inside <p>, so block children nest.
+  const plain = html(UI.AuthLayout, {
+    title: "Sign up",
+    description: "Bring your menu.",
+  });
+  assert.match(plain, /<p>Bring your menu\.<\/p>/);
+  const inline = html(UI.AuthLayout, {
+    title: "Sign up",
+    description: h("a", { href: "/terms" }, "Terms"),
+  });
+  assert.match(inline, /<p><a href="\/terms">Terms<\/a><\/p>/);
+  // Invalid nesting in the rendered tree (React warns about this in the browser).
+  const nested = html(UI.AuthLayout, {
+    title: "Sign up",
+    description: h("p", null, "Bring your menu."),
+  });
+  assert.match(nested, /<p><p>Bring your menu\.<\/p><\/p>/);
+});
+
 test("AuthLayout: main named by an h1, layouts and the split aside", () => {
   const markup = html(
     UI.AuthLayout,

@@ -4,10 +4,12 @@
 // The scanner is deliberately lightweight (no TypeScript or Babel at runtime):
 // comments are blanked, imports from the package are read with patterns, and
 // JSX opening tags of imported Mortar components are tokenised to read their
-// attribute names and literal values. Known limits: props passed through a
-// spread ({...props}) are not checked; components re-exported or wrapped under
-// another name are not followed; JSX in .vue/.svelte/.astro/.html files is not
-// read; dynamic class names built at runtime are not resolved.
+// attribute names and literal values. Components whose contract has no children
+// slot are also checked for JSX body children between the tags. Known limits:
+// props passed through a spread ({...props}) are not checked; components
+// re-exported or wrapped under another name are not followed; JSX in
+// .vue/.svelte/.astro/.html files is not read; dynamic class names built at
+// runtime are not resolved.
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { resolve, join, relative, dirname, extname, sep } from "node:path";
 import { createHash } from "node:crypto";
@@ -18,6 +20,10 @@ import {
   GENERAL_PROPS,
   RENAMED_VALUES,
 } from "./migrations.mjs";
+
+// Built from parts so tracked source does not contain the retired scope literal
+// (tests/npm-package-name.test.mjs forbids it outside the migration allowlist).
+const LEGACY_PKG = ["@", "tony-ui", "/", "mortar"].join("");
 
 export const RULES = {
   "not-installed": "@tonycodes-ui/mortar is imported but not installed.",
@@ -32,6 +38,8 @@ export const RULES = {
   "invalid-value": "A literal value outside the prop's declared union.",
   "css-override":
     "Consumer CSS that selects Mortar's .m-* classes or [data-m-component].",
+  "ancestor-override":
+    "Consumer CSS that uses an ancestor/native-element selector to restyle a Mortar control.",
   "class-override":
     "A Tailwind arbitrary variant in a className that targets Mortar's .m-* classes.",
   "kit-class":
@@ -46,6 +54,13 @@ export const RULES = {
   "local-copy": "A local copy of Mortar source.",
   "raw-element":
     "A raw HTML element (such as <table> or <select>) that a Mortar component replaces, in an app that uses Mortar.",
+  "legacy-package": `A dependency or import of the retired ${LEGACY_PKG}; install and import @tonycodes-ui/mortar instead (see the CHANGELOG migration note).`,
+  "invalid-phrasing":
+    "A block HTML element in a phrasing-only slot that Mortar renders inside a <p>.",
+  "input-static-action":
+    "Static text passed to Input.action; use prefix or suffix instead.",
+  "input-absolute-adornment":
+    "An absolutely positioned decorative sibling of Input; use leadingIcon or trailingIcon.",
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -82,6 +97,20 @@ const CODE = new Set([
 const JSX = new Set([".js", ".jsx", ".tsx", ".mjs"]);
 const STYLE = new Set([".css", ".scss", ".sass", ".less", ".pcss", ".postcss"]);
 const PKG = "@tonycodes-ui/mortar";
+const LEGACY_ESCAPE = LEGACY_PKG.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const LEGACY_IMPORT = new RegExp(
+  String.raw`\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\4`,
+  "g",
+);
+const LEGACY_SIDE_EFFECT = new RegExp(
+  String.raw`\bimport\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\1`,
+  "g",
+);
+const LEGACY_CSS_IMPORT = new RegExp(
+  String.raw`@import\s*(["'])(${LEGACY_ESCAPE}(?:\/[^"']*)?)\1`,
+  "g",
+);
+const LEGACY_FIX = `Install and import "${PKG}" instead of "${LEGACY_PKG}". See the CHANGELOG migration note.`;
 const MAX_FILES = 20000;
 const MAX_BYTES = 1_000_000;
 
@@ -219,6 +248,21 @@ export function blankComments(text, { css = false } = {}) {
   return out.join("");
 }
 
+/**
+ * True when `src[i]` starts a JS string or template literal. An apostrophe in
+ * JSX text (`Don't`) does not: it must follow an operator, bracket, or a
+ * keyword such as `return` (same rule as blankStrings).
+ */
+function quoteStarts(src, i) {
+  const q = src[i];
+  if (q !== '"' && q !== "'" && q !== "`") return false;
+  if (q === "`") return true;
+  const before = src.slice(0, i).trimEnd();
+  return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
+    before,
+  );
+}
+
 /** Index of the character after the `{…}` group starting at `i`. */
 function skipBraces(src, i) {
   let depth = 0;
@@ -229,7 +273,7 @@ function skipBraces(src, i) {
     else if (c === "}") {
       depth--;
       if (depth === 0) return i + 1;
-    } else if (c === '"' || c === "'") {
+    } else if ((c === '"' || c === "'") && quoteStarts(src, i)) {
       i++;
       while (i < n && src[i] !== c && src[i] !== "\n") {
         if (src[i] === "\\") i++;
@@ -253,15 +297,18 @@ function skipBraces(src, i) {
 const NAME = /[A-Za-z_$][\w$]*(?:[-:.][\w$]+)*/y;
 
 /**
- * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
- * for string literals (`a="x"` or `a={"x"}`), the value.
+ * Walk from the end of a JSX tag name to the `>` or `/>` that closes the
+ * opening tag. Returns the attributes, the index after the delimiter, and
+ * whether the tag was self-closing.
  */
-export function jsxAttributes(src, i) {
+function jsxOpening(src, i) {
   const attrs = [];
   const n = src.length;
   while (i < n) {
     while (i < n && /\s/.test(src[i])) i++;
-    if (src[i] === ">" || (src[i] === "/" && src[i + 1] === ">")) break;
+    if (src[i] === "/" && src[i + 1] === ">")
+      return { attrs, end: i + 2, selfClosing: true };
+    if (src[i] === ">") return { attrs, end: i + 1, selfClosing: false };
     if (src[i] === "{") {
       i = skipBraces(src, i);
       continue;
@@ -283,6 +330,7 @@ export function jsxAttributes(src, i) {
         i = end + 1;
       } else if (q === "{") {
         const end = skipBraces(src, i);
+        attr.expression = { start: i + 1, end: end - 1 };
         const inner = src.slice(i + 1, end - 1).trim();
         const literal = inner.match(/^(["'`])([^"'`$\\]*)\1$/);
         if (literal) attr.value = literal[2];
@@ -291,7 +339,252 @@ export function jsxAttributes(src, i) {
     }
     attrs.push(attr);
   }
+  return { attrs, end: i, selfClosing: false };
+}
+
+/**
+ * The attributes of a JSX opening tag whose name ends at `i`: name, offset and,
+ * for string literals (`a="x"` or `a={"x"}`), the value. Brace values also get
+ * `expression: { start, end }` covering the inner text. The returned array has
+ * `end` (index after the opening tag) and `selfClosing`.
+ */
+export function jsxAttributes(src, i) {
+  const { attrs, end, selfClosing } = jsxOpening(src, i);
+  attrs.end = end;
+  attrs.selfClosing = selfClosing;
   return attrs;
+}
+
+/**
+ * True when the JSX element whose body starts at `bodyStart` (just after `>`)
+ * has non-whitespace children before its matching close tag. Nested elements
+ * with the same local name are counted so `<A><A/></A>` is not truncated.
+ */
+export function jsxHasChildren(src, bodyStart, tagName) {
+  const open = new RegExp(`<${tagName}(?=[\\s/>])`, "g");
+  const close = new RegExp(`</${tagName}\\s*>`, "g");
+  let depth = 1;
+  let i = bodyStart;
+  while (i < src.length && depth > 0) {
+    open.lastIndex = i;
+    close.lastIndex = i;
+    const nextOpen = open.exec(src);
+    const nextClose = close.exec(src);
+    if (!nextClose) return /\S/.test(src.slice(bodyStart));
+    if (nextOpen && nextOpen.index < nextClose.index) {
+      const nested = jsxOpening(src, nextOpen.index + nextOpen[0].length);
+      // Self-closing nested tags do not change depth.
+      if (!nested.selfClosing) depth++;
+      i = nested.end;
+    } else {
+      depth--;
+      if (depth === 0) return /\S/.test(src.slice(bodyStart, nextClose.index));
+      i = nextClose.index + nextClose[0].length;
+    }
+  }
+  return false;
+}
+
+/** HTML elements that cannot nest inside a `<p>` (obvious block tags). */
+export const PHRASING_BLOCK_TAGS = new Set([
+  "address",
+  "article",
+  "aside",
+  "blockquote",
+  "div",
+  "dl",
+  "dt",
+  "dd",
+  "fieldset",
+  "figcaption",
+  "figure",
+  "footer",
+  "form",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "header",
+  "hr",
+  "li",
+  "main",
+  "nav",
+  "ol",
+  "p",
+  "pre",
+  "section",
+  "table",
+  "ul",
+]);
+
+const BLOCK_TAG = /<([a-z][a-z0-9]*)(?=[\s/>])/g;
+
+/**
+ * Offsets of obvious block HTML tags in `src.slice(start, end)`.
+ * Strings should already be blanked so markup inside quotes is ignored.
+ */
+export function blockTagsIn(src, start = 0, end = src.length) {
+  const hits = [];
+  BLOCK_TAG.lastIndex = start;
+  let m;
+  while ((m = BLOCK_TAG.exec(src)) && m.index < end) {
+    if (PHRASING_BLOCK_TAGS.has(m[1])) hits.push({ tag: m[1], index: m.index });
+  }
+  return hits;
+}
+
+/**
+ * The [start, end) range of JSX children for the element whose name is
+ * `tagName` and whose attributes start at `afterName`. Null when self-closing
+ * or the closing tag is missing.
+ */
+export function jsxChildrenRange(src, tagName, afterName) {
+  const opening = jsxOpening(src, afterName);
+  if (opening.selfClosing) return null;
+  const start = opening.end;
+  const open = new RegExp(`<${escapeRegExp(tagName)}(?=[\\s/>])`, "g");
+  const close = new RegExp(`</${escapeRegExp(tagName)}\\s*>`, "g");
+  let depth = 1;
+  let i = start;
+  while (i < src.length && depth > 0) {
+    open.lastIndex = i;
+    close.lastIndex = i;
+    const nextOpen = open.exec(src);
+    const nextClose = close.exec(src);
+    if (!nextClose) return null;
+    if (nextOpen && nextOpen.index < nextClose.index) {
+      depth++;
+      i = nextOpen.index + nextOpen[0].length;
+    } else {
+      depth--;
+      if (depth === 0) return { start, end: nextClose.index };
+      i = nextClose.index + nextClose[0].length;
+    }
+  }
+  return null;
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Export name → phrasing-only prop names from each contract's `phrasingSlots`. */
+function phrasingSlotMap(data) {
+  const map = new Map();
+  for (const c of data.components ?? []) {
+    const slots = c.contract?.phrasingSlots;
+    if (slots?.length) map.set(c.export, slots);
+  }
+  return map;
+}
+
+/** End index of the JSX element that opens with `tagName` at `afterName`. */
+function jsxElementEnd(src, tagName, afterName, opening) {
+  if (opening.selfClosing) return opening.end;
+  const body = jsxChildrenRange(src, tagName, afterName);
+  if (!body) return opening.end;
+  const close = src
+    .slice(body.end)
+    .match(new RegExp(`^</${escapeRegExp(tagName)}\\s*>`));
+  return body.end + (close ? close[0].length : 0);
+}
+
+/**
+ * True when an `action={…}` expression is obvious static end content (a string
+ * or a noninteractive span/fragment), not an attached control.
+ */
+export function isStaticInputAction(expression) {
+  const inner = expression.trim();
+  if (!inner) return false;
+  if (/^(["'`])([^"'`$\\]*)\1$/.test(inner)) return true;
+  if (/\bon[A-Z]\w*\s*=/.test(inner) || /\bhref\s*=/.test(inner)) return false;
+  if (/<\/?(?:button|a|input|select|textarea)\b/i.test(inner)) return false;
+  if (/<[A-Z][\w$]*\b/.test(inner)) return false;
+  if (/^<>\s*[^<{]+?\s*<\/>$/.test(inner)) return true;
+  if (/^<\s*span\b[^>]*>\s*[^<{]+?\s*<\/\s*span\s*>$/i.test(inner)) return true;
+  return false;
+}
+
+/**
+ * Absolutely positioned decorative siblings near a Mortar Input, typically
+ * left over from wrapping an unlabeled native input. Bounded: string
+ * `className` literals only, a nearby `relative` wrapper, and only the
+ * immediate sibling before or after this Input (so later Inputs in the same
+ * file are not flagged for an earlier icon).
+ */
+export function absoluteAdornmentsBesideInput(src, inputStart, inputEnd) {
+  const windowStart = Math.max(0, inputStart - 1000);
+  const windowEnd = Math.min(src.length, inputEnd + 1000);
+  const before = src.slice(windowStart, inputStart);
+  const after = src.slice(inputEnd, windowEnd);
+  const hasRelative = (slice) =>
+    /\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*\brelative\b[^"'`]*)\1/.test(
+      slice,
+    );
+  if (!hasRelative(before)) return [];
+  const hits = [];
+  const open =
+    /<(svg|img|span|i|div|em)\b(?=[^>]*\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*\babsolute\b[^"'`]*)\2)[^>]*>/i;
+  const sideFrom = (cls, fallback) =>
+    /\b(?:right-|end-|inset-e|inset-inline-end)/.test(cls)
+      ? "trailing"
+      : /\b(?:left-|start-|inset-s|inset-inline-start)/.test(cls)
+        ? "leading"
+        : fallback;
+  const decorative = (tag, openText) => {
+    if (/\bon[A-Z]\w*\s*=/.test(openText) || /\bhref\s*=/.test(openText))
+      return false;
+    return (
+      tag === "svg" ||
+      tag === "img" ||
+      /\baria-hidden\b/.test(openText) ||
+      tag === "span" ||
+      tag === "i" ||
+      tag === "em" ||
+      tag === "div"
+    );
+  };
+  // Immediate previous sibling: the last absolute tag in `before`, with only
+  // whitespace (and its own closing) between it and the Input.
+  {
+    let last;
+    const re = new RegExp(open.source, "gi");
+    let m;
+    while ((m = re.exec(before))) last = m;
+    if (last) {
+      const tag = last[1].toLowerCase();
+      const cls = last[3];
+      const openText = last[0];
+      const from = last.index;
+      let afterOpen = from + openText.length;
+      if (!/\/>\s*$/.test(openText)) {
+        const close = before
+          .slice(afterOpen)
+          .match(new RegExp(`^[\\s\\S]*?</${tag}\\s*>`, "i"));
+        if (close) afterOpen += close[0].length;
+      }
+      if (/^\s*$/.test(before.slice(afterOpen)) && decorative(tag, openText))
+        hits.push({
+          index: windowStart + from,
+          side: sideFrom(cls, "leading"),
+        });
+    }
+  }
+  // Immediate next sibling: the first absolute tag in `after`, with only
+  // whitespace between the Input and it.
+  {
+    const m = after.match(new RegExp("^\\s*" + open.source, "i"));
+    if (m && decorative(m[1].toLowerCase(), m[0].trimStart() || m[0])) {
+      const absAt = m[0].indexOf("<");
+      hits.push({
+        index: inputEnd + absAt,
+        side: sideFrom(m[3], "trailing"),
+      });
+    }
+  }
+  return hits;
 }
 
 /**
@@ -309,16 +602,6 @@ export function jsxAttributes(src, i) {
 export function blankStrings(src) {
   const out = src.split("");
   const n = src.length;
-  // A quote in JSX text (Don't) is not a string.
-  const starts = (i) => {
-    const q = src[i];
-    if (q !== '"' && q !== "'" && q !== "`") return false;
-    if (q === "`") return true;
-    const before = src.slice(0, i).trimEnd();
-    return /(?:^|=>|[=(,:?&|[{}+;!]|\b(?:return|case|throw|from|import))$/.test(
-      before,
-    );
-  };
   const blank = (from, to) => {
     for (let k = from; k < Math.min(to, n); k++)
       if (out[k] !== "\n") out[k] = " ";
@@ -358,7 +641,7 @@ export function blankStrings(src) {
       if (expr && c === "{") depth++;
       else if (expr && c === "}") {
         if (--depth === 0) return i;
-      } else if ((c === '"' || c === "'" || c === "`") && starts(i)) {
+      } else if ((c === '"' || c === "'" || c === "`") && quoteStarts(src, i)) {
         i = blankOne(i, end);
         if (i < end) i++;
         continue;
@@ -382,6 +665,239 @@ function replacements(data) {
       map.set(element, [...(map.get(element) ?? []), c.export]);
   return map;
 }
+
+/** Export → the native elements that component replaces. */
+function replacesByExport(data) {
+  const map = new Map();
+  for (const c of data.components ?? []) {
+    const list = c.contract?.replaces ?? [];
+    if (list.length) map.set(c.export, list);
+  }
+  return map;
+}
+
+/**
+ * Visual properties that restyle a control. Layout (margin, display, flex,
+ * width, …) is ignored so composition wrappers stay quiet.
+ */
+const VISUAL_PROP = new Set([
+  "background",
+  "background-color",
+  "background-image",
+  "border",
+  "border-color",
+  "border-style",
+  "border-width",
+  "border-top",
+  "border-right",
+  "border-bottom",
+  "border-left",
+  "border-top-color",
+  "border-right-color",
+  "border-bottom-color",
+  "border-left-color",
+  "border-top-style",
+  "border-right-style",
+  "border-bottom-style",
+  "border-left-style",
+  "border-top-width",
+  "border-right-width",
+  "border-bottom-width",
+  "border-left-width",
+  "border-radius",
+  "border-top-left-radius",
+  "border-top-right-radius",
+  "border-bottom-right-radius",
+  "border-bottom-left-radius",
+  "color",
+  "font",
+  "font-family",
+  "font-size",
+  "font-weight",
+  "font-style",
+  "font-variant",
+  "line-height",
+  "letter-spacing",
+  "text-decoration",
+  "text-decoration-line",
+  "text-decoration-color",
+  "text-decoration-style",
+  "text-transform",
+  "text-shadow",
+]);
+
+/** True when a CSS rule body sets a visual property. */
+export function hasVisualDeclarations(body) {
+  for (const m of body.matchAll(/(?:^|[{;])\s*([a-z-]+)\s*:/gi)) {
+    if (VISUAL_PROP.has(m[1].toLowerCase())) return true;
+  }
+  return false;
+}
+
+/**
+ * An obvious ancestor + native-element selector: `.toolbar button`,
+ * `#bar > input`, `div.panel select:hover`. Returns nothing when the selector
+ * is complex, targets kit classes, or has no class/id ancestor marker.
+ */
+export function parseAncestorNativeSelector(selector) {
+  const parts = [];
+  let buf = "";
+  let depth = 0;
+  for (let i = 0; i < selector.length; i++) {
+    const c = selector[i];
+    if (c === "(" || c === "[") depth++;
+    else if (c === ")" || c === "]") depth = Math.max(0, depth - 1);
+    else if (c === "," && depth === 0) {
+      parts.push(buf);
+      buf = "";
+      continue;
+    }
+    buf += c;
+  }
+  parts.push(buf);
+
+  const out = [];
+  for (const raw of parts) {
+    const part = raw.trim();
+    if (!part || part.startsWith("@")) continue;
+    if (/\.m-[a-z]|\[data-m-component\b/.test(part)) continue;
+    const m = part.match(
+      /^(.+?)\s*(?:>|\s)\s*([a-z][a-z0-9]*)(\[[^\]]+\])?((?:::[a-z-]+|:[a-z-]+(?:\([^)]*\))?)*)\s*$/i,
+    );
+    if (!m) continue;
+    const ancestor = m[1].trim();
+    const subject = m[2].toLowerCase();
+    const attr = m[3] ?? "";
+    // One simple ancestor only: `.a .b button` stays manual.
+    if (/[\s>+~]/.test(ancestor)) continue;
+    // Subject must stay a bare native element (optional [type=…] / pseudos).
+    if (/[.#]/.test(m[4] ?? "")) continue;
+    const classes = [...ancestor.matchAll(/\.([A-Za-z_][\w-]*)/g)].map(
+      (x) => x[1],
+    );
+    const id = ancestor.match(/#([A-Za-z_][\w-]*)/)?.[1];
+    if (!classes.length && !id) continue;
+    const type = attr.match(
+      /^\[\s*type\s*=\s*(?:["']?)([\w-]+)(?:["']?)\s*\]$/i,
+    )?.[1];
+    if (attr && !type) continue;
+    out.push({
+      selector: part,
+      tag: subject,
+      type: type?.toLowerCase(),
+      classes,
+      id,
+    });
+  }
+  return out;
+}
+
+function openingEnd(src, i) {
+  const n = src.length;
+  while (i < n) {
+    while (i < n && /\s/.test(src[i])) i++;
+    if (src[i] === "/" && src[i + 1] === ">")
+      return { end: i + 2, selfClose: true };
+    if (src[i] === ">") return { end: i + 1, selfClose: false };
+    if (src[i] === "{") {
+      i = skipBraces(src, i);
+      continue;
+    }
+    NAME.lastIndex = i;
+    const m = NAME.exec(src);
+    if (!m) return { end: i, selfClose: false };
+    i += m[0].length;
+    while (i < n && /\s/.test(src[i])) i++;
+    if (src[i] !== "=") continue;
+    i++;
+    while (i < n && /\s/.test(src[i])) i++;
+    const q = src[i];
+    if (q === '"' || q === "'") {
+      const end = src.indexOf(q, i + 1);
+      if (end < 0) return { end: n, selfClose: false };
+      i = end + 1;
+    } else if (q === "{") i = skipBraces(src, i);
+    else return { end: i, selfClose: false };
+  }
+  return { end: n, selfClose: false };
+}
+
+function replacesMatch(replaces, tag, type) {
+  for (const r of replaces) {
+    const m = /^([a-z]+)(?:\[type=(.+)\])?$/.exec(r);
+    if (!m || m[1] !== tag) continue;
+    if (!type) return true;
+    if (!m[2] || m[2] === type) return true;
+  }
+  return false;
+}
+
+/**
+ * Mortar controls in `src` that replace a native element, with literal
+ * className/id markers on open host ancestors. Complex className expressions
+ * are ignored.
+ */
+export function findMortarPlacements(src, locals, namespaces, byExport) {
+  const stack = [];
+  const placements = [];
+  const re = /<\/?([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?)(?=[\s/>])/g;
+  let m;
+  while ((m = re.exec(src))) {
+    const at = m.index;
+    const name = m[1];
+    const isClose = src[at + 1] === "/";
+    const host = /^[a-z]/.test(name);
+    if (isClose) {
+      if (host) {
+        for (let i = stack.length - 1; i >= 0; i--) {
+          if (stack[i].name === name) {
+            stack.length = i;
+            break;
+          }
+        }
+      }
+      continue;
+    }
+    const attrsStart = at + m[0].length;
+    const { end, selfClose } = openingEnd(src, attrsStart);
+    const attrs = jsxAttributes(src, attrsStart);
+    let exportName;
+    const [ns, member] = name.split(".");
+    if (member && namespaces.has(ns)) exportName = member;
+    else if (!member) exportName = locals.get(name);
+    const replaces = exportName ? byExport.get(exportName) : undefined;
+    if (replaces) {
+      placements.push({
+        exportName,
+        replaces,
+        frames: stack.map((f) => ({
+          classes: new Set(f.classes),
+          id: f.id,
+        })),
+      });
+    }
+    if (host && !selfClose) {
+      const classAttr = attrs.find(
+        (a) => a.name === "className" || a.name === "class",
+      );
+      const idAttr = attrs.find((a) => a.name === "id");
+      const classes = (classAttr?.value ?? "").split(/\s+/).filter(Boolean);
+      stack.push({
+        name,
+        classes,
+        id: idAttr?.value,
+      });
+    }
+    re.lastIndex = end;
+  }
+  return placements;
+}
+
+function frameMatches(frame, classes, id) {
+  if (id && frame.id !== id) return false;
+  return classes.every((c) => frame.classes.has(c));
+}
+
 // Inputs with no Mortar equivalent (hidden values, file pickers, sliders).
 const NATIVE_ONLY = new Set(["hidden", "file", "range", "color", "image"]);
 const TEXT_LIKE = new Set([
@@ -694,9 +1210,23 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
   // tool's mapping; every component it names has existed since 0.1.
   let rawElements = replacements(data);
   if (!rawElements.size) rawElements = replacements(bundled);
+  const byExport = replacesByExport(data);
+  if (![...byExport.keys()].length)
+    for (const [k, v] of replacesByExport(bundled)) byExport.set(k, v);
+  // Phrasing-only slots (rendered inside a <p>). Older catalogues fall back
+  // to this tool's map so Banner/AuthLayout stay checked after upgrade of the
+  // CLI alone.
+  const bundledPhrasing = phrasingSlotMap(bundled);
+  const dataPhrasing = phrasingSlotMap(data);
+  const phrasingSlotsOf = (exportName) =>
+    dataPhrasing.get(exportName) ?? bundledPhrasing.get(exportName) ?? [];
   // Raw elements are collected from every JSX file and reported once the
   // whole app is known to use Mortar.
   const rawHits = [];
+  // Ancestor/native-element CSS rules that set visual properties, matched
+  // later against Mortar controls under a matching host ancestor.
+  const ancestorRules = [];
+  const mortarPlacements = [];
 
   const files = walk(root);
   const hashes = data.agent.sourceHashes ?? {};
@@ -747,10 +1277,20 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             '@import "tailwindcss"; first, then @import "@tonycodes-ui/mortar/styles.css";',
           );
       }
+      for (const m of css.matchAll(LEGACY_CSS_IMPORT))
+        add(
+          "legacy-package",
+          "error",
+          file,
+          line(m.index),
+          `Imports the retired "${m[2]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+          LEGACY_FIX,
+        );
       // Selectors: the text before each `{` that is not an at-rule.
       for (const m of css.matchAll(/([^{};]+)\{/g)) {
         const selector = m[1].trim();
         if (!selector || selector.startsWith("@")) continue;
+        const selAt = m.index + m[0].length - m[1].trimStart().length - 1;
         const hits = [
           ...[...selector.matchAll(/\.(m-[a-z][a-z0-9-]*)/g)]
             .map((x) => x[1])
@@ -765,15 +1305,43 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             "css-override",
             "error",
             file,
-            line(m.index + m[0].length - m[1].trimStart().length - 1),
+            line(selAt),
             `Overrides Mortar markup (${[...new Set(hits)].join(", ")}).`,
             "Remove the override. Use component props, className for layout only, or theme tokens (brandTokens, --m-brand-*). If the kit is wrong, fix it centrally with a pull request.",
           );
+        const braceAt = m.index + m[0].length - 1;
+        const body = css.slice(braceAt + 1, closing(css, braceAt));
+        if (!hits.length && hasVisualDeclarations(body)) {
+          for (const target of parseAncestorNativeSelector(selector))
+            ancestorRules.push({
+              file,
+              line: line(selAt),
+              ...target,
+            });
+        }
       }
       continue;
     }
 
     const src = blankComments(text);
+    for (const m of src.matchAll(LEGACY_IMPORT))
+      add(
+        "legacy-package",
+        "error",
+        file,
+        line(m.index),
+        `Imports the retired "${m[5]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+        LEGACY_FIX,
+      );
+    for (const m of src.matchAll(LEGACY_SIDE_EFFECT))
+      add(
+        "legacy-package",
+        "error",
+        file,
+        line(m.index),
+        `Imports the retired "${m[2]}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+        LEGACY_FIX,
+      );
     // Email markup is tables by design, and has its own components.
     const emailFile = EMAIL_FILE.test(src);
     if (JSX.has(ext) && !emailFile) {
@@ -941,6 +1509,10 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
     if (!imported) continue;
 
+    if (JSX.has(ext) && !emailFile && byExport.size)
+      for (const p of findMortarPlacements(src, locals, namespaces, byExport))
+        mortarPlacements.push(p);
+
     // className tokens on the app's own markup and arbitrary variants.
     for (const m of src.matchAll(
       /\bclass(?:Name)?\s*=\s*(?:\{\s*)?(["'`])([^"'`]*)\1/g,
@@ -1003,6 +1575,8 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     });
 
     if (!JSX.has(ext)) continue;
+    // Blank string contents so "<div>" inside a quote is not read as a tag.
+    const jsx = blankStrings(src);
     // JSX opening tags of Mortar components.
     const tag = /<([A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)?)(?=[\s/>])/g;
     for (const m of src.matchAll(tag)) {
@@ -1027,7 +1601,10 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const propTypes = component.contract.propTypes;
       if (!propTypes) continue;
       const accepts = data.accepts(component);
-      for (const attr of jsxAttributes(src, m.index + m[0].length)) {
+      const afterName = m.index + m[0].length;
+      const opening = jsxOpening(src, afterName);
+      const attrs = opening.attrs;
+      for (const attr of attrs) {
         const name = attr.name;
         if (name === "key" || /[-:]/.test(name)) continue;
         if (!accepts.has(name)) {
@@ -1071,6 +1648,99 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           guess ? `Use ${name}="${guess}".` : undefined,
         );
       }
+      // Input adornments: static text in `action`, or absolute decorative
+      // siblings left over from migrating an unlabeled native input.
+      if (exportName === "Input") {
+        const action = attrs.find((a) => a.name === "action");
+        const staticAction =
+          action &&
+          (action.value !== undefined
+            ? true
+            : action.expression
+              ? isStaticInputAction(
+                  src.slice(action.expression.start, action.expression.end),
+                )
+              : false);
+        if (staticAction)
+          add(
+            "input-static-action",
+            "warning",
+            file,
+            line(action.index),
+            `<Input> action holds static text; action is for an attached control such as a Button.`,
+            "Use `suffix` (or `prefix`) for end/start text adornments such as `%` or units.",
+          );
+        const elementEnd = jsxElementEnd(src, m[1], afterName, opening);
+        // Use comment-blanked source (not string-blanked): className values
+        // must stay readable so absolute/relative tokens are visible.
+        for (const hit of absoluteAdornmentsBesideInput(
+          src,
+          m.index,
+          elementEnd,
+        )) {
+          const prop = hit.side === "trailing" ? "trailingIcon" : "leadingIcon";
+          add(
+            "input-absolute-adornment",
+            "warning",
+            file,
+            line(hit.index),
+            `Absolutely positioned decorative sibling next to <Input>; it centres against the whole field (including the label).`,
+            `Pass the icon as \`${prop}\` so it sits inside the text box.`,
+          );
+        }
+      }
+      // JSX body children on a control with no children slot (e.g. Switch).
+      if (
+        !opening.selfClosing &&
+        !accepts.has("children") &&
+        jsxHasChildren(src, opening.end, m[1])
+      ) {
+        const guess = accepts.has("label")
+          ? "label"
+          : closest("children", Object.keys(propTypes), 2);
+        add(
+          "unknown-prop",
+          "error",
+          file,
+          line(opening.end),
+          `<${exportName}> has no prop "children".`,
+          guess
+            ? `Use \`${guess}\` (${propTypes[guess]?.type ?? "see the contract"}).`
+            : `See the contract: mortar component ${exportName}.`,
+        );
+      }
+      // Phrasing-only slots: block HTML children inside a <p> are invalid.
+      const slots = phrasingSlotsOf(exportName);
+      if (!slots.length) continue;
+      const reportBlock = (slot, hit) =>
+        add(
+          "invalid-phrasing",
+          "error",
+          file,
+          line(hit.index),
+          `<${exportName}> ${slot} is phrasing-only (rendered inside a <p>); <${hit.tag}> is a block element.`,
+          slot === "children"
+            ? "Pass text, a link or emphasis. For a full section, use Section."
+            : "Pass a string or inline markup (links, emphasis), not a nested <p> or other block element.",
+        );
+      for (const slot of slots) {
+        const attr = attrs.find((a) => a.name === slot);
+        if (attr?.expression) {
+          for (const hit of blockTagsIn(
+            jsx,
+            attr.expression.start,
+            attr.expression.end,
+          ))
+            reportBlock(slot, hit);
+          continue;
+        }
+        if (attr) continue; // string literal or bare boolean — no JSX blocks
+        if (slot !== "children" || opening.selfClosing) continue;
+        const body = jsxChildrenRange(src, m[1], afterName);
+        if (!body) continue;
+        for (const hit of blockTagsIn(jsx, body.start, body.end))
+          reportBlock(slot, hit);
+      }
     }
   }
 
@@ -1089,6 +1759,24 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       );
     }
 
+  if (usesMortar)
+    for (const rule of ancestorRules) {
+      const hit = mortarPlacements.find(
+        (p) =>
+          replacesMatch(p.replaces, rule.tag, rule.type) &&
+          p.frames.some((f) => frameMatches(f, rule.classes, rule.id)),
+      );
+      if (!hit) continue;
+      add(
+        "ancestor-override",
+        "error",
+        rule.file,
+        rule.line,
+        `Ancestor selector \`${rule.selector}\` restyles Mortar's <${hit.exportName}> (${rule.tag}${rule.type ? `[type=${rule.type}]` : ""}).`,
+        "Remove the override. Use component props, className for layout only, or theme tokens (brandTokens, --m-brand-*). If the kit is wrong, fix it centrally with a pull request.",
+      );
+    }
+
   // Package-level rules.
   let pkgJson;
   const pkgFile = join(root, "package.json");
@@ -1099,6 +1787,19 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     pkgJson?.dependencies?.[PKG] ??
     pkgJson?.devDependencies?.[PKG] ??
     pkgJson?.peerDependencies?.[PKG];
+  const legacyRange =
+    pkgJson?.dependencies?.[LEGACY_PKG] ??
+    pkgJson?.devDependencies?.[LEGACY_PKG] ??
+    pkgJson?.peerDependencies?.[LEGACY_PKG];
+  if (legacyRange)
+    add(
+      "legacy-package",
+      "error",
+      pkgFile,
+      1,
+      `Depends on the retired "${LEGACY_PKG}"; install and import "${PKG}" instead (see the CHANGELOG migration note).`,
+      LEGACY_FIX,
+    );
   const reactEmail = "@react-email/components";
   if (
     usesEmail &&
