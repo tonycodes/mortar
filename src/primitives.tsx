@@ -233,7 +233,9 @@ export function FieldLabel({
   );
 }
 export interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement>, FieldDescription {
+  extends
+    Omit<InputHTMLAttributes<HTMLInputElement>, "children">,
+    FieldDescription {
   prefix?: string;
   suffix?: string;
   /** Decorative icon inside the field, before the text. */
@@ -242,6 +244,8 @@ export interface InputProps
   trailingIcon?: ReactNode;
   /** Button or menu attached to the end of the field, e.g. "Sort" or "Copy". */
   action?: ReactNode;
+  /** Not accepted: use label, prefix, suffix or the icon slots. */
+  children?: never;
 }
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   {
@@ -255,10 +259,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     trailingIcon,
     action,
     className,
+    children: _children,
     ...props
   },
   ref,
 ) {
+  void _children;
   const { fieldId, messageId, describedBy } = useField({
     id,
     hint,
@@ -474,14 +480,18 @@ export function Checkbox({
   description,
   error,
   className,
+  children: _children,
   ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "children"> & {
   label: ReactNode;
   /** Secondary line under the label, announced as the description (the checkbox's hint). */
   description?: ReactNode;
   /** Marks the checkbox invalid; the message is announced when it appears. */
   error?: string;
+  /** Not accepted: the accessible name is `label`. */
+  children?: never;
 }) {
+  void _children;
   const input = useRef<HTMLInputElement>(null);
   const described = useDescribedLayout(!!(description || error), input);
   if (described)
@@ -518,12 +528,16 @@ export function Switch({
   label,
   description,
   className,
+  children: _children,
   ...props
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "role"> & {
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "role" | "children"> & {
   label: string;
   /** Secondary line under the label, announced as the description. */
   description?: ReactNode;
+  /** Not accepted: the accessible name is `label`. */
+  children?: never;
 }) {
+  void _children;
   const input = useRef<HTMLInputElement>(null);
   const described = useDescribedLayout(!!description, input);
   if (described)
