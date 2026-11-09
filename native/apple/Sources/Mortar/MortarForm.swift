@@ -149,11 +149,11 @@ public struct MortarFormSection<Content: View>: View {
 /// from the proposal, never from its children, so it can't feed back into
 /// itself while a window resizes.
 private struct SectionColumns: Layout {
-    static let breakpoint = 560.0
+    static let breakpoint: CGFloat = 560
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         guard subviews.count == 2 else { return .zero }
-        let width = proposal.width ?? Self.breakpoint
+        let width: CGFloat = proposal.width ?? Self.breakpoint
         if width >= Self.breakpoint {
             let (lead, trail) = columns(width)
             let a = subviews[0].sizeThatFits(ProposedViewSize(width: lead, height: nil))
@@ -181,7 +181,7 @@ private struct SectionColumns: Layout {
         }
     }
 
-    private func columns(_ width: Double) -> (Double, Double) {
+    private func columns(_ width: CGFloat) -> (CGFloat, CGFloat) {
         let available = width - 40
         return (available / 3, available * 2 / 3)
     }
