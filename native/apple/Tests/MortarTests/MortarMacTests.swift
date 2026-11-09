@@ -71,7 +71,7 @@ final class MortarMacTests: XCTestCase {
         guard let send = MacWindow.element(labelled: "Send", in: window) else {
             return XCTFail("No Send button; accessibility labels: \(MacWindow.labels(in: window))")
         }
-        XCTAssertTrue(send.accessibilityPerformPress?() ?? false)
+        XCTAssertTrue(send.accessibilityPerformPress())
         MacWindow.settle(window)
         XCTAssertEqual(model.sent, ["Hello"])
         XCTAssertEqual(model.text, "")
@@ -151,7 +151,7 @@ final class MortarMacTests: XCTestCase {
 
         let narrow = MacWindow.host(
             SettingsFormSample(isSaving: false)
-                .environment(\.dynamicTypeSize, .accessibilityExtraExtraExtraLarge),
+                .environment(\.dynamicTypeSize, .accessibility5),
             size: CGSize(width: 380, height: 800)
         )
         defer { narrow.close() }
@@ -179,7 +179,7 @@ final class MortarMacTests: XCTestCase {
             XCTFail("No \(label); accessibility labels: \(MacWindow.labels(in: window))", line: line)
             return .zero
         }
-        let rect = element.accessibilityFrame?() ?? .zero
+        let rect = element.accessibilityFrame()
         XCTAssertFalse(rect.isEmpty, "\(label) has no frame", line: line)
         return rect
     }
@@ -253,12 +253,23 @@ enum MacWindow {
 
     /// The first accessibility element with this label, as VoiceOver finds it.
     static func element(labelled label: String, in window: NSWindow) -> (any NSAccessibilityProtocol)? {
-        all(in: window).first { $0.accessibilityLabel?() == label }
+        all(in: window).first { axLabel($0) == label }
     }
 
     /// Every accessibility label in the window, to explain a failed lookup.
     static func labels(in window: NSWindow) -> [String] {
-        all(in: window).compactMap { $0.accessibilityLabel?() }.filter { !$0.isEmpty }
+        all(in: window).compactMap { axLabel($0) }.filter { !$0.isEmpty }
+    }
+
+    /// The label, read through Key-Value Coding. The Swift overlay exposes
+    /// `accessibilityLabel` as both a property and a method, and either
+    /// spelling fails to compile.
+    private static func axLabel(_ element: any NSAccessibilityProtocol) -> String? {
+        (element as? NSObject)?.value(forKey: "accessibilityLabel") as? String
+    }
+
+    private static func axChildren(_ element: any NSAccessibilityProtocol) -> [Any] {
+        (element as? NSObject)?.value(forKey: "accessibilityChildren") as? [Any] ?? []
     }
 
     private static func all(in window: NSWindow) -> [any NSAccessibilityProtocol] {
@@ -268,7 +279,7 @@ enum MacWindow {
             let next = queue.removeFirst()
             guard let element = next as? any NSAccessibilityProtocol else { continue }
             found.append(element)
-            queue += element.accessibilityChildren?() ?? []
+            queue += axChildren(element)
         }
         return found
     }
