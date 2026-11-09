@@ -71,7 +71,7 @@ final class MortarMacTests: XCTestCase {
         guard let send = MacWindow.element(labelled: "Send", in: window) else {
             return XCTFail("No Send button; accessibility labels: \(MacWindow.labels(in: window))")
         }
-        XCTAssertTrue(send.accessibilityPerformPress?() ?? false)
+        XCTAssertTrue(MacWindow.press(send))
         MacWindow.settle(window)
         XCTAssertEqual(model.sent, ["Hello"])
         XCTAssertEqual(model.text, "")
@@ -158,12 +158,38 @@ enum MacWindow {
 
     /// The first accessibility element with this label, as VoiceOver finds it.
     static func element(labelled label: String, in window: NSWindow) -> (any NSAccessibilityProtocol)? {
-        all(in: window).first { $0.accessibilityLabel?() == label }
+        all(in: window).first { text(of: $0) == label }
     }
 
     /// Every accessibility label in the window, to explain a failed lookup.
     static func labels(in window: NSWindow) -> [String] {
-        all(in: window).compactMap { $0.accessibilityLabel?() }.filter { !$0.isEmpty }
+        all(in: window).compactMap(text(of:)).filter { !$0.isEmpty }
+    }
+
+    /// Presses a control. The Swift overlay is an optional method on the
+    /// snapshot toolchain and a plain method on the macOS 26 toolchain.
+    static func press(_ element: any NSAccessibilityProtocol) -> Bool {
+        #if compiler(>=6.2)
+        element.accessibilityPerformPress()
+        #else
+        element.accessibilityPerformPress?() ?? false
+        #endif
+    }
+
+    private static func text(of element: any NSAccessibilityProtocol) -> String? {
+        #if compiler(>=6.2)
+        element.accessibilityLabel
+        #else
+        element.accessibilityLabel?()
+        #endif
+    }
+
+    private static func children(of element: any NSAccessibilityProtocol) -> [Any] {
+        #if compiler(>=6.2)
+        element.accessibilityChildren ?? []
+        #else
+        element.accessibilityChildren?() ?? []
+        #endif
     }
 
     private static func all(in window: NSWindow) -> [any NSAccessibilityProtocol] {
@@ -173,7 +199,7 @@ enum MacWindow {
             let next = queue.removeFirst()
             guard let element = next as? any NSAccessibilityProtocol else { continue }
             found.append(element)
-            queue += element.accessibilityChildren?() ?? []
+            queue += children(of: element)
         }
         return found
     }

@@ -1,5 +1,18 @@
 import SwiftUI
 
+/// Spoken form of a conversation message. Inline Markdown becomes prose:
+/// emphasis and code keep their words, and a link keeps its title, not its URL.
+enum MortarChatSpeech {
+    static func markdown(_ source: String) -> AttributedString {
+        let options = AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
+        return (try? AttributedString(markdown: source, options: options)) ?? AttributedString(source)
+    }
+
+    static func prose(_ source: String) -> String {
+        String(markdown(source).characters)
+    }
+}
+
 /// A message in a ``MortarConversation``.
 public struct MortarChatMessage: Identifiable {
     public enum Role: Sendable { case user, assistant }
@@ -174,8 +187,7 @@ private struct MessageRow: View {
     /// The message's Markdown, with links in the link colour (on-primary in
     /// the user's bubble) and underlined, so they don't rely on colour alone.
     private var content: AttributedString {
-        let options = AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
-        var text = (try? AttributedString(markdown: message.text, options: options)) ?? AttributedString(message.text)
+        var text = MortarChatSpeech.markdown(message.text)
         let p = mortar.palette
         var link = AttributeContainer()
         link.foregroundColor = isUser ? p[\.onPrimary] : p[\.link]
@@ -232,7 +244,7 @@ private struct MessageRow: View {
                 .background(shape.fill(isUser ? p[\.primary] : p[\.sunken]))
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(
-                    speaker + Text(verbatim: ": ") + Text(verbatim: String(prose.characters))
+                    speaker + Text(verbatim: ": ") + Text(verbatim: MortarChatSpeech.prose(message.text))
                 )
                 .accessibilityValue(isStreaming ? Text("Responding") : Text(verbatim: ""))
             }
