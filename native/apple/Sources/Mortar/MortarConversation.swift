@@ -266,6 +266,8 @@ private struct MessageRow: View {
 
 /// Chains one VoiceOver action per link onto a bubble that is a single
 /// element, so the link can be opened without putting the URL in the label.
+/// `AnyView` is what lets every link be added: a recursive `View` cannot
+/// return both the original content and that content plus an action.
 private struct BubbleLinks<Content: View>: View {
     let links: [(title: String, url: URL)]
     let content: Content
@@ -277,15 +279,11 @@ private struct BubbleLinks<Content: View>: View {
     }
 
     var body: some View {
-        if let link = links.first {
-            let open = openURL
-            BubbleLinks(links: Array(links.dropFirst())) {
-                content.accessibilityAction(named: Text(verbatim: link.title)) {
-                    open(link.url)
-                }
-            }
-        } else {
-            content
+        let open = openURL
+        links.reduce(AnyView(content)) { partial, link in
+            AnyView(partial.accessibilityAction(named: Text(verbatim: link.title)) {
+                open(link.url)
+            })
         }
     }
 }
