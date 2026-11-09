@@ -19,8 +19,10 @@ import { componentDetail, buildPacket } from "../cli/packet.mjs";
 import {
   auditApp,
   blankStrings,
+  blockTagsIn,
   satisfies,
   jsxAttributes,
+  jsxChildrenRange,
   jsxHasChildren,
   RULES,
 } from "../cli/audit.mjs";
@@ -736,6 +738,79 @@ test("the audit reports a missing install and declaration", async (t) => {
   const report = await auditApp(dir);
   assert.ok(has(report, "not-installed"));
   assert.ok(has(report, "not-declared", "package.json"));
+});
+
+test("the JSX children range and block-tag scanner find nested markup", () => {
+  const src = `<Banner>\n  <div><h2>Start</h2></div>\n</Banner>`;
+  const body = jsxChildrenRange(src, "Banner", "<Banner".length);
+  assert.deepEqual(body, {
+    start: "<Banner>".length,
+    end: src.lastIndexOf("</Banner>"),
+  });
+  assert.deepEqual(
+    blockTagsIn(src, body.start, body.end).map((h) => h.tag),
+    ["div", "h2"],
+  );
+  const attrs = jsxAttributes(
+    `<AuthLayout description={<p>Bring your menu.</p>} />`,
+    "<AuthLayout".length,
+  );
+  const description = attrs.find((a) => a.name === "description");
+  assert.ok(description.expression);
+  assert.deepEqual(
+    blockTagsIn(
+      `<AuthLayout description={<p>Bring your menu.</p>} />`,
+      description.expression.start,
+      description.expression.end,
+    ).map((h) => h.tag),
+    ["p"],
+  );
+});
+
+test("the audit flags block elements in phrasing-only slots", async (t) => {
+  // #102: Banner/AuthLayout wrap phrasing slots in <p>; block children nested.
+  const app = [
+    'import { Banner, AuthLayout, ThemeProvider } from "@tonycodes-ui/mortar";',
+    "export function App() {",
+    "  return (",
+    "    <ThemeProvider>",
+    "      <Banner>",
+    "        <div><h2>Start ordering</h2><p>Free orders.</p></div>",
+    "      </Banner>",
+    '      <AuthLayout title="Sign up" description={<p>Bring your menu.</p>}>',
+    "        <form />",
+    "      </AuthLayout>",
+    '      <Banner>Safe <strong>phrasing</strong> with a <a href="/">link</a>.</Banner>',
+    '      <AuthLayout title="Ok" description="A string is fine."><form /></AuthLayout>',
+    "    </ThemeProvider>",
+    "  );",
+    "}",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/App.tsx": app } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const phrasing = report.findings
+    .filter((f) => f.rule === "invalid-phrasing")
+    .map((f) => [f.line, f.message]);
+  assert.deepEqual(phrasing, [
+    [
+      6,
+      "<Banner> children is phrasing-only (rendered inside a <p>); <div> is a block element.",
+    ],
+    [
+      6,
+      "<Banner> children is phrasing-only (rendered inside a <p>); <h2> is a block element.",
+    ],
+    [
+      6,
+      "<Banner> children is phrasing-only (rendered inside a <p>); <p> is a block element.",
+    ],
+    [
+      8,
+      "<AuthLayout> description is phrasing-only (rendered inside a <p>); <p> is a block element.",
+    ],
+  ]);
+  assert.ok(RULES["invalid-phrasing"]);
 });
 
 // #65: the retired private-registry package must not look like a clean install.
