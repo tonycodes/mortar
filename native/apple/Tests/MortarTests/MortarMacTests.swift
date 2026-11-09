@@ -141,6 +141,52 @@ final class MortarMacTests: XCTestCase {
         }
     }
 
+    /// Cancel and Save share a row when they fit, and stack on the trailing
+    /// edge when they don't (the largest text sizes). Resizing across that
+    /// point has to settle: a layout that remeasures itself here loops.
+    func testFormActionsStayInARowWhenTheyFitAndStackWhenTheyDoNot() {
+        let wide = MacWindow.host(SettingsFormSample(isSaving: false), size: CGSize(width: 1100, height: 800))
+        defer { wide.close() }
+        let cancel = frame(labelled: "Cancel", in: wide)
+        let save = frame(labelled: "Save changes", in: wide)
+        XCTAssertEqual(cancel.midY, save.midY, accuracy: 8, "wide actions share a row: cancel \(cancel) save \(save)")
+        XCTAssertGreaterThan(save.maxX, cancel.maxX + 8, "Save sits trailing of Cancel")
+
+        let narrow = MacWindow.host(
+            SettingsFormSample(isSaving: false)
+                .environment(\.dynamicTypeSize, .accessibilityExtraExtraExtraLarge),
+            size: CGSize(width: 380, height: 800)
+        )
+        defer { narrow.close() }
+        let stackedCancel = frame(labelled: "Cancel", in: narrow)
+        let stackedSave = frame(labelled: "Save changes", in: narrow)
+        XCTAssertGreaterThan(
+            abs(stackedCancel.midY - stackedSave.midY), 20,
+            "large text stacks the actions: cancel \(stackedCancel) save \(stackedSave)"
+        )
+        XCTAssertEqual(
+            stackedCancel.maxX, stackedSave.maxX, accuracy: 6,
+            "stacked actions share a trailing edge: cancel \(stackedCancel) save \(stackedSave)"
+        )
+
+        for width in [380.0, 1100, 640, 900] {
+            narrow.setContentSize(CGSize(width: width, height: 800))
+            assertSettles(narrow, "actions \(width)")
+        }
+    }
+
+    /// The accessibility frame of the first element with this label.
+    /// Screen coordinates, origin at the bottom left.
+    private func frame(labelled label: String, in window: NSWindow, line: UInt = #line) -> CGRect {
+        guard let element = MacWindow.element(labelled: label, in: window) else {
+            XCTFail("No \(label); accessibility labels: \(MacWindow.labels(in: window))", line: line)
+            return .zero
+        }
+        let rect = element.accessibilityFrame?() ?? .zero
+        XCTAssertFalse(rect.isEmpty, "\(label) has no frame", line: line)
+        return rect
+    }
+
     /// Lays the window (and any sheet) out; fails if it takes more than a
     /// second, which a layout loop would.
     private func assertSettles(_ window: NSWindow, _ step: String, line: UInt = #line) {

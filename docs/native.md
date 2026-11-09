@@ -167,6 +167,8 @@ On both platforms the switch sits at the end of its row, after the label, as in 
 
 `MortarMacTests` runs on the Mac itself, not as an iPad app: each screen is hosted in a real window, in light and dark, at more than one size, and resized. It also opens and closes a form with text and secure fields in a split view's detail and in a sheet, many times, and fails if layout doesn't settle. Its references are recorded on CI's Mac in the same way.
 
+The layout-loop tests, and the test that form actions share a row when they fit and stack when they don't, run in the **Mortar for SwiftUI** workflow on `macos-15` (Xcode 16.4) and `macos-26` (the image's Xcode 26). GitHub's `macos-26` image is the current macOS 26 release, not the 26.2 machine that first reported the loop. Snapshot comparison stays on the pinned macOS 15 simulator job.
+
 Rendering differs between iOS versions, so the reference images are recorded on CI's simulator, not on a developer's Mac. To add or update one, delete the old image (or add the test), push, and download the `mortar-swift-snapshots-<sha>` artifact from the failed run: it holds the newly recorded images and any failed comparisons. Review them, commit them under `__Snapshots__`, and push again. Mac references are in the separate `mortar-mac-snapshots-<pull-request-head-sha>` artifact from the Mac job. Review those before committing: a dark sidebar that is a blank white panel is macOS 26's sidebar glass drawn offscreen, and is not a usable reference.
 
 ## Jetpack Compose
