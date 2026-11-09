@@ -40,8 +40,9 @@ struct AccountFooterSample: View {
             HStack(spacing: 10) {
                 MortarAvatar(name: "Ada Lovelace", size: .sm)
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(verbatim: "Ada Lovelace")
+                    Text(verbatim: "Ada Lovelace").lineLimit(1)
                     Text(verbatim: "ada@example.com").foregroundStyle(.secondary).font(.footnote)
+                        .lineLimit(1).truncationMode(.middle)
                 }
                 Spacer(minLength: 0)
                 Image(systemName: "chevron.up.chevron.down").foregroundStyle(.secondary)
