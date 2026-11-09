@@ -96,11 +96,11 @@ On both platforms the switch sits at the end of its row, after the label, as in 
 
 ### Snapshot tests
 
-`native/apple/Tests/MortarTests` renders each component on an iPhone simulator in light, dark and a large accessibility text size, and a branded screen on iPad, with [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing). The **Mortar for SwiftUI** workflow runs them on macOS on every change to `Package.swift` or `native/apple`, and builds the package for Mac.
+`native/apple/Tests/MortarTests` renders each component on an iPhone simulator in light, dark and a large accessibility text size, and a branded screen on iPad, with [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing). The **Mortar for SwiftUI** workflow runs those snapshots on macOS 15, and runs `MortarMacTests` in a real Mac window on macOS 26, on every change to `Package.swift`, `native/apple` or that workflow.
 
 `MortarMacTests` runs on the Mac itself, not as an iPad app: each screen is hosted in a real window, in light and dark, at more than one size, and resized. Its references are recorded on CI's Mac in the same way.
 
-Rendering differs between iOS versions, so the reference images are recorded on CI's simulator, not on a developer's Mac. To add or update one, delete the old image (or add the test), push, and download the `mortar-swift-snapshots-<sha>` artifact from the failed run: it holds the newly recorded images and any failed comparisons. Review them, commit them under `__Snapshots__`, and push again.
+Rendering differs between iOS versions, so the reference images are recorded on CI's simulator, not on a developer's Mac. To add or update one, delete the old image (or add the test), push, and download the `mortar-swift-snapshots-<sha>` artifact from the failed run: it holds the newly recorded images and any failed comparisons. Review them, commit them under `__Snapshots__`, and push again. Mac references are in the separate `mortar-mac-snapshots-<pull-request-head-sha>` artifact from the Mac job. Review those before committing: a dark sidebar that is a blank white panel is macOS 26's sidebar glass drawn offscreen, and is not a usable reference.
 
 ## Jetpack Compose
 
