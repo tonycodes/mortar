@@ -238,6 +238,32 @@ final class MortarSnapshotTests: XCTestCase {
         }
     }
 
+    func testCommentComposer() {
+        check(ComposerStatesSample())
+    }
+
+    func testConversation() {
+        for (name, traits) in phone {
+            assertSnapshot(
+                of: ConversationSample(),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13), traits: traits),
+                named: name
+            )
+        }
+        assertSnapshot(
+            of: ConversationSample(),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPadPro11),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "ipad"
+        )
+        assertSnapshot(
+            of: ConversationSample(isEmpty: true),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "empty"
+        )
+    }
+
     func testBrandOnIPad() {
         let brand = MortarTheme(
             light: { var p = MortarTokens.light; p.primary = 0x1D4ED8; p.primaryActive = 0x1E40AF; p.focus = 0x1D4ED8; return p }(),
