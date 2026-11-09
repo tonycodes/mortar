@@ -12,6 +12,10 @@ import XCTest
 /// compared on the runtime CI pins.
 @MainActor
 final class MortarSnapshotTests: XCTestCase {
+    // TEMPORARY: see SnapshotLog.
+    nonisolated override class func setUp() { super.setUp(); SnapshotLog.start() }
+    nonisolated override class func tearDown() { SnapshotLog.finish(); super.tearDown() }
+
     private let phone: [(String, UITraitCollection)] = [
         ("light", UITraitCollection(userInterfaceStyle: .light)),
         ("dark", UITraitCollection(userInterfaceStyle: .dark)),

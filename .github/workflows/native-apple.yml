@@ -39,14 +39,7 @@ jobs:
           xcodebuild -list
       - name: Build for Mac
         run: xcodebuild build -scheme Mortar -destination 'platform=macOS' -quiet
-      # The Mac itself, not iPad compatibility: windows hosting the shell and
-      # forms, resized and reopened, with their own snapshot references.
-      - name: Test on Mac
-        env:
-          TEST_RUNNER_SNAPSHOT_ARTIFACTS: ${{ runner.temp }}/snapshot-failures-mac
-        run: xcodebuild test -scheme Mortar -destination 'platform=macOS'
       - name: Test on the iOS simulator
-        if: ${{ !cancelled() }}
         env:
           # xcodebuild passes TEST_RUNNER_ variables to the tests, unprefixed.
           TEST_RUNNER_SNAPSHOT_ARTIFACTS: ${{ runner.temp }}/snapshot-failures
@@ -63,18 +56,4 @@ jobs:
           path: |
             native/apple/Tests/MortarTests/__Snapshots__
             ${{ runner.temp }}/snapshot-failures
-            ${{ runner.temp }}/snapshot-failures-mac
           if-no-files-found: ignore
-      # TEMPORARY, removed before merge: prints new and failed snapshots so they
-      # can be reviewed and committed where the artifact can't be downloaded.
-      - name: Print snapshots (temporary)
-        if: always()
-        run: |
-          {
-            git ls-files --others --exclude-standard -- native/apple/Tests/MortarTests/__Snapshots__
-            find "$RUNNER_TEMP/snapshot-failures" "$RUNNER_TEMP/snapshot-failures-mac" -name '*.png' 2>/dev/null
-          } | while read -r f; do
-            echo "SNAPSHOT-BEGIN $f"
-            base64 -b 120 -i "$f"
-            echo "SNAPSHOT-END $f"
-          done

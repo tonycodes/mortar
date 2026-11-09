@@ -10,6 +10,10 @@ import XCTest
 /// window size. The references are recorded on CI's Mac (see docs/native.md).
 @MainActor
 final class MortarMacTests: XCTestCase {
+    // TEMPORARY: see SnapshotLog.
+    nonisolated override class func setUp() { super.setUp(); SnapshotLog.start() }
+    nonisolated override class func tearDown() { SnapshotLog.finish(); super.tearDown() }
+
     func testAppShellWide() {
         for dark in [false, true] {
             let window = MacWindow.host(AppShellSectionsSample(), size: CGSize(width: 980, height: 620), dark: dark)
