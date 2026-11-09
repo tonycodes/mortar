@@ -57,3 +57,61 @@ jobs:
             native/apple/Tests/MortarTests/__Snapshots__
             ${{ runner.temp }}/snapshot-failures
           if-no-files-found: ignore
+
+  # The snapshot job above builds for Mac and tests on the iOS simulator.
+  # It does not run MortarMacTests. The connector layout loop was reported
+  # on macOS 26.2, so these tests also run on the macos-26 runner. Snapshot
+  # comparison stays on the pinned macOS 15 simulator: rendering differs
+  # by OS, and this job runs only the tests that settle without references.
+  mac-layout-loop:
+    name: Mac layout-loop tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Xcode 16.4 matches the snapshot job. Its path is not on macos-26.
+          - os: macos-15
+            developer_dir: /Applications/Xcode_16.4.app/Contents/Developer
+          # Image default (Xcode 26). The workflow env pins Xcode 16.4,
+          # which this image does not have.
+          - os: macos-26
+            developer_dir: /Applications/Xcode.app/Contents/Developer
+    env:
+      DEVELOPER_DIR: ${{ matrix.developer_dir }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Toolchain
+        run: |
+          {
+            echo "### Mac layout-loop runner"
+            echo
+            echo '```'
+            sw_vers
+            xcodebuild -version
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          sw_vers
+          xcodebuild -version
+          test -d "$DEVELOPER_DIR"
+      - name: Layout-loop tests
+        run: |
+          set -o pipefail
+          log="${RUNNER_TEMP}/mac-layout-loop.log"
+          xcodebuild test -scheme Mortar \
+            -destination 'platform=macOS' \
+            -only-testing:MortarTests/MortarMacTests/testConnectorFormOpensAndClosesWithoutLayoutLoop \
+            -only-testing:MortarTests/MortarMacTests/testConnectorSheetPresentsAndDismissesWithoutLayoutLoop \
+            -only-testing:MortarTests/MortarMacTests/testFormActionsStayInARowWhenTheyFitAndStackWhenTheyDoNot \
+            2>&1 | tee "$log"
+          grep -q "TEST SUCCEEDED" "$log"
+          for test in \
+            testConnectorFormOpensAndClosesWithoutLayoutLoop \
+            testConnectorSheetPresentsAndDismissesWithoutLayoutLoop \
+            testFormActionsStayInARowWhenTheyFitAndStackWhenTheyDoNot
+          do
+            grep -E "${test}.*passed" "$log"
+          done
