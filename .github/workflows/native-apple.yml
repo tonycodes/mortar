@@ -17,17 +17,17 @@ permissions:
 concurrency:
   group: native-apple-${{ github.ref }}
   cancel-in-progress: true
-env:
-  # The snapshot references are recorded with this Xcode and simulator;
-  # rendering differs between versions, so change them only together with
-  # re-recorded images.
-  DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
-  SIMULATOR: platform=iOS Simulator,name=iPhone 16,OS=18.6
 jobs:
   test:
     name: Swift package and snapshots
     runs-on: macos-15
     timeout-minutes: 30
+    env:
+      # The snapshot references are recorded with this Xcode and simulator;
+      # rendering differs between versions, so change them only together with
+      # re-recorded images.
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      SIMULATOR: platform=iOS Simulator,name=iPhone 16,OS=18.6
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,4 +56,37 @@ jobs:
           path: |
             native/apple/Tests/MortarTests/__Snapshots__
             ${{ runner.temp }}/snapshot-failures
+          if-no-files-found: ignore
+  # MortarMacTests only compile for macOS, so the iOS job never runs them.
+  # This job uses the runner's default Xcode, not the pinned snapshot one.
+  test-mac:
+    name: Mac package and MortarMacTests
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          xcode-select -p
+          ls -d /Applications/Xcode*.app || true
+          xcodebuild -list
+      - name: Test on Mac
+        if: ${{ !cancelled() }}
+        env:
+          # xcodebuild passes TEST_RUNNER_ variables to the tests, unprefixed.
+          TEST_RUNNER_SNAPSHOT_ARTIFACTS: ${{ runner.temp }}/snapshot-failures-mac
+        run: |
+          xcodebuild test -scheme Mortar \
+            -destination 'platform=macOS'
+      - name: Upload snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mortar-mac-snapshots-${{ github.sha }}
+          path: |
+            native/apple/Tests/MortarTests/__Snapshots__
+            ${{ runner.temp }}/snapshot-failures-mac
           if-no-files-found: ignore
