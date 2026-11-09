@@ -154,7 +154,7 @@ final class MortarMacTests: XCTestCase {
 
         let narrow = MacWindow.host(
             SettingsFormSample(isSaving: false)
-                .environment(\.dynamicTypeSize, .accessibilityExtraExtraExtraLarge),
+                .environment(\.dynamicTypeSize, .accessibility5),
             size: CGSize(width: 380, height: 800)
         )
         defer { narrow.close() }
@@ -182,7 +182,7 @@ final class MortarMacTests: XCTestCase {
             XCTFail("No \(label); accessibility labels: \(MacWindow.labels(in: window))", line: line)
             return .zero
         }
-        let rect = element.accessibilityFrame?() ?? .zero
+        let rect = element.accessibilityFrame()
         XCTAssertFalse(rect.isEmpty, "\(label) has no frame", line: line)
         return rect
     }
