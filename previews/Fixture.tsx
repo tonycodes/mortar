@@ -338,6 +338,15 @@ export function PreviewCase({ name }: { name: string }) {
             ]}
           />
           <UI.Dropdown
+            label="Open row menu"
+            iconOnly
+            variant="ghost"
+            items={[
+              { label: "View", onSelect: () => setMenuChoice("view") },
+              { label: "Archive", onSelect: () => setMenuChoice("archive") },
+            ]}
+          />
+          <UI.Dropdown
             label="More options"
             icon={icons.more}
             iconOnly
