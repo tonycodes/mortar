@@ -283,6 +283,19 @@ test("Dropdown marks its trigger with the shared chevron icon", () => {
   );
 });
 
+test("An icon-only Dropdown without an icon shows the ellipsis and names itself", () => {
+  const markup = html(Dropdown, {
+    label: "Actions for acme/api",
+    items: [{ label: "Edit" }],
+    iconOnly: true,
+    variant: "ghost",
+  });
+  assert.match(markup, /aria-label="Actions for acme\/api"/);
+  assert.match(markup, /data-icon-only="true"/);
+  assert.match(markup, /<circle cx="4.5"/);
+  assert.doesNotMatch(markup, />Actions for acme\/api</);
+});
+
 test("EmptyState takes any heading level and an optional description", () => {
   const markup = html(EmptyState, {
     title: "No results",

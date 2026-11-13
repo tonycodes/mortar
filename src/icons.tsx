@@ -75,6 +75,17 @@ export function ChevronDown() {
   );
 }
 
+/** Three horizontal dots: the "more actions" trigger of an icon-only menu. */
+export function More() {
+  return (
+    <Icon fill="currentColor">
+      <circle cx="4.5" cy="10" r="1.5" />
+      <circle cx="10" cy="10" r="1.5" />
+      <circle cx="15.5" cy="10" r="1.5" />
+    </Icon>
+  );
+}
+
 export function ChevronLeft() {
   return (
     <Icon>
