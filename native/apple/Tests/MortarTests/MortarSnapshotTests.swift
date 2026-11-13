@@ -214,6 +214,59 @@ final class MortarSnapshotTests: XCTestCase {
         }
     }
 
+    func testAppShellSections() {
+        let large = UITraitCollection(traitsFrom: [
+            UITraitCollection(userInterfaceStyle: .light),
+            UITraitCollection(preferredContentSizeCategory: .accessibilityLarge),
+        ])
+        let variants: [(String, ViewImageConfig, UITraitCollection)] = [
+            ("ipad", .iPadPro11, UITraitCollection(userInterfaceStyle: .light)),
+            ("ipad-dark", .iPadPro11, UITraitCollection(userInterfaceStyle: .dark)),
+            ("ipad-large-text", .iPadPro11, large),
+            ("iphone", .iPhone13, UITraitCollection(userInterfaceStyle: .light)),
+        ]
+        for (name, device, traits) in variants {
+            // A tab bar can't show a long name; the sidebar variants cover it.
+            // Only the selected tab's icon shows in the image: see
+            // testTabBarItemsHaveIcons.
+            assertSnapshot(
+                of: AppShellSectionsSample(longName: device.size?.width ?? 0 > 600),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: device), traits: traits),
+                named: name
+            )
+        }
+    }
+
+    /// Every tab on iPhone carries its icon. The snapshot rendering drops
+    /// the tint UIKit gives unselected tab icons, so the image shows only
+    /// the selected tab's; this checks the tab bar itself.
+    func testTabBarItemsHaveIcons() {
+        let controller = UIHostingController(rootView: AppShellSectionsSample(longName: false))
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 844))
+        window.traitOverrides.horizontalSizeClass = .compact
+        window.rootViewController = controller
+        window.isHidden = false
+        controller.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
+        guard let tabBar = Self.find(UITabBar.self, in: controller.view) else {
+            return XCTFail("No tab bar in the iPhone shell")
+        }
+        let items = tabBar.items ?? []
+        XCTAssertEqual(items.map(\.title), ["Inbox", "Drafts", "Sent", "Planning", "Design"])
+        for item in items {
+            XCTAssertNotNil(item.image, "\(item.title ?? "?") has no icon")
+        }
+        XCTAssertEqual(items.map(\.badgeValue), ["12", nil, nil, "3", nil])
+    }
+
+    private static func find<T: UIView>(_ type: T.Type, in view: UIView) -> T? {
+        if let match = view as? T { return match }
+        for child in view.subviews {
+            if let match = find(type, in: child) { return match }
+        }
+        return nil
+    }
+
     func testBrandOnIPad() {
         let brand = MortarTheme(
             light: { var p = MortarTokens.light; p.primary = 0x1D4ED8; p.primaryActive = 0x1E40AF; p.focus = 0x1D4ED8; return p }(),
