@@ -144,7 +144,7 @@ jobs:
     needs: prepare
     if: needs.prepare.outputs.publish == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     environment:
       name: npm-release
       url: https://www.npmjs.com/package/@tonycodes-ui/mortar/v/${{ needs.prepare.outputs.version }}
@@ -236,11 +236,12 @@ jobs:
           set -euo pipefail
           EXPECTED=$(jq -r .integrity provenance.json)
           INTEGRITY=""
-          # A new version can take a short while to reach every npmjs.com edge.
-          for attempt in 1 2 3 4 5 6 7 8 9 10; do
+          # npm now processes a publish before serving it, which has taken about ten
+          # minutes; allow fifteen before treating the release as missing.
+          for attempt in $(seq 1 60); do
             INTEGRITY=$(npm view "@tonycodes-ui/mortar@$VERSION" dist.integrity --registry "$REGISTRY" --userconfig "$RUNNER_TEMP/anonymous.npmrc" --prefer-online 2>/dev/null || true)
             [ -n "$INTEGRITY" ] && break
-            echo "Waiting for npmjs.com to serve $VERSION (attempt $attempt of 10)."
+            echo "Waiting for npmjs.com to serve $VERSION (attempt $attempt of 60)."
             sleep 15
           done
           [ "$INTEGRITY" = "$EXPECTED" ] || { echo "::error::Registry integrity '$INTEGRITY' differs from provenance $EXPECTED"; exit 1; }
