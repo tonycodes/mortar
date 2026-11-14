@@ -78,7 +78,11 @@ test("the published archive is the provenance-checked one and versions are never
   assert.match(publish, /DIST_TAG=next/);
   assert.match(publish, /dist\.integrity/);
   assert.match(publish, /differs from provenance/);
-  assert.match(publish, /for attempt in 1 2 3 4 5 6 7 8 9 10; do/);
+  // npm processes a publish before serving it; wait up to 15 minutes (60 × 15 s),
+  // inside a job limit that leaves room for the steps before it.
+  assert.match(publish, /for attempt in \$\(seq 1 60\); do/);
+  assert.match(publish, /sleep 15/);
+  assert.match(publish, /timeout-minutes: 25/);
   assert.match(
     prepare,
     /node scripts\/release-notes\.mjs "\$VERSION" > "\$DIR\/notes\.md"/,
