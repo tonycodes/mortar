@@ -49,31 +49,58 @@ Button("Cancel", action: cancel).buttonStyle(.mortar(.ghost))
 
 A brand is a `MortarTheme`: its light and dark `MortarPalette`s, font family names (registered by the app) and density. Every component reads the palette that matches the colour scheme, and scales its text with Dynamic Type.
 
-| Component                                                  | Web equivalent   | Notes                                                                                                                                                                                                  |
-| ---------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `MortarButton`, `.buttonStyle(.mortar(_:size:isLoading:))` | Button           | `primary` (the default, as on the web), `secondary`, `ghost`, `danger`, `accent`; `sm`, `md`, `lg`; loading; SF Symbol, icon-only with the title as its accessible name. Medium is at least 44pt tall. |
-| `MortarBadge`                                              | Badge            | Tones `neutral`, `info`, `success`, `warning`, `danger`.                                                                                                                                               |
-| `MortarCard`                                               | Card             | Title, description, header actions, footer, `compact` or `none` padding, `muted` tone.                                                                                                                 |
-| `MortarTextField`                                          | Input            | Label, prompt, hint, error, required marker, secure entry. VoiceOver reads the label as its name, then "required", the error and the hint.                                                             |
-| `MortarSwitch`, `.toggleStyle(.mortar)`                    | Switch           | The whole row toggles; VoiceOver sees a standard switch.                                                                                                                                               |
-| `MortarAvatar`                                             | Avatar           | Image URL with initials while loading or on failure, five sizes, circle or square, online or offline status, decorative.                                                                               |
-| `MortarNotice`                                             | Notice           | Tone, message, actions, dismiss button, VoiceOver announcement.                                                                                                                                        |
-| `MortarEmptyState`                                         | EmptyState       | SF Symbol, description, action, dashed, centred or leading.                                                                                                                                            |
-| `MortarCheckbox`                                           | Checkbox         | Label, description, error, required marker. The whole row toggles; VoiceOver reads a checkbox.                                                                                                         |
-| `MortarRadioGroup`                                         | RadioGroup       | Label, hint, error, options with descriptions and disabled options.                                                                                                                                    |
-| `MortarSegmentedControl`                                   | SegmentedControl | A labelled set of segments; scrolls sideways when they don't fit.                                                                                                                                      |
-| `MortarProgressBar`                                        | ProgressBar      | Label, value and total, a value label (a percentage by default), a status tone.                                                                                                                        |
-| `MortarDivider`                                            | Divider          | Optional label, soft line, spacing `none`, `sm`, `md` or `lg`.                                                                                                                                         |
-| `MortarStackedList`                                        | StackedList      | Rows with an avatar or SF Symbol, description, trailing text and an action; grouped under headings; chevrons.                                                                                          |
-| `MortarAppShell`                                           | AppShell         | Top-level destinations: a tab bar on iPhone, a sidebar on iPad and Mac, each destination in its own navigation stack.                                                                                  |
+| Component                                                  | Web equivalent   | Notes                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `MortarButton`, `.buttonStyle(.mortar(_:size:isLoading:))` | Button           | `primary` (the default, as on the web), `secondary`, `ghost`, `danger`, `accent`; `sm`, `md`, `lg`; loading; SF Symbol, icon-only with the title as its accessible name. Medium is at least 44pt tall.                                     |
+| `MortarBadge`                                              | Badge            | Tones `neutral`, `info`, `success`, `warning`, `danger`.                                                                                                                                                                                   |
+| `MortarCard`                                               | Card             | Title, description, header actions, footer, `compact` or `none` padding, `muted` tone.                                                                                                                                                     |
+| `MortarTextField`                                          | Input            | Label, prompt, hint, error, required marker, secure entry. VoiceOver reads the label as its name, then "required", the error and the hint.                                                                                                 |
+| `MortarSwitch`, `.toggleStyle(.mortar)`                    | Switch           | The whole row toggles; VoiceOver sees a standard switch.                                                                                                                                                                                   |
+| `MortarAvatar`                                             | Avatar           | Image URL with initials while loading or on failure, five sizes, circle or square, online or offline status, decorative.                                                                                                                   |
+| `MortarNotice`                                             | Notice           | Tone, message, actions, dismiss button, VoiceOver announcement.                                                                                                                                                                            |
+| `MortarEmptyState`                                         | EmptyState       | SF Symbol, description, action, dashed, centred or leading.                                                                                                                                                                                |
+| `MortarCheckbox`                                           | Checkbox         | Label, description, error, required marker. The whole row toggles; VoiceOver reads a checkbox.                                                                                                                                             |
+| `MortarRadioGroup`                                         | RadioGroup       | Label, hint, error, options with descriptions and disabled options.                                                                                                                                                                        |
+| `MortarSegmentedControl`                                   | SegmentedControl | A labelled set of segments; scrolls sideways when they don't fit.                                                                                                                                                                          |
+| `MortarProgressBar`                                        | ProgressBar      | Label, value and total, a value label (a percentage by default), a status tone.                                                                                                                                                            |
+| `MortarDivider`                                            | Divider          | Optional label, soft line, spacing `none`, `sm`, `md` or `lg`.                                                                                                                                                                             |
+| `MortarStackedList`                                        | StackedList      | Rows with an avatar or SF Symbol, description, trailing text and an action; grouped under headings; chevrons.                                                                                                                              |
+| `MortarAppShell`                                           | AppShell         | Top-level destinations: a tab bar on iPhone, a sidebar on iPad and Mac. Labelled `sections` and per-item counts; an optional brand title; a sidebar `footer` for the app's account menu. Each destination starts its own navigation stack. |
+
+### App shell
+
+`MortarAppShell` takes the destinations and their screens; Mortar draws the sidebar's surface, selection, spacing and keyboard focus ring, so an app doesn't restyle it.
+
+```swift
+MortarAppShell(selection: $destination, items: [
+    MortarNavigationItem("Inbox", systemImage: "tray", value: .inbox, count: unread),
+    MortarNavigationItem("Sent", systemImage: "paperplane", value: .sent),
+], sections: [
+    MortarNavigationGroup("Projects", items: projects.map {
+        MortarNavigationItem(LocalizedStringKey($0.name), systemImage: "folder", value: .project($0.id))
+    }),
+]) { destination in
+    screen(for: destination)
+} footer: {
+    AccountMenu()  // the app's own Menu: avatar, name, settings, sign out
+}
+```
+
+- `sections` are the web AppShell's labelled groups. On iPhone they join the tab bar after `items`, and iOS moves tabs past the fifth into More.
+- `count` shows beside the label, and as the tab's badge on iPhone; VoiceOver reads it as the item's value. A count of 0 shows nothing.
+- Without a brand, the sidebar keeps a compact bar for its toggle on iPad instead of an empty large title.
+- The footer is pinned under the sidebar's list on iPad and Mac. iPhone has no sidebar, so give account actions a destination there.
+- Changing destination starts it at its root, so Back never leads to a screen pushed under another destination.
 
 On both platforms the switch sits at the end of its row, after the label, as in iOS and Android settings; on the web it comes first.
 
 ### Snapshot tests
 
-`native/apple/Tests/MortarTests` renders each component on an iPhone simulator in light, dark and a large accessibility text size, and a branded screen on iPad, with [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing). The **Mortar for SwiftUI** workflow runs them on macOS on every change to `Package.swift` or `native/apple`, and builds the package for Mac.
+`native/apple/Tests/MortarTests` renders each component on an iPhone simulator in light, dark and a large accessibility text size, and a branded screen on iPad, with [swift-snapshot-testing](https://github.com/pointfreeco/swift-snapshot-testing). The **Mortar for SwiftUI** workflow runs those snapshots on macOS 15, and runs `MortarMacTests` in a real Mac window on macOS 26, on every change to `Package.swift`, `native/apple` or that workflow.
 
-Rendering differs between iOS versions, so the reference images are recorded on CI's simulator, not on a developer's Mac. To add or update one, delete the old image (or add the test), push, and download the `mortar-swift-snapshots-<sha>` artifact from the failed run: it holds the newly recorded images and any failed comparisons. Review them, commit them under `__Snapshots__`, and push again.
+`MortarMacTests` runs on the Mac itself, not as an iPad app: each screen is hosted in a real window, in light and dark, at more than one size, and resized. Its references are recorded on CI's Mac in the same way.
+
+Rendering differs between iOS versions, so the reference images are recorded on CI's simulator, not on a developer's Mac. To add or update one, delete the old image (or add the test), push, and download the `mortar-swift-snapshots-<sha>` artifact from the failed run: it holds the newly recorded images and any failed comparisons. Review them, commit them under `__Snapshots__`, and push again. Mac references are in the separate `mortar-mac-snapshots-<pull-request-head-sha>` artifact from the Mac job. Review those before committing: a dark sidebar that is a blank white panel is macOS 26's sidebar glass drawn offscreen, and is not a usable reference.
 
 ## Jetpack Compose
 
