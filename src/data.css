@@ -294,6 +294,67 @@
   :where(.m-data-table) tr[data-selected] > [data-pin] {
     background-color: var(--m-selected);
   }
+  /* DataGrid pins columns to the start too; the inline inset comes from the
+     measured widths of the pinned columns before it. */
+  :where(.m-data-grid) :is(th, td)[data-pin="start"] {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 2;
+    background-color: var(--m-surface);
+    box-shadow: inset -1px 0 0 var(--m-line);
+  }
+  :where(.m-data-grid:dir(rtl)) :is(th, td)[data-pin="start"] {
+    box-shadow: inset 1px 0 0 var(--m-line);
+  }
+  /* Bottom-align labelled filter controls; the selection bar stays centred. */
+  .m-data-grid .m-table-toolbar:has(> .m-data-grid-controls) {
+    align-items: flex-end;
+  }
+  .m-data-grid-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    min-width: 0;
+  }
+  .m-sort-order {
+    display: inline-grid;
+    place-items: center;
+    min-width: 16px;
+    height: 16px;
+    border-radius: var(--m-radius-full);
+    background: var(--m-sunken);
+    color: var(--m-muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-data-grid-columns-panel {
+    z-index: 30;
+    min-width: 200px;
+    margin-top: 4px;
+    padding: 12px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+  }
+  .m-data-grid-columns-panel fieldset {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .m-data-grid-columns-panel legend {
+    margin-bottom: 8px;
+    color: var(--m-muted);
+    font-size: 12px;
+    font-weight: var(--m-weight-semibold);
+  }
+  .m-data-grid-spacer > td {
+    padding: 0;
+    border: 0;
+  }
   /* Column priority follows the table's own width, so a table in a narrow
      panel collapses as it would on a phone. */
   @container m-data-table (max-width: 767px) {

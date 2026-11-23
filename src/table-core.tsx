@@ -46,8 +46,9 @@ const collator = new Intl.Collator(undefined, {
   numeric: true,
   sensitivity: "base",
 });
-const isEmpty = (v: unknown) => v === null || v === undefined || v === "";
-function compareValues(a: unknown, b: unknown) {
+export const isEmpty = (v: unknown) =>
+  v === null || v === undefined || v === "";
+export function compareValues(a: unknown, b: unknown) {
   if (isEmpty(a) || isEmpty(b))
     return isEmpty(a) === isEmpty(b) ? 0 : isEmpty(a) ? 1 : -1;
   if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();

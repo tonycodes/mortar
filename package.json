@@ -53,6 +53,10 @@
     "./email": {
       "types": "./dist/email.d.ts",
       "import": "./dist/email.js"
+    },
+    "./data-grid": {
+      "types": "./dist/data-grid.d.ts",
+      "import": "./dist/data-grid.js"
     }
   },
   "sideEffects": [
@@ -78,10 +82,18 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.0",
-    "@react-email/components": "^1.0.12"
+    "@react-email/components": "^1.0.12",
+    "@tanstack/react-table": "^9.3.1",
+    "@tanstack/react-virtual": "^3.14.28"
   },
   "peerDependenciesMeta": {
     "@react-email/components": {
+      "optional": true
+    },
+    "@tanstack/react-table": {
+      "optional": true
+    },
+    "@tanstack/react-virtual": {
       "optional": true
     }
   },
@@ -102,7 +114,9 @@
     "@playwright/test": "^1.63.0",
     "@axe-core/playwright": "^4.13.0",
     "@modelcontextprotocol/sdk": "^1.32.1",
-    "@react-email/components": "^1.0.12"
+    "@react-email/components": "^1.0.12",
+    "@tanstack/react-table": "^9.3.1",
+    "@tanstack/react-virtual": "^3.14.28"
   },
   "license": "MIT",
   "publishConfig": {
