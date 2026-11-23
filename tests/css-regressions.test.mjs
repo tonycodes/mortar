@@ -365,12 +365,12 @@ test("table end alignment targets cells, not layout inside the toolbar", () => {
 test("an Input's bordered group is as tall as Select and Button", () => {
   // The 1px group border sat outside a full --m-control input, making every
   // Input 2px taller than the controls beside it.
-  const css = section(sources["src/foundation.css"], "Fields: Input, TextArea and Select");
-  const body = selectorBody(css, ".m-input-group input");
-  assert.equal(
-    declaration(body, "min-height"),
-    "calc(var(--m-control) - 2px)",
+  const css = section(
+    sources["src/foundation.css"],
+    "Fields: Input, TextArea and Select",
   );
+  const body = selectorBody(css, ".m-input-group input");
+  assert.equal(declaration(body, "min-height"), "calc(var(--m-control) - 2px)");
   assert.equal(
     declaration(selectorBody(css, ".m-input-group"), "border"),
     "1px solid var(--m-line-strong)",
