@@ -171,7 +171,8 @@
     --m-cell-pad-y: 6px;
     --m-cell-pad-x: 10px;
   }
-  :is(.m-data-table, .m-table) [data-align="end"] {
+  /* Cells only: a Stack or Grid in the toolbar also carries data-align. */
+  :is(.m-data-table, .m-table) :is(th, td)[data-align="end"] {
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
