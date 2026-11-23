@@ -1,5 +1,6 @@
 // The MCP tools. Each handler takes validated arguments and returns a plain
 // object (serialised as JSON text) or a string (returned as text).
+import { renderAudit, RENDER_RULES } from "./render.mjs";
 import { GUIDES } from "./data.mjs";
 import { searchComponents } from "./search.mjs";
 import { componentDetail, buildPacket } from "./packet.mjs";
@@ -191,11 +192,34 @@ export const TOOLS = [
           description:
             "The application directory (where its package.json is). Relative paths resolve from the server's working directory. Defaults to it.",
         },
+        render: {
+          type: "string",
+          description: `Comma-separated URLs of the running app's pages. When set, each page is also opened in a headless browser at 390px and 1280px, light and dark, and checked for: ${Object.entries(
+            RENDER_RULES,
+          )
+            .map(([k, v]) => `${k} (${v.replace(/\.$/, "")})`)
+            .join(
+              "; ",
+            )}. Needs Playwright installed in the app; it only reads the pages.`,
+        },
       },
       additionalProperties: false,
     },
     annotations: { readOnlyHint: true, openWorldHint: false },
-    run: (data, { path = "." }) => auditApp(path, { data }),
+    run: async (data, { path = ".", render }) => {
+      const report = await auditApp(path, { data });
+      if (render) {
+        const urls = render
+          .split(",")
+          .map((u) => u.trim())
+          .filter(Boolean);
+        const rendered = await renderAudit(urls, { appRoot: report.root });
+        report.findings.push(...rendered);
+        for (const f of rendered) report.summary[f.severity]++;
+        report.rendered = urls;
+      }
+      return report;
+    },
   },
 ];
 
