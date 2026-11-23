@@ -1,10 +1,7 @@
 import { useMemo, useState } from "react";
-import { Badge, Button } from "../src/index.js";
-import {
-  DataGrid,
-  type DataGridColumn,
-  type DataGridPagination,
-} from "../src/data-grid.js";
+import * as UI from "../src/index.js";
+import * as Grid from "../src/data-grid.js";
+import type { DataGridColumn, DataGridPagination } from "../src/data-grid.js";
 
 type Status = "draft" | "sent" | "paid" | "overdue";
 interface Invoice {
@@ -91,7 +88,7 @@ export const columns: DataGridColumn<Invoice>[] = [
   {
     key: "status",
     label: "Status",
-    render: (row) => <Badge tone={tones[row.status]}>{row.status}</Badge>,
+    render: (row) => <UI.Badge tone={tones[row.status]}>{row.status}</UI.Badge>,
     sortable: true,
     filter: {
       options: statuses.map((s) => ({
@@ -103,7 +100,28 @@ export const columns: DataGridColumn<Invoice>[] = [
   },
 ];
 
+/** Loading, error and empty fixtures, chosen by the harness with ?state=. */
+function StatePreview({ state }: { state: string }) {
+  return (
+    <div data-state={state}>
+      <Grid.DataGrid
+        caption="State example"
+        columns={columns}
+        rows={[]}
+        rowLabel={(row) => row.number}
+        loading={state === "loading"}
+        error={state === "error" ? "Check this value" : undefined}
+      />
+    </div>
+  );
+}
+
 export default function Preview() {
+  const state = new URLSearchParams(location.search).get("state");
+  return state ? <StatePreview state={state} /> : <Grids />;
+}
+
+function Grids() {
   const rows = useMemo(() => invoices(100_000), []);
   const paged = useMemo(() => invoices(240), []);
   const [selected, setSelected] = useState<string[]>([]);
@@ -111,22 +129,26 @@ export default function Preview() {
     page: 1,
     pageSize: 25,
   });
+  // The playground Code view shows this element (playground/examples.mjs).
+  const example = (
+    <Grid.DataGrid
+      caption="Invoices (100,000 rows, virtualized)"
+      rows={rows}
+      rowLabel={(row) => row.number}
+      columns={columns}
+      virtualize
+      searchable
+      defaultSort={[{ key: "issued", direction: "descending" }]}
+      selectedIds={selected}
+      onSelectionChange={setSelected}
+      bulkActions={<UI.Button variant="secondary">Mark as paid</UI.Button>}
+      noun="invoices"
+    />
+  );
   return (
     <div style={{ display: "grid", gap: 32 }}>
-      <DataGrid
-        caption="Invoices (100,000 rows, virtualized)"
-        rows={rows}
-        rowLabel={(row) => row.number}
-        columns={columns}
-        virtualize
-        searchable
-        defaultSort={[{ key: "issued", direction: "descending" }]}
-        selectedIds={selected}
-        onSelectionChange={setSelected}
-        bulkActions={<Button variant="secondary">Mark as paid</Button>}
-        noun="invoices"
-      />
-      <DataGrid
+      {example}
+      <Grid.DataGrid
         caption="Invoices (paged)"
         rows={paged}
         rowLabel={(row) => row.number}

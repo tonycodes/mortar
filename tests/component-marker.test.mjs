@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { h, html, UI } from "./support/render.mjs";
 import { readSource } from "./support/css.mjs";
+import * as Grid from "../dist/data-grid.js";
 
 // Every exported component names itself on its root element with
 // data-m-component (DESIGN.md, "Component marker"). Each factory renders the
@@ -161,6 +162,24 @@ const factories = {
         columns: [{ key: "name", label: "Name", render: (row) => row.name }],
         rows: [{ id: "1", name: "A" }],
         rowLabel: (row) => row.name,
+      }),
+  ],
+  DataGrid: [
+    () =>
+      html(Grid.DataGrid, {
+        caption: "Projects",
+        columns: [{ key: "name", label: "Name", render: (row) => row.name }],
+        rows: [{ id: "1", name: "A" }],
+        rowLabel: (row) => row.name,
+      }),
+    () =>
+      html(Grid.DataGrid, {
+        caption: "Projects",
+        columns: [{ key: "name", label: "Name", render: (row) => row.name }],
+        rows: [{ id: "1", name: "A" }],
+        rowLabel: (row) => row.name,
+        virtualize: true,
+        searchable: true,
       }),
   ],
   DescriptionList: [

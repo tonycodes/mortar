@@ -638,10 +638,7 @@ export function DataGrid<T extends { id: string }>({
           style={maxHeight ? { maxHeight } : undefined}
           data-sticky={maxHeight ? true : undefined}
         >
-          <table
-            aria-rowcount={virtualize ? matchingCount + 1 : undefined}
-            aria-multiselectable={onSelectionChange ? true : undefined}
-          >
+          <table aria-rowcount={virtualize ? matchingCount + 1 : undefined}>
             <caption className="m-sr-only">{caption}</caption>
             {ordered.some((col) => col.width) && (
               <colgroup>

@@ -8,6 +8,7 @@
 //   - the kit's `m-*` class names and source file hashes, for the application audit
 // catalog.json and the shipped docs are read at runtime, so the CLI always
 // describes the installed version.
+import { COMPONENT_ENTRIES } from "./entries.mjs";
 import ts from "typescript";
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
@@ -185,6 +186,15 @@ export function agentData(root = ROOT) {
     exports: packageExports(root),
     // @tonycodes-ui/mortar/email, for the audit's import checks.
     emailExports: packageExports(root, "src/email.ts"),
+    // Component subpath entries (scripts/entries.mjs), keyed by subpath.
+    entryExports: Object.fromEntries(
+      Object.entries(COMPONENT_ENTRIES)
+        .filter(([specifier]) => specifier.includes("/mortar/"))
+        .map(([specifier, entry]) => [
+          specifier.slice(specifier.indexOf("/mortar/") + "/mortar".length),
+          packageExports(root, entry),
+        ]),
+    ),
     examples,
     inherited,
     inheritedSets,

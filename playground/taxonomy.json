@@ -111,6 +111,7 @@
           "thumbnail": "StackedList",
           "components": [
             "DataTable",
+            "DataGrid",
             "Table",
             "GridList",
             "StackedList",
