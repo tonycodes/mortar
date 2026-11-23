@@ -47,11 +47,15 @@ async function toned({ page, fixture }, tone, background, ink) {
   ]);
 }
 
+// Table components announce loading in their status region and show errors in
+// a notice; they have no form field to disable or mark invalid.
+const TABLES = new Set(["DataTable", "DataGrid"]);
+
 export const states = Object.freeze({
   disabled: inert,
   async loading(context) {
     const { component, scope } = context;
-    if (component.export === "DataTable") {
+    if (TABLES.has(component.export)) {
       await expect(scope.locator(".m-table-state[role=status]")).toHaveText(
         "Loading records…",
       );
@@ -67,7 +71,7 @@ export const states = Object.freeze({
   },
   async error({ component, scope }) {
     await expect(scope.getByText("Check this value")).toBeVisible();
-    if (component.export !== "DataTable")
+    if (!TABLES.has(component.export))
       await expect(
         scope.locator("input,textarea,select,button[aria-invalid]"),
       ).toHaveAttribute("aria-invalid", "true");

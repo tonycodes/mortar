@@ -329,6 +329,12 @@ test("R9 npm pack dry-run uses the public name and archive", () => {
 
 test("R10 manifest and catalog package fields are the public name", () => {
   const problems = [];
+  // A component may name a subpath its package exports, such as /data-grid.
+  const entries = new Set(
+    Object.keys(JSON.parse(read("package.json")).exports)
+      .filter((key) => !key.endsWith(".css"))
+      .map((key) => PUBLIC + key.slice(1)),
+  );
   const listed = execFileSync(
     "git",
     ["ls-files", "-z", "manifests", "catalog.json"],
@@ -339,12 +345,13 @@ test("R10 manifest and catalog package fields are the public name", () => {
   );
   for (const name of listed.split("\0").filter(Boolean)) {
     const data = JSON.parse(read(name));
-    if (data.package !== PUBLIC)
+    const allowed = name === "catalog.json" ? [PUBLIC] : [...entries];
+    if (!allowed.includes(data.package))
       problems.push(`${name}: package is ${data.package}, not ${PUBLIC}`);
     for (const component of data.components ?? [])
-      if (component.package !== PUBLIC)
+      if (!entries.has(component.package))
         problems.push(
-          `${name}: ${component.id} package is ${component.package}, not ${PUBLIC}`,
+          `${name}: ${component.id} package is ${component.package}, not ${PUBLIC} or one of its entry points`,
         );
   }
   assert.equal(problems.length, 0, problems.join("\n"));
