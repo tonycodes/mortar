@@ -282,6 +282,7 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
   if (emails) guides.push("email");
   const native = !!brief && NATIVE_WORDS.test(brief);
   if (native) guides.push("native");
+  if (selection.some((c) => c.export === "DataGrid")) guides.push("data-grid");
   return {
     package: data.packageName,
     version: data.version,
