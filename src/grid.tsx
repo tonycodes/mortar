@@ -3,6 +3,7 @@
    the markup, styles, keyboard handling and public types; no TanStack type
    appears in the props, so the engine can change without a breaking release. */
 import {
+  useCallback,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -118,7 +119,7 @@ export interface DataGridProps<T extends { id: string }> {
   onPaginationChange?: (pagination: DataGridPagination) => void;
   /** Render only the rows in view. Needs maxHeight (default 32rem when virtualizing). */
   virtualize?: boolean;
-  /** Estimated row height in pixels for virtualization. Default 44. */
+  /** Row height in pixels used for virtualization until a row is measured. Default 44. */
   estimateRowHeight?: number;
   /** Link each row's first cell to a detail page. */
   rowHref?: (row: T) => string | undefined;
@@ -416,9 +417,12 @@ export function DataGrid<T extends { id: string }>({
   // server mode; selections elsewhere are kept.
   const scopeRows = server ? displayRows : table.getFilteredRowModel().rows;
   const scopeIds = useMemo(() => scopeRows.map((row) => row.id), [scopeRows]);
-  const selectedInScope = scopeIds.filter((rowId) => selected.has(rowId));
-  const allInScope =
-    scopeIds.length > 0 && selectedInScope.length === scopeIds.length;
+  // Counted once per selection or result change, not on every scroll frame.
+  const selectedInScope = useMemo(
+    () => scopeIds.reduce((n, rowId) => n + (selected.has(rowId) ? 1 : 0), 0),
+    [scopeIds, selected],
+  );
+  const allInScope = scopeIds.length > 0 && selectedInScope === scopeIds.length;
   const scopeSet = useMemo(() => new Set(scopeIds), [scopeIds]);
   const toggleAll = () =>
     onSelectionChange?.(
@@ -470,13 +474,30 @@ export function DataGrid<T extends { id: string }>({
 
   // Row virtualization: only the rows in view render, with spacer rows keeping
   // the scroll height. Rows keep aria-rowindex so assistive tech knows the size.
+  // Rows share one height, so one rendered row is measured and its height used
+  // for all of them. Measuring each row as it scrolls in would make the
+  // virtualizer recompute every later row's position on each frame.
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [rowHeight, setRowHeight] = useState(estimateRowHeight);
+  const getScrollElement = useCallback(() => scrollRef.current, []);
+  const estimateSize = useCallback(() => rowHeight, [rowHeight]);
   const virtualizer = useVirtualizer({
     count: virtualize ? displayRows.length : 0,
-    getScrollElement: () => scrollRef.current,
-    estimateSize: () => estimateRowHeight,
+    getScrollElement,
+    estimateSize,
     overscan: 8,
   });
+  useLayoutEffect(() => {
+    if (!virtualize) return;
+    const row = scrollRef.current?.querySelector<HTMLElement>(
+      "tbody tr:not(.m-data-grid-spacer)",
+    );
+    const height = row?.getBoundingClientRect().height;
+    if (height && Math.abs(height - rowHeight) > 0.5) setRowHeight(height);
+    // Only when row height can change: not on every scroll frame, where a
+    // measurement would force a synchronous layout.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [virtualize, density, hiddenKey, displayRows.length > 0, rowHeight]);
   const items = virtualize ? virtualizer.getVirtualItems() : [];
   const windowRows = virtualize
     ? items.map((item) => ({ row: displayRows[item.index], index: item.index }))
@@ -695,7 +716,7 @@ export function DataGrid<T extends { id: string }>({
                   >
                     <SelectAll
                       checked={allInScope}
-                      partial={selectedInScope.length > 0 && !allInScope}
+                      partial={selectedInScope > 0 && !allInScope}
                       onChange={toggleAll}
                     />
                   </th>
@@ -765,8 +786,6 @@ export function DataGrid<T extends { id: string }>({
                     aria-rowindex={
                       virtualize ? rowOffset + index + 2 : undefined
                     }
-                    ref={virtualize ? virtualizer.measureElement : undefined}
-                    data-index={virtualize ? index : undefined}
                   >
                     {onSelectionChange && (
                       <td

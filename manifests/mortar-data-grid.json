@@ -37,7 +37,7 @@
       "defaultPagination": "{ page: number; pageSize: number }",
       "onPaginationChange": "(pagination: DataGridPagination) => void",
       "virtualize": "boolean (renders only the rows in view)",
-      "estimateRowHeight": "number (pixels; default 44)",
+      "estimateRowHeight": "number (pixels used until the first row is measured; default 44)",
       "rowHref": "(row: T) => string | undefined",
       "maxHeight": "string (default 32rem when virtualizing)",
       "density": "default | compact",

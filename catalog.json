@@ -2971,7 +2971,7 @@
           "defaultPagination": "{ page: number; pageSize: number }",
           "onPaginationChange": "(pagination: DataGridPagination) => void",
           "virtualize": "boolean (renders only the rows in view)",
-          "estimateRowHeight": "number (pixels; default 44)",
+          "estimateRowHeight": "number (pixels used until the first row is measured; default 44)",
           "rowHref": "(row: T) => string | undefined",
           "maxHeight": "string (default 32rem when virtualizing)",
           "density": "default | compact",
@@ -3193,8 +3193,8 @@
         "probe": "data-grid"
       },
       "integrity": {
-        "source": "258b1ab0bb6b6c26e756427866541406c19bc487c6dd34131aadd5769b83c31c",
-        "preview": "190039c6e7502b0229bc6f03a4295670a04ebb7650fbb0b2740c31a37c41f70d"
+        "source": "fe7a570cc15599049c85febe6f3eb1f30ef274ac951fcd38f38846ea2a238105",
+        "preview": "69f2938a1a3135ac5ea297a50646625e7b6e19b109c7e1169e78ea9422b63b1b"
       }
     },
     {
