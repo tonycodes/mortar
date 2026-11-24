@@ -186,6 +186,17 @@ function filterValueOf<T>(col: DataGridColumn<T>, row: T) {
 const matches = (value: string, query: string) =>
   value.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase());
 
+// Stable table options: functions recreated each render would invalidate
+// TanStack's row-model caches.
+const getRowId = (row: { id: string }) => row.id;
+const isMultiSortEvent = (e: unknown) =>
+  !!(e as { shiftKey?: boolean })?.shiftKey;
+const globalFilterFn = (
+  row: { getValue: (columnId: string) => unknown },
+  columnId: string,
+  value: string,
+) => matches(String(row.getValue(columnId) ?? ""), value);
+
 export function DataGrid<T extends { id: string }>({
   caption,
   columns,
@@ -258,30 +269,54 @@ export function DataGrid<T extends { id: string }>({
     onPaginationChange as (p: DataGridPagination | undefined) => void,
   );
 
-  // TanStack state derived from Mortar's public state.
-  const sorting: SortingState = sort.map((s) => ({
-    id: s.key,
-    desc: s.direction === "descending",
-  }));
-  const columnFilters: ColumnFiltersState = Object.entries(filters)
-    .filter(([, value]) => !isEmpty(value))
-    .map(([key, value]) => ({ id: key, value }));
-  const rowSelection: RowSelectionState = Object.fromEntries(
-    selectedIds.map((rowId) => [rowId, true]),
+  // TanStack state derived from Mortar's public state. Each slice is memoised on
+  // its value: a new object every render would make TanStack re-sort and
+  // re-filter every row on every render, including each scroll frame.
+  const sortKey = JSON.stringify(sort);
+  const sorting = useMemo<SortingState>(
+    () => sort.map((s) => ({ id: s.key, desc: s.direction === "descending" })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [sortKey],
   );
-  const columnVisibility = Object.fromEntries(
-    columns.map((col, index) => [
-      col.key,
-      index === 0 || !hidden.includes(col.key),
-    ]),
+  const filtersKey = JSON.stringify(filters);
+  const columnFilters = useMemo<ColumnFiltersState>(
+    () =>
+      Object.entries(filters)
+        .filter(([, value]) => !isEmpty(value))
+        .map(([key, value]) => ({ id: key, value })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [filtersKey],
   );
-  const columnPinning = {
-    start: columns.filter((c) => c.pin === "start").map((c) => c.key),
-    end: columns.filter((c) => c.pin === "end").map((c) => c.key),
-  };
-  const pagination: PaginationState = paging
-    ? { pageIndex: Math.max(0, paging.page - 1), pageSize: paging.pageSize }
-    : { pageIndex: 0, pageSize: Number.MAX_SAFE_INTEGER };
+  const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
+  const rowSelection = useMemo<RowSelectionState>(
+    () => Object.fromEntries(selectedIds.map((rowId) => [rowId, true])),
+    [selectedIds],
+  );
+  const hiddenKey = hidden.join(",");
+  const columnVisibility = useMemo(
+    () =>
+      Object.fromEntries(
+        columns.map((col, index) => [
+          col.key,
+          index === 0 || !hidden.includes(col.key),
+        ]),
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [columns, hiddenKey],
+  );
+  const columnPinning = useMemo(
+    () => ({
+      start: columns.filter((c) => c.pin === "start").map((c) => c.key),
+      end: columns.filter((c) => c.pin === "end").map((c) => c.key),
+    }),
+    [columns],
+  );
+  const pageIndex = paging ? Math.max(0, paging.page - 1) : 0;
+  const pageSize = paging ? paging.pageSize : Number.MAX_SAFE_INTEGER;
+  const pagination = useMemo<PaginationState>(
+    () => ({ pageIndex, pageSize }),
+    [pageIndex, pageSize],
+  );
 
   const defs = useMemo<ColumnDef<typeof features, T>[]>(
     () =>
@@ -314,7 +349,7 @@ export function DataGrid<T extends { id: string }>({
     features,
     columns: defs,
     data: rows,
-    getRowId: (row: T) => row.id,
+    getRowId,
     state: {
       sorting,
       columnFilters,
@@ -329,11 +364,10 @@ export function DataGrid<T extends { id: string }>({
     manualPagination: server || !paging,
     rowCount: server ? rowCount : undefined,
     enableMultiSort: true,
-    isMultiSortEvent: (e: unknown) => !!(e as { shiftKey?: boolean })?.shiftKey,
+    isMultiSortEvent,
     enableSortingRemoval: true,
     autoResetPageIndex: false,
-    globalFilterFn: (row, columnId, value: string) =>
-      matches(String(row.getValue(columnId) ?? ""), value),
+    globalFilterFn,
     onSortingChange: (u) =>
       setSort(
         resolve(u, sorting).map((s) => ({
@@ -380,22 +414,17 @@ export function DataGrid<T extends { id: string }>({
 
   // Select all covers every matching row in client mode, and the loaded page in
   // server mode; selections elsewhere are kept.
-  const scopeIds = (
-    server ? displayRows : table.getFilteredRowModel().rows
-  ).map((row) => row.id);
-  const selectedInScope = scopeIds.filter((rowId) =>
-    selectedIds.includes(rowId),
-  );
+  const scopeRows = server ? displayRows : table.getFilteredRowModel().rows;
+  const scopeIds = useMemo(() => scopeRows.map((row) => row.id), [scopeRows]);
+  const selectedInScope = scopeIds.filter((rowId) => selected.has(rowId));
   const allInScope =
     scopeIds.length > 0 && selectedInScope.length === scopeIds.length;
+  const scopeSet = useMemo(() => new Set(scopeIds), [scopeIds]);
   const toggleAll = () =>
     onSelectionChange?.(
       allInScope
-        ? selectedIds.filter((rowId) => !scopeIds.includes(rowId))
-        : [
-            ...selectedIds,
-            ...scopeIds.filter((rowId) => !selectedIds.includes(rowId)),
-          ],
+        ? selectedIds.filter((rowId) => !scopeSet.has(rowId))
+        : [...selectedIds, ...scopeIds.filter((rowId) => !selected.has(rowId))],
     );
 
   // Sticky offsets for pinned columns come from the rendered header widths.
@@ -727,11 +756,11 @@ export function DataGrid<T extends { id: string }>({
               {windowRows.map(({ row, index }) => {
                 const original = row.original;
                 const href = rowHref?.(original);
-                const selected = selectedIds.includes(row.id);
+                const isSelected = selected.has(row.id);
                 return (
                   <tr
                     key={row.id}
-                    data-selected={selected || undefined}
+                    data-selected={isSelected || undefined}
                     data-linked={href ? true : undefined}
                     aria-rowindex={
                       virtualize ? rowOffset + index + 2 : undefined
@@ -754,7 +783,7 @@ export function DataGrid<T extends { id: string }>({
                         <input
                           type="checkbox"
                           aria-label={`Select ${rowLabel(original)}`}
-                          checked={selected}
+                          checked={isSelected}
                           onChange={row.getToggleSelectedHandler()}
                         />
                       </td>
