@@ -296,14 +296,15 @@
   }
   /* DataGrid pins columns to the start too; the inline inset comes from the
      measured widths of the pinned columns before it. */
-  :where(.m-data-grid) :is(th, td)[data-pin="start"] {
+  /* Zero specificity, like the end pin above, so stripes and selection win. */
+  :where(.m-data-grid) :where(th, td)[data-pin="start"] {
     position: sticky;
     inset-inline-start: 0;
     z-index: 2;
     background-color: var(--m-surface);
     box-shadow: inset -1px 0 0 var(--m-line);
   }
-  :where(.m-data-grid:dir(rtl)) :is(th, td)[data-pin="start"] {
+  :where(.m-data-grid:dir(rtl)) :where(th, td)[data-pin="start"] {
     box-shadow: inset 1px 0 0 var(--m-line);
   }
   /* Bottom-align labelled filter controls; the selection bar stays centred. */

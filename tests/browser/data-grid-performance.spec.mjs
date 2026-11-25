@@ -72,3 +72,42 @@ test("DataGrid stays fast with 100,000 rows", async ({ page }) => {
   );
   expect(scroll.maxRows, "rows in the DOM").toBeLessThan(BUDGET.domRows);
 });
+
+test("virtual rows sit where their index says, at the measured row height", async ({
+  page,
+}) => {
+  // The virtualizer once kept its 44px estimate after rows measured taller,
+  // so rows drifted further from their index the further people scrolled.
+  await page.goto("/?component=DataGrid&theme=light");
+  const grid = page
+    .locator('[data-mortar-preview="DataGrid"] .m-data-grid')
+    .first();
+  await expect(
+    grid.locator("tbody tr:not(.m-data-grid-spacer)").first(),
+  ).toBeVisible();
+  const drift = await grid.locator(".m-table-scroll").evaluate(async (el) => {
+    const out = [];
+    for (const top of [4_400, 22_000, 440_000]) {
+      el.scrollTop = top;
+      await new Promise((r) =>
+        requestAnimationFrame(() => requestAnimationFrame(r)),
+      );
+      const rows = [
+        ...el.querySelectorAll("tbody tr:not(.m-data-grid-spacer)"),
+      ];
+      const height =
+        rows[1].getBoundingClientRect().top -
+        rows[0].getBoundingClientRect().top;
+      const head = el.querySelector("thead").getBoundingClientRect().height;
+      const index = Number(rows[0].getAttribute("aria-rowindex")) - 2;
+      const actual =
+        rows[0].getBoundingClientRect().top -
+        el.getBoundingClientRect().top +
+        el.scrollTop -
+        head;
+      out.push(Math.abs(actual - index * height));
+    }
+    return out;
+  });
+  for (const px of drift) expect(px).toBeLessThan(2);
+});

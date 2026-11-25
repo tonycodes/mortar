@@ -187,6 +187,10 @@ function filterValueOf<T>(col: DataGridColumn<T>, row: T) {
 const matches = (value: string, query: string) =>
   value.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase());
 
+// A stable default: a new [] each render would rebuild the selection set and
+// recount select-all over every row on every render.
+const NO_IDS: string[] = [];
+
 // Stable table options: functions recreated each render would invalidate
 // TanStack's row-model caches.
 const getRowId = (row: { id: string }) => row.id;
@@ -215,7 +219,7 @@ export function DataGrid<T extends { id: string }>({
   search: searchProp,
   defaultSearch = "",
   onSearchChange,
-  selectedIds = [],
+  selectedIds: selectedIdsProp,
   onSelectionChange,
   hiddenColumns: hiddenProp,
   defaultHiddenColumns = [],
@@ -248,6 +252,7 @@ export function DataGrid<T extends { id: string }>({
   className,
 }: DataGridProps<T>) {
   const server = mode === "server";
+  const selectedIds = selectedIdsProp ?? NO_IDS;
   const [sort, setSort] = useControllable(sortProp, defaultSort, onSortChange);
   const [filters, setFilters] = useControllable(
     filtersProp,
@@ -323,18 +328,19 @@ export function DataGrid<T extends { id: string }>({
     () =>
       columns.map((col) => ({
         id: col.key,
-        accessorFn: (row: T) => filterValueOf(col, row),
+        // Empty values read as undefined, so sortUndefined puts them last in
+        // both directions, as DataTable does. Filters treat them as "".
+        accessorFn: (row: T) => filterValueOf(col, row) || undefined,
         enableSorting: !!col.sortable,
         enableColumnFilter: !!col.filter,
         enableHiding: col.hideable !== false,
-        // Ascending only; TanStack reverses for descending. Empty values sort
-        // last in both directions, as in DataTable.
-        sortFn: (a, b) => {
-          const av = sortValueOf(col, a.original);
-          const bv = sortValueOf(col, b.original);
-          if (isEmpty(av) || isEmpty(bv)) return 0;
-          return compareValues(av, bv);
-        },
+        // Ascending only; TanStack reverses for descending. Rows whose value
+        // is empty never reach here: sortUndefined handles them.
+        sortFn: (a, b) =>
+          compareValues(
+            sortValueOf(col, a.original),
+            sortValueOf(col, b.original),
+          ),
         sortUndefined: "last",
         filterFn: (row, columnId, value: string) => {
           const cell = String(row.getValue(columnId) ?? "");
@@ -407,10 +413,25 @@ export function DataGrid<T extends { id: string }>({
     ...visibleColumns.filter((c) => !c.pin),
     ...visibleColumns.filter((c) => c.pin === "end"),
   ];
-  const displayRows = table.getRowModel().rows;
   const matchingCount = server
     ? (rowCount ?? rows.length)
     : table.getFilteredRowModel().rows.length;
+  // A page past the end (rows removed, or a stale controlled page) shows the
+  // last page; the effect below reports the corrected page.
+  const pageCount = paging
+    ? Math.max(1, Math.ceil(matchingCount / paging.pageSize))
+    : 1;
+  const page = paging ? Math.min(Math.max(1, paging.page), pageCount) : 1;
+  const sortedRows = table.getSortedRowModel().rows;
+  const displayRows =
+    paging && !server
+      ? sortedRows.slice((page - 1) * paging.pageSize, page * paging.pageSize)
+      : table.getRowModel().rows;
+  useLayoutEffect(() => {
+    if (paging && paging.page !== page && matchingCount > 0)
+      setPaging({ ...paging, page });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, paging?.page, matchingCount]);
   const filtering = columnFilters.length > 0 || !isEmpty(search.trim());
 
   // Select all covers every matching row in client mode, and the loaded page in
@@ -467,8 +488,12 @@ export function DataGrid<T extends { id: string }>({
       );
     };
     measure();
+    // Column widths can change while the row's width stays the same (new
+    // data, a new virtual window), so watch the pinned cells themselves.
     const observer = new ResizeObserver(measure);
     observer.observe(tr);
+    for (const cell of tr.querySelectorAll("[data-pin], [data-select]"))
+      observer.observe(cell);
     return () => observer.disconnect();
   }, [headerRow, pinKey, hidden.join(",")]);
 
@@ -487,6 +512,7 @@ export function DataGrid<T extends { id: string }>({
     estimateSize,
     overscan: 8,
   });
+  const items = virtualize ? virtualizer.getVirtualItems() : [];
   useLayoutEffect(() => {
     if (!virtualize) return;
     const row = scrollRef.current?.querySelector<HTMLElement>(
@@ -494,11 +520,21 @@ export function DataGrid<T extends { id: string }>({
     );
     const height = row?.getBoundingClientRect().height;
     if (height && Math.abs(height - rowHeight) > 0.5) setRowHeight(height);
+    // A new estimateSize alone does not rebuild the cached row positions.
+    virtualizer.measure();
     // Only when row height can change: not on every scroll frame, where a
     // measurement would force a synchronous layout.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [virtualize, density, hiddenKey, displayRows.length > 0, rowHeight]);
-  const items = virtualize ? virtualizer.getVirtualItems() : [];
+  }, [
+    virtualize,
+    density,
+    hiddenKey,
+    // The first virtual rows appear a render after mount, once the virtualizer
+    // has its scroll element: measure then.
+    items.length > 0,
+    loading,
+    rowHeight,
+  ]);
   const windowRows = virtualize
     ? items.map((item) => ({ row: displayRows[item.index], index: item.index }))
     : displayRows.map((row, index) => ({ row, index }));
@@ -507,7 +543,7 @@ export function DataGrid<T extends { id: string }>({
     virtualize && items.length
       ? virtualizer.getTotalSize() - items[items.length - 1].end
       : 0;
-  const rowOffset = paging ? (paging.page - 1) * paging.pageSize : 0;
+  const rowOffset = paging ? (page - 1) * paging.pageSize : 0;
   const span = ordered.length + (onSelectionChange ? 1 : 0);
 
   const pinStyle = (col: DataGridColumn<T>) =>
@@ -534,9 +570,6 @@ export function DataGrid<T extends { id: string }>({
   );
   const hasToolbarControls =
     searchable || filterColumns.length > 0 || hideable.length > 0;
-  const pageCount = paging
-    ? Math.max(1, Math.ceil(matchingCount / paging.pageSize))
-    : 1;
   const sortIndex = (key: string) => sort.findIndex((s) => s.key === key);
 
   return (
@@ -851,7 +884,7 @@ export function DataGrid<T extends { id: string }>({
         <div className="m-table-footer">
           {paging && matchingCount > 0 && (
             <Pagination
-              page={Math.min(paging.page, pageCount)}
+              page={page}
               pageCount={pageCount}
               numbered
               summary={{

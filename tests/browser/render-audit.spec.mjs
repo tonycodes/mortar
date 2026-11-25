@@ -66,6 +66,16 @@ test("controls that wrap onto separate lines are not compared", async () => {
   expect(await audit(href)).toEqual([]);
 });
 
+test("a TextArea beside an Input is not a height mismatch", async () => {
+  const href = url(
+    "textarea",
+    page(
+      `<div class="row">${field("Input", "Name", 36)}<div class="m-field" data-m-component="TextArea"><label>Notes</label><textarea style="height:110px;box-sizing:border-box"></textarea></div></div>`,
+    ),
+  );
+  expect(await audit(href)).toEqual([]);
+});
+
 test("a label that inherits right alignment is reported", async () => {
   const href = url(
     "align",

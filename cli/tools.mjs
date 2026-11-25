@@ -205,7 +205,8 @@ export const TOOLS = [
       },
       additionalProperties: false,
     },
-    annotations: { readOnlyHint: true, openWorldHint: false },
+    // With render, it opens the given URLs in a headless browser.
+    annotations: { readOnlyHint: true, openWorldHint: true },
     run: async (data, { path = ".", render }) => {
       const report = await auditApp(path, { data });
       if (render) {

@@ -669,6 +669,27 @@ test("parseAncestorNativeSelector and hasVisualDeclarations stay conservative", 
   assert.ok(!hasVisualDeclarations("display: flex; margin: 8px; gap: 4px;"));
 });
 
+test("the audit points a root import of DataGrid to its entry point", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/Grid.tsx": [
+        'import { DataGrid } from "@tonycodes-ui/mortar";',
+        'export const G = () => <DataGrid caption="x" rows={[]} columns={[]} rowLabel={() => ""} />;',
+      ].join("\n"),
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const finding = report.findings.find(
+    (f) => f.rule === "unknown-export" && f.file === "src/Grid.tsx",
+  );
+  assert.ok(finding, "the root import is reported");
+  assert.equal(
+    finding.fix,
+    'Import DataGrid from "@tonycodes-ui/mortar/data-grid".',
+  );
+});
+
 test("the audit checks imports and props from the /data-grid entry", async (t) => {
   const grid = [
     'import { DataGrid, DataGridz, type DataGridColumn } from "@tonycodes-ui/mortar/data-grid";',
