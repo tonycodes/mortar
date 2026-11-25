@@ -3,7 +3,8 @@ import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import { renderAudit } from "../../cli/render.mjs";
+import { createServer } from "node:http";
+import { renderAudit, parseUrls } from "../../cli/render.mjs";
 
 // mortar audit --render on small pages that reproduce each rule, written with
 // Mortar's own markers so the checks see what an app would render.
@@ -101,5 +102,42 @@ test("content-box controls, missing tokens, overflow and errors are reported", a
     "render-error",
     "render-missing-styles",
     "render-overflow",
+  ]);
+});
+
+test("a page with a request that never finishes still loads", async () => {
+  // A request that never finishes (long polling, a streaming endpoint) kept
+  // the network from going idle, so the page never counted as loaded.
+  test.setTimeout(60_000);
+  const server = createServer((req, res) => {
+    if (req.url === "/events") {
+      res.writeHead(200, { "content-type": "text/event-stream" });
+      res.write(": open\n\n");
+      return; // never ends
+    }
+    res.writeHead(200, { "content-type": "text/html" });
+    res.end(
+      page(
+        `<div class="row">${field("Input", "Search", 36)}</div><script>fetch("/events")</script>`,
+      ),
+    );
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  try {
+    const started = Date.now();
+    const findings = await audit(`http://127.0.0.1:${server.address().port}/`);
+    expect(findings).toEqual([]);
+    expect(Date.now() - started).toBeLessThan(25_000);
+  } finally {
+    server.closeAllConnections();
+    server.close();
+  }
+});
+
+test("rendered URLs are split on commas and trimmed", () => {
+  expect(parseUrls(" http://a/ , http://b/,,http://c/ ")).toEqual([
+    "http://a/",
+    "http://b/",
+    "http://c/",
   ]);
 });
