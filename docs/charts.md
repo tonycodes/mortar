@@ -65,10 +65,12 @@ import { LineChart } from "@tonycodes-ui/mortar/charts";
 | `BarChart`  | Comparing values across categories or a few periods; starts at 0 | `layout`: `grouped` (default) or `stacked`                    |
 
 - `title` is required: it names the chart for screen readers and shows above it (`titleHidden` hides it visually). `description` is one sentence on what the chart shows.
-- `x.format`, `y.format` and each series' `format` control how values read in the axis, tooltip and table.
-- `height` sets the plot height (default 240 pixels); the width follows the container.
+- `x.format`, `y.format` and each series' `format` control how values read in the axis, tooltip and table. `y.label` names the axis and its unit above the plot, for example "Revenue ($k)".
+- `y.min` and `y.max` fix the axis range; marks outside it are clipped to the plot. Bar charts always include zero.
+- Stacks diverge: positive values stack up from zero and negative values stack down from it, so layers never overlap. A missing value leaves a gap rather than dropping to zero.
+- `height` sets the plot height (default 240 pixels); the width follows the container. Below 400 pixels wide, line charts drop their end labels and keep the legend.
 - `loading`, `error` and `empty` show the same states as tables.
-- Charts draw at most eight series. Fold the rest into "Other", or split them across charts.
+- Charts draw at most eight series, each with its own colour. A pinned `slot` is never reused: series without one take the lowest free slots. Fold anything past eight into "Other", or split it across charts.
 - Never put two measures with different scales on one chart. Use two charts instead.
 
 ## Accessibility
@@ -76,9 +78,10 @@ import { LineChart } from "@tonycodes-ui/mortar/charts";
 Every line, area and bar chart is a named figure:
 
 - A legend names every series when there are two or more, and a line chart labels up to four lines at their ends, so identity never depends on colour.
-- The plot takes one tab stop. Left and Right move between x values, Home and End jump to the first and last, and Escape closes the tooltip. Each move is announced, for example "Apr: Pro $51k, Team $29k".
+- The plot takes one tab stop. Left and Right move between x values, Home and End jump to the first and last, and Escape closes the tooltip. Each keyboard move is announced, for example "Apr: Pro $51k, Team $29k"; pointer movement shows the tooltip without announcing.
 - **Show data** swaps the plot for a table of the same rows with formatted values, and **Show chart** swaps back.
 - Text uses the text tokens; marks keep a surface-coloured gap or ring where they meet.
+- In high-contrast (forced colours) mode, series keep their colours so they stay distinguishable, and axes and labels follow the system colours.
 
 A sparkline is an image with a spoken summary built from `label` and the values: "Revenue, last 12 months: 12 values from $42k to $75k, latest $75k". Give `label` the measure and the period, and pass `format` so the summary reads like the number beside it. The summary never depends on colour, and the line keeps its shape in forced-colours mode.
 

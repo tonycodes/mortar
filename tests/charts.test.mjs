@@ -325,3 +325,169 @@ test("MetricGroup's span rule skips sparklines without raising its specificity",
   for (const s of selectors)
     assert.doesNotMatch(s, /^\.m-metrics span:not\(/, s);
 });
+
+// Slice 2 review findings.
+const slotsIn = (markup) =>
+  [...markup.matchAll(/<li style="--m-series:var\(--m-chart-(\d)\)"/g)].map(
+    (m) => m[1],
+  );
+/** Every y an SVG path visits, for its M, L, V, v and Q commands. */
+const pathYs = (d) => {
+  const ys = [];
+  let y = 0;
+  for (const [, cmd, args] of d.matchAll(/([MLVvQHhZ])([^MLVvQHhZ]*)/g)) {
+    const n = args
+      .trim()
+      .split(/[\s,]+/)
+      .filter(Boolean)
+      .map(Number);
+    if (cmd === "M" || cmd === "L") y = n[1];
+    else if (cmd === "V") y = n[0];
+    else if (cmd === "v") y += n[0];
+    else if (cmd === "Q") {
+      ys.push(n[1]);
+      y = n[3];
+    } else continue;
+    ys.push(y);
+  }
+  return ys;
+};
+
+test("a pinned slot is never reused by another series", () => {
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: [
+      { key: "a", label: "A", slot: 2 },
+      { key: "b", label: "B" },
+      { key: "c", label: "C" },
+    ],
+  });
+  const slots = slotsIn(markup);
+  assert.equal(slots.length, 3);
+  assert.equal(new Set(slots).size, 3, `slots ${slots}`);
+  assert.equal(slots[0], "2");
+});
+
+test("stacks diverge: negative values stack below zero and never overlap", () => {
+  const rows = [
+    { m: "Jan", p: 5, q: -3 },
+    { m: "Feb", p: 4, q: -2 },
+  ];
+  const series = [
+    { key: "p", label: "P" },
+    { key: "q", label: "Q" },
+  ];
+  const area = html(Charts.AreaChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series,
+  });
+  const [p, q] = [...area.matchAll(/class="m-chart-area" d="([^"]+)"/g)].map(
+    (m) => pathYs(m[1]),
+  );
+  assert.ok(
+    Math.max(...p) <= Math.min(...q) + 0.01,
+    "the positive band sits above the negative one",
+  );
+  const bars = html(Charts.BarChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series,
+    layout: "stacked",
+  });
+  const heights = [
+    ...bars.matchAll(/class="m-chart-bar"[^>]* d="([^"]+)"/g),
+  ].map((m) => {
+    const ys = pathYs(m[1]);
+    return Math.max(...ys) - Math.min(...ys);
+  });
+  assert.equal(heights.length, 4);
+  assert.ok(
+    heights.every((h) => h > 0),
+    `every bar is visible: ${heights}`,
+  );
+});
+
+test("a missing value leaves a gap in a stacked area instead of dropping to zero", () => {
+  const markup = html(Charts.AreaChart, {
+    title: "R",
+    rows: [
+      { m: "Jan", a: 5 },
+      { m: "Feb", a: Number.NaN },
+      { m: "Mar", a: 7 },
+    ],
+    x: { key: "m" },
+    series: [{ key: "a", label: "A" }],
+  });
+  const line = markup.match(/class="m-chart-line" d="([^"]+)"/)[1];
+  assert.equal(line.match(/M/g).length, 2, line);
+});
+
+test("marks stay inside the plot, and bars include zero", () => {
+  const line = html(Charts.LineChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { max: 5 },
+  });
+  assert.match(line, /clip-path="url\(#/);
+  const bars = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { min: 15 },
+  });
+  assert.match(bars, /<text[^>]*>0<\/text>/, "the zero tick is drawn");
+});
+
+test("end labels stay inside the plot", () => {
+  const rows = [
+    { m: "Jan", a: 9, b: 9, c: 9, d: 9 },
+    { m: "Feb", a: 0, b: 0, c: 0, d: 0 },
+  ];
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series: ["a", "b", "c", "d"].map((key) => ({
+      key,
+      label: key.toUpperCase(),
+    })),
+    height: 240,
+  });
+  const ys = [
+    ...markup.matchAll(/class="m-chart-end-label"[^>]* y="([\d.]+)"/g),
+  ].map((m) => Number(m[1]));
+  assert.equal(ys.length, 4);
+  assert.ok(
+    ys.every((y) => y <= 240 - 28),
+    `labels at ${ys}`,
+  );
+});
+
+test("a single row is visible and centred", () => {
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows: [{ m: "Jan", a: 3 }],
+    x: { key: "m" },
+    series: [{ key: "a", label: "A" }],
+  });
+  assert.match(markup, /class="m-chart-marker"/);
+});
+
+test("the y label is shown and the table header always has a name", () => {
+  const markup = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { label: "Revenue ($k)" },
+  });
+  assert.match(markup, />Revenue \(\$k\)</);
+});

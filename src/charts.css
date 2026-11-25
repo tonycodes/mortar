@@ -169,7 +169,9 @@
     z-index: 2;
     display: grid;
     gap: 4px;
-    min-width: 140px;
+    /* Fits narrow charts: never wider than the plot minus the offset. */
+    min-width: min(140px, 60%);
+    max-width: calc(100% - 24px);
     padding: 8px 10px;
     border: 1px solid var(--m-line);
     border-radius: var(--m-radius);
@@ -206,14 +208,31 @@
     display: flex;
     justify-content: flex-end;
   }
+  .m-chart-axis-label {
+    fill: var(--m-secondary);
+    font-size: 12px;
+    font-weight: var(--m-weight-semibold);
+  }
+  /* High-contrast mode would paint every series the same system colour, so
+     series marks and their legend swatches keep their colours (identity is
+     data here); the axes, labels and crosshair follow the system colours. */
   @media (forced-colors: active) {
     .m-chart-line,
-    .m-chart-crosshair {
+    .m-chart-area,
+    .m-chart-bar,
+    .m-chart-marker,
+    .m-chart-legend li::before,
+    .m-chart-tooltip i {
+      forced-color-adjust: none;
+    }
+    .m-chart-axis line,
+    .m-chart-crosshair,
+    .m-chart-zero {
       stroke: CanvasText;
     }
-    .m-chart-bar,
-    .m-chart-area,
-    .m-chart-marker {
+    .m-chart-axis text,
+    .m-chart-end-label,
+    .m-chart-axis-label {
       fill: CanvasText;
     }
   }

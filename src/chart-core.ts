@@ -108,16 +108,28 @@ export function bandPath(
   upper: readonly Point[],
   lower: readonly Point[],
 ): string {
-  const pairs = upper
-    .map((p, i) => [p, lower[i]] as const)
-    .filter(([u, l]) => Number.isFinite(u.y) && Number.isFinite(l.y));
-  if (pairs.length < 2) return "";
-  const back = pairs
-    .map(([, l]) => l)
-    .reverse()
-    .map((p) => `L${round(p.x)} ${round(p.y)}`)
-    .join("");
-  return `${linePath(pairs.map(([u]) => u))}${back}Z`;
+  // One closed shape per run where both edges are known, so a missing value
+  // leaves a gap instead of a fill bridging it.
+  let d = "";
+  let run: (readonly [Point, Point])[] = [];
+  const close = () => {
+    if (run.length >= 2) {
+      const back = run
+        .map(([, l]) => l)
+        .reverse()
+        .map((p) => `L${round(p.x)} ${round(p.y)}`)
+        .join("");
+      d += `${linePath(run.map(([u]) => u))}${back}Z`;
+    }
+    run = [];
+  };
+  upper.forEach((u, i) => {
+    const l = lower[i];
+    if (Number.isFinite(u.y) && l && Number.isFinite(l.y)) run.push([u, l]);
+    else close();
+  });
+  close();
+  return d;
 }
 
 const round = (n: number) => Math.round(n * 100) / 100;
