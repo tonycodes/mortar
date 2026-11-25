@@ -669,6 +669,62 @@ test("parseAncestorNativeSelector and hasVisualDeclarations stay conservative", 
   assert.ok(!hasVisualDeclarations("display: flex; margin: 8px; gap: 4px;"));
 });
 
+test("the audit points a root import of DataGrid to its entry point", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/Grid.tsx": [
+        'import { DataGrid } from "@tonycodes-ui/mortar";',
+        'export const G = () => <DataGrid caption="x" rows={[]} columns={[]} rowLabel={() => ""} />;',
+      ].join("\n"),
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const finding = report.findings.find(
+    (f) => f.rule === "unknown-export" && f.file === "src/Grid.tsx",
+  );
+  assert.ok(finding, "the root import is reported");
+  assert.equal(
+    finding.fix,
+    'Import DataGrid from "@tonycodes-ui/mortar/data-grid".',
+  );
+});
+
+test("the audit checks imports and props from the /data-grid entry", async (t) => {
+  const grid = [
+    'import { DataGrid, DataGridz, type DataGridColumn } from "@tonycodes-ui/mortar/data-grid";',
+    'import { Badge } from "@tonycodes-ui/mortar";',
+    "type Row = { id: string; name: string };",
+    'const columns: DataGridColumn<Row>[] = [{ key: "name", label: "Name", render: (r) => r.name }];',
+    "export const Grid = ({ rows }: { rows: Row[] }) => (",
+    "  <DataGrid",
+    '    caption="People"',
+    "    rows={rows}",
+    "    columns={columns}",
+    "    rowLabel={(r) => r.name}",
+    '    mode="local"',
+    "    virtualise",
+    "  />",
+    ");",
+    "export const B = () => <Badge>Hi</Badge>;",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/Grid.tsx": grid } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const found = report.findings
+    .filter((f) => f.file === "src/Grid.tsx")
+    .map((f) => [f.rule, f.line]);
+  assert.deepEqual(found, [
+    ["unknown-export", 1],
+    ["invalid-value", 11],
+    ["unknown-prop", 12],
+  ]);
+  assert.ok(
+    !report.findings.some((f) => f.rule === "deep-import"),
+    "the data-grid entry is public",
+  );
+});
+
 test("the audit flags raw elements that a Mortar component replaces", async (t) => {
   // #76: Hive's API keys panel shipped a raw <table> and the audit was clean.
   const keys = [

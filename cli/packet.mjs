@@ -11,8 +11,38 @@ export const THEME_SETUP = `import { ThemeProvider } from "@tonycodes-ui/mortar"
   <App />
 </ThemeProvider>`;
 
-const importLine = (data, names) =>
-  `import { ${[...new Set(names)].sort().join(", ")} } from "${data.packageName}";`;
+/** The package a component is imported from: the root or a subpath entry. */
+const packageOf = (data, name) =>
+  data.components.find((c) => c.export === name)?.package ?? data.packageName;
+
+/** Import lines for the named components, one per package, the root first. */
+const importLine = (data, names) => {
+  const byPackage = new Map();
+  for (const name of new Set(names)) {
+    const specifier = packageOf(data, name);
+    byPackage.set(specifier, [...(byPackage.get(specifier) ?? []), name]);
+  }
+  return [...byPackage]
+    .sort(([a], [b]) =>
+      a === data.packageName
+        ? -1
+        : b === data.packageName
+          ? 1
+          : a.localeCompare(b),
+    )
+    .map(
+      ([specifier, list]) =>
+        `import { ${list.sort().join(", ")} } from "${specifier}";`,
+    )
+    .join("\n");
+};
+
+/** Optional peer dependencies a subpath entry point needs. */
+const ENTRY_PEERS = {
+  "/data-grid": ["@tanstack/react-table", "@tanstack/react-virtual"],
+};
+const peersOf = (data, specifier) =>
+  ENTRY_PEERS[specifier.slice(data.packageName.length)] ?? [];
 
 // The native libraries (docs/native.md): a Swift package and an Android
 // library, built from the same tokens.
@@ -252,6 +282,7 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
   if (emails) guides.push("email");
   const native = !!brief && NATIVE_WORDS.test(brief);
   if (native) guides.push("native");
+  if (selection.some((c) => c.export === "DataGrid")) guides.push("data-grid");
   return {
     package: data.packageName,
     version: data.version,
@@ -266,7 +297,12 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
           })),
         }
       : {}),
-    install: `npm install ${data.packageName} react react-dom tailwindcss`,
+    install: [
+      `npm install ${data.packageName} react react-dom tailwindcss`,
+      ...new Set(
+        selection.flatMap((c) => peersOf(data, c.package ?? data.packageName)),
+      ),
+    ].join(" "),
     css: {
       where: "Your app's Tailwind CSS entry (for example src/index.css).",
       code: CSS_SETUP,

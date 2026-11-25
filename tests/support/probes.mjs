@@ -530,6 +530,59 @@ export const implementations = {
       "person@example.com",
     );
   },
+  async "data-grid"({ page, root: preview }) {
+    const grid = preview.locator(".m-data-grid").first();
+    const body = grid.locator("tbody tr:not(.m-data-grid-spacer)");
+    // Virtualized: 100,000 rows, only a window of them in the DOM.
+    await expect(grid.locator("table")).toHaveAttribute(
+      "aria-rowcount",
+      "100001",
+    );
+    expect(await body.count()).toBeLessThan(100);
+    const scroll = grid.locator(".m-table-scroll");
+    await scroll.evaluate((el) => (el.scrollTop = 2_000_000));
+    await expect(body.first()).not.toHaveAttribute("aria-rowindex", "2");
+    expect(await body.count()).toBeLessThan(100);
+    await scroll.evaluate((el) => (el.scrollTop = 0));
+    // Sort from the keyboard, then shift-click to add a second level.
+    const amount = grid.getByRole("columnheader", { name: /^Amount/ });
+    await grid.getByRole("button", { name: /^Amount/ }).focus();
+    await page.keyboard.press("Enter");
+    await expect(amount).toHaveAttribute("aria-sort", "ascending");
+    await grid
+      .getByRole("button", { name: /^Customer/ })
+      .click({ modifiers: ["Shift"] });
+    await expect(amount).toHaveAttribute("aria-sort", "ascending");
+    await expect(
+      grid.locator("th[data-key=customer] .m-sort-order"),
+    ).toContainText("2");
+    // Search and filter report the matching count; no match offers a reset.
+    const status = grid.getByRole("status");
+    await grid.getByLabel("Search").fill("Hooli");
+    await expect(status).toHaveText("12500 matching invoices");
+    await grid.getByLabel("Status").selectOption("paid");
+    await expect(status).toHaveText("3125 matching invoices");
+    await grid.getByLabel("Search").fill("no such customer");
+    await grid.getByRole("button", { name: "Clear filters" }).click();
+    await expect(grid.getByLabel("Search")).toHaveValue("");
+    await expect(grid.getByLabel("Status")).toHaveValue("");
+    // Selection shows the bulk bar and clears again.
+    const first = body.first();
+    await first.getByRole("checkbox").check();
+    await expect(grid.getByText("1 selected")).toBeVisible();
+    await grid.getByRole("button", { name: "Clear selection" }).click();
+    await expect(first.getByRole("checkbox")).not.toBeChecked();
+    // The Columns menu hides a column.
+    await grid.getByRole("button", { name: "Columns" }).click();
+    await page.getByRole("checkbox", { name: "Issued" }).uncheck();
+    await page.keyboard.press("Escape");
+    await expect(grid.locator("th[data-key=issued]")).toHaveCount(0);
+    // The paged grid moves between pages.
+    const paged = preview.locator(".m-data-grid").nth(1);
+    await expect(paged.getByText("Showing 1 to 25 of 240")).toBeVisible();
+    await paged.getByRole("button", { name: "Next" }).click();
+    await expect(paged.getByText("Showing 26 to 50 of 240")).toBeVisible();
+  },
   async "table-sort"({ page, root: preview }) {
     // The preview also shows a grouped table; exercise the first (paginated) one.
     const root = preview.locator(".m-data-table").first();

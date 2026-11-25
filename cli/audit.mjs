@@ -1375,7 +1375,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         "error",
         file,
         line(m.index),
-        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand" and "${PKG}/email" are public.`,
+        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand", "${PKG}/email" and "${PKG}/data-grid" are public.`,
         `Import from "${PKG}" instead, and remove any alias to the package's source.`,
       );
     }
@@ -1442,7 +1442,11 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         }
         continue;
       }
-      if (spec !== PKG) {
+      // A component subpath (such as /data-grid) the installed version ships.
+      const entry =
+        spec.startsWith(`${PKG}/`) &&
+        data.agent.entryExports?.[spec.slice(PKG.length)];
+      if (spec !== PKG && !entry) {
         if (spec !== `${PKG}/brand` && spec !== `${PKG}/styles.css`)
           if (!/\/(src|dist)\b/.test(spec))
             add(
@@ -1467,6 +1471,9 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const named = clause.match(/\{([\s\S]*)\}/);
       if (!named) continue;
       const offset = m.index + m[0].indexOf("{");
+      const known = entry
+        ? new Set([...entry.values, ...entry.types])
+        : exportNames;
       for (const raw of named[1].split(",")) {
         const item = raw.trim();
         if (!item) continue;
@@ -1476,18 +1483,26 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           .map((s) => s.trim());
         const isType = !!typeOnly || /^type\s/.test(item);
         const at = offset + named[0].indexOf(raw.trimStart() || raw);
-        if (!exportNames.has(name)) {
-          const removed = REMOVED_EXPORTS[name];
-          const guess = removed?.replacement ?? closest(name, exportNames, 3);
+        if (!known.has(name)) {
+          const removed = entry ? undefined : REMOVED_EXPORTS[name];
+          // The name exists, but in another entry point (e.g. DataGrid in /data-grid).
+          const elsewhere = Object.entries(data.agent.entryExports ?? {}).find(
+            ([subpath, list]) =>
+              `${PKG}${subpath}` !== spec &&
+              (list.values.includes(name) || list.types.includes(name)),
+          )?.[0];
+          const guess = removed?.replacement ?? closest(name, known, 3);
           add(
             "unknown-export",
             "error",
             file,
             line(at),
-            `${PKG} ${data.version} has no export "${name}".${removed ? " " + removed.note : ""}`,
-            guess
-              ? `Import ${guess} instead.`
-              : "Search the catalogue (mortar search) for the current component.",
+            `${spec} ${data.version} has no export "${name}".${removed ? " " + removed.note : ""}`,
+            elsewhere
+              ? `Import ${name} from "${PKG}${elsewhere}".`
+              : guess
+                ? `Import ${guess} instead.`
+                : "Search the catalogue (mortar search) for the current component.",
           );
           continue;
         }
