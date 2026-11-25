@@ -79,9 +79,18 @@ const numberFormat = new Intl.NumberFormat(undefined, {
 const defaultY = (n: number) => numberFormat.format(n);
 const defaultX = (v: unknown) =>
   v instanceof Date ? v.toLocaleDateString() : String(v ?? "");
+/**
+ * A row's value for a series. Numbers pass through; numeric strings (common
+ * in JSON from APIs) are read as numbers; anything else is a missing value.
+ */
 const valueOf = (row: Row, key: string) => {
   const v = row[key];
-  return typeof v === "number" ? v : Number.NaN;
+  if (typeof v === "number") return v;
+  if (typeof v === "string" && v.trim() !== "") {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : Number.NaN;
+  }
+  return Number.NaN;
 };
 
 /** At most eight series: slots are never reused, so a ninth is not drawn. */
@@ -212,8 +221,13 @@ function geometry(
     max = Math.max(0, max);
   }
   if (!(min < max)) {
-    // An inverted or flat override: fall back to the data, then to a unit span.
+    // An inverted or flat override: fall back to the data, then to a unit
+    // span, keeping zero where the chart measures from it.
     [min, max] = extent(values);
+    if (zero) {
+      min = Math.min(0, min);
+      max = Math.max(0, max);
+    }
     if (min === max) max = min + 1;
   }
   const ticks = niceTicks([min, max], Math.max(2, Math.floor(height / 48)));
@@ -726,7 +740,8 @@ export function AreaChart(input: AreaChartProps) {
                     )}
                     <path className="m-chart-line" d={linePath(end)} />
                     {end.map((p, j) =>
-                      j === active || isolated(end, j) ? (
+                      Number.isFinite(p.y) &&
+                      (j === active || isolated(end, j)) ? (
                         <circle
                           key={j}
                           className="m-chart-marker"

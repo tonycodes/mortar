@@ -40,7 +40,7 @@ import { Sparkline } from "@tonycodes-ui/mortar/charts";
 
 ## Line, area and bar charts
 
-`LineChart`, `AreaChart` and `BarChart` take rows and a list of series that name the field each one plots, so data from an API needs no reshaping.
+`LineChart`, `AreaChart` and `BarChart` take rows and a list of series that name the field each one plots, so data from an API needs no reshaping. Series fields may be numbers or numeric strings such as `"42.5"`; anything else (`null`, `""`, `"n/a"`) is a missing value and leaves a gap.
 
 ```tsx
 import { LineChart } from "@tonycodes-ui/mortar/charts";

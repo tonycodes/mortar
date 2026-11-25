@@ -483,7 +483,7 @@ test("a single row is visible and centred", () => {
   assert.match(markup, /class="m-chart-marker"/);
 });
 
-test("the y label is shown and the table header always has a name", () => {
+test("the y axis label is drawn above the plot", () => {
   const markup = html(Charts.BarChart, {
     title: "R",
     rows: months,
@@ -497,4 +497,44 @@ test("the y label is shown and the table header always has a name", () => {
 test("a one-value sparkline puts its dot in the middle", () => {
   const markup = html(Charts.Sparkline, { label: "Users", values: [7] });
   assert.match(markup, /class="m-sparkline-last" style="left:50%;top:50%"/);
+});
+
+test("bars keep zero on the axis when a y override falls back to the data", () => {
+  // y.max: 0 with positive data collapsed the domain; the fallback dropped zero.
+  // Values well above zero, so ticks rounding down cannot reach 0 by luck.
+  const high = [
+    { m: "Jan", a: 105, b: 112 },
+    { m: "Feb", a: 121, b: 138 },
+  ];
+  const markup = html(Charts.BarChart, {
+    title: "R",
+    rows: high,
+    x: { key: "m" },
+    series: two,
+    y: { max: 0 },
+  });
+  assert.match(markup, /<text[^>]*>0<\/text>/, "the zero tick is drawn");
+  const zero = Number(
+    markup.match(/class="m-chart-zero"[^>]* y1="([\d.-]+)"/)[1],
+  );
+  assert.ok(
+    zero >= 12 && zero <= 240 - 28,
+    `zero line at ${zero} is inside the plot`,
+  );
+});
+
+test("numeric strings from JSON count as values; other strings are gaps", () => {
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows: [
+      { m: "Jan", a: "10" },
+      { m: "Feb", a: " 20 " },
+      { m: "Mar", a: "n/a" },
+      { m: "Apr", a: "" },
+    ],
+    x: { key: "m" },
+    series: [{ key: "a", label: "A" }],
+  });
+  const d = markup.match(/class="m-chart-line" d="([^"]+)"/)[1];
+  assert.equal((d.match(/[ML]/g) ?? []).length, 2, `two points joined: ${d}`);
 });
