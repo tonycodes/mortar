@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 // mortar: the open, local agent tooling for the Mortar UI kit. An MCP server
 // (`mortar mcp`) and a CLI over the installed package's catalogue and docs.
-// No network, no account, no runtime dependencies.
+// No account and no runtime dependencies. Only `audit --render` uses the
+// network, to open the app pages it is given.
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { loadData, GUIDES, PACKAGE_ROOT } from "../cli/data.mjs";
 import { searchComponents } from "../cli/search.mjs";
 import { componentDetail, buildPacket } from "../cli/packet.mjs";
 import { auditApp, RULES } from "../cli/audit.mjs";
-import { renderAudit, RENDER_RULES } from "../cli/render.mjs";
+import { parseUrls, renderAudit, RENDER_RULES } from "../cli/render.mjs";
 
 const HELP = `mortar — local agent tooling for the Mortar UI kit (@tonycodes-ui/mortar)
 
@@ -37,7 +38,8 @@ Options:
 Add the MCP server to Claude Code:
   claude mcp add mortar -- npx -y @tonycodes-ui/mortar mcp
 
-Everything runs locally against the installed package. No account or network.`;
+Everything runs locally against the installed package, with no account. Only
+audit --render opens the URLs you pass it.`;
 
 function parseArgs(argv) {
   const positional = [];
@@ -202,7 +204,7 @@ async function main() {
       try {
         report = await auditApp(rest[0] ?? ".", { data });
         if (flags.render) {
-          const urls = String(flags.render).split(",").filter(Boolean);
+          const urls = parseUrls(flags.render);
           const rendered = await renderAudit(urls, { appRoot: report.root });
           report.findings.push(...rendered);
           for (const f of rendered) report.summary[f.severity]++;
