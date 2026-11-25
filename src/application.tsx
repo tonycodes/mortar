@@ -11,6 +11,7 @@ import { Button, EmptyState, Input, Notice, type Tone } from "./primitives.js";
 import { BrandMark, Divider } from "./layout.js";
 import { AuthHeader, ProviderButtons, type SignInProvider } from "./auth.js";
 import { ArrowDown, ArrowUp, Check, SortArrows } from "./icons.js";
+import { Sparkline } from "./sparkline.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 import {
   Flyout,
@@ -649,6 +650,8 @@ export interface MetricGroupProps {
     trend?: "up" | "down";
     /** Prior value for comparison, shown as "from …" after the value. */
     previous?: string;
+    /** Recent values, oldest first, drawn as a sparkline under the value. */
+    sparkline?: number[];
   }[];
   /** `shared` joins metrics with shared borders; `cards` separates them into individual cards. */
   variant?: "shared" | "cards";
@@ -702,6 +705,13 @@ export function MetricGroup({
                 )}
                 {item.change}
               </span>
+            )}
+            {item.sparkline && (
+              <Sparkline
+                label={`${item.label}, recent values`}
+                values={item.sparkline}
+                height={28}
+              />
             )}
           </>
         ),

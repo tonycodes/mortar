@@ -1375,7 +1375,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         "error",
         file,
         line(m.index),
-        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand", "${PKG}/email" and "${PKG}/data-grid" are public.`,
+        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand", "${PKG}/email", "${PKG}/data-grid" and "${PKG}/charts" are public.`,
         `Import from "${PKG}" instead, and remove any alias to the package's source.`,
       );
     }

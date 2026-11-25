@@ -1,0 +1,58 @@
+/* Charts: Sparkline. Series colours come from the --m-chart-* tokens; text
+   always uses the text tokens, never a series colour. Every rule sits in
+   @layer components, like the other component families. */
+@layer components {
+  /* == Sparkline == */
+  .m-sparkline {
+    display: inline-block;
+    width: 100%;
+    min-width: 48px;
+    /* Room for the 8px dot and its 2px ring at the top, end and bottom. */
+    padding: 6px 6px 6px 0;
+    vertical-align: middle;
+  }
+  .m-sparkline-plot {
+    position: relative;
+    display: block;
+    height: 100%;
+  }
+  .m-sparkline svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .m-sparkline-line {
+    fill: none;
+    stroke: var(--m-sparkline-colour);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .m-sparkline-area {
+    fill: var(--m-sparkline-colour);
+    fill-opacity: 0.12;
+  }
+  .m-sparkline-band {
+    fill: var(--m-sunken);
+  }
+  /* The dot sits in HTML so it stays round when the SVG stretches. A surface
+     ring separates it from the line. */
+  .m-sparkline-last {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: var(--m-radius-full);
+    background: var(--m-sparkline-colour);
+    box-shadow: 0 0 0 2px var(--m-surface);
+  }
+  @media (forced-colors: active) {
+    .m-sparkline-line {
+      stroke: CanvasText;
+    }
+    .m-sparkline-last {
+      background: CanvasText;
+    }
+  }
+}

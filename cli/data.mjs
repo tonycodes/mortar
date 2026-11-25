@@ -40,6 +40,11 @@ export const GUIDES = {
     summary:
       "Transactional email from @tonycodes-ui/mortar/email: emailTheme, the Email components, the templates (verify email, magic link, password reset, invite, receipt, notification) and renderEmail.",
   },
+  charts: {
+    file: "docs/charts.md",
+    summary:
+      "Charts from @tonycodes-ui/mortar/charts: Sparkline, MetricGroup sparklines, the spoken summary, and the eight-slot series palette and its rules.",
+  },
   "data-grid": {
     file: "docs/data-grid.md",
     summary:

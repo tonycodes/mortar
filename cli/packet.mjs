@@ -283,6 +283,8 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
   const native = !!brief && NATIVE_WORDS.test(brief);
   if (native) guides.push("native");
   if (selection.some((c) => c.export === "DataGrid")) guides.push("data-grid");
+  if (selection.some((c) => c.package?.endsWith("/charts")))
+    guides.push("charts");
   return {
     package: data.packageName,
     version: data.version,
