@@ -6,6 +6,7 @@ import { html, UI } from "./support/render.mjs";
 import { readSource, selectorBody, customProperties } from "./support/css.mjs";
 import {
   areaPath,
+  bandPath,
   extent,
   linearScale,
   linePath,
@@ -148,4 +149,125 @@ test("MetricGroup draws a sparkline only for items that have values", () => {
     markup,
     /aria-label="Requests, recent values: 3 values from 1 to 3, latest 3"/,
   );
+});
+
+const months = [
+  { m: "Jan", a: 10, b: 5 },
+  { m: "Feb", a: 20, b: 10 },
+  { m: "Mar", a: 30, b: 15 },
+];
+const two = [
+  { key: "a", label: "Alpha" },
+  { key: "b", label: "Beta" },
+];
+
+test("a chart is a named figure with a legend for two or more series", () => {
+  const markup = html(Charts.LineChart, {
+    title: "Revenue",
+    description: "By plan",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+  });
+  assert.match(
+    markup,
+    /^<figure data-m-component="LineChart"[^>]* aria-labelledby="([^"]+)"/,
+  );
+  assert.match(markup, /<ul class="m-chart-legend" aria-label="Legend">/);
+  assert.match(markup, /aria-roledescription="chart"/);
+  assert.match(markup, />Show data</);
+  // One series: the title names it, so no legend.
+  assert.doesNotMatch(
+    html(Charts.LineChart, {
+      title: "R",
+      rows: months,
+      x: { key: "m" },
+      series: two.slice(0, 1),
+    }),
+    /m-chart-legend/,
+  );
+});
+
+test("charts draw at most eight series and never reuse a colour", () => {
+  const nine = Array.from({ length: 9 }, (_, i) => ({
+    key: `s${i}`,
+    label: `S${i}`,
+  }));
+  const rows = [
+    Object.fromEntries([["m", "Jan"], ...nine.map((s) => [s.key, 1])]),
+  ];
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series: nine,
+  });
+  const slots = [...markup.matchAll(/--m-series:var\(--m-chart-(\d)\)/g)].map(
+    (m) => m[1],
+  );
+  assert.ok(slots.length > 0);
+  assert.ok(slots.every((slot) => Number(slot) <= 8));
+  assert.doesNotMatch(
+    markup,
+    />S8</,
+    "the ninth series is not drawn or listed",
+  );
+});
+
+test("stacked areas top out at the running total", () => {
+  const markup = html(Charts.AreaChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { min: 0, max: 45 },
+  });
+  // Two layers, each with an area and a line.
+  assert.equal(markup.match(/class="m-chart-area"/g)?.length, 2);
+  assert.equal(markup.match(/class="m-chart-line"/g)?.length, 2);
+});
+
+test("bars round only their data end, and only the top of a stack", () => {
+  const grouped = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+  });
+  const stacked = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    layout: "stacked",
+  });
+  const curved = (markup) =>
+    [...markup.matchAll(/class="m-chart-bar"[^>]* d="([^"]+)"/g)].map((m) =>
+      m[1].includes("Q"),
+    );
+  assert.ok(
+    curved(grouped).every(Boolean),
+    "every grouped bar has a rounded end",
+  );
+  const s = curved(stacked);
+  assert.equal(s.length, 6);
+  assert.equal(s.filter(Boolean).length, 3, "one rounded top per stack");
+});
+
+test("ticks always reach past the largest value", () => {
+  const ticks = niceTicks([0, 111], 5);
+  assert.ok(ticks.at(-1) >= 111, `top tick ${ticks.at(-1)} is below the data`);
+  assert.deepEqual(niceTicks([0, 100]).at(-1), 100);
+});
+
+test("a stacked band runs along its top edge and back along the layer below", () => {
+  const upper = [
+    { x: 0, y: 10 },
+    { x: 10, y: 5 },
+  ];
+  const lower = [
+    { x: 0, y: 20 },
+    { x: 10, y: 15 },
+  ];
+  assert.equal(bandPath(upper, lower), "M0 10L10 5L10 15L0 20Z");
 });

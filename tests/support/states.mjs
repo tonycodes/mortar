@@ -50,6 +50,8 @@ async function toned({ page, fixture }, tone, background, ink) {
 // Table components announce loading in their status region and show errors in
 // a notice; they have no form field to disable or mark invalid.
 const TABLES = new Set(["DataTable", "DataGrid"]);
+// Charts announce loading in their own status line and have no form field.
+const CHARTS = new Set(["LineChart", "AreaChart", "BarChart"]);
 
 export const states = Object.freeze({
   disabled: inert,
@@ -58,6 +60,12 @@ export const states = Object.freeze({
     if (TABLES.has(component.export)) {
       await expect(scope.locator(".m-table-state[role=status]")).toHaveText(
         "Loading records…",
+      );
+      return;
+    }
+    if (CHARTS.has(component.export)) {
+      await expect(scope.locator(".m-chart-state[role=status]")).toHaveText(
+        "Loading chart…",
       );
       return;
     }
@@ -71,7 +79,7 @@ export const states = Object.freeze({
   },
   async error({ component, scope }) {
     await expect(scope.getByText("Check this value")).toBeVisible();
-    if (!TABLES.has(component.export))
+    if (!TABLES.has(component.export) && !CHARTS.has(component.export))
       await expect(
         scope.locator("input,textarea,select,button[aria-invalid]"),
       ).toHaveAttribute("aria-invalid", "true");

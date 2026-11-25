@@ -35,8 +35,12 @@ export function niceTicks(domain: Extent, count = 5): number[] {
   const ticks: number[] = [];
   // Round to the step's precision so 0.1 + 0.2 style drift never shows.
   const digits = Math.max(0, -Math.floor(Math.log10(step)));
-  for (let v = Math.floor(min / step) * step; v <= max + step / 2; v += step)
+  // From the step at or below the minimum to the first step at or above the
+  // maximum, so the top gridline is never below the data.
+  for (let v = Math.floor(min / step) * step; ; v += step) {
     ticks.push(Number(v.toFixed(digits)));
+    if (v >= max - step * 1e-9) break;
+  }
   return ticks;
 }
 
@@ -67,6 +71,23 @@ export function areaPath(points: readonly Point[], baseline: number): string {
   const first = finite[0];
   const last = finite[finite.length - 1];
   return `${linePath(finite)}L${round(last.x)} ${round(baseline)}L${round(first.x)} ${round(baseline)}Z`;
+}
+
+/** SVG path data for the band between an upper and a lower edge (a stacked layer). */
+export function bandPath(
+  upper: readonly Point[],
+  lower: readonly Point[],
+): string {
+  const pairs = upper
+    .map((p, i) => [p, lower[i]] as const)
+    .filter(([u, l]) => Number.isFinite(u.y) && Number.isFinite(l.y));
+  if (pairs.length < 2) return "";
+  const back = pairs
+    .map(([, l]) => l)
+    .reverse()
+    .map((p) => `L${round(p.x)} ${round(p.y)}`)
+    .join("");
+  return `${linePath(pairs.map(([u]) => u))}${back}Z`;
 }
 
 const round = (n: number) => Math.round(n * 100) / 100;

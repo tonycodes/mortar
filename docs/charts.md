@@ -1,6 +1,6 @@
 # Charts
 
-`@tonycodes-ui/mortar/charts` draws charts as SVG with Mortar's tokens, so they follow your brand, density and light or dark appearance. It has no runtime dependencies. This release has `Sparkline`; line, area and bar charts and a meter are planned.
+`@tonycodes-ui/mortar/charts` draws charts as SVG with Mortar's tokens, so they follow your brand, density and light or dark appearance. It has no runtime dependencies. This release has `Sparkline`, `LineChart`, `AreaChart` and `BarChart`; a meter is planned.
 
 ## Sparkline
 
@@ -38,7 +38,47 @@ import { Sparkline } from "@tonycodes-ui/mortar/charts";
 />
 ```
 
+## Line, area and bar charts
+
+`LineChart`, `AreaChart` and `BarChart` take rows and a list of series that name the field each one plots, so data from an API needs no reshaping.
+
+```tsx
+import { LineChart } from "@tonycodes-ui/mortar/charts";
+
+<LineChart
+  title="Monthly revenue by plan"
+  description="Revenue in thousands of dollars, January to June 2026."
+  rows={months}
+  x={{ key: "month", label: "Month" }}
+  series={[
+    { key: "pro", label: "Pro" },
+    { key: "team", label: "Team" },
+  ]}
+  y={{ format: (n) => `$${n}k` }}
+/>;
+```
+
+| Chart       | Use it for                                                       | Options                                                       |
+| ----------- | ---------------------------------------------------------------- | ------------------------------------------------------------- |
+| `LineChart` | Change over time, one to eight series                            | `markers` puts a dot on every value                           |
+| `AreaChart` | Change over time when the series add up to a meaningful total    | `stacked` (default true); unstacked series draw as lines only |
+| `BarChart`  | Comparing values across categories or a few periods; starts at 0 | `layout`: `grouped` (default) or `stacked`                    |
+
+- `title` is required: it names the chart for screen readers and shows above it (`titleHidden` hides it visually). `description` is one sentence on what the chart shows.
+- `x.format`, `y.format` and each series' `format` control how values read in the axis, tooltip and table.
+- `height` sets the plot height (default 240 pixels); the width follows the container.
+- `loading`, `error` and `empty` show the same states as tables.
+- Charts draw at most eight series. Fold the rest into "Other", or split them across charts.
+- Never put two measures with different scales on one chart. Use two charts instead.
+
 ## Accessibility
+
+Every line, area and bar chart is a named figure:
+
+- A legend names every series when there are two or more, and a line chart labels up to four lines at their ends, so identity never depends on colour.
+- The plot takes one tab stop. Left and Right move between x values, Home and End jump to the first and last, and Escape closes the tooltip. Each move is announced, for example "Apr: Pro $51k, Team $29k".
+- **Show data** swaps the plot for a table of the same rows with formatted values, and **Show chart** swaps back.
+- Text uses the text tokens; marks keep a surface-coloured gap or ring where they meet.
 
 A sparkline is an image with a spoken summary built from `label` and the values: "Revenue, last 12 months: 12 values from $42k to $75k, latest $75k". Give `label` the measure and the period, and pass `format` so the summary reads like the number beside it. The summary never depends on colour, and the line keeps its shape in forced-colours mode.
 
