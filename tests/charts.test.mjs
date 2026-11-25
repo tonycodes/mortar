@@ -271,3 +271,57 @@ test("a stacked band runs along its top edge and back along the layer below", ()
   ];
   assert.equal(bandPath(upper, lower), "M0 10L10 5L10 15L0 20Z");
 });
+
+test("ticks terminate for inverted, non-finite and extreme domains", () => {
+  // y.min above every value inverted the domain and looped forever.
+  for (const domain of [
+    [0, -3],
+    [100, 40],
+    [Number.NaN, 5],
+    [1e17, 1e17 + 16],
+  ]) {
+    const ticks = niceTicks(domain);
+    assert.ok(
+      ticks.length >= 1 && ticks.length <= 50,
+      `${domain}: ${ticks.length} ticks`,
+    );
+    assert.ok(ticks.every(Number.isFinite), `${domain}: finite ticks`);
+  }
+});
+
+test("a flat domain keeps missing values missing", () => {
+  const scale = linearScale([5, 5], [0, 100]);
+  assert.equal(scale(5), 50);
+  assert.ok(Number.isNaN(scale(Number.NaN)));
+  assert.equal(
+    linePath(
+      [0, 1, 2].map((i) => ({ x: i * 50, y: scale([5, Number.NaN, 5][i]) })),
+    ),
+    "M0 50M100 50",
+  );
+});
+
+test("an area breaks at a missing value instead of bridging it", () => {
+  const points = [
+    { x: 0, y: 10 },
+    { x: 10, y: 20 },
+    { x: 20, y: Number.NaN },
+    { x: 30, y: 5 },
+    { x: 40, y: 8 },
+  ];
+  const d = areaPath(points, 100);
+  assert.equal(d.match(/Z/g)?.length, 2, d);
+  assert.ok(!d.includes("L10 20L30 5"), `bridged the gap: ${d}`);
+});
+
+test("MetricGroup's span rule skips sparklines without raising its specificity", async () => {
+  // :not() added a class to the specificity, so the rule beat
+  // .m-metrics .m-metric-previous and changed the "from …" font.
+  const css = await readSource("src/application.css");
+  const selectors = [...css.matchAll(/^\s*(\.m-metrics span[^{]*)\{/gm)].map(
+    (m) => m[1].trim(),
+  );
+  assert.ok(selectors.length, "the rule exists");
+  for (const s of selectors)
+    assert.doesNotMatch(s, /^\.m-metrics span:not\(/, s);
+});

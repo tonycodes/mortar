@@ -15,31 +15,47 @@ export function extent(values: readonly number[]): Extent {
   return min === Infinity ? [0, 0] : [min, max];
 }
 
-/** Maps a domain onto a range linearly. A flat domain maps to the range's middle. */
+/**
+ * Maps a domain onto a range linearly. A flat domain maps to the range's
+ * middle. A missing value (NaN) stays missing, so lines keep their gaps.
+ */
 export function linearScale(domain: Extent, range: Extent) {
   const [d0, d1] = domain;
   const [r0, r1] = range;
   const span = d1 - d0;
   return (value: number) =>
-    span === 0 ? (r0 + r1) / 2 : r0 + ((value - d0) / span) * (r1 - r0);
+    !Number.isFinite(value)
+      ? Number.NaN
+      : span === 0
+        ? (r0 + r1) / 2
+        : r0 + ((value - d0) / span) * (r1 - r0);
 }
 
-/** "Nice" tick values covering the extent: steps of 1, 2 or 5 × 10ⁿ. */
+/**
+ * "Nice" tick values from the step at or below the minimum to the first step
+ * at or above the maximum, so the top gridline is never below the data.
+ * Inverted, non-finite and degenerate domains still return a short list.
+ */
 export function niceTicks(domain: Extent, count = 5): number[] {
-  const [min, max] = domain;
+  let [min, max] = domain;
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    const known = [min, max].find(Number.isFinite);
+    return [known ?? 0];
+  }
+  if (min > max) [min, max] = [max, min];
   if (min === max) return [min];
   const raw = (max - min) / Math.max(1, count);
   const power = 10 ** Math.floor(Math.log10(raw));
   const step =
     [1, 2, 5, 10].map((m) => m * power).find((s) => s >= raw) ?? 10 * power;
-  const ticks: number[] = [];
   // Round to the step's precision so 0.1 + 0.2 style drift never shows.
-  const digits = Math.max(0, -Math.floor(Math.log10(step)));
-  // From the step at or below the minimum to the first step at or above the
-  // maximum, so the top gridline is never below the data.
-  for (let v = Math.floor(min / step) * step; ; v += step) {
+  const digits = Math.min(20, Math.max(0, -Math.floor(Math.log10(step))));
+  const ticks: number[] = [];
+  for (let v = Math.floor(min / step) * step; ticks.length < 50; v += step) {
     ticks.push(Number(v.toFixed(digits)));
-    if (v >= max - step * 1e-9) break;
+    // Stop at the maximum, or when the step is too small to change v at
+    // this magnitude (huge values with a tiny span).
+    if (v >= max - step * 1e-9 || v + step === v) break;
   }
   return ticks;
 }
@@ -64,13 +80,27 @@ export function linePath(points: readonly Point[]): string {
   return d;
 }
 
-/** SVG path data for the area between a line and a baseline y. */
+/**
+ * SVG path data for the area between a line and a baseline y: one closed
+ * shape per run of finite values, so a missing value leaves a gap.
+ */
 export function areaPath(points: readonly Point[], baseline: number): string {
-  const finite = points.filter((p) => Number.isFinite(p.y));
-  if (finite.length < 2) return "";
-  const first = finite[0];
-  const last = finite[finite.length - 1];
-  return `${linePath(finite)}L${round(last.x)} ${round(baseline)}L${round(first.x)} ${round(baseline)}Z`;
+  let d = "";
+  let run: Point[] = [];
+  const close = () => {
+    if (run.length >= 2) {
+      const first = run[0];
+      const last = run[run.length - 1];
+      d += `${linePath(run)}L${round(last.x)} ${round(baseline)}L${round(first.x)} ${round(baseline)}Z`;
+    }
+    run = [];
+  };
+  for (const p of points) {
+    if (Number.isFinite(p.y)) run.push(p);
+    else close();
+  }
+  close();
+  return d;
 }
 
 /** SVG path data for the band between an upper and a lower edge (a stacked layer). */

@@ -580,7 +580,7 @@
     font-variant-numeric: tabular-nums;
   }
   /* Not a nested Sparkline's own spans: that would block and offset them. */
-  .m-metrics span:not(.m-sparkline, .m-sparkline *) {
+  .m-metrics span:where(:not(.m-sparkline, .m-sparkline *)) {
     display: block;
     margin-top: 4px;
     font: 12px var(--m-mono);
