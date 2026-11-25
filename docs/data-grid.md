@@ -19,7 +19,9 @@ The grid's engine, [TanStack Table](https://tanstack.com/table) and [TanStack Vi
 npm install @tanstack/react-table @tanstack/react-virtual
 ```
 
-Mortar's stylesheet already includes the grid's styles, so there is nothing else to import.
+The grid needs both packages whenever it is imported, even when it isn't virtualized. Mortar's stylesheet already includes the grid's styles, so there is nothing else to import.
+
+In server mode, always pass `rowCount`. Without it the grid counts only the rows it was given, so paging shows a single page.
 
 ## Client mode
 

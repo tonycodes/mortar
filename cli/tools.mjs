@@ -1,6 +1,6 @@
 // The MCP tools. Each handler takes validated arguments and returns a plain
 // object (serialised as JSON text) or a string (returned as text).
-import { renderAudit, RENDER_RULES } from "./render.mjs";
+import { parseUrls, renderAudit, RENDER_RULES } from "./render.mjs";
 import { GUIDES } from "./data.mjs";
 import { searchComponents } from "./search.mjs";
 import { componentDetail, buildPacket } from "./packet.mjs";
@@ -210,10 +210,7 @@ export const TOOLS = [
     run: async (data, { path = ".", render }) => {
       const report = await auditApp(path, { data });
       if (render) {
-        const urls = render
-          .split(",")
-          .map((u) => u.trim())
-          .filter(Boolean);
+        const urls = parseUrls(render);
         const rendered = await renderAudit(urls, { appRoot: report.root });
         report.findings.push(...rendered);
         for (const f of rendered) report.summary[f.severity]++;

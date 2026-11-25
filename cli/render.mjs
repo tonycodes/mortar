@@ -25,6 +25,13 @@ export const RENDER_RULES = {
 };
 
 const WIDTHS = [390, 1280];
+
+/** The URLs in a comma-separated list, trimmed, empty entries dropped. */
+export const parseUrls = (text) =>
+  String(text ?? "")
+    .split(",")
+    .map((url) => url.trim())
+    .filter(Boolean);
 const SCHEMES = ["light", "dark"];
 
 /** Load Playwright from the application first, then from the kit's install. */
@@ -214,7 +221,9 @@ export async function renderAudit(
             } else errors.push(m.text());
           });
           try {
-            await page.goto(url, { waitUntil: "networkidle", timeout: 30_000 });
+            // Wait for load, not network idle: long polling, streams and
+            // other requests that never finish would keep it from settling.
+            await page.goto(url, { waitUntil: "load", timeout: 30_000 });
           } catch (error) {
             add(
               "render-error",
@@ -226,6 +235,14 @@ export async function renderAudit(
             await page.close();
             continue;
           }
+          // Client-rendered apps mount after load: give Mortar's components a
+          // moment to appear before checking, without failing pages that
+          // have none.
+          await page
+            .locator("[data-m-component]")
+            .first()
+            .waitFor({ timeout: 5_000 })
+            .catch(() => {});
           await page.evaluate(() => document.fonts?.ready);
           const seenAt = `${scheme} ${width}px`;
           const r = await page.evaluate(inspect);
