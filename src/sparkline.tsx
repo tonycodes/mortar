@@ -63,7 +63,8 @@ export function Sparkline({
   const [min, max] = extent(
     band ? [...values, band.min, band.max] : [...values],
   );
-  const x = linearScale([0, Math.max(1, values.length - 1)], [0, 100]);
+  // A single value maps through a flat domain to the middle.
+  const x = linearScale([0, values.length - 1], [0, 100]);
   const y = linearScale([min, max], [100, 0]);
   const points = values.map((v, i) => ({ x: x(i), y: y(v) }));
   let lastIndex = values.length - 1;

@@ -706,13 +706,13 @@ export function MetricGroup({
                 {item.change}
               </span>
             )}
-            {item.sparkline && (
+            {item.sparkline?.length ? (
               <Sparkline
                 label={`${item.label}, recent values`}
                 values={item.sparkline}
                 height={28}
               />
-            )}
+            ) : null}
           </>
         ),
       }))}
