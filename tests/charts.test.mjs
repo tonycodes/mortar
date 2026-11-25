@@ -141,6 +141,8 @@ test("MetricGroup draws a sparkline only for items that have values", () => {
     items: [
       { label: "Requests", value: "1.4M", sparkline: [1, 2, 3] },
       { label: "Latency", value: "184ms" },
+      // An empty list means no trend to show, not a "no data" sparkline.
+      { label: "Errors", value: "0", sparkline: [] },
     ],
   });
   assert.equal(markup.match(/data-m-component="Sparkline"/g)?.length, 1);
@@ -202,4 +204,9 @@ test("MetricGroup's span rule skips sparklines without raising its specificity",
   assert.ok(selectors.length, "the rule exists");
   for (const s of selectors)
     assert.doesNotMatch(s, /^\.m-metrics span:not\(/, s);
+});
+
+test("a one-value sparkline puts its dot in the middle", () => {
+  const markup = html(Charts.Sparkline, { label: "Users", values: [7] });
+  assert.match(markup, /class="m-sparkline-last" style="left:50%;top:50%"/);
 });
