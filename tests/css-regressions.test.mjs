@@ -376,3 +376,24 @@ test("an Input's bordered group is as tall as Select and Button", () => {
     "1px solid var(--m-line-strong)",
   );
 });
+
+test("pinned grid cells have zero specificity so stripes and selection win", () => {
+  // A start-pinned cell at (0,1,1) painted the surface over every stripe.
+  // Removing the :where() groups must leave only the [data-pin] attribute.
+  const css = stripComments(sources["src/data.css"]);
+  const pinned = rules(css).filter(
+    ({ selector, body }) =>
+      /\[data-pin="(start|end)"\]/.test(selector) &&
+      /background-color:\s*var\(--m-surface\)/.test(body),
+  );
+  assert.ok(pinned.length >= 2, "start and end pin rules exist");
+  for (const { selector } of pinned) {
+    const rest = selector.replace(/:where\([^()]*\)/g, "").trim();
+    for (const part of rest.split(",").map((p) => p.trim()))
+      assert.match(
+        part,
+        /^\[data-pin="(start|end)"\]$/,
+        `${selector} must stay at zero class and element specificity`,
+      );
+  }
+});

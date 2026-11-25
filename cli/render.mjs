@@ -62,7 +62,10 @@ function inspect() {
 
   // The visible control of each Mortar field, and default-size buttons.
   const controls = [];
-  for (const field of document.querySelectorAll(".m-field[data-m-component]")) {
+  // Single-line fields only: a TextArea is meant to be taller than its neighbours.
+  for (const field of document.querySelectorAll(
+    ".m-field[data-m-component]:not(:has(textarea))",
+  )) {
     const box = [...field.children].find(
       (child) =>
         child.tagName !== "LABEL" &&

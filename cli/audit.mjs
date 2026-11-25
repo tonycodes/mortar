@@ -1485,6 +1485,12 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         const at = offset + named[0].indexOf(raw.trimStart() || raw);
         if (!known.has(name)) {
           const removed = entry ? undefined : REMOVED_EXPORTS[name];
+          // The name exists, but in another entry point (e.g. DataGrid in /data-grid).
+          const elsewhere = Object.entries(data.agent.entryExports ?? {}).find(
+            ([subpath, list]) =>
+              `${PKG}${subpath}` !== spec &&
+              (list.values.includes(name) || list.types.includes(name)),
+          )?.[0];
           const guess = removed?.replacement ?? closest(name, known, 3);
           add(
             "unknown-export",
@@ -1492,9 +1498,11 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
             file,
             line(at),
             `${spec} ${data.version} has no export "${name}".${removed ? " " + removed.note : ""}`,
-            guess
-              ? `Import ${guess} instead.`
-              : "Search the catalogue (mortar search) for the current component.",
+            elsewhere
+              ? `Import ${name} from "${PKG}${elsewhere}".`
+              : guess
+                ? `Import ${guess} instead.`
+                : "Search the catalogue (mortar search) for the current component.",
           );
           continue;
         }
