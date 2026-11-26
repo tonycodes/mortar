@@ -16,6 +16,8 @@ export const probes = Object.freeze({
   Notice: "notice",
   ErrorSummary: "error-summary",
   CommentComposer: "composer",
+  ChatThread: "chat-thread",
+  ChatComposer: "chat-composer",
   ButtonGroup: "button-group",
   ActionLink: "link",
   Input: "input",

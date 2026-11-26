@@ -151,6 +151,15 @@ const factories = {
       }),
   ],
   CommentComposer: [() => html(UI.CommentComposer, { onSubmit: noop })],
+  ChatComposer: [() => html(UI.ChatComposer, { onSubmit: noop })],
+  ChatThread: [
+    () => html(UI.ChatThread, { label: "Chat", messages: [] }),
+    () =>
+      html(UI.ChatThread, {
+        label: "Chat",
+        messages: [{ id: "1", author: { name: "Ana" }, content: "Hi" }],
+      }),
+  ],
   ContactSection: [
     () => html(UI.ContactSection, { title: "Contact", children: "Form" }),
   ],
