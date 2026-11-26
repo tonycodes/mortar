@@ -49,7 +49,10 @@ public struct MortarCommentComposer: View {
     ///   - label: The field's accessible name; not shown.
     ///   - maxLength: Text past it is cut off.
     ///   - showsCount: Shows the characters used out of `maxLength`.
-    ///   - isStreaming: A reply is arriving: Stop replaces Send.
+    ///   - isStreaming: A reply is arriving. Send is disabled, and
+    ///     Stop replaces it when `onStop` is set.
+    ///   - onStop: Stops the reply. Without it there is no Stop button
+    ///     or Command-period shortcut, so nothing is offered that does nothing.
     ///   - isFocused: Moves focus to the field, or away to dismiss the
     ///     keyboard, and follows it.
     ///   - onAttach: Adds an attachment button at the leading edge.
@@ -128,8 +131,8 @@ public struct MortarCommentComposer: View {
                         .accessibilityLabel(Text("\(maxLength - text.count) characters left"))
                 }
 
-                if isStreaming {
-                    Button { onStop?() } label: {
+                if isStreaming, let onStop {
+                    Button(action: onStop) {
                         Image(systemName: "stop.fill")
                     }
                     .buttonStyle(ComposerIconStyle(kind: .filled))
@@ -141,7 +144,7 @@ public struct MortarCommentComposer: View {
                         Image(systemName: "arrow.up")
                     }
                     .buttonStyle(ComposerIconStyle(kind: .filled))
-                    .disabled(trimmed.isEmpty)
+                    .disabled(trimmed.isEmpty || isStreaming)
                     .accessibilityLabel(sendLabel)
                     .focusEffectDisabled()
                     .keyboardShortcut(.return, modifiers: .command)
@@ -183,11 +186,10 @@ public struct MortarCommentComposer: View {
         text = draft.text
     }
 
+    /// What is on screen under the field: the error, which replaces the
+    /// hint while it is shown, or the hint. As the web composer.
     private var accessibilityHint: Text {
-        let parts = [error, hint].compactMap { $0 }
-        guard var joined = parts.first else { return Text(verbatim: "") }
-        for part in parts.dropFirst() { joined = joined + Text(verbatim: ". ") + part }
-        return joined
+        error ?? hint ?? Text(verbatim: "")
     }
 }
 

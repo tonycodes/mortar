@@ -334,7 +334,14 @@ private struct ChoicePill<Label: View>: View {
                     .fill(isPressed ? p[\.sunken] : p[\.surface])
                     .strokeBorder(isFocused ? p[\.focus] : p[\.line], lineWidth: isFocused ? 2 : 1)
             }
+            #if os(iOS)
+            // A 32-point pill in a 44-point touch target, like the composer's
+            // icon buttons. The Mac's pointer needs no extra target.
+            .padding(.vertical, (MortarTokens.touchTarget - 32) / 2)
+            .contentShape(Rectangle())
+            #else
             .contentShape(shape)
+            #endif
             .focusEffectDisabled()
     }
 }
