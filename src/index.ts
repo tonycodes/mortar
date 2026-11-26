@@ -231,6 +231,13 @@ export type {
   ShoppingCartProps,
 } from "./ecommerce.js";
 export { CommentComposer } from "./composer.js";
+export { ChatThread, ChatComposer } from "./chat.js";
+export type {
+  ChatAuthor,
+  ChatThreadMessage,
+  ChatThreadProps,
+  ChatComposerProps,
+} from "./chat.js";
 export type { LinkItem, ItemGroup } from "./navigation.js";
 export type { HeadingLevel } from "./heading.js";
 export { NetworkIllustration } from "./illustration.js";
