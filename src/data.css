@@ -111,6 +111,10 @@
   .m-data-table colgroup .m-table-select-col {
     width: 44px;
   }
+  /* Matches EXPAND_WIDTH in grid.tsx. */
+  .m-data-grid colgroup .m-data-grid-expand-col {
+    width: 48px;
+  }
   .m-truncate {
     display: block;
     overflow: hidden;
@@ -250,7 +254,7 @@
   :where(
     :is(.m-data-table, .m-table)[data-striped]
       tbody
-      tr:nth-child(even of :not(.m-table-group))
+      tr:nth-child(even of :not(.m-table-group, .m-data-grid-detail))
   ) {
     background: var(--m-sunken);
   }
@@ -273,7 +277,7 @@
   :where(
       .m-data-table[data-striped]
         tbody
-        tr:nth-child(even of :not(.m-table-group))
+        tr:nth-child(even of :not(.m-table-group, .m-data-grid-detail))
     )
     > [data-pin] {
     background-color: var(--m-sunken);
@@ -355,6 +359,117 @@
   .m-data-grid-spacer > td {
     padding: 0;
     border: 0;
+  }
+  /* Column resizing. Zero specificity, so a sticky header or pinned cell keeps
+     position: sticky, which also holds the absolutely placed handle. */
+  :where(.m-data-grid th[data-resizable]) {
+    position: relative;
+  }
+  .m-data-grid-resizer {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    width: 9px;
+    cursor: col-resize;
+    touch-action: none;
+    z-index: 1;
+  }
+  .m-data-grid-resizer::after {
+    content: "";
+    position: absolute;
+    inset-block: 8px;
+    inset-inline-end: 3px;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--m-line-strong);
+    opacity: 0;
+  }
+  .m-data-grid th:hover > .m-data-grid-resizer::after {
+    opacity: 1;
+  }
+  .m-data-grid-resizer:is([data-active], :focus-visible)::after {
+    background: var(--m-focus);
+    opacity: 1;
+  }
+  .m-data-grid-resizer:focus-visible {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  /* Exact widths: each column is as wide as set, and content that doesn't
+     fit is clipped rather than widening the column. */
+  .m-data-grid table[data-resized] {
+    table-layout: fixed;
+  }
+  .m-data-grid
+    table[data-resized]
+    :is(thead th, tbody tr:not(.m-data-grid-detail) > :is(th, td)) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Clipped cells would cut off focus rings drawn outside their controls. */
+  .m-data-grid
+    table[data-resized]
+    :is(.m-sort-button, .m-data-grid-expand):focus-visible {
+    outline-offset: -2px;
+  }
+  /* Expandable rows: a toggle at the start, and a full-width detail row. */
+  .m-data-grid :is(th, td)[data-expand] {
+    width: 1%;
+    padding-inline-end: 0;
+  }
+  .m-data-grid-expand {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-block: -6px;
+    vertical-align: middle;
+    border: 0;
+    border-radius: var(--m-radius);
+    background: none;
+    color: var(--m-muted);
+    cursor: pointer;
+  }
+  .m-data-grid-expand:hover {
+    background: var(--m-sunken);
+    color: var(--m-ink);
+  }
+  .m-data-grid-expand:focus-visible {
+    outline: 2px solid var(--m-focus);
+    outline-offset: -2px;
+  }
+  .m-data-grid-expand svg {
+    width: 16px;
+    height: 16px;
+    transition: rotate 0.15s ease;
+  }
+  .m-data-grid-expand[aria-expanded="true"] svg {
+    rotate: 90deg;
+  }
+  .m-data-grid-expand:dir(rtl) svg {
+    scale: -1 1;
+  }
+  .m-data-grid-expand:dir(rtl)[aria-expanded="true"] svg {
+    rotate: -90deg;
+  }
+  .m-data-grid tr[data-expanded] > :is(th, td) {
+    border-bottom-color: transparent;
+  }
+  .m-data-grid-detail > td {
+    padding: 4px var(--m-cell-pad-x) 16px;
+    white-space: normal;
+    text-align: start;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .m-data-grid-expand svg {
+      transition: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .m-data-grid-resizer::after {
+      background: CanvasText;
+      opacity: 1;
+    }
   }
   /* Column priority follows the table's own width, so a table in a narrow
      panel collapses as it would on a phone. */

@@ -5,6 +5,7 @@
 export { DataGrid } from "./grid.js";
 export type {
   DataGridColumn,
+  DataGridColumnWidths,
   DataGridFilters,
   DataGridPagination,
   DataGridProps,

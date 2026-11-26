@@ -142,7 +142,54 @@ Hidden columns and sort levels are plain arrays, so they are easy to save per us
 - **Paging or virtualization.** Pass `pagination` to page rows, or `virtualize` to render only the rows in view. Virtualization needs a fixed height: `maxHeight`, which defaults to 32rem when virtualizing. Without either, every row renders.
 - **Columns.** People can hide any column but the first from the Columns menu; set `hideable: false` to keep one. `pin: "start"` or `pin: "end"` keeps a column in view while the grid scrolls sideways. `priority` hides secondary columns on narrow grids, as in `DataTable`.
 
+## Resizing columns
+
+`resizable` lets people resize columns: drag the edge of a header, or focus that edge and use the arrow keys (16 pixels a step, 64 with Shift). Home sets a column to its minimum, and End to its `maxWidth` when it has one.
+
+```tsx
+const [widths, setWidths] = useState<DataGridColumnWidths>(savedWidths);
+
+<DataGrid
+  caption="Invoices"
+  rows={invoices}
+  rowLabel={(row) => row.number}
+  columns={columns}
+  resizable
+  columnWidths={widths}
+  onColumnWidthsChange={(next) => {
+    setWidths(next);
+    save(next);
+  }}
+/>;
+```
+
+- Widths are in pixels, by column key. The first resize gives every visible column the width it had on screen, so the other columns keep their widths, and from then on the table is exactly as wide as its columns and scrolls sideways when it's wider than its container. Text that doesn't fit is cut off with an ellipsis.
+- A drag shows its width as it moves and reports it once, when it ends. A key press reports straight away.
+- Columns take `minWidth` (default 64) and `maxWidth` (default 2000); `resizable: false` keeps one column's width fixed. The first resize also brings any column outside those limits back within them. A column's `width` is its starting width until someone resizes it.
+- Keep `columnWidths` to remember widths between visits.
+
+## Expandable rows
+
+`renderDetail` adds a toggle at the start of each row; an expanded row shows the detail in a full-width row underneath it.
+
+```tsx
+<DataGrid
+  caption="Invoices"
+  rows={invoices}
+  rowLabel={(row) => row.number}
+  columns={columns}
+  renderDetail={(row) => <InvoiceLines invoice={row} />}
+  rowCanExpand={(row) => row.lines.length > 0}
+/>
+```
+
+- `rowCanExpand` decides which rows get a toggle; by default every row does.
+- `expandedIds`, `defaultExpandedIds` and `onExpandedChange` hold which rows are open, like the selection. Expanded ids are kept when rows are sorted, filtered or paged.
+- Detail rows aren't available with `virtualize` yet: the grid shows a console warning and doesn't expand rows.
+
 ## Accessibility
+
+Each column edge is a focusable separator named "Resize Customer" (for example), with its width in pixels as its value between its minimum and maximum. The header itself is still named just "Customer". Each expand toggle is a button named "Details for" and the row's `rowLabel`, with `aria-expanded`, and `aria-controls` pointing to the detail row while it's open.
 
 The grid is a semantic table with a caption, `scope` on headers and `aria-sort` on the sorted column. A virtualized grid sets `aria-rowcount` and each row's `aria-rowindex`, so screen readers know where they are in the full set. Every row checkbox is named from `rowLabel`. Check keyboard use and focus in your own toolbar content and bulk actions.
 
@@ -152,4 +199,4 @@ With 100,000 client-side rows in the playground, sorting takes about 250ms, sear
 
 ## Not yet
 
-Column resizing and reordering, grouping with totals, expandable detail rows and inline editing are planned and not in this version.
+Column reordering, grouping with totals, inline editing, and detail rows in a virtualized grid are planned and not in this version.

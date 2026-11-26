@@ -3,11 +3,16 @@
    the markup, styles, keyboard handling and public types; no TanStack type
    appears in the props, so the engine can change without a breaking release. */
 import {
+  Fragment,
   useCallback,
+  useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
+  type KeyboardEvent,
+  type PointerEvent,
   type ReactNode,
 } from "react";
 import {
@@ -42,7 +47,7 @@ import {
   Select,
 } from "./primitives.js";
 import { Pagination } from "./application.js";
-import { SortArrows } from "./icons.js";
+import { ChevronRight, SortArrows } from "./icons.js";
 import type { HeadingLevel } from "./heading.js";
 import { componentRoot, cx } from "./internal.js";
 import {
@@ -69,7 +74,16 @@ export interface DataGridColumn<T> extends Omit<DataTableColumn<T>, "pin"> {
   filterValue?: (row: T) => string | number | null | undefined;
   /** Whether people can hide the column from the Columns menu. Default true; the first column always shows. */
   hideable?: boolean;
+  /** With the grid's `resizable`, set false to keep this column's width fixed. */
+  resizable?: boolean;
+  /** Narrowest width, in pixels, a resize can reach. Default 64. */
+  minWidth?: number;
+  /** Widest width, in pixels, a resize can reach. Default 2000. */
+  maxWidth?: number;
 }
+
+/** Column widths in pixels, by column key. */
+export type DataGridColumnWidths = Record<string, number>;
 
 /** Column key to filter value. A missing or empty value means no filter. */
 export type DataGridFilters = Record<string, string>;
@@ -118,6 +132,25 @@ export interface DataGridProps<T extends { id: string }> {
   defaultPagination?: DataGridPagination;
   onPaginationChange?: (pagination: DataGridPagination) => void;
   /** Render only the rows in view. Needs maxHeight (default 32rem when virtualizing). */
+  /**
+   * Lets people resize columns: drag the edge of a header, or focus it and
+   * use the arrow keys. Widths are in pixels; once every visible column has
+   * one, the table lays out at exactly those widths.
+   */
+  resizable?: boolean;
+  columnWidths?: DataGridColumnWidths;
+  defaultColumnWidths?: DataGridColumnWidths;
+  onColumnWidthsChange?: (widths: DataGridColumnWidths) => void;
+  /**
+   * Content shown in a full-width row under a row when it is expanded. Adds a
+   * toggle at the start of each row. Not available with `virtualize` yet.
+   */
+  renderDetail?: (row: T) => ReactNode;
+  /** Which rows can expand. Default every row. */
+  rowCanExpand?: (row: T) => boolean;
+  expandedIds?: string[];
+  defaultExpandedIds?: string[];
+  onExpandedChange?: (ids: string[]) => void;
   virtualize?: boolean;
   /** Row height in pixels used for virtualization until a row is measured. Default 44. */
   estimateRowHeight?: number;
@@ -190,6 +223,14 @@ const matches = (value: string, query: string) =>
 // A stable default: a new [] each render would rebuild the selection set and
 // recount select-all over every row on every render.
 const NO_IDS: string[] = [];
+const NO_WIDTHS: DataGridColumnWidths = {};
+const MIN_WIDTH = 64;
+const MAX_WIDTH = 2000;
+// Arrow keys move a column edge by this much; with Shift, four times as far.
+const KEY_STEP = 16;
+// The selection and expand columns' widths, as set in data.css.
+const SELECT_WIDTH = 44;
+const EXPAND_WIDTH = 48;
 
 // Stable table options: functions recreated each render would invalidate
 // TanStack's row-model caches.
@@ -227,6 +268,15 @@ export function DataGrid<T extends { id: string }>({
   pagination: paginationProp,
   defaultPagination,
   onPaginationChange,
+  resizable = false,
+  columnWidths: columnWidthsProp,
+  defaultColumnWidths = NO_WIDTHS,
+  onColumnWidthsChange,
+  renderDetail,
+  rowCanExpand,
+  expandedIds: expandedIdsProp,
+  defaultExpandedIds = NO_IDS,
+  onExpandedChange,
   virtualize = false,
   estimateRowHeight = 44,
   rowHref,
@@ -274,6 +324,27 @@ export function DataGrid<T extends { id: string }>({
     defaultPagination,
     onPaginationChange as (p: DataGridPagination | undefined) => void,
   );
+  const [widths, setWidths] = useControllable(
+    columnWidthsProp,
+    defaultColumnWidths,
+    onColumnWidthsChange,
+  );
+  const [expanded, setExpanded] = useControllable(
+    expandedIdsProp,
+    defaultExpandedIds,
+    onExpandedChange,
+  );
+  const expandedSet = useMemo(() => new Set(expanded), [expanded]);
+  // Detail rows change row heights, which the virtualizer's single measured
+  // height can't follow, so virtualized grids don't expand (yet).
+  const expandable = !!renderDetail && !virtualize;
+  useEffect(() => {
+    if (renderDetail && virtualize)
+      console.warn(
+        "DataGrid: renderDetail is not available with virtualize yet; rows will not expand.",
+      );
+  }, [renderDetail, virtualize]);
+  const detailBase = useId();
 
   // TanStack state derived from Mortar's public state. Each slice is memoised on
   // its value: a new object every render would make TanStack re-sort and
@@ -472,7 +543,11 @@ export function DataGrid<T extends { id: string }>({
       for (const cell of cells) {
         const key = cell.dataset.key;
         const pin = cell.dataset.pin;
-        if (pin === "start" || cell.dataset.select !== undefined) {
+        if (
+          pin === "start" ||
+          cell.dataset.select !== undefined ||
+          cell.dataset.expand !== undefined
+        ) {
           if (key) next[key] = start;
           start += cell.offsetWidth;
         } else break;
@@ -495,7 +570,134 @@ export function DataGrid<T extends { id: string }>({
     for (const cell of tr.querySelectorAll("[data-pin], [data-select]"))
       observer.observe(cell);
     return () => observer.disconnect();
-  }, [headerRow, pinKey, hidden.join(",")]);
+  }, [headerRow, pinKey, hidden.join(","), expandable, !!onSelectionChange]);
+
+  // Column resizing. Rendered header widths are tracked so a resize starts
+  // from what is on screen and the separators can report a value.
+  // Columns a narrow grid hides by priority are display: none; they take no
+  // width and don't count toward the table's. A grid inside a hidden tab or
+  // dialog has no layout at all, so nothing is measured until it shows.
+  const [measured, setMeasured] = useState<Record<string, number>>({});
+  const [priorityHidden, setPriorityHidden] = useState<string[]>(NO_IDS);
+  useLayoutEffect(() => {
+    const tr = headerRow;
+    if (!tr || !resizable) return;
+    const measure = () => {
+      if (!tr.isConnected || !tr.getClientRects().length) return;
+      const next: Record<string, number> = {};
+      const gone: string[] = [];
+      for (const cell of tr.children as HTMLCollectionOf<HTMLElement>) {
+        const key = cell.dataset.key;
+        if (!key) continue;
+        if (getComputedStyle(cell).display === "none") gone.push(key);
+        else next[key] = cell.getBoundingClientRect().width;
+      }
+      setMeasured((old) =>
+        JSON.stringify(old) === JSON.stringify(next) ? old : next,
+      );
+      setPriorityHidden((old) =>
+        old.join(",") === gone.join(",") ? old : gone,
+      );
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    for (const cell of tr.children) observer.observe(cell);
+    return () => observer.disconnect();
+  }, [headerRow, resizable, hidden.join(","), expandable]);
+  // A drag shows its width live and reports it once, when it ends.
+  const [drag, setDrag] = useState<{
+    key: string;
+    width: number;
+    base: DataGridColumnWidths;
+  } | null>(null);
+  const widthOf = (key: string) =>
+    drag ? (drag.key === key ? drag.width : drag.base[key]) : widths[key];
+  const minOf = (col: DataGridColumn<T>) => col.minWidth ?? MIN_WIDTH;
+  const maxOf = (col: DataGridColumn<T>) => col.maxWidth ?? MAX_WIDTH;
+  const clampWidth = (col: DataGridColumn<T>, width: number) =>
+    Math.round(Math.min(maxOf(col), Math.max(minOf(col), width)));
+  // Every visible column gets a width the first time one is resized, so the
+  // others keep the widths they had instead of sharing out the difference.
+  // Snapshot widths respect each column's minimum and maximum.
+  const shown = (col: DataGridColumn<T>) => !priorityHidden.includes(col.key);
+  const resizeBase = () => {
+    const base = { ...widths };
+    for (const col of ordered)
+      if (base[col.key] === undefined && shown(col) && measured[col.key])
+        base[col.key] = clampWidth(col, measured[col.key]);
+    return base;
+  };
+  // 2. A drag ends cleanly even if the table unmounts mid-drag (loading, an
+  // empty result): the listeners live on the window and are removed here.
+  const endDrag = useRef<(() => void) | null>(null);
+  useLayoutEffect(() => () => endDrag.current?.(), [headerRow]);
+  const startResize = (
+    col: DataGridColumn<T>,
+    event: PointerEvent<HTMLDivElement>,
+  ) => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    const handle = event.currentTarget;
+    const rtl = getComputedStyle(handle).direction === "rtl";
+    const base = resizeBase();
+    const start = base[col.key] ?? MIN_WIDTH;
+    const startX = event.clientX;
+    let width = start;
+    endDrag.current?.();
+    handle.setPointerCapture(event.pointerId);
+    setDrag({ key: col.key, width, base });
+    const move = (e: globalThis.PointerEvent) => {
+      width = clampWidth(col, start + (e.clientX - startX) * (rtl ? -1 : 1));
+      setDrag({ key: col.key, width, base });
+    };
+    const end = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", end);
+      endDrag.current = null;
+      setDrag(null);
+      setWidths({ ...base, [col.key]: width });
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", end);
+    endDrag.current = end;
+  };
+  const keyResize = (
+    col: DataGridColumn<T>,
+    event: KeyboardEvent<HTMLDivElement>,
+  ) => {
+    const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
+    const grow = rtl ? "ArrowLeft" : "ArrowRight";
+    const shrink = rtl ? "ArrowRight" : "ArrowLeft";
+    const base = resizeBase();
+    const now = base[col.key] ?? MIN_WIDTH;
+    const step = KEY_STEP * (event.shiftKey ? 4 : 1);
+    let next: number | undefined;
+    if (event.key === grow) next = now + step;
+    else if (event.key === shrink) next = now - step;
+    else if (event.key === "Home") next = minOf(col);
+    else if (event.key === "End" && col.maxWidth !== undefined)
+      next = col.maxWidth;
+    if (next === undefined) return;
+    event.preventDefault();
+    setWidths({ ...base, [col.key]: clampWidth(col, next) });
+  };
+  const canResize = (col: DataGridColumn<T>) =>
+    resizable && col.resizable !== false;
+  // Exact widths once every visible column has one: fixed layout, and the
+  // table as wide as its columns, so a resize changes only that column.
+  const fixedWidths =
+    resizable &&
+    ordered.every((col) => !shown(col) || widthOf(col.key) !== undefined);
+  const tableWidth = fixedWidths
+    ? ordered.reduce(
+        (sum, col) => sum + (shown(col) ? widthOf(col.key)! : 0),
+        0,
+      ) +
+      (onSelectionChange ? SELECT_WIDTH : 0) +
+      (expandable ? EXPAND_WIDTH : 0)
+    : undefined;
 
   // Row virtualization: only the rows in view render, with spacer rows keeping
   // the scroll height. Rows keep aria-rowindex so assistive tech knows the size.
@@ -544,7 +746,21 @@ export function DataGrid<T extends { id: string }>({
       ? virtualizer.getTotalSize() - items[items.length - 1].end
       : 0;
   const rowOffset = paging ? (page - 1) * paging.pageSize : 0;
-  const span = ordered.length + (onSelectionChange ? 1 : 0);
+  const span =
+    ordered.length + (onSelectionChange ? 1 : 0) + (expandable ? 1 : 0);
+  const pinnedStart = columnPinning.start.length > 0;
+  const expandPin = pinnedStart
+    ? {
+        "data-pin": "start" as const,
+        style: { insetInlineStart: offsets.__expand ?? 0 },
+      }
+    : {};
+  const toggleExpanded = (rowId: string) =>
+    setExpanded(
+      expandedSet.has(rowId)
+        ? expanded.filter((x) => x !== rowId)
+        : [...expanded, rowId],
+    );
 
   const pinStyle = (col: DataGridColumn<T>) =>
     col.pin && offsets[col.key] !== undefined
@@ -721,17 +937,36 @@ export function DataGrid<T extends { id: string }>({
           style={maxHeight ? { maxHeight } : undefined}
           data-sticky={maxHeight ? true : undefined}
         >
-          <table aria-rowcount={virtualize ? matchingCount + 1 : undefined}>
+          <table
+            aria-rowcount={virtualize ? matchingCount + 1 : undefined}
+            data-resized={fixedWidths || undefined}
+            style={tableWidth ? { width: tableWidth } : undefined}
+          >
             <caption className="m-sr-only">{caption}</caption>
-            {ordered.some((col) => col.width) && (
+            {ordered.some(
+              (col) => col.width || widthOf(col.key) !== undefined,
+            ) && (
               <colgroup>
                 {onSelectionChange && <col className="m-table-select-col" />}
-                {ordered.map((col) => (
-                  <col
-                    key={col.key}
-                    style={col.width ? { width: col.width } : undefined}
-                  />
-                ))}
+                {expandable && <col className="m-data-grid-expand-col" />}
+                {ordered.map((col, index) => {
+                  const width = widthOf(col.key);
+                  return (
+                    <col
+                      key={col.key}
+                      // Hidden with its cells on narrow grids, so the cells
+                      // that remain keep their own columns.
+                      data-priority={cellProps(col, index)["data-priority"]}
+                      style={
+                        width !== undefined
+                          ? { width }
+                          : col.width
+                            ? { width: col.width }
+                            : undefined
+                      }
+                    />
+                  );
+                })}
               </colgroup>
             )}
             <thead>
@@ -740,6 +975,7 @@ export function DataGrid<T extends { id: string }>({
                   <th
                     scope="col"
                     data-select=""
+                    data-key="__select"
                     data-pin={columnPinning.start.length ? "start" : undefined}
                     style={
                       columnPinning.start.length
@@ -754,8 +990,19 @@ export function DataGrid<T extends { id: string }>({
                     />
                   </th>
                 )}
+                {expandable && (
+                  <th
+                    scope="col"
+                    data-expand=""
+                    data-key="__expand"
+                    {...expandPin}
+                  >
+                    <span className="m-sr-only">Details</span>
+                  </th>
+                )}
                 {ordered.map((col, index) => {
                   const position = sortIndex(col.key);
+                  const width = widthOf(col.key) ?? measured[col.key];
                   const direction =
                     position >= 0 ? sort[position].direction : undefined;
                   return (
@@ -763,6 +1010,14 @@ export function DataGrid<T extends { id: string }>({
                       key={col.key}
                       scope="col"
                       {...cellProps(col, index)}
+                      data-resizable={canResize(col) || undefined}
+                      // The separator inside would otherwise join the
+                      // header's name ("Customer Resize Customer").
+                      aria-labelledby={
+                        canResize(col)
+                          ? `${detailBase}-head-${encodeURIComponent(col.key)}`
+                          : undefined
+                      }
                       aria-sort={
                         col.sortable
                           ? position === 0
@@ -784,7 +1039,15 @@ export function DataGrid<T extends { id: string }>({
                               )
                           }
                         >
-                          {col.label}
+                          <span
+                            id={
+                              canResize(col)
+                                ? `${detailBase}-head-${encodeURIComponent(col.key)}`
+                                : undefined
+                            }
+                          >
+                            {col.label}
+                          </span>
                           <SortArrows direction={direction} />
                           {sort.length > 1 && position >= 0 && (
                             <span className="m-sort-order">
@@ -793,8 +1056,37 @@ export function DataGrid<T extends { id: string }>({
                             </span>
                           )}
                         </button>
+                      ) : canResize(col) ? (
+                        <span
+                          id={`${detailBase}-head-${encodeURIComponent(col.key)}`}
+                        >
+                          {col.label}
+                        </span>
                       ) : (
                         col.label
+                      )}
+                      {canResize(col) && (
+                        // A focusable separator: the window-splitter pattern.
+                        <div
+                          role="separator"
+                          aria-orientation="vertical"
+                          aria-label={`Resize ${col.label}`}
+                          aria-valuenow={
+                            width !== undefined ? Math.round(width) : undefined
+                          }
+                          aria-valuemin={minOf(col)}
+                          aria-valuemax={maxOf(col)}
+                          aria-valuetext={
+                            width !== undefined
+                              ? `${Math.round(width)} pixels`
+                              : undefined
+                          }
+                          tabIndex={0}
+                          className="m-data-grid-resizer"
+                          data-active={drag?.key === col.key || undefined}
+                          onPointerDown={(event) => startResize(col, event)}
+                          onKeyDown={(event) => keyResize(col, event)}
+                        />
                       )}
                     </th>
                   );
@@ -811,64 +1103,91 @@ export function DataGrid<T extends { id: string }>({
                 const original = row.original;
                 const href = rowHref?.(original);
                 const isSelected = selected.has(row.id);
+                const canOpen =
+                  expandable && (rowCanExpand ? rowCanExpand(original) : true);
+                const isOpen = canOpen && expandedSet.has(row.id);
+                const detailId = `${detailBase}-detail-${encodeURIComponent(row.id)}`;
                 return (
-                  <tr
-                    key={row.id}
-                    data-selected={isSelected || undefined}
-                    data-linked={href ? true : undefined}
-                    aria-rowindex={
-                      virtualize ? rowOffset + index + 2 : undefined
-                    }
-                  >
-                    {onSelectionChange && (
-                      <td
-                        data-select=""
-                        data-pin={
-                          columnPinning.start.length ? "start" : undefined
-                        }
-                        style={
-                          columnPinning.start.length
-                            ? { insetInlineStart: 0 }
-                            : undefined
-                        }
-                      >
-                        <input
-                          type="checkbox"
-                          aria-label={`Select ${rowLabel(original)}`}
-                          checked={isSelected}
-                          onChange={row.getToggleSelectedHandler()}
-                        />
-                      </td>
-                    )}
-                    {ordered.map((col, colIndex) => {
-                      const content = col.truncate ? (
-                        <span className="m-truncate">
-                          {col.render(original)}
-                        </span>
-                      ) : (
-                        col.render(original)
-                      );
-                      return colIndex === 0 ? (
-                        <th
-                          scope="row"
-                          key={col.key}
-                          {...cellProps(col, colIndex)}
+                  <Fragment key={row.id}>
+                    <tr
+                      data-selected={isSelected || undefined}
+                      data-expanded={isOpen || undefined}
+                      data-linked={href ? true : undefined}
+                      aria-rowindex={
+                        virtualize ? rowOffset + index + 2 : undefined
+                      }
+                    >
+                      {onSelectionChange && (
+                        <td
+                          data-select=""
+                          data-pin={
+                            columnPinning.start.length ? "start" : undefined
+                          }
+                          style={
+                            columnPinning.start.length
+                              ? { insetInlineStart: 0 }
+                              : undefined
+                          }
                         >
-                          {href ? (
-                            <KitLink className="m-row-link" href={href}>
-                              {content}
-                            </KitLink>
-                          ) : (
-                            content
-                          )}
-                        </th>
-                      ) : (
-                        <td key={col.key} {...cellProps(col, colIndex)}>
-                          {content}
+                          <input
+                            type="checkbox"
+                            aria-label={`Select ${rowLabel(original)}`}
+                            checked={isSelected}
+                            onChange={row.getToggleSelectedHandler()}
+                          />
                         </td>
-                      );
-                    })}
-                  </tr>
+                      )}
+                      {expandable && (
+                        <td data-expand="" {...expandPin}>
+                          {canOpen && (
+                            <button
+                              type="button"
+                              className="m-data-grid-expand"
+                              aria-expanded={isOpen}
+                              aria-controls={isOpen ? detailId : undefined}
+                              aria-label={`Details for ${rowLabel(original)}`}
+                              onClick={() => toggleExpanded(row.id)}
+                            >
+                              <ChevronRight />
+                            </button>
+                          )}
+                        </td>
+                      )}
+                      {ordered.map((col, colIndex) => {
+                        const content = col.truncate ? (
+                          <span className="m-truncate">
+                            {col.render(original)}
+                          </span>
+                        ) : (
+                          col.render(original)
+                        );
+                        return colIndex === 0 ? (
+                          <th
+                            scope="row"
+                            key={col.key}
+                            {...cellProps(col, colIndex)}
+                          >
+                            {href ? (
+                              <KitLink className="m-row-link" href={href}>
+                                {content}
+                              </KitLink>
+                            ) : (
+                              content
+                            )}
+                          </th>
+                        ) : (
+                          <td key={col.key} {...cellProps(col, colIndex)}>
+                            {content}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                    {isOpen && (
+                      <tr id={detailId} className="m-data-grid-detail">
+                        <td colSpan={span}>{renderDetail!(original)}</td>
+                      </tr>
+                    )}
+                  </Fragment>
                 );
               })}
               {padBottom > 0 && (

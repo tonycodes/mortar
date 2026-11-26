@@ -739,6 +739,86 @@ export const implementations = {
     await expect(paged.getByText("Showing 1 to 25 of 240")).toBeVisible();
     await paged.getByRole("button", { name: "Next" }).click();
     await expect(paged.getByText("Showing 26 to 50 of 240")).toBeVisible();
+    // Resizable columns: from the keyboard, then by dragging the edge.
+    const detailed = preview.locator(".m-data-grid").nth(2);
+    const customer = detailed.locator("th[data-key=customer]");
+    const handle = detailed.getByRole("separator", {
+      name: "Resize Customer",
+    });
+    const width = () =>
+      customer.evaluate((el) => Math.round(el.getBoundingClientRect().width));
+    // The header keeps its own name; the separator is named separately.
+    await expect(
+      detailed.getByRole("columnheader", { name: "Customer", exact: true }),
+    ).toHaveCount(1);
+    // A grid shown after being hidden (a closed tab or dialog) lays out
+    // normally: nothing measured while hidden collapses its columns.
+    await detailed.evaluate((el) => (el.style.display = "none"));
+    await page.waitForTimeout(100);
+    await detailed.evaluate((el) => (el.style.display = ""));
+    await expect(detailed.locator("table")).not.toHaveAttribute("data-resized");
+    expect(await width()).toBeGreaterThan(60);
+    const before = await width();
+    await handle.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect.poll(width).toBe(before + 16);
+    await expect(handle).toHaveAttribute("aria-valuenow", String(before + 16));
+    await page.keyboard.press("Shift+ArrowLeft");
+    await expect.poll(width).toBe(before - 48);
+    // Every column now has a width: the others kept theirs.
+    await expect(detailed.locator("table")).toHaveAttribute(
+      "data-resized",
+      "true",
+    );
+    // Every shown column kept a real width, including next to a column the
+    // narrow grid hides by priority (Issued): none collapsed to nothing.
+    const widths = await detailed
+      .locator("thead th[data-key]:not([data-key^='__'])")
+      .evaluateAll((cells) =>
+        cells
+          .filter((cell) => getComputedStyle(cell).display !== "none")
+          .map((cell) => [
+            cell.dataset.key,
+            cell.getBoundingClientRect().width,
+          ]),
+      );
+    for (const [key, w] of widths) expect(w, key).toBeGreaterThan(60);
+    // The first resize brought Amount (maxWidth 140) within its limit.
+    const amountHead = detailed.locator("th[data-key=amount]");
+    expect(
+      await amountHead.evaluate((el) => el.getBoundingClientRect().width),
+    ).toBeLessThanOrEqual(140.5);
+    await expect(detailed.locator("td[data-key=amount]").first()).toBeVisible();
+    const box = await handle.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2 + 60, box.y + box.height / 2, {
+      steps: 4,
+    });
+    await page.mouse.up();
+    await expect.poll(width).toBe(before + 12);
+    // The minimum holds.
+    await handle.focus();
+    await page.keyboard.press("Home");
+    await expect.poll(width).toBe(64);
+    // Expandable rows: one opens by default, a draft has no toggle.
+    const open = detailed.getByRole("button", {
+      name: "Details for INV-000002",
+    });
+    await expect(open).toHaveAttribute("aria-expanded", "true");
+    const panel = detailed.locator(
+      `#${await open.getAttribute("aria-controls")}`,
+    );
+    await expect(panel).toContainText("Amount due");
+    await open.click();
+    await expect(open).toHaveAttribute("aria-expanded", "false");
+    await expect(panel).toHaveCount(0);
+    await expect(open).toBeFocused();
+    await open.press("Enter");
+    await expect(open).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      detailed.getByRole("button", { name: "Details for INV-000001" }),
+    ).toHaveCount(0);
   },
   async "table-sort"({ page, root: preview }) {
     // The preview also shows a grouped table; exercise the first (paginated) one.

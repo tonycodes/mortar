@@ -48,7 +48,7 @@ export const GUIDES = {
   "data-grid": {
     file: "docs/data-grid.md",
     summary:
-      "DataGrid from @tonycodes-ui/mortar/data-grid: when to use it over DataTable, installing the TanStack peers, client and server mode, controlled state, sorting, filters, search, selection, paging, virtualization and pinned columns.",
+      "DataGrid from @tonycodes-ui/mortar/data-grid: when to use it over DataTable, installing the TanStack peers, client and server mode, controlled state, sorting, filters, search, selection, paging, virtualization, pinned and resizable columns, and expandable detail rows.",
   },
   native: {
     file: "docs/native.md",
