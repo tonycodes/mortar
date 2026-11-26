@@ -10,6 +10,12 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependencies
+    ignore:
+      # TypeScript 7 drops the classic compiler API (createSourceFile, the
+      # type checker) that scripts/agent-data.mjs, api.mjs and check.mjs use
+      # to build the catalogue. Stay below 7 until that migration is done.
+      - dependency-name: typescript
+        versions: [">=7.0.0"]
     groups:
       react-headless:
         patterns:
