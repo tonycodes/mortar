@@ -31,7 +31,7 @@ const example = {
   "m-brand-d-on-primary": "#0b1f4d",
 };
 // A brand with tinted surfaces (navy in dark) and an accent gradient in each
-// appearance. Mortar's text, status and line colours stay fixed, so these keep
+// appearance. Its text and line colours stay Mortar's, so these keep
 // text at 4.5:1 and strong lines at 3:1: a lighter dark sunken such as #143156
 // drops strong lines to 2.7:1, and #16365f muted text to 4.2:1
 // (docs/theming.md, "Surfaces").
@@ -64,6 +64,34 @@ const warm = {
   "m-brand-d-on-accent": "#fff7ed",
   "m-brand-d-accent-gradient": "linear-gradient(90deg, #7c2d12, #9a3412)",
 };
+// A warm brand that sets its own text and line colours (after tony.codes:
+// cream ink on a slate page in dark, warm ink on cream paper in light). Text
+// stays 4.5:1 and strong lines 3:1 on every surface, and on the opposite
+// appearance's inverse band. Status colours stay Mortar's, which is why the
+// sunken values are a step lighter (light) and darker (dark) than the site's
+// #efe8db and #252c33: success text there drops to 4.4:1.
+const warmText = {
+  "m-brand-l-primary": "#973e2b",
+  "m-brand-l-on-primary": "#fff8ed",
+  "m-brand-l-paper": "#f9f5ed",
+  "m-brand-l-surface": "#fdfaf4",
+  "m-brand-l-sunken": "#f2ece1",
+  "m-brand-l-ink": "#2a1e1b",
+  "m-brand-l-secondary": "#4a3f3a",
+  "m-brand-l-muted": "#6b5f58",
+  "m-brand-l-line": "#e4dccd",
+  "m-brand-l-line-strong": "#80766b",
+  "m-brand-d-primary": "#eea689",
+  "m-brand-d-on-primary": "#2a1e1b",
+  "m-brand-d-paper": "#1b2128",
+  "m-brand-d-surface": "#1f262e",
+  "m-brand-d-sunken": "#232a31",
+  "m-brand-d-ink": "#f7efdf",
+  "m-brand-d-secondary": "#e3dccd",
+  "m-brand-d-muted": "#c1beb7",
+  "m-brand-d-line": "#333a42",
+  "m-brand-d-line-strong": "#7d8288",
+};
 const themes = {
   "neutral light": resolveTokens({ ...root, ...neutral }),
   "neutral dark": resolveTokens({ ...root, ...dark, ...neutral }),
@@ -75,6 +103,8 @@ const themes = {
   "tinted gradient brand dark": resolveTokens({ ...root, ...dark, ...tinted }),
   "warm accent light": resolveTokens({ ...root, ...warm }),
   "warm accent dark": resolveTokens({ ...root, ...dark, ...warm }),
+  "warm text light": resolveTokens({ ...root, ...warmText }),
+  "warm text dark": resolveTokens({ ...root, ...dark, ...warmText }),
 };
 
 const tones = ["success", "warning", "danger", "info"];

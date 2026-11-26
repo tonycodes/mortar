@@ -409,3 +409,54 @@ test("accent hover and active, and strong lines on surfaces, are checked", async
   await page.getByLabel("Light sunken", { exact: true }).fill("#c7c7cc");
   await expect(line).toContainText("Fail");
 });
+
+test("brand text colours restyle the previews and join the contrast table", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const query = new URLSearchParams({
+    "d-paper": "#1b2128",
+    "d-surface": "#1f262e",
+    "d-sunken": "#232a31",
+    "d-ink": "#f7efdf",
+    "d-secondary": "#e3dccd",
+    "d-muted": "#c1beb7",
+  });
+  const errors = await open(page, `&${query}`);
+  const dark = sample(page, "dark");
+  // The dark preview's heading is the brand's cream ink and its body copy
+  // the brand's secondary, not Mortar's greys.
+  await expect(dark.locator(".pg-brand-type h4")).toHaveCSS(
+    "color",
+    "rgb(247, 239, 223)",
+  );
+  await expect(dark.locator(".pg-brand-type p")).toHaveCSS(
+    "color",
+    "rgb(227, 220, 205)",
+  );
+  // The light appearance keeps Mortar's ink.
+  await expect(sample(page, "light").locator(".pg-brand-type h4")).toHaveCSS(
+    "color",
+    "rgb(0, 0, 0)",
+  );
+  for (const id of [
+    "text-surface",
+    "text-sunken",
+    "secondary-page",
+    "secondary-surface",
+    "secondary-sunken",
+    "muted-sunken",
+  ])
+    await expect(page.locator(`[data-check="dark-page-${id}"]`)).toContainText(
+      "Pass",
+    );
+  // A muted colour too close to the page fails its checks.
+  await page.getByText("Advanced: interaction", { exact: false }).click();
+  await page.getByLabel("Dark muted text", { exact: true }).fill("#4a4f55");
+  await expect(
+    page.locator('[data-check="dark-page-muted-page"]'),
+  ).toContainText("Fail");
+  // The output carries the new tokens.
+  await expect(cssOutput(page)).toContainText("--m-brand-d-ink: #f7efdf;");
+  expect(errors).toEqual([]);
+});

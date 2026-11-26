@@ -220,6 +220,70 @@ test("surfaces, the accent gradient and fonts join the contract", () => {
   );
 });
 
+test("text and line colours join the contract and are validated", () => {
+  const brand = {
+    dark: {
+      paper: "#1b2128",
+      ink: "#f7efdf",
+      secondary: "#e3dccd",
+      muted: "#c1beb7",
+      line: "#333a42",
+      lineStrong: "#7d8288",
+    },
+  };
+  assert.equal(
+    brandToCss("warm", brand),
+    [
+      '[data-mortar-brand="warm"] {',
+      "  --m-brand-d-paper: #1b2128;",
+      "  --m-brand-d-ink: #f7efdf;",
+      "  --m-brand-d-secondary: #e3dccd;",
+      "  --m-brand-d-muted: #c1beb7;",
+      "  --m-brand-d-line: #333a42;",
+      "  --m-brand-d-line-strong: #7d8288;",
+      "}",
+    ].join("\n"),
+  );
+  assert.throws(
+    () => brandToStyle({ light: { ink: "red; color: blue" } }),
+    /Invalid Mortar brand colour for light\.ink/,
+  );
+  assert.throws(
+    () => brandToStyle({ dark: { muted: "url(x)" } }),
+    /Invalid Mortar brand colour for dark\.muted/,
+  );
+});
+
+test("text and line colours default to Mortar's, in each appearance and the inverse band", async () => {
+  const css = await readSource("src/tokens.css");
+  const defaults = [
+    ["l", "ink", "#000000"],
+    ["l", "secondary", "#3a3a3c"],
+    ["l", "muted", "#6e6e73"],
+    ["l", "line", "#e5e5ea"],
+    ["l", "line-strong", "#8b8b90"],
+    ["d", "ink", "#f5f5f7"],
+    ["d", "secondary", "#c7c7cc"],
+    ["d", "muted", "#98989d"],
+    ["d", "line", "#29292c"],
+    ["d", "line-strong", "#727278"],
+  ];
+  for (const [mode, key, value] of defaults)
+    assert.ok(
+      css.includes(`--m-${key}: var(--m-brand-${mode}-${key}, ${value});`),
+      `${mode} ${key} keeps ${value}`,
+    );
+  // The inverse band reads the other appearance's brand values.
+  for (const key of ["ink", "secondary", "muted", "line", "line-strong"])
+    for (const mode of ["l", "d"])
+      assert.match(
+        css,
+        new RegExp(
+          `--m-inv-${key}: var\\(--m-brand-${mode}-${key}, #[0-9a-f]{6}\\);`,
+        ),
+      );
+});
+
 test("every brand token the appearance reads starts empty in each brand", async () => {
   const css = await readSource("src/tokens.css");
   const reset = Object.keys(
