@@ -61,6 +61,10 @@ export const RULES = {
     "Static text passed to Input.action; use prefix or suffix instead.",
   "input-absolute-adornment":
     "An absolutely positioned decorative sibling of Input; use leadingIcon or trailingIcon.",
+  "chart-unnamed":
+    "A Mortar chart with no accessible name: a chart without title, or a Sparkline or Meter without label.",
+  "chart-library":
+    "A third-party charting library imported in an app that also uses Mortar's charts.",
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -1120,6 +1124,17 @@ function exportsFromDts(root) {
 const IMPORT =
   /\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(@tonycodes-ui\/mortar(?:\/[^"']*)?)\4/g;
 const SIDE_EFFECT = /\bimport\s*(["'])(@tonycodes-ui\/mortar\/[^"']*)\1/g;
+// The prop that names each Mortar chart for screen readers.
+const CHART_NAME = {
+  LineChart: "title",
+  AreaChart: "title",
+  BarChart: "title",
+  Sparkline: "label",
+  Meter: "label",
+};
+// Charting libraries an app might keep beside Mortar's charts.
+const CHART_LIBRARY =
+  /\b(?:import|from)\s*(["'])(recharts|chart\.js(?:\/auto)?|react-chartjs-2|@nivo\/[\w-]+|victory(?:-[\w-]+)?|apexcharts|react-apexcharts|echarts|echarts-for-react|highcharts|highcharts-react-official|@visx\/[\w-]+|@tremor\/react|plotly\.js(?:-[\w-]+)?|react-plotly\.js|@mui\/x-charts|@ant-design\/charts)\1/g;
 // A file that builds an email: it imports Mortar's email entry or React Email.
 const EMAIL_FILE =
   /\bfrom\s*["'](?:@tonycodes-ui\/mortar\/email|@react-email\/[^"']+)["']/;
@@ -1232,6 +1247,8 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
   const hashes = data.agent.sourceHashes ?? {};
   let usesMortar = false;
   let usesEmail = false;
+  let usesCharts = false;
+  const chartLibraries = [];
   let stylesImported = false;
   let themeProvider = false;
   let firstMortarFile;
@@ -1324,6 +1341,9 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
+    if (/["']@tonycodes-ui\/mortar\/charts["']/.test(src)) usesCharts = true;
+    for (const m of src.matchAll(CHART_LIBRARY))
+      chartLibraries.push({ file, line: line(m.index), name: m[2] });
     for (const m of src.matchAll(LEGACY_IMPORT))
       add(
         "legacy-package",
@@ -1619,6 +1639,23 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const afterName = m.index + m[0].length;
       const opening = jsxOpening(src, afterName);
       const attrs = opening.attrs;
+      // A chart needs a name; a spread may supply it, so skip those.
+      const nameProp = CHART_NAME[exportName];
+      if (
+        nameProp &&
+        !attrs.some((a) => a.name === nameProp) &&
+        !/\{\s*\.\.\./.test(src.slice(afterName, opening.end))
+      )
+        add(
+          "chart-unnamed",
+          "error",
+          file,
+          line(m.index),
+          `<${exportName}> has no ${nameProp}, so screen readers cannot name it.`,
+          nameProp === "title"
+            ? 'Add title="…" naming what the chart shows, such as "Monthly revenue by plan"; titleHidden hides it visually.'
+            : 'Add label="…" naming the measure and period, such as "Revenue, last 12 months".',
+        );
       for (const attr of attrs) {
         const name = attr.name;
         if (name === "key" || /[-:]/.test(name)) continue;
@@ -1758,6 +1795,17 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       }
     }
   }
+
+  if (usesCharts)
+    for (const hit of chartLibraries)
+      add(
+        "chart-library",
+        "info",
+        hit.file,
+        hit.line,
+        `"${hit.name}" is imported in an app that also uses Mortar's charts.`,
+        `Draw the chart with LineChart, AreaChart, BarChart, Sparkline or Meter from "${PKG}/charts", so it follows the kit's palette, tokens and accessibility (mortar guide charts).`,
+      );
 
   if (usesMortar)
     for (const hit of rawHits) {

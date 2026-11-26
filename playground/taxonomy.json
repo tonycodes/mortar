@@ -131,6 +131,7 @@
             "LineChart",
             "AreaChart",
             "BarChart",
+            "Meter",
             "CodeBlock",
             "PreviewFrame"
           ]

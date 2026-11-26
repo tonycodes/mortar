@@ -47,7 +47,10 @@ export function packageExports(root = ROOT, entry = "src/index.ts") {
   return { values: [...values].sort(), types: [...types].sort() };
 }
 
-/** `UI.X` components rendered by a function, following local helper components. */
+// The namespaces playground pages import the kit's entries under.
+const NAMESPACES = new Set(["UI", "Charts"]);
+
+/** `UI.X` and `Charts.X` components rendered by a function, following local helper components. */
 function usedComponents(tree, fn, exports) {
   const locals = new Map();
   for (const s of tree.statements)
@@ -62,7 +65,7 @@ function usedComponents(tree, fn, exports) {
         const tag = n.tagName;
         if (
           ts.isPropertyAccessExpression(tag) &&
-          tag.expression.getText() === "UI" &&
+          NAMESPACES.has(tag.expression.getText()) &&
           exports.has(tag.name.text)
         )
           used.add(tag.name.text);

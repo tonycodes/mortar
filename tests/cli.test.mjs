@@ -189,6 +189,23 @@ test("a build packet for a brief starts from the purpose shell and explains choi
   assert.equal(site.templates[0].id, "saas-landing");
 });
 
+test("packets suggest charts for dashboards and a meter for usage", () => {
+  const names = (brief) =>
+    buildPacket(data, { brief }).components.map((c) => c.name);
+  const dashboard = buildPacket(data, { brief: "a SaaS analytics dashboard" });
+  const picked = dashboard.components.map((c) => c.name);
+  for (const name of ["AppShell", "MetricGroup", "LineChart"])
+    assert.ok(picked.includes(name), `${name} in ${picked}`);
+  assert.ok(dashboard.guides.some((g) => (g.id ?? g) === "charts"));
+  assert.ok(names("a billing page showing storage usage").includes("Meter"));
+  // Public pages get no charts, even when the brief mentions an overview.
+  assert.ok(
+    !names("a landing page with a product overview").some((n) =>
+      /Chart$|^Meter$/.test(n),
+    ),
+  );
+});
+
 test("every guide topic loads from the package", () => {
   for (const topic of Object.keys(GUIDES)) {
     const text = data.guide(topic);
@@ -722,6 +739,45 @@ test("the audit checks imports and props from the /data-grid entry", async (t) =
   assert.ok(
     !report.findings.some((f) => f.rule === "deep-import"),
     "the data-grid entry is public",
+  );
+});
+
+test("the audit flags unnamed charts and notes other charting libraries", async (t) => {
+  const charts = [
+    'import { LineChart, Meter, Sparkline } from "@tonycodes-ui/mortar/charts";',
+    'import { BarChart as RBar } from "recharts";',
+    'const props = { title: "Visits" };',
+    "export const C = ({ rows }: { rows: { m: string; v: number }[] }) => (",
+    "  <>",
+    '    <LineChart rows={rows} x={{ key: "m" }} series={[{ key: "v", label: "Visits" }]} />',
+    '    <LineChart {...props} rows={rows} x={{ key: "m" }} series={[]} />',
+    "    <Sparkline values={[1, 2]} />",
+    '    <Meter label="Storage" value={4} />',
+    "    <RBar data={rows} />",
+    "  </>",
+    ");",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/Charts.tsx": charts } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const found = report.findings
+    .filter((f) => f.file === "src/Charts.tsx")
+    .map((f) => [f.rule, f.severity, f.line]);
+  assert.deepEqual(found, [
+    ["chart-unnamed", "error", 6],
+    ["chart-unnamed", "error", 8],
+    ["chart-library", "info", 2],
+  ]);
+  // Without Mortar's charts, another charting library is the app's choice.
+  const other = fixture("clean-app", {
+    files: {
+      "src/Other.tsx":
+        'import { BarChart } from "recharts";\nexport { BarChart };',
+    },
+  });
+  t.after(() => rmSync(other, { recursive: true, force: true }));
+  assert.ok(
+    !(await auditApp(other)).findings.some((f) => f.rule === "chart-library"),
   );
 });
 

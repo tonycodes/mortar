@@ -13,6 +13,7 @@ import {
   niceTicks,
 } from "../dist/chart-core.js";
 import { sparklineSummary } from "../dist/sparkline.js";
+import { meterStatus, meterText } from "../dist/meter.js";
 import * as Charts from "../dist/charts.js";
 
 // The palette validated with the data-viz checks against Mortar's surfaces
@@ -537,4 +538,58 @@ test("numeric strings from JSON count as values; other strings are gaps", () => 
   });
   const d = markup.match(/class="m-chart-line" d="([^"]+)"/)[1];
   assert.equal((d.match(/[ML]/g) ?? []).length, 2, `two points joined: ${d}`);
+});
+
+// Meter: the highest threshold reached sets the tone and the status text.
+const quota = [
+  { at: 80, tone: "warning", label: "Near limit" },
+  { at: 100, tone: "danger", label: "Over limit" },
+];
+
+test("meter status is the highest threshold reached, in any order", () => {
+  assert.equal(meterStatus(50, quota), undefined);
+  assert.equal(meterStatus(80, quota)?.label, "Near limit");
+  assert.equal(meterStatus(120, [...quota].reverse())?.label, "Over limit");
+  assert.equal(meterStatus(Number.NaN, quota), undefined);
+  assert.equal(
+    meterText(82, 100, (n) => `${n} GB`, quota[0]),
+    "82 GB of 100 GB, Near limit",
+  );
+  assert.equal(meterText(Number.NaN, 100), "No data");
+});
+
+test("Meter is a named meter whose value text carries the status", () => {
+  const markup = html(Charts.Meter, {
+    label: "Storage",
+    value: 82,
+    format: (n) => `${n} GB`,
+    thresholds: quota,
+  });
+  assert.match(markup, /data-m-component="Meter"[^>]* data-tone="warning"/);
+  assert.match(markup, /role="meter"/);
+  assert.match(markup, /aria-valuenow="82"/);
+  assert.match(markup, /aria-valuetext="82 GB of 100 GB, Near limit"/);
+  // The status is visible text, not only a colour.
+  assert.match(markup, /class="m-meter-status">Near limit</);
+  assert.match(markup, /class="m-meter-fill" style="width:82%"/);
+  // Only thresholds inside the track are marked.
+  assert.equal(markup.match(/m-meter-tick/g)?.length, 1);
+});
+
+test("Meter clamps the fill but reports the real value", () => {
+  const over = html(Charts.Meter, {
+    label: "Calls",
+    value: 130,
+    thresholds: quota,
+  });
+  assert.match(over, /style="width:100%"/);
+  assert.match(over, /aria-valuetext="130 of 100, Over limit"/);
+  const none = html(Charts.Meter, { label: "Calls", value: Number.NaN });
+  assert.match(none, /style="width:0%"/);
+  assert.doesNotMatch(none, /aria-valuenow/);
+  assert.doesNotMatch(none, /data-tone/);
+  assert.match(
+    html(Charts.Meter, { label: "x", value: 5, max: 0 }),
+    /width:0%/,
+  );
 });
