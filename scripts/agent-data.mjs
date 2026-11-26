@@ -9,7 +9,9 @@
 // catalog.json and the shipped docs are read at runtime, so the CLI always
 // describes the installed version.
 import { COMPONENT_ENTRIES } from "./entries.mjs";
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";

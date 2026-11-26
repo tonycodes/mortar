@@ -3,7 +3,9 @@
 // parentheses, fall-through cases and simple local variables do not break it.
 // The Vite plugin below serves the result as a lazily imported virtual module;
 // tests import the same functions from node.
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { COMPONENT_ENTRIES } from "../scripts/entries.mjs";

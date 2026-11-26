@@ -10,6 +10,13 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependencies
+    ignore:
+      # typescript-api is TypeScript 6 under another name: the last release
+      # with the JavaScript compiler API that scripts/agent-data.mjs, api.mjs
+      # and check.mjs use. TypeScript 7 (the typescript package, which builds
+      # the kit) has no such API, so this alias must stay below 7.
+      - dependency-name: typescript-api
+        versions: [">=7.0.0"]
     groups:
       react-headless:
         patterns:
