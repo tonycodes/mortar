@@ -5,6 +5,7 @@
 export const COMPONENT_ENTRIES = {
   "@tonycodes-ui/mortar": "src/index.ts",
   "@tonycodes-ui/mortar/data-grid": "src/data-grid.ts",
+  "@tonycodes-ui/mortar/charts": "src/charts.ts",
 };
 
 /** The entry file for a manifest, or undefined when its package is unknown. */

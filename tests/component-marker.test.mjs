@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { h, html, UI } from "./support/render.mjs";
 import { readSource } from "./support/css.mjs";
 import * as Grid from "../dist/data-grid.js";
+import * as Charts from "../dist/charts.js";
 
 // Every exported component names itself on its root element with
 // data-m-component (DESIGN.md, "Component marker"). Each factory renders the
@@ -181,6 +182,10 @@ const factories = {
         virtualize: true,
         searchable: true,
       }),
+  ],
+  Sparkline: [
+    () => html(Charts.Sparkline, { label: "Revenue", values: [1, 3, 2] }),
+    () => html(Charts.Sparkline, { label: "Empty", values: [] }),
   ],
   DescriptionList: [
     () => html(UI.DescriptionList, { items: [{ term: "a", details: "b" }] }),

@@ -579,7 +579,8 @@
     letter-spacing: var(--m-tracking-heading);
     font-variant-numeric: tabular-nums;
   }
-  .m-metrics span {
+  /* Not a nested Sparkline's own spans: that would block and offset them. */
+  .m-metrics span:where(:not(.m-sparkline, .m-sparkline *)) {
     display: block;
     margin-top: 4px;
     font: 12px var(--m-mono);
@@ -616,6 +617,10 @@
   }
   .m-metrics span[data-trend] svg {
     flex-shrink: 0;
+  }
+  .m-metrics .m-sparkline {
+    display: block;
+    margin-top: 12px;
   }
   .m-metrics[data-variant="cards"] {
     gap: 16px;
