@@ -261,6 +261,59 @@ test("PlanComparison marks included cells with hidden glyphs and screen-reader t
   );
 });
 
+test("PlanComparison defaults keep the centred, muted, sectioned table", () => {
+  const markup = html(UI.PlanComparison, {
+    title: "Compare",
+    plans: ["Basic", "Team"],
+    featuredPlan: "Team",
+    groups: [
+      { label: "Limits", rows: [{ feature: "Seats", values: ["1", "5"] }] },
+    ],
+  });
+  // Default enum values are omitted, so existing styles are unchanged.
+  assert.doesNotMatch(markup, /data-align|data-featured-tone|data-layout/);
+  assert.match(markup, /<th scope="colgroup" colSpan="3">Limits<\/th>/i);
+  // The table is named by the section heading.
+  const headingId = markup.match(/<h2[^>]*id="([^"]+)"/)[1];
+  assert.match(markup, new RegExp(`<table aria-labelledby="${headingId}">`));
+});
+
+test("PlanComparison long form: start alignment, accent column, marked text and no group label", () => {
+  const markup = html(UI.PlanComparison, {
+    title: "Us vs them",
+    plans: ["Them", "Us"],
+    featuredPlan: "Us",
+    featuredTone: "accent",
+    align: "start",
+    layout: "flush",
+    groups: [
+      {
+        rows: [
+          {
+            feature: "Fees",
+            values: [
+              { included: false, text: "A cut of every order" },
+              { included: true, text: "No commission" },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+  assert.match(markup, /data-layout="flush"/);
+  assert.match(markup, /data-align="start"/);
+  assert.match(markup, /data-featured-tone="accent"/);
+  assert.doesNotMatch(markup, /m-comparison-group|colgroup/);
+  assert.match(
+    markup,
+    /<span class="m-comparison-value"><span aria-hidden="true" class="m-comparison-mark">✓<\/span><span class="m-sr-only">Included: <\/span><span>No commission<\/span><\/span>/,
+  );
+  assert.match(
+    markup,
+    /<span aria-hidden="true" class="m-comparison-mark m-comparison-no">✗<\/span><span class="m-sr-only">Not included: <\/span><span>A cut of every order<\/span>/,
+  );
+});
+
 test("TestimonialGrid and TeamGrid hide avatars that repeat a visible name", () => {
   const grid = html(UI.TestimonialGrid, {
     items: [{ quote: "Q", name: "Ana Ruiz" }],

@@ -186,6 +186,51 @@ export function TestimonialGrid({
   );
 }
 
+/**
+ * A PlanComparison cell: text, an included/not-included mark, or a mark with
+ * text beside it (a long-form "us vs them" comparison).
+ */
+export type ComparisonValue =
+  boolean | string | { included: boolean; text: string };
+
+function ComparisonMark({
+  included,
+  withText,
+}: {
+  included: boolean;
+  withText?: boolean;
+}) {
+  // The glyph is decoration; the cell's text is the meaning.
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className={
+          cx(withText && "m-comparison-mark", !included && "m-comparison-no") ||
+          undefined
+        }
+      >
+        {included ? "✓" : withText ? "✗" : "—"}
+      </span>
+      <span className="m-sr-only">
+        {included ? "Included" : "Not included"}
+        {withText ? ": " : ""}
+      </span>
+    </>
+  );
+}
+
+function ComparisonCell({ value }: { value: ComparisonValue }) {
+  if (typeof value === "boolean") return <ComparisonMark included={value} />;
+  if (typeof value === "string") return <>{value}</>;
+  return (
+    <span className="m-comparison-value">
+      <ComparisonMark included={value.included} withText />
+      <span>{value.text}</span>
+    </span>
+  );
+}
+
 export function PlanComparison({
   id,
   className,
@@ -193,7 +238,10 @@ export function PlanComparison({
   description,
   plans,
   featuredPlan,
+  featuredTone = "muted",
   groups,
+  align = "center",
+  layout = "section",
   headingLevel = 2,
 }: {
   id?: string;
@@ -202,10 +250,17 @@ export function PlanComparison({
   description?: string;
   plans: string[];
   featuredPlan?: string;
+  /** The featured column: a sunken panel, or a tint of the brand with the header in the link colour. */
+  featuredTone?: "muted" | "accent";
+  /** Groups of rows. A group without a label renders no group header row. */
   groups: {
-    label: string;
-    rows: { feature: string; values: (boolean | string)[] }[];
+    label?: string;
+    rows: { feature: string; values: ComparisonValue[] }[];
   }[];
+  /** Value alignment: centred marks and short values, or start-aligned sentences. */
+  align?: "start" | "center";
+  /** `flush` drops the section's padding, rule and width cap so the table lines up with the content around it. */
+  layout?: "section" | "flush";
   headingLevel?: HeadingLevel;
 }) {
   const headingId = useId();
@@ -214,6 +269,7 @@ export function PlanComparison({
       id={id}
       className={cx("m-marketing-section", className)}
       aria-labelledby={headingId}
+      data-layout={layout === "section" ? undefined : layout}
       {...componentRoot("PlanComparison")}
     >
       <TitledIntro
@@ -227,8 +283,10 @@ export function PlanComparison({
         role="region"
         aria-label={`${title} table`}
         tabIndex={0}
+        data-align={align === "center" ? undefined : align}
+        data-featured-tone={featuredTone === "muted" ? undefined : featuredTone}
       >
-        <table>
+        <table aria-labelledby={headingId}>
           <thead>
             <tr>
               <td />
@@ -243,13 +301,15 @@ export function PlanComparison({
               ))}
             </tr>
           </thead>
-          {groups.map((group) => (
-            <tbody key={group.label}>
-              <tr className="m-comparison-group">
-                <th scope="colgroup" colSpan={plans.length + 1}>
-                  {group.label}
-                </th>
-              </tr>
+          {groups.map((group, g) => (
+            <tbody key={group.label ?? `group-${g}`}>
+              {group.label && (
+                <tr className="m-comparison-group">
+                  <th scope="colgroup" colSpan={plans.length + 1}>
+                    {group.label}
+                  </th>
+                </tr>
+              )}
               {group.rows.map((row) => (
                 <tr key={row.feature}>
                   <th scope="row">{row.feature}</th>
@@ -258,22 +318,7 @@ export function PlanComparison({
                       key={plans[i]}
                       data-featured={plans[i] === featuredPlan || undefined}
                     >
-                      {typeof value === "boolean" ? (
-                        // The glyph is decoration; the cell's text is the meaning.
-                        <>
-                          <span
-                            aria-hidden="true"
-                            className={value ? undefined : "m-comparison-no"}
-                          >
-                            {value ? "✓" : "—"}
-                          </span>
-                          <span className="m-sr-only">
-                            {value ? "Included" : "Not included"}
-                          </span>
-                        </>
-                      ) : (
-                        value
-                      )}
+                      <ComparisonCell value={value} />
                     </td>
                   ))}
                 </tr>

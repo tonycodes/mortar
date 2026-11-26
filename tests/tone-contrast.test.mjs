@@ -86,6 +86,14 @@ const pairs = [
     ...surfaces.map((bg) => [fg, bg, 4.5]),
     ...surfaces.map((bg) => [`inv-${fg}`, `inv-${bg}`, 4.5]),
   ]),
+  // The selected tint behind text: list selection and the accent featured
+  // column of PlanComparison (ink values, secondary row labels, link header).
+  ...["ink", "secondary", "link"].map((fg) => [fg, "selected", 4.5]),
+  ...["ink", "secondary", "link"].map((fg) => [
+    `inv-${fg}`,
+    "inv-selected",
+    4.5,
+  ]),
   ["on-primary", "primary", 4.5],
   ["on-primary", "primary-hover", 4.5],
   ["on-primary", "primary-active", 4.5],
