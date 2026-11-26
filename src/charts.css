@@ -1,0 +1,320 @@
+/* Charts: Sparkline. Series colours come from the --m-chart-* tokens; text
+   always uses the text tokens, never a series colour. Every rule sits in
+   @layer components, like the other component families. */
+@layer components {
+  /* == Sparkline == */
+  .m-sparkline {
+    display: inline-block;
+    width: 100%;
+    min-width: 48px;
+    /* Room for the 8px dot and its 2px ring at the top, end and bottom. */
+    padding: 6px 6px 6px 0;
+    vertical-align: middle;
+  }
+  .m-sparkline-plot {
+    position: relative;
+    display: block;
+    height: 100%;
+  }
+  .m-sparkline svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .m-sparkline-line {
+    fill: none;
+    stroke: var(--m-sparkline-colour);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .m-sparkline-area {
+    fill: var(--m-sparkline-colour);
+    fill-opacity: 0.12;
+  }
+  .m-sparkline-band {
+    fill: var(--m-sunken);
+  }
+  /* The dot sits in HTML so it stays round when the SVG stretches. A surface
+     ring separates it from the line. */
+  .m-sparkline-last {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    margin: -4px 0 0 -4px;
+    border-radius: var(--m-radius-full);
+    background: var(--m-sparkline-colour);
+    box-shadow: 0 0 0 2px var(--m-surface);
+  }
+  @media (forced-colors: active) {
+    .m-sparkline-line {
+      stroke: CanvasText;
+    }
+    .m-sparkline-last {
+      background: CanvasText;
+    }
+  }
+
+  /* == Chart frame: LineChart, AreaChart and BarChart == */
+  .m-chart {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+    margin: 0;
+  }
+  .m-chart-head {
+    display: grid;
+    gap: 4px;
+  }
+  .m-chart-title {
+    color: var(--m-ink);
+    font-size: 15px;
+    font-weight: var(--m-weight-semibold);
+  }
+  .m-chart-description {
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--m-secondary);
+    font-size: 12px;
+  }
+  .m-chart-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .m-chart-legend li::before,
+  .m-chart-tooltip i {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: var(--m-radius-xs);
+    background: var(--m-series);
+  }
+  .m-chart-body {
+    position: relative;
+    min-width: 0;
+  }
+  .m-chart-plot {
+    position: relative;
+    height: 100%;
+    border-radius: var(--m-radius);
+    outline-offset: 2px;
+  }
+  .m-chart-plot:focus-visible {
+    outline: 2px solid var(--m-focus);
+  }
+  .m-chart-plot svg {
+    display: block;
+    overflow: visible;
+  }
+  .m-chart-axis line {
+    stroke: var(--m-line);
+    stroke-width: 1px;
+  }
+  .m-chart-axis text,
+  .m-chart-end-label {
+    fill: var(--m-muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .m-chart-end-label {
+    fill: var(--m-secondary);
+  }
+  .m-chart-zero {
+    stroke: var(--m-line-strong);
+    stroke-width: 1px;
+  }
+  .m-chart-line {
+    fill: none;
+    stroke: var(--m-series);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .m-chart-area {
+    fill: var(--m-series);
+    fill-opacity: 0.18;
+  }
+  /* A 2px surface ring keeps markers readable where lines cross. */
+  .m-chart-marker {
+    fill: var(--m-series);
+    stroke: var(--m-surface);
+    stroke-width: 2px;
+  }
+  /* A 2px surface gap between stacked segments. */
+  .m-chart-bar {
+    fill: var(--m-series);
+    stroke: var(--m-surface);
+    stroke-width: 1px;
+  }
+  .m-chart-crosshair {
+    stroke: var(--m-line-strong);
+    stroke-width: 1px;
+  }
+  .m-chart-band {
+    fill: var(--m-sunken);
+  }
+  .m-chart-tooltip {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    display: grid;
+    gap: 4px;
+    /* Fits narrow charts: never wider than the plot minus the offset. */
+    min-width: min(140px, 60%);
+    max-width: calc(100% - 24px);
+    padding: 8px 10px;
+    border: 1px solid var(--m-line);
+    border-radius: var(--m-radius);
+    background: var(--m-surface);
+    box-shadow: var(--m-float);
+    color: var(--m-secondary);
+    font-size: 12px;
+    pointer-events: none;
+    transform: translateX(12px);
+  }
+  .m-chart-tooltip[data-side="start"] {
+    transform: translateX(calc(-100% - 12px));
+  }
+  .m-chart-tooltip strong {
+    color: var(--m-ink);
+  }
+  .m-chart-tooltip span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .m-chart-tooltip b {
+    margin-inline-start: auto;
+    color: var(--m-ink);
+    font-weight: var(--m-weight-semibold);
+    font-variant-numeric: tabular-nums;
+  }
+  .m-chart-state {
+    margin: 0;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-chart-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .m-chart-axis-label {
+    fill: var(--m-secondary);
+    font-size: 12px;
+    font-weight: var(--m-weight-semibold);
+  }
+  /* High-contrast mode would paint every series the same system colour, so
+     series marks and their legend swatches keep their colours (identity is
+     data here); the axes, labels and crosshair follow the system colours. */
+  @media (forced-colors: active) {
+    .m-chart-line,
+    .m-chart-area,
+    .m-chart-bar,
+    .m-chart-marker,
+    .m-chart-legend li::before,
+    .m-chart-tooltip i {
+      forced-color-adjust: none;
+    }
+    .m-chart-axis line,
+    .m-chart-crosshair,
+    .m-chart-zero {
+      stroke: CanvasText;
+    }
+    .m-chart-axis text,
+    .m-chart-end-label,
+    .m-chart-axis-label {
+      fill: CanvasText;
+    }
+  }
+
+  /* == Meter == */
+  /* The fill is the accent colour until a threshold is reached, then that
+     threshold's tone (--m-tone, set from data-tone). The status label is text
+     beside the value, so the tone is never the only signal. */
+  .m-meter {
+    display: grid;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .m-meter-label {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 12px;
+  }
+  .m-meter-label > span:first-child {
+    font-weight: var(--m-weight-semibold);
+  }
+  .m-meter-value {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+  }
+  .m-meter-amount {
+    font-family: var(--m-mono);
+    color: var(--m-muted);
+  }
+  .m-meter-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: var(--m-weight-semibold);
+    color: var(--m-ink);
+  }
+  .m-meter-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--m-tone);
+  }
+  .m-meter-track {
+    position: relative;
+    height: 8px;
+    border-radius: var(--m-radius-full);
+    background: var(--m-sunken);
+  }
+  .m-meter-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--m-primary);
+  }
+  .m-meter[data-tone] .m-meter-fill {
+    background: var(--m-tone);
+  }
+  /* Threshold marks reach past the track so they show on the fill and on the
+     empty track alike. */
+  .m-meter-tick {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    margin-left: -1px;
+    border-radius: 1px;
+    background: var(--m-muted);
+  }
+  @media (forced-colors: active) {
+    .m-meter-track {
+      border: 1px solid CanvasText;
+    }
+    .m-meter-fill {
+      background: Highlight;
+    }
+    .m-meter-tick,
+    .m-meter-status::before {
+      background: CanvasText;
+    }
+  }
+}

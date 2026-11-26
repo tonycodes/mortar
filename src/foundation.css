@@ -552,10 +552,12 @@
     background: var(--m-surface);
     overflow: hidden;
   }
+  /* The group draws the 1px border, so the whole field matches --m-control
+     like Select and Button beside it. */
   .m-input-group input {
     min-width: 0;
     width: 100%;
-    min-height: var(--m-control);
+    min-height: calc(var(--m-control) - 2px);
     padding: 4px var(--m-pad);
     border: 0;
     background: transparent;

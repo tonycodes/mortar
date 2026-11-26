@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 // mortar: the open, local agent tooling for the Mortar UI kit. An MCP server
 // (`mortar mcp`) and a CLI over the installed package's catalogue and docs.
-// No network, no account, no runtime dependencies.
+// No account and no runtime dependencies. Only `audit --render` uses the
+// network, to open the app pages it is given.
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { loadData, GUIDES, PACKAGE_ROOT } from "../cli/data.mjs";
 import { searchComponents } from "../cli/search.mjs";
 import { componentDetail, buildPacket } from "../cli/packet.mjs";
 import { auditApp, RULES } from "../cli/audit.mjs";
+import { parseUrls, renderAudit, RENDER_RULES } from "../cli/render.mjs";
 
 const HELP = `mortar — local agent tooling for the Mortar UI kit (@tonycodes-ui/mortar)
 
@@ -22,6 +24,8 @@ Usage:
                                      page templates
   mortar audit [path]                Read-only audit of an app's Mortar usage
                                      (exits 1 when it finds errors)
+    --render <url[,url...]>          Also open the running app's pages and
+                                     check what rendered (needs Playwright)
   mortar guide <topic>               Print a guide: ${Object.keys(GUIDES).join(", ")}
   mortar kits                        Kits, categories and components
   mortar skill                       Print the agent skill (skills/mortar/SKILL.md)
@@ -34,7 +38,8 @@ Options:
 Add the MCP server to Claude Code:
   claude mcp add mortar -- npx -y @tonycodes-ui/mortar mcp
 
-Everything runs locally against the installed package. No account or network.`;
+Everything runs locally against the installed package, with no account. Only
+audit --render opens the URLs you pass it.`;
 
 function parseArgs(argv) {
   const positional = [];
@@ -198,6 +203,13 @@ async function main() {
       let report;
       try {
         report = await auditApp(rest[0] ?? ".", { data });
+        if (flags.render) {
+          const urls = parseUrls(flags.render);
+          const rendered = await renderAudit(urls, { appRoot: report.root });
+          report.findings.push(...rendered);
+          for (const f of rendered) report.summary[f.severity]++;
+          report.rendered = urls;
+        }
       } catch (error) {
         return fail(error.message);
       }
@@ -215,7 +227,7 @@ async function main() {
         }
         const s = report.summary;
         out(
-          `\n${s.error} error${s.error === 1 ? "" : "s"}, ${s.warning} warning${s.warning === 1 ? "" : "s"}, ${s.info} info in ${s.files} files.`,
+          `\n${s.error} error${s.error === 1 ? "" : "s"}, ${s.warning} warning${s.warning === 1 ? "" : "s"}, ${s.info} info in ${s.files} files${report.rendered ? ` and ${report.rendered.length} rendered page${report.rendered.length === 1 ? "" : "s"}` : ""}.`,
         );
       }
       if (report.summary.error) process.exitCode = 1;
@@ -244,7 +256,7 @@ async function main() {
         : fail("skill not installed");
     }
     case "rules":
-      for (const [id, text] of Object.entries(RULES))
+      for (const [id, text] of Object.entries({ ...RULES, ...RENDER_RULES }))
         out(`${id.padEnd(24)} ${text}`);
       return;
     default:

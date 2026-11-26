@@ -1,5 +1,6 @@
 import { useState } from "react";
 import * as UI from "../src/index.js";
+import * as Charts from "../src/charts.js";
 import { icons } from "../previews/CompositionFixture.js";
 import {
   cartItems,
@@ -436,6 +437,160 @@ export function StackedDashboardTemplate() {
         />
       </div>
     </UI.StackedShell>
+  );
+}
+
+const weeks = [
+  { week: "1 Sep", web: 412, ios: 233, android: 158 },
+  { week: "8 Sep", web: 438, ios: 251, android: 171 },
+  { week: "15 Sep", web: 455, ios: 247, android: 186 },
+  { week: "22 Sep", web: 501, ios: 268, android: 192 },
+  { week: "29 Sep", web: 489, ios: 290, android: 205 },
+  { week: "6 Oct", web: 534, ios: 302, android: 221 },
+  { week: "13 Oct", web: 562, ios: 318, android: 236 },
+  { week: "20 Oct", web: 590, ios: 331, android: 249 },
+];
+const platforms = [
+  { key: "web", label: "Web" },
+  { key: "ios", label: "iOS" },
+  { key: "android", label: "Android" },
+];
+const channels = [
+  { channel: "Search", trials: 182, paid: 41 },
+  { channel: "Referral", trials: 96, paid: 33 },
+  { channel: "Social", trials: 74, paid: 9 },
+  { channel: "Email", trials: 61, paid: 18 },
+  { channel: "Partners", trials: 38, paid: 15 },
+];
+const revenue = [
+  { month: "May", subscriptions: 31.2, services: 6.1 },
+  { month: "Jun", subscriptions: 33.8, services: 5.4 },
+  { month: "Jul", subscriptions: 35.1, services: 7.2 },
+  { month: "Aug", subscriptions: 38.6, services: 6.8 },
+  { month: "Sep", subscriptions: 41.9, services: 8.3 },
+  { month: "Oct", subscriptions: 44.7, services: 7.9 },
+];
+/** Usage statuses as a share of the limit; each meter scales them to its max. */
+const quota = (max: number) =>
+  [
+    { at: 0.8 * max, tone: "warning", label: "Near limit" },
+    { at: max, tone: "danger", label: "Over limit" },
+  ] as const;
+const thousands = (n: number) => `$${Number(n.toFixed(1))}k`;
+
+/**
+ * An analytics dashboard: headline numbers with sparklines, a line chart of a
+ * trend, a bar chart comparing channels, a stacked area of revenue, and plan
+ * usage as meters beside the content.
+ */
+export function AnalyticsDashboardTemplate() {
+  return (
+    <UI.AppShell
+      brand="Northwind"
+      workspace="Acme workspace"
+      navigation={[
+        { label: "Analytics", href: "?recipe=analytics", current: true },
+        { label: "Customers", href: "#customers" },
+        { label: "Billing", href: "#billing" },
+        { label: "Settings", href: "?recipe=settings" },
+      ]}
+      asideLabel="Plan usage"
+      aside={
+        <UI.Card title="Plan usage" description="Team plan, renews 1 Nov.">
+          <UI.Stack gap="lg">
+            <Charts.Meter
+              label="Seats"
+              value={23}
+              max={25}
+              thresholds={quota(25)}
+            />
+            <Charts.Meter
+              label="Storage"
+              value={61}
+              max={100}
+              format={(n) => `${n} GB`}
+              thresholds={quota(100)}
+            />
+            <Charts.Meter
+              label="API calls this month"
+              value={1.08}
+              max={1}
+              format={(n) => `${n.toFixed(2)}M`}
+              thresholds={quota(1)}
+            />
+          </UI.Stack>
+        </UI.Card>
+      }
+    >
+      <UI.Stack gap="xl">
+        <UI.PageHeading
+          title="Analytics"
+          description="Active users, sign-ups and revenue for the last eight weeks."
+        />
+        <UI.MetricGroup
+          label="Last 30 days"
+          items={[
+            {
+              label: "Weekly active users",
+              value: "1,170",
+              change: "+9.2%",
+              tone: "success",
+              sparkline: weeks.map((w) => w.web + w.ios + w.android),
+            },
+            {
+              label: "Trial to paid",
+              value: "25.1%",
+              change: "+1.4 pts",
+              tone: "success",
+              sparkline: [21.2, 22.4, 22.1, 23.8, 24.0, 23.6, 24.9, 25.1],
+            },
+            {
+              label: "Monthly revenue",
+              value: "$52.6k",
+              change: "+4.8%",
+              tone: "success",
+              sparkline: revenue.map((r) => r.subscriptions + r.services),
+            },
+          ]}
+        />
+        <UI.Card>
+          <Charts.LineChart
+            title="Weekly active users by platform"
+            description="Distinct users who signed in each week, September to October."
+            rows={weeks}
+            x={{ key: "week", label: "Week starting" }}
+            series={platforms}
+            y={{ label: "Users" }}
+          />
+        </UI.Card>
+        <UI.Card>
+          <Charts.BarChart
+            title="Trials and paid conversions by channel"
+            description="New trials in the last 30 days, and how many became paid accounts."
+            rows={channels}
+            x={{ key: "channel" }}
+            series={[
+              { key: "trials", label: "Trials" },
+              { key: "paid", label: "Paid" },
+            ]}
+            y={{ label: "Accounts" }}
+          />
+        </UI.Card>
+        <UI.Card>
+          <Charts.AreaChart
+            title="Monthly revenue"
+            description="Subscriptions and services, in thousands of dollars."
+            rows={revenue}
+            x={{ key: "month" }}
+            series={[
+              { key: "subscriptions", label: "Subscriptions" },
+              { key: "services", label: "Services" },
+            ]}
+            y={{ label: "Revenue ($k)", format: thousands }}
+          />
+        </UI.Card>
+      </UI.Stack>
+    </UI.AppShell>
   );
 }
 

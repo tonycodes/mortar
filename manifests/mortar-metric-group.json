@@ -13,14 +13,14 @@
   "contract": {
     "props": {
       "label": "string",
-      "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\")",
+      "items": "{ label: string; value: string; change?: string; tone?: Tone; icon?: ReactNode; trend?: \"up\" | \"down\"; previous?: string; sparkline?: number[] }[] (trend adds an arrow and announces Increased/Decreased by; previous renders \"from …\"; sparkline draws recent values, oldest first, under the value)",
       "variant": "\"shared\" | \"cards\" (default \"shared\")",
       "className": "string"
     },
     "usage": "Import { MetricGroup } from @tonycodes-ui/mortar. Compose with the public typed props.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
-    "dependencies": []
+    "dependencies": ["mortar-sparkline"]
   },
   "preview": {
     "source": "previews/MetricGroupPreview.tsx"

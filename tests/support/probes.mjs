@@ -530,6 +530,87 @@ export const implementations = {
       "person@example.com",
     );
   },
+  async chart({ page, root: preview }) {
+    const chart = preview.locator(".m-chart").first();
+    const plot = chart.locator(".m-chart-plot");
+    const live = chart.locator("[aria-live=polite]");
+    const tooltip = chart.locator(".m-chart-tooltip");
+    // Every series is named in a legend, so identity never depends on colour.
+    await expect(chart.getByRole("list", { name: "Legend" })).toBeVisible();
+    // Keyboard: the plot takes focus; arrows move a tooltip that is announced.
+    await plot.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(tooltip).toBeVisible();
+    await expect(tooltip).toContainText("Jan");
+    await expect(live).toHaveText(/^Jan: Pro \$42k/);
+    await page.keyboard.press("End");
+    await expect(live).toHaveText(/^Jun: /);
+    await page.keyboard.press("ArrowLeft");
+    await expect(live).toHaveText(/^May: /);
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toHaveCount(0);
+    // The table view shows the same rows with formatted values, and back.
+    await chart.getByRole("button", { name: "Show data" }).click();
+    const table = chart.getByRole("table");
+    await expect(table).toBeVisible();
+    await expect(table.getByRole("rowheader", { name: "Jun" })).toBeVisible();
+    await expect(table).toContainText("$56k");
+    await chart.getByRole("button", { name: "Show chart" }).click();
+    await expect(plot).toBeVisible();
+  },
+  async "data-grid"({ page, root: preview }) {
+    const grid = preview.locator(".m-data-grid").first();
+    const body = grid.locator("tbody tr:not(.m-data-grid-spacer)");
+    // Virtualized: 100,000 rows, only a window of them in the DOM.
+    await expect(grid.locator("table")).toHaveAttribute(
+      "aria-rowcount",
+      "100001",
+    );
+    expect(await body.count()).toBeLessThan(100);
+    const scroll = grid.locator(".m-table-scroll");
+    await scroll.evaluate((el) => (el.scrollTop = 2_000_000));
+    await expect(body.first()).not.toHaveAttribute("aria-rowindex", "2");
+    expect(await body.count()).toBeLessThan(100);
+    await scroll.evaluate((el) => (el.scrollTop = 0));
+    // Sort from the keyboard, then shift-click to add a second level.
+    const amount = grid.getByRole("columnheader", { name: /^Amount/ });
+    await grid.getByRole("button", { name: /^Amount/ }).focus();
+    await page.keyboard.press("Enter");
+    await expect(amount).toHaveAttribute("aria-sort", "ascending");
+    await grid
+      .getByRole("button", { name: /^Customer/ })
+      .click({ modifiers: ["Shift"] });
+    await expect(amount).toHaveAttribute("aria-sort", "ascending");
+    await expect(
+      grid.locator("th[data-key=customer] .m-sort-order"),
+    ).toContainText("2");
+    // Search and filter report the matching count; no match offers a reset.
+    const status = grid.getByRole("status");
+    await grid.getByLabel("Search").fill("Hooli");
+    await expect(status).toHaveText("12500 matching invoices");
+    await grid.getByLabel("Status").selectOption("paid");
+    await expect(status).toHaveText("3125 matching invoices");
+    await grid.getByLabel("Search").fill("no such customer");
+    await grid.getByRole("button", { name: "Clear filters" }).click();
+    await expect(grid.getByLabel("Search")).toHaveValue("");
+    await expect(grid.getByLabel("Status")).toHaveValue("");
+    // Selection shows the bulk bar and clears again.
+    const first = body.first();
+    await first.getByRole("checkbox").check();
+    await expect(grid.getByText("1 selected")).toBeVisible();
+    await grid.getByRole("button", { name: "Clear selection" }).click();
+    await expect(first.getByRole("checkbox")).not.toBeChecked();
+    // The Columns menu hides a column.
+    await grid.getByRole("button", { name: "Columns" }).click();
+    await page.getByRole("checkbox", { name: "Issued" }).uncheck();
+    await page.keyboard.press("Escape");
+    await expect(grid.locator("th[data-key=issued]")).toHaveCount(0);
+    // The paged grid moves between pages.
+    const paged = preview.locator(".m-data-grid").nth(1);
+    await expect(paged.getByText("Showing 1 to 25 of 240")).toBeVisible();
+    await paged.getByRole("button", { name: "Next" }).click();
+    await expect(paged.getByText("Showing 26 to 50 of 240")).toBeVisible();
+  },
   async "table-sort"({ page, root: preview }) {
     // The preview also shows a grouped table; exercise the first (paginated) one.
     const root = preview.locator(".m-data-table").first();
@@ -1139,7 +1220,13 @@ export const implementations = {
       await product.focus();
       await page.keyboard.press("Enter");
       await expect(product).toHaveAttribute("aria-expanded", "true");
-      await expect(page.getByRole("link", { name: /Analytics/ })).toBeVisible();
+      // The flyout is portalled to the body, and the playground sidebar has
+      // its own "Analytics dashboard" link, so match the flyout's link by href.
+      await expect(
+        page
+          .getByRole("link", { name: /Analytics/ })
+          .and(page.locator('[href="#analytics"]')),
+      ).toBeVisible();
       await page.keyboard.press("Escape");
       await expect(product).toHaveAttribute("aria-expanded", "false");
       await expect(product).toBeFocused();

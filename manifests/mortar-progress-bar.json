@@ -23,7 +23,7 @@
       "tone": "neutral | info | success | warning | danger (Tone; omit for the accent colour)",
       "className": "string"
     },
-    "usage": "Import { ProgressBar } from @tonycodes-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { ProgressBar } from @tonycodes-ui/mortar. Use it for the progress of a task, such as an upload or a setup checklist. For a measured amount against a capacity, such as storage or a quota, use Meter from @tonycodes-ui/mortar/charts.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
     "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states.",
     "dependencies": [],
