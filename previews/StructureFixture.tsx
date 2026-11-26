@@ -125,6 +125,139 @@ const agendaMeetings: UI.CalendarEvent[] = [
   },
 ];
 
+const chatPeople = {
+  customer: { name: "Priya Shah", role: "Customer" },
+  assistant: { name: "Brief assistant", role: "AI assistant" },
+  consultant: { name: "Ana Kovač", role: "Consultant" },
+};
+const reply =
+  "Thanks, that helps. I will draft the brief around a weekly sync and send it to Ana for review.";
+
+/** State for the ChatThread and ChatComposer examples: a scripted live conversation. */
+function useChatDemo() {
+  const [messages, setMessages] = useState<UI.ChatThreadMessage[]>([
+    {
+      id: "m1",
+      author: chatPeople.assistant,
+      time: "14:02",
+      dateTime: "2026-11-26T14:02",
+      content: (
+        <p>
+          Hi Priya, I am collecting the details for your project brief. What
+          does the team use today?
+        </p>
+      ),
+    },
+    {
+      id: "m2",
+      author: chatPeople.customer,
+      own: true,
+      time: "14:03",
+      dateTime: "2026-11-26T14:03",
+      content: <p>A shared spreadsheet and a lot of email.</p>,
+    },
+    {
+      id: "m3",
+      author: chatPeople.consultant,
+      time: "14:05",
+      dateTime: "2026-11-26T14:05",
+      content: (
+        <>
+          <p>We can import the spreadsheet. The columns we need are:</p>
+          <ul>
+            <li>
+              <code>client</code> and <code>owner</code>
+            </li>
+            <li>
+              <code>due_date</code> in ISO format
+            </li>
+          </ul>
+        </>
+      ),
+    },
+    {
+      id: "m4",
+      author: chatPeople.customer,
+      own: true,
+      time: "14:06",
+      status: "error",
+      error: "Not sent. Check your connection.",
+      content: <p>Is the import included in the first phase?</p>,
+    },
+    {
+      id: "m5",
+      author: chatPeople.assistant,
+      time: "14:07",
+      dateTime: "2026-11-26T14:07",
+      content: <p>How often should the team review progress?</p>,
+    },
+  ]);
+  const [sent, setSent] = useState<string[]>([]);
+  const [files, setFiles] = useState<string[]>([]);
+  const count = messages.length;
+  const send = (text: string) =>
+    setMessages((current) => [
+      ...current,
+      {
+        id: `own-${count}`,
+        author: chatPeople.customer,
+        own: true,
+        time: "14:08",
+        content: <p>{text}</p>,
+      },
+      {
+        id: `reply-${count}`,
+        author: chatPeople.assistant,
+        status: "streaming",
+      },
+    ]);
+  const finish = () =>
+    setMessages((current) =>
+      current.map((m) =>
+        m.status === "streaming"
+          ? { ...m, status: "complete", time: "14:09", content: <p>{reply}</p> }
+          : m,
+      ),
+    );
+  const addReply = () =>
+    setMessages((current) => [
+      ...current,
+      {
+        id: `extra-${current.length}`,
+        author: chatPeople.consultant,
+        time: "14:10",
+        content: (
+          <>
+            <p>{reply}</p>
+            <p>{reply}</p>
+          </>
+        ),
+      },
+    ]);
+  const retry = (id: string) =>
+    setMessages((current) =>
+      current.map((m) =>
+        m.id === id ? { ...m, status: "complete", error: undefined } : m,
+      ),
+    );
+  const thread = messages.map((m) =>
+    m.status === "error" ? { ...m, onRetry: () => retry(m.id) } : m,
+  );
+  const responding = messages.some((m) => m.status === "streaming");
+  return {
+    thread,
+    send,
+    finish,
+    addReply,
+    responding,
+    sent,
+    files,
+    post: (text: string) => setSent((current) => [...current, text]),
+    attach: (picked: File[]) =>
+      setFiles((current) => [...current, ...picked.map((f) => f.name)]),
+  };
+}
+
 export function StructureCase({ name }: { name: string }) {
   const [dismissed, setDismissed] = useState(false);
   const [notice, setNotice] = useState(true);
@@ -133,6 +266,7 @@ export function StructureCase({ name }: { name: string }) {
   const [view, setView] = useState<UI.CalendarView>("week");
   const [opened, setOpened] = useState("none");
   const [comments, setComments] = useState<string[]>([]);
+  const chat = useChatDemo();
   const scenario = new URLSearchParams(location.search).get("state");
   if (scenario) return <StateFixture name={name} state={scenario} />;
   let example: ReactNode;
@@ -576,6 +710,58 @@ export function StructureCase({ name }: { name: string }) {
               <li key={i}>{comment}</li>
             ))}
           </ul>
+        </UI.Stack>
+      );
+      break;
+    case "ChatThread":
+      example = (
+        <UI.Stack gap="md">
+          <UI.Card>
+            <div
+              style={{ display: "flex", flexDirection: "column", height: 420 }}
+            >
+              <UI.ChatThread
+                label="Conversation with the brief assistant"
+                messages={chat.thread}
+                choices={["Weekly", "Every two weeks", "Monthly"]}
+                onSelect={chat.send}
+              />
+            </div>
+            <UI.ChatComposer
+              loading={chat.responding}
+              onAttach={chat.attach}
+              onSubmit={chat.send}
+            />
+          </UI.Card>
+          <UI.Stack direction="row" gap="sm" wrap>
+            <UI.Button variant="secondary" size="sm" onClick={chat.finish}>
+              Finish the reply
+            </UI.Button>
+            <UI.Button variant="secondary" size="sm" onClick={chat.addReply}>
+              Add a reply
+            </UI.Button>
+          </UI.Stack>
+        </UI.Stack>
+      );
+      break;
+    case "ChatComposer":
+      example = (
+        <UI.Stack gap="lg">
+          <UI.ChatComposer
+            label="Message the brief assistant"
+            hint="Enter sends. Shift+Enter adds a line."
+            suggestions={["Summarise my brief", "What happens next?"]}
+            onAttach={chat.attach}
+            onSubmit={chat.post}
+          />
+          <ul aria-label="Sent messages">
+            {chat.sent.map((text, i) => (
+              <li key={i} style={{ whiteSpace: "pre-wrap" }}>
+                {text}
+              </li>
+            ))}
+          </ul>
+          <output aria-label="Attached files">{chat.files.join(", ")}</output>
         </UI.Stack>
       );
       break;

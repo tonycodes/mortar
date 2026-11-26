@@ -378,9 +378,14 @@ export function TextArea({
   id,
   hint,
   error,
+  mono = false,
   className,
   ...props
-}: TextareaHTMLAttributes<HTMLTextAreaElement> & FieldDescription) {
+}: TextareaHTMLAttributes<HTMLTextAreaElement> &
+  FieldDescription & {
+    /** Monospace text, for editing Markdown or code. */
+    mono?: boolean;
+  }) {
   const { fieldId, messageId, describedBy } = useField({
     id,
     hint,
@@ -393,6 +398,7 @@ export function TextArea({
       <textarea
         {...props}
         id={fieldId}
+        data-mono={mono || undefined}
         aria-invalid={!!error || props["aria-invalid"]}
         aria-describedby={describedBy}
       />

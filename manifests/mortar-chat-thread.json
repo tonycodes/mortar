@@ -1,0 +1,41 @@
+{
+  "id": "mortar-chat-thread",
+  "logicalId": "chat-thread",
+  "name": "ChatThread",
+  "description": "Mortar chat thread: a scrollable log of a live conversation with author avatars, names, roles and times, own messages aligned to the end, a Markdown body slot, a streaming responding state, inline errors with retry and quick-answer choices; it stays pinned to the newest message unless the reader scrolls up.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar",
+  "source": "src/chat.tsx",
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "export": "ChatThread",
+  "capabilities": ["status"],
+  "contract": {
+    "props": {
+      "label": "string (accessible name of the conversation log)",
+      "messages": "{ id: string; author: { name: string; role?: string; image?: string }; content?: ReactNode; own?: boolean; time?: string; dateTime?: string; status?: \"complete\" | \"streaming\" | \"error\"; error?: string; onRetry?: () => void }[]",
+      "choices": "string[] (quick answers under the latest message from someone else)",
+      "onSelect": "(choice: string) => void",
+      "choicesLabel": "string",
+      "empty": "{ title: string; description?: string; action?: ReactNode }",
+      "retryLabel": "string",
+      "respondingLabel": "string",
+      "latestLabel": "string",
+      "id": "string",
+      "className": "string (on the root element)"
+    },
+    "usage": "Import { ChatThread } from @tonycodes-ui/mortar. Place it in a flex column with a fixed height (for example above a ChatComposer) so it can scroll. Pass rendered Markdown as each message's content and mark a reply that is still arriving with status \"streaming\".",
+    "avoid": "Do not use it for static marketing mock-ups (use ChatPreview) or comment threads without live replies (use ActivityFeed). Do not copy implementations or override central colours.",
+    "accessibility": "The scroll area is a focusable role=\"log\" named by label. While a reply streams the log is aria-busy, so screen readers announce the reply once it is complete instead of every token. Avatars are decorative; the author's name and role are text. Quick answers are a named group of buttons.",
+    "dependencies": ["mortar-avatar", "mortar-button"]
+  },
+  "preview": {
+    "source": "previews/ChatThreadPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-chat-thread",
+    "probe": "chat-thread",
+    "states": ["empty", "long"]
+  }
+}
