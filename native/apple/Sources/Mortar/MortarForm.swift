@@ -69,14 +69,14 @@ public struct MortarForm<Content: View, Actions: View>: View {
             if Actions.self != EmptyView.self {
                 VStack(spacing: 0) {
                     Rectangle().fill(p[\.line]).frame(height: 1)
-                    // Side by side, trailing, when they fit; stacked,
-                    // trailing, when they don't, as at the largest text sizes.
+                    // Side by side when they fit, stacked when they don't (as
+                    // at the largest text sizes), at the column's trailing edge.
                     TrailingActions {
                         actions
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
-                    .frame(maxWidth: measure)
+                    .frame(maxWidth: measure, alignment: .trailing)
                     .frame(maxWidth: .infinity)
                 }
                 .background(p[\.paper])
@@ -188,10 +188,10 @@ private struct SectionColumns: Layout {
     }
 }
 
-/// The page's actions. One row, trailing, when they fit the proposed width;
-/// stacked, trailing, when they don't. The choice uses that width only, as
-/// `SectionColumns` does, so it can't feed back into itself while a window
-/// resizes the way `ViewThatFits` can.
+/// The page's actions: one row when they fit the proposed width, stacked
+/// when they don't, each right-aligned. The choice reads only the proposed
+/// width, as `SectionColumns` does, so a resize can't feed back into it.
+/// The form aligns the group to the column's trailing edge.
 private struct TrailingActions: Layout {
     var spacing: CGFloat = 12
     var stackSpacing: CGFloat = 8
@@ -249,8 +249,8 @@ private struct TrailingActions: Layout {
         return CGSize(width: width, height: ideals.map(\.height).max() ?? 0)
     }
 
-    /// The row's minimum, including the gap `ViewThatFits` used to keep
-    /// after its leading spacer, so the stack starts at the same width.
+    /// The row's minimum: the buttons, their gaps and one more gap before
+    /// the leading edge.
     private func rowMinimum(_ ideals: [CGSize]) -> CGFloat {
         rowContent(ideals).width + (ideals.isEmpty ? 0 : spacing)
     }

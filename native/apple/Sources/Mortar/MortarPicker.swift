@@ -3,11 +3,19 @@ import SwiftUI
 /// An option in a ``MortarPicker``.
 public struct MortarPickerOption<Value: Hashable>: Identifiable {
     public var value: Value
-    public var label: String
+    public var label: Text
     public var id: Value { value }
 
-    public init(_ label: String, value: Value) {
-        self.label = label
+    /// A label looked up in the app's strings, like the other field labels.
+    public init(_ label: LocalizedStringKey, value: Value) {
+        self.label = Text(label)
+        self.value = value
+    }
+
+    /// A label shown as given, for names that come from data, such as an
+    /// account or a project the user named.
+    public init(verbatim label: String, value: Value) {
+        self.label = Text(verbatim: label)
         self.value = value
     }
 }
@@ -20,7 +28,7 @@ public struct MortarPicker<Value: Hashable>: View {
     private let label: Text
     @Binding private var selection: Value
     private let options: [MortarPickerOption<Value>]
-    private let placeholder: String?
+    private let placeholder: Text?
     private let hint: Text?
     private let error: Text?
     private let isRequired: Bool
@@ -32,7 +40,7 @@ public struct MortarPicker<Value: Hashable>: View {
         _ label: LocalizedStringKey,
         selection: Binding<Value>,
         options: [MortarPickerOption<Value>],
-        placeholder: String? = nil,
+        placeholder: LocalizedStringKey? = nil,
         hint: LocalizedStringKey? = nil,
         error: LocalizedStringKey? = nil,
         isRequired: Bool = false
@@ -40,7 +48,7 @@ public struct MortarPicker<Value: Hashable>: View {
         self.label = Text(label)
         self._selection = selection
         self.options = options
-        self.placeholder = placeholder
+        self.placeholder = placeholder.map { Text($0) }
         self.hint = hint.map { Text($0) }
         self.error = error.map { Text($0) }
         self.isRequired = isRequired
@@ -60,15 +68,15 @@ public struct MortarPicker<Value: Hashable>: View {
                         selection = option.value
                     } label: {
                         if option.value == selection {
-                            Label(option.label, systemImage: "checkmark")
+                            Label { option.label } icon: { Image(systemName: "checkmark") }
                         } else {
-                            Text(option.label)
+                            option.label
                         }
                     }
                 }
             } label: {
                 HStack(spacing: 8) {
-                    Text(verbatim: chosen?.label ?? placeholder ?? "")
+                    (chosen?.label ?? placeholder ?? Text(verbatim: ""))
                         .foregroundStyle(chosen == nil ? p[\.muted] : isEnabled ? p[\.ink] : p[\.muted])
                         .lineLimit(1)
                     Spacer(minLength: 0)
@@ -86,7 +94,7 @@ public struct MortarPicker<Value: Hashable>: View {
             .menuIndicator(.hidden)
             .focusEffectDisabled()
             .accessibilityLabel(label)
-            .accessibilityValue(Text(verbatim: chosen?.label ?? ""))
+            .accessibilityValue(chosen?.label ?? Text(verbatim: ""))
             .accessibilityHint(FieldChrome<EmptyView>.hint(isRequired: isRequired, error: error, hint: hint))
         }
     }
