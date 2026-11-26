@@ -89,6 +89,7 @@ MortarAppShell(selection: $destination, items: [
 ```
 
 - `sections` are the web AppShell's labelled groups. On iPhone they join the tab bar after `items`, and iOS moves tabs past the fifth into More.
+- Each destination's `value` must be unique across `items` and every section: it is both its identity and its selection. A group's identity defaults to its items' values; pass `id:` when a group's items change but it is the same group.
 - `count` shows beside the label, and as the tab's badge on iPhone; VoiceOver reads it as the item's value. A count of 0 shows nothing.
 - Without a brand, the sidebar keeps a compact bar for its toggle on iPad instead of an empty large title.
 - The footer is pinned under the sidebar's list on iPad and Mac. iPhone has no sidebar, so give account actions a destination there.
