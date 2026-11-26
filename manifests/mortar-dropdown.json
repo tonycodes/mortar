@@ -14,8 +14,8 @@
     "props": {
       "label": "string",
       "items": "DropdownItem[] ({ label; onSelect?; href?; icon?; description?; section?; danger?; disabled? })",
-      "icon": "ReactNode",
-      "iconOnly": "boolean",
+      "icon": "ReactNode (icon-only triggers default to a more ellipsis)",
+      "iconOnly": "boolean (label becomes the accessible name)",
       "variant": "secondary | ghost",
       "align": "start | end",
       "header": "ReactNode",

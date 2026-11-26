@@ -8,7 +8,10 @@
 //   - the kit's `m-*` class names and source file hashes, for the application audit
 // catalog.json and the shipped docs are read at runtime, so the CLI always
 // describes the installed version.
-import ts from "typescript";
+import { COMPONENT_ENTRIES } from "./entries.mjs";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -46,7 +49,10 @@ export function packageExports(root = ROOT, entry = "src/index.ts") {
   return { values: [...values].sort(), types: [...types].sort() };
 }
 
-/** `UI.X` components rendered by a function, following local helper components. */
+// The namespaces playground pages import the kit's entries under.
+const NAMESPACES = new Set(["UI", "Charts"]);
+
+/** `UI.X` and `Charts.X` components rendered by a function, following local helper components. */
 function usedComponents(tree, fn, exports) {
   const locals = new Map();
   for (const s of tree.statements)
@@ -61,7 +67,7 @@ function usedComponents(tree, fn, exports) {
         const tag = n.tagName;
         if (
           ts.isPropertyAccessExpression(tag) &&
-          tag.expression.getText() === "UI" &&
+          NAMESPACES.has(tag.expression.getText()) &&
           exports.has(tag.name.text)
         )
           used.add(tag.name.text);
@@ -185,6 +191,15 @@ export function agentData(root = ROOT) {
     exports: packageExports(root),
     // @tonycodes-ui/mortar/email, for the audit's import checks.
     emailExports: packageExports(root, "src/email.ts"),
+    // Component subpath entries (scripts/entries.mjs), keyed by subpath.
+    entryExports: Object.fromEntries(
+      Object.entries(COMPONENT_ENTRIES)
+        .filter(([specifier]) => specifier.includes("/mortar/"))
+        .map(([specifier, entry]) => [
+          specifier.slice(specifier.indexOf("/mortar/") + "/mortar".length),
+          packageExports(root, entry),
+        ]),
+    ),
     examples,
     inherited,
     inheritedSets,

@@ -345,3 +345,55 @@ test("component styles read the weight and radius scales, not literals", () => {
   }
   assert.deepEqual(found, []);
 });
+
+test("table end alignment targets cells, not layout inside the toolbar", () => {
+  // Stack and Grid also set data-align="end"; in a DataTable toolbar a bare
+  // [data-align="end"] rule right-aligned their field labels.
+  const css = stripComments(Object.values(sources).join("\n"));
+  const found = [];
+  for (const { selector } of rules(css))
+    for (const part of selector.split(","))
+      if (
+        /\.m-(data-)?table\b/.test(part) &&
+        part.includes('[data-align="end"]') &&
+        !/(\bth|\btd|:is\(th, td\))\[data-align="end"\]/.test(part)
+      )
+        found.push(part.trim());
+  assert.deepEqual(found, []);
+});
+
+test("an Input's bordered group is as tall as Select and Button", () => {
+  // The 1px group border sat outside a full --m-control input, making every
+  // Input 2px taller than the controls beside it.
+  const css = section(
+    sources["src/foundation.css"],
+    "Fields: Input, TextArea and Select",
+  );
+  const body = selectorBody(css, ".m-input-group input");
+  assert.equal(declaration(body, "min-height"), "calc(var(--m-control) - 2px)");
+  assert.equal(
+    declaration(selectorBody(css, ".m-input-group"), "border"),
+    "1px solid var(--m-line-strong)",
+  );
+});
+
+test("pinned grid cells have zero specificity so stripes and selection win", () => {
+  // A start-pinned cell at (0,1,1) painted the surface over every stripe.
+  // Removing the :where() groups must leave only the [data-pin] attribute.
+  const css = stripComments(sources["src/data.css"]);
+  const pinned = rules(css).filter(
+    ({ selector, body }) =>
+      /\[data-pin="(start|end)"\]/.test(selector) &&
+      /background-color:\s*var\(--m-surface\)/.test(body),
+  );
+  assert.ok(pinned.length >= 2, "start and end pin rules exist");
+  for (const { selector } of pinned) {
+    const rest = selector.replace(/:where\([^()]*\)/g, "").trim();
+    for (const part of rest.split(",").map((p) => p.trim()))
+      assert.match(
+        part,
+        /^\[data-pin="(start|end)"\]$/,
+        `${selector} must stay at zero class and element specificity`,
+      );
+  }
+});

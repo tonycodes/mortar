@@ -293,7 +293,7 @@ test("the no-JavaScript dark fallback matches the dark appearance exactly", asyn
   const dark = values(selectorBody(css, '[data-mortar-appearance="dark"]'));
   const media = css.slice(css.indexOf("@media (prefers-color-scheme: dark)"));
   const fallback = values(media.slice(0, media.indexOf("\n}\n")));
-  assert.equal(Object.keys(dark).length, 51);
+  assert.equal(Object.keys(dark).length, 59); // 51 + eight --m-chart-* series
   assert.deepEqual(fallback, dark);
 });
 

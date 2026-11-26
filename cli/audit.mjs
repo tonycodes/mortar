@@ -61,6 +61,10 @@ export const RULES = {
     "Static text passed to Input.action; use prefix or suffix instead.",
   "input-absolute-adornment":
     "An absolutely positioned decorative sibling of Input; use leadingIcon or trailingIcon.",
+  "chart-unnamed":
+    "A Mortar chart with no accessible name: a chart without title, or a Sparkline or Meter without label.",
+  "chart-library":
+    "A third-party charting library imported in an app that also uses Mortar's charts.",
   "limited-data": "The audit could not use the installed version's own data.",
 };
 
@@ -304,12 +308,16 @@ const NAME = /[A-Za-z_$][\w$]*(?:[-:.][\w$]+)*/y;
 function jsxOpening(src, i) {
   const attrs = [];
   const n = src.length;
+  // A spread at attribute position ({...props}) may supply any prop.
+  let spread = false;
   while (i < n) {
     while (i < n && /\s/.test(src[i])) i++;
     if (src[i] === "/" && src[i + 1] === ">")
-      return { attrs, end: i + 2, selfClosing: true };
-    if (src[i] === ">") return { attrs, end: i + 1, selfClosing: false };
+      return { attrs, end: i + 2, selfClosing: true, spread };
+    if (src[i] === ">")
+      return { attrs, end: i + 1, selfClosing: false, spread };
     if (src[i] === "{") {
+      if (/^\{\s*\.\.\./.test(src.slice(i, i + 16))) spread = true;
       i = skipBraces(src, i);
       continue;
     }
@@ -339,7 +347,7 @@ function jsxOpening(src, i) {
     }
     attrs.push(attr);
   }
-  return { attrs, end: i, selfClosing: false };
+  return { attrs, end: i, selfClosing: false, spread };
 }
 
 /**
@@ -1120,6 +1128,20 @@ function exportsFromDts(root) {
 const IMPORT =
   /\b(import|export)\s+(type\s+)?((?:(?!\bfrom\b)[^;])*?)\s*\bfrom\s*(["'])(@tonycodes-ui\/mortar(?:\/[^"']*)?)\4/g;
 const SIDE_EFFECT = /\bimport\s*(["'])(@tonycodes-ui\/mortar\/[^"']*)\1/g;
+// The prop that names each Mortar chart for screen readers.
+const CHART_NAME = {
+  LineChart: "title",
+  AreaChart: "title",
+  BarChart: "title",
+  Sparkline: "label",
+  Meter: "label",
+};
+// Charting libraries an app might keep beside Mortar's charts.
+const CHART_LIBRARY =
+  /(?:\bimport\s*\(\s*|\bimport\s*|\bfrom\s*)(["'])(recharts|chart\.js|react-chartjs-2|@nivo\/[\w-]+|victory(?:-[\w-]+)?|apexcharts|react-apexcharts|echarts|echarts-for-react|highcharts|highcharts-react-official|@visx\/[\w-]+|@tremor\/react|plotly\.js(?:-[\w-]+)?|react-plotly\.js|@mui\/x-charts|@ant-design\/charts)(?:\/[^"']*)?\1/g;
+// A value import of Mortar's charts entry; a type-only import draws nothing.
+const CHARTS_USE =
+  /\bimport\s+(?!type\s)[^;]*?\bfrom\s*(["'])@tonycodes-ui\/mortar\/charts\1|\bimport\s*\(\s*(["'])@tonycodes-ui\/mortar\/charts\2/;
 // A file that builds an email: it imports Mortar's email entry or React Email.
 const EMAIL_FILE =
   /\bfrom\s*["'](?:@tonycodes-ui\/mortar\/email|@react-email\/[^"']+)["']/;
@@ -1232,6 +1254,8 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
   const hashes = data.agent.sourceHashes ?? {};
   let usesMortar = false;
   let usesEmail = false;
+  let usesCharts = false;
+  const chartLibraries = [];
   let stylesImported = false;
   let themeProvider = false;
   let firstMortarFile;
@@ -1324,6 +1348,12 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
+    if (CHARTS_USE.test(src)) usesCharts = true;
+    // An import keyword inside a string literal is text, not an import.
+    const unquoted = blankStrings(src);
+    for (const m of src.matchAll(CHART_LIBRARY))
+      if (unquoted.startsWith(m[0].slice(0, 4), m.index))
+        chartLibraries.push({ file, line: line(m.index), name: m[2] });
     for (const m of src.matchAll(LEGACY_IMPORT))
       add(
         "legacy-package",
@@ -1375,7 +1405,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         "error",
         file,
         line(m.index),
-        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand" and "${PKG}/email" are public.`,
+        `Reaches into ${m[0]}; only "${PKG}", "${PKG}/styles.css", "${PKG}/brand", "${PKG}/email", "${PKG}/data-grid" and "${PKG}/charts" are public.`,
         `Import from "${PKG}" instead, and remove any alias to the package's source.`,
       );
     }
@@ -1442,7 +1472,11 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
         }
         continue;
       }
-      if (spec !== PKG) {
+      // A component subpath (such as /data-grid) the installed version ships.
+      const entry =
+        spec.startsWith(`${PKG}/`) &&
+        data.agent.entryExports?.[spec.slice(PKG.length)];
+      if (spec !== PKG && !entry) {
         if (spec !== `${PKG}/brand` && spec !== `${PKG}/styles.css`)
           if (!/\/(src|dist)\b/.test(spec))
             add(
@@ -1467,6 +1501,9 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const named = clause.match(/\{([\s\S]*)\}/);
       if (!named) continue;
       const offset = m.index + m[0].indexOf("{");
+      const known = entry
+        ? new Set([...entry.values, ...entry.types])
+        : exportNames;
       for (const raw of named[1].split(",")) {
         const item = raw.trim();
         if (!item) continue;
@@ -1476,18 +1513,26 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
           .map((s) => s.trim());
         const isType = !!typeOnly || /^type\s/.test(item);
         const at = offset + named[0].indexOf(raw.trimStart() || raw);
-        if (!exportNames.has(name)) {
-          const removed = REMOVED_EXPORTS[name];
-          const guess = removed?.replacement ?? closest(name, exportNames, 3);
+        if (!known.has(name)) {
+          const removed = entry ? undefined : REMOVED_EXPORTS[name];
+          // The name exists, but in another entry point (e.g. DataGrid in /data-grid).
+          const elsewhere = Object.entries(data.agent.entryExports ?? {}).find(
+            ([subpath, list]) =>
+              `${PKG}${subpath}` !== spec &&
+              (list.values.includes(name) || list.types.includes(name)),
+          )?.[0];
+          const guess = removed?.replacement ?? closest(name, known, 3);
           add(
             "unknown-export",
             "error",
             file,
             line(at),
-            `${PKG} ${data.version} has no export "${name}".${removed ? " " + removed.note : ""}`,
-            guess
-              ? `Import ${guess} instead.`
-              : "Search the catalogue (mortar search) for the current component.",
+            `${spec} ${data.version} has no export "${name}".${removed ? " " + removed.note : ""}`,
+            elsewhere
+              ? `Import ${name} from "${PKG}${elsewhere}".`
+              : guess
+                ? `Import ${guess} instead.`
+                : "Search the catalogue (mortar search) for the current component.",
           );
           continue;
         }
@@ -1604,6 +1649,23 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       const afterName = m.index + m[0].length;
       const opening = jsxOpening(src, afterName);
       const attrs = opening.attrs;
+      // A chart needs a name; a spread may supply it, so skip those.
+      const nameProp = CHART_NAME[exportName];
+      if (
+        nameProp &&
+        !attrs.some((a) => a.name === nameProp) &&
+        !opening.spread
+      )
+        add(
+          "chart-unnamed",
+          "error",
+          file,
+          line(m.index),
+          `<${exportName}> has no ${nameProp}, so screen readers cannot name it.`,
+          nameProp === "title"
+            ? 'Add title="…" naming what the chart shows, such as "Monthly revenue by plan"; titleHidden hides it visually.'
+            : 'Add label="…" naming the measure and period, such as "Revenue, last 12 months".',
+        );
       for (const attr of attrs) {
         const name = attr.name;
         if (name === "key" || /[-:]/.test(name)) continue;
@@ -1743,6 +1805,17 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       }
     }
   }
+
+  if (usesCharts)
+    for (const hit of chartLibraries)
+      add(
+        "chart-library",
+        "info",
+        hit.file,
+        hit.line,
+        `"${hit.name}" is imported in an app that also uses Mortar's charts.`,
+        `Draw the chart with LineChart, AreaChart, BarChart, Sparkline or Meter from "${PKG}/charts", so it follows the kit's palette, tokens and accessibility (mortar guide charts).`,
+      );
 
   if (usesMortar)
     for (const hit of rawHits) {

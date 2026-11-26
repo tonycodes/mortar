@@ -3,7 +3,10 @@
 // catalogue carries the result; manifests keep the hand-written descriptions.
 import { resolve, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
+import { COMPONENT_ENTRIES, entryFor } from "./entries.mjs";
 
 // Type declarations always resolve from this checkout's node_modules, so a copy
 // of the kit in a temporary directory produces the same API.
@@ -15,7 +18,8 @@ const MODULES = resolve(
 const FORMAT = ts.TypeFormatFlags.NoTruncation;
 
 function program(root) {
-  return ts.createProgram([resolve(root, "src/index.ts")], {
+  const entries = Object.values(COMPONENT_ENTRIES).map((e) => resolve(root, e));
+  return ts.createProgram(entries, {
     target: ts.ScriptTarget.ES2022,
     lib: ["lib.es2022.d.ts", "lib.dom.d.ts", "lib.dom.iterable.d.ts"],
     module: ts.ModuleKind.NodeNext,
@@ -125,11 +129,20 @@ export function componentApi(root, manifests) {
   const prog = program(root);
   const checker = prog.getTypeChecker();
   const src = resolve(root, "src") + "/";
-  const index = prog.getSourceFile(resolve(root, "src/index.ts"));
-  const exported = new Map(
-    checker
-      .getExportsOfModule(checker.getSymbolAtLocation(index))
-      .map((s) => [s.name, s]),
+  // Exported symbols of each component entry point, keyed by entry file.
+  const exportsOf = new Map(
+    Object.values(COMPONENT_ENTRIES).map((entry) => [
+      entry,
+      new Map(
+        checker
+          .getExportsOfModule(
+            checker.getSymbolAtLocation(
+              prog.getSourceFile(resolve(root, entry)),
+            ),
+          )
+          .map((s) => [s.name, s]),
+      ),
+    ]),
   );
   const resolveSymbol = (symbol) =>
     symbol && symbol.flags & ts.SymbolFlags.Alias
@@ -139,7 +152,7 @@ export function componentApi(root, manifests) {
   const idByDeclaration = new Map();
   const declarations = new Map();
   for (const m of manifests) {
-    const symbol = resolveSymbol(exported.get(m.export));
+    const symbol = resolveSymbol(exportsOf.get(entryFor(m))?.get(m.export));
     const declaration = symbol?.declarations?.[0];
     if (!declaration) continue;
     declarations.set(m.id, declaration);
@@ -223,7 +236,7 @@ export function componentApi(root, manifests) {
     const declaration = declarations.get(m.id);
     if (!declaration) continue;
     const type = checker.getTypeOfSymbolAtLocation(
-      resolveSymbol(exported.get(m.export)),
+      resolveSymbol(exportsOf.get(entryFor(m))?.get(m.export)),
       declaration,
     );
     const signature = type.getCallSignatures()[0];

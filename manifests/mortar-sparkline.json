@@ -1,0 +1,39 @@
+{
+  "id": "mortar-sparkline",
+  "logicalId": "sparkline",
+  "name": "Sparkline",
+  "description": "Small axis-free trend line for a stat tile, table cell or list row, drawn as SVG in a validated series colour.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar/charts",
+  "export": "Sparkline",
+  "source": "src/sparkline.tsx",
+  "capabilities": ["summary"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "contract": {
+    "props": {
+      "values": "number[] (oldest first; NaN breaks the line)",
+      "label": "string (what the values measure; starts the spoken summary)",
+      "format": "(value: number) => string (formats values in the summary; default the locale number format)",
+      "slot": "1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 (series colour; default 1)",
+      "height": "number (pixels; default 32; width follows the container)",
+      "showLast": "boolean (dot on the latest value; default true)",
+      "area": "boolean (fill under the line)",
+      "band": "{ min: number; max: number } (shaded reference range)",
+      "id": "string",
+      "className": "string"
+    },
+    "usage": "Import { Sparkline } from @tonycodes-ui/mortar/charts. Use it beside a number to show its trend, in a stat tile, table cell or list row; for a trend people read values from, use a full chart. The summary is spoken from label and the values, so give label the measure and period, e.g. \"Revenue, last 12 months\". Pass format so the summary reads like the number beside it.",
+    "avoid": "Do not use a status colour or a raw colour for the line, colour it by meaning, or rely on it alone to convey a value; do not copy implementations or override central colours.",
+    "accessibility": "Renders role=img with a summary of the count, range and latest value. Verify the summary reads well next to the visible number.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/SparklinePreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-sparkline",
+    "states": []
+  }
+}

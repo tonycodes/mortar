@@ -24,7 +24,7 @@ import {
   MenuHeading,
   MenuSeparator,
 } from "@headlessui/react";
-import { ChevronDown, Close } from "./icons.js";
+import { ChevronDown, Close, More } from "./icons.js";
 import { headingTag, type HeadingLevel } from "./heading.js";
 import {
   DialogFrame,
@@ -853,8 +853,9 @@ export function Dropdown({
   /** Trigger text, and its accessible name when iconOnly. */
   label: string;
   items: DropdownItem[];
-  /** Trigger icon, e.g. a "more" ellipsis or an avatar. */
+  /** Trigger icon, e.g. an avatar. Icon-only triggers default to a "more" ellipsis. */
   icon?: ReactNode;
+  /** Show only the icon; `label` becomes the trigger's accessible name. */
   iconOnly?: boolean;
   variant?: "secondary" | "ghost";
   align?: "start" | "end";
@@ -863,6 +864,8 @@ export function Dropdown({
   /** On the trigger button. */
   className?: string;
 }) {
+  // An icon-only trigger always has an icon, so it never falls back to its label text.
+  const triggerIcon = icon ?? (iconOnly ? <More /> : undefined);
   const groups: { section?: string; items: DropdownItem[] }[] = [];
   for (const item of items) {
     const last = groups[groups.length - 1];
@@ -910,16 +913,16 @@ export function Dropdown({
       <MenuButton
         {...componentRoot("Dropdown")}
         className={cx("m-button", `m-button-${variant}`, className)}
-        aria-label={iconOnly && icon ? label : undefined}
-        data-icon-only={iconOnly && icon ? true : undefined}
+        aria-label={iconOnly ? label : undefined}
+        data-icon-only={iconOnly ? true : undefined}
       >
-        {icon && (
+        {triggerIcon && (
           <span className="m-button-icon" aria-hidden="true">
-            {icon}
+            {triggerIcon}
           </span>
         )}
-        {!(iconOnly && icon) && label}
-        {!(iconOnly && icon) && (
+        {!iconOnly && label}
+        {!iconOnly && (
           <span className="m-button-icon" aria-hidden="true">
             <ChevronDown />
           </span>
