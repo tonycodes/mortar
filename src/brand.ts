@@ -20,6 +20,20 @@ export interface BrandAppearanceTokens {
   /** Recessed areas: wells, muted bands and hover fills. */
   sunken?: string;
   /**
+   * Body text and headings. Defaults to Mortar's near-black (light) or
+   * near-white (dark). Set the text colours with tinted surfaces, so warm
+   * paper gets warm ink; each must reach 4.5:1 on paper, surface and sunken.
+   */
+  ink?: string;
+  /** Supporting text: descriptions, navigation and footer links. */
+  secondary?: string;
+  /** The quietest text: hints, captions and metadata. 4.5:1 is its floor too. */
+  muted?: string;
+  /** Hairline dividers and card borders (decorative). */
+  line?: string;
+  /** Control borders (inputs, checkboxes): 3:1 on paper, surface and sunken. */
+  lineStrong?: string;
+  /**
    * An optional accent fill: `linear-gradient()`, `radial-gradient()` or
    * `conic-gradient()` (or a `repeating-` form) whose stops are colours. Only
    * components that opt in paint it (Button `variant="accent"`, and
@@ -58,6 +72,11 @@ const KEYS: Record<keyof BrandAppearanceTokens, string> = {
   paper: "paper",
   surface: "surface",
   sunken: "sunken",
+  ink: "ink",
+  secondary: "secondary",
+  muted: "muted",
+  line: "line",
+  lineStrong: "line-strong",
   accentGradient: "accent-gradient",
 };
 const FONT_KEYS: Record<keyof BrandFonts, string> = {

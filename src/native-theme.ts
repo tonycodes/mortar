@@ -148,25 +148,31 @@ function palette(
   const paper = own("paper") ?? base.paper;
   const primary = own("primary") ?? base.primary;
   const onPrimary = own("onPrimary") ?? base.onPrimary;
+  const ink = own("ink") ?? base.ink;
   const neutral = NEUTRAL[mode];
   return {
     ...base,
     paper,
     surface: own("surface") ?? base.surface,
     sunken: own("sunken") ?? base.sunken,
+    ink,
+    secondary: own("secondary") ?? base.secondary,
+    muted: own("muted") ?? base.muted,
+    line: own("line") ?? base.line,
+    lineStrong: own("lineStrong") ?? base.lineStrong,
     primary,
     primaryHover:
       own("primaryHover") ??
-      (branded ? mix(primary, base.ink, 85) : neutral.primaryHover),
+      (branded ? mix(primary, ink, 85) : neutral.primaryHover),
     primaryActive:
       own("primaryActive") ??
-      (branded ? mix(primary, base.ink, 72) : neutral.primaryActive),
+      (branded ? mix(primary, ink, 72) : neutral.primaryActive),
     onPrimary,
     accent: own("accent") ?? primary,
     onAccent: own("onAccent") ?? onPrimary,
     focus: own("focus") ?? primary,
     // Dark links default to ink: a dark primary is often too pale for text.
-    link: own("link") ?? (mode === "light" ? primary : base.ink),
+    link: own("link") ?? (mode === "light" ? primary : ink),
     selected:
       own("selected") ??
       (branded

@@ -55,8 +55,9 @@ interface Field {
   /** How the appearance derives it when the brand leaves it empty. */
   derived: Record<Mode, string>;
   /** core: the required pair. advanced: interaction, accent, focus, link and
-      selected. surface: page, surface and sunken. gradient: the accent fill. */
-  group: "core" | "advanced" | "surface" | "gradient";
+      selected. surface: page, surface and sunken. text: ink, secondary, muted
+      and lines. gradient: the accent fill. */
+  group: "core" | "advanced" | "surface" | "text" | "gradient";
 }
 
 const FIELDS: Field[] = [
@@ -164,6 +165,46 @@ const FIELDS: Field[] = [
     token: "--m-sunken",
     derived: { light: "Mortar's light grey", dark: "Mortar's dark grey" },
     group: "surface",
+  },
+  {
+    key: "ink",
+    css: "ink",
+    label: "Text",
+    token: "--m-ink",
+    derived: { light: "Mortar's black", dark: "Mortar's near-white" },
+    group: "text",
+  },
+  {
+    key: "secondary",
+    css: "secondary",
+    label: "Secondary text",
+    token: "--m-secondary",
+    derived: { light: "Mortar's dark grey", dark: "Mortar's light grey" },
+    group: "text",
+  },
+  {
+    key: "muted",
+    css: "muted",
+    label: "Muted text",
+    token: "--m-muted",
+    derived: { light: "Mortar's grey", dark: "Mortar's grey" },
+    group: "text",
+  },
+  {
+    key: "line",
+    css: "line",
+    label: "Line",
+    token: "--m-line",
+    derived: { light: "Mortar's light line", dark: "Mortar's dark line" },
+    group: "text",
+  },
+  {
+    key: "lineStrong",
+    css: "line-strong",
+    label: "Strong line",
+    token: "--m-line-strong",
+    derived: { light: "Mortar's grey", dark: "Mortar's grey" },
+    group: "text",
   },
   {
     key: "accentGradient",
@@ -649,13 +690,49 @@ const CHECKS = [
     bg: "--m-sunken",
     min: 4.5,
   },
-  // Text and muted colours stay Mortar's; a tinted surface must keep them
-  // readable. Muted text is the lowest-contrast text, so it is the floor.
+  // Text colours (Mortar's, or the brand's own) must stay readable on every
+  // surface. Muted text is usually the lowest-contrast text, so it is the
+  // floor, but a brand's secondary and ink are checked too.
   {
     id: "text-page",
     label: "Text on page",
     fg: "--m-ink",
     bg: "--m-paper",
+    min: 4.5,
+  },
+  {
+    id: "text-surface",
+    label: "Text on surface",
+    fg: "--m-ink",
+    bg: "--m-surface",
+    min: 4.5,
+  },
+  {
+    id: "text-sunken",
+    label: "Text on sunken",
+    fg: "--m-ink",
+    bg: "--m-sunken",
+    min: 4.5,
+  },
+  {
+    id: "secondary-page",
+    label: "Secondary text on page",
+    fg: "--m-secondary",
+    bg: "--m-paper",
+    min: 4.5,
+  },
+  {
+    id: "secondary-surface",
+    label: "Secondary text on surface",
+    fg: "--m-secondary",
+    bg: "--m-surface",
+    min: 4.5,
+  },
+  {
+    id: "secondary-sunken",
+    label: "Secondary text on sunken",
+    fg: "--m-secondary",
+    bg: "--m-sunken",
     min: 4.5,
   },
   {
@@ -1118,8 +1195,8 @@ export function BrandBuilder() {
         </div>
         <details className="pg-brand-advanced">
           <summary>
-            Advanced: interaction, accent, focus, link, selected, surfaces and
-            gradient
+            Advanced: interaction, accent, focus, link, selected, surfaces,
+            gradient, text and lines
           </summary>
           <div className="pg-brand-pair">
             {MODES.map((mode) => (
@@ -1139,11 +1216,24 @@ export function BrandBuilder() {
               <Fieldset
                 key={mode}
                 legend={`${TITLE[mode]} surfaces and gradient`}
-                description="Leave empty to keep Mortar's surfaces. Text and status colours stay Mortar's, so check them against tinted surfaces below. The gradient paints accent buttons and accent bands."
+                description="Leave empty to keep Mortar's surfaces. Status colours stay Mortar's, so check them against tinted surfaces below. The gradient paints accent buttons and accent bands."
               >
                 {FIELDS.filter(
                   (f) => f.group === "surface" || f.group === "gradient",
                 ).map((f) => field(mode, f))}
+              </Fieldset>
+            ))}
+          </div>
+          <div className="pg-brand-pair">
+            {MODES.map((mode) => (
+              <Fieldset
+                key={mode}
+                legend={`${TITLE[mode]} text and lines`}
+                description="Leave empty to keep Mortar's greys. Set them with tinted surfaces, so a warm page gets warm text: every text colour needs 4.5:1 and strong lines 3:1 on page, surface and sunken."
+              >
+                {FIELDS.filter((f) => f.group === "text").map((f) =>
+                  field(mode, f),
+                )}
               </Fieldset>
             ))}
           </div>

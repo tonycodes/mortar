@@ -52,6 +52,11 @@ The full contract, for each of `l` (light) and `d` (dark):
 | `--m-brand-*-paper`                 | `#ffffff` in light, `#000000` in dark               |
 | `--m-brand-*-surface`               | `#ffffff` in light, `#0e0e10` in dark               |
 | `--m-brand-*-sunken`                | `#f5f5f7` in light, `#1c1c1e` in dark               |
+| `--m-brand-*-ink`                   | `#000000` in light, `#f5f5f7` in dark               |
+| `--m-brand-*-secondary`             | `#3a3a3c` in light, `#c7c7cc` in dark               |
+| `--m-brand-*-muted`                 | `#6e6e73` in light, `#98989d` in dark               |
+| `--m-brand-*-line`                  | `#e5e5ea` in light, `#29292c` in dark               |
+| `--m-brand-*-line-strong`           | `#8b8b90` in light, `#727278` in dark               |
 | `--m-brand-*-accent-gradient`       | None: accent fills are the flat `accent`            |
 
 And once for both appearances:
@@ -69,7 +74,26 @@ A brand never inherits values from an outer brand: every `[data-mortar-brand]` s
 
 `paper` is the page, `surface` is cards, panels and raised controls, and `sunken` is wells, muted bands and hover fills. Inverse bands use the other appearance's surfaces: a brand with a navy dark page (`--m-brand-d-paper: #0b1f3a`) gets navy inverse bands on light pages too. Without a brand surface, an inverse band on a light page keeps `#000000` / `#1c1c1e` / `#1c1c1e`, and on a dark page `#f5f5f7` / `#ffffff` / `#ffffff`. `selected` is tinted into the brand's page.
 
-Text, line and status colours stay Mortar's, so a tinted surface is the brand's contrast responsibility. Muted text and danger are the lowest text, and strong lines (control borders, 3:1) the lowest overall: on a navy dark page, `#0b1f3a` (paper), `#0d2341` (surface) and `#0f2848` (sunken) keep every text and status colour at 4.5:1 and strong lines at 3:1, but a lighter sunken such as `#143156` drops strong lines to 2.7:1, and `#16365f` drops muted text to 4.2:1. The brand builder's contrast table checks text, muted text, links and strong lines on all three surfaces.
+Status colours stay Mortar's, and so do text and line colours unless the brand sets them, so a tinted surface is the brand's contrast responsibility. Muted text and danger are the lowest text, and strong lines (control borders, 3:1) the lowest overall: on a navy dark page, `#0b1f3a` (paper), `#0d2341` (surface) and `#0f2848` (sunken) keep every text and status colour at 4.5:1 and strong lines at 3:1, but a lighter sunken such as `#143156` drops strong lines to 2.7:1, and `#16365f` drops muted text to 4.2:1. The brand builder's contrast table checks text, secondary and muted text, links and strong lines on all three surfaces.
+
+### Text and lines
+
+A tinted page usually wants tinted text: cool greys on a warm cream or slate page read as a mismatch. `ink` (body text and headings), `secondary` (descriptions, navigation and footer links), `muted` (hints, captions and metadata), `line` (hairline dividers) and `lineStrong` (control borders) are optional brand tokens. Every component reads them through `--m-ink`, `--m-secondary`, `--m-muted`, `--m-line` and `--m-line-strong`, so MarketingHeader navigation, Footer links and body text follow the brand with no CSS of their own. Inverse bands use the other appearance's values, as with surfaces. Hover and active primary states mix towards the brand's ink.
+
+```ts
+const brand = {
+  dark: {
+    paper: "#1b2128",
+    surface: "#1f262e",
+    sunken: "#232a31",
+    ink: "#f7efdf", // cream
+    secondary: "#e3dccd",
+    muted: "#c1beb7",
+  },
+};
+```
+
+Each text colour needs 4.5:1 on paper, surface and sunken, and `lineStrong` 3:1; `line` is decorative. Status colours still don't change, so keep the sunken surface where success, warning and danger text pass too. On a cream page (`#f9f5ed`), a sunken of `#efe8db` drops Mortar's success text to 4.4:1 and its strong lines to 2.8:1, while `#f2ece1` with a darker `lineStrong` such as `#80766b` passes. `tests/tone-contrast.test.mjs` checks a warm brand like this, and the brand builder checks yours.
 
 ### Accent gradients
 
@@ -168,7 +192,7 @@ Mortar's own styles and the no-JavaScript appearance fallback are ordinary style
 
 ### With the brand builder
 
-The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens, surfaces and accent gradient; empty fields show the value they derive. Set heading and body fonts below. Light and dark previews, each with an inverse band, an accent band, an accent button, a heading sample and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent, for links, text and muted text on page, surface and sunken, and for on-accent text on the accent fill (every gradient stop) at rest, hover and active; 3:1 for strong lines on page, surface and sunken, and for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
+The playground's [brand builder](https://mortar.tony.codes/playground/?page=brand) (`/playground/?page=brand`) designs a brand against this contract. Start from a preset, set the light and dark primary pairs, and open Advanced for the optional tokens, surfaces, accent gradient, text and lines; empty fields show the value they derive. Set heading and body fonts below. Light and dark previews, each with an inverse band, an accent band, an accent button, a heading sample and overlays, update as you type, and a table checks contrast: 4.5:1 for text on primary, hover, active and accent, for links, text, secondary and muted text on page, surface and sunken, and for on-accent text on the accent fill (every gradient stop) at rest, hover and active; 3:1 for strong lines on page, surface and sunken, and for the focus ring. Copy the result as the CSS rule (from `brandToCss`) or as the `brandTokens` object. The brand is kept in the URL, so a link shares it.
 
 ## Marketing surfaces and illustrations
 
@@ -177,8 +201,8 @@ A branded landing page needs no CSS of its own. MarketingPage, MarketingHeader, 
 | Role                | Token                                    | Brand contract               | Used by                                                                                                                              |
 | ------------------- | ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | Canvas and surfaces | `--m-paper`, `--m-surface`, `--m-sunken` | `paper`, `surface`, `sunken` | The page; illustration nodes and the pause control on `surface`                                                                      |
-| Text                | `--m-ink`, `--m-secondary`, `--m-muted`  | (fixed by Mortar)            | Titles; the hero description and illustration labels; the tagline, hero note and inline footer                                       |
-| Borders             | `--m-line`, `--m-line-strong`            | (fixed by Mortar)            | Header and inline-footer rules and the tagline divider; illustration connections and node outlines on `line-strong`, which keeps 3:1 |
+| Text                | `--m-ink`, `--m-secondary`, `--m-muted`  | `ink`, `secondary`, `muted`  | Titles; the hero description and illustration labels; the tagline, hero note and inline footer                                       |
+| Borders             | `--m-line`, `--m-line-strong`            | `line`, `lineStrong`         | Header and inline-footer rules and the tagline divider; illustration connections and node outlines on `line-strong`, which keeps 3:1 |
 | Emphasis            | `--m-link`                               | `link`                       | Hero `emphasis`. On an accent or background hero it takes the band's text colour instead                                             |
 | Accent              | `--m-accent`, `--m-accent-fill`          | `accent`, `accentGradient`   | Accent nodes and travelling signals; `tone="accent"` on Hero, CallToAction and Banner; `variant="accent"` buttons                    |
 | Focus               | `--m-focus`                              | `focus`                      | Every link and button, including the illustration's pause control                                                                    |
