@@ -618,6 +618,17 @@ export const implementations = {
     });
     const width = () =>
       customer.evaluate((el) => Math.round(el.getBoundingClientRect().width));
+    // The header keeps its own name; the separator is named separately.
+    await expect(
+      detailed.getByRole("columnheader", { name: "Customer", exact: true }),
+    ).toHaveCount(1);
+    // A grid shown after being hidden (a closed tab or dialog) lays out
+    // normally: nothing measured while hidden collapses its columns.
+    await detailed.evaluate((el) => (el.style.display = "none"));
+    await page.waitForTimeout(100);
+    await detailed.evaluate((el) => (el.style.display = ""));
+    await expect(detailed.locator("table")).not.toHaveAttribute("data-resized");
+    expect(await width()).toBeGreaterThan(60);
     const before = await width();
     await handle.focus();
     await page.keyboard.press("ArrowRight");
@@ -643,6 +654,11 @@ export const implementations = {
           ]),
       );
     for (const [key, w] of widths) expect(w, key).toBeGreaterThan(60);
+    // The first resize brought Amount (maxWidth 140) within its limit.
+    const amountHead = detailed.locator("th[data-key=amount]");
+    expect(
+      await amountHead.evaluate((el) => el.getBoundingClientRect().width),
+    ).toBeLessThanOrEqual(140.5);
     await expect(detailed.locator("td[data-key=amount]").first()).toBeVisible();
     const box = await handle.boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);

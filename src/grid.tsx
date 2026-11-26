@@ -78,7 +78,7 @@ export interface DataGridColumn<T> extends Omit<DataTableColumn<T>, "pin"> {
   resizable?: boolean;
   /** Narrowest width, in pixels, a resize can reach. Default 64. */
   minWidth?: number;
-  /** Widest width, in pixels, a resize can reach. Default none. */
+  /** Widest width, in pixels, a resize can reach. Default 2000. */
   maxWidth?: number;
 }
 
@@ -225,6 +225,7 @@ const matches = (value: string, query: string) =>
 const NO_IDS: string[] = [];
 const NO_WIDTHS: DataGridColumnWidths = {};
 const MIN_WIDTH = 64;
+const MAX_WIDTH = 2000;
 // Arrow keys move a column edge by this much; with Shift, four times as far.
 const KEY_STEP = 16;
 // The selection and expand columns' widths, as set in data.css.
@@ -569,22 +570,33 @@ export function DataGrid<T extends { id: string }>({
     for (const cell of tr.querySelectorAll("[data-pin], [data-select]"))
       observer.observe(cell);
     return () => observer.disconnect();
-  }, [headerRow, pinKey, hidden.join(",")]);
+  }, [headerRow, pinKey, hidden.join(","), expandable, !!onSelectionChange]);
 
   // Column resizing. Rendered header widths are tracked so a resize starts
   // from what is on screen and the separators can report a value.
+  // Columns a narrow grid hides by priority are display: none; they take no
+  // width and don't count toward the table's. A grid inside a hidden tab or
+  // dialog has no layout at all, so nothing is measured until it shows.
   const [measured, setMeasured] = useState<Record<string, number>>({});
+  const [priorityHidden, setPriorityHidden] = useState<string[]>(NO_IDS);
   useLayoutEffect(() => {
     const tr = headerRow;
     if (!tr || !resizable) return;
     const measure = () => {
-      if (!tr.isConnected) return;
+      if (!tr.isConnected || !tr.getClientRects().length) return;
       const next: Record<string, number> = {};
-      for (const cell of tr.children as HTMLCollectionOf<HTMLElement>)
-        if (cell.dataset.key)
-          next[cell.dataset.key] = cell.getBoundingClientRect().width;
+      const gone: string[] = [];
+      for (const cell of tr.children as HTMLCollectionOf<HTMLElement>) {
+        const key = cell.dataset.key;
+        if (!key) continue;
+        if (getComputedStyle(cell).display === "none") gone.push(key);
+        else next[key] = cell.getBoundingClientRect().width;
+      }
       setMeasured((old) =>
         JSON.stringify(old) === JSON.stringify(next) ? old : next,
+      );
+      setPriorityHidden((old) =>
+        old.join(",") === gone.join(",") ? old : gone,
       );
     };
     measure();
@@ -600,25 +612,25 @@ export function DataGrid<T extends { id: string }>({
   } | null>(null);
   const widthOf = (key: string) =>
     drag ? (drag.key === key ? drag.width : drag.base[key]) : widths[key];
+  const minOf = (col: DataGridColumn<T>) => col.minWidth ?? MIN_WIDTH;
+  const maxOf = (col: DataGridColumn<T>) => col.maxWidth ?? MAX_WIDTH;
   const clampWidth = (col: DataGridColumn<T>, width: number) =>
-    Math.round(
-      Math.min(
-        col.maxWidth ?? Number.POSITIVE_INFINITY,
-        Math.max(col.minWidth ?? MIN_WIDTH, width),
-      ),
-    );
+    Math.round(Math.min(maxOf(col), Math.max(minOf(col), width)));
   // Every visible column gets a width the first time one is resized, so the
   // others keep the widths they had instead of sharing out the difference.
-  // Columns that narrow grids hide by priority measure 0 wide: they take no
-  // width and don't count toward the table's.
-  const shown = (col: DataGridColumn<T>) => measured[col.key] !== 0;
+  // Snapshot widths respect each column's minimum and maximum.
+  const shown = (col: DataGridColumn<T>) => !priorityHidden.includes(col.key);
   const resizeBase = () => {
     const base = { ...widths };
     for (const col of ordered)
       if (base[col.key] === undefined && shown(col) && measured[col.key])
-        base[col.key] = Math.round(measured[col.key]);
+        base[col.key] = clampWidth(col, measured[col.key]);
     return base;
   };
+  // 2. A drag ends cleanly even if the table unmounts mid-drag (loading, an
+  // empty result): the listeners live on the window and are removed here.
+  const endDrag = useRef<(() => void) | null>(null);
+  useLayoutEffect(() => () => endDrag.current?.(), [headerRow]);
   const startResize = (
     col: DataGridColumn<T>,
     event: PointerEvent<HTMLDivElement>,
@@ -631,6 +643,7 @@ export function DataGrid<T extends { id: string }>({
     const start = base[col.key] ?? MIN_WIDTH;
     const startX = event.clientX;
     let width = start;
+    endDrag.current?.();
     handle.setPointerCapture(event.pointerId);
     setDrag({ key: col.key, width, base });
     const move = (e: globalThis.PointerEvent) => {
@@ -638,15 +651,17 @@ export function DataGrid<T extends { id: string }>({
       setDrag({ key: col.key, width, base });
     };
     const end = () => {
-      handle.removeEventListener("pointermove", move);
-      handle.removeEventListener("pointerup", end);
-      handle.removeEventListener("pointercancel", end);
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("pointercancel", end);
+      endDrag.current = null;
       setDrag(null);
       setWidths({ ...base, [col.key]: width });
     };
-    handle.addEventListener("pointermove", move);
-    handle.addEventListener("pointerup", end);
-    handle.addEventListener("pointercancel", end);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", end);
+    window.addEventListener("pointercancel", end);
+    endDrag.current = end;
   };
   const keyResize = (
     col: DataGridColumn<T>,
@@ -661,7 +676,7 @@ export function DataGrid<T extends { id: string }>({
     let next: number | undefined;
     if (event.key === grow) next = now + step;
     else if (event.key === shrink) next = now - step;
-    else if (event.key === "Home") next = col.minWidth ?? MIN_WIDTH;
+    else if (event.key === "Home") next = minOf(col);
     else if (event.key === "End" && col.maxWidth !== undefined)
       next = col.maxWidth;
     if (next === undefined) return;
@@ -996,6 +1011,13 @@ export function DataGrid<T extends { id: string }>({
                       scope="col"
                       {...cellProps(col, index)}
                       data-resizable={canResize(col) || undefined}
+                      // The separator inside would otherwise join the
+                      // header's name ("Customer Resize Customer").
+                      aria-labelledby={
+                        canResize(col)
+                          ? `${detailBase}-head-${encodeURIComponent(col.key)}`
+                          : undefined
+                      }
                       aria-sort={
                         col.sortable
                           ? position === 0
@@ -1017,7 +1039,15 @@ export function DataGrid<T extends { id: string }>({
                               )
                           }
                         >
-                          {col.label}
+                          <span
+                            id={
+                              canResize(col)
+                                ? `${detailBase}-head-${encodeURIComponent(col.key)}`
+                                : undefined
+                            }
+                          >
+                            {col.label}
+                          </span>
                           <SortArrows direction={direction} />
                           {sort.length > 1 && position >= 0 && (
                             <span className="m-sort-order">
@@ -1026,6 +1056,12 @@ export function DataGrid<T extends { id: string }>({
                             </span>
                           )}
                         </button>
+                      ) : canResize(col) ? (
+                        <span
+                          id={`${detailBase}-head-${encodeURIComponent(col.key)}`}
+                        >
+                          {col.label}
+                        </span>
                       ) : (
                         col.label
                       )}
@@ -1038,8 +1074,8 @@ export function DataGrid<T extends { id: string }>({
                           aria-valuenow={
                             width !== undefined ? Math.round(width) : undefined
                           }
-                          aria-valuemin={col.minWidth ?? MIN_WIDTH}
-                          aria-valuemax={col.maxWidth}
+                          aria-valuemin={minOf(col)}
+                          aria-valuemax={maxOf(col)}
                           aria-valuetext={
                             width !== undefined
                               ? `${Math.round(width)} pixels`

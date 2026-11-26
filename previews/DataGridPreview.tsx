@@ -104,6 +104,11 @@ export const columns: DataGridColumn<Invoice>[] = [
   },
 ];
 
+/** The detail grid caps Amount, so the first resize brings it within range. */
+const detailColumns: DataGridColumn<Invoice>[] = columns.map((col) =>
+  col.key === "amount" ? { ...col, maxWidth: 140 } : col,
+);
+
 /** Loading, error and empty fixtures, chosen by the harness with ?state=. */
 function StatePreview({ state }: { state: string }) {
   return (
@@ -168,7 +173,7 @@ function Grids() {
         caption="Invoices with details"
         rows={detailed}
         rowLabel={(row) => row.number}
-        columns={columns}
+        columns={detailColumns}
         resizable
         columnWidths={widths}
         onColumnWidthsChange={setWidths}

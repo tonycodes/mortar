@@ -68,6 +68,12 @@ test("resizable columns get a focusable separator named after the column", () =>
   assert.match(separators[0], /aria-orientation="vertical"/);
   assert.match(separators[0], /aria-label="Resize Id"/);
   assert.match(separators[0], /aria-valuemin="64"/);
+  // A separator always has a range: 2000 unless the column sets maxWidth.
+  assert.match(separators[0], /aria-valuemax="2000"/);
+  // The header's name is its label, not "Id Resize Id".
+  const head = markup.match(/<th[^>]*data-key="id"[^>]*>/)[0];
+  const labelledBy = head.match(/aria-labelledby="([^"]+)"/)[1];
+  assert.match(markup, new RegExp(`<span id="${labelledBy}">Id</span>`));
   assert.match(separators[0], /tabindex="0"/);
   // A column can opt out, and a grid without resizable has none.
   const fixed = html(DataGrid, {
@@ -146,4 +152,19 @@ test("virtualized grids do not expand rows yet", () => {
     defaultExpandedIds: ["r0"],
   });
   assert.doesNotMatch(markup, /m-data-grid-expand|m-data-grid-detail/);
+});
+
+test("resized tables keep focus rings and detail rows unclipped", async () => {
+  const { readSource } = await import("./support/css.mjs");
+  const css = await readSource("src/data.css");
+  // Cells clip in fixed layout, so controls draw their ring inside.
+  assert.match(
+    css,
+    /table\[data-resized\]\s*:is\(\.m-sort-button, \.m-data-grid-expand\):focus-visible\s*\{\s*outline-offset: -2px;/,
+  );
+  // The detail row is not clipped.
+  assert.match(
+    css,
+    /table\[data-resized\]\s*:is\(\s*thead th,\s*tbody tr:not\(\.m-data-grid-detail\) > :is\(th, td\)\s*\)\s*\{\s*overflow: hidden;/,
+  );
 });

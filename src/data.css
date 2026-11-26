@@ -400,9 +400,17 @@
   .m-data-grid table[data-resized] {
     table-layout: fixed;
   }
-  .m-data-grid table[data-resized] :is(th, td) {
+  .m-data-grid
+    table[data-resized]
+    :is(thead th, tbody tr:not(.m-data-grid-detail) > :is(th, td)) {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  /* Clipped cells would cut off focus rings drawn outside their controls. */
+  .m-data-grid
+    table[data-resized]
+    :is(.m-sort-button, .m-data-grid-expand):focus-visible {
+    outline-offset: -2px;
   }
   /* Expandable rows: a toggle at the start, and a full-width detail row. */
   .m-data-grid :is(th, td)[data-expand] {
@@ -428,7 +436,7 @@
   }
   .m-data-grid-expand:focus-visible {
     outline: 2px solid var(--m-focus);
-    outline-offset: 0;
+    outline-offset: -2px;
   }
   .m-data-grid-expand svg {
     width: 16px;

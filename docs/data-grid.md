@@ -144,7 +144,7 @@ Hidden columns and sort levels are plain arrays, so they are easy to save per us
 
 ## Resizing columns
 
-`resizable` lets people resize columns: drag the edge of a header, or focus that edge and use the arrow keys (16 pixels a step, 64 with Shift). Home sets a column to its minimum, and End to its maximum when it has one.
+`resizable` lets people resize columns: drag the edge of a header, or focus that edge and use the arrow keys (16 pixels a step, 64 with Shift). Home sets a column to its minimum, and End to its `maxWidth` when it has one.
 
 ```tsx
 const [widths, setWidths] = useState<DataGridColumnWidths>(savedWidths);
@@ -165,7 +165,7 @@ const [widths, setWidths] = useState<DataGridColumnWidths>(savedWidths);
 
 - Widths are in pixels, by column key. The first resize gives every visible column the width it had on screen, so the other columns keep their widths, and from then on the table is exactly as wide as its columns and scrolls sideways when it's wider than its container. Text that doesn't fit is cut off with an ellipsis.
 - A drag shows its width as it moves and reports it once, when it ends. A key press reports straight away.
-- Columns take `minWidth` (default 64) and `maxWidth`; `resizable: false` keeps one column's width fixed. A column's `width` is its starting width until someone resizes it.
+- Columns take `minWidth` (default 64) and `maxWidth` (default 2000); `resizable: false` keeps one column's width fixed. The first resize also brings any column outside those limits back within them. A column's `width` is its starting width until someone resizes it.
 - Keep `columnWidths` to remember widths between visits.
 
 ## Expandable rows
@@ -189,7 +189,7 @@ const [widths, setWidths] = useState<DataGridColumnWidths>(savedWidths);
 
 ## Accessibility
 
-Each column edge is a focusable separator named "Resize Customer" (for example), with its width in pixels as its value. Each expand toggle is a button named "Details for" and the row's `rowLabel`, with `aria-expanded`, and `aria-controls` pointing to the detail row while it's open.
+Each column edge is a focusable separator named "Resize Customer" (for example), with its width in pixels as its value between its minimum and maximum. The header itself is still named just "Customer". Each expand toggle is a button named "Details for" and the row's `rowLabel`, with `aria-expanded`, and `aria-controls` pointing to the detail row while it's open.
 
 The grid is a semantic table with a caption, `scope` on headers and `aria-sort` on the sorted column. A virtualized grid sets `aria-rowcount` and each row's `aria-rowindex`, so screen readers know where they are in the full set. Every row checkbox is named from `rowLabel`. Check keyboard use and focus in your own toolbar content and bulk actions.
 
