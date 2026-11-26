@@ -3,7 +3,9 @@
 
 export { Sparkline } from "./sparkline.js";
 export { LineChart, AreaChart, BarChart } from "./xy-chart.js";
+export { Meter } from "./meter.js";
 export type { SparklineProps } from "./sparkline.js";
+export type { MeterProps, MeterThreshold } from "./meter.js";
 export type {
   ChartBaseProps,
   ChartSeries,

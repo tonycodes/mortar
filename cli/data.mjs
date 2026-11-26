@@ -43,7 +43,7 @@ export const GUIDES = {
   charts: {
     file: "docs/charts.md",
     summary:
-      "Charts from @tonycodes-ui/mortar/charts: Sparkline, MetricGroup sparklines, the spoken summary, and the eight-slot series palette and its rules.",
+      "Charts from @tonycodes-ui/mortar/charts: Sparkline and MetricGroup sparklines; LineChart, AreaChart and BarChart with their tooltip, keyboard and table view; Meter with status thresholds; and the eight-slot series palette and its rules.",
   },
   "data-grid": {
     file: "docs/data-grid.md",
