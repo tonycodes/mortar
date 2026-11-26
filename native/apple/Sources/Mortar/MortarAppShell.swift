@@ -19,13 +19,19 @@ public struct MortarNavigationItem<Value: Hashable>: Identifiable {
 
 /// A labelled group of destinations under a ``MortarAppShell``'s main
 /// navigation, as the web AppShell's `sections`.
-public struct MortarNavigationGroup<Value: Hashable> {
+public struct MortarNavigationGroup<Value: Hashable>: Identifiable {
     public var label: LocalizedStringKey
     public var items: [MortarNavigationItem<Value>]
+    /// The group's identity across updates. Defaults to its items' values,
+    /// so adding, removing or reordering groups keeps each header with its
+    /// own items. Pass one when a group's items change but it is still the
+    /// same group, such as a project list that grows.
+    public var id: AnyHashable
 
-    public init(_ label: LocalizedStringKey, items: [MortarNavigationItem<Value>]) {
+    public init(_ label: LocalizedStringKey, id: AnyHashable? = nil, items: [MortarNavigationItem<Value>]) {
         self.label = label
         self.items = items
+        self.id = id ?? AnyHashable(items.map(\.value))
     }
 }
 
@@ -50,6 +56,10 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
     @Environment(\.horizontalSizeClass) private var sizeClass
     #endif
 
+    /// Every destination's `value` must be unique across `items` and all
+    /// `sections`: it is the destination's identity and its selection.
+    /// Debug builds stop on a repeated value; release builds keep the first.
+    ///
     /// - Parameters:
     ///   - brand: The sidebar's title. Without one, the sidebar reserves no
     ///     large-title space for it.
@@ -67,12 +77,22 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
         @ViewBuilder content: @escaping (Value) -> Content,
         @ViewBuilder footer: () -> Footer
     ) {
+        let values = (items + sections.flatMap(\.items)).map(\.value)
+        assert(Set(values).count == values.count,
+               "MortarAppShell: each destination's value must be unique across items and sections.")
         self.brand = brand.map { Text($0) }
         self._selection = selection
         self.items = items
         self.sections = sections
         self.content = content
         self.footer = footer()
+    }
+
+    /// Every destination once, in order: the tab bar's source. A repeated
+    /// value keeps its first destination, so tab identities stay unique.
+    private var destinations: [MortarNavigationItem<Value>] {
+        var seen = Set<Value>()
+        return (items + sections.flatMap(\.items)).filter { seen.insert($0.value).inserted }
     }
 
     private var isCompact: Bool {
@@ -90,7 +110,7 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
         Group {
             if isCompact {
                 TabView(selection: $selection) {
-                    ForEach(items + sections.flatMap(\.items)) { item in
+                    ForEach(destinations) { item in
                         NavigationStack { screen(item.value) }
                             .tabItem { Label(item.label, systemImage: item.systemImage) }
                             .badge(item.count ?? 0)
@@ -101,11 +121,11 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
                 NavigationSplitView {
                     List {
                         ForEach(items) { row($0) }
-                        ForEach(sections.indices, id: \.self) { index in
+                        ForEach(sections) { section in
                             Section {
-                                ForEach(sections[index].items) { row($0) }
+                                ForEach(section.items) { row($0) }
                             } header: {
-                                Text(sections[index].label)
+                                Text(section.label)
                                     .font(mortar.font(11, .semibold))
                                     .tracking(11 * MortarTokens.trackingCaps)
                                     .textCase(.uppercase)
@@ -166,7 +186,7 @@ public struct MortarAppShell<Value: Hashable, Footer: View, Content: View>: View
                 .fill(isSelected ? mortar.palette[\.surface] : .clear)
                 .padding(.horizontal, 8)
         )
-        .accessibilityValue(count.map { Text("\($0)") } ?? Text(verbatim: ""))
+        .modifier(CountValue(count: count))
         .accessibilityAddTraits(isSelected ? [.isButton, .isSelected] : .isButton)
     }
 
@@ -188,6 +208,20 @@ extension MortarAppShell where Footer == EmptyView {
     ) {
         self.init(brand, selection: selection, items: items, sections: sections, content: content) {
             EmptyView()
+        }
+    }
+}
+
+/// A row's count as its accessibility value, formatted as on screen. No
+/// value at all when there is no count, rather than an empty one.
+private struct CountValue: ViewModifier {
+    let count: Int?
+
+    func body(content: Content) -> some View {
+        if let count {
+            content.accessibilityValue(Text(count, format: .number))
+        } else {
+            content
         }
     }
 }
