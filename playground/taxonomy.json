@@ -148,6 +148,12 @@
           ]
         },
         {
+          "id": "chat",
+          "title": "Chat and messaging",
+          "thumbnail": "ChatThread",
+          "components": ["ChatThread", "ChatComposer"]
+        },
+        {
           "id": "auth",
           "title": "Sign-in and registration",
           "thumbnail": "SignInPanel",

@@ -17,6 +17,7 @@
       "onChange": "ChangeEventHandler<HTMLTextAreaElement>",
       "hint": "string",
       "error": "string (announced when it appears)",
+      "mono": "boolean (monospace text for Markdown or code)",
       "id": "string (defaults to a generated id)",
       "required": "boolean (native; adds a decorative marker to the label)",
       "className": "string (on the root element)"

@@ -1,0 +1,50 @@
+{
+  "id": "mortar-chat-composer",
+  "logicalId": "chat-composer",
+  "name": "ChatComposer",
+  "description": "Mortar chat composer: a labelled, growing textarea with an attach-files icon button and a send icon button; Enter sends, Shift+Enter adds a line and Enter during IME composition is left alone. Disabled and busy states and optional starter-prompt chips.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar",
+  "source": "src/chat.tsx",
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "export": "ChatComposer",
+  "capabilities": ["form", "input"],
+  "contract": {
+    "props": {
+      "onSubmit": "(value: string) => void (receives the trimmed text)",
+      "value": "string",
+      "onChange": "(value: string) => void",
+      "label": "string",
+      "labelVisible": "boolean",
+      "placeholder": "string",
+      "sendLabel": "string",
+      "onAttach": "(files: File[]) => void (adds the attach button)",
+      "attachLabel": "string",
+      "accept": "string",
+      "attachments": "ReactNode (for example an AttachmentList above the text)",
+      "suggestions": "string[] (starter prompts shown as chips)",
+      "onSelect": "(suggestion: string) => void (replaces sending the chosen starter prompt)",
+      "suggestionsLabel": "string",
+      "disabled": "boolean",
+      "loading": "boolean (a reply is in progress: text stays editable, sending is blocked)",
+      "hint": "string",
+      "error": "string (announced when it appears)",
+      "id": "string",
+      "className": "string (on the root element)"
+    },
+    "usage": "Import { ChatComposer } from @tonycodes-ui/mortar. Put it under a ChatThread; set loading while a reply streams and disabled when the conversation is closed.",
+    "avoid": "Do not use it for comments that are reviewed before posting (use CommentComposer, where Ctrl/⌘+Enter submits). Do not copy implementations or override central colours.",
+    "accessibility": "The textarea has a label (visually hidden by default) and aria-keyshortcuts=\"Enter\". Icon buttons have text names. A busy send button stays focusable. Starter prompts are a named group of buttons.",
+    "dependencies": ["mortar-button"]
+  },
+  "preview": {
+    "source": "previews/ChatComposerPreview.tsx"
+  },
+  "testing": {
+    "profile": "control",
+    "target": ".m-chat-composer-form",
+    "probe": "chat-composer",
+    "states": ["loading", "disabled", "error", "long"]
+  }
+}
