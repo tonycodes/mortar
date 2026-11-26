@@ -29,6 +29,135 @@ export const implementations = {
       "Ship it",
     ]);
   },
+  async "chat-thread"({ page, root }) {
+    const log = root.getByRole("log", {
+      name: "Conversation with the brief assistant",
+    });
+    const gap = () =>
+      log.evaluate((el) => el.scrollHeight - el.scrollTop - el.clientHeight);
+    // Author, role and time per message; own messages align to the end.
+    await expect(log.getByText("· AI assistant").first()).toBeVisible();
+    await expect(log.locator("time").first()).toHaveAttribute(
+      "datetime",
+      "2026-11-26T14:02",
+    );
+    await expect(
+      log.locator(".m-chat-message[data-own]").first(),
+    ).toBeVisible();
+    // Opens pinned to the newest message.
+    await expect.poll(gap).toBeLessThanOrEqual(2);
+    // A failed message offers Retry; retrying clears the error.
+    await expect(
+      log.getByText("Not sent. Check your connection."),
+    ).toBeVisible();
+    await log.getByRole("button", { name: "Retry" }).click();
+    await expect(log.getByText("Not sent. Check your connection.")).toHaveCount(
+      0,
+    );
+    // Choosing a quick answer sends it and starts a streamed reply; the log is
+    // busy (announced once complete) and the choices go away meanwhile.
+    const choices = log.getByRole("group", { name: "Suggested replies" });
+    await choices.getByRole("button", { name: "Weekly" }).click();
+    await expect(log.locator(".m-chat-message[data-own]").last()).toHaveText(
+      /Weekly/,
+    );
+    await expect(log).toHaveAttribute("aria-busy", "true");
+    await expect(log.getByText("Responding…")).toBeAttached();
+    await expect(choices).toHaveCount(0);
+    // The chosen button is gone; focus stays in the thread, not on the page.
+    await expect(log).toBeFocused();
+    // The composer is busy while the reply streams: Enter does not send.
+    const field = root.getByLabel("Message", { exact: true });
+    await field.fill("Another question");
+    await field.press("Enter");
+    await expect(field).toHaveValue("Another question");
+    await root.getByRole("button", { name: "Finish the reply" }).click();
+    await expect(log).not.toHaveAttribute("aria-busy", "true");
+    await expect(log.getByText(/draft the brief/)).toBeVisible();
+    await expect.poll(gap).toBeLessThanOrEqual(2);
+    // Sending from the composer appends an own message and stays at the bottom.
+    await field.press("Enter");
+    await expect(field).toHaveValue("");
+    await expect(log.locator(".m-chat-message[data-own]").last()).toHaveText(
+      /Another question/,
+    );
+    await root.getByRole("button", { name: "Finish the reply" }).click();
+    await root.getByRole("button", { name: "Add a reply" }).click();
+    await expect.poll(gap).toBeLessThanOrEqual(2);
+    // Scrolled up, new messages do not move the view; a button brings it back.
+    await log.evaluate((el) => (el.scrollTop = 0));
+    await root.getByRole("button", { name: "Add a reply" }).click();
+    await expect.poll(gap).toBeGreaterThan(100);
+    await expect(log.evaluate((el) => el.scrollTop)).resolves.toBeLessThan(5);
+    await root.getByRole("button", { name: "Jump to latest" }).click();
+    await expect.poll(gap).toBeLessThanOrEqual(2);
+    await expect(
+      root.getByRole("button", { name: "Jump to latest" }),
+    ).toHaveCount(0);
+  },
+  async "chat-composer"({ page, root }) {
+    const field = root.getByLabel("Message the brief assistant", {
+      exact: true,
+    });
+    const send = root.getByRole("button", { name: "Send", exact: true });
+    const sent = root.getByRole("list", { name: "Sent messages" });
+    await expect(field).toHaveAttribute("aria-keyshortcuts", "Enter");
+    await expect(
+      root.getByRole("button", { name: "Attach files" }),
+    ).toBeVisible();
+    await expect(send).toBeDisabled();
+    await field.fill("   ");
+    await expect(send).toBeDisabled();
+    // Shift+Enter adds a line; Enter sends the trimmed text and clears the box.
+    await field.fill("First line");
+    await field.press("Shift+Enter");
+    await field.pressSequentially("second line  ");
+    await expect(field).toHaveValue("First line\nsecond line  ");
+    await field.press("Enter");
+    await expect(sent.getByRole("listitem")).toHaveText([
+      "First line\nsecond line",
+    ]);
+    await expect(field).toHaveValue("");
+    // Enter that ends an IME composition is left to the input method.
+    await field.fill("にほん");
+    await field.evaluate((el) => {
+      el.dispatchEvent(
+        new KeyboardEvent("keydown", {
+          key: "Enter",
+          bubbles: true,
+          cancelable: true,
+          isComposing: true,
+        }),
+      );
+    });
+    await expect(field).toHaveValue("にほん");
+    await expect(sent.getByRole("listitem")).toHaveCount(1);
+    // Sending from the button empties the field, which disables Send: focus
+    // goes back to the field instead of falling to the page.
+    await send.focus();
+    await page.keyboard.press("Space");
+    await expect(sent.getByRole("listitem")).toHaveCount(2);
+    await expect(field).toBeFocused();
+    // A starter prompt sends itself.
+    await root
+      .getByRole("group", { name: "Suggested prompts" })
+      .getByRole("button", { name: "What happens next?" })
+      .click();
+    await expect(sent.getByRole("listitem").last()).toHaveText(
+      "What happens next?",
+    );
+    // The attach button opens a file picker and reports the chosen files.
+    const chooser = page.waitForEvent("filechooser");
+    await root.getByRole("button", { name: "Attach files" }).click();
+    await (
+      await chooser
+    ).setFiles({
+      name: "brief.md",
+      mimeType: "text/markdown",
+      buffer: Buffer.from("# Brief"),
+    });
+    await expect(root.getByLabel("Attached files")).toHaveText("brief.md");
+  },
   async notice({ page, root }) {
     const notice = root.getByText("Payment failed");
     await expect(

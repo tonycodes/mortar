@@ -182,6 +182,43 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         />
       );
       break;
+    case "ChatThread":
+      content = (
+        <div style={{ display: "flex", flexDirection: "column", height: 320 }}>
+          <UI.ChatThread
+            label={label}
+            empty={{ title: "No records" }}
+            messages={
+              state === "long"
+                ? [
+                    {
+                      id: "long",
+                      author: {
+                        name: "A participant with a very long display name",
+                        role: "AI assistant",
+                      },
+                      time: "14:02",
+                      content: <p>{"Unbroken".repeat(40)}</p>,
+                    },
+                  ]
+                : []
+            }
+          />
+        </div>
+      );
+      break;
+    case "ChatComposer":
+      content = (
+        <UI.ChatComposer
+          label={label}
+          labelVisible={state === "long"}
+          disabled={disabled}
+          loading={state === "loading"}
+          error={error}
+          onSubmit={changed}
+        />
+      );
+      break;
     case "Fieldset":
       content = (
         <UI.Fieldset legend={label} disabled={disabled}>

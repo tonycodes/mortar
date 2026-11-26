@@ -35,6 +35,167 @@ final class MortarMacTests: XCTestCase {
         XCTAssertEqual(window.contentView?.frame.width, 980)
     }
 
+    /// A conversation in a narrow and a wide window: the column stays at a
+    /// readable measure, centred, however wide the window.
+    func testConversation() {
+        for (name, width) in [("narrow", 480.0), ("wide", 1280)] {
+            let window = MacWindow.host(ConversationSample(), size: CGSize(width: width, height: 640))
+            defer { window.close() }
+            snapshot(window, named: name)
+        }
+        let dark = MacWindow.host(ConversationSample(), size: CGSize(width: 900, height: 640), dark: true)
+        defer { dark.close() }
+        snapshot(dark, named: "dark")
+    }
+
+    func testCommentComposer() {
+        let window = MacWindow.host(
+            ComposerStatesSample().padding(20).frame(maxHeight: .infinity, alignment: .top),
+            size: CGSize(width: 560, height: 620)
+        )
+        defer { window.close() }
+        snapshot(window, named: "light")
+    }
+
+    /// The composer sends on Command-Return, follows an external focus
+    /// binding, trims what it sends and clears afterwards.
+    /// A runner that cannot make the window key has an empty accessibility
+    /// tree, so the press is skipped there. `testComposerMaxLength` still runs.
+    func testComposerSendsAndClears() throws {
+        let model = ComposerModel()
+        let window = MacWindow.host(ComposerHarness(model: model), size: CGSize(width: 480, height: 160))
+        defer { window.close() }
+        try XCTSkipUnless(window.isKeyWindow, "Runner did not make the window key (visible: \(window.isVisible)), so the accessibility press cannot run.")
+        model.isFocused = true
+        MacWindow.settle(window)
+        XCTAssertTrue(model.isFocused)
+        model.text = "  Hello  "
+        MacWindow.settle(window)
+        guard let send = MacWindow.element(labelled: "Send", in: window) else {
+            return XCTFail("No Send button; accessibility labels: \(MacWindow.labels(in: window))")
+        }
+        XCTAssertTrue(MacWindow.press(send))
+        MacWindow.settle(window)
+        XCTAssertEqual(model.sent, ["Hello"])
+        XCTAssertEqual(model.text, "")
+    }
+
+    /// Text past maxLength is cut off.
+    func testComposerMaxLength() {
+        let model = ComposerModel()
+        let window = MacWindow.host(ComposerHarness(model: model, maxLength: 5), size: CGSize(width: 480, height: 160))
+        defer { window.close() }
+        model.text = "Hello, world"
+        MacWindow.settle(window)
+        XCTAssertEqual(model.text, "Hello")
+    }
+
+    /// The settings page in a narrow and a wide window and in dark: sections
+    /// stack below 560 points and sit beside their titles above it, in a
+    /// readable column.
+    func testForm() {
+        for (name, width, dark) in [("narrow", 520.0, false), ("wide", 1100, false), ("dark", 1100, true)] {
+            let window = MacWindow.host(SettingsFormSample(isSaving: false),
+                                        size: CGSize(width: width, height: 900), dark: dark)
+            defer { window.close() }
+            snapshot(window, named: name)
+        }
+    }
+
+    /// The integration reported on macOS 26.2: a connector form with a text
+    /// and a secure field, in a split view's detail, opened and closed and
+    /// resized. AppKit stops a layout loop with an exception, so a loop fails
+    /// this test; each step must also settle quickly.
+    func testConnectorFormOpensAndClosesWithoutLayoutLoop() {
+        let model = ConnectorModel()
+        let window = MacWindow.host(ConnectorSplitSample(model: model), size: CGSize(width: 1000, height: 700))
+        defer { window.close() }
+        for round in 0..<20 {
+            model.showsForm = true
+            assertSettles(window, "open \(round)")
+            if round.isMultiple(of: 5) {
+                model.password = round.isMultiple(of: 10) ? "" : "app-password"
+                assertSettles(window, "type \(round)")
+            }
+            model.showsForm = false
+            assertSettles(window, "close \(round)")
+        }
+        model.showsForm = true
+        for width in [700.0, 1400, 820, 1000] {
+            window.setContentSize(CGSize(width: width, height: 700))
+            assertSettles(window, "resize \(width)")
+        }
+    }
+
+    /// The same form as a fixed 680x650 sheet, presented and dismissed.
+    /// The first presentation on a cold process is not timed: on the
+    /// macos-26 runner it took about 1.5s without an AppKit layout
+    /// exception. The repeats are the loop check.
+    func testConnectorSheetPresentsAndDismissesWithoutLayoutLoop() {
+        let model = ConnectorModel()
+        let window = MacWindow.host(ConnectorSplitSample(model: model), size: CGSize(width: 1000, height: 760))
+        defer { window.close() }
+        model.showsSheet = true
+        MacWindow.settle(window, for: 0.6)
+        XCTAssertNotNil(window.attachedSheet, "warmup sheet")
+        model.showsSheet = false
+        MacWindow.settle(window, for: 0.4)
+        for round in 0..<10 {
+            model.showsSheet = true
+            assertSettles(window, "present \(round)") { window.attachedSheet != nil }
+            XCTAssertNotNil(window.attachedSheet, "sheet \(round)")
+            model.showsSheet = false
+            assertSettles(window, "dismiss \(round)") { window.attachedSheet == nil }
+        }
+    }
+
+    /// Resizing a form at the largest text size crosses the width where the
+    /// actions switch between a row and a stack. Each width has to settle.
+    /// Row versus stack is recorded in the iOS form snapshots: this process
+    /// publishes only the hosting view to the accessibility walk, so button
+    /// frames are not available here.
+    func testFormActionsResizeWithoutLayoutLoop() {
+        let window = MacWindow.host(
+            SettingsFormSample(isSaving: false)
+                .environment(\.dynamicTypeSize, .accessibility5),
+            size: CGSize(width: 380, height: 800)
+        )
+        defer { window.close() }
+        for width in [380.0, 1100, 640, 900, 420] {
+            window.setContentSize(CGSize(width: width, height: 800))
+            assertSettles(window, "actions \(width)")
+        }
+    }
+
+    /// Lays the window (and any sheet) out. Fails if it takes a second,
+    /// which a layout loop would. When `ready` is set, waits inside that
+    /// second for the sheet to finish presenting or dismissing: a fixed
+    /// 0.15s sample missed a sheet that was still in flight on macos-15.
+    private func assertSettles(
+        _ window: NSWindow,
+        _ step: String,
+        ready: (() -> Bool)? = nil,
+        line: UInt = #line
+    ) {
+        let start = Date()
+        let limit = start.addingTimeInterval(0.9)
+        func pump() {
+            window.layoutIfNeeded()
+            window.attachedSheet?.layoutIfNeeded()
+            RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+        }
+        pump()
+        if let ready {
+            while !ready(), Date() < limit {
+                pump()
+            }
+        } else if Date() < start.addingTimeInterval(0.15) {
+            RunLoop.main.run(until: start.addingTimeInterval(0.15))
+            window.layoutIfNeeded()
+        }
+        XCTAssertLessThan(Date().timeIntervalSince(start), 1.0, "\(step) took too long to lay out", line: line)
+    }
+
     private func snapshot(
         _ window: NSWindow,
         named name: String,
@@ -53,6 +214,26 @@ final class MortarMacTests: XCTestCase {
             testName: testName,
             line: line
         )
+    }
+}
+
+@MainActor
+@Observable
+final class ComposerModel {
+    var text = ""
+    var isFocused = false
+    var sent: [String] = []
+}
+
+private struct ComposerHarness: View {
+    @Bindable var model: ComposerModel
+    var maxLength: Int?
+
+    var body: some View {
+        MortarCommentComposer(text: $model.text, maxLength: maxLength, isFocused: $model.isFocused) {
+            model.sent.append($0)
+        }
+        .padding(20)
     }
 }
 
@@ -82,6 +263,42 @@ enum MacWindow {
             print("MacWindow: window is not key (visible: \(window.isVisible))")
         }
         return window
+    }
+
+    /// The first accessibility element with this label, as VoiceOver finds it.
+    static func element(labelled label: String, in window: NSWindow) -> (any NSAccessibilityProtocol)? {
+        all(in: window).first { text(of: $0) == label }
+    }
+
+    /// Every accessibility label in the window, to explain a failed lookup.
+    static func labels(in window: NSWindow) -> [String] {
+        all(in: window).compactMap(text(of:)).filter { !$0.isEmpty }
+    }
+
+    /// Presses a control. Xcode 16.4 and Xcode 26 both import this as a
+    /// plain method. Optional chaining does not compile on either.
+    static func press(_ element: any NSAccessibilityProtocol) -> Bool {
+        element.accessibilityPerformPress()
+    }
+
+    private static func text(of element: any NSAccessibilityProtocol) -> String? {
+        element.accessibilityLabel()
+    }
+
+    private static func children(of element: any NSAccessibilityProtocol) -> [Any] {
+        element.accessibilityChildren() ?? []
+    }
+
+    private static func all(in window: NSWindow) -> [any NSAccessibilityProtocol] {
+        var found: [any NSAccessibilityProtocol] = []
+        var queue: [Any] = window.contentView.map { [$0] } ?? []
+        while !queue.isEmpty, found.count < 2000 {
+            let next = queue.removeFirst()
+            guard let element = next as? any NSAccessibilityProtocol else { continue }
+            found.append(element)
+            queue += children(of: element)
+        }
+        return found
     }
 
     /// Hides the glass that macOS 26 draws behind a sidebar, and the

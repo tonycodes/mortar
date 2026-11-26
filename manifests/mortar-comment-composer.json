@@ -6,6 +6,9 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "CommentComposer",
+  "platforms": {
+    "swiftui": "MortarCommentComposer"
+  },
   "source": "src/composer.tsx",
   "capabilities": ["form"],
   "owner": "Mortar maintainers",
