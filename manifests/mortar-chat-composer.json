@@ -45,6 +45,6 @@
     "profile": "control",
     "target": ".m-chat-composer-form",
     "probe": "chat-composer",
-    "states": ["disabled", "error", "long"]
+    "states": ["loading", "disabled", "error", "long"]
   }
 }

@@ -7,6 +7,7 @@ import {
   ChatComposer,
   TextArea,
 } from "./support/render.mjs";
+import { readSource } from "./support/css.mjs";
 
 const noop = () => {};
 const assistant = { name: "Brief assistant", role: "AI assistant" };
@@ -98,6 +99,8 @@ test("ChatThread offers quick answers only under someone else's finished message
   for (const messages of [
     [{ ...other, own: true }],
     [{ ...other, status: "streaming" }],
+    // A failed reply is not finished: no quick answers under it.
+    [{ ...other, status: "error", error: "Not sent." }],
     [],
   ])
     assert.doesNotMatch(
@@ -192,4 +195,26 @@ test("TextArea mono marks the textarea only when asked", () => {
     /<textarea[^>]*data-mono="true"/,
   );
   assert.doesNotMatch(html(TextArea, { label: "Brief" }), /data-mono/);
+});
+
+test("chat and mono text areas keep the error colour and 16px on phones", async () => {
+  const app = await readSource("src/application.css");
+  const foundation = await readSource("src/foundation.css");
+  // The composer's grey hint rule must not turn its error grey.
+  assert.match(
+    app,
+    /\.m-chat-composer-form > p\.m-error \{\s*color: var\(--m-tone\);/,
+  );
+  // 16px under 560px stops iOS Safari zooming when the field takes focus,
+  // including the composer and a mono TextArea (whose 0.9em rule outranks
+  // the plain textarea one).
+  const phone = (css) =>
+    [...css.matchAll(/@media \(max-width: 560px\) \{([\s\S]*?)\n  \}/g)]
+      .map((m) => m[1])
+      .join("\n");
+  assert.match(
+    phone(app),
+    /\.m-chat-composer-box textarea \{\s*font-size: 16px;/,
+  );
+  assert.match(phone(foundation), /\.m-field textarea\[data-mono\]/);
 });

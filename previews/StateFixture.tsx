@@ -213,6 +213,7 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
           label={label}
           labelVisible={state === "long"}
           disabled={disabled}
+          loading={state === "loading"}
           error={error}
           onSubmit={changed}
         />

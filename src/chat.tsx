@@ -112,19 +112,38 @@ export function ChatThread({
     if (pinned.current) toBottom();
   });
 
-  // Content can also grow without a render (images loading, fonts): follow it.
+  // Content can grow without a render (images loading, fonts), and the scroll
+  // area can shrink (a growing composer below it, a smaller window): follow
+  // the bottom in both cases.
   useLayoutEffect(() => {
     const target = list.current;
-    if (!target || typeof ResizeObserver === "undefined") return;
+    const area = scroller.current;
+    if (!target || !area || typeof ResizeObserver === "undefined") return;
     const observer = new ResizeObserver(() => {
       if (pinned.current) toBottom();
     });
     observer.observe(target);
+    observer.observe(area);
     return () => observer.disconnect();
   }, [toBottom, messages.length === 0]);
 
+  // Quick answers belong to a finished reply: not while it streams, and not
+  // under one that failed.
   const showChoices =
-    choices.length > 0 && last && !last.own && last.status !== "streaming";
+    choices.length > 0 &&
+    last &&
+    !last.own &&
+    last.status !== "streaming" &&
+    last.status !== "error";
+
+  // Choosing a quick answer usually removes the choices. Keep focus in the
+  // thread instead of letting it fall to the page.
+  const refocus = useRef(false);
+  useLayoutEffect(() => {
+    if (!refocus.current || showChoices) return;
+    refocus.current = false;
+    scroller.current?.focus({ preventScroll: true });
+  });
 
   return (
     <div
@@ -179,7 +198,10 @@ export function ChatThread({
                 key={choice}
                 variant="secondary"
                 size="sm"
-                onClick={() => onSelect?.(choice)}
+                onClick={() => {
+                  refocus.current = true;
+                  onSelect?.(choice);
+                }}
               >
                 {choice}
               </Button>
@@ -332,6 +354,7 @@ export function ChatComposer({
 }: ChatComposerProps) {
   const { fieldId, messageId, describedBy } = useField({ hint, error });
   const files = useRef<HTMLInputElement>(null);
+  const field = useRef<HTMLTextAreaElement>(null);
   const [own, setOwn] = useState("");
   const value = controlled ?? own;
   const setValue = (next: string) => {
@@ -340,10 +363,14 @@ export function ChatComposer({
   };
   const text = value.trim();
   const blocked = disabled || loading;
+  // Sending empties the field, which disables Send, and a starter chip may
+  // become disabled while the reply loads: put focus back in the field so it
+  // never falls to the page.
   const send = () => {
     if (!text || blocked) return;
     onSubmit(text);
     if (controlled === undefined) setOwn("");
+    field.current?.focus();
   };
   return (
     <form
@@ -371,6 +398,7 @@ export function ChatComposer({
           <div className="m-chat-composer-attachments">{attachments}</div>
         )}
         <textarea
+          ref={field}
           id={fieldId}
           rows={1}
           value={value}
@@ -449,9 +477,11 @@ export function ChatComposer({
               variant="secondary"
               size="sm"
               disabled={blocked}
-              onClick={() =>
-                onSelect ? onSelect(suggestion) : onSubmit(suggestion)
-              }
+              onClick={() => {
+                if (onSelect) onSelect(suggestion);
+                else onSubmit(suggestion);
+                field.current?.focus();
+              }}
             >
               {suggestion}
             </Button>

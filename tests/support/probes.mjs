@@ -64,6 +64,8 @@ export const implementations = {
     await expect(log).toHaveAttribute("aria-busy", "true");
     await expect(log.getByText("Responding…")).toBeAttached();
     await expect(choices).toHaveCount(0);
+    // The chosen button is gone; focus stays in the thread, not on the page.
+    await expect(log).toBeFocused();
     // The composer is busy while the reply streams: Enter does not send.
     const field = root.getByLabel("Message", { exact: true });
     await field.fill("Another question");
@@ -130,8 +132,12 @@ export const implementations = {
     });
     await expect(field).toHaveValue("にほん");
     await expect(sent.getByRole("listitem")).toHaveCount(1);
-    await send.click();
+    // Sending from the button empties the field, which disables Send: focus
+    // goes back to the field instead of falling to the page.
+    await send.focus();
+    await page.keyboard.press("Space");
     await expect(sent.getByRole("listitem")).toHaveCount(2);
+    await expect(field).toBeFocused();
     // A starter prompt sends itself.
     await root
       .getByRole("group", { name: "Suggested prompts" })

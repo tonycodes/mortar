@@ -1755,6 +1755,10 @@
     color: var(--m-muted);
     font-size: 12px;
   }
+  /* The hint rule above would otherwise turn the error grey. */
+  .m-chat-composer-form > p.m-error {
+    color: var(--m-tone);
+  }
   .m-chat-composer-box {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -1781,6 +1785,12 @@
     line-height: 1.45;
     resize: none;
     field-sizing: content;
+  }
+  /* 16px stops iOS Safari zooming the page when the field takes focus. */
+  @media (max-width: 560px) {
+    .m-chat-composer-box textarea {
+      font-size: 16px;
+    }
   }
   .m-chat-composer-box textarea::placeholder {
     color: var(--m-muted);

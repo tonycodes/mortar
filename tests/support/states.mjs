@@ -69,6 +69,23 @@ export const states = Object.freeze({
       );
       return;
     }
+    // A chat composer stays editable while a reply loads: only sending is
+    // blocked, and Send stays focusable and busy.
+    if (component.export === "ChatComposer") {
+      const field = scope.locator("textarea");
+      await expect(field).toBeEditable();
+      await field.fill("Next question");
+      await field.press("Enter");
+      await expect(field).toHaveValue("Next question");
+      const send = scope.getByRole("button", { name: "Send", exact: true });
+      await expect(send).toHaveAttribute("aria-busy", "true");
+      // aria-disabled, not disabled, so keyboard focus can still reach it.
+      await expect(send).toHaveAttribute("aria-disabled", "true");
+      await expect(send).not.toHaveAttribute("disabled");
+      await send.focus();
+      await expect(send).toBeFocused();
+      return;
+    }
     await inert(context);
     if (component.export === "SignInPanel") {
       await expect(scope.locator("form")).toHaveAttribute("aria-busy", "true");

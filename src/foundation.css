@@ -690,7 +690,8 @@
   @media (max-width: 560px) {
     .m-input-group input,
     .m-field select,
-    .m-field textarea {
+    .m-field textarea,
+    .m-field textarea[data-mono] {
       font-size: 16px;
     }
   }
