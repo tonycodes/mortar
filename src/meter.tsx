@@ -54,12 +54,17 @@ export function meterText(
   status?: MeterThreshold,
 ) {
   if (!Number.isFinite(value)) return "No data";
-  const text = `${format(value)} of ${format(max)}`;
+  // Without a usable capacity, the amount is all there is to say.
+  const text = validMax(max)
+    ? `${format(value)} of ${format(max)}`
+    : format(value);
   return status ? `${text}, ${status.label}` : text;
 }
 
+const validMax = (max: number) => Number.isFinite(max) && max > 0;
+
 const percentOf = (value: number, max: number) =>
-  max > 0 && Number.isFinite(value)
+  validMax(max) && Number.isFinite(value)
     ? Math.min(100, Math.max(0, (value / max) * 100))
     : 0;
 
@@ -79,8 +84,16 @@ export function Meter({
 }: MeterProps) {
   const labelId = useId();
   const status = meterStatus(value, thresholds);
-  const finite = Number.isFinite(value);
   const amount = meterText(value, max, format);
+  // ARIA needs a current value inside the range; the value text carries the
+  // real amount, including one over the maximum or missing.
+  const range = validMax(max) ? max : 100;
+  const now = Number.isFinite(value) ? Math.min(range, Math.max(0, value)) : 0;
+  const ticks = new Map(
+    thresholds
+      .filter((t) => t.at > 0 && t.at < max)
+      .map((t) => [t.at, t] as const),
+  );
   return (
     <div
       id={id}
@@ -100,23 +113,21 @@ export function Meter({
         role="meter"
         aria-labelledby={labelId}
         aria-valuemin={0}
-        aria-valuemax={max}
-        aria-valuenow={finite ? value : undefined}
+        aria-valuemax={range}
+        aria-valuenow={now}
         aria-valuetext={meterText(value, max, format, status)}
       >
         <span
           className="m-meter-fill"
           style={{ width: `${percentOf(value, max)}%` }}
         />
-        {thresholds
-          .filter((t) => t.at > 0 && t.at < max)
-          .map((t) => (
-            <span
-              key={`${t.at}-${t.label}`}
-              className="m-meter-tick"
-              style={{ left: `${percentOf(t.at, max)}%` }}
-            />
-          ))}
+        {[...ticks.keys()].map((at) => (
+          <span
+            key={at}
+            className="m-meter-tick"
+            style={{ left: `${percentOf(at, max)}%` }}
+          />
+        ))}
       </div>
     </div>
   );

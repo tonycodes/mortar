@@ -308,12 +308,16 @@ const NAME = /[A-Za-z_$][\w$]*(?:[-:.][\w$]+)*/y;
 function jsxOpening(src, i) {
   const attrs = [];
   const n = src.length;
+  // A spread at attribute position ({...props}) may supply any prop.
+  let spread = false;
   while (i < n) {
     while (i < n && /\s/.test(src[i])) i++;
     if (src[i] === "/" && src[i + 1] === ">")
-      return { attrs, end: i + 2, selfClosing: true };
-    if (src[i] === ">") return { attrs, end: i + 1, selfClosing: false };
+      return { attrs, end: i + 2, selfClosing: true, spread };
+    if (src[i] === ">")
+      return { attrs, end: i + 1, selfClosing: false, spread };
     if (src[i] === "{") {
+      if (/^\{\s*\.\.\./.test(src.slice(i, i + 16))) spread = true;
       i = skipBraces(src, i);
       continue;
     }
@@ -343,7 +347,7 @@ function jsxOpening(src, i) {
     }
     attrs.push(attr);
   }
-  return { attrs, end: i, selfClosing: false };
+  return { attrs, end: i, selfClosing: false, spread };
 }
 
 /**
@@ -1134,7 +1138,10 @@ const CHART_NAME = {
 };
 // Charting libraries an app might keep beside Mortar's charts.
 const CHART_LIBRARY =
-  /\b(?:import|from)\s*(["'])(recharts|chart\.js(?:\/auto)?|react-chartjs-2|@nivo\/[\w-]+|victory(?:-[\w-]+)?|apexcharts|react-apexcharts|echarts|echarts-for-react|highcharts|highcharts-react-official|@visx\/[\w-]+|@tremor\/react|plotly\.js(?:-[\w-]+)?|react-plotly\.js|@mui\/x-charts|@ant-design\/charts)\1/g;
+  /(?:\bimport\s*\(\s*|\bimport\s*|\bfrom\s*)(["'])(recharts|chart\.js|react-chartjs-2|@nivo\/[\w-]+|victory(?:-[\w-]+)?|apexcharts|react-apexcharts|echarts|echarts-for-react|highcharts|highcharts-react-official|@visx\/[\w-]+|@tremor\/react|plotly\.js(?:-[\w-]+)?|react-plotly\.js|@mui\/x-charts|@ant-design\/charts)(?:\/[^"']*)?\1/g;
+// A value import of Mortar's charts entry; a type-only import draws nothing.
+const CHARTS_USE =
+  /\bimport\s+(?!type\s)[^;]*?\bfrom\s*(["'])@tonycodes-ui\/mortar\/charts\1|\bimport\s*\(\s*(["'])@tonycodes-ui\/mortar\/charts\2/;
 // A file that builds an email: it imports Mortar's email entry or React Email.
 const EMAIL_FILE =
   /\bfrom\s*["'](?:@tonycodes-ui\/mortar\/email|@react-email\/[^"']+)["']/;
@@ -1341,9 +1348,12 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
     }
 
     const src = blankComments(text);
-    if (/["']@tonycodes-ui\/mortar\/charts["']/.test(src)) usesCharts = true;
+    if (CHARTS_USE.test(src)) usesCharts = true;
+    // An import keyword inside a string literal is text, not an import.
+    const unquoted = blankStrings(src);
     for (const m of src.matchAll(CHART_LIBRARY))
-      chartLibraries.push({ file, line: line(m.index), name: m[2] });
+      if (unquoted.startsWith(m[0].slice(0, 4), m.index))
+        chartLibraries.push({ file, line: line(m.index), name: m[2] });
     for (const m of src.matchAll(LEGACY_IMPORT))
       add(
         "legacy-package",
@@ -1644,7 +1654,7 @@ export async function auditApp(path = ".", { data: bundled } = {}) {
       if (
         nameProp &&
         !attrs.some((a) => a.name === nameProp) &&
-        !/\{\s*\.\.\./.test(src.slice(afterName, opening.end))
+        !opening.spread
       )
         add(
           "chart-unnamed",

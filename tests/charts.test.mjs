@@ -576,20 +576,44 @@ test("Meter is a named meter whose value text carries the status", () => {
   assert.equal(markup.match(/m-meter-tick/g)?.length, 1);
 });
 
-test("Meter clamps the fill but reports the real value", () => {
+test("Meter keeps aria-valuenow in range and reads the real value", () => {
+  // ARIA needs a current value between min and max; the text carries the
+  // real amount.
   const over = html(Charts.Meter, {
     label: "Calls",
     value: 130,
     thresholds: quota,
   });
   assert.match(over, /style="width:100%"/);
+  assert.match(over, /aria-valuenow="100"/);
   assert.match(over, /aria-valuetext="130 of 100, Over limit"/);
+  const under = html(Charts.Meter, { label: "Calls", value: -5 });
+  assert.match(under, /aria-valuenow="0"/);
+  assert.match(under, /aria-valuetext="-5 of 100"/);
+  // A meter needs aria-valuenow even with no data; the text says so.
   const none = html(Charts.Meter, { label: "Calls", value: Number.NaN });
   assert.match(none, /style="width:0%"/);
-  assert.doesNotMatch(none, /aria-valuenow/);
+  assert.match(none, /aria-valuenow="0"/);
+  assert.match(none, /aria-valuetext="No data"/);
   assert.doesNotMatch(none, /data-tone/);
-  assert.match(
-    html(Charts.Meter, { label: "x", value: 5, max: 0 }),
-    /width:0%/,
-  );
+  // A maximum that is not a positive number is unknown, not a range.
+  for (const max of [0, -10, Number.NaN]) {
+    const bad = html(Charts.Meter, { label: "x", value: 5, max });
+    assert.match(bad, /width:0%/, `${max}`);
+    assert.match(bad, /aria-valuemax="100"/, `${max}`);
+    assert.match(bad, /aria-valuetext="5"/, `${max}`);
+  }
+});
+
+test("Meter draws one tick per threshold value", () => {
+  const markup = html(Charts.Meter, {
+    label: "x",
+    value: 10,
+    thresholds: [
+      { at: 40, tone: "warning", label: "Hi" },
+      { at: 40, tone: "warning", label: "Hi" },
+      { at: 70, tone: "danger", label: "Higher" },
+    ],
+  });
+  assert.equal(markup.match(/m-meter-tick/g)?.length, 2);
 });

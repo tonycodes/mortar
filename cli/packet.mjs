@@ -207,8 +207,7 @@ const NATIVE_WORDS =
 // a trend; usage against a limit is a meter. Each pick names its reason.
 const CHART_BRIEFS = [
   {
-    words:
-      /\b(?:dashboards?|analytics|metrics|kpis?|reporting|reports?|insights|overview)\b/i,
+    words: /\b(?:dashboards?|analytics|metrics|kpis?|reporting)\b/i,
     picks: [
       [
         "MetricGroup",
@@ -221,8 +220,7 @@ const CHART_BRIEFS = [
     ],
   },
   {
-    words:
-      /\b(?:charts?|graphs?|plots?|trends?|over time|time series|histor(?:y|ical))\b/i,
+    words: /\b(?:charts?|graphs?|trends?|over time|time series)\b/i,
     picks: [
       [
         "LineChart",
@@ -236,7 +234,7 @@ const CHART_BRIEFS = [
   },
   {
     words:
-      /\b(?:quotas?|usage|storage|capacity|seats|limits?|allowance|budget)\b/i,
+      /\b(?:quotas?|storage|capacity|allowance|(?:plan|storage|seat|data|api) usage|usage (?:limits?|against|meters?)|seat limits?)\b/i,
     picks: [
       [
         "Meter",
@@ -261,8 +259,14 @@ export function chooseForBrief(data, brief) {
   for (const p of purposes) choose(p.shell, p.reason);
   if (purposes.some((p) => p.shell === "MarketingHeader"))
     choose("Footer", "Public pages close with the shared Footer.");
-  // Charts belong in application screens, not on public pages.
-  if (!purposes.some((p) => p.shell === "MarketingHeader"))
+  // Charts belong in application screens: not on public pages, in docs or
+  // sign-in, in an email, or in a native app (the native libraries have none).
+  if (
+    purposes.some((p) => p.id === "application") &&
+    !purposes.some((p) => p.id === "docs" || p.id === "auth") &&
+    !EMAIL_WORDS.test(brief) &&
+    !NATIVE_WORDS.test(brief)
+  )
     for (const c of CHART_BRIEFS)
       if (c.words.test(brief))
         for (const [name, reason] of c.picks) choose(name, reason);
