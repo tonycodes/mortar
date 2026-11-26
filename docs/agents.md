@@ -77,6 +77,7 @@ npx mortar component DataTable
 npx mortar packet AppShell DataTable
 npx mortar packet --brief "an admin screen listing invoices with filters"
 npx mortar audit .
+npx mortar audit . --render http://localhost:5173/,http://localhost:5173/settings
 npx mortar guide theming
 ```
 
@@ -88,7 +89,7 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 2. **Packet.** Call `get_build_packet` with the components you picked, or with the brief. Compose from it: the contracts list every prop, and the page templates show complete page patterns to follow.
 3. **Compose.** Use named imports from `@tonycodes-ui/mortar` and the exact props and values in each contract. Keep product names, data, routes, permissions and actions in props and slots. Theme with `ThemeProvider` and tokens (`get_guide theming`). Never copy a component's source, wrap it repeatedly, or override `.m-*` classes or `[data-m-component]` in your CSS. When replacing an unlabeled native `<input>`, move search icons onto `leadingIcon`/`trailingIcon` and units onto `prefix`/`suffix`; do not keep `relative`/`absolute` chrome around a labeled `Input`, and do not put static text in `action` (that slot is for an attached Button or menu).
    For an iOS, iPadOS or Android app, use the SwiftUI package and the Compose library (`get_guide native`). A component's contract names its native equivalent under `native`, and a packet for a native brief lists every component the native libraries have.
-4. **Audit.** Run `audit_app` (or `npx mortar audit`) and fix what it finds, then run the app's own typecheck and build. Verify in a browser: mobile and desktop, light and dark, keyboard and focus, and loading, empty and error states.
+4. **Audit.** Run `audit_app` (or `npx mortar audit`) and fix what it finds, then run the app's own typecheck and build. With the app running, add the page URLs (`render`, or `--render`) to check what rendered. Verify in a browser: mobile and desktop, light and dark, keyboard and focus, and loading, empty and error states.
 5. **Contribute.** If a shared pattern is missing or a component is wrong, fix it in the kit, not in the app. Open a pull request at [github.com/tonycodes/mortar](https://github.com/tonycodes/mortar) following [CONTRIBUTING.md](../CONTRIBUTING.md) and [AGENTS.md](../AGENTS.md) (`get_guide contributing`). Maintainer review and CI decide what merges; agents never approve, merge or publish their own changes.
 
 ## The audit
@@ -112,6 +113,7 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 | `invalid-phrasing`         | error    | A block HTML element (`div`, `p`, heading, list, …) in a phrasing-only slot that Mortar renders inside a `<p>` (from each contract's `phrasingSlots`, today `Banner` `children` and `AuthLayout` `description`)                                                                                                                             |
 | `input-static-action`      | warning  | Static text (a string or noninteractive `<span>`) in `Input` `action`. `action` is for an attached control; use `suffix` or `prefix` for units and symbols                                                                                                                                                                                  |
 | `input-absolute-adornment` | warning  | An absolutely positioned decorative sibling (`absolute` in `className`) next to `Input` inside a `relative` wrapper. Use `leadingIcon` or `trailingIcon` so the icon sits in the text box, not against the label                                                                                                                            |
+| `chart-unnamed`            | error    | A Mortar chart with no name: `LineChart`, `AreaChart` or `BarChart` without `title`, or `Sparkline` or `Meter` without `label`. Skipped when a spread may supply it                                                                                                                                                                         |
 | `legacy-package`           | error    | An import or `package.json` dependency of the retired private-registry package (see [CHANGELOG Migration](../CHANGELOG.md#migration)); install and import `@tonycodes-ui/mortar` instead. A `node_modules` copy of the old package does not count as installing the public one                                                              |
 | `email-app-import`         | error    | In an email (a file importing `@tonycodes-ui/mortar/email` or React Email), an app component or `styles.css`, naming the email component to use. Raw elements in emails are not reported: email layout is tables                                                                                                                            |
 | `email-peer-missing`       | error    | `@tonycodes-ui/mortar/email` is imported but `@react-email/components` is not in package.json                                                                                                                                                                                                                                               |
@@ -120,9 +122,25 @@ Add `--json` for machine-readable output. `mortar audit` exits with status 1 whe
 | `missing-theme-provider`   | warning  | Mortar components rendered without a `ThemeProvider`                                                                                                                                                                                                                                                                                        |
 | `kit-class`                | warning  | Mortar-internal class names on the app's own markup                                                                                                                                                                                                                                                                                         |
 | `raw-colour`               | warning  | Hex, `rgb()`/`oklch()` colours or Tailwind palette classes in files that render Mortar components, except where they define a brand (`brandTokens`, `brandToCss`/`brandToStyle`/`registerBrand` arguments, `BrandDefinition` objects, `--m-brand-*` values)                                                                                 |
+| `chart-library`            | info     | A third-party charting library (Recharts, Chart.js, Nivo, ECharts and others) imported in an app that also uses `@tonycodes-ui/mortar/charts`                                                                                                                                                                                               |
 | `limited-data`             | info     | The installed release has no agent data, so a newer catalogue was used                                                                                                                                                                                                                                                                      |
 
 The audit is a fast scanner, not a type checker. It checks JSX body children when a component's contract has no `children` slot (for example `<Switch>…</Switch>`). It does not see props passed through a spread (`{...props}`), components re-exported or wrapped under another name, class names built at runtime, or markup in `.vue`, `.svelte`, `.astro` or `.html` files. Run the app's typecheck and build as well.
+
+### Rendered checks
+
+`--render` (or `audit_app`'s `render` argument) takes comma-separated URLs of the running app. After the source scan, each page opens in a headless browser at 390px and 1280px, in light and dark, and the audit checks what actually rendered. It only reads the pages: it never clicks, types or submits. It needs Playwright in the app (`npm install -D playwright` and `npx playwright install chromium`); set `MORTAR_CHROME` to use another Chromium.
+
+| Rule                    | Severity | Finds                                                                                                    |
+| ----------------------- | -------- | -------------------------------------------------------------------------------------------------------- |
+| `render-error`          | error    | A console error or uncaught exception, or a page that does not load                                      |
+| `render-missing-styles` | error    | Mortar components on a page without Mortar's tokens, so `styles.css` is not loaded                       |
+| `render-box-sizing`     | error    | Mortar controls with content-box sizing, usually because Tailwind is not imported before Mortar's styles |
+| `render-row-height`     | warning  | Mortar controls side by side in one row at different heights                                             |
+| `render-label-align`    | warning  | A Mortar field label that is not start-aligned, usually inherited from a parent's `text-align`           |
+| `render-overflow`       | warning  | A page that scrolls sideways at 390px                                                                    |
+
+Each problem is reported once, with the widths and appearances it showed in when it was not all of them. Rendered checks cover the states a page shows when it loads; open dialogs, menus and error states are not reached. Keep checking those in a browser.
 
 A clean audit means the audit found none of the problems above. It is not proof that a page is built only from Mortar components: hand-written layout, typography or animation in the app's own markup is invisible to it unless it touches Mortar's classes, colours, or an obvious ancestor/native-element visual override. Do not report a passing audit as that proof. To show a page is composed from the kit, point to the components it renders (each root carries `data-m-component`) and to [what you can extend](theming.md#what-you-can-extend).
 

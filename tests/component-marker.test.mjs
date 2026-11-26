@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { h, html, UI } from "./support/render.mjs";
 import { readSource } from "./support/css.mjs";
+import * as Grid from "../dist/data-grid.js";
+import * as Charts from "../dist/charts.js";
 
 // Every exported component names itself on its root element with
 // data-m-component (DESIGN.md, "Component marker"). Each factory renders the
@@ -162,6 +164,65 @@ const factories = {
         rows: [{ id: "1", name: "A" }],
         rowLabel: (row) => row.name,
       }),
+  ],
+  DataGrid: [
+    () =>
+      html(Grid.DataGrid, {
+        caption: "Projects",
+        columns: [{ key: "name", label: "Name", render: (row) => row.name }],
+        rows: [{ id: "1", name: "A" }],
+        rowLabel: (row) => row.name,
+      }),
+    () =>
+      html(Grid.DataGrid, {
+        caption: "Projects",
+        columns: [{ key: "name", label: "Name", render: (row) => row.name }],
+        rows: [{ id: "1", name: "A" }],
+        rowLabel: (row) => row.name,
+        virtualize: true,
+        searchable: true,
+      }),
+  ],
+  LineChart: [
+    () =>
+      html(Charts.LineChart, {
+        title: "Revenue",
+        rows: [{ m: "Jan", a: 1 }],
+        x: { key: "m" },
+        series: [{ key: "a", label: "A" }],
+      }),
+  ],
+  AreaChart: [
+    () =>
+      html(Charts.AreaChart, {
+        title: "Revenue",
+        rows: [],
+        x: { key: "m" },
+        series: [{ key: "a", label: "A" }],
+      }),
+  ],
+  BarChart: [
+    () =>
+      html(Charts.BarChart, {
+        title: "Revenue",
+        rows: [{ m: "Jan", a: 1 }],
+        x: { key: "m" },
+        series: [{ key: "a", label: "A" }],
+        loading: true,
+      }),
+  ],
+  Meter: [
+    () => html(Charts.Meter, { label: "Storage", value: 40 }),
+    () =>
+      html(Charts.Meter, {
+        label: "Seats",
+        value: Number.NaN,
+        thresholds: [{ at: 80, tone: "warning", label: "Near limit" }],
+      }),
+  ],
+  Sparkline: [
+    () => html(Charts.Sparkline, { label: "Revenue", values: [1, 3, 2] }),
+    () => html(Charts.Sparkline, { label: "Empty", values: [] }),
   ],
   DescriptionList: [
     () => html(UI.DescriptionList, { items: [{ term: "a", details: "b" }] }),

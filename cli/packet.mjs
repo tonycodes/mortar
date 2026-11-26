@@ -11,8 +11,38 @@ export const THEME_SETUP = `import { ThemeProvider } from "@tonycodes-ui/mortar"
   <App />
 </ThemeProvider>`;
 
-const importLine = (data, names) =>
-  `import { ${[...new Set(names)].sort().join(", ")} } from "${data.packageName}";`;
+/** The package a component is imported from: the root or a subpath entry. */
+const packageOf = (data, name) =>
+  data.components.find((c) => c.export === name)?.package ?? data.packageName;
+
+/** Import lines for the named components, one per package, the root first. */
+const importLine = (data, names) => {
+  const byPackage = new Map();
+  for (const name of new Set(names)) {
+    const specifier = packageOf(data, name);
+    byPackage.set(specifier, [...(byPackage.get(specifier) ?? []), name]);
+  }
+  return [...byPackage]
+    .sort(([a], [b]) =>
+      a === data.packageName
+        ? -1
+        : b === data.packageName
+          ? 1
+          : a.localeCompare(b),
+    )
+    .map(
+      ([specifier, list]) =>
+        `import { ${list.sort().join(", ")} } from "${specifier}";`,
+    )
+    .join("\n");
+};
+
+/** Optional peer dependencies a subpath entry point needs. */
+const ENTRY_PEERS = {
+  "/data-grid": ["@tanstack/react-table", "@tanstack/react-virtual"],
+};
+const peersOf = (data, specifier) =>
+  ENTRY_PEERS[specifier.slice(data.packageName.length)] ?? [];
 
 // The native libraries (docs/native.md): a Swift package and an Android
 // library, built from the same tokens.
@@ -173,6 +203,47 @@ const EMAIL_WORDS =
 const NATIVE_WORDS =
   /\b(?:ios|ipados|iphone|ipad|android|swift(?:ui)?|jetpack compose|kotlin|(?:native|mobile)\s+apps?)\b/i;
 
+// Briefs that call for charts. A dashboard leads with its headline numbers and
+// a trend; usage against a limit is a meter. Each pick names its reason.
+const CHART_BRIEFS = [
+  {
+    words: /\b(?:dashboards?|analytics|metrics|kpis?|reporting)\b/i,
+    picks: [
+      [
+        "MetricGroup",
+        "A dashboard leads with its headline numbers; items take a sparkline for their trend.",
+      ],
+      [
+        "LineChart",
+        "Change over time reads as a line chart (mortar guide charts).",
+      ],
+    ],
+  },
+  {
+    words: /\b(?:charts?|graphs?|trends?|over time|time series)\b/i,
+    picks: [
+      [
+        "LineChart",
+        "Change over time reads as a line chart (mortar guide charts).",
+      ],
+      [
+        "BarChart",
+        "Comparisons across categories read as a bar chart (mortar guide charts).",
+      ],
+    ],
+  },
+  {
+    words:
+      /\b(?:quotas?|storage|capacity|allowance|(?:plan|storage|seat|data|api) usage|usage (?:limits?|against|meters?)|seat limits?)\b/i,
+    picks: [
+      [
+        "Meter",
+        "An amount against a capacity or limit reads as a Meter with status thresholds.",
+      ],
+    ],
+  },
+];
+
 /** Pick components for a free-text brief, with the reason for each. */
 export function chooseForBrief(data, brief) {
   const purposes = PURPOSES.filter((p) => p.words.test(brief));
@@ -188,6 +259,17 @@ export function chooseForBrief(data, brief) {
   for (const p of purposes) choose(p.shell, p.reason);
   if (purposes.some((p) => p.shell === "MarketingHeader"))
     choose("Footer", "Public pages close with the shared Footer.");
+  // Charts belong in application screens: not on public pages, in docs or
+  // sign-in, in an email, or in a native app (the native libraries have none).
+  if (
+    purposes.some((p) => p.id === "application") &&
+    !purposes.some((p) => p.id === "docs" || p.id === "auth") &&
+    !EMAIL_WORDS.test(brief) &&
+    !NATIVE_WORDS.test(brief)
+  )
+    for (const c of CHART_BRIEFS)
+      if (c.words.test(brief))
+        for (const [name, reason] of c.picks) choose(name, reason);
   let results = searchComponents(data, { query: brief, limit: 40 });
   if (purposes.length)
     results = results.map((r) => ({
@@ -252,6 +334,9 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
   if (emails) guides.push("email");
   const native = !!brief && NATIVE_WORDS.test(brief);
   if (native) guides.push("native");
+  if (selection.some((c) => c.export === "DataGrid")) guides.push("data-grid");
+  if (selection.some((c) => c.package?.endsWith("/charts")))
+    guides.push("charts");
   return {
     package: data.packageName,
     version: data.version,
@@ -266,7 +351,12 @@ export function buildPacket(data, { components: names = [], brief } = {}) {
           })),
         }
       : {}),
-    install: `npm install ${data.packageName} react react-dom tailwindcss`,
+    install: [
+      `npm install ${data.packageName} react react-dom tailwindcss`,
+      ...new Set(
+        selection.flatMap((c) => peersOf(data, c.package ?? data.packageName)),
+      ),
+    ].join(" "),
     css: {
       where: "Your app's Tailwind CSS entry (for example src/index.css).",
       code: CSS_SETUP,

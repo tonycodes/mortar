@@ -189,6 +189,34 @@ test("a build packet for a brief starts from the purpose shell and explains choi
   assert.equal(site.templates[0].id, "saas-landing");
 });
 
+test("packets suggest charts for dashboards and a meter for usage", () => {
+  const names = (brief) =>
+    buildPacket(data, { brief }).components.map((c) => c.name);
+  const dashboard = buildPacket(data, { brief: "a SaaS analytics dashboard" });
+  const picked = dashboard.components.map((c) => c.name);
+  for (const name of ["AppShell", "MetricGroup", "LineChart"])
+    assert.ok(picked.includes(name), `${name} in ${picked}`);
+  assert.ok(dashboard.guides.some((g) => (g.id ?? g) === "charts"));
+  assert.ok(names("a billing page showing storage usage").includes("Meter"));
+  // A marketing word in an application brief does not veto its charts.
+  assert.ok(names("a product analytics dashboard").includes("LineChart"));
+  // No charts outside application screens, and no chart from a loose word.
+  for (const brief of [
+    "a landing page with a product overview",
+    "a weekly usage digest email",
+    "an iOS app showing storage usage",
+    "API reference docs with rate limits and usage examples",
+    "documentation site with a changelog and version history",
+    "account settings page with login history",
+    "a support inbox for bug reports",
+    "a cinema seat booking app with seats",
+  ])
+    assert.ok(
+      !names(brief).some((n) => /Chart$|^Meter$|^MetricGroup$/.test(n)),
+      `${brief}: ${names(brief)}`,
+    );
+});
+
 test("every guide topic loads from the package", () => {
   for (const topic of Object.keys(GUIDES)) {
     const text = data.guide(topic);
@@ -667,6 +695,141 @@ test("parseAncestorNativeSelector and hasVisualDeclarations stay conservative", 
   assert.equal(parseAncestorNativeSelector(".a .b button").length, 0);
   assert.ok(hasVisualDeclarations("border-radius: 999px; font-size: 9px;"));
   assert.ok(!hasVisualDeclarations("display: flex; margin: 8px; gap: 4px;"));
+});
+
+test("the audit points a root import of DataGrid to its entry point", async (t) => {
+  const dir = fixture("clean-app", {
+    files: {
+      "src/Grid.tsx": [
+        'import { DataGrid } from "@tonycodes-ui/mortar";',
+        'export const G = () => <DataGrid caption="x" rows={[]} columns={[]} rowLabel={() => ""} />;',
+      ].join("\n"),
+    },
+  });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const finding = report.findings.find(
+    (f) => f.rule === "unknown-export" && f.file === "src/Grid.tsx",
+  );
+  assert.ok(finding, "the root import is reported");
+  assert.equal(
+    finding.fix,
+    'Import DataGrid from "@tonycodes-ui/mortar/data-grid".',
+  );
+});
+
+test("the audit checks imports and props from the /data-grid entry", async (t) => {
+  const grid = [
+    'import { DataGrid, DataGridz, type DataGridColumn } from "@tonycodes-ui/mortar/data-grid";',
+    'import { Badge } from "@tonycodes-ui/mortar";',
+    "type Row = { id: string; name: string };",
+    'const columns: DataGridColumn<Row>[] = [{ key: "name", label: "Name", render: (r) => r.name }];',
+    "export const Grid = ({ rows }: { rows: Row[] }) => (",
+    "  <DataGrid",
+    '    caption="People"',
+    "    rows={rows}",
+    "    columns={columns}",
+    "    rowLabel={(r) => r.name}",
+    '    mode="local"',
+    "    virtualise",
+    "  />",
+    ");",
+    "export const B = () => <Badge>Hi</Badge>;",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/Grid.tsx": grid } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const found = report.findings
+    .filter((f) => f.file === "src/Grid.tsx")
+    .map((f) => [f.rule, f.line]);
+  assert.deepEqual(found, [
+    ["unknown-export", 1],
+    ["invalid-value", 11],
+    ["unknown-prop", 12],
+  ]);
+  assert.ok(
+    !report.findings.some((f) => f.rule === "deep-import"),
+    "the data-grid entry is public",
+  );
+});
+
+test("the audit flags unnamed charts and notes other charting libraries", async (t) => {
+  const charts = [
+    'import { LineChart, Meter, Sparkline } from "@tonycodes-ui/mortar/charts";',
+    'import { BarChart as RBar } from "recharts";',
+    'const props = { title: "Visits" };',
+    "export const C = ({ rows }: { rows: { m: string; v: number }[] }) => (",
+    "  <>",
+    '    <LineChart rows={rows} x={{ key: "m" }} series={[{ key: "v", label: "Visits" }]} />',
+    '    <LineChart {...props} rows={rows} x={{ key: "m" }} series={[]} />',
+    "    <Sparkline values={[1, 2]} />",
+    '    <Meter label="Storage" value={4} />',
+    "    <RBar data={rows} />",
+    "  </>",
+    ");",
+  ].join("\n");
+  const dir = fixture("clean-app", { files: { "src/Charts.tsx": charts } });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const report = await auditApp(dir);
+  const found = report.findings
+    .filter((f) => f.file === "src/Charts.tsx")
+    .map((f) => [f.rule, f.severity, f.line]);
+  assert.deepEqual(found, [
+    ["chart-unnamed", "error", 6],
+    ["chart-unnamed", "error", 8],
+    ["chart-library", "info", 2],
+  ]);
+  // Without Mortar's charts, another charting library is the app's choice.
+  const other = fixture("clean-app", {
+    files: {
+      "src/Other.tsx":
+        'import { BarChart } from "recharts";\nexport { BarChart };',
+    },
+  });
+  t.after(() => rmSync(other, { recursive: true, force: true }));
+  assert.ok(
+    !(await auditApp(other)).findings.some((f) => f.rule === "chart-library"),
+  );
+});
+
+test("chart audit edge cases: nested spreads, types, strings and dynamic imports", async (t) => {
+  const files = {
+    // A spread inside a prop value does not name the chart.
+    "src/Nested.tsx": [
+      'import { LineChart } from "@tonycodes-ui/mortar/charts";',
+      "export const N = (b: object) => <LineChart rows={[]} x={{ ...b }} series={[]} />;",
+    ].join("\n"),
+    // A string that mentions an import is not one; a dynamic import and a
+    // subpath are.
+    "src/Libs.ts": [
+      "export const note = \"import 'highcharts'\";",
+      'export const load = () => import("echarts/core");',
+    ].join("\n"),
+  };
+  const dir = fixture("clean-app", { files });
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const found = (await auditApp(dir)).findings
+    .filter((f) => f.rule.startsWith("chart-"))
+    .map((f) => [f.rule, f.file, f.line]);
+  assert.deepEqual(found, [
+    ["chart-unnamed", "src/Nested.tsx", 2],
+    ["chart-library", "src/Libs.ts", 2],
+  ]);
+  // Importing only a type from the charts entry draws no chart.
+  const types = fixture("clean-app", {
+    files: {
+      "src/Types.ts": [
+        'import type { MeterProps } from "@tonycodes-ui/mortar/charts";',
+        'import { BarChart } from "recharts";',
+        "export type P = MeterProps;",
+        "export { BarChart };",
+      ].join("\n"),
+    },
+  });
+  t.after(() => rmSync(types, { recursive: true, force: true }));
+  assert.ok(
+    !(await auditApp(types)).findings.some((f) => f.rule === "chart-library"),
+  );
 });
 
 test("the audit flags raw elements that a Mortar component replaces", async (t) => {

@@ -3,9 +3,39 @@
 // parentheses, fall-through cases and simple local variables do not break it.
 // The Vite plugin below serves the result as a lazily imported virtual module;
 // tests import the same functions from node.
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
+import { COMPONENT_ENTRIES } from "../scripts/entries.mjs";
+
+const ROOT_PACKAGE = "@tonycodes-ui/mortar";
+/** Package specifier by source entry stem, e.g. "data-grid" → ".../data-grid". */
+const PACKAGE_BY_STEM = new Map(
+  Object.entries(COMPONENT_ENTRIES).map(([specifier, entry]) => [
+    entry.replace(/^src\//, "").replace(/\.tsx?$/, ""),
+    specifier,
+  ]),
+);
+/**
+ * Namespace imports of component entries in a fixture (`import * as UI from
+ * "../src/index.js"`), mapped to their package. Defaults to UI → the root.
+ */
+function namespaces(tree) {
+  const found = new Map();
+  for (const node of tree.statements) {
+    const binding = ts.isImportDeclaration(node)
+      ? node.importClause?.namedBindings
+      : undefined;
+    if (!binding || !ts.isNamespaceImport(binding)) continue;
+    const stem = node.moduleSpecifier.text.match(/\/src\/([\w-]+)\.js$/)?.[1];
+    if (stem && PACKAGE_BY_STEM.has(stem))
+      found.set(binding.name.text, PACKAGE_BY_STEM.get(stem));
+  }
+  if (!found.size) found.set("UI", ROOT_PACKAGE);
+  return found;
+}
 
 const parse = (file, text) =>
   ts.createSourceFile(
@@ -110,6 +140,19 @@ export function caseExpression(tree, name) {
     if (!found) ts.forEachChild(node, visit);
   };
   visit(tree);
+  // A preview with its own data names its example `const example = <… />`.
+  const visitExample = (node) => {
+    if (found) return;
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.name.text === "example" &&
+      isJsx(unwrap(node.initializer))
+    )
+      found = { expr: unwrap(node.initializer), scope: node.parent.parent };
+    ts.forEachChild(node, visitExample);
+  };
+  if (!found) visitExample(tree);
   return found;
 }
 
@@ -184,24 +227,32 @@ export function exampleCode(
   exports,
   fixtureFile = "Fixture.tsx",
   caseName = name,
+  packageOf = () => ROOT_PACKAGE,
 ) {
   const tree = parse(fixtureFile, fixtureText);
   const found = caseExpression(tree, caseName);
-  if (!found) return `import { ${name} } from "@tonycodes-ui/mortar";`;
+  if (!found) return `import { ${name} } from "${packageOf(name)}";`;
+  const spaces = namespaces(tree);
   let body = render(tree, found.expr, found.scope);
   if (hosted[name] && !body.includes(`<UI.${name}`)) body = hosted[name](body);
-  const used = [
-    ...new Set(
-      [...body.matchAll(/\bUI\.(\w+)/g)]
-        .map((m) => m[1])
-        .filter((n) => exports.has(n)),
-    ),
-  ].sort();
-  return [
-    `import { ${(used.length ? used : [name]).join(", ")} } from "@tonycodes-ui/mortar";`,
-    "",
-    body.replace(/\bUI\./g, ""),
-  ].join("\n");
+  // One import line per package, the root package first.
+  const imports = new Map();
+  for (const [space, specifier] of spaces)
+    for (const m of body.matchAll(new RegExp(`\\b${space}\\.(\\w+)`, "g")))
+      if (exports.has(m[1]))
+        imports.set(specifier, (imports.get(specifier) ?? new Set()).add(m[1]));
+  if (!imports.size) imports.set(packageOf(name), new Set([name]));
+  const lines = [...imports]
+    .sort(([a], [b]) =>
+      a === ROOT_PACKAGE ? -1 : b === ROOT_PACKAGE ? 1 : a.localeCompare(b),
+    )
+    .map(
+      ([specifier, names]) =>
+        `import { ${[...names].sort().join(", ")} } from "${specifier}";`,
+    );
+  for (const space of spaces.keys())
+    body = body.replace(new RegExp(`\\b${space}\\.`, "g"), "");
+  return [...lines, "", body].join("\n");
 }
 
 /** Code view text for every catalogue component, keyed by export name. */
@@ -211,6 +262,8 @@ export function buildExamples(
   read = (file) => readFileSync(file, "utf8"),
 ) {
   const exports = new Set(components.map((c) => c.export));
+  const packages = new Map(components.map((c) => [c.export, c.package]));
+  const packageOf = (name) => packages.get(name) ?? ROOT_PACKAGE;
   const examples = {};
   const files = new Set();
   for (const c of components) {
@@ -229,6 +282,7 @@ export function buildExamples(
       exports,
       fixtureFile,
       name ?? c.export,
+      packageOf,
     );
   }
   return { examples, files: [...files] };

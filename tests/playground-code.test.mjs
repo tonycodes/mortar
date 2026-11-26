@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { buildExamples, exampleCode } from "../playground/examples.mjs";
+import { COMPONENT_ENTRIES } from "../scripts/entries.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const { components } = JSON.parse(
@@ -23,11 +24,17 @@ test("Code view imports only public exports and never shows the fixtures' UI nam
     const code = examples[c.export];
     if (/\bUI\./.test(code)) problems.push(`${c.export}: UI. prefix`);
     if (/<Control\b/.test(code)) problems.push(`${c.export}: private Control`);
-    const imported = code.match(
-      /^import \{ ([^}]+) \} from "@tonycodes-ui\/mortar";/,
-    );
-    if (!imported) problems.push(`${c.export}: no import line`);
-    else if (!imported[1].split(", ").includes(c.export))
+    // Each import line names a public entry point; the component's own line
+    // is the one for its package (the root, or a subpath such as /data-grid).
+    const lines = [
+      ...code.matchAll(/^import \{ ([^}]+) \} from "([^"]+)";$/gm),
+    ];
+    if (!lines.length) problems.push(`${c.export}: no import line`);
+    for (const [, , specifier] of lines)
+      if (!(specifier in COMPONENT_ENTRIES))
+        problems.push(`${c.export}: imports ${specifier}`);
+    const own = lines.find(([, , specifier]) => specifier === c.package);
+    if (lines.length && !own?.[1].split(", ").includes(c.export))
       problems.push(`${c.export}: does not import itself`);
   }
   assert.deepEqual(problems, []);

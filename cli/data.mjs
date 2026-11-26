@@ -40,6 +40,16 @@ export const GUIDES = {
     summary:
       "Transactional email from @tonycodes-ui/mortar/email: emailTheme, the Email components, the templates (verify email, magic link, password reset, invite, receipt, notification) and renderEmail.",
   },
+  charts: {
+    file: "docs/charts.md",
+    summary:
+      "Charts from @tonycodes-ui/mortar/charts: Sparkline and MetricGroup sparklines; LineChart, AreaChart and BarChart with their tooltip, keyboard and table view; Meter with status thresholds; and the eight-slot series palette and its rules.",
+  },
+  "data-grid": {
+    file: "docs/data-grid.md",
+    summary:
+      "DataGrid from @tonycodes-ui/mortar/data-grid: when to use it over DataTable, installing the TanStack peers, client and server mode, controlled state, sorting, filters, search, selection, paging, virtualization and pinned columns.",
+  },
   native: {
     file: "docs/native.md",
     summary:

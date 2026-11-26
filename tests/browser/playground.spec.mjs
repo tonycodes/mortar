@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { accessibility, tokenColor } from "../support/preview.mjs";
 import AxeBuilder from "@axe-core/playwright";
 for (const width of [320, 768, 1280]) {

@@ -14,7 +14,7 @@ Mortar is an MIT React 19 + Tailwind 4 UI kit. Its agent tooling ships in the pa
 3. **Compose** following the defaults below.
 4. **Emails.** Build transactional emails from `@tonycodes-ui/mortar/email` (`get_guide email`), never from the app components.
 5. **Native apps.** For iPhone, iPad and Android, use Mortar for SwiftUI and Mortar for Jetpack Compose (`get_guide native`): each component's contract names its native equivalent. Build what they don't have from the platform's own controls, styled with `MortarTokens`.
-6. **Audit.** Run `audit_app` on the application (`npx mortar audit`), fix every error and review the warnings, then rerun it with the app's build and typecheck.
+6. **Audit.** Run `audit_app` on the application (`npx mortar audit`), fix every error and review the warnings, then rerun it with the app's build and typecheck. With the app running, pass its page URLs as `render` (`npx mortar audit . --render <url>`) to check the rendered pages too.
 7. **Verify** in a browser and report the actual results.
 
 ## Defaults

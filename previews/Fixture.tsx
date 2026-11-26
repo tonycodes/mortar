@@ -338,6 +338,15 @@ export function PreviewCase({ name }: { name: string }) {
             ]}
           />
           <UI.Dropdown
+            label="Open row menu"
+            iconOnly
+            variant="ghost"
+            items={[
+              { label: "View", onSelect: () => setMenuChoice("view") },
+              { label: "Archive", onSelect: () => setMenuChoice("archive") },
+            ]}
+          />
+          <UI.Dropdown
             label="More options"
             icon={icons.more}
             iconOnly
@@ -540,6 +549,7 @@ export function PreviewCase({ name }: { name: string }) {
               change: "+12.4%",
               tone: "success",
               icon: icons.inbox,
+              sparkline: [1.08, 1.12, 1.1, 1.19, 1.24, 1.21, 1.3, 1.36, 1.42],
             },
             {
               label: "Latency",

@@ -66,6 +66,14 @@ export const templates: PageTemplate[] = [
     Component: page("StackedDashboardTemplate"),
   },
   {
+    id: "analytics",
+    title: "Analytics dashboard",
+    description:
+      "Headline numbers with sparklines, line, bar and area charts, and plan usage meters.",
+    kind: "Application",
+    Component: page("AnalyticsDashboardTemplate"),
+  },
+  {
     id: "settings",
     title: "Settings screen",
     description: "Tabs, grouped fields, a danger zone and unsaved changes.",

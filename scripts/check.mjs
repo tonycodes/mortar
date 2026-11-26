@@ -8,7 +8,9 @@ import {
 import { resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { format } from "prettier";
 import {
   capabilityErrors,
@@ -16,6 +18,7 @@ import {
   contractErrors,
 } from "./test-contract.mjs";
 import { componentApi } from "./api.mjs";
+import { COMPONENT_ENTRIES } from "./entries.mjs";
 /** Every declaration block whose selector list contains `selector`, joined. */
 export function selectorBody(css, selector) {
   const bodies = [];
@@ -164,39 +167,44 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       add("M001", `manifests/${file}`, "Manifest must be valid JSON.");
     }
   }
-  const actualExports = new Set();
-  const ast = ts.createSourceFile(
-    "index.ts",
-    await readFile(resolve(root, "src/index.ts"), "utf8"),
-    ts.ScriptTarget.Latest,
-    true,
-  );
-  for (const node of ast.statements) {
-    if (
-      (ts.isExportDeclaration(node) &&
+  // Runtime exports of each component entry point (scripts/entries.mjs).
+  const entryExports = new Map();
+  for (const [specifier, entry] of Object.entries(COMPONENT_ENTRIES)) {
+    const exported = new Set();
+    entryExports.set(specifier, exported);
+    const ast = ts.createSourceFile(
+      entry,
+      await readFile(resolve(root, entry), "utf8"),
+      ts.ScriptTarget.Latest,
+      true,
+    );
+    for (const node of ast.statements) {
+      if (
+        (ts.isExportDeclaration(node) &&
+          !node.isTypeOnly &&
+          (!node.exportClause || !ts.isNamedExports(node.exportClause))) ||
+        ts.isExportAssignment(node) ||
+        (!ts.isExportDeclaration(node) &&
+          !ts.isInterfaceDeclaration(node) &&
+          !ts.isTypeAliasDeclaration(node) &&
+          ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export)
+      )
+        add(
+          "M001",
+          entry,
+          "Public runtime exports must use explicit named export lists so every export receives a manifest and test contract.",
+        );
+    }
+    for (const node of ast.statements)
+      if (
+        ts.isExportDeclaration(node) &&
         !node.isTypeOnly &&
-        (!node.exportClause || !ts.isNamedExports(node.exportClause))) ||
-      ts.isExportAssignment(node) ||
-      (!ts.isExportDeclaration(node) &&
-        !ts.isInterfaceDeclaration(node) &&
-        !ts.isTypeAliasDeclaration(node) &&
-        ts.getCombinedModifierFlags(node) & ts.ModifierFlags.Export)
-    )
-      add(
-        "M001",
-        "src/index.ts",
-        "Public runtime exports must use explicit named export lists so every export receives a manifest and test contract.",
-      );
+        node.exportClause &&
+        ts.isNamedExports(node.exportClause)
+      )
+        for (const e of node.exportClause.elements)
+          if (!e.isTypeOnly) exported.add(e.name.text);
   }
-  for (const node of ast.statements)
-    if (
-      ts.isExportDeclaration(node) &&
-      !node.isTypeOnly &&
-      node.exportClause &&
-      ts.isNamedExports(node.exportClause)
-    )
-      for (const e of node.exportClause.elements)
-        if (!e.isTypeOnly) actualExports.add(e.name.text);
   const ids = new Set();
   const names = new Set();
   for (const c of manifests) {
@@ -204,12 +212,12 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       !c.id ||
       ids.has(c.id) ||
       names.has(c.export) ||
-      !actualExports.has(c.export)
+      !entryExports.get(c.package)?.has(c.export)
     )
       add(
         "M001",
         `manifests/${c.id}.json`,
-        "Use a unique component ID and an existing named export.",
+        `Use a unique component ID and an existing named export of its package (${Object.keys(COMPONENT_ENTRIES).join(" or ")}).`,
       );
     for (const message of [...contractErrors(c), ...capabilityErrors(c)])
       add("M006", `manifests/${c.id}.json`, message);
@@ -239,9 +247,14 @@ export async function checkKit(root = ROOT, { refresh = false } = {}) {
       }
     }
   }
-  for (const name of actualExports)
-    if (!names.has(name))
-      add("M001", "src/index.ts", `Add a manifest and preview for ${name}.`);
+  for (const [specifier, exported] of entryExports)
+    for (const name of exported)
+      if (!names.has(name))
+        add(
+          "M001",
+          COMPONENT_ENTRIES[specifier],
+          `Add a manifest and preview for ${name}.`,
+        );
   for (const c of manifests)
     for (const id of c.contract?.dependencies || [])
       if (!ids.has(id))
