@@ -103,6 +103,35 @@ export function areaPath(points: readonly Point[], baseline: number): string {
   return d;
 }
 
+/** SVG path data for the band between an upper and a lower edge (a stacked layer). */
+export function bandPath(
+  upper: readonly Point[],
+  lower: readonly Point[],
+): string {
+  // One closed shape per run where both edges are known, so a missing value
+  // leaves a gap instead of a fill bridging it.
+  let d = "";
+  let run: (readonly [Point, Point])[] = [];
+  const close = () => {
+    if (run.length >= 2) {
+      const back = run
+        .map(([, l]) => l)
+        .reverse()
+        .map((p) => `L${round(p.x)} ${round(p.y)}`)
+        .join("");
+      d += `${linePath(run.map(([u]) => u))}${back}Z`;
+    }
+    run = [];
+  };
+  upper.forEach((u, i) => {
+    const l = lower[i];
+    if (Number.isFinite(u.y) && l && Number.isFinite(l.y)) run.push([u, l]);
+    else close();
+  });
+  close();
+  return d;
+}
+
 const round = (n: number) => Math.round(n * 100) / 100;
 
 /** A categorical series slot. There are eight and they are never reused: a

@@ -1,0 +1,51 @@
+{
+  "id": "mortar-line-chart",
+  "logicalId": "line-chart",
+  "name": "LineChart",
+  "description": "Line chart for change over time across one to eight series, with a crosshair tooltip, keyboard navigation, direct end labels for up to four series and a table view.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar/charts",
+  "export": "LineChart",
+  "source": "src/xy-chart.tsx",
+  "capabilities": ["summary"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "contract": {
+    "props": {
+      "title": "string (the accessible name; shown above the chart unless titleHidden)",
+      "titleHidden": "boolean",
+      "description": "string (one sentence on what the chart shows; read before it)",
+      "rows": "Record<string, unknown>[] (one object per x value or category)",
+      "x": "{ key: string; label?: string; format?: (value: unknown) => string }",
+      "series": "{ key: string; label: string; slot?: 1–8; format?: (value: number) => string }[] (one to eight; a ninth is not drawn)",
+      "y": "{ label?: string; format?: (value: number) => string; min?: number; max?: number }",
+      "height": "number (plot height in pixels; default 240; width follows the container)",
+      "legend": "auto | hidden (auto shows a legend for two or more series)",
+      "tableView": "boolean (a Show data button swaps the plot for a table of the rows; default true)",
+      "loading": "boolean",
+      "error": "string",
+      "empty": "{ title: string; description?: string } (shown when there are no rows)",
+      "id": "string",
+      "className": "string",
+      "markers": "boolean (mark every value with a dot)"
+    },
+    "usage": "Import { LineChart } from @tonycodes-ui/mortar/charts. Use it for change over time. Give each series a stable slot if series can be hidden. Up to four series get direct labels at the line ends; more rely on the legend. Never put two measures with different scales on one chart: use two charts.",
+    "avoid": "Do not use status colours or raw colours for series, use two y axes, cycle colours past eight series, copy implementations or override central colours.",
+    "accessibility": "A named figure with an optional description, a focusable plot whose Left, Right, Home and End keys move a tooltip announced in a live region, a legend so identity never depends on colour, and a Show data table view.",
+    "dependencies": [
+      "mortar-button",
+      "mortar-empty-state",
+      "mortar-notice",
+      "mortar-table"
+    ]
+  },
+  "preview": {
+    "source": "previews/LineChartPreview.tsx"
+  },
+  "testing": {
+    "profile": "composite",
+    "target": ".m-chart",
+    "states": ["loading", "error", "empty"],
+    "probe": "chart"
+  }
+}

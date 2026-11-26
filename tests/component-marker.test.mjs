@@ -183,6 +183,34 @@ const factories = {
         searchable: true,
       }),
   ],
+  LineChart: [
+    () =>
+      html(Charts.LineChart, {
+        title: "Revenue",
+        rows: [{ m: "Jan", a: 1 }],
+        x: { key: "m" },
+        series: [{ key: "a", label: "A" }],
+      }),
+  ],
+  AreaChart: [
+    () =>
+      html(Charts.AreaChart, {
+        title: "Revenue",
+        rows: [],
+        x: { key: "m" },
+        series: [{ key: "a", label: "A" }],
+      }),
+  ],
+  BarChart: [
+    () =>
+      html(Charts.BarChart, {
+        title: "Revenue",
+        rows: [{ m: "Jan", a: 1 }],
+        x: { key: "m" },
+        series: [{ key: "a", label: "A" }],
+        loading: true,
+      }),
+  ],
   Sparkline: [
     () => html(Charts.Sparkline, { label: "Revenue", values: [1, 3, 2] }),
     () => html(Charts.Sparkline, { label: "Empty", values: [] }),

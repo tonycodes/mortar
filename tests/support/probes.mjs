@@ -530,6 +530,34 @@ export const implementations = {
       "person@example.com",
     );
   },
+  async chart({ page, root: preview }) {
+    const chart = preview.locator(".m-chart").first();
+    const plot = chart.locator(".m-chart-plot");
+    const live = chart.locator("[aria-live=polite]");
+    const tooltip = chart.locator(".m-chart-tooltip");
+    // Every series is named in a legend, so identity never depends on colour.
+    await expect(chart.getByRole("list", { name: "Legend" })).toBeVisible();
+    // Keyboard: the plot takes focus; arrows move a tooltip that is announced.
+    await plot.focus();
+    await page.keyboard.press("ArrowRight");
+    await expect(tooltip).toBeVisible();
+    await expect(tooltip).toContainText("Jan");
+    await expect(live).toHaveText(/^Jan: Pro \$42k/);
+    await page.keyboard.press("End");
+    await expect(live).toHaveText(/^Jun: /);
+    await page.keyboard.press("ArrowLeft");
+    await expect(live).toHaveText(/^May: /);
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toHaveCount(0);
+    // The table view shows the same rows with formatted values, and back.
+    await chart.getByRole("button", { name: "Show data" }).click();
+    const table = chart.getByRole("table");
+    await expect(table).toBeVisible();
+    await expect(table.getByRole("rowheader", { name: "Jun" })).toBeVisible();
+    await expect(table).toContainText("$56k");
+    await chart.getByRole("button", { name: "Show chart" }).click();
+    await expect(plot).toBeVisible();
+  },
   async "data-grid"({ page, root: preview }) {
     const grid = preview.locator(".m-data-grid").first();
     const body = grid.locator("tbody tr:not(.m-data-grid-spacer)");

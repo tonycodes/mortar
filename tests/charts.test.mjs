@@ -6,6 +6,7 @@ import { html, UI } from "./support/render.mjs";
 import { readSource, selectorBody, customProperties } from "./support/css.mjs";
 import {
   areaPath,
+  bandPath,
   extent,
   linearScale,
   linePath,
@@ -152,6 +153,127 @@ test("MetricGroup draws a sparkline only for items that have values", () => {
   );
 });
 
+const months = [
+  { m: "Jan", a: 10, b: 5 },
+  { m: "Feb", a: 20, b: 10 },
+  { m: "Mar", a: 30, b: 15 },
+];
+const two = [
+  { key: "a", label: "Alpha" },
+  { key: "b", label: "Beta" },
+];
+
+test("a chart is a named figure with a legend for two or more series", () => {
+  const markup = html(Charts.LineChart, {
+    title: "Revenue",
+    description: "By plan",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+  });
+  assert.match(
+    markup,
+    /^<figure data-m-component="LineChart"[^>]* aria-labelledby="([^"]+)"/,
+  );
+  assert.match(markup, /<ul class="m-chart-legend" aria-label="Legend">/);
+  assert.match(markup, /aria-roledescription="chart"/);
+  assert.match(markup, />Show data</);
+  // One series: the title names it, so no legend.
+  assert.doesNotMatch(
+    html(Charts.LineChart, {
+      title: "R",
+      rows: months,
+      x: { key: "m" },
+      series: two.slice(0, 1),
+    }),
+    /m-chart-legend/,
+  );
+});
+
+test("charts draw at most eight series and never reuse a colour", () => {
+  const nine = Array.from({ length: 9 }, (_, i) => ({
+    key: `s${i}`,
+    label: `S${i}`,
+  }));
+  const rows = [
+    Object.fromEntries([["m", "Jan"], ...nine.map((s) => [s.key, 1])]),
+  ];
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series: nine,
+  });
+  const slots = [...markup.matchAll(/--m-series:var\(--m-chart-(\d)\)/g)].map(
+    (m) => m[1],
+  );
+  assert.ok(slots.length > 0);
+  assert.ok(slots.every((slot) => Number(slot) <= 8));
+  assert.doesNotMatch(
+    markup,
+    />S8</,
+    "the ninth series is not drawn or listed",
+  );
+});
+
+test("stacked areas top out at the running total", () => {
+  const markup = html(Charts.AreaChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { min: 0, max: 45 },
+  });
+  // Two layers, each with an area and a line.
+  assert.equal(markup.match(/class="m-chart-area"/g)?.length, 2);
+  assert.equal(markup.match(/class="m-chart-line"/g)?.length, 2);
+});
+
+test("bars round only their data end, and only the top of a stack", () => {
+  const grouped = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+  });
+  const stacked = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    layout: "stacked",
+  });
+  const curved = (markup) =>
+    [...markup.matchAll(/class="m-chart-bar"[^>]* d="([^"]+)"/g)].map((m) =>
+      m[1].includes("Q"),
+    );
+  assert.ok(
+    curved(grouped).every(Boolean),
+    "every grouped bar has a rounded end",
+  );
+  const s = curved(stacked);
+  assert.equal(s.length, 6);
+  assert.equal(s.filter(Boolean).length, 3, "one rounded top per stack");
+});
+
+test("ticks always reach past the largest value", () => {
+  const ticks = niceTicks([0, 111], 5);
+  assert.ok(ticks.at(-1) >= 111, `top tick ${ticks.at(-1)} is below the data`);
+  assert.deepEqual(niceTicks([0, 100]).at(-1), 100);
+});
+
+test("a stacked band runs along its top edge and back along the layer below", () => {
+  const upper = [
+    { x: 0, y: 10 },
+    { x: 10, y: 5 },
+  ];
+  const lower = [
+    { x: 0, y: 20 },
+    { x: 10, y: 15 },
+  ];
+  assert.equal(bandPath(upper, lower), "M0 10L10 5L10 15L0 20Z");
+});
+
 test("ticks terminate for inverted, non-finite and extreme domains", () => {
   // y.min above every value inverted the domain and looped forever.
   for (const domain of [
@@ -206,7 +328,213 @@ test("MetricGroup's span rule skips sparklines without raising its specificity",
     assert.doesNotMatch(s, /^\.m-metrics span:not\(/, s);
 });
 
+// Slice 2 review findings.
+const slotsIn = (markup) =>
+  [...markup.matchAll(/<li style="--m-series:var\(--m-chart-(\d)\)"/g)].map(
+    (m) => m[1],
+  );
+/** Every y an SVG path visits, for its M, L, V, v and Q commands. */
+const pathYs = (d) => {
+  const ys = [];
+  let y = 0;
+  for (const [, cmd, args] of d.matchAll(/([MLVvQHhZ])([^MLVvQHhZ]*)/g)) {
+    const n = args
+      .trim()
+      .split(/[\s,]+/)
+      .filter(Boolean)
+      .map(Number);
+    if (cmd === "M" || cmd === "L") y = n[1];
+    else if (cmd === "V") y = n[0];
+    else if (cmd === "v") y += n[0];
+    else if (cmd === "Q") {
+      ys.push(n[1]);
+      y = n[3];
+    } else continue;
+    ys.push(y);
+  }
+  return ys;
+};
+
+test("a pinned slot is never reused by another series", () => {
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: [
+      { key: "a", label: "A", slot: 2 },
+      { key: "b", label: "B" },
+      { key: "c", label: "C" },
+    ],
+  });
+  const slots = slotsIn(markup);
+  assert.equal(slots.length, 3);
+  assert.equal(new Set(slots).size, 3, `slots ${slots}`);
+  assert.equal(slots[0], "2");
+});
+
+test("stacks diverge: negative values stack below zero and never overlap", () => {
+  const rows = [
+    { m: "Jan", p: 5, q: -3 },
+    { m: "Feb", p: 4, q: -2 },
+  ];
+  const series = [
+    { key: "p", label: "P" },
+    { key: "q", label: "Q" },
+  ];
+  const area = html(Charts.AreaChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series,
+  });
+  const [p, q] = [...area.matchAll(/class="m-chart-area" d="([^"]+)"/g)].map(
+    (m) => pathYs(m[1]),
+  );
+  assert.ok(
+    Math.max(...p) <= Math.min(...q) + 0.01,
+    "the positive band sits above the negative one",
+  );
+  const bars = html(Charts.BarChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series,
+    layout: "stacked",
+  });
+  const heights = [
+    ...bars.matchAll(/class="m-chart-bar"[^>]* d="([^"]+)"/g),
+  ].map((m) => {
+    const ys = pathYs(m[1]);
+    return Math.max(...ys) - Math.min(...ys);
+  });
+  assert.equal(heights.length, 4);
+  assert.ok(
+    heights.every((h) => h > 0),
+    `every bar is visible: ${heights}`,
+  );
+});
+
+test("a missing value leaves a gap in a stacked area instead of dropping to zero", () => {
+  const markup = html(Charts.AreaChart, {
+    title: "R",
+    rows: [
+      { m: "Jan", a: 5 },
+      { m: "Feb", a: Number.NaN },
+      { m: "Mar", a: 7 },
+    ],
+    x: { key: "m" },
+    series: [{ key: "a", label: "A" }],
+  });
+  const line = markup.match(/class="m-chart-line" d="([^"]+)"/)[1];
+  assert.equal(line.match(/M/g).length, 2, line);
+});
+
+test("marks stay inside the plot, and bars include zero", () => {
+  const line = html(Charts.LineChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { max: 5 },
+  });
+  assert.match(line, /clip-path="url\(#/);
+  const bars = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { min: 15 },
+  });
+  assert.match(bars, /<text[^>]*>0<\/text>/, "the zero tick is drawn");
+});
+
+test("end labels stay inside the plot", () => {
+  const rows = [
+    { m: "Jan", a: 9, b: 9, c: 9, d: 9 },
+    { m: "Feb", a: 0, b: 0, c: 0, d: 0 },
+  ];
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows,
+    x: { key: "m" },
+    series: ["a", "b", "c", "d"].map((key) => ({
+      key,
+      label: key.toUpperCase(),
+    })),
+    height: 240,
+  });
+  const ys = [
+    ...markup.matchAll(/class="m-chart-end-label"[^>]* y="([\d.]+)"/g),
+  ].map((m) => Number(m[1]));
+  assert.equal(ys.length, 4);
+  assert.ok(
+    ys.every((y) => y <= 240 - 28),
+    `labels at ${ys}`,
+  );
+});
+
+test("a single row is visible and centred", () => {
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows: [{ m: "Jan", a: 3 }],
+    x: { key: "m" },
+    series: [{ key: "a", label: "A" }],
+  });
+  assert.match(markup, /class="m-chart-marker"/);
+});
+
+test("the y axis label is drawn above the plot", () => {
+  const markup = html(Charts.BarChart, {
+    title: "R",
+    rows: months,
+    x: { key: "m" },
+    series: two,
+    y: { label: "Revenue ($k)" },
+  });
+  assert.match(markup, />Revenue \(\$k\)</);
+});
+
 test("a one-value sparkline puts its dot in the middle", () => {
   const markup = html(Charts.Sparkline, { label: "Users", values: [7] });
   assert.match(markup, /class="m-sparkline-last" style="left:50%;top:50%"/);
+});
+
+test("bars keep zero on the axis when a y override falls back to the data", () => {
+  // y.max: 0 with positive data collapsed the domain; the fallback dropped zero.
+  // Values well above zero, so ticks rounding down cannot reach 0 by luck.
+  const high = [
+    { m: "Jan", a: 105, b: 112 },
+    { m: "Feb", a: 121, b: 138 },
+  ];
+  const markup = html(Charts.BarChart, {
+    title: "R",
+    rows: high,
+    x: { key: "m" },
+    series: two,
+    y: { max: 0 },
+  });
+  assert.match(markup, /<text[^>]*>0<\/text>/, "the zero tick is drawn");
+  const zero = Number(
+    markup.match(/class="m-chart-zero"[^>]* y1="([\d.-]+)"/)[1],
+  );
+  assert.ok(
+    zero >= 12 && zero <= 240 - 28,
+    `zero line at ${zero} is inside the plot`,
+  );
+});
+
+test("numeric strings from JSON count as values; other strings are gaps", () => {
+  const markup = html(Charts.LineChart, {
+    title: "R",
+    rows: [
+      { m: "Jan", a: "10" },
+      { m: "Feb", a: " 20 " },
+      { m: "Mar", a: "n/a" },
+      { m: "Apr", a: "" },
+    ],
+    x: { key: "m" },
+    series: [{ key: "a", label: "A" }],
+  });
+  const d = markup.match(/class="m-chart-line" d="([^"]+)"/)[1];
+  assert.equal((d.match(/[ML]/g) ?? []).length, 2, `two points joined: ${d}`);
 });

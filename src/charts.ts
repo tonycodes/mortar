@@ -2,5 +2,15 @@
    no runtime dependencies. See docs/charts.md. */
 
 export { Sparkline } from "./sparkline.js";
+export { LineChart, AreaChart, BarChart } from "./xy-chart.js";
 export type { SparklineProps } from "./sparkline.js";
+export type {
+  ChartBaseProps,
+  ChartSeries,
+  ChartX,
+  ChartY,
+  LineChartProps,
+  AreaChartProps,
+  BarChartProps,
+} from "./xy-chart.js";
 export type { ChartSlot } from "./chart-core.js";
