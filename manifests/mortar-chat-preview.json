@@ -6,6 +6,9 @@
   "stack": "react-tailwind",
   "package": "@tonycodes-ui/mortar",
   "export": "ChatPreview",
+  "platforms": {
+    "swiftui": "MortarConversation"
+  },
   "source": "src/showcase.tsx",
   "capabilities": [],
   "owner": "Mortar maintainers",

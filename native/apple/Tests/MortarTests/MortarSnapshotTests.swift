@@ -237,6 +237,66 @@ final class MortarSnapshotTests: XCTestCase {
         }
     }
 
+    func testCommentComposer() {
+        check(ComposerStatesSample())
+    }
+
+    func testConversation() {
+        for (name, traits) in phone {
+            assertSnapshot(
+                of: ConversationSample(),
+                as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13), traits: traits),
+                named: name
+            )
+        }
+        assertSnapshot(
+            of: ConversationSample(),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPadPro11),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "ipad"
+        )
+        assertSnapshot(
+            of: ConversationSample(isEmpty: true),
+            as: .image(perceptualPrecision: 0.98, layout: .device(config: .iPhone13),
+                       traits: UITraitCollection(userInterfaceStyle: .light)),
+            named: "empty"
+        )
+    }
+
+    /// The bubble's spoken name is the prose, not the Markdown source.
+    /// The simulator host does not publish SwiftUI's accessibility elements to
+    /// this unit-test process (the walk came back empty), so this checks the
+    /// function the label uses. A person still has to hear it with VoiceOver.
+    func testConversationVoiceOverReadsProse() {
+        let spoken = MortarChatSpeech.prose(
+            "Invoices include **tax lines** and `billing-2026-11.csv`. "
+                + "See [the notes](https://example.com)."
+        )
+        XCTAssertEqual(spoken, "Invoices include tax lines and billing-2026-11.csv. See the notes.")
+        XCTAssertFalse(spoken.contains("**"))
+        XCTAssertFalse(spoken.contains("`"))
+        XCTAssertFalse(spoken.contains("https://"))
+    }
+
+    /// Text past maxLength is cut off. The same behaviour is in MortarMacTests;
+    /// this runs on the iOS job. The "characters left" name is in the checklist.
+    func testComposerMaxLengthCutsAndCounts() {
+        let model = ComposerDraft()
+        let controller = UIHostingController(
+            rootView: ComposerCountHarness(model: model).mortarTheme(.neutral)
+        )
+        let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 390, height: 200))
+        window.rootViewController = controller
+        window.isHidden = false
+        controller.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
+        model.text = "Hello, world"
+        controller.view.setNeedsLayout()
+        controller.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.4))
+        XCTAssertEqual(model.text, "Hello")
+    }
+
     /// Every tab on iPhone carries its icon. The snapshot rendering drops
     /// the tint UIKit gives unselected tab icons, so the image shows only
     /// the selected tab's; this checks the tab bar itself.
@@ -308,6 +368,21 @@ private struct AppShellSample: View {
             MortarEmptyState("Inbox zero", description: "New messages appear here.", systemImage: "tray")
                 .navigationTitle(value.capitalized)
         }
+    }
+}
+
+@MainActor
+@Observable
+private final class ComposerDraft {
+    var text = ""
+}
+
+private struct ComposerCountHarness: View {
+    @Bindable var model: ComposerDraft
+
+    var body: some View {
+        MortarCommentComposer(text: $model.text, maxLength: 5, showsCount: true) { _ in }
+            .padding(20)
     }
 }
 

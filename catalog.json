@@ -2254,6 +2254,9 @@
         "target": ".m-chat-preview",
         "states": []
       },
+      "platforms": {
+        "swiftui": "MortarConversation"
+      },
       "integrity": {
         "source": "5007ded5183de63b8cf2347022d2e0a658d2198200a71c4c9fed48691d032913",
         "preview": "b2e073c2540da8e3d5c3c3023651bbf4061cbeef0a62ba19d4b0c2e7b9ab90a1"
@@ -3075,6 +3078,9 @@
         "target": ".m-composer",
         "probe": "composer",
         "states": ["error"]
+      },
+      "platforms": {
+        "swiftui": "MortarCommentComposer"
       },
       "integrity": {
         "source": "2f6aa3fe045f48d288cb777ae724d1c479b9843fa66b1bf81564941b32d52354",
