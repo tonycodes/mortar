@@ -90,6 +90,112 @@ final class MortarMacTests: XCTestCase {
         XCTAssertEqual(model.text, "Hello")
     }
 
+    /// The settings page in a narrow and a wide window and in dark: sections
+    /// stack below 560 points and sit beside their titles above it, in a
+    /// readable column.
+    func testForm() {
+        for (name, width, dark) in [("narrow", 520.0, false), ("wide", 1100, false), ("dark", 1100, true)] {
+            let window = MacWindow.host(SettingsFormSample(isSaving: false),
+                                        size: CGSize(width: width, height: 900), dark: dark)
+            defer { window.close() }
+            snapshot(window, named: name)
+        }
+    }
+
+    /// The integration reported on macOS 26.2: a connector form with a text
+    /// and a secure field, in a split view's detail, opened and closed and
+    /// resized. AppKit stops a layout loop with an exception, so a loop fails
+    /// this test; each step must also settle quickly.
+    func testConnectorFormOpensAndClosesWithoutLayoutLoop() {
+        let model = ConnectorModel()
+        let window = MacWindow.host(ConnectorSplitSample(model: model), size: CGSize(width: 1000, height: 700))
+        defer { window.close() }
+        for round in 0..<20 {
+            model.showsForm = true
+            assertSettles(window, "open \(round)")
+            if round.isMultiple(of: 5) {
+                model.password = round.isMultiple(of: 10) ? "" : "app-password"
+                assertSettles(window, "type \(round)")
+            }
+            model.showsForm = false
+            assertSettles(window, "close \(round)")
+        }
+        model.showsForm = true
+        for width in [700.0, 1400, 820, 1000] {
+            window.setContentSize(CGSize(width: width, height: 700))
+            assertSettles(window, "resize \(width)")
+        }
+    }
+
+    /// The same form as a fixed 680x650 sheet, presented and dismissed.
+    /// The first presentation on a cold process is not timed: on the
+    /// macos-26 runner it took about 1.5s without an AppKit layout
+    /// exception. The repeats are the loop check.
+    func testConnectorSheetPresentsAndDismissesWithoutLayoutLoop() {
+        let model = ConnectorModel()
+        let window = MacWindow.host(ConnectorSplitSample(model: model), size: CGSize(width: 1000, height: 760))
+        defer { window.close() }
+        model.showsSheet = true
+        MacWindow.settle(window, for: 0.6)
+        XCTAssertNotNil(window.attachedSheet, "warmup sheet")
+        model.showsSheet = false
+        MacWindow.settle(window, for: 0.4)
+        for round in 0..<10 {
+            model.showsSheet = true
+            assertSettles(window, "present \(round)") { window.attachedSheet != nil }
+            XCTAssertNotNil(window.attachedSheet, "sheet \(round)")
+            model.showsSheet = false
+            assertSettles(window, "dismiss \(round)") { window.attachedSheet == nil }
+        }
+    }
+
+    /// Resizing a form at the largest text size crosses the width where the
+    /// actions switch between a row and a stack. Each width has to settle.
+    /// Row versus stack is recorded in the iOS form snapshots: this process
+    /// publishes only the hosting view to the accessibility walk, so button
+    /// frames are not available here.
+    func testFormActionsResizeWithoutLayoutLoop() {
+        let window = MacWindow.host(
+            SettingsFormSample(isSaving: false)
+                .environment(\.dynamicTypeSize, .accessibility5),
+            size: CGSize(width: 380, height: 800)
+        )
+        defer { window.close() }
+        for width in [380.0, 1100, 640, 900, 420] {
+            window.setContentSize(CGSize(width: width, height: 800))
+            assertSettles(window, "actions \(width)")
+        }
+    }
+
+    /// Lays the window (and any sheet) out. Fails if it takes a second,
+    /// which a layout loop would. When `ready` is set, waits inside that
+    /// second for the sheet to finish presenting or dismissing: a fixed
+    /// 0.15s sample missed a sheet that was still in flight on macos-15.
+    private func assertSettles(
+        _ window: NSWindow,
+        _ step: String,
+        ready: (() -> Bool)? = nil,
+        line: UInt = #line
+    ) {
+        let start = Date()
+        let limit = start.addingTimeInterval(0.9)
+        func pump() {
+            window.layoutIfNeeded()
+            window.attachedSheet?.layoutIfNeeded()
+            RunLoop.main.run(until: Date().addingTimeInterval(0.05))
+        }
+        pump()
+        if let ready {
+            while !ready(), Date() < limit {
+                pump()
+            }
+        } else if Date() < start.addingTimeInterval(0.15) {
+            RunLoop.main.run(until: start.addingTimeInterval(0.15))
+            window.layoutIfNeeded()
+        }
+        XCTAssertLessThan(Date().timeIntervalSince(start), 1.0, "\(step) took too long to lay out", line: line)
+    }
+
     private func snapshot(
         _ window: NSWindow,
         named name: String,
@@ -169,30 +275,18 @@ enum MacWindow {
         all(in: window).compactMap(text(of:)).filter { !$0.isEmpty }
     }
 
-    /// Presses a control. The Swift overlay is an optional method on the
-    /// snapshot toolchain and a plain method on the macOS 26 toolchain.
+    /// Presses a control. Xcode 16.4 and Xcode 26 both import this as a
+    /// plain method. Optional chaining does not compile on either.
     static func press(_ element: any NSAccessibilityProtocol) -> Bool {
-        #if compiler(>=6.2)
         element.accessibilityPerformPress()
-        #else
-        element.accessibilityPerformPress?() ?? false
-        #endif
     }
 
     private static func text(of element: any NSAccessibilityProtocol) -> String? {
-        #if compiler(>=6.2)
         element.accessibilityLabel()
-        #else
-        element.accessibilityLabel?()
-        #endif
     }
 
     private static func children(of element: any NSAccessibilityProtocol) -> [Any] {
-        #if compiler(>=6.2)
         element.accessibilityChildren() ?? []
-        #else
-        element.accessibilityChildren?() ?? []
-        #endif
     }
 
     private static func all(in window: NSWindow) -> [any NSAccessibilityProtocol] {
