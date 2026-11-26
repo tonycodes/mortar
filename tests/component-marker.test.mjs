@@ -211,6 +211,15 @@ const factories = {
         loading: true,
       }),
   ],
+  Meter: [
+    () => html(Charts.Meter, { label: "Storage", value: 40 }),
+    () =>
+      html(Charts.Meter, {
+        label: "Seats",
+        value: Number.NaN,
+        thresholds: [{ at: 80, tone: "warning", label: "Near limit" }],
+      }),
+  ],
   Sparkline: [
     () => html(Charts.Sparkline, { label: "Revenue", values: [1, 3, 2] }),
     () => html(Charts.Sparkline, { label: "Empty", values: [] }),

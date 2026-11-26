@@ -1220,7 +1220,13 @@ export const implementations = {
       await product.focus();
       await page.keyboard.press("Enter");
       await expect(product).toHaveAttribute("aria-expanded", "true");
-      await expect(page.getByRole("link", { name: /Analytics/ })).toBeVisible();
+      // The flyout is portalled to the body, and the playground sidebar has
+      // its own "Analytics dashboard" link, so match the flyout's link by href.
+      await expect(
+        page
+          .getByRole("link", { name: /Analytics/ })
+          .and(page.locator('[href="#analytics"]')),
+      ).toBeVisible();
       await page.keyboard.press("Escape");
       await expect(product).toHaveAttribute("aria-expanded", "false");
       await expect(product).toBeFocused();

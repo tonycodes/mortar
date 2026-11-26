@@ -1,0 +1,36 @@
+{
+  "id": "mortar-meter",
+  "logicalId": "meter",
+  "name": "Meter",
+  "description": "One measured value against a capacity or target, such as storage or a quota, with optional status thresholds shown as tone, label and track marks.",
+  "stack": "react-tailwind",
+  "package": "@tonycodes-ui/mortar/charts",
+  "export": "Meter",
+  "source": "src/meter.tsx",
+  "capabilities": ["summary"],
+  "owner": "Mortar maintainers",
+  "kitId": "application",
+  "contract": {
+    "props": {
+      "label": "string (what is measured; the meter's accessible name)",
+      "value": "number",
+      "max": "number (the capacity or target; default 100)",
+      "format": "(value: number) => string (formats the value and the maximum; default the locale number format)",
+      "thresholds": "{ at: number; tone: success | warning | danger; label: string }[] (the highest one reached sets the tone and shows its label)",
+      "id": "string",
+      "className": "string"
+    },
+    "usage": "Import { Meter } from @tonycodes-ui/mortar/charts. Use it for a measured amount against a capacity or target: storage, seats, a quota or a budget. Give every threshold a label such as \"Near limit\"; the label is shown and read, so the status never depends on colour. For the progress of a task, use ProgressBar.",
+    "avoid": "Do not use it for task progress, colour it with a series or raw colour, rely on the tone without a threshold label, copy implementations or override central colours.",
+    "accessibility": "Renders role=meter named by label, with a value text such as \"82 GB of 100 GB, Near limit\". Verify the threshold labels read well after the value.",
+    "dependencies": []
+  },
+  "preview": {
+    "source": "previews/MeterPreview.tsx"
+  },
+  "testing": {
+    "profile": "display",
+    "target": ".m-meter",
+    "states": []
+  }
+}

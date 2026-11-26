@@ -236,4 +236,85 @@
       fill: CanvasText;
     }
   }
+
+  /* == Meter == */
+  /* The fill is the accent colour until a threshold is reached, then that
+     threshold's tone (--m-tone, set from data-tone). The status label is text
+     beside the value, so the tone is never the only signal. */
+  .m-meter {
+    display: grid;
+    gap: 8px;
+    font-size: 12px;
+  }
+  .m-meter-label {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 12px;
+  }
+  .m-meter-label > span:first-child {
+    font-weight: var(--m-weight-semibold);
+  }
+  .m-meter-value {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+  }
+  .m-meter-amount {
+    font-family: var(--m-mono);
+    color: var(--m-muted);
+  }
+  .m-meter-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: var(--m-weight-semibold);
+    color: var(--m-ink);
+  }
+  .m-meter-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--m-tone);
+  }
+  .m-meter-track {
+    position: relative;
+    height: 8px;
+    border-radius: var(--m-radius-full);
+    background: var(--m-sunken);
+  }
+  .m-meter-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--m-primary);
+  }
+  .m-meter[data-tone] .m-meter-fill {
+    background: var(--m-tone);
+  }
+  /* Threshold marks reach past the track so they show on the fill and on the
+     empty track alike. */
+  .m-meter-tick {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    margin-left: -1px;
+    border-radius: 1px;
+    background: var(--m-muted);
+  }
+  @media (forced-colors: active) {
+    .m-meter-track {
+      border: 1px solid CanvasText;
+    }
+    .m-meter-fill {
+      background: Highlight;
+    }
+    .m-meter-tick,
+    .m-meter-status::before {
+      background: CanvasText;
+    }
+  }
 }

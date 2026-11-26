@@ -1,6 +1,6 @@
 # Charts
 
-`@tonycodes-ui/mortar/charts` draws charts as SVG with Mortar's tokens, so they follow your brand, density and light or dark appearance. It has no runtime dependencies. This release has `Sparkline`, `LineChart`, `AreaChart` and `BarChart`; a meter is planned.
+`@tonycodes-ui/mortar/charts` draws charts as SVG with Mortar's tokens, so they follow your brand, density and light or dark appearance. It has no runtime dependencies. It has `Sparkline`, `LineChart`, `AreaChart`, `BarChart` and `Meter`. The playground's **Analytics dashboard** template puts all five together: headline numbers with sparklines, line, bar and area charts, and plan usage meters.
 
 ## Sparkline
 
@@ -73,6 +73,30 @@ import { LineChart } from "@tonycodes-ui/mortar/charts";
 - Charts draw at most eight series, each with its own colour. A pinned `slot` is never reused: series without one take the lowest free slots. Fold anything past eight into "Other", or split it across charts.
 - Never put two measures with different scales on one chart. Use two charts instead.
 
+## Meter
+
+A meter shows one measured amount against a capacity or target: storage, seats, a quota or a budget. For the progress of a task, such as an upload or a setup checklist, use `ProgressBar` from the main package instead.
+
+```tsx
+import { Meter } from "@tonycodes-ui/mortar/charts";
+
+<Meter
+  label="Storage"
+  value={82}
+  max={100}
+  format={(n) => `${n} GB`}
+  thresholds={[
+    { at: 80, tone: "warning", label: "Near limit" },
+    { at: 100, tone: "danger", label: "Over limit" },
+  ]}
+/>;
+```
+
+- The highest threshold the value has reached sets the fill's tone and shows its label beside the value. Below every threshold the fill is the accent colour and no status shows.
+- Thresholds use the status tones, because they say whether the amount is fine, not which series it is. Every threshold needs a `label`, so the status never depends on colour.
+- Each threshold between zero and `max` is marked on the track.
+- A value over `max` fills the track and still reads as the real value: "130 GB of 100 GB, Over limit". A missing value (`NaN`) reads "No data".
+
 ## Accessibility
 
 Every line, area and bar chart is a named figure:
@@ -82,6 +106,8 @@ Every line, area and bar chart is a named figure:
 - **Show data** swaps the plot for a table of the same rows with formatted values, and **Show chart** swaps back.
 - Text uses the text tokens; marks keep a surface-coloured gap or ring where they meet.
 - In high-contrast (forced colours) mode, series keep their colours so they stay distinguishable, and axes and labels follow the system colours.
+
+A meter has `role="meter"`, named by its `label`, and its value text includes the status: "82 GB of 100 GB, Near limit".
 
 A sparkline is an image with a spoken summary built from `label` and the values: "Revenue, last 12 months: 12 values from $42k to $75k, latest $75k". Give `label` the measure and the period, and pass `format` so the summary reads like the number beside it. The summary never depends on colour, and the line keeps its shape in forced-colours mode.
 
