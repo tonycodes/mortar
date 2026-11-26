@@ -3,7 +3,9 @@
 // catalogue carries the result; manifests keep the hand-written descriptions.
 import { resolve, relative, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { COMPONENT_ENTRIES, entryFor } from "./entries.mjs";
 
 // Type declarations always resolve from this checkout's node_modules, so a copy

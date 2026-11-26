@@ -8,7 +8,9 @@ import {
 import { resolve, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
-import ts from "typescript";
+// TypeScript 6 under an alias: TypeScript 7, which builds the kit, has no
+// JavaScript compiler API. See .github/dependabot.yml.
+import ts from "typescript-api";
 import { format } from "prettier";
 import {
   capabilityErrors,
