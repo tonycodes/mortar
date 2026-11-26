@@ -1,7 +1,11 @@
 import { useMemo, useState } from "react";
 import * as UI from "../src/index.js";
 import * as Grid from "../src/data-grid.js";
-import type { DataGridColumn, DataGridPagination } from "../src/data-grid.js";
+import type {
+  DataGridColumn,
+  DataGridColumnWidths,
+  DataGridPagination,
+} from "../src/data-grid.js";
 
 type Status = "draft" | "sent" | "paid" | "overdue";
 interface Invoice {
@@ -124,6 +128,8 @@ export default function Preview() {
 function Grids() {
   const rows = useMemo(() => invoices(100_000), []);
   const paged = useMemo(() => invoices(240), []);
+  const detailed = useMemo(() => invoices(8), []);
+  const [widths, setWidths] = useState<DataGridColumnWidths>({});
   const [selected, setSelected] = useState<string[]>([]);
   const [pagination, setPagination] = useState<DataGridPagination>({
     page: 1,
@@ -156,6 +162,27 @@ function Grids() {
         pagination={pagination}
         onPaginationChange={setPagination}
         density="compact"
+        noun="invoices"
+      />
+      <Grid.DataGrid
+        caption="Invoices with details"
+        rows={detailed}
+        rowLabel={(row) => row.number}
+        columns={columns}
+        resizable
+        columnWidths={widths}
+        onColumnWidthsChange={setWidths}
+        renderDetail={(row) => (
+          <UI.DescriptionList
+            items={[
+              { term: "Customer", details: row.customer },
+              { term: "Issued", details: day.format(row.issued) },
+              { term: "Amount due", details: money.format(row.amount) },
+            ]}
+          />
+        )}
+        rowCanExpand={(row) => row.status !== "draft"}
+        defaultExpandedIds={["inv-2"]}
         noun="invoices"
       />
     </div>
