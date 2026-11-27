@@ -17,7 +17,7 @@ const readJson = (file) => JSON.parse(readFileSync(file, "utf8"));
 export const GUIDES = {
   design: {
     file: "DESIGN.md",
-    summary: "Design principles, API conventions and composing flows.",
+    summary: "Design principles, scope, API conventions and composing flows.",
   },
   conventions: {
     file: "DESIGN.md",
@@ -49,11 +49,6 @@ export const GUIDES = {
     file: "docs/data-grid.md",
     summary:
       "DataGrid from @tonycodes-ui/mortar/data-grid: when to use it over DataTable, installing the TanStack peers, client and server mode, controlled state, sorting, filters, search, selection, paging, virtualization and pinned columns.",
-  },
-  native: {
-    file: "docs/native.md",
-    summary:
-      "Mortar for SwiftUI (iPhone, iPad, Mac) and Jetpack Compose (Android): install, MortarTheme and brands, the native components and their web equivalents, the generated tokens and snapshot tests.",
   },
   "migrating-0.6": {
     file: "docs/migrating-to-0.6.md",

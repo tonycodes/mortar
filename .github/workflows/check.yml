@@ -23,10 +23,6 @@ jobs:
       - name: Check public kit
         id: kit-check
         run: npm run check
-        env:
-          # The runner image has swiftc and kotlinc; require the native token
-          # files to compile instead of skipping.
-          MORTAR_NATIVE_COMPILE: "1"
       - run: npx playwright install --with-deps chromium
       # Both suites serve the playground-dist that npm run check built.
       - run: npm run test:browser

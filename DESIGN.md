@@ -14,6 +14,19 @@
 
 The machine-readable contract is design-principles.json. Both the local contribution workflow and the open MCP server (`mortar mcp`, [docs/agents.md](docs/agents.md)) expose these principles. Detection is split between structural checks and visual maintainer review.
 
+## Scope
+
+Mortar exists so coding agents can build many web products for a person or company, each a public site with the application UI behind it (dashboards, settings, admin) and the emails it sends, and so that:
+
+1. **Every product looks like its own brand.** Theming changes how products look, not just their colours, so two Mortar products need not look alike.
+2. **Every product gets fixes and improvements by upgrading.** Consumers install the package and never copy or restyle components, so a release reaches all of them at once.
+
+Work that serves neither goal is out of scope. In particular:
+
+- Mortar is web only: React and Tailwind, plus email. There are no native iOS or Android kits.
+- A new component, or a new feature on an existing one, ships when a real site, dashboard or email needs it. Parity with another component library is not a reason on its own.
+- Keep breadth small and depth honest: one well-tested component beats several overlapping ones. Before adding a component, check whether a prop, a variant or a composition of existing components covers the need.
+
 ## API conventions
 
 Every component follows these rules. New props must fit them, and the code review checks them.

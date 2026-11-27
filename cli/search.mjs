@@ -216,7 +216,6 @@ export function searchComponents(
         category: p.categoryTitle ?? null,
         description: c.description,
         capabilities: c.capabilities,
-        ...(c.platforms ? { platforms: c.platforms } : {}),
         score: Math.round(total * 10) / 10,
         matched,
       });

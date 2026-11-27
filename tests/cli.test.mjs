@@ -204,7 +204,6 @@ test("packets suggest charts for dashboards and a meter for usage", () => {
   for (const brief of [
     "a landing page with a product overview",
     "a weekly usage digest email",
-    "an iOS app showing storage usage",
     "API reference docs with rate limits and usage examples",
     "documentation site with a changelog and version history",
     "account settings page with login history",
@@ -226,7 +225,6 @@ test("every guide topic loads from the package", () => {
   assert.doesNotMatch(data.guide("conventions"), /## Composing flows/);
   assert.match(data.guide("auth-flows"), /AuthLayout/);
   assert.match(data.guide("email"), /renderEmail/);
-  assert.match(data.guide("native"), /MortarTheme/);
   assert.match(data.guide("contributing"), /# Agent instructions/);
 });
 
@@ -1349,59 +1347,5 @@ test("a brief about emails points the packet at the email entry", async () => {
     const packet = buildPacket(data, { brief });
     assert.ok(!packet.guides.includes("email"), brief);
     assert.equal(packet.email, undefined);
-  }
-});
-
-// #95: components with SwiftUI and Compose versions name them, and a brief
-// for a native app gets the native libraries.
-test("get_component names a component's native equivalents", () => {
-  const input = componentDetail(
-    data,
-    data.components.find((c) => c.export === "Input"),
-  );
-  assert.deepEqual(input.native, {
-    swiftui: { name: "MortarTextField", import: "import Mortar" },
-    compose: {
-      name: "MortarTextField",
-      import: "import codes.tony.mortar.MortarTextField",
-    },
-  });
-  const web = componentDetail(
-    data,
-    data.components.find((c) => c.export === "DataTable"),
-  );
-  assert.equal(web.native, undefined);
-});
-
-test("a brief for a native app points the packet at the native libraries", async () => {
-  const data = await loadData();
-  for (const brief of [
-    "An iPhone and iPad app for team inboxes",
-    "Android app settings screen in Jetpack Compose",
-    "Native mobile apps for our booking product",
-    "A SwiftUI onboarding flow",
-  ]) {
-    const packet = buildPacket(data, { brief });
-    assert.ok(packet.guides.includes("native"), brief);
-    assert.equal(packet.native.swiftui.import, "import Mortar");
-    assert.equal(packet.native.compose.package, "codes.tony:mortar");
-    assert.equal(packet.native.components.length, 20);
-    assert.deepEqual(
-      packet.native.components.find((c) => c.web === "Button"),
-      { web: "Button", swiftui: "MortarButton", compose: "MortarButton" },
-    );
-    // SwiftUI before Compose: no compose name is invented.
-    assert.deepEqual(
-      packet.native.components.find((c) => c.web === "CommentComposer"),
-      { web: "CommentComposer", swiftui: "MortarCommentComposer" },
-    );
-  }
-  for (const brief of [
-    "A responsive dashboard that works on mobile",
-    "Marketing site with a compose-your-plan pricing page",
-  ]) {
-    const packet = buildPacket(data, { brief });
-    assert.ok(!packet.guides.includes("native"), brief);
-    assert.equal(packet.native, undefined);
   }
 });
