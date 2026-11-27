@@ -290,6 +290,65 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
         />
       );
       break;
+    case "PlanComparison":
+      // Long form: an unlabelled group of sentence-length "us vs them" rows,
+      // start-aligned, with an accent featured column and marked text values.
+      content = (
+        <UI.PlanComparison
+          title="What the example product replaces"
+          description="Illustrative comparison, not a claim about any product."
+          plans={["Typical platforms", "With the example product"]}
+          featuredPlan="With the example product"
+          featuredTone="accent"
+          align="start"
+          groups={[
+            {
+              rows: [
+                {
+                  feature: "Fees on every order",
+                  values: [
+                    {
+                      included: false,
+                      text: "A percentage of each order before you see a penny",
+                    },
+                    {
+                      included: true,
+                      text: "No commission: you keep the whole of every order",
+                    },
+                  ],
+                },
+                {
+                  feature: "Who owns the customer",
+                  values: [
+                    {
+                      included: false,
+                      text: "Emails, order history and repeat business stay with the platform",
+                    },
+                    {
+                      included: true,
+                      text: "You do: customer data and reorder history stay yours",
+                    },
+                  ],
+                },
+                {
+                  feature: "Getting online",
+                  values: [
+                    {
+                      included: false,
+                      text: "Weeks of setup, photography and approvals",
+                    },
+                    {
+                      included: true,
+                      text: "Live in minutes from a menu file you already have",
+                    },
+                  ],
+                },
+              ],
+            },
+          ]}
+        />
+      );
+      break;
     case "Pricing":
       content =
         state === "coming-soon" ? (

@@ -1606,6 +1606,9 @@
   .m-comparison {
     --m-cell-pad-y: 14px;
     --m-cell-pad-x: 16px;
+    /* Contains the screen-reader text of scrolled-off cells, so it can't
+       widen the page. */
+    position: relative;
     margin-top: 40px;
   }
   .m-comparison :is(th, td) {
@@ -1632,6 +1635,51 @@
   }
   .m-comparison [data-featured] {
     background: var(--m-sunken);
+  }
+  /* Accent featured column: the brand's selected tint, with the column
+     header in the link colour. Ink, secondary and link text keep 4.5:1 on
+     it (tests/tone-contrast.test.mjs). */
+  .m-comparison[data-featured-tone="accent"] [data-featured] {
+    background: var(--m-selected);
+  }
+  .m-comparison[data-featured-tone="accent"] thead th[data-featured] {
+    color: var(--m-link);
+  }
+  /* A mark beside text: the glyph hangs, so wrapped lines align with the text. */
+  .m-comparison-value {
+    display: inline-flex;
+    gap: 8px;
+    align-items: baseline;
+    text-align: start;
+  }
+  .m-comparison-mark {
+    flex: none;
+    font-weight: var(--m-weight-semibold);
+  }
+  /* Start alignment for sentence-length values: text reads from the start
+     edge and rows align to the top. */
+  .m-comparison[data-align="start"] :is(th, td) {
+    text-align: start;
+    vertical-align: top;
+  }
+  .m-comparison[data-align="start"] :is(thead th, td) {
+    min-width: 14em;
+  }
+  /* Flush: no section padding, rule or width cap, so the table lines up with
+     the surrounding content. */
+  .m-marketing-section[data-layout="flush"] {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border-top: 0;
+  }
+  .m-marketing-section[data-layout="flush"] .m-comparison {
+    --m-cell-pad-x: 12px;
+  }
+  .m-marketing-section[data-layout="flush"]
+    .m-comparison
+    :is(th, td):first-child {
+    padding-inline-start: 0;
   }
 
   /* == CallToAction == */

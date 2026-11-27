@@ -16,14 +16,17 @@
       "description": "string",
       "plans": "string[]",
       "featuredPlan": "string",
-      "groups": "{ label; rows: { feature; values: (boolean | string)[] }[] }[]",
+      "featuredTone": "\"muted\" | \"accent\" (default \"muted\"; accent tints the featured column with the brand's selected colour and puts its header in the link colour)",
+      "groups": "{ label?; rows: { feature; values: ComparisonValue[] }[] }[] (a group without a label renders no group header row)",
+      "align": "\"start\" | \"center\" (default \"center\"; start aligns sentence-length values to the start edge and the top of the row)",
+      "layout": "\"section\" | \"flush\" (default \"section\"; flush drops the section padding, rule and width cap so the table lines up with the surrounding content)",
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2)"
     },
-    "usage": "Import { PlanComparison } from @tonycodes-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { PlanComparison } from @tonycodes-ui/mortar. Compose with the public typed props. A value is a string, a boolean (a ✓ or — mark) or { included, text } (a ✓ or ✗ mark before the text). For a long-form \"us vs them\" comparison with sentence-length values, use align=\"start\", featuredTone=\"accent\", { included, text } values and an unlabelled group; use layout=\"flush\" inside a page column that already sets its own width and padding.",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. Included and not-included cells hide their glyph and carry screen-reader text.",
+    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook. The table is named by the section title, and on narrow screens it scrolls inside a focusable region named \"<title> table\". Included and not-included cells hide their glyph and carry screen-reader text (\"Included\" / \"Not included\", followed by the text for { included, text } values). The accent featured column keeps ink, secondary and link text at 4.5:1 in light and dark.",
     "dependencies": []
   },
   "preview": {
@@ -32,6 +35,6 @@
   "testing": {
     "profile": "composite",
     "target": ".m-comparison",
-    "states": []
+    "states": ["long"]
   }
 }
