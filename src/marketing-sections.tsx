@@ -426,6 +426,7 @@ export function ContactSection({
   id,
   className,
   title,
+  emphasis,
   description,
   details = [],
   headingLevel = 2,
@@ -436,6 +437,8 @@ export function ContactSection({
   id?: string;
   className?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description?: string;
   details?: { label: string; value: ReactNode }[];
   headingLevel?: HeadingLevel;
@@ -451,6 +454,7 @@ export function ContactSection({
     <>
       <TitledIntro
         title={title}
+        emphasis={emphasis}
         description={description}
         headingLevel={headingLevel}
       />

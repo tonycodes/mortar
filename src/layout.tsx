@@ -109,6 +109,8 @@ export interface SectionProps {
   id?: string;
   eyebrow?: string;
   title?: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description?: string;
   tone?: SectionTone;
   align?: "start" | "center";
@@ -121,6 +123,7 @@ export function Section({
   id,
   eyebrow,
   title,
+  emphasis,
   description,
   tone = "default",
   align = "start",
@@ -139,6 +142,7 @@ export function Section({
       {...titledIntroSlots({
         eyebrow,
         title: title || undefined,
+        emphasis,
         description,
         headingLevel,
       })}

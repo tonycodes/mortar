@@ -40,7 +40,8 @@ import { isBrandParam } from "./explorer.js";
 
 type Key = keyof BrandAppearanceTokens;
 type Mode = "light" | "dark";
-type FontKey = keyof BrandFonts;
+// The builder edits font-family lists; emphasisStyle is a keyword, set in code.
+type FontKey = Exclude<keyof BrandFonts, "emphasisStyle">;
 type Values = Record<Mode, Partial<Record<Key, string>>> & {
   fonts?: Partial<Record<FontKey, string>>;
 };

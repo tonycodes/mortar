@@ -1,5 +1,6 @@
 import { useState } from "react";
 import * as UI from "../src/index.js";
+import { scenes } from "./MarketingArt.js";
 
 export function StateFixture({ name, state }: { name: string; state: string }) {
   const [count, setCount] = useState(0);
@@ -277,6 +278,30 @@ export function StateFixture({ name, state }: { name: string; state: string }) {
             },
           ]}
           actions={<UI.Button variant="secondary">Invite</UI.Button>}
+        />
+      );
+      break;
+    case "Hero":
+      // Long state: a long emphasised title and captioned image tiles.
+      content = (
+        <UI.Hero
+          headingLevel={2}
+          layout="split"
+          title="You talk to the person who plans the work. They do the building, end to end."
+          emphasis="They do the building"
+          description="One engineer from the first call to the release, with a written brief for every engagement."
+          actions={[{ label: "Get in touch", href: "#contact" }]}
+          images={[
+            {
+              image: <img alt="A portrait in a studio" src={scenes[0]} />,
+              caption: "The engineer · A studio in a long town name",
+            },
+            <img key="b" alt="" src={scenes[1]} />,
+            {
+              image: <img alt="" src={scenes[2]} />,
+              caption: "Workshop days, in person or remote",
+            },
+          ]}
         />
       );
       break;

@@ -101,6 +101,7 @@ export function CompositionCase({ name }: { name: string }) {
           <UI.Section
             eyebrow="Muted band"
             title="Sections alternate rhythm"
+            emphasis="alternate rhythm"
             description="Use tones to separate consecutive sections."
             tone="muted"
           >

@@ -15,7 +15,7 @@
       "title": "string",
       "eyebrow": "string",
       "description": "string",
-      "items": "{ title: string; description: string; icon?: ReactNode }[]",
+      "items": "{ title: string; description: string; icon?: ReactNode; eyebrow?: string; meta?: ReactNode; href?: string; footer?: ReactNode; actions?: LinkAction[] }[] (FeatureGridItem; eyebrow sits above the title, meta under it, footer under the description, actions as text links at the end; href links the title)",
       "id": "string",
       "marker": "\"auto\" | \"icon\" | \"number\" | \"none\"",
       "columns": "2 | 3 | 4",
@@ -23,9 +23,9 @@
       "className": "string (layout only: margins or grid placement)",
       "headingLevel": "1 | 2 | 3 | 4 | 5 | 6 (default 2); item titles sit one level below"
     },
-    "usage": "Import { FeatureGrid } from @tonycodes-ui/mortar. Compose with the public typed props.",
+    "usage": "Import { FeatureGrid } from @tonycodes-ui/mortar. Compose with the public typed props. For case-study or project cards, give items an eyebrow (the client), meta (role and dates), href (the title links to the page), footer (the stack) and actions (a \"Read the case study\" link).",
     "avoid": "Do not copy implementations, override central colours or grant component approval.",
-    "accessibility": "Verify accessible names, keyboard interaction, visible focus, responsive layout and supported states. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
+    "accessibility": "Each item title is a heading one level below the section title. An item href makes the title a real link with the global visible focus ring; actions are text links whose label should name the destination. Glyph arrows are aria-hidden. The root element exposes data-m-component for tests and consumers. It is not a styling hook.",
     "dependencies": []
   },
   "preview": {

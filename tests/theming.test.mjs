@@ -225,11 +225,14 @@ test("every brand token the appearance reads starts empty in each brand", async 
   const reset = Object.keys(
     customProperties(selectorBody(css, ":where([data-mortar-brand])")),
   );
-  // Fonts are read by the document-scope rules in foundation.css.
+  // Fonts are read by the document-scope rules in foundation.css, and the
+  // emphasis font and style by .m-emphasis in marketing.css.
   const read = new Set([
     ...[...css.matchAll(/var\(\s*--(m-brand-[a-z0-9-]+)/g)].map((m) => m[1]),
     "m-brand-font",
     "m-brand-font-heading",
+    "m-brand-font-emphasis",
+    "m-brand-font-emphasis-style",
   ]);
   assert.deepEqual([...read].sort(), reset.sort());
 });
@@ -305,4 +308,35 @@ test("the brand helpers ship as their own package entry point", () => {
     types: "./dist/brand.d.ts",
     import: "./dist/brand.js",
   });
+});
+
+test("brand emphasis font and style join the contract and default to today's look", async () => {
+  assert.deepEqual(
+    brandToStyle({
+      fonts: {
+        emphasis: '"Fraunces", Georgia, serif',
+        emphasisStyle: "italic",
+      },
+    }),
+    {
+      "--m-brand-font-emphasis": '"Fraunces", Georgia, serif',
+      "--m-brand-font-emphasis-style": "italic",
+    },
+  );
+  assert.deepEqual(brandToStyle({ fonts: { emphasisStyle: "normal" } }), {
+    "--m-brand-font-emphasis-style": "normal",
+  });
+  assert.throws(
+    () => brandToStyle({ fonts: { emphasis: "url(x)" } }),
+    /Invalid Mortar brand font for fonts\.emphasis/,
+  );
+  for (const style of ["oblique", "italic; color: red", "bold"])
+    assert.throws(
+      () => brandToStyle({ fonts: { emphasisStyle: style } }),
+      /Invalid Mortar brand font style for fonts\.emphasisStyle/,
+    );
+  // Every brand resets both, so a nested brand never inherits an outer one's.
+  const tokens = await readSource("src/tokens.css");
+  assert.match(tokens, /--m-brand-font-emphasis: initial;/);
+  assert.match(tokens, /--m-brand-font-emphasis-style: initial;/);
 });
