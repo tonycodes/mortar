@@ -36,6 +36,10 @@ export interface BrandFonts {
   body?: string;
   /** Headings and component titles. Defaults to the body font. */
   heading?: string;
+  /** The emphasised phrase in a marketing heading (the `emphasis` prop). Defaults to the heading's font. */
+  emphasis?: string;
+  /** `italic` sets the emphasised phrase in italics. Defaults to `normal`: upright, marked by the link colour alone. */
+  emphasisStyle?: "normal" | "italic";
 }
 
 /** A brand's light and dark values. Inverse bands use the other appearance's. */
@@ -60,10 +64,12 @@ const KEYS: Record<keyof BrandAppearanceTokens, string> = {
   sunken: "sunken",
   accentGradient: "accent-gradient",
 };
-const FONT_KEYS: Record<keyof BrandFonts, string> = {
+const FONT_KEYS: Record<Exclude<keyof BrandFonts, "emphasisStyle">, string> = {
   body: "font",
   heading: "font-heading",
+  emphasis: "font-emphasis",
 };
+const FONT_STYLES = new Set(["normal", "italic"]);
 
 const NAME = /^[a-z0-9][a-z0-9-]*$/i;
 
@@ -276,7 +282,7 @@ export function brandToStyle(
       out[`--m-brand-${prefix}-${KEYS[key]}`] = value;
     }
   }
-  for (const key of Object.keys(FONT_KEYS) as (keyof BrandFonts)[]) {
+  for (const key of Object.keys(FONT_KEYS) as (keyof typeof FONT_KEYS)[]) {
     const value = brand.fonts?.[key]?.trim();
     if (!value) continue;
     if (!isBrandFont(value))
@@ -284,6 +290,14 @@ export function brandToStyle(
         `Invalid Mortar brand font for fonts.${key}: "${value}". Use family names, quoted names and generic families separated by commas, e.g. "Inter", sans-serif.`,
       );
     out[`--m-brand-${FONT_KEYS[key]}`] = value;
+  }
+  const style = brand.fonts?.emphasisStyle?.trim();
+  if (style) {
+    if (!FONT_STYLES.has(style))
+      throw new Error(
+        `Invalid Mortar brand font style for fonts.emphasisStyle: "${style}". Use normal or italic.`,
+      );
+    out["--m-brand-font-emphasis-style"] = style;
   }
   return out;
 }

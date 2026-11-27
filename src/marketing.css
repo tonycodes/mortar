@@ -645,12 +645,16 @@
   .m-hero-split[data-wide="preview"] {
     grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   }
-  /* An emphasised phrase in the title: the brand's text-safe link colour. */
-  .m-hero .m-emphasis {
-    font-style: normal;
+  /* An emphasised phrase in a title (the emphasis prop): the brand's
+     text-safe link colour, in the brand's emphasis font and style when it
+     sets them, else upright in the heading's font. */
+  .m-emphasis {
+    font-family: var(--m-brand-font-emphasis, inherit);
+    font-style: var(--m-brand-font-emphasis-style, normal);
     color: var(--m-link);
   }
-  .m-hero:is([data-background], [data-tone="accent"]) .m-emphasis {
+  .m-hero[data-background] .m-emphasis,
+  [data-tone="accent"] .m-emphasis {
     color: inherit;
   }
   .m-hero-note {
@@ -703,17 +707,27 @@
     max-width: 880px;
     margin: 56px auto 0;
   }
-  .m-hero-tiles > div {
+  .m-hero-tiles > figure {
+    margin: 0;
+    min-width: 0;
+  }
+  .m-hero-tiles figcaption {
+    margin-top: 8px;
+    color: var(--m-muted);
+    font-size: 13px;
+  }
+  .m-hero-tiles > div,
+  .m-hero-tiles > figure > div {
     aspect-ratio: 2 / 3;
     overflow: hidden;
     border-radius: var(--m-radius-lg);
     background: var(--m-sunken);
     box-shadow: inset 0 0 0 1px var(--m-line);
   }
-  .m-hero-tiles > div:nth-child(3n + 1) {
+  .m-hero-tiles > :nth-child(3n + 1) {
     translate: 0 48px;
   }
-  .m-hero-tiles > div:nth-child(3n) {
+  .m-hero-tiles > :nth-child(3n) {
     translate: 0 24px;
   }
   .m-hero-tiles :is(img, video, svg) {
@@ -817,10 +831,10 @@
       gap: 10px;
       padding-bottom: 32px;
     }
-    .m-hero-tiles > div:nth-child(3n + 1) {
+    .m-hero-tiles > :nth-child(3n + 1) {
       translate: 0 32px;
     }
-    .m-hero-tiles > div:nth-child(3n) {
+    .m-hero-tiles > :nth-child(3n) {
       translate: 0 16px;
     }
   }
@@ -958,6 +972,51 @@
   }
   .m-feature-details {
     margin-top: 28px;
+  }
+  /* Richer FeatureGrid cards: eyebrow, linked title, meta, footer, actions. */
+  .m-feature-grid .m-feature-eyebrow {
+    margin: 0 0 6px;
+    color: var(--m-muted);
+    font-size: 13px;
+    font-weight: var(--m-weight-medium);
+  }
+  .m-feature-grid .m-feature-link {
+    color: inherit;
+    text-decoration: none;
+  }
+  .m-feature-grid .m-feature-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .m-feature-meta,
+  .m-feature-footer {
+    margin-top: 6px;
+    color: var(--m-muted);
+    font-size: 14px;
+  }
+  .m-feature-footer {
+    margin-top: 12px;
+  }
+  .m-feature-grid :is(.m-feature-meta, .m-feature-footer) p {
+    margin: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+  .m-feature-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    margin-top: 16px;
+  }
+  .m-feature-actions a {
+    color: var(--m-link);
+    font-size: 15px;
+    font-weight: var(--m-weight-semibold);
+    text-decoration: none;
+  }
+  .m-feature-actions a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   /* Feature grid markers and balanced columns. */
   .m-feature-grid[data-columns="2"] {

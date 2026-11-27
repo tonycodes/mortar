@@ -22,9 +22,9 @@
       "id": "string (the root element's id, e.g. an in-page link target)",
       "className": "string (layout only: margins or grid placement)",
       "layout": "\"center\" | \"split\" | \"angled\" (default center). angled: copy beside an image (children) that fills the end half to the edge on a slant",
-      "images": "ReactNode[] (image tiles shown as a staggered collage beside or below the copy; use instead of children)",
+      "images": "(ReactNode | { image: ReactNode; caption: string })[] (image tiles shown as a staggered collage beside or below the copy; use instead of children; an { image, caption } tile shows its caption under the image in a figure)",
       "tone": "\"default\" | \"accent\" (default \"default\"; accent: a full-bleed band of the brand's accent fill, its gradient when it defines one, with on-accent copy and actions; the preview keeps the page's colours; a background takes precedence)",
-      "emphasis": "string (a phrase in the title to emphasise: its first occurrence renders as <em class=\"m-emphasis\"> inside the one heading, in the brand's link colour; a phrase not in the title is ignored, so the title stays a plain string)",
+      "emphasis": "string (a phrase in the title to emphasise: its first occurrence renders as <em class=\"m-emphasis\"> inside the one heading, in the brand's link colour and its emphasis font and style when set; a phrase not in the title is ignored, so the title stays a plain string)",
       "note": "ReactNode (short supporting content below the actions, such as a note or a Notice)",
       "wide": "\"copy\" | \"preview\" (split only: the column that takes three fifths of the width; omitted, the columns are even; narrow screens stack them)"
     },
@@ -39,6 +39,6 @@
   "testing": {
     "profile": "composite",
     "target": ".m-hero",
-    "states": []
+    "states": ["long"]
   }
 }

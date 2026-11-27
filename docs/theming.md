@@ -2,7 +2,7 @@
 
 Mortar's look comes from tokens in [`src/tokens.css`](../src/tokens.css), in three layers:
 
-1. **Brand contract.** A brand declares `--m-brand-l-*` (light), `--m-brand-d-*` (dark) and the brand fonts (`--m-brand-font`, `--m-brand-font-heading`), and nothing else. Every value is optional.
+1. **Brand contract.** A brand declares `--m-brand-l-*` (light), `--m-brand-d-*` (dark) and the brand fonts (`--m-brand-font`, `--m-brand-font-heading`, `--m-brand-font-emphasis`, `--m-brand-font-emphasis-style`), and nothing else. Every value is optional.
 2. **Appearance.** Light and dark resolve the contract into the live tokens (`--m-primary`, `--m-link`, …) and into the `--m-inv-*` tokens that inverse sections use. So dark mode and `tone="inverse"` never need brand-specific CSS.
 3. **Scales.** Type, space, radius, sizing, density and stacking. These are appearance-independent.
 
@@ -56,10 +56,12 @@ The full contract, for each of `l` (light) and `d` (dark):
 
 And once for both appearances:
 
-| Token                    | Default when omitted                   |
-| ------------------------ | -------------------------------------- |
-| `--m-brand-font`         | `--m-font` (the system stack)          |
-| `--m-brand-font-heading` | `--m-font-heading`, else the body font |
+| Token                           | Default when omitted                   |
+| ------------------------------- | -------------------------------------- |
+| `--m-brand-font`                | `--m-font` (the system stack)          |
+| `--m-brand-font-heading`        | `--m-font-heading`, else the body font |
+| `--m-brand-font-emphasis`       | The heading's font                     |
+| `--m-brand-font-emphasis-style` | `normal` (upright)                     |
 
 Hover and active mix towards **ink** (darker in light, lighter in dark), so text on them keeps at least the contrast it has on `primary`. Check `on-primary` against `primary` yourself (4.5:1 or more); Mortar's own brands are tested in `tests/tone-contrast.test.mjs`.
 
@@ -91,6 +93,17 @@ Text, line and status colours stay Mortar's, so a tinted surface is the brand's 
 ### Fonts
 
 `fonts: { body, heading }` (`--m-brand-font`, `--m-brand-font-heading`) are font-family lists, the same in light and dark. They apply wherever the brand does, including a container-scoped ThemeProvider. Headings (`h1`–`h6` inside Mortar) and component titles use the heading font; without one they keep the body font. Mortar loads no font files: load them in your app (for example with `@font-face` or your framework's font loader) and name them here. An entry may be a bare `var(--name)`, as framework font loaders such as `next/font` hand out (`var(--font-inter), system-ui, sans-serif`); a `var()` with a fallback, `url()` and `local()` are rejected.
+
+`fonts.emphasis` and `fonts.emphasisStyle` (`--m-brand-font-emphasis`, `--m-brand-font-emphasis-style`) style the emphasised phrase in a marketing heading: the `emphasis` prop on Hero, Section, HeaderSection, ContentSection, FeatureSection, ProcessSteps, ContactSection and CallToAction. `emphasis` is a font-family list like the others; `emphasisStyle` is `normal` or `italic`. Without them the phrase keeps the heading's font, upright, and is marked by the link colour alone. A serif italic accent, for example:
+
+```ts
+const brand = {
+  light: { link: "#973e2b" },
+  dark: { link: "#eea689" },
+  fonts: { emphasis: '"Fraunces", Georgia, serif', emphasisStyle: "italic" },
+};
+// <Section title="You talk to me. I do the building." emphasis="I do the building." />
+```
 
 ### At runtime, from data
 
@@ -174,18 +187,18 @@ The playground's [brand builder](https://mortar.tony.codes/playground/?page=bran
 
 A branded landing page needs no CSS of its own. MarketingPage, MarketingHeader, Hero, Footer and NetworkIllustration read the same semantic tokens as every other component, so one brand, in CSS or from `brandTokens` at runtime, restyles all of them in both appearances. The [split landing template](../playground/template-pages.tsx) (`?recipe=split-landing`) is composed this way.
 
-| Role                | Token                                    | Brand contract               | Used by                                                                                                                              |
-| ------------------- | ---------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Canvas and surfaces | `--m-paper`, `--m-surface`, `--m-sunken` | `paper`, `surface`, `sunken` | The page; illustration nodes and the pause control on `surface`                                                                      |
-| Text                | `--m-ink`, `--m-secondary`, `--m-muted`  | (fixed by Mortar)            | Titles; the hero description and illustration labels; the tagline, hero note and inline footer                                       |
-| Borders             | `--m-line`, `--m-line-strong`            | (fixed by Mortar)            | Header and inline-footer rules and the tagline divider; illustration connections and node outlines on `line-strong`, which keeps 3:1 |
-| Emphasis            | `--m-link`                               | `link`                       | Hero `emphasis`. On an accent or background hero it takes the band's text colour instead                                             |
-| Accent              | `--m-accent`, `--m-accent-fill`          | `accent`, `accentGradient`   | Accent nodes and travelling signals; `tone="accent"` on Hero, CallToAction and Banner; `variant="accent"` buttons                    |
-| Focus               | `--m-focus`                              | `focus`                      | Every link and button, including the illustration's pause control                                                                    |
+| Role                | Token                                                                  | Brand contract                                  | Used by                                                                                                                              |
+| ------------------- | ---------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Canvas and surfaces | `--m-paper`, `--m-surface`, `--m-sunken`                               | `paper`, `surface`, `sunken`                    | The page; illustration nodes and the pause control on `surface`                                                                      |
+| Text                | `--m-ink`, `--m-secondary`, `--m-muted`                                | (fixed by Mortar)                               | Titles; the hero description and illustration labels; the tagline, hero note and inline footer                                       |
+| Borders             | `--m-line`, `--m-line-strong`                                          | (fixed by Mortar)                               | Header and inline-footer rules and the tagline divider; illustration connections and node outlines on `line-strong`, which keeps 3:1 |
+| Emphasis            | `--m-link`, `--m-brand-font-emphasis`, `--m-brand-font-emphasis-style` | `link`, `fonts.emphasis`, `fonts.emphasisStyle` | `emphasis` on Hero and the section components. On an accent band or a background hero it takes the band's text colour instead        |
+| Accent              | `--m-accent`, `--m-accent-fill`                                        | `accent`, `accentGradient`                      | Accent nodes and travelling signals; `tone="accent"` on Hero, CallToAction and Banner; `variant="accent"` buttons                    |
+| Focus               | `--m-focus`                                                            | `focus`                                         | Every link and button, including the illustration's pause control                                                                    |
 
 Emphasis uses the brand's `link` colour because link is the brand's text-safe colour. Accent is a fill and may be too light or too dark to read as text. In the neutral brand, link is ink, so an emphasised phrase looks like the rest of the title and keeps only its `<em>` meaning. Set `link` to give it a colour.
 
-No new tokens were needed for these components: each role above already had one. If your brand needs a role that is missing, raise it as an issue rather than styling around it.
+Emphasis is the one role with its own brand fonts (`fonts.emphasis`, `fonts.emphasisStyle`; see [Fonts](#fonts)); every other role above reuses a token the kit already had. If your brand needs a role that is missing, raise it as an issue rather than styling around it.
 
 ### Your own SVG
 

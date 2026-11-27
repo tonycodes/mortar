@@ -14,6 +14,7 @@
     "props": {
       "eyebrow": "string",
       "title": "string",
+      "emphasis": "string (a phrase in the title to emphasise: its first occurrence renders as <em class=\"m-emphasis\"> inside the heading, in the brand's link colour and its emphasis font and style when set; a phrase not in the title is ignored)",
       "description": "string",
       "links": "LinkAction[]",
       "stats": "{ label: string; value: string }[]",

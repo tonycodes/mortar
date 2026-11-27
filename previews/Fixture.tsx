@@ -1062,6 +1062,35 @@ export function PreviewCase({ name }: { name: string }) {
             tone="muted"
             items={items}
           />
+          <UI.FeatureGrid
+            title="Selected engagements"
+            columns={2}
+            items={[
+              {
+                eyebrow: "Northwind Travel",
+                title: "A booking platform rebuilt in twelve weeks",
+                href: "#northwind",
+                meta: "Lead engineer · 2024–2025",
+                description:
+                  "Moved bookings off a legacy monolith without downtime.",
+                footer: "React, Node.js, PostgreSQL",
+                actions: [
+                  { label: "Read the engagement brief", href: "#northwind" },
+                ],
+              },
+              {
+                eyebrow: "Harbour Dental",
+                title: "Online booking for six practices",
+                href: "#harbour",
+                meta: "Consultant · 2023",
+                description: "Patients book, move and cancel without a call.",
+                footer: "TypeScript, Stripe",
+                actions: [
+                  { label: "Read the engagement brief", href: "#harbour" },
+                ],
+              },
+            ]}
+          />
         </>
       );
       break;
@@ -1071,6 +1100,7 @@ export function PreviewCase({ name }: { name: string }) {
           <UI.FeatureSection
             eyebrow="Theming"
             title="Your brand, centrally managed"
+            emphasis="centrally managed"
             description="Choose a theme in one place."
             details={
               <UI.CheckList items={["Light and dark", "Brand colours"]} />
@@ -1289,6 +1319,7 @@ export function PreviewCase({ name }: { name: string }) {
         <>
           <UI.CallToAction
             title="Start your next project"
+            emphasis="next project"
             description="Use one shared foundation."
             actions={[action]}
           />

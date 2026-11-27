@@ -117,6 +117,8 @@ export type {
   PricingExtra,
   HeaderLink,
   FlyoutItem,
+  FeatureGridItem,
+  HeroImage,
 } from "./marketing.js";
 export { SegmentedControl, CodeBlock, PreviewFrame } from "./inspection.js";
 export {

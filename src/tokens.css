@@ -1,6 +1,7 @@
 /* Mortar tokens, in three layers.
    1. Brand contract: a brand declares --m-brand-l-* (light), --m-brand-d-*
-      (dark) and --m-brand-font / --m-brand-font-heading, and nothing else.
+      (dark) and the brand fonts (--m-brand-font, --m-brand-font-heading,
+      --m-brand-font-emphasis, --m-brand-font-emphasis-style), and nothing else.
       Every value is optional; omitted surfaces keep the defaults below.
    2. Appearance: resolves the contract into the live --m-* tokens and into the
       --m-inv-* tokens (the opposite appearance, used by inverse bands), so
@@ -46,6 +47,8 @@
   --m-brand-d-accent-gradient: initial;
   --m-brand-font: initial;
   --m-brand-font-heading: initial;
+  --m-brand-font-emphasis: initial;
+  --m-brand-font-emphasis-style: initial;
 }
 /* Neutral: the appearance fallbacks supply its colours; it keeps its tuned
    interaction states. */

@@ -5,7 +5,13 @@ import {
   type IconLink,
   type ItemGroup,
 } from "./navigation.js";
-import { useId, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  isValidElement,
+  useId,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { DialogPanel, DialogTitle } from "@headlessui/react";
 import { ActionLink, Button, type LinkAction } from "./primitives.js";
 import { BrandMark, Prose, type SectionTone } from "./layout.js";
@@ -250,6 +256,19 @@ export function MarketingPage({
     </div>
   );
 }
+/** A Hero image tile with a caption shown under it. */
+export interface HeroImage {
+  image: ReactNode;
+  caption: string;
+}
+function isHeroImage(tile: ReactNode | HeroImage): tile is HeroImage {
+  return (
+    typeof tile === "object" &&
+    tile !== null &&
+    !isValidElement(tile) &&
+    "image" in tile
+  );
+}
 export function Hero({
   id,
   className,
@@ -285,8 +304,8 @@ export function Hero({
   headingLevel?: HeadingLevel;
   /** Decorative full-cover image or video behind the copy. The hero switches to the inverse tone with a scrim so text keeps its contrast. */
   background?: ReactNode;
-  /** Image tiles shown as a staggered collage beside (split) or below (center) the copy. Use instead of children; give each image its own alt text, or alt="" when decorative. */
-  images?: ReactNode[];
+  /** Image tiles shown as a staggered collage beside (split) or below (center) the copy. Use instead of children; give each image its own alt text, or alt="" when decorative. Pass `{ image, caption }` to show a caption under a tile. */
+  images?: (ReactNode | HeroImage)[];
   /** default: the page. accent: a full-bleed band of the brand's accent fill (its accent gradient when it defines one) with on-accent copy and actions; the preview keeps the page's colours. A background takes precedence. */
   tone?: "default" | "accent";
 }) {
@@ -317,14 +336,37 @@ export function Hero({
       </div>
       {images.length > 0 && (
         <div className="m-hero-tiles">
-          {images.map((image, index) => (
-            <div key={index}>{image}</div>
-          ))}
+          {images.map((tile, index) =>
+            isHeroImage(tile) ? (
+              <figure key={index}>
+                <div>{tile.image}</div>
+                <figcaption>{tile.caption}</figcaption>
+              </figure>
+            ) : (
+              <div key={index}>{tile}</div>
+            ),
+          )}
         </div>
       )}
       {children && <div className="m-hero-preview">{children}</div>}
     </section>
   );
+}
+/** One FeatureGrid card. Only title and description are required. */
+export interface FeatureGridItem {
+  title: string;
+  description: string;
+  icon?: ReactNode;
+  /** A short label above the title, e.g. the client's name. */
+  eyebrow?: string;
+  /** A line under the title, e.g. a role and dates. */
+  meta?: ReactNode;
+  /** Links the title to this address. */
+  href?: string;
+  /** Content under the description, e.g. the stack used. */
+  footer?: ReactNode;
+  /** Text links at the end of the card, e.g. "Read the case study". */
+  actions?: LinkAction[];
 }
 export function FeatureGrid({
   id,
@@ -343,7 +385,7 @@ export function FeatureGrid({
   eyebrow?: string;
   title: string;
   description?: string;
-  items: { title: string; description: string; icon?: ReactNode }[];
+  items: FeatureGridItem[];
   /** auto: show icons when supplied, otherwise no marker. number: for sequences. */
   marker?: "auto" | "icon" | "number" | "none";
   /** Defaults to a balanced count for the number of items. */
@@ -387,8 +429,36 @@ export function FeatureGrid({
                   {content}
                 </span>
               )}
-              <ItemHeading>{item.title}</ItemHeading>
+              {item.eyebrow && (
+                <p className="m-feature-eyebrow">{item.eyebrow}</p>
+              )}
+              <ItemHeading>
+                {item.href ? (
+                  <KitLink className="m-feature-link" href={item.href}>
+                    {item.title}
+                  </KitLink>
+                ) : (
+                  item.title
+                )}
+              </ItemHeading>
+              {item.meta && <div className="m-feature-meta">{item.meta}</div>}
               <p>{item.description}</p>
+              {item.footer && (
+                <div className="m-feature-footer">{item.footer}</div>
+              )}
+              {item.actions && item.actions.length > 0 && (
+                <div className="m-feature-actions">
+                  {item.actions.map((action, index) => (
+                    <KitLink
+                      key={`${action.label}:${action.href}:${index}`}
+                      href={action.href}
+                    >
+                      {action.label}
+                      <span aria-hidden="true"> →</span>
+                    </KitLink>
+                  ))}
+                </div>
+              )}
             </article>
           );
         })}
@@ -401,6 +471,7 @@ export function FeatureSection({
   className,
   eyebrow,
   title,
+  emphasis,
   description,
   details,
   children,
@@ -414,6 +485,8 @@ export function FeatureSection({
   className?: string;
   eyebrow?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description: string;
   /** Supporting content under the description, such as a CheckList or actions. */
   details?: ReactNode;
@@ -429,6 +502,7 @@ export function FeatureSection({
   const [eyebrowSlot, headingSlot] = titledIntroSlots({
     eyebrow,
     title,
+    emphasis,
     headingLevel,
   });
   return (
@@ -458,6 +532,7 @@ export function ProcessSteps({
   className,
   eyebrow,
   title,
+  emphasis,
   description,
   items,
   tone = "default",
@@ -467,6 +542,8 @@ export function ProcessSteps({
   className?: string;
   eyebrow?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description?: string;
   items: { title: string; description: string }[];
   tone?: SectionTone;
@@ -480,7 +557,13 @@ export function ProcessSteps({
       data-tone={sectionTone(tone)}
       {...componentRoot("ProcessSteps")}
     >
-      {...titledIntroSlots({ eyebrow, title, description, headingLevel })}
+      {...titledIntroSlots({
+        eyebrow,
+        title,
+        emphasis,
+        description,
+        headingLevel,
+      })}
       <ol
         className="m-process-steps"
         style={{ "--m-steps": items.length } as CSSProperties}
@@ -869,6 +952,7 @@ export function CallToAction({
   id,
   className,
   title,
+  emphasis,
   description,
   actions,
   tone = "default",
@@ -878,6 +962,8 @@ export function CallToAction({
   id?: string;
   className?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description?: string;
   actions: LinkAction[];
   /** default: the page surface. muted: the sunken band. inverse: the inverse token remap. accent: the brand's accent fill (its accent gradient when it defines one) with on-accent copy and actions. */
@@ -890,6 +976,7 @@ export function CallToAction({
     <>
       <TitledIntro
         title={title}
+        emphasis={emphasis}
         description={description}
         descriptionClassName={null}
         headingLevel={headingLevel}
@@ -1042,6 +1129,7 @@ export function HeaderSection({
   className,
   eyebrow,
   title,
+  emphasis,
   description,
   links = [],
   stats = [],
@@ -1053,6 +1141,8 @@ export function HeaderSection({
   className?: string;
   eyebrow?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description?: string;
   links?: LinkAction[];
   stats?: { label: string; value: string }[];
@@ -1073,6 +1163,7 @@ export function HeaderSection({
       {...titledIntroSlots({
         eyebrow,
         title,
+        emphasis,
         description,
         id: headingId,
         headingLevel,
@@ -1109,6 +1200,7 @@ export function ContentSection({
   className,
   eyebrow,
   title,
+  emphasis,
   description,
   media,
   mediaPosition = "end",
@@ -1122,6 +1214,8 @@ export function ContentSection({
   className?: string;
   eyebrow?: string;
   title: string;
+  /** A phrase in the title to emphasise. Its first occurrence renders as `<em class="m-emphasis">` inside the heading; a phrase not in the title is ignored. */
+  emphasis?: string;
   description?: string;
   /** Image, figure or illustration shown beside the copy. */
   media?: ReactNode;
@@ -1153,6 +1247,7 @@ export function ContentSection({
         {...titledIntroSlots({
           eyebrow,
           title,
+          emphasis,
           description,
           id: headingId,
           headingLevel,
