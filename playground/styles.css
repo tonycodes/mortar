@@ -461,56 +461,12 @@
   font-size: 12px;
 }
 
-/* Native gallery and email preview (?page=native, ?page=email). */
+/* Email preview (?page=email). */
 .pg-tool-toolbar {
   border-bottom: 1px solid var(--m-line);
   border-radius: var(--m-radius-lg);
 }
-.pg-native-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: 16px;
-  align-items: start;
-}
-.pg-native-shot {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  min-width: 0;
-}
-.pg-native-shot figcaption {
-  display: flex;
-  gap: 8px;
-  align-items: baseline;
-  font-size: 13px;
-}
-.pg-native-shot figcaption span {
-  color: var(--m-muted);
-}
-.pg-native-shot img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border: 1px solid var(--m-line);
-  border-radius: var(--m-radius-lg);
-}
-.pg-native-shot > p {
-  padding: 24px;
-  border: 1px dashed var(--m-line-strong);
-  border-radius: var(--m-radius-lg);
-  color: var(--m-muted);
-}
-.pg-native-web {
-  padding: 16px;
-  border: 1px solid var(--m-line);
-  border-radius: var(--m-radius-lg);
-  background: var(--m-paper);
-  color: var(--m-ink);
-}
 /* Browser text zoom stands in for the native large text setting. */
-.pg-native-web[data-large-text] {
-  zoom: 1.5;
-}
 /* The frame keeps the chosen width; the plain text fills what is left, or
    wraps below it. */
 .pg-email {

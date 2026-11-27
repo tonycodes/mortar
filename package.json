@@ -79,7 +79,6 @@
     "build:playground": "tsc --noEmit -p tsconfig.playground.json && vite build",
     "format:check": "prettier --check .",
     "release:prepare": "node scripts/release.mjs",
-    "native:tokens": "npm run build && node scripts/native-tokens.mjs",
     "test:visual": "playwright test --config playwright.visual.config.mjs"
   },
   "peerDependencies": {

@@ -31,15 +31,11 @@ import "./styles.css";
 const BrandBuilder = lazy(() =>
   import("./brand-builder.js").then((m) => ({ default: m.BrandBuilder })),
 );
-const NativeGallery = lazy(() =>
-  import("./native-gallery.js").then((m) => ({ default: m.NativeGallery })),
-);
 const EmailPreview = lazy(() =>
   import("./email-preview.js").then((m) => ({ default: m.EmailPreview })),
 );
 const TOOLS = {
   brand: { label: "Brand builder", Page: BrandBuilder },
-  native: { label: "Native gallery", Page: NativeGallery },
   email: { label: "Email preview", Page: EmailPreview },
 } as const;
 type Tool = keyof typeof TOOLS;

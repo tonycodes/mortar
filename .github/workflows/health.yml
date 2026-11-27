@@ -23,8 +23,6 @@ jobs:
           node-version: "22"
       - run: npm ci --ignore-scripts
       - run: npm run check
-        env:
-          MORTAR_NATIVE_COMPILE: "1"
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
         env:

@@ -12,6 +12,6 @@
     "M008": "Committed catalogue matches the manifests",
     "M009": "Brands declare only the --m-brand-* contract, and every appearance resolves the accent pair and its inverse",
     "M010": "Manifest dependencies match the catalogue components the source renders",
-    "M011": "Manifest platforms name SwiftUI and Compose counterparts that exist in native/"
+    "M011": "Manifests declare no platforms: Mortar is web-only"
   }
 }

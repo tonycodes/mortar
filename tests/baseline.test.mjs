@@ -181,10 +181,7 @@ test("baseline derives dependencies, closes capabilities and finds fixed colours
     await edit("mortar-button", (c) => c.capabilities.push("keyboard"));
     await edit("mortar-badge", (c) => c.capabilities.push("sparkly"));
     await edit("mortar-toast", (c) => (c.contract.states = ["Light"]));
-    await edit(
-      "mortar-card",
-      (c) => (c.platforms = { ios: "MortarCard", swiftui: "Card" }),
-    );
+    await edit("mortar-card", (c) => (c.platforms = { swiftui: "MortarCard" }));
     await writeFile(
       join(dir, "src/marketing.css"),
       "\n.m-new { color: #123456; border-color: hsl(0 0% 0%); }\n/* #abcdef in a comment */\n",
@@ -214,8 +211,8 @@ test("baseline derives dependencies, closes capabilities and finds fixed colours
     assert.match(at("M006", "mortar-badge")[0]?.message, /Unknown capability/);
     assert.match(at("M007", "mortar-toast")[0]?.message, /contract\.states/);
     assert.ok(
-      at("M011", "mortar-card").some((f) => /unknown|Mortar/.test(f.message)),
-      "platforms rejects unknown keys and non-Mortar type names",
+      at("M011", "mortar-card").some((f) => /web-only/.test(f.message)),
+      "a manifest cannot declare native platforms",
     );
     assert.equal(
       at("M005", "src/marketing.css").length,

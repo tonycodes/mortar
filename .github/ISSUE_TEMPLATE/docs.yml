@@ -13,7 +13,6 @@ body:
         - AGENTS.md / docs/agents.md
         - docs/theming.md
         - docs/email.md
-        - docs/native.md
         - CONTRIBUTING.md / TESTING.md
         - Agent skill (skills/mortar)
         - Other

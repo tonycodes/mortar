@@ -26,6 +26,12 @@ const golden = [
   "ShoppingCart",
 ];
 const templates = ["saas-landing", "cart-page", "split-landing"];
+// Baselines exist for Linux only: other systems render fonts differently, so
+// compare on Linux (CI, or a Linux container) and skip elsewhere.
+test.skip(
+  process.platform !== "linux",
+  "Visual baselines are Linux-only; run on Linux or rely on CI.",
+);
 
 for (const name of golden)
   for (const theme of ["light", "dark"])

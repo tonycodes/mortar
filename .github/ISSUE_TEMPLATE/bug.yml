@@ -14,7 +14,6 @@ body:
         - Playground
         - CLI / MCP / audit
         - Email
-        - Native (SwiftUI / Compose)
         - Docs
         - Other
     validations:
